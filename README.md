@@ -43,6 +43,14 @@ The plugin is self-contained: its release zip (the one Grav's GPM installs, abou
 | The grid needs | the OpenSim helpers version 3 (they serve the API and the blocks) | nothing more than OpenSimulator |
 | Mails (confirmation, password) | sent by the engine on the machine of the grid | sent by the site (PHP `mail()`) |
 
+### The helpers of the grid
+
+With the bundled engine, the site can also serve the helpers of the grid itself (setting **Serve the helpers**), the ones the plugin carries: what the viewers and the simulators ask (welcome page, search, profiles, destination guide, message of the day, economy, offline messages, grid status), on the address of the site, no other port nor server. The addresses are the ones the config of the grid gives its services: set its `WebURL` to the site (`[Const]` of `Robust.ini`, then restart Robust and the simulators), and the site answers `/helpers/...`, `/welcome`, `/search`, `/profile/...` as the grid says; every other address stays the site's.
+
+Off (the default), the grid keeps the helpers it has, at the **Helpers address** of the settings, and the blocks come from there.
+
+For now the site serves the helpers of a grid of the OpenSim install of its server (the login address left empty): the helpers read the grid from the install of the server.
+
 ## Requirements
 
 - Grav 2 (PHP 8.3 or newer), with the Form, Login and Shortcode Core plugins (Grav installs them with this one).

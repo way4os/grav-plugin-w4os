@@ -60,13 +60,48 @@ final class Bundled
     }
 
     /**
+     * Whether an address of the site is one the helpers of the grid serve: under the address of the helpers (`/helpers`), or one of
+     * the web services the grid gives the viewers and the simulators (welcome, search, profiles, economy, offline messages...). The
+     * config of the grid says them, as it does for w4os: its WebURL and its services must be the ones of the site.
+     */
+    public function serves(string $path): bool
+    {
+        $grid = $this->grid();
+        if ($grid === null) {
+            return false;
+        }
+        $addresses = array_merge([(string) $grid->helpersUrl()], array_values($grid->addresses(true)));
+        foreach ($addresses as $url) {
+            // The address of a profile has the name in it
+            $prefix = rtrim((string) preg_replace('#/?\[AGENT_NAME\].*$#', '', (string) parse_url($url, PHP_URL_PATH)), '/');
+            if ($prefix !== '' && ($path === $prefix || str_starts_with($path, "$prefix/"))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** Answers the request of this process with the helpers of the grid (their Slim application), and sends the answer. */
+    public function serveHelpers(): void
+    {
+        \OpenSim\Helpers\App::create(fn (string $nick) => $this->grid())->run();
+    }
+
+    /** The grid, as the engine finds it. */
+    private function grid(): ?Grid
+    {
+        return Grid::find($this->environment(), $this->nick());
+    }
+
+    /**
      * The HTML of a block of the helpers, made here.
      *
      * @param array<string,scalar> $args
      */
     public function block(string $name, array $args = []): ?string
     {
-        $grid = Grid::find($this->environment(), $this->nick());
+        $grid = $this->grid();
         if ($grid === null || \OpenSim\Helpers\Block\Blocks::name($name) === null) {
             return null;
         }

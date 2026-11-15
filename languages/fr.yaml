@@ -135,6 +135,8 @@ w4os:
   admin_db_user: 'Utilisateur de la base'
   admin_db_password: 'Mot de passe de la base'
   admin_db_password_help: 'Gardé hors de la configuration et de git'
+  admin_serve_helpers: 'Servir les helpers'
+  admin_serve_helpers_help: 'Ce que demandent les viewers et les simulateurs (accueil, recherche, profils, économie, messages hors ligne) aux adresses de la grille, qui doivent être celles de ce site. Désactivé : la grille garde ses propres helpers'
   admin_opensim_conf: 'Installation OpenSim de ce serveur'
   admin_opensim_conf_help: 'Son opensim.conf, s’il n’est pas à l’un des endroits habituels'
   admin_tab_connection: 'Connexion'

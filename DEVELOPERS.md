@@ -22,6 +22,8 @@ composer install                       # with the family next to this folder (..
 vendor/bin/build-tools build zip       # dist/grav-plugin-w4os-<version>.zip, from the last commit (.distignore, .version)
 ```
 
+The site serves the helpers of the grid (`serve_helpers`) the way w4os does: the addresses the config of the grid gives its web services (`Grid::addresses(true)`, and the address of the helpers) are answered by the helpers' Slim application (`OpenSim\Helpers\App::create()->run()`, in `onPluginsInitialized`), every other one by Grav. The helpers take off the path of their address themselves (`GridMiddleware`). Their own engine reads the install of the server (`Layout::load()` in `Http\Action\Engine`): a grid described by the plugin (login address and database) is not found there yet, so serving the helpers needs the grid of the install of the server until the helpers take the environment of the application.
+
 `classes/Bundled.php` uses them as libraries: the engine's `Api\Router` answers the calls of `Engine` (no HTTP, no key), the helpers' `View` makes the blocks, and the pictures of the models are served at the route `assets`. Its grid is the one of an OpenSim install of the server (`Layout` of its `opensim.conf`), or a grid described by its login address and its Robust database: the plugin writes, in `user-data://w4os/opensim/etc/grids/<nick>/`, a remote grid `<nick>.conf` and a `Helpers.ini` with its database and its grid info (the file the helpers read on a web host without OpenSimulator).
 
 ## Layout

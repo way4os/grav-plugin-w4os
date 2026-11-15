@@ -90,6 +90,12 @@ form:
               type: password
               label: w4os.admin_db_password
               help: w4os.admin_db_password_help
+            serve_helpers:
+              type: toggle
+              label: w4os.admin_serve_helpers
+              help: w4os.admin_serve_helpers_help
+              options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
+              validate: { type: bool }
             bundled.opensim_conf:
               type: text
               label: w4os.admin_opensim_conf

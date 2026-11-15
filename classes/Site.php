@@ -72,6 +72,23 @@ final class Site
         return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'));
     }
 
+    /** Whether the site serves the helpers of the grid itself (setting "serve_helpers", with the bundled engine). */
+    public function servesHelpers(): bool
+    {
+        return (bool) ($this->config()['serve_helpers'] ?? false) && $this->bundled() !== null;
+    }
+
+    /** Answers a request for the helpers of the grid, when the site serves them and the address is one of theirs; false otherwise. */
+    public function helpers(string $path): bool
+    {
+        if (! $this->servesHelpers() || ! $this->bundled()->serves($path)) {
+            return false;
+        }
+        $this->bundled()->serveHelpers();
+
+        return true;
+    }
+
     /**
      * Answers the address of a picture of the grid (route "assets") with the bundled engine: the pictures of the models.
      *
@@ -95,7 +112,9 @@ final class Site
 
     public function blocks(): Blocks
     {
-        if ($bundled = $this->bundled()) {
+        // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
+        $bundled = $this->bundled();
+        if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
             return new Blocks(fn (string $name, array $args) => $this->cached("block $name ".json_encode($args), fn () => $bundled->block($name, $args)));
         }
 

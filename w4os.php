@@ -50,6 +50,10 @@ class W4osPlugin extends Plugin
         if ($this->isAdmin()) {
             return;
         }
+        // The helpers of the grid (viewers, simulators), when the site serves them
+        if ($this->site()->helpers($this->grav['uri']->path())) {
+            exit;
+        }
         // The pictures of the grid, served by the bundled engine
         if ($answer = $this->site()->asset($this->grav['uri']->path())) {
             [$status, $body, $headers] = $answer;

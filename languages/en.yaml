@@ -135,6 +135,8 @@ w4os:
   admin_db_user: 'Database user'
   admin_db_password: 'Database password'
   admin_db_password_help: 'Kept out of the configuration and of git'
+  admin_serve_helpers: 'Serve the helpers'
+  admin_serve_helpers_help: 'What the viewers and the simulators ask (welcome, search, profiles, economy, offline messages) at the addresses of the grid, which must be the ones of this site. Off: the grid keeps its own helpers'
   admin_opensim_conf: 'OpenSim install of this server'
   admin_opensim_conf_help: 'Its opensim.conf, when it is not in one of the usual places'
   admin_tab_connection: 'Connection'
