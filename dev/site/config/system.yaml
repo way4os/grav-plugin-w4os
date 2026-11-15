@@ -1,0 +1,23 @@
+# Development site of the plugin (dev/grav.sh)
+home:
+  alias: '/home'
+pages:
+  theme: quark2
+  markdown:
+    extra: true
+languages:
+  supported: [en, fr]
+  include_default_lang: false
+  translations: true
+cache:
+  enabled: false
+twig:
+  cache: false
+  debug: true
+errors:
+  display: 1
+  log: true
+debugger:
+  enabled: false
+session:
+  enabled: true
