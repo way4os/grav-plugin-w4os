@@ -41,7 +41,7 @@ w4os:
   reset_done: 'Je wachtwoord is gewijzigd. Je kunt er nu mee inloggen.'
   new_password: 'Nieuw wachtwoord'
   current_password: 'Huidig wachtwoord'
-  account_title: 'Mijn Avatar'
+  account_title: 'Avatarprofiel'
   born: 'Geboren'
   profile_title: 'Profiel'
   profile_text: 'Wat anderen in de virtuele wereld van je zien (de foto en de interesses stel je in de viewer in).'

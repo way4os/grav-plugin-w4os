@@ -41,7 +41,7 @@ w4os:
   reset_done: 'Votre mot de passe est changé. Vous pouvez vous connecter avec.'
   new_password: 'Nouveau mot de passe'
   current_password: 'Mot de passe actuel'
-  account_title: 'Mon avatar'
+  account_title: 'Profil de l’avatar'
   born: 'Naissance'
   profile_title: 'Profil'
   profile_text: 'Ce que les autres voient de vous dans le monde virtuel (la photo et les centres d’intérêt se règlent dans le viewer).'

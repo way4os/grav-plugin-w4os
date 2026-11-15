@@ -41,7 +41,7 @@ w4os:
   reset_done: 'Your password is changed. You can log in with it now.'
   new_password: 'New password'
   current_password: 'Current password'
-  account_title: 'My Avatar'
+  account_title: 'Avatar Profile'
   born: 'Born'
   profile_title: 'Profile'
   profile_text: 'What other people see of you in-world (the picture and the interests are set in the viewer).'

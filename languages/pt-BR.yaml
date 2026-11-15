@@ -41,7 +41,7 @@ w4os:
   reset_done: 'Sua senha foi alterada. Você já pode entrar com ela.'
   new_password: 'Nova senha'
   current_password: 'Senha atual'
-  account_title: 'Meu Avatar'
+  account_title: 'Perfil do avatar'
   born: 'Nascido'
   profile_title: 'Perfil'
   profile_text: 'O que os outros veem de você no mundo virtual (a foto e os interesses se definem no viewer).'
