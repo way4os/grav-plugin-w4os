@@ -2,7 +2,7 @@
 # Development Grav for the plugin: Grav and the plugins it needs, at the versions of the sites, in tmp/grav (ignored by git),
 # served by the PHP built-in server. No container.
 #
-#   dev/grav.sh install   install (or complete) the site, link this plugin, copy the pages of the test site (dev/site)
+#   dev/grav.sh install   install (or complete) the site, link this plugin, copy the default pages of the w4os site (../w4os-site)
 #   dev/grav.sh serve     serve it on http://127.0.0.1:${GRAV_PORT:-8820}
 #   dev/grav.sh tunnel    forward ${API_TUNNEL:-}  (local port:host:port through ssh) for an engine API that only listens locally
 set -Eeuo pipefail
@@ -41,7 +41,7 @@ install() {
     mkdir -p "$site/user/config/plugins"
     cp dev/site/config/system.yaml "$site/user/config/system.yaml" 2>/dev/null || true
     rm -rf "$site/user/pages/02.typography"
-    cp -R dev/site/pages/. "$site/user/pages/"
+    [ ! -d ../w4os-site/defaults/pages ] || cp -R ../w4os-site/defaults/pages/. "$site/user/pages/"
     echo "Grav in $site. dev/grav.sh serve"
 }
 

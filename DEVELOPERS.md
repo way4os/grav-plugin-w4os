@@ -20,7 +20,7 @@ The plugin and the site are two projects:
 - `classes/Site.php`: the part that knows Grav: settings and API key, Grav's HTTP client and cache, the pages of the plugin, the avatar as a Grav user.
 - `pages/*.md`: the front matter of the pages of the plugin, with their forms (Form plugin, `process: [{w4os: register}]`); title and texts come from `languages.yaml`.
 - `templates/w4os.html.twig` and `templates/w4os/<page>.html.twig`: the pages. `templates/forms/fields/w4os_models`: the models picker. A theme overrides any of them.
-- `dev/site`: the skeleton of the test site (its config, a home page and a help page in English and French); the pages of a real site belong to the site, not to the plugin.
+- `dev/`: a local development Grav (`dev/grav.sh`, its config in `dev/site`); the pages of a site belong to the site (the w4os site has the default ones), not to the plugin.
 
 ## How it plugs into Grav
 
@@ -37,28 +37,12 @@ composer install
 vendor/bin/pest
 ```
 
-## Development site
+## Trying it
 
-`dev/grav.sh` makes a Grav site in `tmp/grav` (ignored by git) at the versions of the sites (Grav 2.2, Form, Login, Email, Shortcode Core, Quark2), links this plugin into it and copies the example pages. It runs on the PHP built-in server: no container.
+On a development machine, never on a live grid: the w4os site (`../w4os-site`) bundles this plugin at its `HEAD`. Build its package there (`apt-package`), install it on the machine of a test grid, `w4os-site setup` with the helpers of that grid, `w4os-site web apache --port <port> --install`. See the DEVELOPERS.md of the w4os site.
 
-```bash
-dev/grav.sh install
-dev/grav.sh serve       # http://127.0.0.1:8820
-```
-
-The site needs the helpers of a grid (version 3, which serve the engine API at `/api` and the blocks at `/blocks`). Never a live grid: a test grid on a development machine. In `tmp/grav/user/config/plugins/w4os.yaml`, `url:` is the address of these helpers; the key goes in `tmp/grav/user/data/w4os/api.json` (`{"api_key": "osk_..."}`).
-
-When the helpers listen only on the development machine, `dev/grav.sh tunnel` forwards them through ssh, with `.env` (not in git):
-
-```bash
-API_TUNNEL=8099:127.0.0.1:8099
-API_TUNNEL_HOST=dev-machine.example.org
-```
-
-To serve the helpers of a branch on the development machine, without installing them: copy the project with its `vendor` (`rsync -azL`, which follows the links of the path repositories), `composer dump-autoload -o` there, make a key of the install, and run them as the web server's user:
-
-```bash
-sudo -u www-data env OPENSIM_GRID=<grid> php -S 127.0.0.1:8099 -t public public/index.php
-```
+The helpers of a branch can be served without being installed: copy the project with its `vendor` (`rsync -azL`, which follows the links of the path repositories), `composer dump-autoload -o` there, make a key of the install, and serve its `public` folder with the web server (`SetEnv OPENSIM_GRID <grid>`, `CGIPassAuth On` for the API key, `FallbackResource /index.php`).
 
 No real mail: test with addresses of `example.org`, and take the tokens from the API with `send: false` (`POST /email-confirmations`, `POST /password-resets`), then open `/register/confirm?token=` or `/reset-password?token=`.
+
+A local Grav, when needed (`dev/grav.sh install`, `dev/grav.sh serve` on http://127.0.0.1:8820, Grav in `tmp/grav`, ignored by git), runs on the PHP built-in server; `dev/grav.sh tunnel` forwards helpers that only listen on a development machine, with `API_TUNNEL` and `API_TUNNEL_HOST` in `.env`.
