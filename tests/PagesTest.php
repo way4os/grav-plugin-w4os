@@ -30,8 +30,10 @@ describe('pages', function () {
             $used = array_merge($used, $keys[1]);
         }
         // Keys built from a variable: the titles of the pages, the actions and messages of the managers
-        $used = array_diff(array_unique($used), ['manage', 'action']);
+        $used = array_diff(array_unique($used), ['manage', 'action', 'error']);
         expect($used)->not->toBeEmpty();
+        // Every problem code of the engine has its text
+        $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));
         foreach ($used as $key) {
             foreach ($languages as $texts) {
                 expect($texts)->toHaveKey($key);

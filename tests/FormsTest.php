@@ -60,7 +60,7 @@ describe('register', function () {
         } catch (FormError $e) {
         }
 
-        expect($e->key)->toBe('w4os.error_invalid')->and($e->detail)->toBe("'x' is not a UUID");
+        expect($e->key)->toBe('w4os.error_invalid_request')->and($e->detail)->toBe("'x' is not a UUID");
     });
 
     test('on a test site, mails nothing and gives the link', function () use ($fields) {
@@ -79,8 +79,8 @@ describe('sign-in and passwords', function () {
 
         expect($refused(403, 'email-unconfirmed'))->toBe('w4os.error_email_unconfirmed')
             ->and($refused(403, 'account-disabled'))->toBe('w4os.error_account_disabled')
-            ->and($refused(403, 'sign-in-refused'))->toBe('w4os.error_sign_in')
-            ->and($refused(503, null))->toBe('w4os.error_unavailable');
+            ->and($refused(403, 'sign-in-refused'))->toBe('w4os.error_sign_in_refused')
+            ->and($refused(503, null))->toBe('w4os.error_channel_unavailable');
     });
 
     test('the forgotten password mails a link to the reset page', function () {
@@ -97,8 +97,8 @@ describe('sign-in and passwords', function () {
     });
 
     test('a token refused is told so', function () {
-        expect(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->reset(['token' => 't', 'password' => 'a', 'password_confirm' => 'a'])))->toBe('w4os.error_token')
-            ->and(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->confirm('t')))->toBe('w4os.error_token');
+        expect(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->reset(['token' => 't', 'password' => 'a', 'password_confirm' => 'a'])))->toBe('w4os.error_token_refused')
+            ->and(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->confirm('t')))->toBe('w4os.error_token_refused');
     });
 
     test('a new password needs the current one', function () {
@@ -146,6 +146,6 @@ describe('account', function () {
         expect(array_map(fn ($r) => $r['method'].' '.parse_url($r['url'], PHP_URL_PATH), $log))->toBe([
             'PATCH /helpers/api/avatars/u1', 'PATCH /helpers/api/avatars/u1', 'POST /helpers/api/password-resets', 'DELETE /helpers/api/avatars/u1',
         ])->and($log[1]['body']['data']['attributes'])->toBe(['active' => false])
-            ->and(formError(fn () => $forms->manage('promote', ['uuid' => 'u1'])))->toBe('w4os.error_invalid');
+            ->and(formError(fn () => $forms->manage('promote', ['uuid' => 'u1'])))->toBe('w4os.error_invalid_request');
     });
 });

@@ -77,7 +77,7 @@ class W4osPlugin extends Plugin
         try {
             $avatar = $this->site()->forms()->signIn($login, $password);
         } catch (FormError $e) {
-            if ($e->key !== 'w4os.error_sign_in') {
+            if ($e->key !== 'w4os.error_sign_in_refused') {
                 $this->grav['messages']->add($this->site()->translate($e->key), 'error');
                 $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
             }
@@ -211,7 +211,7 @@ class W4osPlugin extends Plugin
                     // no break
                 case 'profile':
                     $this->requireAvatar();
-                    $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_unavailable'), $data);
+                    $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_channel_unavailable'), $data);
                     $key = $result['email'] === null ? 'w4os.profile_saved' : ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending');
                     $this->done($key, $routes['account'], [htmlspecialchars((string) $result['email']), $this->link($result['link'])]);
                     // no break
@@ -325,7 +325,7 @@ class W4osPlugin extends Plugin
 
             return ['items' => $items, 'meta' => $meta, 'error' => null];
         } catch (EngineException $e) {
-            return ['items' => [], 'meta' => [], 'error' => $this->site()->translate('w4os.error_unavailable')];
+            return ['items' => [], 'meta' => [], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
         }
     }
 

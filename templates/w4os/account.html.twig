@@ -1,6 +1,6 @@
 {% set avatar = w4os_avatar() %}
 {% if avatar is empty %}
-    <p class="notices red">{{ 'w4os.error_unavailable'|t }}</p>
+    <p class="notices red">{{ 'w4os.error_channel_unavailable'|t }}</p>
 {% else %}
     <div class="w4os-account-head">
         <p class="w4os-avatar-name"><strong>{{ avatar.name }}</strong>

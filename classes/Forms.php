@@ -13,26 +13,12 @@ final class Forms
     /** The profile fields an avatar edits on the site. */
     public const PROFILE = ['about', 'wants', 'skills', 'languages', 'firstLife', 'profileUrl'];
 
-    /** The text of each code of the problems of the engine (Problem::CODES); the others are ERROR_INVALID or ERROR_UNAVAILABLE. */
-    public const ERRORS = [
-        'sign-in-refused' => 'w4os.error_sign_in',
-        'account-disabled' => 'w4os.error_account_disabled',
-        'email-unconfirmed' => 'w4os.error_email_unconfirmed',
-        'name-invalid' => 'w4os.error_name_invalid',
-        'name-reserved' => 'w4os.error_name_reserved',
-        'name-taken' => 'w4os.error_name_taken',
-        'password-required' => 'w4os.error_required',
-        'password-invalid' => 'w4os.error_password_invalid',
-        'email-invalid' => 'w4os.error_email_invalid',
-        'email-required' => 'w4os.error_email_required',
-        'model-unknown' => 'w4os.error_model_unknown',
-        'token-refused' => 'w4os.error_token',
-        'no-confirmation-pending' => 'w4os.error_no_confirmation_pending',
-        'mail-failed' => 'w4os.error_mail_failed',
-        'not-found' => 'w4os.error_not_found',
-        'invalid-request' => 'w4os.error_invalid',
-        'field-unknown' => 'w4os.error_invalid',
-        'link-invalid' => 'w4os.error_invalid',
+    /** The codes of the problems of the engine (Problem::CODES), each told by the text `w4os.error_<code>` (- as _). */
+    public const CODES = [
+        'not-found', 'invalid-request', 'invalid-document', 'type-conflict', 'unauthorized', 'method-not-allowed', 'channel-unavailable',
+        'instance-failed', 'internal-error', 'sign-in-refused', 'account-disabled', 'email-unconfirmed', 'name-invalid', 'name-reserved',
+        'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
+        'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed',
     ];
 
     /**
@@ -198,7 +184,7 @@ final class Forms
             'disable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => false])),
             'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'), $this->sends())),
             'delete' => $this->ask(fn () => $this->engine->deleteAvatar($uuid)),
-            default => throw new FormError('w4os.error_invalid'),
+            default => throw new FormError('w4os.error_invalid_request'),
         };
     }
 
@@ -237,6 +223,8 @@ final class Forms
     /** The text of a problem, by its code; what the engine says (English) goes with it, for the log. */
     private function error(EngineException $e): FormError
     {
-        return new FormError(self::ERRORS[$e->problemCode] ?? 'w4os.error_unavailable', $e->getMessage(), $e);
+        $code = in_array($e->problemCode, self::CODES, true) ? $e->problemCode : ($e->status >= 500 ? 'internal-error' : 'invalid-request');
+
+        return new FormError('w4os.error_'.str_replace('-', '_', $code), $e->getMessage(), $e);
     }
 }
