@@ -85,7 +85,7 @@ final class Site
 
     /**
      * The page of the plugin at the route asked for, unless the site has its own page there. The front matter is the one of
-     * pages/<type>.md (its forms), title and text come from languages.yaml.
+     * pages/<type>.md (its forms), title and text come from the language files.
      */
     public function addPage(string $path): void
     {
@@ -173,14 +173,14 @@ final class Site
         return trim((string) ($saved['api_key'] ?? ''));
     }
 
+    /**
+     * A text of the language files, the values put in its %s (Grav's translations, vsprintf).
+     *
+     * @param list<scalar> $vars
+     */
     public function translate(string $key, array $vars = []): string
     {
-        $text = (string) $this->grav['language']->translate([$key]);
-        foreach ($vars as $name => $value) {
-            $text = str_replace('{'.$name.'}', (string) $value, $text);
-        }
-
-        return $text;
+        return (string) $this->grav['language']->translate(array_merge([$key], array_values($vars)));
     }
 
     /**
@@ -198,7 +198,7 @@ final class Site
     private function get(string $url): ?string
     {
         try {
-            [$status, $body] = $this->send('GET', $url, ['Accept' => 'text/html'], null);
+            [$status, $body] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
 
             return $status === 200 ? $body : null;
         } catch (\Throwable $e) {
@@ -206,6 +206,15 @@ final class Site
 
             return null;
         }
+    }
+
+    /** The language of the visitor, for what the helpers show (their blocks, in their own translations). */
+    private function acceptLanguage(): string
+    {
+        $language = $this->grav['language'];
+        $active = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
+
+        return $active === 'en' ? 'en' : "$active, en;q=0.5";
     }
 
     /** A value kept in the cache of Grav for the time of the setting "cache"; null is not kept. */

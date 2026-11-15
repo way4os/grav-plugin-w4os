@@ -39,6 +39,12 @@ describe('pages', function () {
         }
         foreach ($languages as $texts) {
             expect(array_keys($texts))->toEqualCanonicalizing(array_keys($languages['en']));
+            // The same values put in each text (%s, %1$s...)
+            foreach ($texts as $key => $text) {
+                preg_match_all('/%(\d\$)?s/', $text, $mine);
+                preg_match_all('/%(\d\$)?s/', $languages['en'][$key], $english);
+                expect(count($mine[0]))->toBe(count($english[0]), $key);
+            }
         }
     });
 });

@@ -54,7 +54,7 @@ describe('register', function () {
             ->and($refused('model-unknown'))->toBe('w4os.error_model_unknown');
     });
 
-    test('keeps what the engine says of a value only for a generic refusal', function () use ($fields) {
+    test('keeps what the engine says, for the log', function () use ($fields) {
         try {
             forms([[400, problem(400, "'x' is not a UUID", 'invalid-request')]])->register($fields);
         } catch (FormError $e) {

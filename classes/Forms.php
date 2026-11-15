@@ -6,7 +6,7 @@ namespace W4os\Grav;
  * What the forms of the site ask of the engine: register an avatar, confirm its email, forgotten password, the account of the
  * avatar signed in, the avatars for the managers of the grid. The rules of the names, the passwords and the models are the
  * engine's; only what the form itself adds (the password typed twice, the terms) is checked here.
- * Plain PHP: a refusal is a FormError that carries the key of its text in languages.yaml, from the code of the engine's problem.
+ * Plain PHP: a refusal is a FormError that carries the key of its text in the language files, from the code of the engine's problem.
  */
 final class Forms
 {
@@ -234,11 +234,9 @@ final class Forms
         }
     }
 
-    /** The text of a problem, by its code; what the engine says is kept for the codes that only say "a value is wrong". */
+    /** The text of a problem, by its code; what the engine says (English) goes with it, for the log. */
     private function error(EngineException $e): FormError
     {
-        $key = self::ERRORS[$e->problemCode] ?? 'w4os.error_unavailable';
-
-        return new FormError($key, $key === 'w4os.error_invalid' ? $e->getMessage() : '', $e);
+        return new FormError(self::ERRORS[$e->problemCode] ?? 'w4os.error_unavailable', $e->getMessage(), $e);
     }
 }

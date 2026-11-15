@@ -1,83 +1,99 @@
 w4os:
-  register_title: 'Créer votre avatar'
-  register_text: 'Choisissez un nom : c’est ainsi qu’on vous verra dans le monde. Il ne peut plus être changé ensuite.'
+  # Registration
+  register_title: 'Créer mon avatar'
+  register_text: 'Choisissez un nom ci-dessous. C''est ainsi que les gens vous verront dans le monde virtuel.'
   register_button: 'Créer mon avatar'
   have_avatar: 'Vous avez déjà un avatar ?'
-  sign_in: 'Se connecter'
-  sign_out: 'Se déconnecter'
-  first_name: Prénom
-  last_name: Nom
-  email: E-mail
+  first_name: 'Prénom'
+  last_name: 'Nom de famille'
+  email: 'E-mail'
   password: 'Mot de passe'
   password_confirm: 'Confirmez le mot de passe'
-  password_help: 'De 6 à 16 caractères, sans guillemet double (les viewers n’en prennent pas plus). Le même mot de passe vous connecte ici et dans le monde.'
-  model: 'Votre première tenue'
-  model_help: 'Vous pourrez toujours changer d’apparence dans le monde.'
-  terms_agree: 'J’accepte les {link}conditions de cette grille{/link}.'
-  registered: 'Votre avatar {name} est prêt. Connectez-vous avec son nom ou votre e-mail.'
-  registered_confirm: 'Votre avatar {name} est créé. Un message part vers votre adresse : cliquez sur le lien qu’il contient pour la confirmer, c’est ce qui active votre avatar.'
-  registered_not_sent: 'Votre avatar {name} est créé, mais le message de confirmation n’a pas pu partir. Demandez-en un nouveau ci-dessous, ou contactez les gestionnaires de la grille.'
+  password_help: 'De 6 à 16 caractères, sans guillemet double. Le même mot de passe vous connecte ici et dans le monde virtuel.'
+  model: 'Choisissez le premier ensemble pour votre avatar.'
+  model_help: 'Vous pourrez toujours changer d’apparence dans le monde virtuel.'
+  terms_agree: 'Je suis d''accord avec les conditions de la page %s.'
+  registered: 'Avatar %s créé. Connectez-vous avec son nom ou votre e-mail.'
+  registered_confirm: 'Avatar %s créé. Un message part vers votre adresse : cliquez sur le lien qu’il contient pour la confirmer, c’est ce qui active votre avatar.'
+  registered_not_sent: 'Avatar %s créé, mais le message de confirmation n’a pas pu partir. Demandez-en un nouveau ci-dessous, ou contactez les gestionnaires de la grille.'
+  registered_test: 'Avatar %1$s créé. Site de test, pas de mail : confirmez-le avec ce lien : %2$s'
+
+  # Email confirmation
   confirm_title: 'Confirmez votre e-mail'
   confirm_text: 'Votre avatar est actif dès que vous cliquez sur le lien du message envoyé. Rien après quelques minutes ? Regardez dans les indésirables.'
-  confirmed: 'Votre e-mail est confirmé, {name} est actif. Vous pouvez vous connecter maintenant, ici et dans le monde.'
+  confirmed: 'Votre e-mail est confirmé, %s est actif. Vous pouvez vous connecter, ici et dans le monde virtuel.'
   resend_title: 'Recevoir un nouveau lien'
   resend_button: 'Envoyer un nouveau lien'
   confirm_resent: 'Un nouveau lien est en route.'
-  avatar_name: 'Nom de l’avatar'
-  forgot_title: 'Mot de passe oublié'
+  confirm_resent_test: 'Site de test, pas de mail : confirmez avec ce lien : %s'
+  avatar_name: 'Nom de l''avatar'
+
+  # Log in, lost password
+  log_in: 'Connexion'
+  logout: 'Déconnexion'
+  login: 'Nom de l’avatar ou e-mail'
+  forgot_title: 'Mot de passe perdu'
   forgot_text: 'Tapez le nom de votre avatar ou votre e-mail : vous recevrez un lien pour choisir un nouveau mot de passe.'
   forgot_button: 'M’envoyer un lien'
   forgot_sent: 'Si un avatar a ce nom ou cet e-mail, un lien part vers son adresse.'
   forgot_test: 'Site de test, pas de mail : le lien d’un nouveau mot de passe ne s’affiche pas ici, l’API de l’engine le donne (send: false).'
-  login: 'Nom de l’avatar ou e-mail'
-  reset_title: 'Nouveau mot de passe'
+  reset_title: 'Réinitialisation du mot de passe'
   reset_text: 'Choisissez le nouveau mot de passe de votre avatar.'
   reset_no_token: 'Cette page s’ouvre depuis le lien du message reçu.'
   reset_button: 'Enregistrer le mot de passe'
   reset_done: 'Votre mot de passe est changé. Vous pouvez vous connecter avec.'
   new_password: 'Nouveau mot de passe'
   current_password: 'Mot de passe actuel'
+
+  # My avatar
   account_title: 'Mon avatar'
-  born: 'né le'
-  profile_title: 'E-mail et profil'
-  profile_text: 'Ce que les autres voient de vous dans le monde (la photo et les centres d’intérêt se règlent dans le viewer).'
+  born: 'Naissance'
+  profile_title: 'Profil'
+  profile_text: 'Ce que les autres voient de vous dans le monde virtuel (la photo et les centres d’intérêt se règlent dans le viewer).'
   about: 'À propos'
-  wants: Envies
-  skills: Talents
-  languages: Langues
+  wants: 'J''aimerais'
+  skills: 'Compétences'
+  languages: 'Langues'
   first_life: 'Vie réelle'
   profile_url: 'Page web'
-  save_button: Enregistrer
+  save_button: 'Enregistrer'
   profile_saved: 'Votre profil est enregistré.'
   password_title: 'Mot de passe'
   password_button: 'Changer le mot de passe'
   password_saved: 'Votre mot de passe est changé.'
-  manage_title: 'Avatars de la grille'
+  email_pending: 'Votre profil est enregistré. Un lien part vers %s : cliquez dessus pour en faire votre e-mail.'
+  email_pending_test: 'Votre profil est enregistré. Site de test, pas de mail : confirmez %1$s avec ce lien : %2$s'
+  email_changed: 'Votre e-mail est maintenant %s.'
+
+  # Avatars of the grid (managers)
+  manage_title: 'Avatars'
   search_avatars: 'Nom ou e-mail'
-  search: Chercher
-  no_avatars: 'Aucun avatar.'
-  avatars_count: '{count} avatars'
-  status: État
-  last_seen: 'Vu le'
-  created: 'Créé le'
-  actions: Actions
-  god: dieu
-  online: 'Dans le monde'
-  active: Actif
-  inactive: Inactif
-  action_enable: Activer
-  action_disable: Désactiver
+  search: 'Chercher'
+  no_avatars: 'Aucun résultat'
+  avatars_count: '%s avatars'
+  status: 'Statut'
+  last_seen: 'Dernière apparition'
+  created: 'Créé'
+  actions: 'Actions'
+  god: 'Dieu'
+  online: 'En ligne'
+  active: 'Actif'
+  inactive: 'Inactif'
+  action_enable: 'Activer'
+  action_disable: 'Désactiver'
   action_reset: 'Lien mot de passe'
-  action_delete: Supprimer
-  delete_confirm: 'Supprimer {name} pour de bon, avec son inventaire ?'
-  manage_enable: '{name} est activé.'
-  manage_disable: '{name} est désactivé.'
-  manage_reset: 'Un lien pour choisir un nouveau mot de passe part vers {name}.'
-  manage_delete: '{name} est supprimé.'
+  action_delete: 'Supprimer'
+  delete_confirm: 'Supprimer %s pour de bon, avec son inventaire ?'
+  manage_enable: '%s est activé.'
+  manage_disable: '%s est désactivé.'
+  manage_reset: 'Un lien pour choisir un nouveau mot de passe part vers %s.'
+  manage_delete: '%s est supprimé.'
+
+  # Errors (the codes of the engine's problems, and what the forms check)
   error_required: 'Merci de remplir tous les champs.'
   error_password_match: 'Les deux mots de passe ne sont pas les mêmes.'
-  error_terms: 'Merci d’accepter les conditions de la grille.'
-  error_invalid: 'Impossible :'
+  error_terms: 'Vous devez accepter les conditions de la page %s.'
+  error_invalid: 'Ce n’est pas possible.'
   error_not_found: 'Cet avatar n’existe pas.'
   error_forbidden: 'Ce n’est pas permis.'
   error_token: 'Ce lien ne marche pas : il a expiré ou il a déjà servi. Demandez-en un nouveau.'
@@ -90,35 +106,32 @@ w4os:
   error_password_invalid: 'Le mot de passe doit avoir de 6 à 16 caractères, sans guillemet double.'
   error_email_invalid: 'Cette adresse e-mail n’est pas valide.'
   error_email_required: 'Cet avatar n’a pas d’adresse e-mail.'
-  error_model_unknown: 'Cette tenue n’est pas disponible, merci d’en choisir une autre.'
+  error_model_unknown: 'Cet ensemble n’est pas disponible, merci d’en choisir un autre.'
   error_no_confirmation_pending: 'Cet avatar n’attend pas de confirmation de son e-mail.'
   error_mail_failed: 'Le message n’a pas pu partir. Merci de réessayer plus tard.'
-  registered_test: 'Votre avatar {name} est créé. Site de test, pas de mail : confirmez-le avec ce lien : {link}'
-  confirm_resent_test: 'Site de test, pas de mail : confirmez avec ce lien : {link}'
-  email_pending: 'Votre profil est enregistré. Un lien part vers {email} : cliquez dessus pour en faire votre e-mail.'
-  email_pending_test: 'Votre profil est enregistré. Site de test, pas de mail : confirmez {email} avec ce lien : {link}'
-  email_changed: 'Votre e-mail est maintenant {email}.'
-  admin_send_mail: 'Envoyer les mails'
-  admin_send_mail_help: 'Désactivé sur un site de test seulement : l’engine n’envoie rien, les liens des inscriptions et des changements d’e-mail s’affichent sur la page'
   error_current_password: 'Le mot de passe actuel est faux.'
   error_unavailable: 'La grille ne répond pas pour l’instant. Merci de réessayer plus tard.'
   error_nonce: 'Cette page a expiré, merci de recommencer.'
-  admin_tab_connection: Connexion
-  admin_tab_accounts: Comptes
-  admin_tab_pages: Pages
+
+  # Settings (admin)
+  admin_tab_connection: 'Connexion'
+  admin_tab_accounts: 'Comptes'
+  admin_tab_pages: 'Pages'
   admin_url: 'Adresse des helpers'
   admin_url_help: 'L’adresse des helpers de la grille, où sont ses blocs ; l’API de l’engine est son /api'
-  admin_api_url: 'Adresse de l’API engine'
+  admin_api_url: 'Adresse de l’API de l’engine'
   admin_api_url_help: 'Seulement si l’API n’est pas le /api des helpers'
   admin_grid: 'Nick de la grille'
   admin_grid_help: 'Seulement si l’API sert plusieurs grilles'
   admin_api_key: 'Clé d’API'
   admin_api_key_help: 'Faite sur la machine de la grille : opensim api-key create <nom>. Gardée hors de la configuration et de git.'
   admin_api_key_saved: 'Enregistrée (tapez-en une nouvelle pour la remplacer)'
+  admin_send_mail: 'Envoyer les mails'
+  admin_send_mail_help: 'Désactivé sur un site de test seulement : l’engine n’envoie rien, les liens des inscriptions et des changements d’e-mail s’affichent sur la page'
   admin_cache: 'Cache (secondes)'
   admin_built_in_css: 'CSS intégré'
   admin_built_in_css_help: 'La feuille de style du plugin (ses pages, les modèles, les blocs) ; désactivée quand le thème les stylise'
-  admin_register: Inscription
+  admin_register: 'Inscription'
   admin_confirm_email: 'Confirmer l’e-mail'
   admin_confirm_email_help: 'Un nouvel avatar reste inactif jusqu’à ce qu’il clique sur le lien que l’engine lui envoie'
   admin_terms: 'Page des conditions'
@@ -127,12 +140,3 @@ w4os:
   admin_manager_level_help: 'Les avatars de ce niveau ou plus gèrent les avatars sur le site (200 : les dieux de la grille)'
   admin_save_accounts: 'Garder des comptes Grav'
   admin_save_accounts_help: 'Garder un compte Grav (user/accounts) pour chaque avatar qui se connecte ; toujours avec le plugin API'
-  grid_status: 'État de la grille'
-  regions: Régions
-  members: Membres
-  active_members: 'Membres actifs (30 jours)'
-  members_in_world: 'Membres dans le monde'
-  active_users: 'Visiteurs (30 jours)'
-  total_users: 'Visiteurs dans le monde'
-  area: Superficie
-  user_menu: Compte

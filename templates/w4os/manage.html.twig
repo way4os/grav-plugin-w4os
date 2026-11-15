@@ -8,7 +8,7 @@
 {% elseif list.items is empty %}
     <p>{{ 'w4os.no_avatars'|t }}</p>
 {% else %}
-    <p class="w4os-count">{{ 'w4os.avatars_count'|t|replace({'{count}': list.meta.total ?? list.items|length}) }}</p>
+    <p class="w4os-count">{{ 'w4os.avatars_count'|t(list.meta.total ?? list.items|length) }}</p>
     <div class="w4os-table-wrap">
     <table class="w4os-avatars">
         <thead><tr>
@@ -25,7 +25,7 @@
                 <td>{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
                 <td class="w4os-actions">
                     {% for action in (a.active ? ['disable', 'reset', 'delete'] : ['enable', 'delete']) %}
-                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'w4os.delete_confirm'|t|replace({'{name}': a.name})|e('js') }}')"{% endif %}>
+                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'w4os.delete_confirm'|t(a.name)|e('js') }}')"{% endif %}>
                             {{ nonce_field('w4os-manage')|raw }}
                             <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
                             <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">

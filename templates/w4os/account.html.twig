@@ -8,7 +8,7 @@
         </p>
         <p class="w4os-links">
             {% if w4os_is_manager() and w4os_route('manage') %}<a class="button" href="{{ base_url_relative ~ w4os_route('manage') }}">{{ 'w4os.manage_title'|t }}</a>{% endif %}
-            <a class="button" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.sign_out'|t }}</a>
+            <a class="button" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.logout'|t }}</a>
         </p>
     </div>
     <div class="w4os-account-profile">{{ w4os_block('profile', { name: avatar.name|replace({' ': '.'}) }) }}</div>
