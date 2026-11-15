@@ -1,0 +1,19 @@
+tmp/
+vendor/
+.env
+composer.lock
+.phpunit.result.cache
+.DS_Store
+*~
+# AI assistants: personal settings
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+.claude/
+.cursor/
+.gemini/
+.junie/
+.mcp.json
+opencode.json
+boost.json
+.github/copilot-instructions.md
