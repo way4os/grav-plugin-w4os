@@ -10,6 +10,8 @@ grid: ''
 # plugin, which keeps it in user-data://w4os/api.json (never in this file nor in git). The environment (GRAV_CONFIG__PLUGINS__W4OS__API_KEY)
 # can set it too.
 # api_key: ''
+# The style sheet of the plugin (its pages, the models picker, the blocks); off when the theme styles them
+built_in_css: true
 # How long (seconds) the blocks of the helpers and the avatar models are kept before being read again
 cache: 60
 register:

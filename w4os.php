@@ -121,7 +121,7 @@ class W4osPlugin extends Plugin
 
     public function onTwigSiteVariables(): void
     {
-        $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
     }
 
     /** [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /] */
