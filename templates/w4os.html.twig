@@ -1,0 +1,9 @@
+{# The pages of the plugin (pages/*.md): the text of the page, then its part (templates/w4os/<type>.html.twig). #}
+{% extends 'partials/base.html.twig' %}
+
+{% block content %}
+    <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
+        <h1>{{ page.title }}</h1>
+        {% include 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
+    </div>
+{% endblock %}

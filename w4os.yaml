@@ -1,0 +1,35 @@
+enabled: true
+# The address of the helpers of the grid, where its blocks are (https://grid.example.org/helpers). The engine API is served there
+# under /api unless api_url says otherwise.
+url: ''
+# The address of the engine API, when it is not the /api of the helpers
+api_url: ''
+# The nick of the grid, when the API serves several grids (its addresses are then /grids/{grid}/...); empty for the API of one grid
+grid: ''
+# The API key of the site, made on the machine of the grid: opensim api-key create <label>. Typed on the settings page of the
+# plugin, which keeps it in user-data://w4os/api.json (never in this file nor in git). The environment (GRAV_CONFIG__PLUGINS__W4OS__API_KEY)
+# can set it too.
+# api_key: ''
+# How long (seconds) the blocks of the helpers and the avatar models are kept before being read again
+cache: 60
+register:
+  # Registration on the site: off, nobody registers here
+  enabled: true
+  # The new avatar is inactive until it confirms its email with the link the engine mails it
+  confirm_email: true
+  # A page of the site the visitor must agree to (terms of service), as its route; empty for none
+  terms: ''
+# The avatars whose level is this or more manage the avatars of the grid on the site (200 and over are the gods of the grid)
+manager_level: 200
+# Keep a Grav account (user/accounts) for each avatar that signs in. Off: the avatar lives in the session only. The API plugin of
+# Grav needs one: it is kept anyway when that plugin is on.
+save_accounts: false
+# The pages of the plugin, served unless the site has a page at that route. The sign-in page is the one of the Login plugin
+# (/login); its "forgot password" button leads to its route_forgot, which is the one of this plugin by default.
+routes:
+  register: /register
+  confirm: /register/confirm
+  forgot: /forgot_password
+  reset: /reset-password
+  account: /account
+  manage: /account/avatars

@@ -1,0 +1,10 @@
+{# The terms of the site to agree to, when the setting register.terms names their page. #}
+{% set terms = config.plugins.w4os.register.terms %}
+{% if terms %}
+    <div class="form-field w4os-terms">
+        <label class="inline">
+            <input type="checkbox" name="{{ (scope ~ field.name)|fieldName }}" value="1" required>
+            {{ 'PLUGIN_W4OS.TERMS_AGREE'|t|replace({'{link}': '<a href="' ~ (base_url_relative ~ terms)|e('html_attr') ~ '" target="_blank">', '{/link}': '</a>'})|raw }}
+        </label>
+    </div>
+{% endif %}

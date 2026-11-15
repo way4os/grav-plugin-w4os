@@ -1,0 +1,49 @@
+{% set list = w4os_avatars() %}
+<form class="w4os-search" method="get">
+    <input type="search" name="search" value="{{ uri.query('search')|e('html_attr') }}" placeholder="{{ 'PLUGIN_W4OS.SEARCH_AVATARS'|t|e('html_attr') }}">
+    <button class="button" type="submit">{{ 'PLUGIN_W4OS.SEARCH'|t }}</button>
+</form>
+{% if list.error %}
+    <p class="notices red">{{ list.error }}</p>
+{% elseif list.items is empty %}
+    <p>{{ 'PLUGIN_W4OS.NO_AVATARS'|t }}</p>
+{% else %}
+    <p class="w4os-count">{{ 'PLUGIN_W4OS.AVATARS_COUNT'|t|replace({'{count}': list.meta.total ?? list.items|length}) }}</p>
+    <div class="w4os-table-wrap">
+    <table class="w4os-avatars">
+        <thead><tr>
+            <th>{{ 'PLUGIN_W4OS.AVATAR_NAME'|t }}</th><th>{{ 'PLUGIN_W4OS.EMAIL'|t }}</th><th>{{ 'PLUGIN_W4OS.STATUS'|t }}</th>
+            <th>{{ 'PLUGIN_W4OS.LAST_SEEN'|t }}</th><th>{{ 'PLUGIN_W4OS.CREATED'|t }}</th><th>{{ 'PLUGIN_W4OS.ACTIONS'|t }}</th>
+        </tr></thead>
+        <tbody>
+        {% for a in list.items %}
+            <tr class="{{ a.active ? 'active' : 'inactive' }}">
+                <td>{{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'PLUGIN_W4OS.GOD'|t }}</span>{% endif %}</td>
+                <td>{{ a.email }}</td>
+                <td>{{ a.online ? 'PLUGIN_W4OS.ONLINE'|t : (a.active ? 'PLUGIN_W4OS.ACTIVE'|t : 'PLUGIN_W4OS.INACTIVE'|t) }}</td>
+                <td>{{ a.lastSeen ? a.lastSeen|date('Y-m-d') : '—' }}</td>
+                <td>{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
+                <td class="w4os-actions">
+                    {% for action in (a.active ? ['disable', 'reset', 'delete'] : ['enable', 'delete']) %}
+                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'PLUGIN_W4OS.DELETE_CONFIRM'|t|replace({'{name}': a.name})|e('js') }}')"{% endif %}>
+                            {{ nonce_field('w4os-manage')|raw }}
+                            <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
+                            <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">
+                            <button class="button small {{ action == 'delete' ? 'danger' : '' }}" name="action" value="{{ action }}">{{ ('PLUGIN_W4OS.ACTION_' ~ action|upper)|t }}</button>
+                        </form>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% set pages = ((list.meta.total ?? 0) / (list.meta.perPage ?: 50))|round(0, 'ceil') %}
+    {% if pages > 1 %}
+        <p class="w4os-pages">
+        {% for n in 1..pages %}
+            {% if n == (list.meta.page ?? 1) %}<strong>{{ n }}</strong>{% else %}<a href="?{{ {search: uri.query('search'), page: n}|url_encode }}">{{ n }}</a>{% endif %}
+        {% endfor %}
+        </p>
+    {% endif %}
+{% endif %}

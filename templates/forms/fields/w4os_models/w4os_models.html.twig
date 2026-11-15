@@ -1,0 +1,29 @@
+{# The avatar models as pictures to pick from (radio buttons), as w4os shows them; nothing when the grid has none. #}
+{% extends "forms/field.html.twig" %}
+
+{% block field %}
+    {% set models = w4os_models() %}
+    {% if models is not empty %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}
+
+{% block input %}
+    {% set models = w4os_models() %}
+    {% set current = value ?: (models|length ? random(models).name : '') %}
+    <p class="w4os-help">{{ 'PLUGIN_W4OS.MODEL_HELP'|t }}</p>
+    <ul class="w4os-models">
+        {% for model in models %}
+            {% set id = (field.id|default(field.name)) ~ '-' ~ loop.index %}
+            <li>
+                <label class="w4os-model" for="{{ id|e('html_attr') }}">
+                    <input type="radio" id="{{ id|e('html_attr') }}" name="{{ (scope ~ field.name)|fieldName }}" value="{{ model.name|e('html_attr') }}"{% if model.name == current %} checked{% endif %}>
+                    <figure>
+                        <img class="w4os-model-picture" src="{{ model.image|e('html_attr') }}" alt="" loading="lazy" width="256" height="256">
+                        <figcaption>{{ model.label ?: model.name }}</figcaption>
+                    </figure>
+                </label>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

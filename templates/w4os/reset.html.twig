@@ -1,0 +1,7 @@
+{% if uri.query('token') %}
+    <p class="w4os-intro">{{ 'PLUGIN_W4OS.RESET_TEXT'|t }}</p>
+    {% include 'forms/form.html.twig' with { form: forms('w4os-reset') } %}
+{% else %}
+    <p class="w4os-intro">{{ 'PLUGIN_W4OS.RESET_NO_TOKEN'|t }}</p>
+    <p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route('forgot') }}">{{ 'PLUGIN_W4OS.FORGOT_TITLE'|t }}</a></p>
+{% endif %}

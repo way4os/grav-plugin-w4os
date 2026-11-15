@@ -1,0 +1,5 @@
+<p class="w4os-intro">{{ 'PLUGIN_W4OS.REGISTER_TEXT'|t }}</p>
+{% include 'forms/form.html.twig' with { form: forms('w4os-register') } %}
+<p class="w4os-links">
+    {{ 'PLUGIN_W4OS.HAVE_AVATAR'|t }} <a href="{{ base_url_relative ~ config.plugins.login.route|default('/login') }}">{{ 'PLUGIN_W4OS.SIGN_IN'|t }}</a>
+</p>
