@@ -46,7 +46,7 @@ w4os:
   current_password: 'Senha atual'
 
   # My avatar
-  account_title: 'Meu Avatar'
+  account_title: 'Perfil do avatar'
   born: 'Nascido'
   profile_title: 'Perfil'
   profile_text: 'O que os outros veem de você no mundo virtual (a foto e os interesses se definem no viewer).'

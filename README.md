@@ -31,6 +31,12 @@ The presentation and help pages are plain Markdown files of the site (`user/page
 
 In a template: `{{ w4os_block('grid-status') }}`.
 
+What only a visitor with no avatar signed in sees (an invitation to register), in a page with `cache_enable: false`:
+
+```markdown
+[w4os-guest]Create your avatar, then connect with any OpenSimulator viewer.[/w4os-guest]
+```
+
 ## Standalone
 
 The plugin is self-contained: its release zip (the one Grav's GPM installs, about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):

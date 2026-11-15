@@ -46,7 +46,7 @@ w4os:
   current_password: 'Cyfrinair presennol'
 
   # My avatar
-  account_title: 'Fy Avatar'
+  account_title: 'Proffil Avatar'
   born: 'Eni'
   profile_title: 'Proffil'
   profile_text: 'Yr hyn y mae eraill yn ei weld ohonoch yn y byd rhithwir (mae’r llun a’r diddordebau’n cael eu gosod yn y gwyliwr).'

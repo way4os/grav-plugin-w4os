@@ -142,13 +142,18 @@ class W4osPlugin extends Plugin
         $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
     }
 
-    /** [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /] */
+    /**
+     * [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /]
+     * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
+     */
     public function onShortcodeHandlers(): void
     {
-        $this->grav['shortcode']->getHandlers()->add('w4os', fn ($shortcode) => $this->block(
+        $handlers = $this->grav['shortcode']->getHandlers();
+        $handlers->add('w4os', fn ($shortcode) => $this->block(
             (string) $shortcode->getParameter('block', ''),
             array_filter(['name' => $shortcode->getParameter('name'), 'level' => $shortcode->getParameter('level'), 'title' => $shortcode->getParameter('title')]),
         ));
+        $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
     }
 
     public function onPagesInitialized(): void
