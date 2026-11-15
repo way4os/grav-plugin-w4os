@@ -141,6 +141,31 @@ final class Site
         return is_array($models) ? $models : [];
     }
 
+    /** The name of the grid, kept for the time of the setting "cache"; empty when the engine cannot tell it. */
+    public function gridName(): string
+    {
+        return $this->info('grid name', fn () => $this->engine()->gridName());
+    }
+
+    /** The login URI of the grid (host:port), kept for the time of the setting "cache"; empty when the engine cannot tell it. */
+    public function loginUri(): string
+    {
+        return $this->info('login uri', fn () => $this->engine()->loginUri());
+    }
+
+    private function info(string $key, \Closure $value): string
+    {
+        $kept = $this->cached($key, function () use ($value) {
+            try {
+                return $value() ?: null;
+            } catch (EngineException $e) {
+                return null;
+            }
+        });
+
+        return is_string($kept) ? $kept : '';
+    }
+
     /** @return array<string,string> the route of each page of the plugin, by its type */
     public function routes(): array
     {

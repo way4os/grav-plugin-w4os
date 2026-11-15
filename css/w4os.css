@@ -34,11 +34,18 @@
 .block-table { border-collapse: collapse; }
 .block-table th, .block-table td { text-align: left; padding: .25rem .75rem .25rem 0; }
 
-/* The menu of the visitor (templates/w4os/user-menu.html.twig) */
-.w4os-user-menu { position: relative; }
-.w4os-user-menu summary { cursor: pointer; list-style: none; white-space: nowrap; }
-.w4os-user-menu summary::-webkit-details-marker { display: none; }
-nav .w4os-user-menu ul, .w4os-user-menu ul { display: block; position: absolute; right: 0; z-index: 20; min-width: 12rem; margin: .5rem 0 0; padding: .5rem 0; list-style: none; background: var(--pico-background-color, #fff); border: 1px solid rgba(127, 127, 127, .25); border-radius: .4rem; box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .1); }
-nav .w4os-user-menu li, .w4os-user-menu li { display: block; margin: 0; padding: 0; list-style: none; }
-nav .w4os-user-menu li a, .w4os-user-menu li a { display: block; margin: 0; padding: .35rem 1rem; white-space: nowrap; text-decoration: none; }
-.overlay .w4os-user-menu ul { position: static; box-shadow: none; }
+/* The menu of the visitor (templates/w4os/user-menu.html.twig): its label is a link, its list opens on hover or focus, as the
+   languages of oli-langswitcher do */
+.w4os-user-menu { position: relative; display: flex; align-items: center; }
+.w4os-user-current { white-space: nowrap; text-decoration: none; color: inherit; }
+.w4os-user-list { position: absolute; top: 100%; right: 0; z-index: 50; display: grid; gap: 0.1rem; min-width: 12rem; margin: 0; padding: 0.35rem; list-style: none; color: CanvasText; background: Canvas;
+    border: 1px solid rgba(127, 127, 127, 0.35); border-radius: var(--q2-radius-md, 0.5rem); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); visibility: hidden; opacity: 0; transition: opacity 0.15s; }
+.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible; opacity: 1; }
+nav .w4os-user-list li, .w4os-user-list li { display: block; width: auto; margin: 0; padding: 0; list-style: none; }
+nav .w4os-user-list a, .w4os-user-list a { display: block; margin: 0; padding: 0.4rem 0.6rem; border-radius: var(--q2-radius-sm, 0.4rem); color: inherit; line-height: 1.2; white-space: nowrap; text-decoration: none; }
+.w4os-user-list a:hover, .w4os-user-list a:focus-visible { background: rgba(127, 127, 127, 0.15); }
+.overlay .w4os-user-menu { flex-direction: column; align-items: flex-start; }
+.overlay .w4os-user-list { position: static; visibility: visible; opacity: 1; box-shadow: none; border: 0; background: none; }
+
+/* The login URI to copy: one click selects it whole */
+.w4os-login-uri { user-select: all; cursor: text; }

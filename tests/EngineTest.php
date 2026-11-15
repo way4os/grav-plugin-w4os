@@ -53,3 +53,17 @@ describe('engine', function () {
         expect(fn () => $engine->avatar('u1'))->toThrow(fn (EngineException $e) => expect($e->status)->toBe(503));
     });
 });
+
+describe('grid info', function () {
+    test('the name of the grid is its gridname', function () {
+        $engine = fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['elements' => ['gridname' => 'Demo World']]]]]], $log);
+
+        expect($engine->gridName())->toBe('Demo World')->and($log[0]['url'])->toEndWith('/api/info');
+    });
+
+    test('the login URI is the uri of the grid info, asked once', function () {
+        $engine = fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['uri' => 'grid.example.org:8002', 'elements' => ['gridname' => 'Demo World']]]]]], $log);
+
+        expect($engine->loginUri())->toBe('grid.example.org:8002')->and($engine->gridName())->toBe('Demo World')->and($log)->toHaveCount(1);
+    });
+});

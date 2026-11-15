@@ -144,15 +144,21 @@ class W4osPlugin extends Plugin
 
     /**
      * [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /]
+     * [w4os text="welcome_title" /]: a text of the language files, the name of the grid in its %s ("Welcome to %s")
+     * [w4os info="uri" /]: the login URI of the grid (host:port), as text to copy
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      */
     public function onShortcodeHandlers(): void
     {
         $handlers = $this->grav['shortcode']->getHandlers();
-        $handlers->add('w4os', fn ($shortcode) => $this->block(
-            (string) $shortcode->getParameter('block', ''),
-            array_filter(['name' => $shortcode->getParameter('name'), 'level' => $shortcode->getParameter('level'), 'title' => $shortcode->getParameter('title')]),
-        ));
+        $handlers->add('w4os', fn ($shortcode) => match (true) {
+            ($text = (string) $shortcode->getParameter('text', '')) !== '' => htmlspecialchars($this->site()->translate('w4os.'.preg_replace('/[^a-z0-9_]/', '', $text), [$this->site()->gridName()])),
+            $shortcode->getParameter('info') === 'uri' => '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>',
+            default => $this->block(
+                (string) $shortcode->getParameter('block', ''),
+                array_filter(['name' => $shortcode->getParameter('name'), 'level' => $shortcode->getParameter('level'), 'title' => $shortcode->getParameter('title')]),
+            ),
+        });
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
     }
 
@@ -326,6 +332,9 @@ class W4osPlugin extends Plugin
     {
         $uri = $this->grav['uri'];
         $args += array_filter(['q' => $uri->query('q'), 'topic' => $uri->query('topic'), 'name' => $name === 'profile' ? $uri->query('name') : null]);
+        // The helpers translate their blocks: they are asked in the language of the page
+        $language = $this->grav['language'];
+        $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
         if ($name === 'profile' && empty($args['name']) && ($avatar = $this->site()->avatar())) {
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }

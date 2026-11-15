@@ -11,6 +11,9 @@ namespace W4os\Grav;
  */
 final class Engine
 {
+    /** @var ?array<string,mixed> */
+    private ?array $info = null;
+
     /**
      * @param string $url the address of the API
      * @param string $key the API key of the site (`opensim api-key create`)
@@ -54,6 +57,24 @@ final class Engine
         $key = str_contains($login, '@') ? 'email' : 'name';
 
         return $this->resource($this->call('POST', '/sign-ins', ['type' => 'sign-ins', 'attributes' => [$key => trim($login), 'password' => $password]]));
+    }
+
+    /** The name of the grid, as its grid info says it (`gridname`). */
+    public function gridName(): string
+    {
+        return (string) ($this->info()['elements']['gridname'] ?? ($this->info()['name'] ?? ''));
+    }
+
+    /** The login URI of the grid as a viewer takes it (host:port), as the engine writes it. */
+    public function loginUri(): string
+    {
+        return (string) ($this->info()['uri'] ?? '');
+    }
+
+    /** @return array<string,mixed> what the engine says of the grid (/info) */
+    private function info(): array
+    {
+        return $this->info ??= $this->resource($this->call('GET', '/info'));
     }
 
     /**
