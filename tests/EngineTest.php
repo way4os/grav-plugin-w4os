@@ -26,13 +26,13 @@ describe('engine', function () {
     });
 
     test('throws the problem the API answers', function () {
-        $engine = fakeEngine([[403, problem(403, 'The name or the password is wrong.', 'urn:opensim:problem:sign-in-refused')]]);
+        $engine = fakeEngine([[403, problem(403, 'The name or the password is wrong.', 'sign-in-refused')], [503, problem(503, 'down')]]);
 
         expect(fn () => $engine->signIn('Ada Love', 'wrong'))->toThrow(function (EngineException $e) {
             expect($e->status)->toBe(403)
-                ->and($e->type)->toBe('urn:opensim:problem:sign-in-refused')
+                ->and($e->problemCode)->toBe('sign-in-refused')
                 ->and($e->getMessage())->toBe('The name or the password is wrong.');
-        });
+        })->and(fn () => $engine->avatar('u1'))->toThrow(fn (EngineException $e) => expect($e->problemCode)->toBe('channel-unavailable'));
     });
 
     test('is not ready without an address or a key', function () {

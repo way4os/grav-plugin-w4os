@@ -14,7 +14,7 @@ It is one piece of the w4os family:
 - **Register**: an avatar chooses its name, its email, its password and its first outfit among the avatar models of the grid. It stays inactive until it clicks the link of the confirmation mail the engine sends (can be switched off). A page of terms to agree to can be required.
 - **Sign in** with the name of the avatar (`First Last`) or its email, on the page of the Login plugin. The accounts of the site (its administrators) keep working.
 - **Forgotten password**: a link by mail to choose a new one.
-- **My avatar**: the profile of the avatar, its email and the text of its profile (about, wants, skills, languages, real life, web page), its password.
+- **My avatar**: the profile of the avatar, the text of its profile (about, wants, skills, languages, real life, web page), its password, and its email: a new address changes once the link mailed to it is clicked.
 - **Avatars of the grid**, for its managers (the avatars of user level 200 or more by default): search, enable, disable, mail a password link, delete.
 - **Blocks of the helpers** in any page, as a shortcode or in a template: grid info, grid status, message of the day, search, popular places, destination guide, directory, profile.
 - English and French.
@@ -56,7 +56,7 @@ The pages of the plugin are served at these routes unless the site has its own p
 | Avatars of the grid (managers) | `/account/avatars` |
 | Sign in (Login plugin) | `/login` |
 
-The mails (confirmation, password) are sent by the engine, on the machine of the grid.
+The mails (confirmation, password) are sent by the engine, on the machine of the grid. On a test site, **Send the mails** off (`send_mail: false`) mails nothing: the confirmation links of the registrations and of the email changes are shown on the page instead (never the one of a new password).
 
 ## License
 

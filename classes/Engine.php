@@ -90,12 +90,16 @@ final class Engine
     }
 
     /**
+     * Change an avatar. Its email with `confirmEmail` (and `link`, `send`) changes only once the new address is confirmed.
+     *
      * @param array<string,mixed> $attributes email, password, active, about, profileUrl, wants, skills, languages, firstLife
-     * @return array<string,mixed>
+     * @return array{array<string,mixed>, array<string,mixed>} the attributes of the avatar and the meta of the answer
      */
     public function updateAvatar(string $id, array $attributes): array
     {
-        return $this->resource($this->call('PATCH', '/avatars/'.rawurlencode($id), ['type' => 'avatars', 'id' => $id, 'attributes' => $attributes]));
+        $document = $this->call('PATCH', '/avatars/'.rawurlencode($id), ['type' => 'avatars', 'id' => $id, 'attributes' => $attributes]);
+
+        return [$this->resource($document), (array) ($document['meta'] ?? [])];
     }
 
     public function deleteAvatar(string $id): void
@@ -121,10 +125,10 @@ final class Engine
      *
      * @param string $link the page that takes the token, `{token}` in it
      */
-    public function requestPasswordReset(string $login, string $link): void
+    public function requestPasswordReset(string $login, string $link, bool $send = true): void
     {
         $key = str_contains($login, '@') ? 'email' : 'name';
-        $this->call('POST', '/password-resets', ['type' => 'password-resets', 'attributes' => [$key => trim($login), 'link' => $link]]);
+        $this->call('POST', '/password-resets', ['type' => 'password-resets', 'attributes' => [$key => trim($login), 'link' => $link] + ($send ? [] : ['send' => false])]);
     }
 
     /** @return array<string,mixed> the avatar whose password changed */
@@ -133,10 +137,16 @@ final class Engine
         return $this->resource($this->call('POST', '/password-resets/complete', ['type' => 'password-resets', 'attributes' => ['token' => $token, 'password' => $password]]));
     }
 
-    /** Mail a new link to confirm its email to an avatar that waits for it. */
-    public function requestEmailConfirmation(string $avatar, string $link): void
+    /**
+     * Mail a new link to confirm its email to an avatar that waits for it.
+     *
+     * @return array<string,mixed> the token given (token, link, expires) when it is not mailed
+     */
+    public function requestEmailConfirmation(string $avatar, string $link, bool $send = true): array
     {
-        $this->call('POST', '/email-confirmations', ['type' => 'email-confirmations', 'attributes' => ['avatar' => $avatar, 'link' => $link]]);
+        $document = $this->call('POST', '/email-confirmations', ['type' => 'email-confirmations', 'attributes' => ['avatar' => $avatar, 'link' => $link] + ($send ? [] : ['send' => false])]);
+
+        return $send ? [] : (array) ($document['data'][0]['attributes'] ?? []);
     }
 
     /** @return array<string,mixed> the avatar, now active */
@@ -175,7 +185,7 @@ final class Engine
             throw new EngineException($status >= 400 ? $status : 502, "The engine API answered $status with no JSON document.");
         }
         if ($status >= 400) {
-            throw new EngineException($status, (string) ($document['detail'] ?? $document['title'] ?? "Error $status"), (string) ($document['type'] ?? ''), $document);
+            throw new EngineException($status, (string) ($document['detail'] ?? $document['title'] ?? "Error $status"), $document);
         }
 
         return $document;

@@ -88,6 +88,12 @@ form:
               label: PLUGIN_W4OS.ADMIN_MANAGER_LEVEL
               help: PLUGIN_W4OS.ADMIN_MANAGER_LEVEL_HELP
               validate: { type: int, min: 1 }
+            send_mail:
+              type: toggle
+              label: PLUGIN_W4OS.ADMIN_SEND_MAIL
+              help: PLUGIN_W4OS.ADMIN_SEND_MAIL_HELP
+              options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
+              validate: { type: bool }
             save_accounts:
               type: toggle
               label: PLUGIN_W4OS.ADMIN_SAVE_ACCOUNTS

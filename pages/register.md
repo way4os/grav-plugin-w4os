@@ -29,12 +29,14 @@ form:
       label: PLUGIN_W4OS.PASSWORD
       help: PLUGIN_W4OS.PASSWORD_HELP
       autocomplete: new-password
+      minlength: 6
       maxlength: 16
       validate: { required: true }
     password_confirm:
       type: password
       label: PLUGIN_W4OS.PASSWORD_CONFIRM
       autocomplete: new-password
+      minlength: 6
       maxlength: 16
       validate: { required: true }
     model:

@@ -6,12 +6,34 @@ namespace W4os\Grav;
  * What the forms of the site ask of the engine: register an avatar, confirm its email, forgotten password, the account of the
  * avatar signed in, the avatars for the managers of the grid. The rules of the names, the passwords and the models are the
  * engine's; only what the form itself adds (the password typed twice, the terms) is checked here.
- * Plain PHP: a refusal is a FormError that carries the key of its text in languages.yaml.
+ * Plain PHP: a refusal is a FormError that carries the key of its text in languages.yaml, from the code of the engine's problem.
  */
 final class Forms
 {
     /** The profile fields an avatar edits on the site. */
     public const PROFILE = ['about', 'wants', 'skills', 'languages', 'firstLife', 'profileUrl'];
+
+    /** The text of each code of the problems of the engine (Problem::CODES); the others are ERROR_INVALID or ERROR_UNAVAILABLE. */
+    public const ERRORS = [
+        'sign-in-refused' => 'PLUGIN_W4OS.ERROR_SIGN_IN',
+        'account-disabled' => 'PLUGIN_W4OS.ERROR_ACCOUNT_DISABLED',
+        'email-unconfirmed' => 'PLUGIN_W4OS.ERROR_EMAIL_UNCONFIRMED',
+        'name-invalid' => 'PLUGIN_W4OS.ERROR_NAME_INVALID',
+        'name-reserved' => 'PLUGIN_W4OS.ERROR_NAME_RESERVED',
+        'name-taken' => 'PLUGIN_W4OS.ERROR_NAME_TAKEN',
+        'password-required' => 'PLUGIN_W4OS.ERROR_REQUIRED',
+        'password-invalid' => 'PLUGIN_W4OS.ERROR_PASSWORD_INVALID',
+        'email-invalid' => 'PLUGIN_W4OS.ERROR_EMAIL_INVALID',
+        'email-required' => 'PLUGIN_W4OS.ERROR_EMAIL_REQUIRED',
+        'model-unknown' => 'PLUGIN_W4OS.ERROR_MODEL_UNKNOWN',
+        'token-refused' => 'PLUGIN_W4OS.ERROR_TOKEN',
+        'no-confirmation-pending' => 'PLUGIN_W4OS.ERROR_NO_CONFIRMATION_PENDING',
+        'mail-failed' => 'PLUGIN_W4OS.ERROR_MAIL_FAILED',
+        'not-found' => 'PLUGIN_W4OS.ERROR_NOT_FOUND',
+        'invalid-request' => 'PLUGIN_W4OS.ERROR_INVALID',
+        'field-unknown' => 'PLUGIN_W4OS.ERROR_INVALID',
+        'link-invalid' => 'PLUGIN_W4OS.ERROR_INVALID',
+    ];
 
     /**
      * @param array<string,mixed> $config the settings of the plugin
@@ -19,11 +41,18 @@ final class Forms
      */
     public function __construct(private Engine $engine, private array $config, private \Closure $link) {}
 
+    /** Whether the engine mails the links; off on a test site, where the links of a registration are shown instead. */
+    public function sends(): bool
+    {
+        return (bool) ($this->config['send_mail'] ?? true);
+    }
+
     /**
      * Register an avatar: First and last name, email, password (twice), model.
      *
      * @param array<string,mixed> $data the fields of the form
-     * @return array{avatar: array<string,mixed>, confirm: bool, sent: bool} the avatar, whether it must confirm its email, whether the mail left
+     * @return array{avatar: array<string,mixed>, confirm: bool, sent: bool, link: ?string} the avatar, whether it must confirm
+     *     its email, whether the mail left, the link of the confirmation when it was not mailed (test site)
      */
     public function register(array $data): array
     {
@@ -39,32 +68,53 @@ final class Forms
         if ($attributes['firstName'] === '' || $attributes['lastName'] === '' || $attributes['email'] === '' || $attributes['password'] === '') {
             throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
         }
-        $attributes += $confirm ? ['confirmEmail' => true, 'link' => $this->tokenLink('confirm')] : ['active' => true];
+        $attributes += $confirm ? ['confirmEmail' => true, 'link' => $this->tokenLink('confirm')] + ($this->sends() ? [] : ['send' => false]) : ['active' => true];
         [$avatar, $meta] = $this->ask(fn () => $this->engine->createAvatar($attributes));
 
-        return ['avatar' => $avatar, 'confirm' => $confirm, 'sent' => ($meta['emailConfirmation'] ?? '') === 'sent'];
+        return [
+            'avatar' => $avatar,
+            'confirm' => $confirm,
+            'sent' => ($meta['emailConfirmation'] ?? '') === 'sent',
+            'link' => $meta['confirmation']['link'] ?? null,
+        ];
     }
 
-    /** @return array<string,mixed> the avatar, now active */
+    /** @return array<string,mixed> the avatar, now active, or with its new email */
     public function confirm(string $token): array
     {
-        return $this->ask(fn () => $this->engine->confirmEmail(trim($token)), 'PLUGIN_W4OS.ERROR_TOKEN');
+        return $this->ask(fn () => $this->engine->confirmEmail(trim($token)));
     }
 
-    /** Mail a new confirmation link to an avatar that waits for it (by name). */
-    public function resendConfirmation(string $name): void
+    /**
+     * Mail a new confirmation link to an avatar that waits for it (by name).
+     *
+     * @return ?string the link, when it is not mailed (test site)
+     */
+    public function resendConfirmation(string $name): ?string
     {
-        $this->ask(fn () => $this->engine->requestEmailConfirmation(trim($name), $this->tokenLink('confirm')));
+        $given = $this->ask(fn () => $this->engine->requestEmailConfirmation(trim($name), $this->tokenLink('confirm'), $this->sends()));
+
+        return $given['link'] ?? null;
     }
 
-    /** Mail a link to choose a new password. The answer is the same whether the name or the email is someone's or not. */
+    /**
+     * Mail a link to choose a new password. The answer is the same whether the name or the email is someone's or not; on a test
+     * site nothing is mailed and the link is not shown (it opens the account of anyone): the API gives the token.
+     */
     public function forgot(array $data): void
     {
         $login = trim((string) ($data['login'] ?? ''));
         if ($login === '') {
             throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
         }
-        $this->ask(fn () => $this->engine->requestPasswordReset($login, $this->tokenLink('reset')));
+        try {
+            $this->engine->requestPasswordReset($login, $this->tokenLink('reset'), $this->sends());
+        } catch (EngineException $e) {
+            // Nobody has this name or email: said only when nothing is mailed, the visitor is not told
+            if ($e->problemCode !== 'not-found') {
+                throw $this->error($e);
+            }
+        }
     }
 
     /** @return array<string,mixed> the avatar whose password changed */
@@ -72,7 +122,7 @@ final class Forms
     {
         $this->samePassword($data);
 
-        return $this->ask(fn () => $this->engine->resetPassword(trim((string) ($data['token'] ?? '')), (string) $data['password']), 'PLUGIN_W4OS.ERROR_TOKEN');
+        return $this->ask(fn () => $this->engine->resetPassword(trim((string) ($data['token'] ?? '')), (string) $data['password']));
     }
 
     /**
@@ -82,14 +132,7 @@ final class Forms
      */
     public function signIn(string $login, string $password): array
     {
-        try {
-            return $this->engine->signIn($login, $password);
-        } catch (EngineException $e) {
-            if ($e->status === 403) {
-                throw new FormError(str_contains($e->getMessage(), 'not active') ? 'PLUGIN_W4OS.ERROR_NOT_ACTIVE' : 'PLUGIN_W4OS.ERROR_SIGN_IN', previous: $e);
-            }
-            throw $this->error($e);
-        }
+        return $this->ask(fn () => $this->engine->signIn($login, $password));
     }
 
     /** @return array<string,mixed> the avatar */
@@ -99,33 +142,35 @@ final class Forms
     }
 
     /**
-     * The email and the profile of the avatar signed in: what changed only (an avatar has no profile until it opens it in-world).
+     * The email and the profile of the avatar signed in: what changed only. A new email changes once the avatar clicks the link
+     * mailed to it.
      *
      * @param array<string,mixed> $current the avatar as the engine has it
-     * @return array<string,mixed> the avatar
+     * @return array{avatar: array<string,mixed>, email: ?string, link: ?string} the avatar, the new email waiting for its
+     *     confirmation, its link when it was not mailed (test site)
      */
     public function profile(array $current, array $data): array
     {
         $attributes = [];
-        foreach (array_merge(['email'], self::PROFILE) as $key) {
+        foreach (self::PROFILE as $key) {
             if (array_key_exists($key, $data) && trim((string) $data[$key]) !== trim((string) ($current[$key] ?? ''))) {
                 $attributes[$key] = trim((string) $data[$key]);
             }
         }
-        if (($attributes['email'] ?? 'x') === '') {
+        $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
+        if ($email === '') {
             throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
         }
+        $changed = strtolower($email) !== strtolower(trim((string) ($current['email'] ?? '')));
+        if ($changed) {
+            $attributes += ['email' => $email, 'confirmEmail' => true, 'link' => $this->tokenLink('confirm', ['change' => 1])] + ($this->sends() ? [] : ['send' => false]);
+        }
         if ($attributes === []) {
-            return $current;
+            return ['avatar' => $current, 'email' => null, 'link' => null];
         }
-        try {
-            return $this->engine->updateAvatar((string) $current['uuid'], $attributes);
-        } catch (EngineException $e) {
-            if ($e->status === 503 && str_contains($e->getMessage(), 'no profile yet')) {
-                throw new FormError('PLUGIN_W4OS.ERROR_NO_PROFILE', previous: $e);
-            }
-            throw $e->status === 403 ? new FormError('PLUGIN_W4OS.ERROR_FORBIDDEN', previous: $e) : $this->error($e);
-        }
+        [$avatar, $meta] = $this->ask(fn () => $this->engine->updateAvatar((string) $current['uuid'], $attributes));
+
+        return ['avatar' => $avatar, 'email' => $changed ? $email : null, 'link' => $meta['confirmation']['link'] ?? null];
     }
 
     /** A new password for the avatar signed in, once its current one is checked. */
@@ -135,7 +180,7 @@ final class Forms
         try {
             $this->engine->signIn((string) $avatar['name'], (string) ($data['current'] ?? ''));
         } catch (EngineException $e) {
-            throw $e->status === 403 ? new FormError('PLUGIN_W4OS.ERROR_CURRENT_PASSWORD', previous: $e) : $this->error($e);
+            throw $e->problemCode === 'sign-in-refused' ? new FormError('PLUGIN_W4OS.ERROR_CURRENT_PASSWORD', previous: $e) : $this->error($e);
         }
         $this->ask(fn () => $this->engine->updateAvatar((string) $avatar['uuid'], ['password' => (string) $data['password']]));
     }
@@ -151,18 +196,22 @@ final class Forms
         match ($action) {
             'enable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => true])),
             'disable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => false])),
-            'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'))),
+            'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'), $this->sends())),
             'delete' => $this->ask(fn () => $this->engine->deleteAvatar($uuid)),
             default => throw new FormError('PLUGIN_W4OS.ERROR_INVALID'),
         };
     }
 
-    /** The address of a page that takes a token, `{token}` where the engine puts it. */
-    private function tokenLink(string $type): string
+    /**
+     * The address of a page that takes a token, `{token}` where the engine puts it.
+     *
+     * @param array<string,scalar> $query more of the address
+     */
+    private function tokenLink(string $type, array $query = []): string
     {
         $url = ($this->link)($type);
 
-        return $url.(str_contains($url, '?') ? '&' : '?').'token={token}';
+        return $url.(str_contains($url, '?') ? '&' : '?').($query === [] ? '' : http_build_query($query).'&').'token={token}';
     }
 
     private function samePassword(array $data): void
@@ -175,27 +224,21 @@ final class Forms
         }
     }
 
-    /**
-     * A call to the engine, its problems as form errors.
-     *
-     * @param string $forbidden the text of a 403 (a token refused)
-     */
-    private function ask(\Closure $call, string $forbidden = 'PLUGIN_W4OS.ERROR_FORBIDDEN'): mixed
+    /** A call to the engine, its problems as form errors. */
+    private function ask(\Closure $call): mixed
     {
         try {
             return $call();
         } catch (EngineException $e) {
-            throw $e->status === 403 ? new FormError($forbidden, previous: $e) : $this->error($e);
+            throw $this->error($e);
         }
     }
 
-    /** The text of a problem: what the engine says of a wrong value, a generic one otherwise. */
+    /** The text of a problem, by its code; what the engine says is kept for the codes that only say "a value is wrong". */
     private function error(EngineException $e): FormError
     {
-        return match (true) {
-            $e->status === 400, $e->status === 409 => new FormError('PLUGIN_W4OS.ERROR_INVALID', $e->getMessage(), $e),
-            $e->status === 404 => new FormError('PLUGIN_W4OS.ERROR_NOT_FOUND', previous: $e),
-            default => new FormError('PLUGIN_W4OS.ERROR_UNAVAILABLE', previous: $e),
-        };
+        $key = self::ERRORS[$e->problemCode] ?? 'PLUGIN_W4OS.ERROR_UNAVAILABLE';
+
+        return new FormError($key, $key === 'PLUGIN_W4OS.ERROR_INVALID' ? $e->getMessage() : '', $e);
     }
 }

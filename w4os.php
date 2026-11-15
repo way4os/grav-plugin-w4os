@@ -192,17 +192,18 @@ class W4osPlugin extends Plugin
                     $result = $forms->register($data);
                     $name = (string) $result['avatar']['name'];
                     if ($result['confirm']) {
-                        $this->done($result['sent'] ? 'PLUGIN_W4OS.REGISTERED_CONFIRM' : 'PLUGIN_W4OS.REGISTERED_NOT_SENT', $routes['confirm'], ['name' => $name]);
+                        $key = $result['link'] ? 'PLUGIN_W4OS.REGISTERED_TEST' : ($result['sent'] ? 'PLUGIN_W4OS.REGISTERED_CONFIRM' : 'PLUGIN_W4OS.REGISTERED_NOT_SENT');
+                        $this->done($key, $routes['confirm'], ['name' => $name, 'link' => $this->link($result['link'])]);
                     }
                     $this->done('PLUGIN_W4OS.REGISTERED', $login, ['name' => $name]);
                     // no break: done() redirects
                 case 'resend':
-                    $forms->resendConfirmation((string) ($data['name'] ?? ''));
-                    $this->done('PLUGIN_W4OS.CONFIRM_RESENT', $routes['confirm']);
+                    $link = $forms->resendConfirmation((string) ($data['name'] ?? ''));
+                    $this->done($link ? 'PLUGIN_W4OS.CONFIRM_RESENT_TEST' : 'PLUGIN_W4OS.CONFIRM_RESENT', $routes['confirm'], ['link' => $this->link($link)]);
                     // no break
                 case 'forgot':
                     $forms->forgot($data);
-                    $this->done('PLUGIN_W4OS.FORGOT_SENT', $routes['forgot']);
+                    $this->done($forms->sends() ? 'PLUGIN_W4OS.FORGOT_SENT' : 'PLUGIN_W4OS.FORGOT_TEST', $routes['forgot']);
                     // no break
                 case 'reset':
                     $forms->reset($data);
@@ -210,8 +211,9 @@ class W4osPlugin extends Plugin
                     // no break
                 case 'profile':
                     $this->requireAvatar();
-                    $forms->profile(self::current() ?? throw new FormError('PLUGIN_W4OS.ERROR_UNAVAILABLE'), $data);
-                    $this->done('PLUGIN_W4OS.PROFILE_SAVED', $routes['account']);
+                    $result = $forms->profile(self::current() ?? throw new FormError('PLUGIN_W4OS.ERROR_UNAVAILABLE'), $data);
+                    $key = $result['email'] === null ? 'PLUGIN_W4OS.PROFILE_SAVED' : ($result['link'] ? 'PLUGIN_W4OS.EMAIL_PENDING_TEST' : 'PLUGIN_W4OS.EMAIL_PENDING');
+                    $this->done($key, $routes['account'], ['email' => htmlspecialchars((string) $result['email']), 'link' => $this->link($result['link'])]);
                     // no break
                 case 'password':
                     $forms->password($this->requireAvatar(), $data);
@@ -223,15 +225,28 @@ class W4osPlugin extends Plugin
         }
     }
 
-    /** The link of a confirmation mail: the avatar is active, it can sign in. */
+    /** The link of a confirmation mail: the new avatar is active, it can sign in; or the new email of an avatar is its email. */
     private function confirm(string $token): void
     {
         try {
             $avatar = $this->site()->forms()->confirm($token);
-            $this->done('PLUGIN_W4OS.CONFIRMED', $this->grav['config']->get('plugins.login.route', '/login'), ['name' => (string) ($avatar['name'] ?? '')]);
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
+
+            return;
         }
+        $login = $this->grav['config']->get('plugins.login.route', '/login');
+        if ($this->grav['uri']->query('change')) {
+            $this->site()->avatar() === null || $this->grav['user']->set('email', (string) ($avatar['email'] ?? ''));
+            $this->done('PLUGIN_W4OS.EMAIL_CHANGED', $this->site()->avatar() === null ? $login : $this->site()->routes()['account'], ['email' => htmlspecialchars((string) ($avatar['email'] ?? ''))]);
+        }
+        $this->done('PLUGIN_W4OS.CONFIRMED', $login, ['name' => (string) ($avatar['name'] ?? '')]);
+    }
+
+    /** A link of a message (the confirmation link of a test site, which mails nothing). */
+    private function link(?string $url): string
+    {
+        return $url ? '<a href="'.htmlspecialchars($url).'">'.htmlspecialchars($url).'</a>' : '';
     }
 
     /** An action of a manager on an avatar (a form of the list, with its nonce). */
