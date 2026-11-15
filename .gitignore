@@ -1,7 +1,6 @@
 tmp/
 vendor/
 .env
-composer.lock
 .phpunit.result.cache
 .DS_Store
 *~
@@ -17,3 +16,5 @@ GEMINI.md
 opencode.json
 boost.json
 .github/copilot-instructions.md
+dist/
+build/

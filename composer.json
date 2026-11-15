@@ -1,14 +1,53 @@
 {
     "name": "magicoli/grav-plugin-w4os",
-    "description": "Grav plugin: the website of an OpenSimulator grid, a thin bridge to the OpenSim engine API",
+    "description": "Grav plugin: the website of an OpenSimulator grid, through the OpenSim engine API of the grid or the engine and helpers it bundles",
     "type": "grav-plugin",
     "license": "AGPL-3.0-or-later",
+    "repositories": [
+        {
+            "name": "magicoli/opensim-engine",
+            "url": "../opensim-engine/",
+            "type": "path",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "name": "magicoli/opensim-helpers",
+            "url": "../opensim-helpers/",
+            "type": "path",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "name": "magicoli/opensim-rest-php",
+            "url": "../opensim-rest-php/",
+            "type": "path",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "name": "magicoli/container-tools",
+            "url": "../container-tools/",
+            "type": "path",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "require": {
-        "php": "^8.3"
+        "php": "^8.3",
+        "magicoli/opensim-engine": "@dev",
+        "magicoli/opensim-helpers": "@dev",
+        "magicoli/opensim-rest-php": "@dev"
     },
     "require-dev": {
         "pestphp/pest": "^4.0",
-        "symfony/yaml": "^7.0 || ^8.0"
+        "symfony/yaml": "^7.0 || ^8.0",
+        "magicoli/bash-tools": "^1.0",
+        "magicoli/build-tools": "^0.1.2"
     },
     "autoload": {
         "psr-4": {
@@ -21,6 +60,11 @@
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true
-        }
-    }
+        },
+        "optimize-autoloader": true,
+        "prepend-autoloader": false,
+        "platform-check": false
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

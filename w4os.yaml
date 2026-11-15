@@ -1,11 +1,32 @@
 enabled: true
+# The engine of the grid, where the site asks everything:
+#   remote   the engine API of the grid, served by its helpers (url, api_key below): the site can be anywhere
+#   bundled  the engine and the helpers the plugin bundles (its vendor folder), used as libraries: no API, no key; the grid is
+#            described under "bundled" below. Needs the PHP extensions of the engine (pdo_mysql, mysqli; imagick for the pictures).
+engine: remote
 # The address of the helpers of the grid, where its blocks are (https://grid.example.org/helpers). The engine API is served there
 # under /api unless api_url says otherwise.
 url: ''
 # The address of the engine API, when it is not the /api of the helpers
 api_url: ''
-# The nick of the grid, when the API serves several grids (its addresses are then /grids/{grid}/...); empty for the API of one grid
+# The nick of the grid, when the API serves several grids (its addresses are then /grids/{grid}/...); empty for the API of one grid.
+# With the bundled engine and an OpenSim install on this server: the grid of the install, empty for its only grid.
 grid: ''
+# The grid of the bundled engine (engine: bundled): an OpenSim install of this server, or a grid described by its login address
+# and the database of its Robust.
+bundled:
+  # The login address of the grid (http://grid.example.org:8002): its name and its addresses come from it (get_grid_info).
+  # Empty: the grid of the OpenSim install of this server (its opensim.conf, found or given below).
+  login: ''
+  # The database of its Robust. The password typed on the settings page is kept in user-data://w4os/database.json (never in this
+  # file nor in git); the environment can set it too (GRAV_CONFIG__PLUGINS__W4OS__BUNDLED__DATABASE__PASSWORD).
+  database:
+    host: localhost
+    port: 3306
+    name: ''
+    user: ''
+  # The opensim.conf of the install of this server, when it is not in one of the usual places
+  opensim_conf: ''
 # The API key of the site, made on the machine of the grid: opensim api-key create <label>. Typed on the settings page of the
 # plugin, which keeps it in user-data://w4os/api.json (never in this file nor in git). The environment (GRAV_CONFIG__PLUGINS__W4OS__API_KEY)
 # can set it too.
@@ -38,3 +59,5 @@ routes:
   reset: /reset-password
   account: /account
   manage: /account/avatars
+  # The pictures of the grid (the models), served by the bundled engine
+  assets: /grid-assets

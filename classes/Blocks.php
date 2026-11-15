@@ -3,9 +3,9 @@
 namespace W4os\Grav;
 
 /**
- * The blocks of the helpers of the grid (`/blocks/{name}`: grid info, grid status, message of the day, search, profile...), as the
- * HTML fragments the helpers make, in their own translations (the language of the visitor is asked), put in the pages of the site as
- * they are. Plain PHP: the reading of an address (with its cache) is given.
+ * The blocks of the helpers of the grid (grid info, grid status, message of the day, search, profile...), as the HTML fragments the
+ * helpers make, in their own translations (the language of the visitor is asked), put in the pages of the site as they are: read at
+ * `/blocks/{name}` of the helpers of the grid, or made by the helpers the plugin bundles. Plain PHP: the reading is given.
  */
 final class Blocks
 {
@@ -16,12 +16,20 @@ final class Blocks
     private const ARGS = ['name', 'q', 'topic', 'level', 'title'];
 
     /**
-     * @param string $url the address of the helpers of the grid (`https://grid.example.org/helpers`)
-     * @param \Closure(string $url): ?string $fetch the body at an address, null when it cannot be read
+     * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read
      */
-    public function __construct(private string $url, private \Closure $fetch)
+    public function __construct(private \Closure $fetch) {}
+
+    /**
+     * The blocks the helpers of a grid serve at their address (`https://grid.example.org/helpers`).
+     *
+     * @param \Closure(string $url): ?string $get the body at an address, null when it cannot be read
+     */
+    public static function remote(string $url, \Closure $get): self
     {
-        $this->url = rtrim($url, '/');
+        $url = rtrim($url, '/');
+
+        return new self(fn (string $name, array $args) => $url === '' ? null : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
     }
 
     /**
@@ -34,11 +42,11 @@ final class Blocks
         $name = strtolower(trim($name));
         // The helpers take both spellings
         $name = in_array(str_replace('-', '_', $name), self::NAMES, true) ? str_replace('-', '_', $name) : $name;
-        if ($this->url === '' || ! in_array($name, self::NAMES, true)) {
+        if (! in_array($name, self::NAMES, true)) {
             return '';
         }
         $query = array_filter(array_intersect_key($args, array_flip(self::ARGS)), fn ($v) => $v !== null && $v !== '');
-        $html = ($this->fetch)($this->url.'/blocks/'.$name.($query === [] ? '' : '?'.http_build_query($query)));
+        $html = ($this->fetch)($name, $query);
 
         return is_string($html) ? trim($html) : '';
     }

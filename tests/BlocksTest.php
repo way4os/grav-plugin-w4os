@@ -5,7 +5,7 @@ use W4os\Grav\Blocks;
 describe('blocks', function () {
     test('reads a block of the helpers with its arguments', function () {
         $asked = [];
-        $blocks = new Blocks('https://grid.example.org/helpers/', function (string $url) use (&$asked) {
+        $blocks = Blocks::remote('https://grid.example.org/helpers/', function (string $url) use (&$asked) {
             $asked[] = $url;
 
             return " <section>$url</section> ";
@@ -18,9 +18,10 @@ describe('blocks', function () {
     });
 
     test('a block that is not one, or not public, is never asked', function () {
-        $blocks = new Blocks('https://grid.example.org/helpers', fn () => throw new LogicException('asked'));
+        $blocks = Blocks::remote('https://grid.example.org/helpers', fn () => throw new LogicException('asked'));
 
         expect($blocks->html('health'))->toBe('')->and($blocks->html('../avatars'))->toBe('')
-            ->and((new Blocks('', fn () => 'x'))->html('grid-info'))->toBe('');
+            ->and(Blocks::remote('', fn () => 'x')->html('grid-info'))->toBe('')
+            ->and((new Blocks(fn (string $name, array $args) => "<p>$name ".json_encode($args).'</p>'))->html('profile', ['name' => 'Ada.Love']))->toBe('<p>profile {"name":"Ada.Love"}</p>');
     });
 });

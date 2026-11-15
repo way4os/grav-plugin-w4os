@@ -1,0 +1,9 @@
+# What the release zip (the one Grav's GPM installs) leaves out, among what git tracks: /name is at the root, name is anywhere
+/.distignore
+/.gitignore
+/DEVELOPERS.md
+/dev
+/tests
+/phpunit.xml
+/docs
+/build

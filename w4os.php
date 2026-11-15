@@ -17,6 +17,7 @@ require_once __DIR__.'/classes/Engine.php';
 require_once __DIR__.'/classes/FormError.php';
 require_once __DIR__.'/classes/Forms.php';
 require_once __DIR__.'/classes/Blocks.php';
+require_once __DIR__.'/classes/Bundled.php';
 require_once __DIR__.'/classes/Site.php';
 
 /**
@@ -48,6 +49,16 @@ class W4osPlugin extends Plugin
     {
         if ($this->isAdmin()) {
             return;
+        }
+        // The pictures of the grid, served by the bundled engine
+        if ($answer = $this->site()->asset($this->grav['uri']->path())) {
+            [$status, $body, $headers] = $answer;
+            http_response_code($status);
+            foreach ($headers as $name => $value) {
+                header("$name: $value");
+            }
+            echo $body;
+            exit;
         }
         $this->enable([
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
@@ -89,7 +100,7 @@ class W4osPlugin extends Plugin
         $event->stopPropagation();
     }
 
-    /** The API key typed on the settings page is kept out of the configuration (and of git), see Site::saveApiKey(). */
+    /** The API key and the password of the database typed on the settings page are kept out of the configuration (and of git). */
     public function onAdminSave(Event $event): void
     {
         $object = $event['object'] ?? null;
@@ -100,6 +111,9 @@ class W4osPlugin extends Plugin
         $key = trim((string) $object->get('api_key', ''));
         $key === '' || $this->site()->saveApiKey($key);
         $object->undef('api_key');
+        $password = (string) $object->get('bundled.database.password', '');
+        $password === '' || $this->site()->saveDatabasePassword($password);
+        $object->undef('bundled.database.password');
     }
 
     /** Templates of the plugin come last, so a theme can override them. */

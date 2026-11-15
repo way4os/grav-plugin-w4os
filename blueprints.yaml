@@ -33,6 +33,17 @@ form:
           type: tab
           title: w4os.admin_tab_connection
           fields:
+            engine:
+              type: select
+              label: w4os.admin_engine
+              help: w4os.admin_engine_help
+              options:
+                remote: w4os.admin_engine_remote
+                bundled: w4os.admin_engine_bundled
+            section_remote:
+              type: section
+              title: w4os.admin_engine_remote
+              underline: true
             url:
               type: url
               label: w4os.admin_url
@@ -52,6 +63,38 @@ form:
               type: text
               label: w4os.admin_grid
               help: w4os.admin_grid_help
+            section_bundled:
+              type: section
+              title: w4os.admin_engine_bundled
+              underline: true
+            bundled.login:
+              type: url
+              label: w4os.admin_bundled_login
+              help: w4os.admin_bundled_login_help
+              placeholder: 'http://grid.example.org:8002'
+            bundled.database.host:
+              type: text
+              label: w4os.admin_db_host
+              placeholder: localhost
+            bundled.database.port:
+              type: number
+              label: w4os.admin_db_port
+              placeholder: 3306
+            bundled.database.name:
+              type: text
+              label: w4os.admin_db_name
+            bundled.database.user:
+              type: text
+              label: w4os.admin_db_user
+            bundled.database.password:
+              type: password
+              label: w4os.admin_db_password
+              help: w4os.admin_db_password_help
+            bundled.opensim_conf:
+              type: text
+              label: w4os.admin_opensim_conf
+              help: w4os.admin_opensim_conf_help
+              placeholder: '/etc/opensim/opensim.conf'
             built_in_css:
               type: toggle
               label: w4os.admin_built_in_css

@@ -16,26 +16,32 @@ final class Engine
      * @param string $key the API key of the site (`opensim api-key create`)
      * @param string $grid the nick of the grid, when the API serves several
      * @param \Closure(string $method, string $url, array<string,string> $headers, ?string $body): array{int, string} $send
+     * @param bool $local the engine the plugin bundles, called as a library: no address, no key
+     * @param string $assets the public address of the pictures of the grid, when it is not the one of the API
      */
     public function __construct(
         private string $url,
         private string $key,
         private string $grid,
         private \Closure $send,
+        private bool $local = false,
+        private string $assets = '',
     ) {
         $this->url = rtrim($url, '/');
     }
 
-    /** Whether the site can talk to the API: an address and a key. */
+    /** Whether the site can talk to the engine: the bundled one, or an API with its address and key. */
     public function ready(): bool
     {
-        return $this->url !== '' && $this->key !== '';
+        return $this->local || ($this->url !== '' && $this->key !== '');
     }
 
     /** The public address of a picture of the grid (a model, a profile), by its asset UUID. */
     public function assetUrl(string $uuid, string $format = 'jpg'): string
     {
-        return $this->url.$this->path('/assets/'.rawurlencode($uuid).'.'.$format);
+        $file = rawurlencode($uuid).'.'.$format;
+
+        return $this->assets !== '' ? rtrim($this->assets, '/')."/$file" : $this->url.$this->path("/assets/$file");
     }
 
     /**
@@ -166,10 +172,10 @@ final class Engine
     public function call(string $method, string $path, ?array $data = null, array $query = []): array
     {
         if (! $this->ready()) {
-            throw new EngineException(503, 'The site is not connected to the engine API (address and key).');
+            throw new EngineException(503, 'The site is not connected to the engine (bundled, or an API address and key).');
         }
         $url = $this->url.$this->path($path).($query === [] ? '' : '?'.http_build_query($query));
-        $headers = ['Authorization' => 'Bearer '.$this->key, 'Accept' => 'application/vnd.api+json, application/problem+json'];
+        $headers = ['Accept' => 'application/vnd.api+json, application/problem+json'] + ($this->key === '' ? [] : ['Authorization' => 'Bearer '.$this->key]);
         $body = null;
         if ($data !== null) {
             $headers['Content-Type'] = 'application/vnd.api+json';

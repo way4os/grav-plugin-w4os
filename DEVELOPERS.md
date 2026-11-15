@@ -13,6 +13,17 @@ The plugin and the site are two projects:
 - **This plugin** is reusable on any Grav site: settings, the pages of the accounts and of the managers, the blocks. It holds no content of the site and imposes no theme (its style sheet can be switched off).
 - **The light w4os site** is a project of its own, with its own apt package and installer: Grav, this plugin as a dependency, a light theme, the default `.md` pages, and the installer that sets the address and the key of the API. What belongs to a site (pages, theme, Grav config) goes there.
 
+## The engine and the helpers in the plugin
+
+The plugin requires the projects of the OpenSim family it uses (`magicoli/opensim-engine`, `magicoli/opensim-helpers`, `magicoli/opensim-rest-php`): in development they are the folders next to this one (path repositories, `@dev`, linked), the way the other projects of the family do (`vendor/bin/build-tools switch dev|release`). The release zip carries them as files with the rest of `vendor`: a site needs nothing else. `vendor` is loaded only when the settings ask the bundled engine (`Site::bundled()`), after Grav's own autoloader (`prepend-autoloader: false`), and composer's platform check is off: an extension the engine needs (pdo_mysql, imagick) never stops a site that uses the API of its grid.
+
+```bash
+composer install                       # with the family next to this folder (../opensim-engine...)
+vendor/bin/build-tools build zip       # dist/grav-plugin-w4os-<version>.zip, from the last commit (.distignore, .version)
+```
+
+`classes/Bundled.php` uses them as libraries: the engine's `Api\Router` answers the calls of `Engine` (no HTTP, no key), the helpers' `View` makes the blocks, and the pictures of the models are served at the route `assets`. Its grid is the one of an OpenSim install of the server (`Layout` of its `opensim.conf`), or a grid described by its login address and its Robust database: the plugin writes, in `user-data://w4os/opensim/etc/grids/<nick>/`, a remote grid `<nick>.conf` and a `Helpers.ini` with its database and its grid info (the file the helpers read on a web host without OpenSimulator).
+
 ## Layout
 
 - `w4os.php`: the Grav plugin, no logic of its own: the events (sign-in, pages, forms, Twig, shortcode, settings).
@@ -41,7 +52,7 @@ vendor/bin/pest
 
 ## Trying it
 
-On a development machine, never on a live grid: the w4os site (`../w4os-site`) bundles this plugin at its `HEAD`. Build its package there (`apt-package`), install it on the machine of a test grid, `w4os-site setup` with the helpers of that grid, `w4os-site web apache --port <port> --install`. See the DEVELOPERS.md of the w4os site.
+On a development machine, never on a live grid: the w4os site (`../w4os-site`) bundles the release zip of this plugin (`dist/`, build it first). Build its package (`apt-package`), install it on the machine of a test grid, `w4os-site setup` with the helpers of that grid, `w4os-site web apache --port <port> --install`. See the DEVELOPERS.md of the w4os site.
 
 The helpers of a branch can be served without being installed: copy the project with its `vendor` (`rsync -azL`, which follows the links of the path repositories), `composer dump-autoload -o` there, make a key of the install, and serve its `public` folder with the web server (`SetEnv OPENSIM_GRID <grid>`, `CGIPassAuth On` for the API key, `FallbackResource /index.php`).
 

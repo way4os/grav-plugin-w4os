@@ -8,15 +8,23 @@ use Grav\Common\Page\Page;
 use Grav\Common\User\Interfaces\UserInterface;
 
 /**
- * The part that knows Grav: the settings and the API key, the engine and the blocks through Grav's HTTP client and cache, the pages
- * of the plugin, the avatar of the visitor.
+ * The part that knows Grav: the settings and the secrets, the engine (the API of the grid through Grav's HTTP client, or the engine
+ * the plugin bundles) and the blocks with Grav's cache, the pages of the plugin, the avatar of the visitor.
  */
 final class Site
 {
     /** Where the API key typed on the settings page is kept, out of the configuration. */
     public const SECRET = 'user-data://w4os/api.json';
 
+    /** Where the password of the database of a described grid is kept, out of the configuration. */
+    public const DATABASE_SECRET = 'user-data://w4os/database.json';
+
+    /** Where the description of a grid the bundled engine works with is written. */
+    public const GRID_FOLDER = 'user-data://w4os/opensim';
+
     private ?Engine $engine = null;
+
+    private ?Bundled $bundled = null;
 
     public function __construct(private Grav $grav) {}
 
@@ -26,12 +34,58 @@ final class Site
         return (array) $this->grav['config']->get('plugins.w4os', []);
     }
 
+    /**
+     * The engine: the API of the grid (setting "engine: remote", its address and key), or the engine the plugin bundles ("bundled").
+     */
     public function engine(): Engine
     {
+        if ($this->engine !== null) {
+            return $this->engine;
+        }
+        if ($bundled = $this->bundled()) {
+            return $this->engine = new Engine('', '', $bundled->nick(), fn ($method, $url, $headers, $body) => array_slice($bundled->route($method, $url, $body), 0, 2), true, $this->url('assets', false));
+        }
         $config = $this->config();
         $url = trim((string) ($config['api_url'] ?? '')) ?: (trim((string) ($config['url'] ?? '')) === '' ? '' : rtrim($config['url'], '/').'/api');
 
-        return $this->engine ??= new Engine($url, $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...));
+        return $this->engine = new Engine($url, $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...));
+    }
+
+    /** The engine and the helpers the plugin bundles, when the settings ask them and the vendor folder is there; null otherwise. */
+    public function bundled(): ?Bundled
+    {
+        if ($this->bundled !== null || ($this->config()['engine'] ?? 'remote') !== 'bundled') {
+            return $this->bundled;
+        }
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
+        if (! Bundled::available()) {
+            $this->grav['log']->error('w4os: the engine is set to bundled, but the plugin has no vendor folder (the release zip has one)');
+
+            return null;
+        }
+        $settings = (array) ($this->config()['bundled'] ?? []);
+        $settings['grid'] = (string) ($this->config()['grid'] ?? '');
+        $settings['database']['password'] = (string) ($settings['database']['password'] ?? '') ?: $this->secret(self::DATABASE_SECRET, 'password');
+        $root = (string) $this->grav['locator']->findResource(self::GRID_FOLDER, true, true);
+
+        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'));
+    }
+
+    /**
+     * Answers the address of a picture of the grid (route "assets") with the bundled engine: the pictures of the models.
+     *
+     * @return ?array{int, string, array<string,string>} the status, the body, the headers; null when it is not such an address
+     */
+    public function asset(string $path): ?array
+    {
+        $route = $this->routes()['assets'] ?? '';
+        $bundled = $route === '' ? null : $this->bundled();
+        if ($bundled === null || preg_match('#^'.preg_quote($route, '#').'/([0-9a-fA-F-]{36})\.(jpg|png)$#', $path, $m) !== 1) {
+            return null;
+        }
+
+        return $bundled->route('GET', '/grids/'.rawurlencode($bundled->nick())."/assets/{$m[1]}.{$m[2]}");
     }
 
     public function forms(): Forms
@@ -41,7 +95,11 @@ final class Site
 
     public function blocks(): Blocks
     {
-        return new Blocks((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->cached($url, fn () => $this->get($url)));
+        if ($bundled = $this->bundled()) {
+            return new Blocks(fn (string $name, array $args) => $this->cached("block $name ".json_encode($args), fn () => $bundled->block($name, $args)));
+        }
+
+        return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->cached($url, fn () => $this->get($url)));
     }
 
     /**
@@ -75,12 +133,12 @@ final class Site
         return $routes;
     }
 
-    /** The absolute address of a page of the plugin. */
-    public function url(string $type): string
+    /** The absolute address of a page of the plugin, in the language of the visitor (or none: the pictures). */
+    public function url(string $type, bool $language = true): string
     {
         $route = $this->routes()[$type] ?? '/';
 
-        return rtrim($this->grav['uri']->rootUrl(true), '/').$this->grav['language']->getLanguageURLPrefix().$route;
+        return rtrim($this->grav['uri']->rootUrl(true), '/').($language ? $this->grav['language']->getLanguageURLPrefix() : '').$route;
     }
 
     /**
@@ -91,7 +149,7 @@ final class Site
     {
         $type = array_search($path, $this->routes(), true);
         $pages = $this->grav['pages'];
-        if ($type === false || $pages->find($path)) {
+        if ($type === false || ! is_file(dirname(__DIR__)."/pages/$type.md") || $pages->find($path)) {
             return;
         }
         $page = new Page();
@@ -155,6 +213,15 @@ final class Site
         @chmod($file, 0640);
     }
 
+    /** Keep the password of the database typed on the settings page in user-data (not in the configuration): see onAdminSave. */
+    public function saveDatabasePassword(string $password): void
+    {
+        $file = $this->grav['locator']->findResource(self::DATABASE_SECRET, true, true);
+        @mkdir(dirname($file), 0770, true);
+        file_put_contents($file, (string) json_encode(['password' => $password]));
+        @chmod($file, 0640);
+    }
+
     public function hasApiKey(): bool
     {
         return $this->apiKey() !== '';
@@ -163,14 +230,16 @@ final class Site
     /** The configuration (environment) wins, then the key kept in user-data. */
     private function apiKey(): string
     {
-        $key = trim((string) ($this->config()['api_key'] ?? ''));
-        if ($key !== '') {
-            return $key;
-        }
-        $file = $this->grav['locator']->findResource(self::SECRET, true);
+        return trim((string) ($this->config()['api_key'] ?? '')) ?: $this->secret(self::SECRET, 'api_key');
+    }
+
+    /** A value kept in a file of user-data. */
+    private function secret(string $stream, string $key): string
+    {
+        $file = $this->grav['locator']->findResource($stream, true);
         $saved = $file && is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
 
-        return trim((string) ($saved['api_key'] ?? ''));
+        return trim((string) ($saved[$key] ?? ''));
     }
 
     /**
@@ -195,10 +264,10 @@ final class Site
         return [$response->getStatusCode(), $response->getContent(false)];
     }
 
-    private function get(string $url): ?string
+    private function get(string $url, string $accept = 'text/html'): ?string
     {
         try {
-            [$status, $body] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
+            [$status, $body] = $this->send('GET', $url, ['Accept' => $accept, 'Accept-Language' => $this->acceptLanguage()], null);
 
             return $status === 200 ? $body : null;
         } catch (\Throwable $e) {

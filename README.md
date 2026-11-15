@@ -31,19 +31,30 @@ The presentation and help pages are plain Markdown files of the site (`user/page
 
 In a template: `{{ w4os_block('grid-status') }}`.
 
+## Standalone
+
+The plugin is self-contained: its release zip (the one Grav's GPM installs, about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):
+
+| | **The API of the grid** (`engine: remote`, the default) | **The engine bundled with the plugin** (`engine: bundled`) |
+| --- | --- | --- |
+| Where | the site can be anywhere | the site reaches the database of the grid's Robust |
+| The site needs | the address of the helpers of the grid and an API key | the login address of the grid and its Robust database (or nothing: the OpenSim install of this server) |
+| PHP | what Grav needs | also `pdo_mysql` (and `imagick` for the pictures of the models) |
+| The grid needs | the OpenSim helpers version 3 (they serve the API and the blocks) | nothing more than OpenSimulator |
+| Mails (confirmation, password) | sent by the engine on the machine of the grid | sent by the site (PHP `mail()`) |
+
 ## Requirements
 
 - Grav 2 (PHP 8.3 or newer), with the Form, Login and Shortcode Core plugins (Grav installs them with this one).
-- An OpenSimulator grid with the OpenSim helpers (`opensim-helpers`, version 3), which serve the engine API and the blocks, and an API key for the site.
+- An OpenSimulator grid: with its OpenSim helpers (version 3) and an API key for the site, or with its Robust database reachable from the site.
 
 ## Install
 
-1. Install the plugin: copy this folder to `user/plugins/w4os` (or `bin/gpm install w4os` once it is published).
-2. On the machine of the grid, make a key for the site: `opensim api-key create my-website`. It is shown once.
-3. In the admin of the site (Plugins > W4OS), or in `user/config/plugins/w4os.yaml`:
-   - **Helpers address**: the address of the helpers of the grid, `https://grid.example.org/helpers`;
-   - **API key**: the key of step 2. The settings page keeps it in `user/data/w4os/api.json`, out of the configuration and of git. Without the admin, set it in the environment: `GRAV_CONFIG__PLUGINS__W4OS__API_KEY=osk_...`.
-4. Add your pages (`user/pages`), with the blocks you want. The style sheet of the plugin can be switched off (Built-in CSS) when the theme styles the pages and the blocks.
+1. Install the plugin: unzip its release in `user/plugins/w4os` (or `bin/gpm install w4os` once it is published). A copy of the git repository has no `vendor` folder: run `composer install --no-dev` in it, or use the API of the grid.
+2. In the admin of the site (Plugins > W4OS), or in `user/config/plugins/w4os.yaml`, choose the engine:
+   - **The API of the grid**: on the machine of the grid, make a key for the site (`opensim api-key create my-website`, shown once), then set the **Helpers address** (`https://grid.example.org/helpers`) and the **API key**. The settings page keeps the key in `user/data/w4os/api.json`, out of the configuration and of git; without the admin, set it in the environment (`GRAV_CONFIG__PLUGINS__W4OS__API_KEY=osk_...`).
+   - **The engine bundled with the plugin**: set the **Login address of the grid** (`http://grid.example.org:8002`) and its Robust **database** (host, port, name, user, password; the password is kept in `user/data/w4os/database.json`). The plugin writes the description of the grid in `user/data/w4os/opensim`. On the machine of the grid, the login address can stay empty: the plugin uses the grid of the OpenSim install of this server (its `opensim.conf`, or the one given).
+3. Add your pages (`user/pages`), with the blocks you want. The style sheet of the plugin can be switched off (Built-in CSS) when the theme styles the pages and the blocks.
 
 The pages of the plugin are served at these routes unless the site has its own page there (settings, tab Pages):
 
@@ -56,8 +67,9 @@ The pages of the plugin are served at these routes unless the site has its own p
 | My avatar | `/account` |
 | Avatars of the grid (managers) | `/account/avatars` |
 | Sign in (Login plugin) | `/login` |
+| Pictures of the grid (bundled engine) | `/grid-assets` |
 
-The mails (confirmation, password) are sent by the engine, on the machine of the grid. On a test site, **Send the mails** off (`send_mail: false`) mails nothing: the confirmation links of the registrations and of the email changes are shown on the page instead (never the one of a new password).
+The mails (confirmation, password) are sent by the engine: on the machine of the grid with its API, by the site with the bundled engine. On a test site, **Send the mails** off (`send_mail: false`) mails nothing: the confirmation links of the registrations and of the email changes are shown on the page instead (never the one of a new password).
 
 ## License
 
