@@ -6,6 +6,13 @@ The engine API provides everything; the plugin only consumes it. An operation th
 
 w4os (`~/Projects/w4os`, branch `speculoos`) is the reference of the method: the registration form, the models picker, the profile and account pages, the sign-in with the avatar name or the email are all done there. Follow it.
 
+## Two projects
+
+The plugin and the site are two projects:
+
+- **This plugin** is reusable on any Grav site: settings, the pages of the accounts and of the managers, the blocks. It holds no content of the site and imposes no theme (its style sheet can be switched off).
+- **The light w4os site** is a project of its own, with its own apt package and installer: Grav, this plugin as a dependency, a light theme, the default `.md` pages, and the installer that sets the address and the key of the API. What belongs to a site (pages, theme, Grav config) goes there.
+
 ## Layout
 
 - `w4os.php`: the Grav plugin, no logic of its own: the events (sign-in, pages, forms, Twig, shortcode, settings).
@@ -13,7 +20,7 @@ w4os (`~/Projects/w4os`, branch `speculoos`) is the reference of the method: the
 - `classes/Site.php`: the part that knows Grav: settings and API key, Grav's HTTP client and cache, the pages of the plugin, the avatar as a Grav user.
 - `pages/*.md`: the front matter of the pages of the plugin, with their forms (Form plugin, `process: [{w4os: register}]`); title and texts come from `languages.yaml`.
 - `templates/w4os.html.twig` and `templates/w4os/<page>.html.twig`: the pages. `templates/forms/fields/w4os_models`: the models picker. A theme overrides any of them.
-- `examples/pages`: a home page and a help page, in English and French.
+- `dev/site`: the skeleton of the test site (its config, a home page and a help page in English and French); the pages of a real site belong to the site, not to the plugin.
 
 ## How it plugs into Grav
 

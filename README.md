@@ -1,6 +1,13 @@
 # W4OS for Grav
 
-The website of an [OpenSimulator](http://opensimulator.org) grid, kept minimal: a [Grav](https://getgrav.org) plugin that is a thin bridge to the OpenSim engine API. Everything about the avatars is asked of the engine; the site only shows it.
+The pages an [OpenSimulator](http://opensimulator.org) grid needs on its website, for any [Grav](https://getgrav.org) site: a plugin that is a thin bridge to the OpenSim engine API. Everything about the avatars is asked of the engine; the site only shows it.
+
+It is one piece of the w4os family:
+
+- **grav-plugin-w4os** (this plugin): reusable on any Grav site. It brings the settings of the engine API, the pages of the accounts and of the managers, and the blocks. No content of its own, no theme imposed.
+- **The light w4os site** (a project of its own, with its own apt package and installer): a complete minimal website for a grid, Grav with this plugin, a light theme and the default pages (home, help), set up by its installer.
+- **w4os for WordPress**: the same pages for a WordPress site.
+- **w4os-app**: the full application, later.
 
 ## Features
 
@@ -35,7 +42,7 @@ In a template: `{{ w4os_block('grid-status') }}`.
 3. In the admin of the site (Plugins > W4OS), or in `user/config/plugins/w4os.yaml`:
    - **Helpers address**: the address of the helpers of the grid, `https://grid.example.org/helpers`;
    - **API key**: the key of step 2. The settings page keeps it in `user/data/w4os/api.json`, out of the configuration and of git. Without the admin, set it in the environment: `GRAV_CONFIG__PLUGINS__W4OS__API_KEY=osk_...`.
-4. Add your pages (`user/pages`), with the blocks you want. Examples are in [examples/pages](examples/pages).
+4. Add your pages (`user/pages`), with the blocks you want. The style sheet of the plugin can be switched off (Built-in CSS) when the theme styles the pages and the blocks.
 
 The pages of the plugin are served at these routes unless the site has its own page there (settings, tab Pages):
 
