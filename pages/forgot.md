@@ -9,11 +9,11 @@ form:
   fields:
     login:
       type: text
-      label: PLUGIN_W4OS.LOGIN
+      label: w4os.login
       autocomplete: username
       validate: { required: true }
   buttons:
-    - { type: submit, value: PLUGIN_W4OS.FORGOT_BUTTON, classes: 'button primary' }
+    - { type: submit, value: w4os.forgot_button, classes: 'button primary' }
   process:
     - w4os: forgot
 ---

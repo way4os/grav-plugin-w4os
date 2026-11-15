@@ -15,24 +15,24 @@ final class Forms
 
     /** The text of each code of the problems of the engine (Problem::CODES); the others are ERROR_INVALID or ERROR_UNAVAILABLE. */
     public const ERRORS = [
-        'sign-in-refused' => 'PLUGIN_W4OS.ERROR_SIGN_IN',
-        'account-disabled' => 'PLUGIN_W4OS.ERROR_ACCOUNT_DISABLED',
-        'email-unconfirmed' => 'PLUGIN_W4OS.ERROR_EMAIL_UNCONFIRMED',
-        'name-invalid' => 'PLUGIN_W4OS.ERROR_NAME_INVALID',
-        'name-reserved' => 'PLUGIN_W4OS.ERROR_NAME_RESERVED',
-        'name-taken' => 'PLUGIN_W4OS.ERROR_NAME_TAKEN',
-        'password-required' => 'PLUGIN_W4OS.ERROR_REQUIRED',
-        'password-invalid' => 'PLUGIN_W4OS.ERROR_PASSWORD_INVALID',
-        'email-invalid' => 'PLUGIN_W4OS.ERROR_EMAIL_INVALID',
-        'email-required' => 'PLUGIN_W4OS.ERROR_EMAIL_REQUIRED',
-        'model-unknown' => 'PLUGIN_W4OS.ERROR_MODEL_UNKNOWN',
-        'token-refused' => 'PLUGIN_W4OS.ERROR_TOKEN',
-        'no-confirmation-pending' => 'PLUGIN_W4OS.ERROR_NO_CONFIRMATION_PENDING',
-        'mail-failed' => 'PLUGIN_W4OS.ERROR_MAIL_FAILED',
-        'not-found' => 'PLUGIN_W4OS.ERROR_NOT_FOUND',
-        'invalid-request' => 'PLUGIN_W4OS.ERROR_INVALID',
-        'field-unknown' => 'PLUGIN_W4OS.ERROR_INVALID',
-        'link-invalid' => 'PLUGIN_W4OS.ERROR_INVALID',
+        'sign-in-refused' => 'w4os.error_sign_in',
+        'account-disabled' => 'w4os.error_account_disabled',
+        'email-unconfirmed' => 'w4os.error_email_unconfirmed',
+        'name-invalid' => 'w4os.error_name_invalid',
+        'name-reserved' => 'w4os.error_name_reserved',
+        'name-taken' => 'w4os.error_name_taken',
+        'password-required' => 'w4os.error_required',
+        'password-invalid' => 'w4os.error_password_invalid',
+        'email-invalid' => 'w4os.error_email_invalid',
+        'email-required' => 'w4os.error_email_required',
+        'model-unknown' => 'w4os.error_model_unknown',
+        'token-refused' => 'w4os.error_token',
+        'no-confirmation-pending' => 'w4os.error_no_confirmation_pending',
+        'mail-failed' => 'w4os.error_mail_failed',
+        'not-found' => 'w4os.error_not_found',
+        'invalid-request' => 'w4os.error_invalid',
+        'field-unknown' => 'w4os.error_invalid',
+        'link-invalid' => 'w4os.error_invalid',
     ];
 
     /**
@@ -66,7 +66,7 @@ final class Forms
             'model' => (string) ($data['model'] ?? ''),
         ];
         if ($attributes['firstName'] === '' || $attributes['lastName'] === '' || $attributes['email'] === '' || $attributes['password'] === '') {
-            throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
+            throw new FormError('w4os.error_required');
         }
         $attributes += $confirm ? ['confirmEmail' => true, 'link' => $this->tokenLink('confirm')] + ($this->sends() ? [] : ['send' => false]) : ['active' => true];
         [$avatar, $meta] = $this->ask(fn () => $this->engine->createAvatar($attributes));
@@ -105,7 +105,7 @@ final class Forms
     {
         $login = trim((string) ($data['login'] ?? ''));
         if ($login === '') {
-            throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
+            throw new FormError('w4os.error_required');
         }
         try {
             $this->engine->requestPasswordReset($login, $this->tokenLink('reset'), $this->sends());
@@ -159,7 +159,7 @@ final class Forms
         }
         $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
         if ($email === '') {
-            throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
+            throw new FormError('w4os.error_required');
         }
         $changed = strtolower($email) !== strtolower(trim((string) ($current['email'] ?? '')));
         if ($changed) {
@@ -180,7 +180,7 @@ final class Forms
         try {
             $this->engine->signIn((string) $avatar['name'], (string) ($data['current'] ?? ''));
         } catch (EngineException $e) {
-            throw $e->problemCode === 'sign-in-refused' ? new FormError('PLUGIN_W4OS.ERROR_CURRENT_PASSWORD', previous: $e) : $this->error($e);
+            throw $e->problemCode === 'sign-in-refused' ? new FormError('w4os.error_current_password', previous: $e) : $this->error($e);
         }
         $this->ask(fn () => $this->engine->updateAvatar((string) $avatar['uuid'], ['password' => (string) $data['password']]));
     }
@@ -198,7 +198,7 @@ final class Forms
             'disable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => false])),
             'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'), $this->sends())),
             'delete' => $this->ask(fn () => $this->engine->deleteAvatar($uuid)),
-            default => throw new FormError('PLUGIN_W4OS.ERROR_INVALID'),
+            default => throw new FormError('w4os.error_invalid'),
         };
     }
 
@@ -217,10 +217,10 @@ final class Forms
     private function samePassword(array $data): void
     {
         if ((string) ($data['password'] ?? '') === '') {
-            throw new FormError('PLUGIN_W4OS.ERROR_REQUIRED');
+            throw new FormError('w4os.error_required');
         }
         if ((string) $data['password'] !== (string) ($data['password_confirm'] ?? '')) {
-            throw new FormError('PLUGIN_W4OS.ERROR_PASSWORD_MATCH');
+            throw new FormError('w4os.error_password_match');
         }
     }
 
@@ -237,8 +237,8 @@ final class Forms
     /** The text of a problem, by its code; what the engine says is kept for the codes that only say "a value is wrong". */
     private function error(EngineException $e): FormError
     {
-        $key = self::ERRORS[$e->problemCode] ?? 'PLUGIN_W4OS.ERROR_UNAVAILABLE';
+        $key = self::ERRORS[$e->problemCode] ?? 'w4os.error_unavailable';
 
-        return new FormError($key, $key === 'PLUGIN_W4OS.ERROR_INVALID' ? $e->getMessage() : '', $e);
+        return new FormError($key, $key === 'w4os.error_invalid' ? $e->getMessage() : '', $e);
     }
 }

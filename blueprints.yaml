@@ -31,83 +31,83 @@ form:
       fields:
         tab_connection:
           type: tab
-          title: PLUGIN_W4OS.ADMIN_TAB_CONNECTION
+          title: w4os.admin_tab_connection
           fields:
             url:
               type: url
-              label: PLUGIN_W4OS.ADMIN_URL
-              help: PLUGIN_W4OS.ADMIN_URL_HELP
+              label: w4os.admin_url
+              help: w4os.admin_url_help
               placeholder: 'https://grid.example.org/helpers'
             api_key:
               type: password
-              label: PLUGIN_W4OS.ADMIN_API_KEY
-              help: PLUGIN_W4OS.ADMIN_API_KEY_HELP
+              label: w4os.admin_api_key
+              help: w4os.admin_api_key_help
               data-placeholder@: '\Grav\Plugin\W4osPlugin::adminKeyPlaceholder'
             api_url:
               type: url
-              label: PLUGIN_W4OS.ADMIN_API_URL
-              help: PLUGIN_W4OS.ADMIN_API_URL_HELP
+              label: w4os.admin_api_url
+              help: w4os.admin_api_url_help
               placeholder: 'https://grid.example.org/helpers/api'
             grid:
               type: text
-              label: PLUGIN_W4OS.ADMIN_GRID
-              help: PLUGIN_W4OS.ADMIN_GRID_HELP
+              label: w4os.admin_grid
+              help: w4os.admin_grid_help
             built_in_css:
               type: toggle
-              label: PLUGIN_W4OS.ADMIN_BUILT_IN_CSS
-              help: PLUGIN_W4OS.ADMIN_BUILT_IN_CSS_HELP
+              label: w4os.admin_built_in_css
+              help: w4os.admin_built_in_css_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
             cache:
               type: number
-              label: PLUGIN_W4OS.ADMIN_CACHE
+              label: w4os.admin_cache
               validate: { type: int, min: 0 }
 
         tab_accounts:
           type: tab
-          title: PLUGIN_W4OS.ADMIN_TAB_ACCOUNTS
+          title: w4os.admin_tab_accounts
           fields:
             register.enabled:
               type: toggle
-              label: PLUGIN_W4OS.ADMIN_REGISTER
+              label: w4os.admin_register
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
             register.confirm_email:
               type: toggle
-              label: PLUGIN_W4OS.ADMIN_CONFIRM_EMAIL
-              help: PLUGIN_W4OS.ADMIN_CONFIRM_EMAIL_HELP
+              label: w4os.admin_confirm_email
+              help: w4os.admin_confirm_email_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
             register.terms:
               type: text
-              label: PLUGIN_W4OS.ADMIN_TERMS
-              help: PLUGIN_W4OS.ADMIN_TERMS_HELP
+              label: w4os.admin_terms
+              help: w4os.admin_terms_help
               placeholder: '/terms'
             manager_level:
               type: number
-              label: PLUGIN_W4OS.ADMIN_MANAGER_LEVEL
-              help: PLUGIN_W4OS.ADMIN_MANAGER_LEVEL_HELP
+              label: w4os.admin_manager_level
+              help: w4os.admin_manager_level_help
               validate: { type: int, min: 1 }
             send_mail:
               type: toggle
-              label: PLUGIN_W4OS.ADMIN_SEND_MAIL
-              help: PLUGIN_W4OS.ADMIN_SEND_MAIL_HELP
+              label: w4os.admin_send_mail
+              help: w4os.admin_send_mail_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
             save_accounts:
               type: toggle
-              label: PLUGIN_W4OS.ADMIN_SAVE_ACCOUNTS
-              help: PLUGIN_W4OS.ADMIN_SAVE_ACCOUNTS_HELP
+              label: w4os.admin_save_accounts
+              help: w4os.admin_save_accounts_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
 
         tab_pages:
           type: tab
-          title: PLUGIN_W4OS.ADMIN_TAB_PAGES
+          title: w4os.admin_tab_pages
           fields:
-            routes.register: { type: text, label: PLUGIN_W4OS.REGISTER_TITLE }
-            routes.confirm: { type: text, label: PLUGIN_W4OS.CONFIRM_TITLE }
-            routes.forgot: { type: text, label: PLUGIN_W4OS.FORGOT_TITLE }
-            routes.reset: { type: text, label: PLUGIN_W4OS.RESET_TITLE }
-            routes.account: { type: text, label: PLUGIN_W4OS.ACCOUNT_TITLE }
-            routes.manage: { type: text, label: PLUGIN_W4OS.MANAGE_TITLE }
+            routes.register: { type: text, label: w4os.register_title }
+            routes.confirm: { type: text, label: w4os.confirm_title }
+            routes.forgot: { type: text, label: w4os.forgot_title }
+            routes.reset: { type: text, label: w4os.reset_title }
+            routes.account: { type: text, label: w4os.account_title }
+            routes.manage: { type: text, label: w4os.manage_title }

@@ -9,11 +9,11 @@ form:
   fields:
     name:
       type: text
-      label: PLUGIN_W4OS.AVATAR_NAME
+      label: w4os.avatar_name
       placeholder: 'First Last'
       validate: { required: true }
   buttons:
-    - { type: submit, value: PLUGIN_W4OS.RESEND_BUTTON, classes: 'button' }
+    - { type: submit, value: w4os.resend_button, classes: 'button' }
   process:
     - w4os: resend
 ---

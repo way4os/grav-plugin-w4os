@@ -9,6 +9,7 @@ use RocketTheme\Toolbox\Event\Event;
 use W4os\Grav\Blocks;
 use W4os\Grav\EngineException;
 use W4os\Grav\FormError;
+use W4os\Grav\Format;
 use W4os\Grav\Forms;
 use W4os\Grav\Site;
 
@@ -17,6 +18,7 @@ require_once __DIR__.'/classes/Engine.php';
 require_once __DIR__.'/classes/FormError.php';
 require_once __DIR__.'/classes/Forms.php';
 require_once __DIR__.'/classes/Blocks.php';
+require_once __DIR__.'/classes/Format.php';
 require_once __DIR__.'/classes/Site.php';
 
 /**
@@ -77,7 +79,7 @@ class W4osPlugin extends Plugin
         try {
             $avatar = $this->site()->forms()->signIn($login, $password);
         } catch (FormError $e) {
-            if ($e->key !== 'PLUGIN_W4OS.ERROR_SIGN_IN') {
+            if ($e->key !== 'w4os.error_sign_in') {
                 $this->grav['messages']->add($this->site()->translate($e->key), 'error');
                 $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
             }
@@ -117,6 +119,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatars', fn () => $this->avatars()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_number', fn ($value, int $decimals = 0) => Format::number((float) $value, $this->locale(), $decimals)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_area', fn ($value) => Format::area((float) $value, $this->locale())));
     }
 
     public function onTwigSiteVariables(): void
@@ -187,37 +191,37 @@ class W4osPlugin extends Plugin
             switch ((string) $event['params']) {
                 case 'register':
                     if (($site->config()['register']['terms'] ?? '') !== '' && empty($data['terms'])) {
-                        throw new FormError('PLUGIN_W4OS.ERROR_TERMS');
+                        throw new FormError('w4os.error_terms');
                     }
                     $result = $forms->register($data);
                     $name = (string) $result['avatar']['name'];
                     if ($result['confirm']) {
-                        $key = $result['link'] ? 'PLUGIN_W4OS.REGISTERED_TEST' : ($result['sent'] ? 'PLUGIN_W4OS.REGISTERED_CONFIRM' : 'PLUGIN_W4OS.REGISTERED_NOT_SENT');
+                        $key = $result['link'] ? 'w4os.registered_test' : ($result['sent'] ? 'w4os.registered_confirm' : 'w4os.registered_not_sent');
                         $this->done($key, $routes['confirm'], ['name' => $name, 'link' => $this->link($result['link'])]);
                     }
-                    $this->done('PLUGIN_W4OS.REGISTERED', $login, ['name' => $name]);
+                    $this->done('w4os.registered', $login, ['name' => $name]);
                     // no break: done() redirects
                 case 'resend':
                     $link = $forms->resendConfirmation((string) ($data['name'] ?? ''));
-                    $this->done($link ? 'PLUGIN_W4OS.CONFIRM_RESENT_TEST' : 'PLUGIN_W4OS.CONFIRM_RESENT', $routes['confirm'], ['link' => $this->link($link)]);
+                    $this->done($link ? 'w4os.confirm_resent_test' : 'w4os.confirm_resent', $routes['confirm'], ['link' => $this->link($link)]);
                     // no break
                 case 'forgot':
                     $forms->forgot($data);
-                    $this->done($forms->sends() ? 'PLUGIN_W4OS.FORGOT_SENT' : 'PLUGIN_W4OS.FORGOT_TEST', $routes['forgot']);
+                    $this->done($forms->sends() ? 'w4os.forgot_sent' : 'w4os.forgot_test', $routes['forgot']);
                     // no break
                 case 'reset':
                     $forms->reset($data);
-                    $this->done('PLUGIN_W4OS.RESET_DONE', $login);
+                    $this->done('w4os.reset_done', $login);
                     // no break
                 case 'profile':
                     $this->requireAvatar();
-                    $result = $forms->profile(self::current() ?? throw new FormError('PLUGIN_W4OS.ERROR_UNAVAILABLE'), $data);
-                    $key = $result['email'] === null ? 'PLUGIN_W4OS.PROFILE_SAVED' : ($result['link'] ? 'PLUGIN_W4OS.EMAIL_PENDING_TEST' : 'PLUGIN_W4OS.EMAIL_PENDING');
+                    $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_unavailable'), $data);
+                    $key = $result['email'] === null ? 'w4os.profile_saved' : ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending');
                     $this->done($key, $routes['account'], ['email' => htmlspecialchars((string) $result['email']), 'link' => $this->link($result['link'])]);
                     // no break
                 case 'password':
                     $forms->password($this->requireAvatar(), $data);
-                    $this->done('PLUGIN_W4OS.PASSWORD_SAVED', $routes['account']);
+                    $this->done('w4os.password_saved', $routes['account']);
             }
         } catch (FormError $e) {
             $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
@@ -238,9 +242,9 @@ class W4osPlugin extends Plugin
         $login = $this->grav['config']->get('plugins.login.route', '/login');
         if ($this->grav['uri']->query('change')) {
             $this->site()->avatar() === null || $this->grav['user']->set('email', (string) ($avatar['email'] ?? ''));
-            $this->done('PLUGIN_W4OS.EMAIL_CHANGED', $this->site()->avatar() === null ? $login : $this->site()->routes()['account'], ['email' => htmlspecialchars((string) ($avatar['email'] ?? ''))]);
+            $this->done('w4os.email_changed', $this->site()->avatar() === null ? $login : $this->site()->routes()['account'], ['email' => htmlspecialchars((string) ($avatar['email'] ?? ''))]);
         }
-        $this->done('PLUGIN_W4OS.CONFIRMED', $login, ['name' => (string) ($avatar['name'] ?? '')]);
+        $this->done('w4os.confirmed', $login, ['name' => (string) ($avatar['name'] ?? '')]);
     }
 
     /** A link of a message (the confirmation link of a test site, which mails nothing). */
@@ -254,7 +258,7 @@ class W4osPlugin extends Plugin
     {
         $route = $this->site()->routes()['manage'];
         if (! Utils::verifyNonce((string) ($post['nonce'] ?? ''), 'w4os-manage')) {
-            $this->grav['messages']->add($this->site()->translate('PLUGIN_W4OS.ERROR_NONCE'), 'error');
+            $this->grav['messages']->add($this->site()->translate('w4os.error_nonce'), 'error');
 
             return;
         }
@@ -262,7 +266,7 @@ class W4osPlugin extends Plugin
         try {
             $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar);
             $query = http_build_query(array_intersect_key($_GET, ['search' => 1, 'page' => 1]));
-            $this->done('PLUGIN_W4OS.MANAGE_'.strtoupper((string) $post['action']), $route.($query === '' ? '' : "?$query"), ['name' => $avatar['name']]);
+            $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), ['name' => $avatar['name']]);
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
         }
@@ -286,7 +290,7 @@ class W4osPlugin extends Plugin
     /** @return array{uuid: string, name: string, level: int} */
     private function requireAvatar(): array
     {
-        return $this->site()->avatar() ?? throw new FormError('PLUGIN_W4OS.ERROR_FORBIDDEN');
+        return $this->site()->avatar() ?? throw new FormError('w4os.error_forbidden');
     }
 
     /** The HTML of a block of the helpers; the search and the profile take their arguments from the address too. */
@@ -298,7 +302,20 @@ class W4osPlugin extends Plugin
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }
 
+        // The status of the grid in the language of the site, from the data of the block
+        if (str_replace('_', '-', $name) === 'grid-status' && ($data = $this->site()->blocks()->data('grid-status'))) {
+            return $this->grav['twig']->processTemplate('w4os/blocks/grid-status.html.twig', ['data' => $data]);
+        }
+
         return $this->site()->blocks()->html($name, $args);
+    }
+
+    /** The locale of the language of the page (fr, en, pt-BR). */
+    private function locale(): string
+    {
+        $language = $this->grav['language'];
+
+        return str_replace('-', '_', (string) ($language->getActive() ?: ($language->getDefault() ?: 'en')));
     }
 
     /**
@@ -316,7 +333,7 @@ class W4osPlugin extends Plugin
 
             return ['items' => $items, 'meta' => $meta, 'error' => null];
         } catch (EngineException $e) {
-            return ['items' => [], 'meta' => [], 'error' => $this->site()->translate('PLUGIN_W4OS.ERROR_UNAVAILABLE')];
+            return ['items' => [], 'meta' => [], 'error' => $this->site()->translate('w4os.error_unavailable')];
         }
     }
 
@@ -357,7 +374,7 @@ class W4osPlugin extends Plugin
         try {
             $site = new Site(\Grav\Common\Grav::instance());
 
-            return $site->hasApiKey() ? $site->translate('PLUGIN_W4OS.ADMIN_API_KEY_SAVED') : 'osk_…';
+            return $site->hasApiKey() ? $site->translate('w4os.admin_api_key_saved') : 'osk_…';
         } catch (\Throwable) {
             return '';
         }

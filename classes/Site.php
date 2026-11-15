@@ -98,7 +98,7 @@ final class Site
         $page->init(new \SplFileInfo(dirname(__DIR__).'/pages/'.$type.'.md'));
         $page->route($path);
         $page->slug(basename($path));
-        $page->title($this->translate('PLUGIN_W4OS.'.strtoupper($type).'_TITLE'));
+        $page->title($this->translate('w4os.'.$type.'_title'));
         $pages->addPage($page, $path);
         unset($this->grav['page']);
         $this->grav['page'] = $page;

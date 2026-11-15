@@ -9,31 +9,31 @@ forms:
     fields:
       email:
         type: email
-        label: PLUGIN_W4OS.EMAIL
+        label: w4os.email
         autocomplete: email
         validate: { required: true }
       about:
         type: textarea
-        label: PLUGIN_W4OS.ABOUT
+        label: w4os.about
         rows: 5
       wants:
         type: text
-        label: PLUGIN_W4OS.WANTS
+        label: w4os.wants
       skills:
         type: text
-        label: PLUGIN_W4OS.SKILLS
+        label: w4os.skills
       languages:
         type: text
-        label: PLUGIN_W4OS.LANGUAGES
+        label: w4os.languages
       firstLife:
         type: textarea
-        label: PLUGIN_W4OS.FIRST_LIFE
+        label: w4os.first_life
         rows: 3
       profileUrl:
         type: url
-        label: PLUGIN_W4OS.PROFILE_URL
+        label: w4os.profile_url
     buttons:
-      - { type: submit, value: PLUGIN_W4OS.SAVE_BUTTON, classes: 'button primary' }
+      - { type: submit, value: w4os.save_button, classes: 'button primary' }
     process:
       - w4os: profile
   w4os-password:
@@ -41,26 +41,26 @@ forms:
     fields:
       current:
         type: password
-        label: PLUGIN_W4OS.CURRENT_PASSWORD
+        label: w4os.current_password
         autocomplete: current-password
         validate: { required: true }
       password:
         type: password
-        label: PLUGIN_W4OS.NEW_PASSWORD
-        help: PLUGIN_W4OS.PASSWORD_HELP
+        label: w4os.new_password
+        help: w4os.password_help
         autocomplete: new-password
         minlength: 6
         maxlength: 16
         validate: { required: true }
       password_confirm:
         type: password
-        label: PLUGIN_W4OS.PASSWORD_CONFIRM
+        label: w4os.password_confirm
         autocomplete: new-password
         minlength: 6
         maxlength: 16
         validate: { required: true }
     buttons:
-      - { type: submit, value: PLUGIN_W4OS.PASSWORD_BUTTON, classes: 'button' }
+      - { type: submit, value: w4os.password_button, classes: 'button' }
     process:
       - w4os: password
 ---

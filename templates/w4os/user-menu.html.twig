@@ -1,0 +1,21 @@
+{# The menu of the visitor, for the top bar of a theme: the avatar signed in (its account, the avatars of the grid for a manager,
+   sign out), else sign in. #}
+{% set routes = config.plugins.w4os.routes %}
+{% set login_route = config.plugins.login.route|default('/login') %}
+<details class="w4os-user-menu">
+    {% if grav.user.authenticated %}
+        <summary><i class="fa-solid fa-user" aria-hidden="true"></i> {{ grav.user.fullname ?: grav.user.username }}</summary>
+        <ul>
+            {% if grav.user.w4os %}<li><a href="{{ base_url_relative ~ routes.account }}">{{ 'w4os.account_title'|t }}</a></li>{% endif %}
+            {% if w4os_is_manager() %}<li><a href="{{ base_url_relative ~ routes.manage }}">{{ 'w4os.manage_title'|t }}</a></li>{% endif %}
+            <li><a href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.sign_out'|t }}</a></li>
+        </ul>
+    {% else %}
+        <summary><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> {{ 'w4os.sign_in'|t }}</summary>
+        <ul>
+            <li><a href="{{ base_url_relative ~ login_route }}">{{ 'w4os.sign_in'|t }}</a></li>
+            {% if w4os_route('register') %}<li><a href="{{ base_url_relative ~ w4os_route('register') }}">{{ 'w4os.register_title'|t }}</a></li>{% endif %}
+            <li><a href="{{ base_url_relative ~ routes.forgot }}">{{ 'w4os.forgot_title'|t }}</a></li>
+        </ul>
+    {% endif %}
+</details>

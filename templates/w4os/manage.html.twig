@@ -1,35 +1,35 @@
 {% set list = w4os_avatars() %}
 <form class="w4os-search" method="get">
-    <input type="search" name="search" value="{{ uri.query('search')|e('html_attr') }}" placeholder="{{ 'PLUGIN_W4OS.SEARCH_AVATARS'|t|e('html_attr') }}">
-    <button class="button" type="submit">{{ 'PLUGIN_W4OS.SEARCH'|t }}</button>
+    <input type="search" name="search" value="{{ uri.query('search')|e('html_attr') }}" placeholder="{{ 'w4os.search_avatars'|t|e('html_attr') }}">
+    <button class="button" type="submit">{{ 'w4os.search'|t }}</button>
 </form>
 {% if list.error %}
     <p class="notices red">{{ list.error }}</p>
 {% elseif list.items is empty %}
-    <p>{{ 'PLUGIN_W4OS.NO_AVATARS'|t }}</p>
+    <p>{{ 'w4os.no_avatars'|t }}</p>
 {% else %}
-    <p class="w4os-count">{{ 'PLUGIN_W4OS.AVATARS_COUNT'|t|replace({'{count}': list.meta.total ?? list.items|length}) }}</p>
+    <p class="w4os-count">{{ 'w4os.avatars_count'|t|replace({'{count}': list.meta.total ?? list.items|length}) }}</p>
     <div class="w4os-table-wrap">
     <table class="w4os-avatars">
         <thead><tr>
-            <th>{{ 'PLUGIN_W4OS.AVATAR_NAME'|t }}</th><th>{{ 'PLUGIN_W4OS.EMAIL'|t }}</th><th>{{ 'PLUGIN_W4OS.STATUS'|t }}</th>
-            <th>{{ 'PLUGIN_W4OS.LAST_SEEN'|t }}</th><th>{{ 'PLUGIN_W4OS.CREATED'|t }}</th><th>{{ 'PLUGIN_W4OS.ACTIONS'|t }}</th>
+            <th>{{ 'w4os.avatar_name'|t }}</th><th>{{ 'w4os.email'|t }}</th><th>{{ 'w4os.status'|t }}</th>
+            <th>{{ 'w4os.last_seen'|t }}</th><th>{{ 'w4os.created'|t }}</th><th>{{ 'w4os.actions'|t }}</th>
         </tr></thead>
         <tbody>
         {% for a in list.items %}
             <tr class="{{ a.active ? 'active' : 'inactive' }}">
-                <td>{{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'PLUGIN_W4OS.GOD'|t }}</span>{% endif %}</td>
+                <td>{{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'w4os.god'|t }}</span>{% endif %}</td>
                 <td>{{ a.email }}</td>
-                <td>{{ a.online ? 'PLUGIN_W4OS.ONLINE'|t : (a.active ? 'PLUGIN_W4OS.ACTIVE'|t : 'PLUGIN_W4OS.INACTIVE'|t) }}</td>
+                <td>{{ a.online ? 'w4os.online'|t : (a.active ? 'w4os.active'|t : 'w4os.inactive'|t) }}</td>
                 <td>{{ a.lastSeen ? a.lastSeen|date('Y-m-d') : '—' }}</td>
                 <td>{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
                 <td class="w4os-actions">
                     {% for action in (a.active ? ['disable', 'reset', 'delete'] : ['enable', 'delete']) %}
-                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'PLUGIN_W4OS.DELETE_CONFIRM'|t|replace({'{name}': a.name})|e('js') }}')"{% endif %}>
+                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'w4os.delete_confirm'|t|replace({'{name}': a.name})|e('js') }}')"{% endif %}>
                             {{ nonce_field('w4os-manage')|raw }}
                             <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
                             <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">
-                            <button class="button small {{ action == 'delete' ? 'danger' : '' }}" name="action" value="{{ action }}">{{ ('PLUGIN_W4OS.ACTION_' ~ action|upper)|t }}</button>
+                            <button class="button small {{ action == 'delete' ? 'danger' : '' }}" name="action" value="{{ action }}">{{ ('w4os.action_' ~ action)|t }}</button>
                         </form>
                     {% endfor %}
                 </td>

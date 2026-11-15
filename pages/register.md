@@ -9,46 +9,46 @@ form:
   fields:
     first_name:
       type: text
-      label: PLUGIN_W4OS.FIRST_NAME
+      label: w4os.first_name
       autocomplete: given-name
       maxlength: 63
       validate: { required: true }
     last_name:
       type: text
-      label: PLUGIN_W4OS.LAST_NAME
+      label: w4os.last_name
       autocomplete: family-name
       maxlength: 63
       validate: { required: true }
     email:
       type: email
-      label: PLUGIN_W4OS.EMAIL
+      label: w4os.email
       autocomplete: email
       validate: { required: true }
     password:
       type: password
-      label: PLUGIN_W4OS.PASSWORD
-      help: PLUGIN_W4OS.PASSWORD_HELP
+      label: w4os.password
+      help: w4os.password_help
       autocomplete: new-password
       minlength: 6
       maxlength: 16
       validate: { required: true }
     password_confirm:
       type: password
-      label: PLUGIN_W4OS.PASSWORD_CONFIRM
+      label: w4os.password_confirm
       autocomplete: new-password
       minlength: 6
       maxlength: 16
       validate: { required: true }
     model:
       type: w4os_models
-      label: PLUGIN_W4OS.MODEL
+      label: w4os.model
       data-options@: '\Grav\Plugin\W4osPlugin::modelOptions'
       validate: { type: radio }
     terms:
       type: w4os_terms
       validate: { type: bool }
   buttons:
-    - { type: submit, value: PLUGIN_W4OS.REGISTER_BUTTON, classes: 'button primary' }
+    - { type: submit, value: w4os.register_button, classes: 'button primary' }
   process:
     - w4os: register
 ---

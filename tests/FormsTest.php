@@ -41,17 +41,17 @@ describe('register', function () {
 
     test('refuses two different passwords without asking the engine', function () use ($fields) {
         $forms = forms([], $log);
-        expect(formError(fn () => $forms->register(['password_confirm' => 'other'] + $fields)))->toBe('PLUGIN_W4OS.ERROR_PASSWORD_MATCH')
+        expect(formError(fn () => $forms->register(['password_confirm' => 'other'] + $fields)))->toBe('w4os.error_password_match')
             ->and($log)->toBe([]);
     });
 
     test('tells what the engine refuses by its code, in the language of the site', function () use ($fields) {
         $refused = fn (string $code) => formError(fn () => forms([[400, problem(400, 'refused', $code)]])->register($fields));
 
-        expect($refused('name-taken'))->toBe('PLUGIN_W4OS.ERROR_NAME_TAKEN')
-            ->and($refused('name-reserved'))->toBe('PLUGIN_W4OS.ERROR_NAME_RESERVED')
-            ->and($refused('password-invalid'))->toBe('PLUGIN_W4OS.ERROR_PASSWORD_INVALID')
-            ->and($refused('model-unknown'))->toBe('PLUGIN_W4OS.ERROR_MODEL_UNKNOWN');
+        expect($refused('name-taken'))->toBe('w4os.error_name_taken')
+            ->and($refused('name-reserved'))->toBe('w4os.error_name_reserved')
+            ->and($refused('password-invalid'))->toBe('w4os.error_password_invalid')
+            ->and($refused('model-unknown'))->toBe('w4os.error_model_unknown');
     });
 
     test('keeps what the engine says of a value only for a generic refusal', function () use ($fields) {
@@ -60,7 +60,7 @@ describe('register', function () {
         } catch (FormError $e) {
         }
 
-        expect($e->key)->toBe('PLUGIN_W4OS.ERROR_INVALID')->and($e->detail)->toBe("'x' is not a UUID");
+        expect($e->key)->toBe('w4os.error_invalid')->and($e->detail)->toBe("'x' is not a UUID");
     });
 
     test('on a test site, mails nothing and gives the link', function () use ($fields) {
@@ -77,10 +77,10 @@ describe('sign-in and passwords', function () {
     test('a refused sign-in says why', function () {
         $refused = fn (int $status, ?string $code) => formError(fn () => forms([[$status, problem($status, 'refused', $code)]])->signIn('Ada Love', 'x'));
 
-        expect($refused(403, 'email-unconfirmed'))->toBe('PLUGIN_W4OS.ERROR_EMAIL_UNCONFIRMED')
-            ->and($refused(403, 'account-disabled'))->toBe('PLUGIN_W4OS.ERROR_ACCOUNT_DISABLED')
-            ->and($refused(403, 'sign-in-refused'))->toBe('PLUGIN_W4OS.ERROR_SIGN_IN')
-            ->and($refused(503, null))->toBe('PLUGIN_W4OS.ERROR_UNAVAILABLE');
+        expect($refused(403, 'email-unconfirmed'))->toBe('w4os.error_email_unconfirmed')
+            ->and($refused(403, 'account-disabled'))->toBe('w4os.error_account_disabled')
+            ->and($refused(403, 'sign-in-refused'))->toBe('w4os.error_sign_in')
+            ->and($refused(503, null))->toBe('w4os.error_unavailable');
     });
 
     test('the forgotten password mails a link to the reset page', function () {
@@ -97,14 +97,14 @@ describe('sign-in and passwords', function () {
     });
 
     test('a token refused is told so', function () {
-        expect(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->reset(['token' => 't', 'password' => 'a', 'password_confirm' => 'a'])))->toBe('PLUGIN_W4OS.ERROR_TOKEN')
-            ->and(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->confirm('t')))->toBe('PLUGIN_W4OS.ERROR_TOKEN');
+        expect(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->reset(['token' => 't', 'password' => 'a', 'password_confirm' => 'a'])))->toBe('w4os.error_token')
+            ->and(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->confirm('t')))->toBe('w4os.error_token');
     });
 
     test('a new password needs the current one', function () {
         $avatar = ['uuid' => 'u1', 'name' => 'Ada Love'];
         $forms = forms([[403, problem(403, 'wrong', 'sign-in-refused')]], $log);
-        expect(formError(fn () => $forms->password($avatar, ['current' => 'bad', 'password' => 'n', 'password_confirm' => 'n'])))->toBe('PLUGIN_W4OS.ERROR_CURRENT_PASSWORD')
+        expect(formError(fn () => $forms->password($avatar, ['current' => 'bad', 'password' => 'n', 'password_confirm' => 'n'])))->toBe('w4os.error_current_password')
             ->and($log)->toHaveCount(1);
 
         forms([[200, avatarDocument()], [200, avatarDocument()]], $log)->password($avatar, ['current' => 'old', 'password' => 'n', 'password_confirm' => 'n']);
@@ -146,6 +146,6 @@ describe('account', function () {
         expect(array_map(fn ($r) => $r['method'].' '.parse_url($r['url'], PHP_URL_PATH), $log))->toBe([
             'PATCH /helpers/api/avatars/u1', 'PATCH /helpers/api/avatars/u1', 'POST /helpers/api/password-resets', 'DELETE /helpers/api/avatars/u1',
         ])->and($log[1]['body']['data']['attributes'])->toBe(['active' => false])
-            ->and(formError(fn () => $forms->manage('promote', ['uuid' => 'u1'])))->toBe('PLUGIN_W4OS.ERROR_INVALID');
+            ->and(formError(fn () => $forms->manage('promote', ['uuid' => 'u1'])))->toBe('w4os.error_invalid');
     });
 });

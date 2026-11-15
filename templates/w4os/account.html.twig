@@ -1,20 +1,20 @@
 {% set avatar = w4os_avatar() %}
 {% if avatar is empty %}
-    <p class="notices red">{{ 'PLUGIN_W4OS.ERROR_UNAVAILABLE'|t }}</p>
+    <p class="notices red">{{ 'w4os.error_unavailable'|t }}</p>
 {% else %}
     <div class="w4os-account-head">
         <p class="w4os-avatar-name"><strong>{{ avatar.name }}</strong>
-            {% if avatar.created %}<span class="w4os-born">{{ 'PLUGIN_W4OS.BORN'|t }} {{ avatar.created|date('Y-m-d') }}</span>{% endif %}
+            {% if avatar.created %}<span class="w4os-born">{{ 'w4os.born'|t }} {{ avatar.created|date('Y-m-d') }}</span>{% endif %}
         </p>
         <p class="w4os-links">
-            {% if w4os_is_manager() and w4os_route('manage') %}<a class="button" href="{{ base_url_relative ~ w4os_route('manage') }}">{{ 'PLUGIN_W4OS.MANAGE_TITLE'|t }}</a>{% endif %}
-            <a class="button" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'PLUGIN_W4OS.SIGN_OUT'|t }}</a>
+            {% if w4os_is_manager() and w4os_route('manage') %}<a class="button" href="{{ base_url_relative ~ w4os_route('manage') }}">{{ 'w4os.manage_title'|t }}</a>{% endif %}
+            <a class="button" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.sign_out'|t }}</a>
         </p>
     </div>
     <div class="w4os-account-profile">{{ w4os_block('profile', { name: avatar.name|replace({' ': '.'}) }) }}</div>
-    <h2>{{ 'PLUGIN_W4OS.PROFILE_TITLE'|t }}</h2>
-    <p class="w4os-help">{{ 'PLUGIN_W4OS.PROFILE_TEXT'|t }}</p>
+    <h2>{{ 'w4os.profile_title'|t }}</h2>
+    <p class="w4os-help">{{ 'w4os.profile_text'|t }}</p>
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
-    <h2>{{ 'PLUGIN_W4OS.PASSWORD_TITLE'|t }}</h2>
+    <h2>{{ 'w4os.password_title'|t }}</h2>
     {% include 'forms/form.html.twig' with { form: forms('w4os-password') } %}
 {% endif %}

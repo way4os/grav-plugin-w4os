@@ -11,7 +11,7 @@
 {% block input %}
     {% set models = w4os_models() %}
     {% set current = value ?: (models|length ? random(models).name : '') %}
-    <p class="w4os-help">{{ 'PLUGIN_W4OS.MODEL_HELP'|t }}</p>
+    <p class="w4os-help">{{ 'w4os.model_help'|t }}</p>
     <ul class="w4os-models">
         {% for model in models %}
             {% set id = (field.id|default(field.name)) ~ '-' ~ loop.index %}

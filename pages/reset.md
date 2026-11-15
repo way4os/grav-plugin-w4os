@@ -13,21 +13,21 @@ form:
       default: "uri.query('token')"
     password:
       type: password
-      label: PLUGIN_W4OS.NEW_PASSWORD
-      help: PLUGIN_W4OS.PASSWORD_HELP
+      label: w4os.new_password
+      help: w4os.password_help
       autocomplete: new-password
       minlength: 6
       maxlength: 16
       validate: { required: true }
     password_confirm:
       type: password
-      label: PLUGIN_W4OS.PASSWORD_CONFIRM
+      label: w4os.password_confirm
       autocomplete: new-password
       minlength: 6
       maxlength: 16
       validate: { required: true }
   buttons:
-    - { type: submit, value: PLUGIN_W4OS.RESET_BUTTON, classes: 'button primary' }
+    - { type: submit, value: w4os.reset_button, classes: 'button primary' }
   process:
     - w4os: reset
 ---
