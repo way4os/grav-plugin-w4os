@@ -18,7 +18,7 @@ It is one piece of the w4os family:
 - **Avatars of the grid**, for its managers (the avatars of user level 200 or more by default): search, enable, disable, mail a password link, delete.
 - **Blocks of the helpers** in any page, as a shortcode or in a template: grid info, grid status (in the language of the site, numbers and area as the language writes them), message of the day, search, popular places, destination guide, directory, profile.
 - **Menu of the visitor** for the top bar of a theme: the avatar signed in (my avatar, avatars of the grid, sign out), else sign in, create an avatar, forgotten password: `{% include 'w4os/user-menu.html.twig' %}`.
-- In English, French, German, Italian, Dutch, Portuguese (Brazil) and Welsh, the words of w4os (`languages/<lang>.yaml`: a language is a file, a translator works on one).
+- In English, French, German, Italian, Dutch, Portuguese (Brazil) and Welsh: the texts come from the translation catalog of the OpenSim engine, shared by every website of a grid (Grav, WordPress); `languages/<lang>.yaml` are generated from it (`composer languages`).
 
 The presentation and help pages are plain Markdown files of the site (`user/pages`), with the blocks in them:
 

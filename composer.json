@@ -55,7 +55,8 @@
         }
     },
     "scripts": {
-        "test": "pest"
+        "test": "pest",
+        "languages": "php dev/languages.php"
     },
     "config": {
         "allow-plugins": {
