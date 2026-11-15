@@ -1,0 +1,25 @@
+{
+    "name": "magicoli/grav-plugin-w4os",
+    "description": "Grav plugin: the website of an OpenSimulator grid, a thin bridge to the OpenSim engine API",
+    "type": "grav-plugin",
+    "license": "AGPL-3.0-or-later",
+    "require": {
+        "php": "^8.3"
+    },
+    "require-dev": {
+        "pestphp/pest": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "W4os\\Grav\\": "classes/"
+        }
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
