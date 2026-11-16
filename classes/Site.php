@@ -565,8 +565,20 @@ final class Site
         return $active === 'en' ? 'en' : "$active, en;q=0.5";
     }
 
-    /** A value kept in the cache of Grav for the time of the setting "cache"; null is not kept. */
-    private function cached(string $key, \Closure $value): mixed
+    /** The OpenAPI document of the engine, read (OpenApi): kept an hour. */
+    public function openApi(): OpenApi
+    {
+        return new OpenApi((array) ($this->cached('openapi', function () {
+            try {
+                return $this->engine()->openapi() ?: null;
+            } catch (EngineException) {
+                return null;
+            }
+        }, 3600) ?? []));
+    }
+
+    /** A value kept in the cache of Grav for the time of the setting "cache" (or the one given, in seconds); null is not kept. */
+    private function cached(string $key, \Closure $value, ?int $lifetime = null): mixed
     {
         $cache = $this->grav['cache'];
         $id = 'w4os-'.md5($key.'|'.$this->grav['language']->getActive());
@@ -575,7 +587,7 @@ final class Site
             return $kept;
         }
         $kept = $value();
-        $kept === null || $cache->save($id, $kept, max(0, (int) ($this->config()['cache'] ?? 60)));
+        $kept === null || $cache->save($id, $kept, $lifetime ?? max(0, (int) ($this->config()['cache'] ?? 60)));
 
         return $kept;
     }

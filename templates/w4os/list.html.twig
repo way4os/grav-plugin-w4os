@@ -1,0 +1,59 @@
+{# A list of the engine as the site draws it, from the engine's description of it (OpenApi::listOf(): its columns and their types,
+   its filters and their values, its sortable columns, its search, the actions of a row). Variables: list, items, meta, query (the
+   query of the page), error, texts (the keys of its search placeholder, of no row, of the count), links (the links of a row: key,
+   url with {uuid} and {name}), sort (the order without one in the address). The keys of the engine are its catalog's, under w4os. #}
+{% import 'w4os/list-cells.html.twig' as cells %}
+{% set sort_default = sort ?? '' %}
+{# One row: the search, then the filters, whose empty option names them #}
+<form class="w4os-filters" method="get">
+    {% if list.search is not null %}
+    <div role="search">
+        <input type="search" name="search" value="{{ query.search ?? '' }}" placeholder="{{ texts.search|t|e('html_attr') }}" aria-label="{{ texts.search|t|e('html_attr') }}">
+        <button type="submit">{{ 'w4os.search'|t }}</button>
+    </div>
+    {% endif %}
+    {% for filter in list.filters %}
+        <select name="{{ filter.name|e('html_attr') }}" aria-label="{{ ('w4os.' ~ filter.key)|t|e('html_attr') }}" onchange="this.form.requestSubmit()">
+            <option value="">{{ ('w4os.' ~ filter.key)|t }}</option>
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.key ? ('w4os.' ~ value.key)|t : value.value }}</option>{% endfor %}
+        </select>
+    {% endfor %}
+    {% if query.sort is defined %}<input type="hidden" name="sort" value="{{ query.sort }}">{% endif %}
+</form>
+{% if error %}
+    <p class="notices red">{{ error }}</p>
+{% elseif items is empty %}
+    <p>{{ texts.empty|t }}</p>
+{% else %}
+    <p class="w4os-count">{{ texts.count|t(meta.total ?? items|length) }}</p>
+    <div class="w4os-table-wrap">
+    <table class="w4os-list w4os-{{ list.type|e('html_attr') }}">
+        <thead><tr>
+            {% for column in list.columns %}
+                {% if column.name in list.sorts %}{{ cells.sorted(column, query, sort_default) }}{% else %}<th>{{ ('w4os.' ~ column.key)|t }}</th>{% endif %}
+            {% endfor %}
+            {% if links or list.actions %}<th><span class="sr-only">{{ 'w4os.actions'|t }}</span></th>{% endif %}
+        </tr></thead>
+        <tbody>
+        {% for item in items %}
+            <tr{% if item.status is defined %} class="w4os-{{ item.status|e('html_attr') }}"{% endif %}>
+                {% for column in list.columns %}<td class="w4os-cell-{{ column.type|e('html_attr') }}">{{ cells.cell(column, item) }}</td>{% endfor %}
+                {% if links or list.actions %}<td class="w4os-actions">{{ cells.menu(list, item, links) }}</td>{% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {# The pages of the list: the engine pages it (its total, its page), the links keep the search, the filters and the sort #}
+    {% set current = meta.page ?? 1 %}
+    {% set pages = ((meta.total ?? 0) / (meta.perPage ?: 50))|round(0, 'ceil') %}
+    {% if pages > 1 %}
+        <nav class="w4os-pages" aria-label="{{ texts.count|t(meta.total)|e('html_attr') }}">
+        {% if current > 1 %}<a href="?{{ query|merge({page: current - 1})|url_encode }}" rel="prev" aria-label="‹">‹</a>{% endif %}
+        {% for n in 1..pages %}
+            {% if n == current %}<strong aria-current="page">{{ n }}</strong>{% else %}<a href="?{{ query|merge({page: n})|url_encode }}">{{ n }}</a>{% endif %}
+        {% endfor %}
+        {% if current < pages %}<a href="?{{ query|merge({page: current + 1})|url_encode }}" rel="next" aria-label="›">›</a>{% endif %}
+        </nav>
+    {% endif %}
+{% endif %}

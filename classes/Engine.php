@@ -133,6 +133,16 @@ final class Engine
     }
 
     /**
+     * The OpenAPI document of the engine (`/openapi.json`, at the root of the API): what it gives, its lists among them (OpenApi).
+     *
+     * @return array<string,mixed>
+     */
+    public function openapi(): array
+    {
+        return $this->call('GET', '/openapi.json', grid: false);
+    }
+
+    /**
      * The picks or the classifieds of an avatar (`picks`, `classifieds`), as its profile shows them: name, description, picture,
      * parcel, region, position, teleport (and created, expires for a classified).
      *
@@ -211,15 +221,16 @@ final class Engine
      *
      * @param ?array<string,mixed> $data the primary data of the body (JSON:API `data`)
      * @param array<string,scalar> $query
+     * @param bool $grid under the grid of the site (`/grids/{grid}`, when the API serves several), else at the root of the API
      * @return array<string,mixed> the document answered (empty for 204)
      * @throws EngineException the problem the API answered, or the API cannot be reached
      */
-    public function call(string $method, string $path, ?array $data = null, array $query = []): array
+    public function call(string $method, string $path, ?array $data = null, array $query = [], bool $grid = true): array
     {
         if (! $this->ready()) {
             throw new EngineException(503, 'The site is not connected to the engine (bundled, or an API address and key).');
         }
-        $url = $this->url.$this->path($path).($query === [] ? '' : '?'.http_build_query($query));
+        $url = $this->url.($grid ? $this->path($path) : $path).($query === [] ? '' : '?'.http_build_query($query));
         $headers = ['Accept' => 'application/vnd.api+json, application/problem+json'] + ($this->key === '' ? [] : ['Authorization' => 'Bearer '.$this->key]);
         $body = null;
         if ($data !== null) {

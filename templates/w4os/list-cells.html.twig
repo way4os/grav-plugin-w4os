@@ -1,0 +1,51 @@
+{# The parts of a list of the engine (w4os/list.html.twig): a sortable column title, a cell by the display type of its column, the
+   actions menu of a row. A column may also show a picture before its value (`picture`: the attribute of an asset) and a tag after it
+   (`tag`: a true attribute, `tagKey` its text). #}
+
+{# A column title sorts the list by it, a second click the other way #}
+{% macro sorted(column, query, default) %}
+    {% set current = query.sort ?? default %}
+    {% set next = current == column.name ? '-' ~ column.name : column.name %}
+    <th{% if current|trim('-', 'left') == column.name %} aria-sort="{{ current starts with '-' ? 'descending' : 'ascending' }}"{% endif %}><a href="?{{ query|merge({sort: next})|url_encode }}">{{ ('w4os.' ~ column.key)|t }}{% if current|trim('-', 'left') == column.name %} <span aria-hidden="true">{{ current starts with '-' ? '↓' : '↑' }}</span>{% endif %}</a></th>
+{% endmacro %}
+
+{# The value of a column for a row, drawn by its type #}
+{% macro cell(column, item) %}
+    {% set value = attribute(item, column.name) ?? null %}
+    {% set type = column.type %}
+    {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb" src="{{ w4os_picture(attribute(item, column.picture) ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% endif %}
+    {%- if type == 'date' -%}{{ value ? value|date('Y-m-d') : '—' }}
+    {%- elseif type == 'datetime' -%}{{ value ? value|date('Y-m-d H:i') : '—' }}
+    {%- elseif type == 'boolean' -%}{{ value ? '✓' : '—' }}
+    {%- elseif type == 'status' -%}<span class="w4os-status">{{ value is not empty ? ('w4os.status_' ~ value)|t : '—' }}</span>
+    {%- elseif type == 'role' -%}{{ value is not empty ? ('w4os.role_' ~ value|replace({'-': '_'}))|t : (item.level ?? '—') }}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}
+    {%- elseif type == 'picture' -%}<img class="w4os-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
+    {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="48" height="48">{% else %}—{% endif %}
+    {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
+    {%- else -%}{{ value is iterable ? value|join(', ') : (value ?? '—') }}
+    {%- endif -%}
+    {% if column.tag is defined and attribute(item, column.tag) ?? false %} <span class="w4os-tag">{{ ('w4os.' ~ (column.tagKey ?? column.tag))|t }}</span>{% endif %}
+    {% if column.picture is defined %}</span></div>{% endif %}
+{% endmacro %}
+
+{# The actions menu of a row: the links of the page (view, edit), then the engine's actions that apply to it, posted to the page #}
+{% macro menu(list, item, links) %}
+    {% set actions = w4os_list_actions(list, item) %}
+    <details class="w4os-menu">
+        <summary aria-label="{{ ('w4os.actions'|t ~ ': ' ~ (item.name ?? ''))|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}">⋮</summary>
+        <div class="w4os-menu-list">
+            {% for link in links ?? [] %}
+                {% set url = link.url|replace({'{uuid}': (item.uuid ?? item.id ?? '')|url_encode, '{name}': (item.name ?? '')|replace({' ': '.'})|url_encode}) %}
+                <a href="{{ url|e('html_attr') }}">{{ ('w4os.' ~ link.key)|t }}</a>
+            {% endfor %}
+            {% if actions %}
+            <form method="post">
+                {{ nonce_field('w4os-list')|raw }}
+                <input type="hidden" name="id" value="{{ (item.uuid ?? item.id ?? '')|e('html_attr') }}">
+                <input type="hidden" name="name" value="{{ (item.name ?? '')|e('html_attr') }}">
+                {% for action in actions %}<button name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ (action.key ?? ('action_' ~ action.name)))|t }}</button>{% endfor %}
+            </form>
+            {% endif %}
+        </div>
+    </details>
+{% endmacro %}

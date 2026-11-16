@@ -10,6 +10,7 @@ use W4os\Grav\Blocks;
 use W4os\Grav\EngineException;
 use W4os\Grav\FormError;
 use W4os\Grav\Forms;
+use W4os\Grav\Lists;
 use W4os\Grav\Site;
 
 require_once __DIR__.'/classes/EngineException.php';
@@ -17,6 +18,8 @@ require_once __DIR__.'/classes/Engine.php';
 require_once __DIR__.'/classes/FormError.php';
 require_once __DIR__.'/classes/Forms.php';
 require_once __DIR__.'/classes/Blocks.php';
+require_once __DIR__.'/classes/OpenApi.php';
+require_once __DIR__.'/classes/Lists.php';
 require_once __DIR__.'/classes/Bundled.php';
 require_once __DIR__.'/classes/Site.php';
 
@@ -181,6 +184,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
