@@ -102,6 +102,9 @@ forms:
             type: tab
             title: w4os.profile_tab_first_life
             fields:
+              first_picture:
+                type: w4os_photo
+                picture: firstImage
               firstLife:
                 type: textarea
                 classes: w4os-autogrow

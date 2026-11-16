@@ -1,9 +1,9 @@
 {# The avatar of a profile form as the 2nd Life tab of the viewer shows it, what the form does not change: its picture, name, key,
-   birth date, partner and role (the avatar signed in, or the one a manager edits) #}
+   birth date, partner and account (its role; the avatar signed in, or the one a manager edits) #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
 {% if avatar %}
     <div class="w4os-identity">
-        <img class="w4os-identity-picture" src="{{ w4os_picture(avatar.profileImage)|e('html_attr') }}" alt="" width="96" height="96">
+        <img class="w4os-identity-picture" src="{{ w4os_picture(avatar.profileImage)|e('html_attr') }}" alt="">
         <div class="w4os-identity-details">
             <p class="w4os-identity-name">{{ avatar.name }}</p>
             <dl>
@@ -11,7 +11,7 @@
             {% if avatar.created %}<dt>{{ 'w4os.born'|t }}</dt><dd>{{ avatar.created|date('Y-m-d') }}</dd>{% endif %}
             {% set partner = w4os_avatar_name(avatar.partner) %}
             {% if partner %}<dt>{{ 'w4os.partner'|t }}</dt><dd><a href="{{ w4os_profile_page(partner)|e('html_attr') }}">{{ partner }}</a></dd>{% endif %}
-            {% if avatar.role %}<dt>{{ 'w4os.role'|t }}</dt><dd>{{ ('w4os.role_' ~ avatar.role|replace({'-': '_'}))|t }}</dd>{% endif %}
+            {% if avatar.role %}<dt>{{ 'w4os.profile_tab_account'|t }}</dt><dd>{{ ('w4os.role_' ~ avatar.role|replace({'-': '_'}))|t }}</dd>{% endif %}
             </dl>
         </div>
     </div>
