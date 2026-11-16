@@ -1,5 +1,5 @@
-{# The languages of an avatar: free text, as in the viewer, with the site's languages and the usual ones to pick from (a datalist),
-   suggested again for each language added after a separator (js/languages.js) #}
+{# The languages of an avatar: free text, as in the viewer ("Français, English"), typed as tags (Tom Select, assets/tom-select)
+   with the site's languages and the usual ones to pick from, each in its own language; a plain text field without the script #}
 {% extends "forms/fields/text/text.html.twig" %}
 
 {% block input_attributes %}
@@ -10,6 +10,8 @@
 
 {% block append %}
     {{ parent() }}
+    {% do assets.addCss('plugin://w4os/assets/tom-select/tom-select.min.css') %}
+    {% do assets.addJs('plugin://w4os/assets/tom-select/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
     {% do assets.addJs('plugin://w4os/js/languages.js', {group: 'bottom', loading: 'defer'}) %}
     <datalist id="w4os-languages-{{ field.name|e('html_attr') }}">
         {% for name in w4os_language_names() %}<option value="{{ name }}"></option>{% endfor %}

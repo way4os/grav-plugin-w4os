@@ -156,6 +156,8 @@ final class Forms
     public function profile(array $current, array $data, bool $confirm = true, array $extra = []): array
     {
         $attributes = $extra;
+        // The languages as the viewer keeps them: "Français, English"
+        isset($data['languages']) && ($data['languages'] = implode(', ', array_filter(array_map('trim', preg_split('/[,;]/u', (string) $data['languages']) ?: []))));
         foreach (self::PROFILE as $key) {
             if (array_key_exists($key, $data) && trim((string) $data[$key]) !== trim((string) ($current[$key] ?? ''))) {
                 $attributes[$key] = trim((string) $data[$key]);

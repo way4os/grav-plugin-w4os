@@ -1,20 +1,26 @@
-// A list of languages typed in one field (French, English): its suggestions go on after a comma, a semicolon, a slash or a space,
-// each one the text typed so far followed by a language not in it yet.
+// The languages of a profile as tags (Tom Select): each language picked from the list, or typed and closed by a comma or a
+// space, becomes a tag; the suggestions are the languages that match what is typed. The field keeps the text of the viewer.
 document.querySelectorAll('input[data-w4os-languages]').forEach((input) => {
-    const list = document.getElementById(input.getAttribute('list'));
-    if (!list) {
+    if (typeof TomSelect === 'undefined') {
         return;
     }
-    const names = [...list.options].map((option) => option.value);
-    const suggest = () => {
-        // What is typed up to the last separator, and the languages already in it
-        const done = (input.value.match(/^(.*[,;/\s])/u) || ['', ''])[1];
-        const prefix = done.replace(/\s*$/u, ' ').replace(/^ $/u, '');
-        const chosen = done.toLowerCase().split(/[,;/\s]+/u).filter(Boolean);
-        list.replaceChildren(...names
-            .filter((name) => !chosen.includes(name.toLowerCase()))
-            .map((name) => new Option(prefix + name)));
-    };
-    input.addEventListener('input', suggest);
-    input.addEventListener('focus', suggest);
+    const list = document.getElementById(input.getAttribute('list'));
+    const names = list ? [...list.options].map((option) => option.value) : [];
+    input.removeAttribute('list');
+    input.value = input.value.split(/[,;]/u).map((name) => name.trim()).filter(Boolean).join(',');
+    const tags = new TomSelect(input, {
+        delimiter: ',',
+        create: true,
+        createOnBlur: true,
+        persist: false,
+        maxOptions: null,
+        options: names.map((name) => ({ value: name, text: name })),
+        plugins: ['remove_button'],
+    });
+    tags.control_input.addEventListener('keydown', (event) => {
+        if (event.key === ' ' && tags.inputValue().trim() !== '') {
+            event.preventDefault();
+            tags.createItem();
+        }
+    });
 });

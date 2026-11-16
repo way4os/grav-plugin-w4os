@@ -270,7 +270,8 @@ final class Site
         $page->init(new \SplFileInfo(dirname(__DIR__).'/pages/'.$type.'.md'));
         $page->route($path);
         $page->slug(basename($path));
-        $page->title($this->translate('w4os.'.$type.'_title'));
+        // The account page is where the avatar edits its profile: the title of its menu entry and button
+        $page->title($this->translate($type === 'account' ? 'w4os.edit_profile' : 'w4os.'.$type.'_title'));
         $pages->addPage($page, $path);
         unset($this->grav['page']);
         $this->grav['page'] = $page;
@@ -372,17 +373,18 @@ final class Site
     public const USUAL_LANGUAGES = ['en', 'fr', 'de', 'es', 'it', 'nl', 'pt', 'cy', 'pl', 'sv', 'ru', 'ja', 'zh', 'ko', 'ar', 'tr'];
 
     /**
-     * The names of the languages to suggest for a profile, in the language of the page: the site's first, then the usual ones.
+     * The names of the languages to suggest for a profile, each in its own language (Français, English, Deutsch): the site's
+     * first, then the usual ones.
      *
      * @return list<string>
      */
     public function languageNames(): array
     {
         $language = $this->grav['language'];
-        $page = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
         $names = [];
         foreach (array_unique([...array_map('strval', (array) $language->getLanguages()), ...self::USUAL_LANGUAGES]) as $code) {
-            $name = class_exists(\Locale::class) ? \Locale::getDisplayLanguage(str_replace('-', '_', $code), str_replace('-', '_', $page)) : '';
+            $locale = str_replace('-', '_', $code);
+            $name = class_exists(\Locale::class) ? \Locale::getDisplayLanguage($locale, $locale) : '';
             $name = $name !== '' && $name !== $code ? $name : (string) \Grav\Common\Language\LanguageCodes::getNativeName($code);
             $name !== '' && $names[] = mb_strtoupper(mb_substr($name, 0, 1)).mb_substr($name, 1);
         }

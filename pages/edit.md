@@ -61,7 +61,8 @@ form:
                     hire: w4os.want_hire
                 wants:
                   type: text
-                  label: w4os.profile_other
+                  label: false
+                  title: w4os.wants
             skills_group:
               type: fieldset
               legend: w4os.skills
@@ -80,7 +81,8 @@ form:
                     custom-characters: w4os.skill_custom_characters
                 skills:
                   type: text
-                  label: w4os.profile_other
+                  label: false
+                  title: w4os.skills
             languages:
               type: w4os_languages
               label: w4os.languages

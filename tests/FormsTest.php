@@ -154,6 +154,12 @@ describe('account', function () {
         expect($log)->toHaveCount(1)->and($log[0]['body']['data']['attributes'])->toBe(['published' => true]);
     });
 
+    test('keeps the languages as the viewer does, whatever the separators typed', function () use ($current) {
+        forms([[200, avatarDocument()]], $log)->profile($current, ['email' => 'ada@example.org', 'languages' => 'Français,English ; Deutsch,']);
+
+        expect($log[0]['body']['data']['attributes'])->toBe(['languages' => 'Français, English, Deutsch']);
+    });
+
     test('asks nothing when nothing changed', function () use ($current) {
         forms([], $log)->profile($current, ['email' => 'ada@example.org', 'about' => 'Hi']);
 
