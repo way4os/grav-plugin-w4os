@@ -124,8 +124,10 @@ final class Bundled
         if ($login === '') {
             $conf = trim((string) ($this->settings['opensim_conf'] ?? ''));
             $layout = Layout::load($conf !== '' ? $conf : null, DirectoryLayout::roots());
-            // The caches of the site's own: the ones of the install belong to its system user
-            $this->environment = Environment::system($this->cache === '' ? $layout : new Layout(['CacheRoot' => $this->cache] + $layout->all(), $layout->file(), $layout->profile()));
+            // The caches and the state of the tasks of the site's own (the ones of the described grids' place): the ones of the
+            // install belong to its system user
+            $own = ['TasksRoot' => "$this->root/var/cron"] + ($this->cache === '' ? [] : ['CacheRoot' => $this->cache]);
+            $this->environment = Environment::system(new Layout($own + $layout->all(), $layout->file(), $layout->profile()));
             $this->nick = trim((string) ($this->settings['grid'] ?? '')) ?: $this->onlyGrid();
 
             return $this->environment;
