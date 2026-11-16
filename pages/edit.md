@@ -19,7 +19,6 @@ form:
     email:
       type: email
       label: w4os.email
-      validate: { required: true }
     about:
       type: textarea
       label: w4os.about

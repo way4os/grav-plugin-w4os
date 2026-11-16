@@ -160,7 +160,8 @@ describe('account', function () {
             ->and(Forms::status(['active' => false]))->toBe('disabled')
             ->and(Forms::ACTIONS[Forms::status(['active' => true])])->toBe(['disable', 'reset'])
             ->and(Forms::ACTIONS['pending'])->not->toContain('reset')
-            ->and(Forms::actions(['uuid' => 'u1', 'active' => true], 'u1'))->toBe(['reset']);
+            ->and(Forms::actions(['uuid' => 'u1', 'active' => true, 'email' => 'ada@example.org'], 'u1'))->toBe(['reset'])
+            ->and(Forms::actions(['uuid' => 'm1', 'active' => true, 'email' => ''], 'u1'))->toBe(['disable']);
     });
 
     test('the list of the managers asks the engine with its filters and sort, and keeps only known values', function () {
@@ -180,11 +181,14 @@ describe('account', function () {
         forms([[200, avatarDocument()]], $log2)->edit($edited, ['role' => 'liaison', 'email' => 'ada@example.org']);
         forms([], $log3)->edit($edited, ['role' => 'emperor', 'email' => 'ada@example.org']);
 
+        $model = ['uuid' => 'm1', 'name' => 'Default Ruth', 'email' => '', 'role' => 'resident'];
+        forms([[200, avatarDocument()]], $log6)->edit($model, ['role' => 'resident', 'email' => '', 'about' => 'A model']);
         forms([[200, avatarDocument()]], $log4)->edit($edited, ['role' => 'resident', 'email' => 'ada@example.org', 'password' => 'secret12', 'password_confirm' => 'secret12']);
         $forms5 = forms([], $log5);
 
         expect($log[0]['body']['data']['attributes'])->toBe(['about' => 'Hi', 'email' => 'new@example.org'])
             ->and($log4[0]['body']['data']['attributes'])->toBe(['password' => 'secret12'])
+            ->and($log6[0]['body']['data']['attributes'])->toBe(['about' => 'A model'])
             ->and(formError(fn () => $forms5->edit($edited, ['email' => 'ada@example.org', 'password' => 'a12345', 'password_confirm' => 'b12345'])))->toBe('w4os.error_password_match')
             ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
             ->and($log3)->toBe([]);

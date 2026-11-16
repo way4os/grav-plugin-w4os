@@ -146,8 +146,10 @@ final class Forms
             }
         }
         $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
+        // An avatar's own profile has an email; a manager may leave it empty (the models and the technical accounts have none)
         if ($email === '') {
-            throw new FormError('w4os.error_required');
+            $confirm && throw new FormError('w4os.error_required');
+            $email = trim((string) ($current['email'] ?? ''));
         }
         $changed = strtolower($email) !== strtolower(trim((string) ($current['email'] ?? '')));
         if ($changed) {
@@ -242,7 +244,8 @@ final class Forms
     }
 
     /**
-     * The entries of the actions menu of an avatar: the ones of its status, never disabling the manager's own avatar.
+     * The entries of the actions menu of an avatar: the ones of its status, never disabling the manager's own avatar, no reset link
+     * for an avatar without an email.
      *
      * @param ?string $self the UUID of the avatar of the manager
      * @return list<string>
@@ -250,8 +253,10 @@ final class Forms
     public static function actions(array $avatar, ?string $self = null): array
     {
         $actions = self::ACTIONS[self::status($avatar)];
+        // Never disabling the manager's own avatar; no reset link for an avatar without an email (the models, the technical ones)
+        $without = [...(($avatar['uuid'] ?? null) === $self ? ['disable'] : []), ...(trim((string) ($avatar['email'] ?? '')) === '' ? ['reset'] : [])];
 
-        return ($avatar['uuid'] ?? null) === $self ? array_values(array_diff($actions, ['disable'])) : $actions;
+        return array_values(array_diff($actions, $without));
     }
 
     /**
