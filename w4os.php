@@ -177,6 +177,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_url', fn (string $name) => $this->site()->profileUrl($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->avatarItems($uuid, $kind)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
@@ -460,6 +461,22 @@ class W4osPlugin extends Plugin
     private function requireAvatar(): array
     {
         return $this->site()->avatar() ?? throw new FormError('w4os.error_forbidden');
+    }
+
+    /**
+     * The picks or the classifieds of an avatar, none when the engine cannot tell.
+     *
+     * @return list<array<string,mixed>>
+     */
+    private function avatarItems(string $uuid, string $kind): array
+    {
+        try {
+            return in_array($kind, ['picks', 'classifieds'], true) ? $this->site()->engine()->avatarItems($uuid, $kind) : [];
+        } catch (EngineException $e) {
+            $this->grav['log']->warning("w4os: the $kind of $uuid: ".$e->getMessage());
+
+            return [];
+        }
     }
 
     /** The name of an avatar by its UUID (a partner), '' when the engine has none. */

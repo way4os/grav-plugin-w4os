@@ -87,6 +87,20 @@ form:
             languages:
               type: w4os_languages
               label: w4os.languages
+        picks:
+          type: tab
+          title: w4os.profile_tab_picks
+          fields:
+            picks_list:
+              type: w4os_items
+              kind: picks
+        classifieds:
+          type: tab
+          title: w4os.profile_tab_classifieds
+          fields:
+            classifieds_list:
+              type: w4os_items
+              kind: classifieds
         first_life:
           type: tab
           title: w4os.profile_tab_first_life

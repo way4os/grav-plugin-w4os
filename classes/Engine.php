@@ -133,6 +133,19 @@ final class Engine
     }
 
     /**
+     * The picks or the classifieds of an avatar (`picks`, `classifieds`), as its profile shows them: name, description, picture,
+     * parcel, region, position, teleport (and created, expires for a classified).
+     *
+     * @return list<array<string,mixed>>
+     */
+    public function avatarItems(string $id, string $kind): array
+    {
+        $document = $this->call('GET', '/avatars/'.rawurlencode($id).'/'.rawurlencode($kind));
+
+        return array_values(array_map(fn ($resource) => (array) ($resource['attributes'] ?? []), (array) ($document['data'] ?? [])));
+    }
+
+    /**
      * Change an avatar. Its email with `confirmEmail` (and `link`, `send`) changes only once the new address is confirmed.
      *
      * @param array<string,mixed> $attributes email, password, active, about, profileUrl, wants, skills, languages, firstLife
