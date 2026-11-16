@@ -72,7 +72,9 @@ final class Site
         $settings['database']['password'] = (string) ($settings['database']['password'] ?? '') ?: $this->secret(self::DATABASE_SECRET, 'password');
         $root = (string) $this->grav['locator']->findResource(self::GRID_FOLDER, true, true);
 
-        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'));
+        $cache = (string) $this->grav['locator']->findResource('cache://w4os/opensim', true, true);
+
+        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'), $cache);
     }
 
     /** Whether the site serves the helpers of the grid itself (setting "serve_helpers", with the bundled engine). */

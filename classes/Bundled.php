@@ -28,8 +28,9 @@ final class Bundled
      * @param array<string,mixed> $settings login, database (host, port, name, user, password), opensim_conf, grid
      * @param string $root the folder of the site where a described grid is written (etc/grids/<nick>)
      * @param \Closure(string $url): ?string $fetch the body at an address (get_grid_info of a described grid)
+     * @param string $cache the folder of the caches of the engine for this site (the pictures it converts...), one the site writes to
      */
-    public function __construct(private array $settings, private string $root, private \Closure $fetch) {}
+    public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '') {}
 
     /** Whether the plugin has its vendor folder (the release zip, or composer install). */
     public static function available(): bool
@@ -119,7 +120,9 @@ final class Bundled
         $login = rtrim(trim((string) ($this->settings['login'] ?? '')), '/');
         if ($login === '') {
             $conf = trim((string) ($this->settings['opensim_conf'] ?? ''));
-            $this->environment = Environment::system(Layout::load($conf !== '' ? $conf : null, DirectoryLayout::roots()));
+            $layout = Layout::load($conf !== '' ? $conf : null, DirectoryLayout::roots());
+            // The caches of the site's own: the ones of the install belong to its system user
+            $this->environment = Environment::system($this->cache === '' ? $layout : new Layout(['CacheRoot' => $this->cache] + $layout->all(), $layout->file(), $layout->profile()));
             $this->nick = trim((string) ($this->settings['grid'] ?? '')) ?: $this->onlyGrid();
 
             return $this->environment;
@@ -129,7 +132,7 @@ final class Bundled
             'EtcRoot' => "$this->root/etc",
             'VarRoot' => "$this->root/var",
             'DataRoot' => "$this->root/var/data",
-            'CacheRoot' => "$this->root/cache",
+            'CacheRoot' => $this->cache !== '' ? $this->cache : "$this->root/cache",
             'LogsRoot' => "$this->root/logs",
             'BackupRoot' => "$this->root/backups",
         ]));
