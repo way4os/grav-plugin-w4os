@@ -123,6 +123,8 @@ w4os:
   error_model_unknown: 'Deze outfit is niet beschikbaar, kies een andere.'
   error_link_invalid: 'Dat is niet mogelijk.'
   error_field_unknown: 'Dat is niet mogelijk.'
+  error_role_unknown: 'Deze rol bestaat niet.'
+  error_role_level_conflict: 'Het niveau past niet bij de rol.'
   error_token_refused: 'Deze link werkt niet: hij is verlopen of al gebruikt. Vraag een nieuwe aan.'
   error_no_confirmation_pending: 'Deze avatar wacht niet op de bevestiging van zijn e-mail.'
   error_mail_failed: 'De mail kon niet worden verstuurd. Probeer het later opnieuw.'

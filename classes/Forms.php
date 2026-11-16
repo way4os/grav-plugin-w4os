@@ -18,7 +18,7 @@ final class Forms
         'not-found', 'invalid-request', 'invalid-document', 'type-conflict', 'unauthorized', 'method-not-allowed', 'channel-unavailable',
         'instance-failed', 'internal-error', 'sign-in-refused', 'account-disabled', 'email-unconfirmed', 'name-invalid', 'name-reserved',
         'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
-        'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed',
+        'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed', 'role-unknown', 'role-level-conflict',
     ];
 
     /**

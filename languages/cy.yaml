@@ -123,6 +123,8 @@ w4os:
   error_model_unknown: 'Nid yw’r wisg hon ar gael, dewiswch un arall.'
   error_link_invalid: 'Nid yw hyn yn bosibl.'
   error_field_unknown: 'Nid yw hyn yn bosibl.'
+  error_role_unknown: 'Nid yw’r rôl hon yn bodoli.'
+  error_role_level_conflict: 'Nid yw’r lefel yn cyfateb i’r rôl.'
   error_token_refused: 'Nid yw’r ddolen hon yn gweithio: mae wedi dod i ben neu wedi’i defnyddio eisoes. Gofynnwch am un newydd.'
   error_no_confirmation_pending: 'Nid yw’r avatar hwn yn aros am gadarnhad ei ebost.'
   error_mail_failed: 'Doedd dim modd anfon yr ebost. Rhowch gynnig arall arni nes ymlaen.'

@@ -123,6 +123,8 @@ w4os:
   error_model_unknown: 'Cet ensemble n’est pas disponible, merci d’en choisir un autre.'
   error_link_invalid: 'Ce n’est pas possible.'
   error_field_unknown: 'Ce n’est pas possible.'
+  error_role_unknown: 'Ce rôle n’existe pas.'
+  error_role_level_conflict: 'Le niveau ne correspond pas au rôle.'
   error_token_refused: 'Ce lien ne marche pas : il a expiré ou il a déjà servi. Demandez-en un nouveau.'
   error_no_confirmation_pending: 'Cet avatar n’attend pas de confirmation de son e-mail.'
   error_mail_failed: 'Le message n’a pas pu partir. Merci de réessayer plus tard.'

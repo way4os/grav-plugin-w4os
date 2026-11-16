@@ -123,6 +123,8 @@ w4os:
   error_model_unknown: 'Questo outfit non è disponibile, scegline un altro.'
   error_link_invalid: 'Non è possibile.'
   error_field_unknown: 'Non è possibile.'
+  error_role_unknown: 'Questo ruolo non esiste.'
+  error_role_level_conflict: 'Il livello non corrisponde al ruolo.'
   error_token_refused: 'Questo link non funziona: è scaduto o è già stato usato. Chiedine uno nuovo.'
   error_no_confirmation_pending: 'Questo avatar non attende la conferma della sua email.'
   error_mail_failed: 'L’email non è potuta partire. Riprova più tardi.'
