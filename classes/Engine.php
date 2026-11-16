@@ -47,6 +47,12 @@ final class Engine
         return $this->assets !== '' ? rtrim($this->assets, '/')."/$file" : $this->url.$this->path("/assets/$file");
     }
 
+    /** The address of the grid's own logo, as its helpers have it (LogoURL), null when it has none. */
+    public function gridLogo(): ?string
+    {
+        return ($this->info()['logo'] ?? null) ?: null;
+    }
+
     /**
      * Sign an avatar in: its name (`First Last`) or email, and its password.
      *

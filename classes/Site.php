@@ -124,6 +124,27 @@ final class Site
         return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->cached($url, fn () => $this->get($url)));
     }
 
+    /**
+     * The address of a logo of the engine the plugin bundles (a file of OpenSim\Assets\Logos::FILES), null when it has none.
+     */
+    public function logo(string $file): ?string
+    {
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
+        if (! class_exists(\OpenSim\Assets\Logos::class) || ! in_array($file, \OpenSim\Assets\Logos::FILES, true)) {
+            return null;
+        }
+        $path = 'vendor/magicoli/opensim-engine/'.\OpenSim\Assets\Logos::FOLDER.'/'.$file;
+
+        return is_file(dirname(__DIR__).'/'.$path) ? \Grav\Common\Utils::url("plugin://w4os/$path") : null;
+    }
+
+    /** The logo of the grid: its own (LogoURL of its helpers), else the OpenSimulator logo. */
+    public function gridLogo(): ?string
+    {
+        return $this->info('logo', fn () => $this->engine()->gridLogo()) ?: $this->logo('opensimulator-logo.png');
+    }
+
     /** The address of the profile picture of an avatar, the placeholder of the engine when it has none. */
     public function picture(?string $uuid): string
     {
