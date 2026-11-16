@@ -137,3 +137,30 @@ li:empty { display: none; }
 .w4os-form .profile-item { grid-template-columns: minmax(6rem, 12rem) 1fr; }
 @media (max-width: 40rem) { .profile-items, .profile-item, .w4os-form .profile-item { grid-template-columns: 1fr; } }
 .w4os-photo { margin-bottom: 1rem; }
+
+/* Tom Select (the languages of a profile) as one field of the theme: one border, one line high while the tags fit, the theme's
+   field colors (Pico's variables when the theme has them) and focus ring */
+.ts-wrapper { border: 0; padding: 0; background: none; box-shadow: none; height: auto; }
+.ts-wrapper .ts-control {
+    border: var(--pico-border-width, 1px) solid var(--pico-form-element-border-color, rgba(127, 127, 127, .5));
+    border-radius: var(--pico-border-radius, .25rem);
+    background-color: var(--pico-form-element-background-color, transparent);
+    color: var(--pico-form-element-color, inherit);
+    min-height: calc(1rem * var(--pico-line-height, 1.5) + var(--pico-form-element-spacing-vertical, .5rem) * 2 + var(--pico-border-width, 1px) * 2);
+    padding: calc(var(--pico-form-element-spacing-vertical, .5rem) / 2) var(--pico-form-element-spacing-horizontal, .75rem);
+    align-items: center;
+    box-shadow: none;
+}
+.ts-wrapper.focus .ts-control {
+    border-color: transparent;
+    box-shadow: 0 0 0 2px var(--q2-focus-ring, var(--pico-form-element-focus-color, Highlight)), 0 0 0 3px var(--q2-bg, transparent);
+}
+.ts-wrapper .ts-control > input {
+    flex: 1 1 4rem; width: auto; height: auto; min-height: 0; margin: 0; padding: 0;
+    border: 0; background: none; box-shadow: none; color: inherit;
+}
+.ts-dropdown {
+    background-color: var(--pico-form-element-background-color, Canvas);
+    color: var(--pico-form-element-color, CanvasText);
+    border-color: var(--pico-form-element-border-color, rgba(127, 127, 127, .5));
+}

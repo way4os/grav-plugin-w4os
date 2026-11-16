@@ -5,3 +5,7 @@
 {% else %}
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
 {% endif %}
+{# The tabs of the Form plugin need jQuery (Grav's collection); js/form-tabs.js makes them keyboard tabs, keeps the tab open in
+   the address, and grows the text areas where the browser cannot #}
+{% do assets.add('jquery', 101) %}
+{% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}

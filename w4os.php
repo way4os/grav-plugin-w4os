@@ -82,8 +82,8 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The messages given while the page rendered (the notices of the blocks of the helpers) at the marker a theme puts after the
-     * messages of the site (`<!-- w4os:messages -->`), the ones shown before being gone.
+     * The messages given while the page rendered (the notices of the blocks of the helpers) at the marker of the plugin's pages, at
+     * the start of their content (`<!-- w4os:messages -->`), the ones the theme showed before being gone.
      */
     public function onOutputGenerated(): void
     {
@@ -92,7 +92,10 @@ class W4osPlugin extends Plugin
         if (! str_contains($output, $marker)) {
             return;
         }
-        $messages = $this->grav['messages']->all() ? $this->grav['twig']->processTemplate('partials/messages.html.twig') : '';
+        // The theme's messages, else the plugin's own
+        $twig = $this->grav['twig'];
+        $template = $twig->twig()->getLoader()->exists('partials/messages.html.twig') ? 'partials/messages.html.twig' : 'w4os/messages.html.twig';
+        $messages = $this->grav['messages']->all() ? $twig->processTemplate($template) : '';
         $this->grav->output = str_replace($marker, $messages, $output);
     }
 
@@ -177,6 +180,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_url', fn (string $name) => $this->site()->profileUrl($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->avatarItems($uuid, $kind)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
@@ -477,6 +481,20 @@ class W4osPlugin extends Plugin
 
             return [];
         }
+    }
+
+    /** The age of an account as the viewer says it (joined today, else its days in the form of their number), '' without a date. */
+    private function age(?int $created): string
+    {
+        if ((int) $created <= 0) {
+            return '';
+        }
+        $days = intdiv(max(0, time() - (int) $created), 86400);
+        $language = (string) ($this->grav['language']->getActive() ?: 'en');
+
+        return $days === 0
+            ? $this->site()->translate('w4os.profile_age_today')
+            : sprintf(\OpenSim\I18n\Catalog::plural($language, 'profile_age_days', $days), $days);
     }
 
     /** The name of an avatar by its UUID (a partner), '' when the engine has none. */

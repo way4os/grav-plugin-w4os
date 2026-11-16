@@ -1,0 +1,6 @@
+{# The messages of the site, for a theme without its own partials/messages.html.twig #}
+{% if grav.messages.all %}
+    <div class="w4os-messages" role="status">
+        {% for message in grav.messages.fetch %}<p class="notices {{ message.scope|e('html_attr') }}">{{ message.message|raw }}</p>{% endfor %}
+    </div>
+{% endif %}

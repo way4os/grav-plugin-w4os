@@ -5,10 +5,10 @@
     <div class="w4os-identity">
         <img class="w4os-identity-picture" src="{{ w4os_picture(avatar.profileImage)|e('html_attr') }}" alt="">
         <div class="w4os-identity-details">
-            <p class="w4os-identity-name">{{ avatar.name }}</p>
             <dl>
+            <dt>{{ 'w4os.profile_name'|t }}</dt><dd>{{ avatar.name }}</dd>
             <dt>{{ 'w4os.profile_key'|t }}</dt><dd><code>{{ avatar.uuid }}</code></dd>
-            {% if avatar.created %}<dt>{{ 'w4os.born'|t }}</dt><dd>{{ avatar.created|date('Y-m-d') }}</dd>{% endif %}
+            {% if avatar.created %}<dt>{{ 'w4os.born'|t }}</dt><dd>{{ avatar.created|date('Y-m-d') }} ({{ w4os_age(avatar.created) }})</dd>{% endif %}
             {% set partner = w4os_avatar_name(avatar.partner) %}
             {% if partner %}<dt>{{ 'w4os.partner'|t }}</dt><dd><a href="{{ w4os_profile_page(partner)|e('html_attr') }}">{{ partner }}</a></dd>{% endif %}
             {% if avatar.role %}<dt>{{ 'w4os.profile_tab_account'|t }}</dt><dd>{{ ('w4os.role_' ~ avatar.role|replace({'-': '_'}))|t }}</dd>{% endif %}

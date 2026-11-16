@@ -7,6 +7,8 @@
 {% block mobile %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
 
 {% block content %}
+    {# The messages given while the page renders (the notices of the blocks of the helpers), put here by the plugin #}
+    <!-- w4os:messages -->
     <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
         {# A profile its owner or a manager may change: the way to its edit page #}
         {% set edit_url = page.header.w4os == 'profile' and not w4os_is_viewer() ? w4os_profile_edit_url() : null %}
