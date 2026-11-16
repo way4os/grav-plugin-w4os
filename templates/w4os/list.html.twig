@@ -18,14 +18,14 @@
            one value of a dynamic filter is searched with Tom Select too, among the ones of the rows #}
         {% set asked = query[filter.name] ?? [] %}
         <select name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}">
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.label ? ('w4os.' ~ value.label)|t : value.value }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% elseif filter.format is defined %}
         <input type="text" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
         <select name="{{ filter.name|e('html_attr') }}"{{ (filter.dynamic ?? false) ? ' data-w4os-filter' }} aria-label="{{ label|e('html_attr') }}"{% if not (filter.dynamic ?? false) %} onchange="this.form.requestSubmit()"{% endif %}>
             <option value="">{{ label }}</option>
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.label ? ('w4os.' ~ value.label)|t : value.value }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% endif %}
     {% endfor %}

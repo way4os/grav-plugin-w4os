@@ -58,6 +58,20 @@ describe('a list of the engine', function () {
             ->and($offered['filters'][0]['values'])->toBe([['value' => 'grid.welcome', 'label' => ''], ['value' => 'grid.sandbox', 'label' => '']]);
     });
 
+    test('the simulators of the regions: several, as the rows have them, with their text', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('regions'), ['flags', 'simulator']);
+        $query = Lists::query($list, ['simulator' => ['192.168.8.69:9010', '192.168.8.69:9020']], 10);
+        $meta = ['available' => ['simulator' => [['value' => '192.168.8.69:9010', 'label' => 'Welcome sim']], 'flags' => ['Persistent']]];
+        $offered = array_column(Lists::offering($list, $meta, $query['page'])['filters'], null, 'name');
+
+        expect($query['api']['filter[simulator]'])->toBe('192.168.8.69:9010,192.168.8.69:9020')
+            ->and($offered['simulator']['values'])->toBe([
+                ['value' => '192.168.8.69:9010', 'label' => '', 'text' => 'Welcome sim'],
+                ['value' => '192.168.8.69:9020', 'label' => ''],
+            ])
+            ->and(array_column($offered['flags']['values'], 'value'))->toBe(['Persistent']);
+    });
+
     test('a column gives the labels of its values', function () use ($document) {
         $roles = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['roles'];
 

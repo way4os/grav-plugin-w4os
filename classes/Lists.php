@@ -44,7 +44,10 @@ final class Lists
             if (! empty($filter['multiple'])) {
                 // Several values: a list, or one text with commas; the ones the filter has, in its order
                 $values = array_map('trim', is_array($asked) ? array_map('strval', $asked) : explode(',', (string) $asked));
-                $known = array_values(array_intersect(array_column($filter['values'], 'value'), $values));
+                // The values the filter has; any, of a dynamic filter the engine lists none of (the rows' ones)
+                $known = ! empty($filter['dynamic']) && $filter['values'] === []
+                    ? array_values(array_unique(array_filter($values, fn ($value) => $value !== '' && mb_strlen($value) <= 200)))
+                    : array_values(array_intersect(array_column($filter['values'], 'value'), $values));
                 $known === [] || $page[$filter['name']] = $known;
             } elseif (self::allowed($filter, $value = trim(is_scalar($asked) ? (string) $asked : ''))) {
                 $page[$filter['name']] = $value;
@@ -69,8 +72,8 @@ final class Lists
     }
 
     /**
-     * The list with the values its dynamic filters offer: the ones the rows have now (the meta of the list: `available`), and the
-     * ones asked.
+     * The list with the values its dynamic filters offer: the ones the rows have now (the meta of the list: `available`, plain
+     * values or {value, label} with a text to show), and the ones asked.
      *
      * @param array<string,mixed> $list
      * @param array<string,mixed> $meta
@@ -81,11 +84,19 @@ final class Lists
     {
         foreach ($list['filters'] as $i => $filter) {
             if (! empty($filter['dynamic']) && isset($meta['available'][$filter['name']])) {
-                $useful = array_values(array_unique(array_merge(array_map('strval', (array) $meta['available'][$filter['name']]), (array) ($page[$filter['name']] ?? []))));
-                // The values the engine lists, with their labels; else the ones of the rows as they are
+                // The values the rows have: plain values, or {value, label} with a label to show as it is
+                $texts = [];
+                foreach ((array) $meta['available'][$filter['name']] as $available) {
+                    $value = (string) (is_array($available) ? ($available['value'] ?? '') : $available);
+                    $value === '' || $texts[$value] = is_array($available) && isset($available['label']) ? (string) $available['label'] : null;
+                }
+                foreach ((array) ($page[$filter['name']] ?? []) as $asked) {
+                    $texts += [(string) $asked => null];
+                }
+                // The values the engine lists, with their labels; else the ones of the rows, with their text
                 $list['filters'][$i]['values'] = $filter['values'] === []
-                    ? array_map(fn ($value) => ['value' => $value, 'label' => ''], $useful)
-                    : array_values(array_filter($filter['values'], fn ($value) => in_array($value['value'], $useful, true)));
+                    ? array_map(fn ($value, $text) => ['value' => (string) $value, 'label' => ''] + ($text === null ? [] : ['text' => $text]), array_keys($texts), array_values($texts))
+                    : array_values(array_filter($filter['values'], fn ($value) => array_key_exists($value['value'], $texts)));
             }
         }
 
