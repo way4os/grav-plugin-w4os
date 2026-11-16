@@ -48,10 +48,10 @@ describe('a list of the engine', function () {
             ->and(count(Lists::offering($list, [], [])['filters'][0]['values']))->toBe(count($list['filters'][0]['values']));
     });
 
-    test('a column with a map of labels gives them as its values', function () use ($document) {
+    test('a column gives the labels of its values', function () use ($document) {
         $roles = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['roles'];
 
-        expect($roles['values'])->toContain(['value' => 'DefaultRegion', 'label' => 'region_flag_default_region']);
+        expect(array_column($roles['values'], 'label', 'value'))->toMatchArray(['DefaultRegion' => 'region_flag_default_region']);
     });
 
     test('a page shows the filters it names, in its order', function () use ($document) {

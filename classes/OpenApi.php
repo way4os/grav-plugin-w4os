@@ -36,7 +36,7 @@ final class OpenApi
         }
         $x = (array) ($operation['x-list'] ?? []);
         $columns = array_map(
-            fn (array $column) => $this->labelled($column) + ['label' => 'column_'.$column['name'], 'type' => 'text'] + $this->person($type, $column),
+            fn (array $column) => $column + ['label' => 'column_'.$column['name'], 'type' => 'text'],
             array_values(array_filter((array) ($x['columns'] ?? []), fn ($column) => isset($column['name']))),
         );
         $sorts = array_values(array_unique(array_map(fn ($sort) => ltrim((string) $sort, '-'), (array) ($parameters['sort']['schema']['enum'] ?? []))));
@@ -72,7 +72,7 @@ final class OpenApi
             return null;
         }
         $groups = array_values(array_map(fn ($group) => ['name' => (string) $group['name'], 'label' => (string) ($group['label'] ?? 'group_'.$group['name'])], array_filter((array) ($x['groups'] ?? []), fn ($group) => isset($group['name']))));
-        $fields = array_values(array_map(fn ($field) => $this->labelled($field) + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''] + $this->person($type, $field), array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
+        $fields = array_values(array_map(fn ($field) => $field + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''], array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
 
         return [
             'type' => $type,
@@ -124,34 +124,6 @@ final class OpenApi
         }
 
         return $filters;
-    }
-
-    /**
-     * A column or a field with the labels of its values as a list (`values`: value, label), whether the engine gives them so or as
-     * a map (`labels`: value => label).
-     *
-     * @param array<string,mixed> $entry
-     * @return array<string,mixed>
-     */
-    private function labelled(array $entry): array
-    {
-        if (! isset($entry['values']) && isset($entry['labels'])) {
-            $entry['values'] = array_map(fn ($value, $label) => ['value' => (string) $value, 'label' => (string) $label], array_keys((array) $entry['labels']), array_values((array) $entry['labels']));
-        }
-
-        return $entry;
-    }
-
-    /**
-     * The picture of nothing of a picture of a column or a field, when the engine does not say it: the silhouette of a person for
-     * the pictures of the avatars.
-     *
-     * @param array<string,mixed> $entry
-     * @return array{default?: string}
-     */
-    private function person(string $type, array $entry): array
-    {
-        return $type === 'avatars' && (isset($entry['picture']) || ($entry['type'] ?? '') === 'picture') ? ['default' => 'person'] : [];
     }
 
     /** @return ?array<string,mixed> the list operation of a type: `GET` on `/grids/{grid}/<type>` or `/<type>` */

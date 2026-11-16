@@ -80,7 +80,7 @@ test('a form of the site takes the choices of its fields from the engine', funct
         ->and(Items::withOptions($fields, $form)['tabs']['fields']['account']['fields']['email'])->toBe(['type' => 'email']);
 });
 
-test('the pictures of the avatars show the silhouette of a person when they have none', function () {
+test('a picture says what stands for it when there is none: a person for the avatars, a place for the regions', function () {
     $api = new OpenApi(Contract::document());
     $name = array_column($api->listOf('avatars')['columns'], null, 'name')['name'];
     $picture = array_column($api->itemOf('avatars')['fields'], null, 'name')['profileImage'];
@@ -88,5 +88,5 @@ test('the pictures of the avatars show the silhouette of a person when they have
 
     expect($name['default'] ?? null)->toBe('person')
         ->and($picture['default'] ?? null)->toBe('person')
-        ->and($map)->not->toHaveKey('default');
+        ->and($map['default'] ?? null)->toBe('place');
 });
