@@ -33,7 +33,7 @@ w4os:
   logout: 'Allgofnodi'
   login: 'Enw avatar neu ebost'
   sign_in_failed: 'Methodd y mewngofnodi'
-  forgot_title: 'Cyfrinair Coll'
+  forgot_title: 'Wedi anghofio''r cyfrinair'
   forgot_text: 'Teipiwch enw eich avatar neu eich ebost: byddwch yn cael dolen i ddewis cyfrinair newydd.'
   forgot_button: 'Anfonwch ddolen ataf'
   forgot_sent: 'Os oes gan avatar yr enw neu’r ebost hwn, mae dolen ar ei ffordd i’w gyfeiriad.'

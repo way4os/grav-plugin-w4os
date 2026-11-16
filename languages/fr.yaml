@@ -33,7 +33,7 @@ w4os:
   logout: 'Déconnexion'
   login: 'Nom de l’avatar ou e-mail'
   sign_in_failed: 'Échec de la connexion'
-  forgot_title: 'Mot de passe perdu'
+  forgot_title: 'Mot de passe oublié'
   forgot_text: 'Tapez le nom de votre avatar ou votre e-mail : vous recevrez un lien pour choisir un nouveau mot de passe.'
   forgot_button: 'M’envoyer un lien'
   forgot_sent: 'Si un avatar a ce nom ou cet e-mail, un lien part vers son adresse.'
