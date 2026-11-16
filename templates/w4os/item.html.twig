@@ -1,0 +1,20 @@
+{# The page of an item of the engine (?id=<UUID>, w4os_item in the front matter: its type, the page of its list): its fields as the
+   engine describes them, the ones the visitor changes in a form, then the actions that apply to it #}
+{% import 'w4os/list-cells.html.twig' as cells %}
+{% set page_item = w4os_item() %}
+{% if page_item.list %}<p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route(page_item.list) }}">← {{ ('w4os.' ~ page_item.list ~ '_title')|t }}</a></p>{% endif %}
+{% if page_item.item is empty %}
+    <p class="notices red">{{ page_item.error ?? 'w4os.error_not_found'|t }}</p>
+{% else %}
+    {% include 'forms/form.html.twig' with { form: forms('w4os-item') } %}
+    {% set actions = w4os_list_actions(page_item.form, page_item.item) %}
+    {% if actions %}
+    <form class="w4os-item-actions" method="post">
+        {{ nonce_field('w4os-list')|raw }}
+        <input type="hidden" name="id" value="{{ page_item.item.uuid ?? page_item.item.id ?? '' }}">
+        {% for action in actions %}<button class="secondary" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+    </form>
+    {% endif %}
+{% endif %}
+{% do assets.add('jquery', 101) %}
+{% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}

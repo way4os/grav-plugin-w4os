@@ -1,6 +1,8 @@
-{# The list of the regions of the grid, for the managers: the engine's list (w4os_list in the front matter of the page) #}
+{# The list of the regions of the grid, for the managers: the engine's list (w4os_list in the front matter of the page), each
+   region leading to its page #}
 {% set data = w4os_list(page.header.w4os_list ?? {type: 'regions'}) %}
+{% set links = w4os_route('region') ? [{key: 'action_edit', url: base_url_relative ~ w4os_route('region') ~ '?id={uuid}'}] : [] %}
 {% include 'w4os/list.html.twig' with {
-    list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: [],
+    list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: links,
     texts: {search: 'w4os.search_regions', empty: 'w4os.no_regions', count: 'w4os.regions_count', title: 'w4os.regions_title'}
 } only %}

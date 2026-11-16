@@ -54,6 +54,35 @@ final class OpenApi
     }
 
     /**
+     * The page of an item of a type (avatars, regions...), as its `x-form` describes it: the groups of its fields, its fields in
+     * their order (FieldSet entries: name, label, type, group, readOnly, options, condition, access...), its actions. Null when the
+     * engine describes none.
+     *
+     * @return ?array{type: string, groups: list<array{name: string, label: string}>, fields: list<array<string,mixed>>, actions: list<array<string,mixed>>}
+     */
+    public function itemOf(string $type): ?array
+    {
+        $x = null;
+        foreach ((array) ($this->document['paths'] ?? []) as $path => $item) {
+            if (preg_match('#^(/grids/\{grid\})?/'.preg_quote($type, '#').'/\{id\}$#', (string) $path) === 1 && isset($item['get']['x-form'])) {
+                $x = (array) $item['get']['x-form'];
+            }
+        }
+        if ($x === null) {
+            return null;
+        }
+        $groups = array_values(array_map(fn ($group) => ['name' => (string) $group['name'], 'label' => (string) ($group['label'] ?? 'group_'.$group['name'])], array_filter((array) ($x['groups'] ?? []), fn ($group) => isset($group['name']))));
+        $fields = array_values(array_map(fn ($field) => $field + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''], array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
+
+        return [
+            'type' => $type,
+            'groups' => $groups,
+            'fields' => $fields,
+            'actions' => array_values(array_filter((array) ($x['actions'] ?? []), fn ($action) => isset($action['name'], $action['method'], $action['path']))),
+        ];
+    }
+
+    /**
      * The filters of an x-list: a choice among values, or a free value (`format`).
      *
      * @param array<int,mixed> $filters

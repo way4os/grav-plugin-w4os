@@ -10,6 +10,7 @@ use W4os\Grav\Blocks;
 use W4os\Grav\EngineException;
 use W4os\Grav\FormError;
 use W4os\Grav\Forms;
+use W4os\Grav\Items;
 use W4os\Grav\Lists;
 use W4os\Grav\Site;
 
@@ -20,6 +21,7 @@ require_once __DIR__.'/classes/Forms.php';
 require_once __DIR__.'/classes/Blocks.php';
 require_once __DIR__.'/classes/OpenApi.php';
 require_once __DIR__.'/classes/Lists.php';
+require_once __DIR__.'/classes/Items.php';
 require_once __DIR__.'/classes/Bundled.php';
 require_once __DIR__.'/classes/Site.php';
 
@@ -173,6 +175,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar', fn () => self::current()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_monitor', fn () => $this->site()->monitor()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_item', fn () => $this->item()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
@@ -253,10 +256,10 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit', 'regions'], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit', 'regions', 'region'], true) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
-        } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions'], true) && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions', 'region'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
@@ -266,8 +269,12 @@ class W4osPlugin extends Plugin
             // The name of the avatar in the title; the title of the list when there is no such avatar
             $edited = $this->edited();
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
-        } elseif (in_array($type, ['manage', 'regions'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+        } elseif (in_array($type, ['manage', 'regions', 'region'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
+        } elseif ($type === 'region') {
+            // The name of the item in the title
+            $name = (string) ($this->item()['item']['name'] ?? '');
+            $name === '' || $this->grav['page']->title($name);
         }
     }
 
@@ -275,6 +282,11 @@ class W4osPlugin extends Plugin
     public function onFormInitialized(Event $event): void
     {
         $form = $event['form'];
+        if ($form->getName() === 'w4os-item') {
+            $this->itemForm($form);
+
+            return;
+        }
         $avatar = match ($form->getName()) {
             'w4os-profile' => self::current(),
             'w4os-edit' => $this->edited(),
@@ -369,6 +381,18 @@ class W4osPlugin extends Plugin
                     $forms->edit($edited, $data);
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
+                    // no break
+                case 'item':
+                    $page = $this->item();
+                    $page['item'] === null && throw new FormError('w4os.error_not_found');
+                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles']);
+                    $id = Lists::id($page['item']);
+                    try {
+                        $changes === [] || $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
+                    } catch (EngineException $e) {
+                        throw $forms->error($e);
+                    }
+                    $this->done('w4os.manage_saved', $this->grav['page']->route().'?'.http_build_query(['id' => $id]), [(string) ($page['item']['name'] ?? '')]);
             }
         } catch (FormError $e) {
             $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
@@ -424,12 +448,14 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * An action of a manager on a row of the list of a page (a form of the list, with its nonce): the engine's operation, checked
-     * against the row as the engine has it now.
+     * An action of a manager on a row of the list of a page, or on the item of an item page (a form with its nonce): the engine's
+     * operation, checked against the row as the engine has it now.
      */
     private function listAction(array $post): void
     {
-        $options = (array) ($this->grav['page']->header()->w4os_list ?? []);
+        $header = $this->grav['page']->header();
+        $item = isset($header->w4os_item);
+        $options = (array) ($item ? $header->w4os_item : ($header->w4os_list ?? []));
         $route = $this->grav['page']->route();
         if (! Utils::verifyNonce((string) ($post['nonce'] ?? ''), 'w4os-list')) {
             $this->grav['messages']->add($this->site()->translate('w4os.error_nonce'), 'error');
@@ -437,18 +463,21 @@ class W4osPlugin extends Plugin
             return;
         }
         $type = (string) ($options['type'] ?? '');
-        $list = $this->site()->openApi()->listOf($type);
+        // The engine's description of the list, or of the item (the same actions)
+        $described = $item ? $this->site()->openApi()->itemOf($type) : $this->site()->openApi()->listOf($type);
         $name = (string) ($post['action'] ?? '');
         try {
-            $item = $list === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
-            $action = array_column($list === null ? [] : Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null), null, 'name')[$name] ?? null;
+            $row = $described === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
+            $action = array_column($described === null ? [] : Lists::actions($described, $row, $this->site()->avatar()['uuid'] ?? null), null, 'name')[$name] ?? null;
             $action === null && throw new FormError('w4os.error_invalid_request');
             // The page of the site that takes the token of a mail the action sends (`link`)
-            [$method, $path, $data] = Lists::request($action, $item, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
+            [$method, $path, $data] = Lists::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
             $this->site()->engine()->call($method, $path, $data);
-            $type === 'avatars' && $this->site()->forgetProfile((string) ($item['name'] ?? ''));
-            $query = http_build_query(Lists::query(Lists::showing($list, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
-            $this->done('w4os.manage_'.$name, $route.($query === '' ? '' : "?$query"), [(string) ($item['name'] ?? '')]);
+            $type === 'avatars' && $this->site()->forgetProfile((string) ($row['name'] ?? ''));
+            $query = $item
+                ? http_build_query(['id' => Lists::id($row)])
+                : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
+            $this->done('w4os.manage_'.$name, $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
             $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
         } catch (FormError $e) {
@@ -618,6 +647,47 @@ class W4osPlugin extends Plugin
             'search' => $rest !== '' ? ['topic' => $rest] : [],
             default => [],
         };
+    }
+
+    /**
+     * The item of the page of an item (?id=, or the id its form posts; w4os_item in its front matter): its description by the
+     * engine (OpenApi::itemOf()), the item, the roles of the visitor for it.
+     *
+     * @return array{type: string, list: ?string, form: ?array<string,mixed>, item: ?array<string,mixed>, roles: list<string>, error: ?string}
+     */
+    private function item(): array
+    {
+        static $page = null;
+        if ($page === null) {
+            $options = (array) ($this->grav['page']->header()->w4os_item ?? []);
+            $type = (string) ($options['type'] ?? '');
+            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null];
+            $uri = $this->grav['uri'];
+            $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
+            try {
+                $page['item'] = $id === '' || $page['form'] === null ? null : ($this->site()->engine()->item($type, $id) ?: null);
+            } catch (EngineException $e) {
+                $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
+            }
+            $page['item'] === null || $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
+        }
+
+        return $page;
+    }
+
+    /** The form of the page of an item: the engine's fields (x-form) as the visitor sees and changes them, filled with the item. */
+    private function itemForm($form): void
+    {
+        $page = $this->item();
+        if ($page['form'] === null || $page['item'] === null) {
+            return;
+        }
+        $form->setFields(Items::fields($page['form'], $page['item'], $page['roles']));
+        foreach (Items::values($page['form'], $page['item'], $page['roles']) as $key => $value) {
+            $form->getData()->get($key) === null && $form->setData($key, $value);
+        }
+        // Nothing to change: no Save button
+        array_filter($page['form']['fields'], fn ($field) => Items::visible($field, $page['item'], $page['roles']) && Items::editable($field, $page['roles'])) === [] && $form->set('buttons', []);
     }
 
     /** The avatar a manager changes (the UUID the edit form posts, else ?avatar=<UUID> of the page), as the engine has it, once per request. */

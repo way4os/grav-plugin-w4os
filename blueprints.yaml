@@ -168,6 +168,7 @@ form:
             routes.manage: { type: text, label: w4os.manage_title }
             routes.edit: { type: text, label: w4os.action_edit }
             routes.regions: { type: text, label: w4os.regions_title }
+            routes.region: { type: text, label: w4os.column_region }
             routes.search: { type: text, label: w4os.search }
             routes.profile: { type: text, label: w4os.profile_title }
             routes.guide: { type: text, label: w4os.guide_title }
