@@ -127,4 +127,7 @@ li:empty { display: none; }
 .profile-item-picture { width: 100%; max-width: none; height: auto; aspect-ratio: 4 / 3; object-fit: fill; border-radius: .4rem; }
 .profile-item h3 { margin-top: 0; }
 .profile-item-label { font-weight: 600; }
-@media (max-width: 40rem) { .profile-items, .profile-item { grid-template-columns: 1fr; } }
+/* In a form (narrower): the list above the one picked */
+.w4os-form .profile-items { grid-template-columns: 1fr; }
+.w4os-form .profile-item { grid-template-columns: minmax(6rem, 12rem) 1fr; }
+@media (max-width: 40rem) { .profile-items, .profile-item, .w4os-form .profile-item { grid-template-columns: 1fr; } }
