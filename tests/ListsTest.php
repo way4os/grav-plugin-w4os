@@ -48,6 +48,16 @@ describe('a list of the engine', function () {
             ->and(count(Lists::offering($list, [], [])['filters'][0]['values']))->toBe(count($list['filters'][0]['values']));
     });
 
+    test('a dynamic filter the engine lists no values of takes the ones of the rows', function () {
+        $list = ['search' => null, 'sort' => ['default' => '', 'values' => [], 'descending' => '-'], 'actions' => [],
+            'filters' => [['name' => 'simulator', 'label' => 'filter_simulator', 'values' => [], 'dynamic' => true]]];
+        $query = Lists::query($list, ['simulator' => 'grid.welcome'], 10);
+        $offered = Lists::offering($list, ['available' => ['simulator' => ['grid.welcome', 'grid.sandbox']]], $query['page']);
+
+        expect($query['api'])->toHaveKey('filter[simulator]', 'grid.welcome')
+            ->and($offered['filters'][0]['values'])->toBe([['value' => 'grid.welcome', 'label' => ''], ['value' => 'grid.sandbox', 'label' => '']]);
+    });
+
     test('a column gives the labels of its values', function () use ($document) {
         $roles = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['roles'];
 

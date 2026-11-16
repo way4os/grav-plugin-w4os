@@ -81,8 +81,11 @@ final class Lists
     {
         foreach ($list['filters'] as $i => $filter) {
             if (! empty($filter['dynamic']) && isset($meta['available'][$filter['name']])) {
-                $useful = array_merge(array_map('strval', (array) $meta['available'][$filter['name']]), (array) ($page[$filter['name']] ?? []));
-                $list['filters'][$i]['values'] = array_values(array_filter($filter['values'], fn ($value) => in_array($value['value'], $useful, true)));
+                $useful = array_values(array_unique(array_merge(array_map('strval', (array) $meta['available'][$filter['name']]), (array) ($page[$filter['name']] ?? []))));
+                // The values the engine lists, with their labels; else the ones of the rows as they are
+                $list['filters'][$i]['values'] = $filter['values'] === []
+                    ? array_map(fn ($value) => ['value' => $value, 'label' => ''], $useful)
+                    : array_values(array_filter($filter['values'], fn ($value) => in_array($value['value'], $useful, true)));
             }
         }
 
@@ -135,6 +138,10 @@ final class Lists
     {
         if ($value === '') {
             return false;
+        }
+        // The values of a dynamic filter the engine does not list are the ones of the rows (a simulator...)
+        if (! empty($filter['dynamic']) && $filter['values'] === []) {
+            return mb_strlen($value) <= 200;
         }
         if (isset($filter['format'])) {
             return $filter['format'] === 'uuid' ? preg_match('/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i', $value) === 1 : mb_strlen($value) <= 200;
