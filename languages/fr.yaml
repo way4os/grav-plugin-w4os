@@ -90,6 +90,7 @@ w4os:
   profile_name: 'Nom'
   profile_age_today: 'Inscrit aujourd’hui'
   profile_age_days: '%d jours'
+  profile_groups: 'Groupes'
   profile_no_description: 'Aucune description.'
   profile_location: 'Lieu'
   profile_teleport: 'Téléportation'

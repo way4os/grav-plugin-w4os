@@ -1,29 +1,3 @@
-{# The picks or the classifieds (field.kind) of the avatar of a profile form, as its profile page shows them: read only, they are
-   made in the viewer. The list, then each one: its picture, name, description, place, end and teleport link #}
+{# The picks or the classifieds (field.kind) of the avatar of a profile form, read only, rendered as its profile page shows them #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
-{% set items = avatar ? w4os_avatar_items(avatar.uuid, field.kind) : [] %}
-<p class="w4os-note">{{ 'w4os.profile_viewer_only'|t }}</p>
-{% if items is empty %}
-    <p class="profile-none">{{ 'w4os.profile_none'|t }}</p>
-{% else %}
-    <div class="profile-items profile-{{ field.kind|e('html_attr') }}">
-        <ul class="profile-items-list">
-            {% for item in items %}<li><a href="#w4os-{{ field.kind|e('html_attr') }}-{{ loop.index }}">{{ item.name }}</a></li>{% endfor %}
-        </ul>
-        <div class="profile-items-details">
-            {% for item in items %}
-                {% set place = [item.parcel, item.region]|filter(v => v)|join(', ') ~ (item.region and item.position ? ' (' ~ item.position|join(', ') ~ ')' : '') %}
-                <article id="w4os-{{ field.kind|e('html_attr') }}-{{ loop.index }}" class="profile-item">
-                    <img class="profile-item-picture" src="{{ w4os_picture(item.picture)|e('html_attr') }}" alt="" width="256" height="192" loading="lazy">
-                    <div class="profile-item-text">
-                        <h3>{{ item.name }}</h3>
-                        <p class="profile-item-description">{% if item.description %}{{ item.description|nl2br }}{% else %}{{ 'w4os.profile_no_description'|t }}{% endif %}</p>
-                        {% if place %}<p class="profile-item-place"><span class="profile-item-label">{{ 'w4os.profile_location'|t }}</span> {{ place }}</p>{% endif %}
-                        {% if item.expires %}<p class="profile-item-until"><span class="profile-item-label">{{ 'w4os.profile_until'|t }}</span> {{ item.expires|date('Y-m-d') }}</p>{% endif %}
-                        {% if item.teleport %}<p><a class="profile-item-teleport" href="{{ item.teleport|e('html_attr') }}">{{ 'w4os.profile_teleport'|t }}</a></p>{% endif %}
-                    </div>
-                </article>
-            {% endfor %}
-        </div>
-    </div>
-{% endif %}
+{% if avatar %}{{ w4os_avatar_items(avatar.uuid, field.kind) }}{% endif %}

@@ -181,7 +181,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->avatarItems($uuid, $kind)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
@@ -468,14 +469,14 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The picks or the classifieds of an avatar, none when the engine cannot tell.
+     * The picks, the classifieds or the groups of an avatar, none when the engine cannot tell.
      *
      * @return list<array<string,mixed>>
      */
     private function avatarItems(string $uuid, string $kind): array
     {
         try {
-            return in_array($kind, ['picks', 'classifieds'], true) ? $this->site()->engine()->avatarItems($uuid, $kind) : [];
+            return in_array($kind, ['picks', 'classifieds', 'groups'], true) ? $this->site()->engine()->avatarItems($uuid, $kind) : [];
         } catch (EngineException $e) {
             $this->grav['log']->warning("w4os: the $kind of $uuid: ".$e->getMessage());
 
@@ -495,6 +496,20 @@ class W4osPlugin extends Plugin
         return $days === 0
             ? $this->site()->translate('w4os.profile_age_today')
             : sprintf(\OpenSim\I18n\Catalog::plural($language, 'profile_age_days', $days), $days);
+    }
+
+    /**
+     * The picks or the classifieds of an avatar as its profile page shows them: the same rendering, the helpers' (View::items()).
+     */
+    private function itemsHtml(string $uuid, string $kind): string
+    {
+        if (! class_exists(\OpenSim\Helpers\View\View::class) || ! method_exists(\OpenSim\Helpers\View\View::class, 'items')) {
+            return '';
+        }
+        $templates = \Composer\InstalledVersions::getInstallPath('magicoli/opensim-helpers').'/templates';
+        $language = (string) ($this->grav['language']->getActive() ?: 'en');
+
+        return (new \OpenSim\Helpers\View\View($templates))->items($kind, $this->avatarItems($uuid, $kind), $this->site()->engine()->assetsUrl(), $language);
     }
 
     /** The name of an avatar by its UUID (a partner), '' when the engine has none. */

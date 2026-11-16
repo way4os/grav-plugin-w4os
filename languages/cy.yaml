@@ -90,6 +90,7 @@ w4os:
   profile_name: 'Enw'
   profile_age_today: 'Ymunodd heddiw'
   profile_age_days: '%d diwrnod'
+  profile_groups: 'Grwpiau'
   profile_no_description: 'Dim disgrifiad.'
   profile_location: 'Lleoliad'
   profile_teleport: 'Teleportio'

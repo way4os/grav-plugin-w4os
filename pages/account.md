@@ -22,6 +22,8 @@ forms:
                 classes: w4os-autogrow
                 label: w4os.about
                 rows: 5
+              groups:
+                type: w4os_groups
               published:
                 type: checkbox
                 label: w4os.show_in_search
