@@ -1,4 +1,4 @@
-{# The avatar of a profile form as the 2nd Life tab of the viewer shows it, what the form does not change: its picture, name, key,
+{# The avatar of a profile form as the In-world tab of the viewer shows it, what the form does not change: its picture, name, key,
    birth date, partner and account (its role; the avatar signed in, or the one a manager edits) #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
 {% if avatar %}
