@@ -1,6 +1,6 @@
-{# The managers' dashboard: the blocks of the helpers its page lists (w4os_blocks in its front matter), one after the other #}
+{# The managers' dashboard: the blocks of the helpers its page lists (w4os_blocks in its front matter), each in a card of the theme #}
 <div class="w4os-dashboard-blocks">
     {% for block in page.header.w4os_blocks ?? [] %}
-        <div class="w4os-dashboard-block">{{ w4os_block(block) }}</div>
+        <article class="card w4os-dashboard-block"><div class="card-body">{{ w4os_block(block) }}</div></article>
     {% endfor %}
 </div>
