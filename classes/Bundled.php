@@ -78,10 +78,18 @@ final class Bundled
         return $grid->servedByHelpers($origin.$path);
     }
 
-    /** Answers the request of this process with the helpers of the grid (their Slim application), and sends the answer. */
+    /** Answers the request of this process with the helpers of the grid (their Slim application), then does what waits for it. */
     public function serveHelpers(): void
     {
         \OpenSim\Helpers\App::create(fn (string $nick) => $this->grid())->run();
+        // What waits for the answer, as the helpers' own index.php does it: the answer goes first, then a simulator that registered
+        // is read and the tasks that are due run (the search index fills by itself)
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        } elseif (function_exists('litespeed_finish_request')) {
+            litespeed_finish_request();
+        }
+        method_exists(\OpenSim\Helpers\Http\Action\Engine::class, 'finish') && \OpenSim\Helpers\Http\Action\Engine::finish();
     }
 
     /** The grid, as the engine finds it. */
