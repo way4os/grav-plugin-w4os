@@ -31,6 +31,8 @@ The presentation and help pages are plain Markdown files of the site (`user/page
 
 In a template: `{{ w4os_block('grid-status') }}`.
 
+A page laid out like the splash page of the helpers (the one a viewer shows: grid info and status on the left, the page and the popular places in the middle, the message of the day on the right), with `template: w4os/splash` in its front matter.
+
 What only a visitor with no avatar signed in sees (an invitation to register), in a page with `cache_enable: false`:
 
 ```markdown

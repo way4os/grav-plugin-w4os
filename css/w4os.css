@@ -77,3 +77,10 @@ li:empty { display: none; }
     .w4os-name { white-space: normal; }
     .w4os-status { min-width: 0; }
 }
+/* The splash layout: the columns of the splash page of the helpers, one column with the page first on a narrow screen */
+.w4os-splash { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); }
+.w4os-splash aside { overflow-wrap: anywhere; }
+@media (max-width: 52rem) {
+    .w4os-splash { grid-template-columns: minmax(0, 1fr); }
+    .w4os-splash-main { order: -1; }
+}

@@ -248,6 +248,7 @@ class W4osPlugin extends Plugin
         try {
             switch ((string) $event['params']) {
                 case 'register':
+                    ($minutes = $this->registrationsLimited()) === null || throw new FormError('w4os.error_too_many_registrations', vars: [$minutes]);
                     if (($site->config()['register']['terms'] ?? '') !== '' && empty($data['terms'])) {
                         throw new FormError('w4os.error_terms', vars: [$this->termsLink()]);
                     }
@@ -285,6 +286,25 @@ class W4osPlugin extends Plugin
             $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
             $event->stopPropagation();
         }
+    }
+
+    /**
+     * The registrations from the address of the visitor, counted the way the Login plugin counts its own (its limiter `registrations`,
+     * settings `user_registration.max_attempts_count` and `max_attempts_interval`).
+     *
+     * @return ?int the minutes to wait when there were too many, else null
+     */
+    private function registrationsLimited(): ?int
+    {
+        $login = $this->grav['login'] ?? null;
+        if ($login === null) {
+            return null;
+        }
+        $limiter = $login->getRateLimiter('registrations');
+        $ip = $login->getIpKey();
+        $limiter->registerRateLimitedAction($ip, 'ip');
+
+        return $limiter->isRateLimited($ip, 'ip') ? (int) $limiter->getInterval() : null;
     }
 
     /** The link of a confirmation mail: the new avatar is active, it can sign in; or the new email of an avatar is its email. */

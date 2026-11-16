@@ -7,6 +7,9 @@ form:
   name: w4os-register
   classes: w4os-form
   fields:
+    # Invisible to people: a bot that fills it is refused (the honeypot of the Form plugin)
+    honeypot:
+      type: honeypot
     first_name:
       type: text
       label: w4os.first_name
