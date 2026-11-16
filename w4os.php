@@ -443,9 +443,8 @@ class W4osPlugin extends Plugin
             $item = $list === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
             $action = array_column($list === null ? [] : Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null), null, 'name')[$name] ?? null;
             $action === null && throw new FormError('w4os.error_invalid_request');
-            // The page of the site that takes the token of a mail; the engine's password resets take the reset page
-            $page = $action['link'] ?? (str_ends_with((string) $action['path'], '/password-resets') ? 'reset' : null);
-            [$method, $path, $data] = Lists::request($action, $item, $page === null ? [] : $this->site()->forms()->tokenAttributes($page));
+            // The page of the site that takes the token of a mail the action sends (`link`)
+            [$method, $path, $data] = Lists::request($action, $item, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
             $this->site()->engine()->call($method, $path, $data);
             $type === 'avatars' && $this->site()->forgetProfile((string) ($item['name'] ?? ''));
             $query = http_build_query(Lists::query(Lists::showing($list, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));

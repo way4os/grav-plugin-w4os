@@ -42,7 +42,7 @@
         {% for item in items %}
             <tr{% if item.status is defined %} class="w4os-{{ item.status|e('html_attr') }}"{% endif %}>
                 {% for column in list.columns %}<td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">{{ cells.cell(column, item) }}</td>{% endfor %}
-                {% if links or list.actions %}<td class="w4os-actions">{{ cells.menu(list, item, links) }}</td>{% endif %}
+                {% if links or list.actions %}<td class="w4os-actions">{% if links or w4os_list_actions(list, item) %}{{ cells.menu(list, item, links) }}{% endif %}</td>{% endif %}
             </tr>
         {% endfor %}
         </tbody>

@@ -70,6 +70,7 @@ describe('a list of the engine', function () {
     test('makes the request of the engine for an action on a row', function () use ($document) {
         $actions = array_column((new OpenApi($document))->listOf('avatars')['actions'], null, 'name');
         $ada = ['uuid' => 'u1', 'name' => 'Ada Love', 'status' => 'active'];
+        expect($actions['reset']['link'] ?? null)->toBe('reset');
 
         expect(Lists::request($actions['disable'], $ada))->toBe(['PATCH', '/avatars/u1', ['type' => 'avatars', 'id' => 'u1', 'attributes' => ['status' => 'disabled']]])
             ->and(Lists::request($actions['reset'], $ada, ['link' => 'https://site.example.org/reset?token={token}']))
