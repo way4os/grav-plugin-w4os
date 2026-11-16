@@ -19,12 +19,12 @@
     {% set type = column.type %}
     {% set labels = {} %}
     {% for known in column.values ?? [] %}{% set labels = labels|merge({(known.value): known.label}) %}{% endfor %}
-    {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% endif %}
+    {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% endif %}
     {%- if type == 'date' -%}{{ value ? value|date('Y-m-d') }}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
     {%- elseif type == 'status' -%}{% if value is not empty %}<span class="w4os-status">{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.status_' ~ value)|t }}</span>{% endif %}
     {%- elseif type == 'role' -%}{% if value is not empty %}{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.role_' ~ value|replace({'-': '_'}))|t }}{% else %}{{ item.level ?? '' }}{% endif %}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}
-    {%- elseif type == 'picture' -%}<img class="w4os-thumb" src="{{ w4os_picture(value, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
+    {%- elseif type == 'picture' -%}<img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(value, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
     {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="48" height="48">{% endif %}
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
     {%- elseif type == 'hop' -%}{% if value %}<a href="{{ value|e('html_attr') }}" title="{{ value|e('html_attr') }}">{{ ('w4os.' ~ column.label)|t }}</a>{% endif %}

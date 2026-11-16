@@ -31,7 +31,9 @@
 .w4os-list tr.w4os-disabled td:not(.w4os-actions) { opacity: .6; }
 .w4os-cell-who { white-space: nowrap; }
 .w4os-who { display: flex; align-items: center; gap: .5rem; }
-.w4os-thumb { flex: none; width: 32px; height: 32px; max-width: none; object-fit: cover; border-radius: 50%; }
+/* A picture beside a value: square with the theme's small radius (a place, a map), round for a person */
+.w4os-thumb { flex: none; width: 32px; height: 32px; max-width: none; object-fit: cover; border-radius: var(--pico-border-radius, .25rem); }
+.w4os-thumb-person { border-radius: 50%; }
 .w4os-status { display: inline-block; min-width: 6rem; }
 .w4os-pending .w4os-status { font-style: italic; }
 .w4os-actions { width: 1%; text-align: right; }
