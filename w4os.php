@@ -329,6 +329,7 @@ class W4osPlugin extends Plugin
                     }
                     $result = $forms->register($data);
                     $name = (string) $result['avatar']['name'];
+                    $site->forgetProfile($name);
                     if ($result['confirm']) {
                         $key = $result['link'] ? 'w4os.registered_test' : ($result['sent'] ? 'w4os.registered_confirm' : 'w4os.registered_not_sent');
                         $this->done($key, $routes['confirm'], [$name, $this->link($result['link'])]);
@@ -353,6 +354,7 @@ class W4osPlugin extends Plugin
                     $password = (string) ($data['password'] ?? '') !== '';
                     $password && $forms->password($avatar, $data);
                     $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_channel_unavailable'), $data);
+                    $site->forgetProfile((string) $avatar['name']);
                     $key = $result['email'] !== null ? ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending') : ($password ? 'w4os.password_saved' : 'w4os.profile_saved');
                     $this->done($key, $routes['account'], [htmlspecialchars((string) $result['email']), $this->link($result['link'])]);
                     // no break
@@ -364,6 +366,7 @@ class W4osPlugin extends Plugin
                     $this->site()->isManager() || throw new FormError('w4os.error_unauthorized');
                     $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
                     $forms->edit($edited, $data);
+                    $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
             }
         } catch (FormError $e) {
@@ -431,6 +434,7 @@ class W4osPlugin extends Plugin
         $avatar = ['uuid' => (string) ($post['uuid'] ?? ''), 'name' => (string) ($post['name'] ?? '')];
         try {
             $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar, $this->site()->avatar()['uuid'] ?? null);
+            $this->site()->forgetProfile($avatar['name']);
             $query = http_build_query(Forms::listQuery($_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), [$avatar['name']]);
         } catch (FormError $e) {

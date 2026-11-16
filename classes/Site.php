@@ -120,10 +120,37 @@ final class Site
         // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
         $bundled = $this->bundled();
         if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
-            return new Blocks(fn (string $name, array $args) => $this->noticed($this->cached("block $name ".json_encode($args), fn () => $bundled->rendered($name, $args))));
+            return new Blocks(fn (string $name, array $args) => $this->noticed($this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $bundled->rendered($name, $args))));
         }
 
-        return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->noticed($this->cached($url, fn () => $this->block($url))));
+        return Blocks::remote((string) ($this->config()['url'] ?? ''), function (string $url) {
+            parse_str((string) parse_url($url, PHP_URL_QUERY), $args);
+
+            return $this->noticed($this->cached($url.$this->profileVersion(basename((string) parse_url($url, PHP_URL_PATH)), $args), fn () => $this->block($url)));
+        });
+    }
+
+    /**
+     * Forget what the site keeps of the profile of an avatar (its blocks, in every language and form), once it changed: its page
+     * shows the change at once. A change made in the viewer shows once the blocks expire (the setting "cache", in seconds).
+     */
+    public function forgetProfile(string $name): void
+    {
+        $name === '' || $this->grav['cache']->save($this->profileKey($name), uniqid('', true), 86400);
+    }
+
+    /** What the blocks of a profile are kept under besides their arguments: the version of the avatar's profile (forgetProfile()). */
+    private function profileVersion(string $block, array $args): string
+    {
+        $name = (string) ($args['name'] ?? '');
+
+        return $block !== 'profile' || $name === '' ? '' : ' '.(string) ($this->grav['cache']->fetch($this->profileKey($name)) ?: '');
+    }
+
+    /** The key of the version of an avatar's profile, by its name ("First Last", "First.Last", whatever the case). */
+    private function profileKey(string $name): string
+    {
+        return 'w4os-profile-'.md5(strtolower(trim((string) preg_replace('/[\s._]+/', ' ', $name))));
     }
 
     /**
