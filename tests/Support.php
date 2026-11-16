@@ -26,6 +26,15 @@ function avatarDocument(array $attributes = []): array
     return ['data' => ['type' => 'avatars', 'id' => 'u1', 'attributes' => $attributes + ['uuid' => 'u1', 'name' => 'Ada Love', 'email' => 'ada@example.org', 'level' => 0]]];
 }
 
+/** The JSON:API document of a registration: a new avatar whose email is to be confirmed, not made yet (202). */
+function registrationDocument(array $meta = []): array
+{
+    return ['data' => ['type' => 'registrations', 'id' => 'u1', 'attributes' => [
+        'avatar' => 'u1', 'name' => 'Ada Love', 'firstName' => 'Ada', 'lastName' => 'Love', 'email' => 'ada@example.org', 'model' => 'Default Ruth',
+        'expires' => 1900000000,
+    ]], 'meta' => $meta];
+}
+
 /** A problem of the engine, with its code (Problem::CODES); none, the engine's code of the status is used. */
 function problem(int $status, string $detail, ?string $code = null): array
 {

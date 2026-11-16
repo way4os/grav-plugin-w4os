@@ -313,7 +313,11 @@ class W4osPlugin extends Plugin
         try {
             $avatar = $this->site()->forms()->confirm($token);
         } catch (FormError $e) {
-            $this->grav['messages']->add($this->errorText($e), 'error');
+            // The name of a registration taken meanwhile: the person registers again with another one
+            $again = $e->key === 'w4os.error_name_taken' && isset($this->site()->routes()['register'])
+                ? ' <a href="'.htmlspecialchars($this->site()->url('register')).'">'.htmlspecialchars($this->site()->translate('w4os.register_title')).'</a>'
+                : '';
+            $this->grav['messages']->add($this->errorText($e).$again, 'error');
 
             return;
         }

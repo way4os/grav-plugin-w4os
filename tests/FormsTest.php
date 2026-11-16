@@ -22,10 +22,11 @@ function formError(callable $call): string
 describe('register', function () {
     $fields = ['first_name' => 'Ada', 'last_name' => 'Love', 'email' => 'ada@example.org', 'password' => 'secret12', 'password_confirm' => 'secret12', 'model' => 'Default Ruth'];
 
-    test('makes an inactive avatar that confirms its email', function () use ($fields) {
-        $result = forms([[201, avatarDocument(['active' => false]) + ['meta' => ['emailConfirmation' => 'sent']]]], $log)->register($fields);
+    test('asks for a registration that confirms its email, nothing made until then', function () use ($fields) {
+        $result = forms([[202, registrationDocument(['emailConfirmation' => 'sent'])]], $log)->register($fields);
 
         expect($result['confirm'])->toBeTrue()
+            ->and($result['avatar']['name'])->toBe('Ada Love')
             ->and($result['sent'])->toBeTrue()
             ->and($log[0]['body']['data']['attributes'])->toBe([
                 'firstName' => 'Ada', 'lastName' => 'Love', 'email' => 'ada@example.org', 'password' => 'secret12',
@@ -64,8 +65,8 @@ describe('register', function () {
     });
 
     test('on a test site, mails nothing and gives the link', function () use ($fields) {
-        $answer = avatarDocument(['active' => false]) + ['meta' => ['emailConfirmation' => 'given', 'confirmation' => ['token' => 't', 'link' => 'https://site.example.org/confirm?token=t']]];
-        $result = forms([[201, $answer]], $log, ['send_mail' => false])->register($fields);
+        $answer = registrationDocument(['emailConfirmation' => 'given', 'confirmation' => ['token' => 't', 'link' => 'https://site.example.org/confirm?token=t']]);
+        $result = forms([[202, $answer]], $log, ['send_mail' => false])->register($fields);
 
         expect($log[0]['body']['data']['attributes'])->toHaveKey('send', false)
             ->and($result['sent'])->toBeFalse()
@@ -99,6 +100,10 @@ describe('sign-in and passwords', function () {
     test('a token refused is told so', function () {
         expect(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->reset(['token' => 't', 'password' => 'a', 'password_confirm' => 'a'])))->toBe('w4os.error_token_refused')
             ->and(formError(fn () => forms([[403, problem(403, 'expired', 'token-refused')]])->confirm('t')))->toBe('w4os.error_token_refused');
+    });
+
+    test('a registration whose name was taken before its confirmation is told so', function () {
+        expect(formError(fn () => forms([[400, problem(400, 'taken meanwhile', 'name-taken')]])->confirm('t')))->toBe('w4os.error_name_taken');
     });
 
     test('a new password needs the current one', function () {
