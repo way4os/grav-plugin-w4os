@@ -15,7 +15,7 @@ It is one piece of the w4os family:
 - **Sign in** with the name of the avatar (`First Last`) or its email, on the page of the Login plugin. The accounts of the site (its administrators) keep working.
 - **Forgotten password**: a link by mail to choose a new one.
 - **My avatar**: the profile of the avatar, the text of its profile (about, wants, skills, languages, real life, web page), its password, and its email: a new address changes once the link mailed to it is clicked.
-- **Avatars of the grid**, for its managers (the avatars of user level 200 or more by default): search, enable, disable, mail a password link, delete.
+- **Avatars of the grid**, for its managers (the avatars of user level 200 or more by default): search, see each one's status (active, disabled, waiting for the confirmation of its email), and from its actions menu enable or disable it, or mail it a password link.
 - **Blocks of the helpers** in any page, as a shortcode or in a template: grid info, grid status (in the language of the site, numbers and area as the language writes them), message of the day, search, popular places, destination guide, directory, profile.
 - **Menu of the visitor** for the top bar of a theme: the avatar signed in (my avatar, avatars of the grid, sign out), else sign in, create an avatar, forgotten password: `{% include 'w4os/user-menu.html.twig' %}`.
 - In English, French, German, Italian, Dutch, Portuguese (Brazil) and Welsh: the texts come from the translation catalog of the OpenSim engine, shared by every website of a grid (Grav, WordPress); `languages/<lang>.yaml` are generated from it (`composer languages`).

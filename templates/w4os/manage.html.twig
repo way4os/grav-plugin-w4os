@@ -12,26 +12,37 @@
     <div class="w4os-table-wrap">
     <table class="w4os-avatars">
         <thead><tr>
-            <th>{{ 'w4os.avatar_name'|t }}</th><th>{{ 'w4os.email'|t }}</th><th>{{ 'w4os.status'|t }}</th>
-            <th>{{ 'w4os.last_seen'|t }}</th><th>{{ 'w4os.created'|t }}</th><th>{{ 'w4os.actions'|t }}</th>
+            <th>{{ 'w4os.avatar_name'|t }}</th><th>{{ 'w4os.email'|t }}</th>
+            <th>{{ 'w4os.last_seen'|t }}</th><th>{{ 'w4os.created'|t }}</th>
+            <th>{{ 'w4os.status'|t }}</th><th><span class="sr-only">{{ 'w4os.actions'|t }}</span></th>
         </tr></thead>
         <tbody>
         {% for a in list.items %}
-            <tr class="{{ a.active ? 'active' : 'inactive' }}">
-                <td>{{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'w4os.god'|t }}</span>{% endif %}</td>
+            {% set status = w4os_status(a) %}
+            <tr class="w4os-{{ status }}">
+                <td class="w4os-name">
+                    <img class="w4os-thumb" src="{{ w4os_picture(a.profileImage)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
+                    {{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'w4os.god'|t }}</span>{% endif %}{% if a.online %} <span class="w4os-tag">{{ 'w4os.online'|t }}</span>{% endif %}
+                </td>
                 <td>{{ a.email }}</td>
-                <td>{{ a.online ? 'w4os.online'|t : (a.active ? 'w4os.active'|t : 'w4os.inactive'|t) }}</td>
                 <td>{{ a.lastSeen ? a.lastSeen|date('Y-m-d') : '—' }}</td>
                 <td>{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
+                <td><span class="w4os-status">{{ ('w4os.status_' ~ status)|t }}</span></td>
                 <td class="w4os-actions">
-                    {% for action in (a.active ? ['disable', 'reset', 'delete'] : ['enable', 'delete']) %}
-                        <form method="post"{% if action == 'delete' %} onsubmit="return confirm('{{ 'w4os.delete_confirm'|t(a.name)|e('js') }}')"{% endif %}>
+                    {% set actions = w4os_actions(a) %}
+                    {% if actions %}
+                    <details class="w4os-menu">
+                        <summary aria-label="{{ ('w4os.actions'|t ~ ': ' ~ a.name)|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}">⋮</summary>
+                        <form method="post">
                             {{ nonce_field('w4os-manage')|raw }}
                             <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
                             <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">
-                            <button class="button small {{ action == 'delete' ? 'danger' : '' }}" name="action" value="{{ action }}">{{ ('w4os.action_' ~ action)|t }}</button>
+                            {% for action in actions %}
+                                <button name="action" value="{{ action }}">{{ ('w4os.action_' ~ action)|t }}</button>
+                            {% endfor %}
                         </form>
-                    {% endfor %}
+                    </details>
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

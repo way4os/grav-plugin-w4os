@@ -129,11 +129,6 @@ final class Engine
         return [$this->resource($document), (array) ($document['meta'] ?? [])];
     }
 
-    public function deleteAvatar(string $id): void
-    {
-        $this->call('DELETE', '/avatars/'.rawurlencode($id));
-    }
-
     /**
      * A page of the avatars.
      *

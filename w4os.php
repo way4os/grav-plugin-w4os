@@ -135,6 +135,9 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatars', fn () => $this->avatars()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid) => $this->site()->picture($uuid)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_status', fn (array $avatar) => Forms::status($avatar)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_actions', fn (array $avatar) => Forms::actions($avatar, $this->site()->avatar()['uuid'] ?? null)));
     }
 
     public function onTwigSiteVariables(): void
@@ -289,7 +292,7 @@ class W4osPlugin extends Plugin
         }
         $avatar = ['uuid' => (string) ($post['uuid'] ?? ''), 'name' => (string) ($post['name'] ?? '')];
         try {
-            $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar);
+            $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar, $this->site()->avatar()['uuid'] ?? null);
             $query = http_build_query(array_intersect_key($_GET, ['search' => 1, 'page' => 1]));
             $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), [$avatar['name']]);
         } catch (FormError $e) {

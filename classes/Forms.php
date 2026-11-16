@@ -171,19 +171,48 @@ final class Forms
         $this->ask(fn () => $this->engine->updateAvatar((string) $avatar['uuid'], ['password' => (string) $data['password']]));
     }
 
+    /** What a manager of the grid can do to an avatar, by its status: the entries of its actions menu, in this order. */
+    public const ACTIONS = [
+        'active' => ['disable', 'reset'],
+        'disabled' => ['enable'],
+        'pending' => ['enable'],
+    ];
+
+    /** The status of an avatar: active, disabled (by a manager), or pending (waiting for the confirmation of its email). */
+    public static function status(array $avatar): string
+    {
+        $status = (string) ($avatar['status'] ?? '');
+
+        return isset(self::ACTIONS[$status]) ? $status : (! empty($avatar['active']) ? 'active' : 'disabled');
+    }
+
     /**
-     * What a manager of the grid does to an avatar: enable, disable, mail a password link, delete.
+     * The entries of the actions menu of an avatar: the ones of its status, never disabling the manager's own avatar.
+     *
+     * @param ?string $self the UUID of the avatar of the manager
+     * @return list<string>
+     */
+    public static function actions(array $avatar, ?string $self = null): array
+    {
+        $actions = self::ACTIONS[self::status($avatar)];
+
+        return ($avatar['uuid'] ?? null) === $self ? array_values(array_diff($actions, ['disable'])) : $actions;
+    }
+
+    /**
+     * What a manager of the grid does to an avatar: enable, disable, mail a password link.
      *
      * @param array<string,mixed> $avatar the avatar acted on (uuid, name)
+     * @param ?string $self the UUID of the avatar of the manager, who never disables it
      */
-    public function manage(string $action, array $avatar): void
+    public function manage(string $action, array $avatar, ?string $self = null): void
     {
         $uuid = (string) ($avatar['uuid'] ?? '');
+        ($action === 'disable' && $uuid === $self) && throw new FormError('w4os.error_invalid_request');
         match ($action) {
             'enable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => true])),
             'disable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => false])),
             'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'), $this->sends())),
-            'delete' => $this->ask(fn () => $this->engine->deleteAvatar($uuid)),
             default => throw new FormError('w4os.error_invalid_request'),
         };
     }

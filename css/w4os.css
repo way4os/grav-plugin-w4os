@@ -22,10 +22,24 @@
 .w4os-table-wrap { overflow-x: auto; }
 .w4os-avatars { width: 100%; border-collapse: collapse; font-size: .9em; }
 .w4os-avatars th, .w4os-avatars td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(127, 127, 127, .25); vertical-align: middle; }
-.w4os-avatars tr.inactive td { opacity: .6; }
-.w4os-actions { white-space: nowrap; }
-.w4os-actions form { display: inline; }
-.w4os-actions .button { padding: .15rem .5rem; font-size: .85em; }
+.w4os-avatars tr.w4os-disabled td:not(.w4os-actions) { opacity: .6; }
+.w4os-name { white-space: nowrap; }
+.w4os-thumb { width: 32px; height: 32px; object-fit: cover; border-radius: 50%; vertical-align: middle; margin-right: .4rem; }
+.w4os-status { display: inline-block; min-width: 6rem; }
+.w4os-pending .w4os-status { font-style: italic; }
+.w4os-actions { width: 1%; text-align: right; }
+.w4os-menu { position: relative; display: inline-block; }
+.w4os-menu summary { list-style: none; cursor: pointer; padding: 0 .6rem; font-size: 1.2em; line-height: 1.6; border-radius: 4px; }
+.w4os-menu summary::-webkit-details-marker { display: none; }
+.w4os-menu summary::after { content: none; }
+.w4os-menu summary:hover, .w4os-menu[open] summary { background: rgba(127, 127, 127, .15); }
+.w4os-menu form { position: absolute; right: 0; z-index: 10; display: flex; flex-direction: column; min-width: 14rem; margin: .2rem 0 0;
+    padding: .25rem 0; background: var(--pico-background-color, #fff); border: 1px solid rgba(127, 127, 127, .3); border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15); }
+.w4os-menu form button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: .4rem .8rem; cursor: pointer; text-align: left;
+    white-space: nowrap; font-size: .9em; color: inherit; }
+.w4os-menu form button:hover, .w4os-menu form button:focus-visible { background: rgba(127, 127, 127, .15); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .w4os-tag { font-size: .75em; padding: 0 .3rem; border: 1px solid currentColor; border-radius: .3rem; }
 .w4os-pages a, .w4os-pages strong { margin-right: .5rem; }
 

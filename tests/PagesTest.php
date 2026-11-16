@@ -34,6 +34,13 @@ describe('pages', function () {
         expect($used)->not->toBeEmpty();
         // Every problem code of the engine has its text
         $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));
+        // Every status of an avatar and every action of its menu has its text, and the message once done
+        foreach (W4os\Grav\Forms::ACTIONS as $status => $actions) {
+            $used[] = "status_$status";
+            foreach ($actions as $action) {
+                array_push($used, "action_$action", "manage_$action");
+            }
+        }
         foreach ($used as $key) {
             foreach ($languages as $texts) {
                 expect($texts)->toHaveKey($key);

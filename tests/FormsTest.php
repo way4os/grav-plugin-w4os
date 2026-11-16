@@ -137,15 +137,30 @@ describe('account', function () {
         expect($log)->toBe([]);
     });
 
-    test('the managers enable, disable, mail a password link and delete', function () {
-        $forms = forms([[200, avatarDocument()], [200, avatarDocument()], [202, ['meta' => []]], [204, null]], $log);
-        foreach (['enable', 'disable', 'reset', 'delete'] as $action) {
+    test('the managers enable, disable and mail a password link', function () {
+        $forms = forms([[200, avatarDocument()], [200, avatarDocument()], [202, ['meta' => []]]], $log);
+        foreach (['enable', 'disable', 'reset'] as $action) {
             $forms->manage($action, ['uuid' => 'u1', 'name' => 'Ada Love']);
         }
 
         expect(array_map(fn ($r) => $r['method'].' '.parse_url($r['url'], PHP_URL_PATH), $log))->toBe([
-            'PATCH /helpers/api/avatars/u1', 'PATCH /helpers/api/avatars/u1', 'POST /helpers/api/password-resets', 'DELETE /helpers/api/avatars/u1',
+            'PATCH /helpers/api/avatars/u1', 'PATCH /helpers/api/avatars/u1', 'POST /helpers/api/password-resets',
         ])->and($log[1]['body']['data']['attributes'])->toBe(['active' => false])
-            ->and(formError(fn () => $forms->manage('promote', ['uuid' => 'u1'])))->toBe('w4os.error_invalid_request');
+            ->and(formError(fn () => $forms->manage('delete', ['uuid' => 'u1'])))->toBe('w4os.error_invalid_request');
+    });
+
+    test('the status of an avatar gives the entries of its menu', function () {
+        expect(Forms::status(['status' => 'pending', 'active' => false]))->toBe('pending')
+            ->and(Forms::status(['active' => true]))->toBe('active')
+            ->and(Forms::status(['active' => false]))->toBe('disabled')
+            ->and(Forms::ACTIONS[Forms::status(['active' => true])])->toBe(['disable', 'reset'])
+            ->and(Forms::ACTIONS['pending'])->not->toContain('reset')
+            ->and(Forms::actions(['uuid' => 'u1', 'active' => true], 'u1'))->toBe(['reset']);
+    });
+
+    test('a manager never disables their own avatar', function () {
+        $forms = forms([], $log);
+        expect(formError(fn () => $forms->manage('disable', ['uuid' => 'u1', 'name' => 'Mona'], 'u1')))->toBe('w4os.error_invalid_request')
+            ->and($log)->toBe([]);
     });
 });

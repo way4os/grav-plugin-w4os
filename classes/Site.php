@@ -13,6 +13,9 @@ use Grav\Common\User\Interfaces\UserInterface;
  */
 final class Site
 {
+    /** The asset the engine answers with its placeholder picture. */
+    private const NO_PICTURE = '201ce950-aa38-46d8-a8f1-4396e9d6be00';
+
     /** Where the API key typed on the settings page is kept, out of the configuration. */
     public const SECRET = 'user-data://w4os/api.json';
 
@@ -119,6 +122,14 @@ final class Site
         }
 
         return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->cached($url, fn () => $this->get($url)));
+    }
+
+    /** The address of the profile picture of an avatar, the placeholder of the engine when it has none. */
+    public function picture(?string $uuid): string
+    {
+        $none = $uuid === null || trim($uuid, "0- ") === '';
+
+        return $this->engine()->assetUrl($none ? self::NO_PICTURE : $uuid);
     }
 
     /**
