@@ -21,6 +21,7 @@ form:
               type: w4os_identity
             about:
               type: textarea
+              classes: w4os-autogrow
               label: w4os.about
               rows: 5
             published:
@@ -92,6 +93,7 @@ form:
           fields:
             firstLife:
               type: textarea
+              classes: w4os-autogrow
               label: w4os.first_life
               rows: 3
         account:

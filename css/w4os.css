@@ -113,3 +113,5 @@ li:empty { display: none; }
 .block-search .search-form button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
 .search-topics { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem 1rem; margin: .5rem 0 1rem; }
 .w4os-splash .block-guide h1 { font-size: 1.5rem; }
+/* The text areas of the forms grow with their text (a script does it where the browser cannot) */
+.w4os-autogrow { field-sizing: content; min-height: 5rem; max-height: 30rem; }
