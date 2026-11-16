@@ -3,7 +3,7 @@
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
 {% if avatar %}
     <div class="w4os-identity">
-        <img class="w4os-identity-picture" src="{{ w4os_picture(avatar.profileImage)|e('html_attr') }}" alt="">
+        <img class="w4os-identity-picture" src="{{ w4os_picture(avatar.profileImage, 'person')|e('html_attr') }}" alt="">
         <div class="w4os-identity-details">
             <dl>
             <dt>{{ 'w4os.profile_name'|t }}</dt><dd>{{ avatar.name }}</dd>

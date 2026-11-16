@@ -29,7 +29,7 @@
 {% elseif items is empty %}
     <p>{{ texts.empty|t }}</p>
 {% else %}
-    <p class="w4os-count">{{ texts.count|t(meta.total ?? items|length) }}</p>
+    <p class="w4os-count">{{ w4os_count(texts.count, meta.total ?? items|length) }}</p>
     <div class="w4os-table-wrap">
     <table class="w4os-list w4os-{{ list.type|e('html_attr') }}">
         <thead><tr>

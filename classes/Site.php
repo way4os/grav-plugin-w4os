@@ -14,8 +14,6 @@ use Grav\Common\User\Interfaces\UserInterface;
 final class Site
 {
     /** The asset the engine answers with its placeholder picture. */
-    private const NO_PICTURE = '201ce950-aa38-46d8-a8f1-4396e9d6be00';
-
     /** Where the API key typed on the settings page is kept, out of the configuration. */
     public const SECRET = 'user-data://w4os/api.json';
 
@@ -174,12 +172,21 @@ final class Site
         return $this->info('logo', fn () => $this->engine()->gridLogo()) ?: $this->logo('opensimulator-logo.png');
     }
 
-    /** The address of the profile picture of an avatar, the placeholder of the engine when it has none. */
-    public function picture(?string $uuid): string
+    /**
+     * The address of a picture of the grid; for none, the engine's picture of nothing: the silhouette of a person (`person`, a
+     * profile) or the one of a place. The engine shows it too for a picture it does not have (`?default=`).
+     */
+    public function picture(?string $uuid, ?string $default = null): string
     {
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
+        $person = $default === 'person';
         $none = $uuid === null || trim($uuid, "0- ") === '';
+        $placeholder = class_exists(\OpenSim\Assets\WebAssets::class)
+            ? ($person ? \OpenSim\Assets\WebAssets::PERSON : \OpenSim\Assets\WebAssets::PLACEHOLDER)
+            : '00000000-0000-0000-0000-000000000000';
 
-        return $this->engine()->assetUrl($none ? self::NO_PICTURE : $uuid);
+        return $this->engine()->assetUrl($none ? $placeholder : (string) $uuid).($person ? '?default=person' : '');
     }
 
     /**
@@ -496,6 +503,25 @@ final class Site
     public function translate(string $key, array $vars = []): string
     {
         return (string) $this->grav['language']->translate(array_merge([$key], array_values($vars)));
+    }
+
+    /**
+     * A count in the language of the page, in the form its number takes there (the engine's catalog: `%d region`, `%d regions`);
+     * a text without forms as the language files have it.
+     *
+     * @param string $key a key of the language files (`w4os.regions_count`)
+     */
+    public function count(string $key, int $n): string
+    {
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
+        $name = (string) preg_replace('/^w4os\./', '', $key);
+        if (! class_exists(\OpenSim\I18n\Catalog::class) || ! isset(\OpenSim\I18n\Catalog::SINGULARS[$name])) {
+            return $this->translate($key, [$n]);
+        }
+        $language = (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en');
+
+        return sprintf(\OpenSim\I18n\Catalog::plural($language, $name, $n), $n);
     }
 
     /**
