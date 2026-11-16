@@ -145,9 +145,9 @@ form:
               minlength: 6
               maxlength: 16
   buttons:
-    - { type: submit, value: w4os.save_button, classes: 'button primary' }
-    # The profile page of the avatar (its address set when the form is)
+    # The main action last, at the far right: the profile page of the avatar (its address set when the form is), then Save
     - { type: button, id: w4os-view-profile, value: w4os.action_view, url: '', classes: 'button secondary' }
+    - { type: submit, value: w4os.save_button, classes: 'button primary' }
   process:
     - w4os: edit
 ---
