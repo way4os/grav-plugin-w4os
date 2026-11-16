@@ -285,6 +285,12 @@ class W4osPlugin extends Plugin
         $form->getData()->get('published') === null && $form->setData('published', (bool) ($avatar['published'] ?? false));
         // The avatar a manager changes goes with the form: its address has no ?avatar= once posted
         $form->getName() === 'w4os-edit' && $form->setData('avatar', (string) $avatar['uuid']);
+        // The button next to Save leads to the profile page of the avatar
+        $buttons = (array) $form->get('buttons');
+        foreach ($buttons as $i => $button) {
+            ($button['id'] ?? '') === 'w4os-view-profile' && ($buttons[$i]['url'] = $this->site()->profilePage((string) $avatar['name']));
+        }
+        $form->set('buttons', $buttons);
     }
 
     /** The forms of the pages of the plugin: `process: [{w4os: register}]` in their front matter. */
