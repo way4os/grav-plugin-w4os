@@ -1,0 +1,8 @@
+{# The links under the button of the login form: register (while registration is open) and lost password. A theme includes it
+   after the form of the Login plugin (its templates/login.html.twig), whose own lost password button goes away with
+   `route_forgot: false` in the settings of the Login plugin. #}
+{% set routes = config.plugins.w4os.routes %}
+<p class="w4os-login-links">
+    {% if w4os_route('register') %}<a href="{{ base_url_relative ~ w4os_route('register') }}">{{ 'w4os.register'|t }}</a><span aria-hidden="true"> – </span>{% endif %}
+    <a href="{{ base_url_relative ~ routes.forgot }}">{{ 'w4os.forgot_title'|t }}</a>
+</p>

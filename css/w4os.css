@@ -63,3 +63,4 @@ nav .w4os-user-list a, .w4os-user-list a { display: block; margin: 0; padding: 0
 
 /* The login URI to copy: one click selects it whole */
 .w4os-login-uri { user-select: all; cursor: text; }
+.w4os-login-links { margin: 1rem 0 0; text-align: center; font-size: .9em; }

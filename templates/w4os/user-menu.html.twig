@@ -1,6 +1,6 @@
 {# The menu of the visitor, for the top bar of a theme. Signed in: the name of the avatar leads to its profile, its list (on hover or
    focus) has the avatars of the grid for a manager and sign out. Not signed in: "Log in" leads to the login page, its list has
-   create an avatar and lost password. #}
+   register and lost password. #}
 {% set routes = config.plugins.w4os.routes %}
 {% set login_route = config.plugins.login.route|default('/login') %}
 <div class="w4os-user-menu">
@@ -13,7 +13,7 @@
     {% else %}
         <a class="w4os-user-current" href="{{ base_url_relative ~ login_route }}" aria-haspopup="true"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> {{ 'w4os.log_in'|t }}</a>
         <ul class="w4os-user-list">
-            {% if w4os_route('register') %}<li><a href="{{ base_url_relative ~ w4os_route('register') }}">{{ 'w4os.register_title'|t }}</a></li>{% endif %}
+            {% if w4os_route('register') %}<li><a href="{{ base_url_relative ~ w4os_route('register') }}">{{ 'w4os.register'|t }}</a></li>{% endif %}
             <li><a href="{{ base_url_relative ~ routes.forgot }}">{{ 'w4os.forgot_title'|t }}</a></li>
         </ul>
     {% endif %}
