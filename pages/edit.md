@@ -48,6 +48,7 @@ form:
               fields:
                 wantsList:
                   type: checkboxes
+                  label: false
                   classes: w4os-flags
                   options:
                     build: w4os.want_build
@@ -68,6 +69,7 @@ form:
               fields:
                 skillsList:
                   type: checkboxes
+                  label: false
                   classes: w4os-flags
                   options:
                     textures: w4os.skill_textures
