@@ -79,7 +79,7 @@ w4os:
   status_pending: 'En attente'
   role: 'Rôle'
   role_resident: 'Résident'
-  role_god_like: 'Divin'
+  role_god_like: 'Quasi-dieu'
   role_customer_service: 'Service client'
   role_liaison: 'Liaison'
   role_god: 'Dieu'

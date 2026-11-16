@@ -81,7 +81,7 @@ w4os:
   role_resident: 'Residente'
   role_god_like: 'Divino'
   role_customer_service: 'Atendimento ao Cliente'
-  role_liaison: 'Ligação'
+  role_liaison: 'Contato'
   role_god: 'Deus'
   action_enable: 'Ativar'
   action_disable: 'Desativar'

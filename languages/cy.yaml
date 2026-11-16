@@ -81,7 +81,7 @@ w4os:
   role_resident: 'Preswylydd'
   role_god_like: 'Fel y duw'
   role_customer_service: 'Gwasanaeth Cwsmeriaid'
-  role_liaison: 'Cysylltiad'
+  role_liaison: 'Swyddog cyswllt'
   role_god: 'Duw'
   action_enable: 'Galluogi'
   action_disable: 'Analluogi'

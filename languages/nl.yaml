@@ -81,7 +81,7 @@ w4os:
   role_resident: 'Bewoner'
   role_god_like: 'Goddelijk'
   role_customer_service: 'Klantenservice'
-  role_liaison: 'Verbinding'
+  role_liaison: 'Contactpersoon'
   role_god: 'God'
   action_enable: 'Activeren'
   action_disable: 'Uitschakelen'
