@@ -420,7 +420,7 @@ final class Site
     }
 
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
-    public const ADMIN_PAGES = ['manage' => 'w4os.manage_title'];
+    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title'];
 
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its

@@ -164,6 +164,7 @@ form:
             routes.forgot: { type: text, label: w4os.forgot_title }
             routes.reset: { type: text, label: w4os.reset_title }
             routes.account: { type: text, label: w4os.edit_profile }
+            routes.dashboard: { type: text, label: w4os.dashboard_title }
             routes.manage: { type: text, label: w4os.manage_title }
             routes.edit: { type: text, label: w4os.action_edit }
             routes.search: { type: text, label: w4os.search }

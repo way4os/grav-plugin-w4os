@@ -65,6 +65,8 @@ routes:
   forgot: /forgot_password
   reset: /reset-password
   account: /account
+  # The managers' dashboard: the blocks of its page (pages/dashboard.md), the first entry of the admin menu (not /admin: Grav's Admin plugin)
+  dashboard: /account/dashboard
   manage: /account/avatars
   edit: /account/avatars/edit
   # The pages of the grid the site serves (the grid's config gives these addresses to the viewers): a block of the helpers each

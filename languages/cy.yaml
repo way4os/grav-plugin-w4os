@@ -104,6 +104,7 @@ w4os:
   email_pending_test: 'Mae eich proffil wedi’i gadw. Safle prawf, dim ebost: cadarnhewch %1$s gyda’r ddolen hon: %2$s'
   email_changed: 'Eich ebost yw %s nawr.'
   menu_admin: 'Gweinyddu'
+  dashboard_title: 'Bwrdd rheoli'
   manage_title: 'Avatars'
   search_avatars: 'Enw neu ebost'
   search: 'Chwilio'

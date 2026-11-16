@@ -104,6 +104,7 @@ w4os:
   email_pending_test: 'Seu perfil foi salvo. Site de teste, sem email: confirme %1$s com este link: %2$s'
   email_changed: 'Seu email agora é %s.'
   menu_admin: 'Admin'
+  dashboard_title: 'Painel'
   manage_title: 'Avatares'
   search_avatars: 'Nome ou email'
   search: 'Buscar'

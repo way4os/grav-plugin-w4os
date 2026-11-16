@@ -104,6 +104,7 @@ w4os:
   email_pending_test: 'Dein Profil ist gespeichert. Testseite, keine E-Mail: Bestätige %1$s mit diesem Link: %2$s'
   email_changed: 'Deine E-Mail ist jetzt %s.'
   menu_admin: 'Admin'
+  dashboard_title: 'Dashboard'
   manage_title: 'Avatare'
   search_avatars: 'Name oder E-Mail'
   search: 'Suchen'

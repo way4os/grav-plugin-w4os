@@ -252,10 +252,10 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'manage', 'edit'], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit'], true) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
-        } elseif (in_array($type, ['manage', 'edit'], true) && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['dashboard', 'manage', 'edit'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);

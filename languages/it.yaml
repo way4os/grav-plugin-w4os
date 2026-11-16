@@ -104,6 +104,7 @@ w4os:
   email_pending_test: 'Il tuo profilo è salvato. Sito di prova, nessuna email: conferma %1$s con questo link: %2$s'
   email_changed: 'La tua email ora è %s.'
   menu_admin: 'Admin'
+  dashboard_title: 'Bacheca'
   manage_title: 'Avatar'
   search_avatars: 'Nome o email'
   search: 'Cerca'

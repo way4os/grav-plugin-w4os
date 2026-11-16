@@ -10,7 +10,7 @@ namespace W4os\Grav;
 final class Blocks
 {
     /** The blocks a visitor may see; `health` is for the managers, with the API key. */
-    public const NAMES = ['grid-info', 'grid-status', 'motd', 'destination_guide', 'popular_places', 'directory_info', 'search', 'profile'];
+    public const NAMES = ['grid-info', 'grid-status', 'motd', 'destination_guide', 'popular_places', 'directory_info', 'search', 'profile', 'new_users'];
 
     /** The arguments a block takes from the page or the shortcode. */
     private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang', 'assets'];
