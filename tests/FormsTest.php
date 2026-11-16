@@ -185,7 +185,7 @@ describe('account', function () {
             ]);
     });
 
-    test('a manager changes the profile, the email at once, and the role only when another one is picked', function () {
+    test('a manager changes the profile, the email at once (cleared too), and the role only when another one is picked', function () {
         $edited = ['uuid' => 'u1', 'name' => 'Ada Love', 'email' => 'ada@example.org', 'about' => '', 'role' => 'resident', 'level' => 5];
         forms([[200, avatarDocument()]], $log)->edit($edited, ['role' => 'resident', 'email' => 'new@example.org', 'about' => 'Hi']);
         forms([[200, avatarDocument()]], $log2)->edit($edited, ['role' => 'liaison', 'email' => 'ada@example.org']);
@@ -194,11 +194,13 @@ describe('account', function () {
         $model = ['uuid' => 'm1', 'name' => 'Default Ruth', 'email' => '', 'role' => 'resident'];
         forms([[200, avatarDocument()]], $log6)->edit($model, ['role' => 'resident', 'email' => '', 'about' => 'A model']);
         forms([[200, avatarDocument()]], $log4)->edit($edited, ['role' => 'resident', 'email' => 'ada@example.org', 'password' => 'secret12', 'password_confirm' => 'secret12']);
+        forms([[200, avatarDocument()]], $log7)->edit($edited, ['role' => 'resident', 'email' => '']);
         $forms5 = forms([], $log5);
 
         expect($log[0]['body']['data']['attributes'])->toBe(['about' => 'Hi', 'email' => 'new@example.org'])
             ->and($log4[0]['body']['data']['attributes'])->toBe(['password' => 'secret12'])
             ->and($log6[0]['body']['data']['attributes'])->toBe(['about' => 'A model'])
+            ->and($log7[0]['body']['data']['attributes'])->toBe(['email' => ''])
             ->and(formError(fn () => $forms5->edit($edited, ['email' => 'ada@example.org', 'password' => 'a12345', 'password_confirm' => 'b12345'])))->toBe('w4os.error_password_match')
             ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
             ->and($log3)->toBe([]);

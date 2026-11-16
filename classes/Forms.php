@@ -167,11 +167,8 @@ final class Forms
             }
         }
         $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
-        // An avatar's own profile has an email; a manager may leave it empty (the models and the technical accounts have none)
-        if ($email === '') {
-            $confirm && throw new FormError('w4os.error_required');
-            $email = trim((string) ($current['email'] ?? ''));
-        }
+        // An avatar's own profile has an email; a manager may leave it empty or clear it (the models and the technical accounts have none)
+        $email === '' && $confirm && throw new FormError('w4os.error_required');
         $changed = strtolower($email) !== strtolower(trim((string) ($current['email'] ?? '')));
         if ($changed) {
             $attributes += $confirm
