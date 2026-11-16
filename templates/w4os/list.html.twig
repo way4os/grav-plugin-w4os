@@ -13,7 +13,13 @@
     {% endif %}
     {% for filter in list.filters %}
         {% set label = ('w4os.' ~ filter.label)|t %}
-        {% if filter.format is defined %}
+        {% if filter.multiple ?? false %}
+        {# Several values, any of them (Tom Select, js/filters.js): its label as its placeholder, the meaning of each value as its tip #}
+        {% set asked = query[filter.name] ?? [] %}
+        <select name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}">
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.label ? ('w4os.' ~ value.label)|t : value.value }}</option>{% endfor %}
+        </select>
+        {% elseif filter.format is defined %}
         <input type="text" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
         <select name="{{ filter.name|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
@@ -24,6 +30,11 @@
     {% endfor %}
     {% if query.sort is defined %}<input type="hidden" name="sort" value="{{ query.sort }}">{% endif %}
 </form>
+{% if list.filters|filter(f => (f.multiple ?? false)) %}
+    {% do assets.addCss('plugin://w4os/assets/tom-select/tom-select.min.css') %}
+    {% do assets.addJs('plugin://w4os/assets/tom-select/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
+    {% do assets.addJs('plugin://w4os/js/filters.js', {group: 'bottom', loading: 'defer'}) %}
+{% endif %}
 {% if error %}
     <p class="notices red">{{ error }}</p>
 {% elseif items is empty %}

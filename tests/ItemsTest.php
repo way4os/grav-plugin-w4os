@@ -27,8 +27,8 @@ describe('the page of an item of the engine', function () {
         $fields = array_column($api->itemOf('regions')['fields'], null, 'name');
         $avatar = array_column($api->itemOf('avatars')['fields'], null, 'name');
 
-        expect(Items::visible($fields['enabled'], ['hyperlink' => false], ['manager']))->toBeTrue()
-            ->and(Items::visible($fields['enabled'], ['hyperlink' => true], ['manager']))->toBeFalse()
+        expect(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => true], ['manager']))->toBeTrue()
+            ->and(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => false], ['manager']))->toBeFalse()
             ->and(Items::editable($fields['enabled'], ['manager']))->toBeTrue()
             ->and(Items::editable($fields['enabled'], ['owner']))->toBeFalse()
             ->and(Items::editable($fields['name'], ['manager']))->toBeFalse()
@@ -38,8 +38,8 @@ describe('the page of an item of the engine', function () {
 
     test('makes the fields of its form: its groups as tabs, what the visitor changes as inputs, the rest as values', function () use ($api) {
         $form = $api->itemOf('regions');
-        $local = Items::fields($form, ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'enabled' => true], ['manager']);
-        $link = Items::fields($form, ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true], ['manager']);
+        $local = Items::fields($form, ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'local' => true, 'enabled' => true], ['manager']);
+        $link = Items::fields($form, ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true, 'local' => false], ['manager']);
         $tabs = $local['groups']['fields'];
 
         expect($local['id'])->toBe(['type' => 'hidden'])
@@ -56,10 +56,10 @@ describe('the page of an item of the engine', function () {
         $avatar = $api->itemOf('avatars');
         $ada = ['uuid' => 'u1', 'about' => 'Hi', 'wantsList' => ['meet', 'build'], 'role' => 'resident'];
 
-        expect(Items::changes($region, ['hyperlink' => false, 'enabled' => true], [], ['manager']))->toBe(['enabled' => false])
-            ->and(Items::changes($region, ['hyperlink' => false, 'enabled' => true], ['enabled' => '1'], ['manager']))->toBe([])
-            ->and(Items::changes($region, ['hyperlink' => false, 'enabled' => null], [], ['manager']))->toBe([])
-            ->and(Items::changes($region, ['hyperlink' => false, 'enabled' => true], [], ['owner']))->toBe([])
+        expect(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['manager']))->toBe(['enabled' => false])
+            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], ['enabled' => '1'], ['manager']))->toBe([])
+            ->and(Items::changes($region, ['hyperlink' => false, 'local' => false, 'enabled' => null], [], ['manager']))->toBe([])
+            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['owner']))->toBe([])
             ->and(Items::changes($avatar, $ada, ['about' => 'Hi', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => ''], ['self']))
             ->toBe([])
             ->and(Items::changes($avatar, $ada, ['about' => 'Hello', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => 'secret1'], ['manager']))

@@ -32,7 +32,7 @@ final class Lists
      * @param array<string,mixed> $list the list (OpenApi::listOf()), with the filters the page shows
      * @param array<string,mixed> $get the query of the address
      * @param array<string,scalar> $fixed the filters the page always asks the engine (`technical => no`)
-     * @return array{api: array<string,scalar>, page: array<string,string>}
+     * @return array{api: array<string,scalar>, page: array<string,string|list<string>>}
      */
     public static function query(array $list, array $get, int $perPage, array $fixed = []): array
     {
@@ -40,8 +40,15 @@ final class Lists
         $search = trim((string) ($get['search'] ?? ''));
         $list['search'] !== null && $search !== '' && $page['search'] = $search;
         foreach ($list['filters'] as $filter) {
-            $value = trim((string) ($get[$filter['name']] ?? ''));
-            self::allowed($filter, $value) && $page[$filter['name']] = $value;
+            $asked = $get[$filter['name']] ?? '';
+            if (! empty($filter['multiple'])) {
+                // Several values: a list, or one text with commas; the ones the filter has, in its order
+                $values = array_map('trim', is_array($asked) ? array_map('strval', $asked) : explode(',', (string) $asked));
+                $known = array_values(array_intersect(array_column($filter['values'], 'value'), $values));
+                $known === [] || $page[$filter['name']] = $known;
+            } elseif (self::allowed($filter, $value = trim(is_scalar($asked) ? (string) $asked : ''))) {
+                $page[$filter['name']] = $value;
+            }
         }
         $asked = (string) ($get['sort'] ?? '');
         $descending = $list['sort']['descending'] ?: '-';
@@ -55,10 +62,31 @@ final class Lists
         $sort === '' || $api['sort'] = $sort;
         isset($page['search']) && $api['search'] = $page['search'];
         foreach ($list['filters'] as $filter) {
-            isset($page[$filter['name']]) && $api['filter['.$filter['name'].']'] = $page[$filter['name']];
+            isset($page[$filter['name']]) && $api['filter['.$filter['name'].']'] = is_array($page[$filter['name']]) ? implode(',', $page[$filter['name']]) : $page[$filter['name']];
         }
 
         return ['api' => $api, 'page' => $page];
+    }
+
+    /**
+     * The list with the values its dynamic filters offer: the ones the rows have now (the meta of the list: `available`), and the
+     * ones asked.
+     *
+     * @param array<string,mixed> $list
+     * @param array<string,mixed> $meta
+     * @param array<string,mixed> $page the query of the page (Lists::query())
+     * @return array<string,mixed>
+     */
+    public static function offering(array $list, array $meta, array $page): array
+    {
+        foreach ($list['filters'] as $i => $filter) {
+            if (! empty($filter['dynamic']) && isset($meta['available'][$filter['name']])) {
+                $useful = array_merge(array_map('strval', (array) $meta['available'][$filter['name']]), (array) ($page[$filter['name']] ?? []));
+                $list['filters'][$i]['values'] = array_values(array_filter($filter['values'], fn ($value) => in_array($value['value'], $useful, true)));
+            }
+        }
+
+        return $list;
     }
 
     /**

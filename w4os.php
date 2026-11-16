@@ -611,7 +611,7 @@ class W4osPlugin extends Plugin
         try {
             [$items, $meta] = $this->site()->engine()->items($type, $query['api']);
 
-            return ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
+            return ['list' => Lists::offering($list, $meta, $query['page']), 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
         } catch (EngineException $e) {
             // What the engine refuses (a simulator it does not know...) said as it is, the rest as a channel down
             $refused = $e->status >= 400 && $e->status < 500 ? $this->errorText($this->site()->forms()->error($e)) : $error['error'];

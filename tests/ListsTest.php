@@ -26,7 +26,32 @@ describe('a list of the engine', function () {
         $filters = array_column((new OpenApi($document))->listOf('regions')['filters'], null, 'name');
 
         expect($filters['owner'])->toMatchArray(['format' => 'uuid', 'values' => []])
-            ->and($filters['online']['values'][0])->toBe(['value' => 'yes', 'label' => 'yes']);
+            ->and($filters['flags'])->toMatchArray(['multiple' => true, 'dynamic' => true])
+            ->and($filters['flags']['values'][0])->toBe(['value' => 'DefaultRegion', 'label' => 'region_flag_default_region', 'description' => 'region_flag_default_region_help']);
+    });
+
+    test('a filter of several values asks any of them, the ones it has only', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('regions'), ['flags', 'simulator']);
+        $query = Lists::query($list, ['flags' => ['Hyperlink', 'Nothing', 'DefaultRegion']], 10);
+
+        expect($query['page'])->toBe(['flags' => ['DefaultRegion', 'Hyperlink']])
+            ->and($query['api']['filter[flags]'])->toBe('DefaultRegion,Hyperlink')
+            ->and(Lists::query($list, ['flags' => 'Persistent,DefaultRegion'], 10)['page']['flags'])->toBe(['DefaultRegion', 'Persistent'])
+            ->and(Lists::query($list, ['flags' => 'Nothing'], 10)['page'])->toBe([]);
+    });
+
+    test('a dynamic filter offers the values the rows have now, and the ones asked', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('regions'), ['flags']);
+        $offered = Lists::offering($list, ['available' => ['flags' => ['Persistent', 'DefaultRegion']]], ['flags' => ['Hyperlink']]);
+
+        expect(array_column($offered['filters'][0]['values'], 'value'))->toBe(['DefaultRegion', 'Persistent', 'Hyperlink'])
+            ->and(count(Lists::offering($list, [], [])['filters'][0]['values']))->toBe(count($list['filters'][0]['values']));
+    });
+
+    test('a column with a map of labels gives them as its values', function () use ($document) {
+        $roles = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['roles'];
+
+        expect($roles['values'])->toContain(['value' => 'DefaultRegion', 'label' => 'region_flag_default_region']);
     });
 
     test('a page shows the filters it names, in its order', function () use ($document) {
@@ -63,7 +88,7 @@ describe('a list of the engine', function () {
             ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => '']))->toBe(['disable'])
             ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org'], 'u1'))->toBe(['reset'])
             ->and($names(['uuid' => 'u1', 'status' => 'pending', 'email' => 'ada@example.org']))->toBe(['enable'])
-            ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'enabled' => false]), 'name'))->toBe(['enable'])
+            ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'local' => true, 'enabled' => false]), 'name'))->toBe(['enable'])
             ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'enabled' => null]), 'name'))->toBe([]);
     });
 
