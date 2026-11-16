@@ -57,7 +57,7 @@
    theme's rules of nav (the list as wide as its content, pulled aside, padded items) are undone; on one line, scrolling sideways */
 .profile-tabs { display: block; }
 .profile-tabs li { list-style: none; margin: 0; padding: 0; }
-.profile-tabs .tabs-nav { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; margin-left: 0; margin-right: 0; }
+.profile-tabs .tabs-nav { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; margin: 0 0 1.5rem; }
 .profile-tabs .tab__link { white-space: nowrap; }
 .w4os-note { font-style: italic; opacity: .8; }
 .block-table { border-collapse: collapse; }
