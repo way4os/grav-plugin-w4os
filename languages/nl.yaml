@@ -5,6 +5,7 @@ w4os:
   register_title: 'Mijn Avatar aanmaken'
   register_text: 'Kies hieronder een naam. Zo zullen mensen je in de virtuele wereld zien.'
   register_button: 'Mijn Avatar aanmaken'
+  register: 'Registreren'
   have_avatar: 'Heb je al een avatar?'
   first_name: 'Voornaam'
   last_name: 'Achternaam'

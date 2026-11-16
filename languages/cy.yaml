@@ -5,6 +5,7 @@ w4os:
   register_title: 'Creu Fy Avatar'
   register_text: 'Dewiswch enw isod. Dyma sut bydd pobl yn eich gweld yn y byd rhithwir.'
   register_button: 'Creu Fy Avatar'
+  register: 'Cofrestru'
   have_avatar: 'Oes gennych chi avatar yn barod?'
   first_name: 'Enw cyntaf'
   last_name: 'Cyfareddol'
