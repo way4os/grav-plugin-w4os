@@ -19,7 +19,6 @@ form:
           fields:
             identity:
               type: w4os_identity
-              validate: { ignore: true }
             about:
               type: textarea
               label: w4os.about
@@ -42,7 +41,6 @@ form:
             interests_note:
               type: w4os_note
               text: w4os.interests_removed
-              validate: { ignore: true }
             wants_group:
               type: fieldset
               legend: w4os.wants
