@@ -37,6 +37,16 @@ What only a visitor with no avatar signed in sees (an invitation to register), i
 [w4os-guest]Create your avatar, then connect with any OpenSimulator viewer.[/w4os-guest]
 ```
 
+What shows only while registration is open (setting `register.enabled`), such as a link to the registration page:
+
+```markdown
+[w4os-guest][w4os-register][Create your avatar](/register), then connect with any OpenSimulator viewer.[/w4os-register][/w4os-guest]
+1. [w4os-register]**Create your avatar** on the [registration page](/register).[/w4os-register]
+1. **Install a viewer**.
+```
+
+Inside a list item, the shortcode goes after the number: the item left empty is hidden, and the list is numbered without it.
+
 ## Standalone
 
 The plugin is self-contained: its release zip (the one Grav's GPM installs, about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):

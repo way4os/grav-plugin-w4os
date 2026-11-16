@@ -162,6 +162,7 @@ class W4osPlugin extends Plugin
      * [w4os text="welcome_title" /]: a text of the language files, the name of the grid in its %s ("Welcome to %s")
      * [w4os info="uri" /]: the login URI of the grid (host:port), as text to copy
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
+     * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
      */
     public function onShortcodeHandlers(): void
     {
@@ -175,6 +176,7 @@ class W4osPlugin extends Plugin
             ),
         });
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
+        $handlers->add('w4os-register', fn ($shortcode) => isset($this->site()->routes()['register']) ? (string) $shortcode->getContent() : '');
     }
 
     public function onPagesInitialized(): void
