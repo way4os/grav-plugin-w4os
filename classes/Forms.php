@@ -173,6 +173,11 @@ final class Forms
     {
         $role = (string) ($data['role'] ?? '');
         $extra = in_array($role, self::ROLES, true) && $role !== ($edited['role'] ?? null) ? ['role' => $role] : [];
+        // A new password when the manager gives one, confirmed; the engine checks it as at registration
+        if ((string) ($data['password'] ?? '') !== '') {
+            $this->samePassword($data);
+            $extra['password'] = (string) $data['password'];
+        }
 
         return $this->profile($edited, $data, false, $extra);
     }

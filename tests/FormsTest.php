@@ -180,7 +180,12 @@ describe('account', function () {
         forms([[200, avatarDocument()]], $log2)->edit($edited, ['role' => 'liaison', 'email' => 'ada@example.org']);
         forms([], $log3)->edit($edited, ['role' => 'emperor', 'email' => 'ada@example.org']);
 
+        forms([[200, avatarDocument()]], $log4)->edit($edited, ['role' => 'resident', 'email' => 'ada@example.org', 'password' => 'secret12', 'password_confirm' => 'secret12']);
+        $forms5 = forms([], $log5);
+
         expect($log[0]['body']['data']['attributes'])->toBe(['about' => 'Hi', 'email' => 'new@example.org'])
+            ->and($log4[0]['body']['data']['attributes'])->toBe(['password' => 'secret12'])
+            ->and(formError(fn () => $forms5->edit($edited, ['email' => 'ada@example.org', 'password' => 'a12345', 'password_confirm' => 'b12345'])))->toBe('w4os.error_password_match')
             ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
             ->and($log3)->toBe([]);
     });

@@ -31,7 +31,7 @@ form:
       type: text
       label: w4os.skills
     languages:
-      type: text
+      type: w4os_languages
       label: w4os.languages
     firstLife:
       type: textarea
@@ -40,6 +40,20 @@ form:
     profileUrl:
       type: url
       label: w4os.profile_url
+    # A new password, set by the manager (empty: unchanged)
+    password:
+      type: password
+      label: w4os.new_password
+      help: w4os.password_help
+      autocomplete: new-password
+      minlength: 6
+      maxlength: 16
+    password_confirm:
+      type: password
+      label: w4os.password_confirm
+      autocomplete: new-password
+      minlength: 6
+      maxlength: 16
   buttons:
     - { type: submit, value: w4os.save_button, classes: 'button primary' }
   process:

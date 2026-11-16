@@ -335,6 +335,28 @@ final class Site
         return trim((string) $slogan);
     }
 
+    /** The languages most avatars speak, besides the ones of the site, suggested for the languages of a profile. */
+    public const USUAL_LANGUAGES = ['en', 'fr', 'de', 'es', 'it', 'nl', 'pt', 'cy', 'pl', 'sv', 'ru', 'ja', 'zh', 'ko', 'ar', 'tr'];
+
+    /**
+     * The names of the languages to suggest for a profile, in the language of the page: the site's first, then the usual ones.
+     *
+     * @return list<string>
+     */
+    public function languageNames(): array
+    {
+        $language = $this->grav['language'];
+        $page = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
+        $names = [];
+        foreach (array_unique([...array_map('strval', (array) $language->getLanguages()), ...self::USUAL_LANGUAGES]) as $code) {
+            $name = class_exists(\Locale::class) ? \Locale::getDisplayLanguage(str_replace('-', '_', $code), str_replace('-', '_', $page)) : '';
+            $name = $name !== '' && $name !== $code ? $name : (string) \Grav\Common\Language\LanguageCodes::getNativeName($code);
+            $name !== '' && $names[] = mb_strtoupper(mb_substr($name, 0, 1)).mb_substr($name, 1);
+        }
+
+        return array_values(array_unique($names));
+    }
+
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
     public const ADMIN_PAGES = ['manage' => 'w4os.manage_title'];
 

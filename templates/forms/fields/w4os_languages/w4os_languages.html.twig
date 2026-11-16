@@ -1,0 +1,14 @@
+{# The languages of an avatar: free text, as in the viewer, with the site's languages and the usual ones to pick from (a datalist) #}
+{% extends "forms/fields/text/text.html.twig" %}
+
+{% block input_attributes %}
+    {{ parent() }}
+    list="w4os-languages-{{ field.name|e('html_attr') }}"
+{% endblock %}
+
+{% block append %}
+    {{ parent() }}
+    <datalist id="w4os-languages-{{ field.name|e('html_attr') }}">
+        {% for name in w4os_language_names() %}<option value="{{ name }}"></option>{% endfor %}
+    </datalist>
+{% endblock %}

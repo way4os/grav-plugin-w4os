@@ -23,7 +23,7 @@ forms:
         type: text
         label: w4os.skills
       languages:
-        type: text
+        type: w4os_languages
         label: w4os.languages
       firstLife:
         type: textarea
