@@ -7,6 +7,15 @@ form:
   name: w4os-edit
   classes: w4os-form
   fields:
+    role:
+      type: select
+      label: w4os.role
+      options:
+        resident: w4os.role_resident
+        god-like: w4os.role_god_like
+        customer-service: w4os.role_customer_service
+        liaison: w4os.role_liaison
+        god: w4os.role_god
     email:
       type: email
       label: w4os.email

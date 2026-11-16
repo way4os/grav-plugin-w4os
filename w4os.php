@@ -243,7 +243,7 @@ class W4osPlugin extends Plugin
         if ($avatar === null) {
             return;
         }
-        foreach (array_merge(['email'], Forms::PROFILE) as $key) {
+        foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
         }
     }
@@ -300,7 +300,7 @@ class W4osPlugin extends Plugin
                 case 'edit':
                     $this->site()->isManager() || throw new FormError('w4os.error_unauthorized');
                     $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
-                    $forms->profile($edited, $data, false);
+                    $forms->edit($edited, $data);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
             }
         } catch (FormError $e) {

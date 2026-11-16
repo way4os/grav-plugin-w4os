@@ -133,12 +133,13 @@ final class Forms
      *
      * @param array<string,mixed> $current the avatar as the engine has it
      * @param bool $confirm whether a new email waits for its confirmation (the avatar's own form), else it changes at once (a manager)
+     * @param array<string,mixed> $extra more to change in the same call (the role a manager gives)
      * @return array{avatar: array<string,mixed>, email: ?string, link: ?string} the avatar, the new email waiting for its
      *     confirmation, its link when it was not mailed (test site)
      */
-    public function profile(array $current, array $data, bool $confirm = true): array
+    public function profile(array $current, array $data, bool $confirm = true, array $extra = []): array
     {
-        $attributes = [];
+        $attributes = $extra;
         foreach (self::PROFILE as $key) {
             if (array_key_exists($key, $data) && trim((string) $data[$key]) !== trim((string) ($current[$key] ?? ''))) {
                 $attributes[$key] = trim((string) $data[$key]);
@@ -160,6 +161,20 @@ final class Forms
         [$avatar, $meta] = $this->ask(fn () => $this->engine->updateAvatar((string) $current['uuid'], $attributes));
 
         return ['avatar' => $avatar, 'email' => $changed && $confirm ? $email : null, 'link' => $meta['confirmation']['link'] ?? null];
+    }
+
+    /**
+     * What a manager changes of an avatar: its profile and its email (at once), and its role when another one is picked (a level
+     * that is not the one of a role stays until then).
+     *
+     * @param array<string,mixed> $edited the avatar as the engine has it
+     */
+    public function edit(array $edited, array $data): array
+    {
+        $role = (string) ($data['role'] ?? '');
+        $extra = in_array($role, self::ROLES, true) && $role !== ($edited['role'] ?? null) ? ['role' => $role] : [];
+
+        return $this->profile($edited, $data, false, $extra);
     }
 
     /** A new password for the avatar signed in, once its current one is checked. */

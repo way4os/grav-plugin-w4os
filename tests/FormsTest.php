@@ -173,6 +173,17 @@ describe('account', function () {
             ]);
     });
 
+    test('a manager changes the profile, the email at once, and the role only when another one is picked', function () {
+        $edited = ['uuid' => 'u1', 'name' => 'Ada Love', 'email' => 'ada@example.org', 'about' => '', 'role' => 'resident', 'level' => 5];
+        forms([[200, avatarDocument()]], $log)->edit($edited, ['role' => 'resident', 'email' => 'new@example.org', 'about' => 'Hi']);
+        forms([[200, avatarDocument()]], $log2)->edit($edited, ['role' => 'liaison', 'email' => 'ada@example.org']);
+        forms([], $log3)->edit($edited, ['role' => 'emperor', 'email' => 'ada@example.org']);
+
+        expect($log[0]['body']['data']['attributes'])->toBe(['about' => 'Hi', 'email' => 'new@example.org'])
+            ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
+            ->and($log3)->toBe([]);
+    });
+
     test('a manager never disables their own avatar', function () {
         $forms = forms([], $log);
         expect(formError(fn () => $forms->manage('disable', ['uuid' => 'u1', 'name' => 'Mona'], 'u1')))->toBe('w4os.error_invalid_request')
