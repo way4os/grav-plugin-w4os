@@ -16,11 +16,26 @@ document.querySelectorAll('input[data-w4os-languages]').forEach((input) => {
         maxOptions: null,
         options: names.map((name) => ({ value: name, text: name })),
         plugins: ['remove_button'],
+        // A tag added, what was typed for it is gone
+        onItemAdd() {
+            this.setTextboxValue('');
+            this.refreshOptions(false);
+        },
     });
-    tags.control_input.addEventListener('keydown', (event) => {
-        if (event.key === ' ' && tags.inputValue().trim() !== '') {
-            event.preventDefault();
-            tags.createItem();
+    // A comma or a space closes the language typed (keyboard, paste or phone): the one of the list when it is one (whatever
+    // its capitals), else as typed; what follows the last one is still being typed
+    const close = (typed) => {
+        const known = names.find((name) => name.toLowerCase() === typed.toLowerCase());
+        known ? tags.addItem(known) : tags.createItem(typed);
+    };
+    tags.control_input.addEventListener('input', () => {
+        const parts = tags.inputValue().split(/[,\s]+/u);
+        if (parts.length < 2) {
+            return;
         }
+        const rest = parts.pop();
+        parts.filter(Boolean).forEach(close);
+        tags.setTextboxValue(rest);
+        tags.refreshOptions(rest !== '');
     });
 });
