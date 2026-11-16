@@ -77,7 +77,23 @@ class W4osPlugin extends Plugin
             'onPageInitialized' => ['onPageInitialized', 0],
             'onFormInitialized' => ['onFormInitialized', 0],
             'onFormProcessed' => ['onFormProcessed', 0],
+            'onOutputGenerated' => ['onOutputGenerated', 0],
         ]);
+    }
+
+    /**
+     * The messages given while the page rendered (the notices of the blocks of the helpers) at the marker a theme puts after the
+     * messages of the site (`<!-- w4os:messages -->`), the ones shown before being gone.
+     */
+    public function onOutputGenerated(): void
+    {
+        $marker = '<!-- w4os:messages -->';
+        $output = (string) $this->grav->output;
+        if (! str_contains($output, $marker)) {
+            return;
+        }
+        $messages = $this->grav['messages']->all() ? $this->grav['twig']->processTemplate('partials/messages.html.twig') : '';
+        $this->grav->output = str_replace($marker, $messages, $output);
     }
 
     /**
