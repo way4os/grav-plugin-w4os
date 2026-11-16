@@ -17,8 +17,10 @@
             {# Its actions under it, where the edit page has its own, as the Form plugin draws its buttons (the theme's classes); the
                tab open goes with the button (js/keep-tab.js) #}
             {% do assets.addJs('plugin://w4os/js/keep-tab.js', {group: 'bottom', loading: 'defer'}) %}
-            <div class="{{ form_button_outer_classes ?: 'buttons' }} w4os-profile-actions">
-                <a href="{{ edit_url|e('html_attr') }}" data-w4os-keep-tab><button type="button" class="{{ form_button_classes ?: 'button' }} button primary">{{ 'w4os.action_edit'|t }}</button></a>
+            <div class="form-wrapper w4os-profile-actions">
+                <div class="{{ form_button_outer_classes ?: 'buttons' }}">
+                    <a href="{{ edit_url|e('html_attr') }}" data-w4os-keep-tab><button type="button" class="{{ form_button_classes ?: 'button' }} button primary">{{ 'w4os.action_edit'|t }}</button></a>
+                </div>
             </div>
         {% endif %}
     </div>
