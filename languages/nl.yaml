@@ -85,6 +85,8 @@ w4os:
   partner: 'Partner'
   show_in_search: 'Tonen in zoekresultaten'
   interests_removed: 'Viewers tonen deze sectie sinds 2023 niet meer.'
+  profile_viewer_only: 'Gemaakt en bewerkt in de viewer.'
+  profile_none: 'Geen.'
   save_button: 'Opslaan'
   profile_saved: 'Je profiel is opgeslagen.'
   password_title: 'Wachtwoord'

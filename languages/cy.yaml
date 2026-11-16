@@ -85,6 +85,8 @@ w4os:
   partner: 'Partner'
   show_in_search: 'Dangos yn y chwiliad'
   interests_removed: 'Nid yw’r gwylwyr yn dangos yr adran hon ers 2023.'
+  profile_viewer_only: 'Wedi’u creu a’u golygu yn y gwyliwr.'
+  profile_none: 'Dim.'
   save_button: 'Cadw'
   profile_saved: 'Mae eich proffil wedi’i gadw.'
   password_title: 'Cyfrinair'

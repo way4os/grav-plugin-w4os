@@ -85,6 +85,8 @@ w4os:
   partner: 'Parceiro'
   show_in_search: 'Mostrar nos resultados de busca'
   interests_removed: 'Os visualizadores não mostram mais esta seção desde 2023.'
+  profile_viewer_only: 'Criados e editados no visualizador.'
+  profile_none: 'Nenhum.'
   save_button: 'Salvar'
   profile_saved: 'Seu perfil foi salvo.'
   password_title: 'Senha'

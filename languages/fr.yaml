@@ -85,6 +85,8 @@ w4os:
   partner: 'Partenaire'
   show_in_search: 'Afficher dans la recherche'
   interests_removed: 'Les viewers n’affichent plus cette section depuis 2023.'
+  profile_viewer_only: 'Créés et modifiés dans le viewer.'
+  profile_none: 'Aucun.'
   save_button: 'Enregistrer'
   profile_saved: 'Votre profil est enregistré.'
   password_title: 'Mot de passe'
