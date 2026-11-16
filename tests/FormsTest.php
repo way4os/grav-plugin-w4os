@@ -158,6 +158,16 @@ describe('account', function () {
             ->and(Forms::actions(['uuid' => 'u1', 'active' => true], 'u1'))->toBe(['reset']);
     });
 
+    test('the list of the managers asks the engine with its filters and sort, and keeps only known values', function () {
+        $query = Forms::listQuery(['search' => ' ada ', 'status' => 'pending', 'role' => 'god', 'sort' => '-role', 'page' => '2']);
+        expect($query['api'])->toBe(['page[size]' => 50, 'page[number]' => 2, 'filter[technical]' => 'no', 'sort' => '-level',
+            'search' => 'ada', 'filter[status]' => 'pending', 'filter[role]' => 'god'])
+            ->and($query['page'])->toBe(['search' => 'ada', 'status' => 'pending', 'role' => 'god', 'sort' => '-role'])
+            ->and(Forms::listQuery(['status' => 'deleted', 'role' => 'x', 'sort' => 'password']))->toBe([
+                'api' => ['page[size]' => 50, 'page[number]' => 1, 'filter[technical]' => 'no', 'sort' => '-created'], 'page' => [],
+            ]);
+    });
+
     test('a manager never disables their own avatar', function () {
         $forms = forms([], $log);
         expect(formError(fn () => $forms->manage('disable', ['uuid' => 'u1', 'name' => 'Mona'], 'u1')))->toBe('w4os.error_invalid_request')

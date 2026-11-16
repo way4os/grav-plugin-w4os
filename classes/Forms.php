@@ -178,6 +178,37 @@ final class Forms
         'pending' => ['enable'],
     ];
 
+    /** The roles of the avatars, as the engine names them from their user level. */
+    public const ROLES = ['resident', 'god-like', 'customer-service', 'liaison', 'god'];
+
+    /** The columns the list of the managers sorts on: the sort of the engine for each. */
+    public const SORTS = ['name' => 'name', 'email' => 'email', 'role' => 'level', 'lastSeen' => 'lastSeen', 'created' => 'created', 'status' => 'active'];
+
+    /**
+     * The list of the managers from the query of its address (search, status, role, sort, page): the query of the engine, and the
+     * query of the page as it is kept in its links.
+     *
+     * @param array<string,mixed> $get
+     * @return array{api: array<string,scalar>, page: array<string,string>}
+     */
+    public static function listQuery(array $get): array
+    {
+        $page = array_filter([
+            'search' => trim((string) ($get['search'] ?? '')),
+            'status' => isset(self::ACTIONS[$get['status'] ?? '']) ? (string) $get['status'] : '',
+            'role' => in_array($get['role'] ?? '', self::ROLES, true) ? (string) $get['role'] : '',
+            'sort' => isset(self::SORTS[ltrim((string) ($get['sort'] ?? ''), '-')]) ? (string) $get['sort'] : '',
+        ], fn (string $value) => $value !== '');
+        $sort = $page['sort'] ?? '-created';
+        $api = ['page[size]' => 50, 'page[number]' => max(1, (int) ($get['page'] ?? 1)), 'filter[technical]' => 'no',
+            'sort' => (str_starts_with($sort, '-') ? '-' : '').self::SORTS[ltrim($sort, '-')]];
+        isset($page['search']) && $api['search'] = $page['search'];
+        isset($page['status']) && $api['filter[status]'] = $page['status'];
+        isset($page['role']) && $api['filter[role]'] = $page['role'];
+
+        return ['api' => $api, 'page' => $page];
+    }
+
     /** The status of an avatar: active, disabled (by a manager), or pending (waiting for the confirmation of its email). */
     public static function status(array $avatar): string
     {

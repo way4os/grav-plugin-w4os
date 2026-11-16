@@ -149,6 +149,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid) => $this->site()->picture($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_status', fn (array $avatar) => Forms::status($avatar)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_statuses', fn () => array_keys(Forms::ACTIONS)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_roles', fn () => Forms::ROLES));
         $twig->addFunction(new \Twig\TwigFunction('w4os_actions', fn (array $avatar) => Forms::actions($avatar, $this->site()->avatar()['uuid'] ?? null)));
     }
 
@@ -321,7 +323,7 @@ class W4osPlugin extends Plugin
         $avatar = ['uuid' => (string) ($post['uuid'] ?? ''), 'name' => (string) ($post['name'] ?? '')];
         try {
             $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar, $this->site()->avatar()['uuid'] ?? null);
-            $query = http_build_query(array_intersect_key($_GET, ['search' => 1, 'page' => 1]));
+            $query = http_build_query(Forms::listQuery($_GET)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), [$avatar['name']]);
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
@@ -374,21 +376,19 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The avatars for the list of the managers: search and page from the address.
+     * The avatars for the list of the managers: search, filters, sort and page from the address.
      *
-     * @return array{items: list<array<string,mixed>>, meta: array<string,mixed>, error: ?string}
+     * @return array{items: list<array<string,mixed>>, meta: array<string,mixed>, query: array<string,string>, error: ?string}
      */
     private function avatars(): array
     {
-        $uri = $this->grav['uri'];
-        $query = ['page[size]' => 50, 'page[number]' => max(1, (int) $uri->query('page')), 'sort' => '-created', 'filter[technical]' => 'no'];
-        ($search = trim((string) $uri->query('search'))) === '' || ($query['search'] = $search);
+        $query = Forms::listQuery($_GET);
         try {
-            [$items, $meta] = $this->site()->engine()->avatars($query);
+            [$items, $meta] = $this->site()->engine()->avatars($query['api']);
 
-            return ['items' => $items, 'meta' => $meta, 'error' => null];
+            return ['items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
         } catch (EngineException $e) {
-            return ['items' => [], 'meta' => [], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
+            return ['items' => [], 'meta' => [], 'query' => $query['page'], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
         }
     }
 

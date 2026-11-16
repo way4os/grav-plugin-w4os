@@ -1,8 +1,28 @@
 {% set list = w4os_avatars() %}
-<form class="w4os-search" method="get">
-    <input type="search" name="search" value="{{ uri.query('search')|e('html_attr') }}" placeholder="{{ 'w4os.search_avatars'|t|e('html_attr') }}">
-    <button class="button" type="submit">{{ 'w4os.search'|t }}</button>
+{% set query = list.query %}
+{% import _self as table %}
+{# One row: the search, then the filters, whose empty option names them #}
+<form class="w4os-filters" method="get">
+    <div role="search">
+        <input type="search" name="search" value="{{ query.search ?? '' }}" placeholder="{{ 'w4os.search_avatars'|t|e('html_attr') }}" aria-label="{{ 'w4os.search_avatars'|t|e('html_attr') }}">
+        <button type="submit">{{ 'w4os.search'|t }}</button>
+    </div>
+    <select name="status" aria-label="{{ 'w4os.status'|t|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <option value="">{{ 'w4os.status'|t }}</option>
+        {% for status in w4os_statuses() %}<option value="{{ status }}"{{ (query.status ?? '') == status ? ' selected' }}>{{ ('w4os.status_' ~ status)|t }}</option>{% endfor %}
+    </select>
+    <select name="role" aria-label="{{ 'w4os.role'|t|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <option value="">{{ 'w4os.role'|t }}</option>
+        {% for role in w4os_roles() %}<option value="{{ role }}"{{ (query.role ?? '') == role ? ' selected' }}>{{ ('w4os.role_' ~ role|replace({'-': '_'}))|t }}</option>{% endfor %}
+    </select>
+    {% if query.sort is defined %}<input type="hidden" name="sort" value="{{ query.sort }}">{% endif %}
 </form>
+{# A column title sorts the list by it, a second click the other way #}
+{% macro sorted(column, label, query) %}
+    {% set current = query.sort ?? '-created' %}
+    {% set next = current == column ? '-' ~ column : column %}
+    <th{% if current|trim('-', 'left') == column %} aria-sort="{{ current starts with '-' ? 'descending' : 'ascending' }}"{% endif %}><a href="?{{ query|merge({sort: next})|url_encode }}">{{ label }}{% if current|trim('-', 'left') == column %} <span aria-hidden="true">{{ current starts with '-' ? '↓' : '↑' }}</span>{% endif %}</a></th>
+{% endmacro %}
 {% if list.error %}
     <p class="notices red">{{ list.error }}</p>
 {% elseif list.items is empty %}
@@ -12,21 +32,26 @@
     <div class="w4os-table-wrap">
     <table class="w4os-avatars">
         <thead><tr>
-            <th>{{ 'w4os.avatar_name'|t }}</th><th>{{ 'w4os.email'|t }}</th>
-            <th>{{ 'w4os.last_seen'|t }}</th><th>{{ 'w4os.created'|t }}</th>
-            <th>{{ 'w4os.status'|t }}</th><th><span class="sr-only">{{ 'w4os.actions'|t }}</span></th>
+            {{ table.sorted('name', 'w4os.avatar_name'|t, query) }}
+            {{ table.sorted('email', 'w4os.email'|t, query) }}
+            {{ table.sorted('role', 'w4os.role'|t, query) }}
+            {{ table.sorted('lastSeen', 'w4os.last_seen'|t, query) }}
+            {{ table.sorted('created', 'w4os.created'|t, query) }}
+            {{ table.sorted('status', 'w4os.status'|t, query) }}
+            <th><span class="sr-only">{{ 'w4os.actions'|t }}</span></th>
         </tr></thead>
         <tbody>
         {% for a in list.items %}
             {% set status = w4os_status(a) %}
             <tr class="w4os-{{ status }}">
-                <td class="w4os-name">
+                <td class="w4os-name"><div class="w4os-who">
                     <img class="w4os-thumb" src="{{ w4os_picture(a.profileImage)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
-                    {{ a.name }}{% if a.isGod %} <span class="w4os-tag">{{ 'w4os.god'|t }}</span>{% endif %}{% if a.online %} <span class="w4os-tag">{{ 'w4os.online'|t }}</span>{% endif %}
-                </td>
-                <td>{{ a.email }}</td>
-                <td>{{ a.lastSeen ? a.lastSeen|date('Y-m-d') : '—' }}</td>
-                <td>{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
+                    <span>{{ a.name }}{% if a.online %} <span class="w4os-tag">{{ 'w4os.online'|t }}</span>{% endif %}</span>
+                </div></td>
+                <td class="w4os-email">{{ a.email }}</td>
+                <td class="w4os-role">{% if a.role is defined %}{{ ('w4os.role_' ~ a.role|replace({'-': '_'}))|t }}{% if not (a.standardLevel ?? true) %} ({{ a.level }}){% endif %}{% else %}{{ a.level }}{% endif %}</td>
+                <td class="w4os-date">{{ a.lastSeen ? a.lastSeen|date('Y-m-d') : '—' }}</td>
+                <td class="w4os-date">{{ a.created ? a.created|date('Y-m-d') : '—' }}</td>
                 <td><span class="w4os-status">{{ ('w4os.status_' ~ status)|t }}</span></td>
                 <td class="w4os-actions">
                     {% set actions = w4os_actions(a) %}
@@ -53,7 +78,7 @@
     {% if pages > 1 %}
         <p class="w4os-pages">
         {% for n in 1..pages %}
-            {% if n == (list.meta.page ?? 1) %}<strong>{{ n }}</strong>{% else %}<a href="?{{ {search: uri.query('search'), page: n}|url_encode }}">{{ n }}</a>{% endif %}
+            {% if n == (list.meta.page ?? 1) %}<strong>{{ n }}</strong>{% else %}<a href="?{{ query|merge({page: n})|url_encode }}">{{ n }}</a>{% endif %}
         {% endfor %}
         </p>
     {% endif %}
