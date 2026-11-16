@@ -19,7 +19,7 @@ describe('engine', function () {
 
     test('asks under the grid when the API serves several', function () {
         $engine = fakeEngine([[200, ['data' => []]]], $log, 'demo');
-        $engine->avatars(['search' => 'ada', 'page[size]' => 10]);
+        $engine->items('avatars', ['search' => 'ada', 'page[size]' => 10]);
 
         expect($log[0]['url'])->toBe('https://grid.example.org/helpers/api/grids/demo/avatars?search=ada&page%5Bsize%5D=10')
             ->and($engine->assetUrl('abc'))->toBe('https://grid.example.org/helpers/api/grids/demo/assets/abc.jpg');

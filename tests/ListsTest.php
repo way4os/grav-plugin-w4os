@@ -1,90 +1,78 @@
 <?php
 
+use OpenSim\Api\Contract;
 use W4os\Grav\Lists;
 use W4os\Grav\OpenApi;
 
-/** An engine's document with the list of the avatars as session A describes it (x-list), and the regions without one. */
-function lists_document(): array
-{
-    $filter = fn (string $name, array $values) => ['name' => "filter[$name]", 'in' => 'query', 'schema' => ['type' => 'string', 'enum' => $values]];
+describe('a list of the engine', function () {
+    // The engine's own document, as /openapi.json gives it
+    $document = Contract::document();
 
-    return [
-        'openapi' => '3.1.0',
-        'components' => ['parameters' => ['search' => ['name' => 'search', 'in' => 'query', 'schema' => ['type' => 'string']]]],
-        'paths' => [
-            '/grids/{grid}/avatars' => ['get' => [
-                'parameters' => [
-                    ['$ref' => '#/components/parameters/search'],
-                    ['name' => 'sort', 'in' => 'query', 'schema' => ['type' => 'string', 'enum' => ['name', '-name', 'created', '-created']]],
-                    ['name' => 'page[size]', 'in' => 'query', 'schema' => ['type' => 'integer', 'default' => 50]],
-                    $filter('status', ['active', 'disabled', 'pending']),
-                    $filter('role', ['resident', 'god']),
-                    $filter('technical', ['yes', 'no']),
-                ],
-                'x-list' => [
-                    'columns' => [
-                        ['name' => 'name', 'key' => 'avatar_name', 'type' => 'text', 'picture' => 'profileImage', 'tag' => 'online'],
-                        ['name' => 'created', 'type' => 'date'],
-                        ['name' => 'status', 'type' => 'status'],
-                    ],
-                    'filters' => [
-                        ['name' => 'status', 'key' => 'status', 'values' => ['active' => 'status_active']],
-                        ['name' => 'role', 'key' => 'role'],
-                    ],
-                    'search' => ['name', 'email'],
-                    'actions' => [
-                        ['name' => 'disable', 'when' => ['status' => ['active']]],
-                        ['name' => 'enable', 'when' => ['status' => ['disabled', 'pending']]],
-                        ['name' => 'reset', 'when' => ['status' => ['active'], 'email' => true]],
-                    ],
-                ],
-            ]],
-            '/grids/{grid}/regions' => ['get' => ['parameters' => [
-                ['name' => 'sort', 'in' => 'query', 'schema' => ['type' => 'string']],
-                $filter('online', ['yes', 'no']),
-            ]]],
-        ],
-    ];
-}
+    test('is read from its list operation and its x-list', function () use ($document) {
+        $list = (new OpenApi($document))->listOf('avatars');
+        $name = $list['columns'][0];
 
-describe('A list of the engine', function () {
-    test('is read from its list operation and its x-list', function () {
-        $list = (new OpenApi(lists_document()))->listOf('avatars');
-
-        expect(array_column($list['columns'], 'name'))->toBe(['name', 'created', 'status'])
-            ->and($list['columns'][1]['key'])->toBe('column_created')
-            ->and($list['columns'][0]['picture'])->toBe('profileImage')
-            ->and($list['sorts'])->toBe(['name', 'created'])
-            ->and(array_column($list['filters'], 'name'))->toBe(['status', 'role'])
-            ->and($list['filters'][0]['values'][0])->toBe(['value' => 'active', 'key' => 'status_active'])
-            ->and($list['filters'][1]['values'][1])->toBe(['value' => 'god', 'key' => ''])
+        expect(array_column($list['columns'], 'name'))->toBe(['name', 'email', 'role', 'lastSeen', 'created', 'status'])
+            ->and($name)->toMatchArray(['label' => 'avatar_name', 'type' => 'text', 'sort' => 'name', 'picture' => 'profileImage', 'tag' => 'online'])
+            ->and($list['sort'])->toMatchArray(['default' => '-created', 'descending' => '-'])
+            ->and($list['sort']['values'])->toContain('level')
             ->and($list['search'])->toBe(['name', 'email'])
-            ->and($list['pageSize'])->toBe(50)
-            ->and((new OpenApi(lists_document()))->listOf('parcels'))->toBeNull();
+            ->and(array_column($list['filters'], 'name'))->toContain('status', 'role', 'technical')
+            ->and(array_column($list['actions'], 'name'))->toBe(['enable', 'disable', 'reset'])
+            ->and((new OpenApi($document))->listOf('nothing'))->toBeNull();
     });
 
-    test('without an x-list, shows every filter with values and no column', function () {
-        $list = (new OpenApi(lists_document()))->listOf('regions');
+    test('a free filter keeps its format', function () use ($document) {
+        $filters = array_column((new OpenApi($document))->listOf('regions')['filters'], null, 'name');
 
-        expect($list['columns'])->toBe([])->and(array_column($list['filters'], 'name'))->toBe(['online'])->and($list['search'])->toBeNull();
+        expect($filters['owner'])->toMatchArray(['format' => 'uuid', 'values' => []])
+            ->and($filters['online']['values'][0])->toBe(['value' => 'yes', 'label' => 'yes']);
     });
 
-    test('builds the query of the engine from the address, what the list allows only', function () {
-        $list = (new OpenApi(lists_document()))->listOf('avatars');
-        $query = Lists::query($list, ['search' => ' ada ', 'status' => 'pending', 'role' => 'emperor', 'sort' => '-name', 'page' => '2'], 20, ['filter[technical]' => 'no'], '-created');
-        $plain = Lists::query($list, ['sort' => 'email'], 20, [], '-created');
+    test('a page shows the filters it names, in its order', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('avatars'), ['role', 'status', 'nothing']);
 
-        expect($query['page'])->toBe(['search' => 'ada', 'status' => 'pending', 'sort' => '-name'])
-            ->and($query['api'])->toBe(['page[size]' => 20, 'page[number]' => 2, 'filter[technical]' => 'no', 'sort' => '-name', 'search' => 'ada', 'filter[status]' => 'pending'])
-            ->and($plain['page'])->toBe([])->and($plain['api']['sort'])->toBe('-created');
+        expect(array_column($list['filters'], 'name'))->toBe(['role', 'status']);
     });
 
-    test('gives a row the actions its attributes allow', function () {
-        $list = (new OpenApi(lists_document()))->listOf('avatars');
-        $names = fn (array $item) => array_column(Lists::actions($list, $item), 'name');
+    test('builds the query of the engine from the address, what the list allows only', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('avatars'), ['status', 'role']);
+        $query = Lists::query($list, ['search' => ' ada ', 'status' => 'pending', 'role' => 'emperor', 'sort' => '-level', 'page' => '2'], 20, ['technical' => 'no']);
+        $plain = Lists::query($list, ['sort' => 'password', 'technical' => 'yes'], 20);
 
-        expect($names(['status' => 'active', 'email' => 'ada@example.org']))->toBe(['disable', 'reset'])
-            ->and($names(['status' => 'active', 'email' => '']))->toBe(['disable'])
-            ->and($names(['status' => 'pending']))->toBe(['enable']);
+        expect($query['page'])->toBe(['search' => 'ada', 'status' => 'pending', 'sort' => '-level'])
+            ->and($query['api'])->toBe(['page[size]' => 20, 'page[number]' => 2, 'filter[technical]' => 'no', 'sort' => '-level', 'search' => 'ada', 'filter[status]' => 'pending'])
+            ->and($plain['page'])->toBe([])
+            ->and($plain['api'])->toBe(['page[size]' => 20, 'page[number]' => 1, 'sort' => '-created']);
+    });
+
+    test('takes a free filter of its format only', function () use ($document) {
+        $list = (new OpenApi($document))->listOf('regions');
+        $uuid = '0b7c5c3a-1d2e-4f50-9a6b-7c8d9e0f1a2b';
+
+        expect(Lists::query($list, ['owner' => $uuid], 10)['api'])->toHaveKey('filter[owner]', $uuid)
+            ->and(Lists::query($list, ['owner' => 'Ada'], 10)['api'])->not->toHaveKey('filter[owner]');
+    });
+
+    test('gives a row the actions it allows', function () use ($document) {
+        $list = (new OpenApi($document))->listOf('avatars');
+        $names = fn (array $item, ?string $self = null) => array_column(Lists::actions($list, $item, $self), 'name');
+        $regions = (new OpenApi($document))->listOf('regions');
+
+        expect($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org']))->toBe(['disable', 'reset'])
+            ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => '']))->toBe(['disable'])
+            ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org'], 'u1'))->toBe(['reset'])
+            ->and($names(['uuid' => 'u1', 'status' => 'pending', 'email' => 'ada@example.org']))->toBe(['enable'])
+            ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'enabled' => false]), 'name'))->toBe(['enable'])
+            ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'enabled' => null]), 'name'))->toBe([]);
+    });
+
+    test('makes the request of the engine for an action on a row', function () use ($document) {
+        $actions = array_column((new OpenApi($document))->listOf('avatars')['actions'], null, 'name');
+        $ada = ['uuid' => 'u1', 'name' => 'Ada Love', 'status' => 'active'];
+
+        expect(Lists::request($actions['disable'], $ada))->toBe(['PATCH', '/avatars/u1', ['type' => 'avatars', 'id' => 'u1', 'attributes' => ['status' => 'disabled']]])
+            ->and(Lists::request($actions['reset'], $ada, ['link' => 'https://site.example.org/reset?token={token}']))
+            ->toBe(['POST', '/password-resets', ['type' => 'password-resets', 'attributes' => ['name' => 'Ada Love', 'link' => 'https://site.example.org/reset?token={token}']]]);
     });
 });

@@ -171,7 +171,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_block', fn (string $name, array $args = []) => $this->block($name, $args), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models', fn () => $this->site()->models()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar', fn () => self::current()));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_avatars', fn () => $this->avatars()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
@@ -184,17 +184,13 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid) => $this->site()->picture($uuid)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_status', fn (array $avatar) => Forms::status($avatar)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_statuses', fn () => array_keys(Forms::ACTIONS)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_roles', fn () => Forms::ROLES));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_actions', fn (array $avatar) => Forms::actions($avatar, $this->site()->avatar()['uuid'] ?? null)));
     }
 
     public function onTwigSiteVariables(): void
@@ -270,7 +266,7 @@ class W4osPlugin extends Plugin
             $edited = $this->edited();
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
-            $this->manage((array) ($_POST ?? []));
+            $this->listAction((array) ($_POST ?? []));
         }
     }
 
@@ -426,21 +422,35 @@ class W4osPlugin extends Plugin
         return $url ? '<a href="'.htmlspecialchars($url).'">'.htmlspecialchars($url).'</a>' : '';
     }
 
-    /** An action of a manager on an avatar (a form of the list, with its nonce). */
-    private function manage(array $post): void
+    /**
+     * An action of a manager on a row of the list of a page (a form of the list, with its nonce): the engine's operation, checked
+     * against the row as the engine has it now.
+     */
+    private function listAction(array $post): void
     {
-        $route = $this->site()->routes()['manage'];
-        if (! Utils::verifyNonce((string) ($post['nonce'] ?? ''), 'w4os-manage')) {
+        $options = (array) ($this->grav['page']->header()->w4os_list ?? []);
+        $route = $this->grav['page']->route();
+        if (! Utils::verifyNonce((string) ($post['nonce'] ?? ''), 'w4os-list')) {
             $this->grav['messages']->add($this->site()->translate('w4os.error_nonce'), 'error');
 
             return;
         }
-        $avatar = ['uuid' => (string) ($post['uuid'] ?? ''), 'name' => (string) ($post['name'] ?? '')];
+        $type = (string) ($options['type'] ?? '');
+        $list = $this->site()->openApi()->listOf($type);
+        $name = (string) ($post['action'] ?? '');
         try {
-            $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar, $this->site()->avatar()['uuid'] ?? null);
-            $this->site()->forgetProfile($avatar['name']);
-            $query = http_build_query(Forms::listQuery($_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
-            $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), [$avatar['name']]);
+            $item = $list === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
+            $action = array_column($list === null ? [] : Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null), null, 'name')[$name] ?? null;
+            $action === null && throw new FormError('w4os.error_invalid_request');
+            // The page of the site that takes the token of a mail; the engine's password resets take the reset page
+            $page = $action['link'] ?? (str_ends_with((string) $action['path'], '/password-resets') ? 'reset' : null);
+            [$method, $path, $data] = Lists::request($action, $item, $page === null ? [] : $this->site()->forms()->tokenAttributes($page));
+            $this->site()->engine()->call($method, $path, $data);
+            $type === 'avatars' && $this->site()->forgetProfile((string) ($item['name'] ?? ''));
+            $query = http_build_query(Lists::query(Lists::showing($list, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
+            $this->done('w4os.manage_'.$name, $route.($query === '' ? '' : "?$query"), [(string) ($item['name'] ?? '')]);
+        } catch (EngineException $e) {
+            $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
         }
@@ -548,19 +558,30 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The avatars for the list of the managers: search, filters, sort and page from the address.
+     * A list of the engine for a page (`w4os_list` in its front matter: type, the filters it shows, the ones it always asks, the
+     * rows of a page): the list as the engine describes it, a page of its rows from the search, filters, sort and page of the
+     * address.
      *
-     * @return array{items: list<array<string,mixed>>, meta: array<string,mixed>, query: array<string,string>, error: ?string}
+     * @param array<string,mixed> $options type, filters, fixed, per_page
+     * @return array{list: ?array<string,mixed>, items: list<array<string,mixed>>, meta: array<string,mixed>, query: array<string,string>, error: ?string}
      */
-    private function avatars(): array
+    private function listing(array $options): array
     {
-        $query = Forms::listQuery($_GET, (int) ($this->config->get('plugins.w4os.manage.per_page') ?: 50));
+        $type = (string) ($options['type'] ?? '');
+        $list = $this->site()->openApi()->listOf($type);
+        $error = ['list' => $list, 'items' => [], 'meta' => [], 'query' => [], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
+        if ($list === null) {
+            return $error;
+        }
+        $list = Lists::showing($list, isset($options['filters']) ? (array) $options['filters'] : null);
+        $perPage = (int) ($options['per_page'] ?? $this->config->get('plugins.w4os.manage.per_page') ?: $list['pageSize'] ?: 50);
+        $query = Lists::query($list, $_GET, $perPage, (array) ($options['fixed'] ?? []));
         try {
-            [$items, $meta] = $this->site()->engine()->avatars($query['api']);
+            [$items, $meta] = $this->site()->engine()->items($type, $query['api']);
 
-            return ['items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
-        } catch (EngineException $e) {
-            return ['items' => [], 'meta' => [], 'query' => $query['page'], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
+            return ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
+        } catch (EngineException) {
+            return ['list' => $list, 'query' => $query['page']] + $error;
         }
     }
 

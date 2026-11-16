@@ -5,8 +5,9 @@ namespace W4os\Grav;
 /**
  * The engine's OpenAPI document, as the site reads it to show the lists of its models: what the list operation of a model
  * (`GET /grids/{grid}/<type>`) says in its parameters (search, sort, page, `filter[...]` and their values) and in its `x-list`
- * (the columns in their order with their display type and the catalog key of their label, the filters to show and the keys of their
- * values, the fields the search looks in, the actions of a row and when they apply). The site draws them its own way.
+ * (the columns in their order with their display type and the catalog key of their label, the sorts, the filters and the keys of
+ * their values, the fields the search looks in, the actions of a row: their operation and when they apply). The site draws them
+ * its own way.
  */
 final class OpenApi
 {
@@ -14,10 +15,12 @@ final class OpenApi
     public function __construct(private array $document) {}
 
     /**
-     * The list of a type of the engine (avatars, regions...), null when the engine has no list of it.
+     * The list of a type of the engine (avatars, regions...), null when the engine has no list of it. Its `x-list` as the engine
+     * gives it, completed from the parameters of the operation when it has none: the filters with values (their enums), the sorts
+     * (the enum of `sort`), the search (a `search` parameter).
      *
-     * @return ?array{type: string, columns: list<array<string,mixed>>, sorts: list<string>, filters: list<array{name: string, key:
-     *     string, values: list<array{value: string, key: string}>}>, search: ?list<string>, actions: list<array<string,mixed>>,
+     * @return ?array{type: string, columns: list<array<string,mixed>>, sort: array{default: string, values: list<string>,
+     *     descending: string}, search: ?list<string>, filters: list<array<string,mixed>>, actions: list<array<string,mixed>>,
      *     pageSize: ?int}
      */
     public function listOf(string $type): ?array
@@ -32,56 +35,59 @@ final class OpenApi
             isset($parameter['name']) && $parameters[(string) $parameter['name']] = $parameter;
         }
         $x = (array) ($operation['x-list'] ?? []);
-        $columns = [];
-        foreach ((array) ($x['columns'] ?? []) as $column) {
-            isset($column['name']) && $columns[] = ['key' => 'column_'.$column['name'], 'type' => 'text', 'sortable' => false] + (array) $column;
-        }
-        // The sortable columns: the values of `sort`, else the columns that say so
-        $enum = (array) ($parameters['sort']['schema']['enum'] ?? []);
-        $sorts = $enum !== []
-            ? array_values(array_unique(array_map(fn ($sort) => ltrim((string) $sort, '-'), $enum)))
-            : array_values(array_map(fn ($column) => (string) $column['name'], array_filter($columns, fn ($column) => (bool) $column['sortable'])));
+        $columns = array_map(
+            fn (array $column) => $column + ['label' => 'column_'.$column['name'], 'type' => 'text'],
+            array_values(array_filter((array) ($x['columns'] ?? []), fn ($column) => isset($column['name']))),
+        );
+        $sorts = array_values(array_unique(array_map(fn ($sort) => ltrim((string) $sort, '-'), (array) ($parameters['sort']['schema']['enum'] ?? []))));
+        $sort = (array) ($x['sort'] ?? []) + ['default' => '', 'values' => $sorts, 'descending' => '-'];
 
         return [
             'type' => $type,
             'columns' => $columns,
-            'sorts' => $sorts,
-            'filters' => $this->filters($parameters, (array) ($x['filters'] ?? [])),
+            'sort' => ['default' => (string) $sort['default'], 'values' => array_values(array_map('strval', (array) $sort['values'])), 'descending' => (string) $sort['descending']],
             'search' => isset($parameters['search']) ? array_values((array) ($x['search'] ?? [])) : null,
-            'actions' => array_values(array_filter((array) ($x['actions'] ?? []), fn ($action) => isset($action['name']))),
+            'filters' => isset($x['filters']) ? $this->filtersOf((array) $x['filters']) : $this->filters($parameters),
+            'actions' => array_values(array_filter((array) ($x['actions'] ?? []), fn ($action) => isset($action['name'], $action['method'], $action['path']))),
             'pageSize' => isset($parameters['page[size]']['schema']['default']) ? (int) $parameters['page[size]']['schema']['default'] : null,
         ];
     }
 
     /**
-     * The filters a list shows: the ones its x-list names, in its order (else every `filter[...]` with values), each with its values
-     * from the enum of its parameter and the catalog keys of its label and of its values.
+     * The filters of an x-list: a choice among values, or a free value (`format`).
      *
-     * @param array<string,array<string,mixed>> $parameters
-     * @param array<int,array<string,mixed>> $shown
-     * @return list<array{name: string, key: string, values: list<array{value: string, key: string}>}>
+     * @param array<int,mixed> $filters
+     * @return list<array{name: string, label: string, values: list<array{value: string, label: string}>, format?: string}>
      */
-    private function filters(array $parameters, array $shown): array
+    private function filtersOf(array $filters): array
     {
         $all = [];
+        foreach ($filters as $filter) {
+            if (! isset($filter['name'])) {
+                continue;
+            }
+            $values = array_map(fn ($value) => ['value' => (string) ($value['value'] ?? ''), 'label' => (string) ($value['label'] ?? '')], (array) ($filter['values'] ?? []));
+            $all[] = ['name' => (string) $filter['name'], 'label' => (string) ($filter['label'] ?? 'filter_'.$filter['name']), 'values' => $values]
+                + (isset($filter['format']) ? ['format' => (string) $filter['format']] : []);
+        }
+
+        return $all;
+    }
+
+    /**
+     * The filters of a list without an x-list: every `filter[...]` parameter with values (its enum).
+     *
+     * @param array<string,array<string,mixed>> $parameters
+     * @return list<array{name: string, label: string, values: list<array{value: string, label: string}>}>
+     */
+    private function filters(array $parameters): array
+    {
+        $filters = [];
         foreach ($parameters as $name => $parameter) {
             $values = (array) ($parameter['schema']['enum'] ?? []);
             if (preg_match('/^filter\[(.+)\]$/', $name, $m) === 1 && $values !== []) {
-                $all[$m[1]] = array_map('strval', array_values($values));
+                $filters[] = ['name' => $m[1], 'label' => 'filter_'.$m[1], 'values' => array_map(fn ($value) => ['value' => (string) $value, 'label' => ''], array_values($values))];
             }
-        }
-        $filters = [];
-        foreach ($shown !== [] ? $shown : array_map(fn ($name) => ['name' => $name], array_keys($all)) as $filter) {
-            $name = (string) ($filter['name'] ?? '');
-            if (! isset($all[$name])) {
-                continue;
-            }
-            $keys = (array) ($filter['values'] ?? []);
-            $filters[] = [
-                'name' => $name,
-                'key' => (string) ($filter['key'] ?? 'filter_'.$name),
-                'values' => array_map(fn (string $value) => ['value' => $value, 'key' => (string) ($keys[$value] ?? '')], $all[$name]),
-            ];
         }
 
         return $filters;

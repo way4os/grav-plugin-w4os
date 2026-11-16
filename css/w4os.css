@@ -18,16 +18,16 @@
 .w4os-model img { display: block; width: 100%; max-width: none; background: rgba(127, 127, 127, .2); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: .4rem; }
 .w4os-model figcaption { text-align: center; padding: .3rem 0; }
 
-/* The list of the avatars, for the managers */
+/* The lists of the engine (the avatars, for the managers) */
 .w4os-filters { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: flex-start; margin-bottom: 1rem; }
 .w4os-filters [role=search] { flex: 2 1 18rem; margin: 0; }
 .w4os-filters [role=search] button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
 .w4os-filters select { flex: 1 1 9rem; width: auto; margin: 0; }
-.w4os-avatars th a { color: inherit; text-decoration: none; white-space: nowrap; }
-.w4os-avatars { width: 100%; border-collapse: collapse; font-size: .9em; }
-.w4os-avatars th, .w4os-avatars td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(127, 127, 127, .25); vertical-align: middle; }
-.w4os-avatars tr.w4os-disabled td:not(.w4os-actions) { opacity: .6; }
-.w4os-name { white-space: nowrap; }
+.w4os-list th a { color: inherit; text-decoration: none; white-space: nowrap; }
+.w4os-list { width: 100%; border-collapse: collapse; font-size: .9em; }
+.w4os-list th, .w4os-list td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(127, 127, 127, .25); vertical-align: middle; }
+.w4os-list tr.w4os-disabled td:not(.w4os-actions) { opacity: .6; }
+.w4os-cell-who { white-space: nowrap; }
 .w4os-who { display: flex; align-items: center; gap: .5rem; }
 .w4os-thumb { flex: none; width: 32px; height: 32px; max-width: none; object-fit: cover; border-radius: 50%; }
 .w4os-status { display: inline-block; min-width: 6rem; }
@@ -81,11 +81,11 @@ nav .w4os-user-list a, .w4os-user-list a { display: block; margin: 0; padding: 0
 .w4os-login-links { margin: 1rem 0 0; text-align: center; font-size: .9em; }
 /* A list item emptied by [w4os-register] while registration is closed: hidden, the list numbered without it */
 li:empty { display: none; }
-/* A phone: the name, the role, the status and the actions */
+/* A phone: a list without its emails and dates (the avatars: the name, the role, the status and the actions) */
 @media (max-width: 600px) {
-    .w4os-avatars .w4os-email, .w4os-avatars .w4os-date, .w4os-avatars th:nth-child(2), .w4os-avatars th:nth-child(4), .w4os-avatars th:nth-child(5) { display: none; }
-    .w4os-avatars th, .w4os-avatars td { padding-inline: .25rem; }
-    .w4os-name { white-space: normal; }
+    .w4os-list .w4os-cell-email, .w4os-list .w4os-cell-date { display: none; }
+    .w4os-list th, .w4os-list td { padding-inline: .25rem; }
+    .w4os-cell-who { white-space: normal; }
     .w4os-status { min-width: 0; }
 }
 /* The splash layout: the columns of the splash page of the helpers, one column with the page first on a narrow screen */

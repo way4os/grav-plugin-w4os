@@ -169,16 +169,22 @@ final class Engine
     }
 
     /**
-     * A page of the avatars.
+     * A page of the items of a type (avatars, regions...).
      *
      * @param array<string,scalar> $query search, sort, filter[...], page[number], page[size]
      * @return array{list<array<string,mixed>>, array<string,mixed>} the attributes of each, and the meta (total, page, perPage)
      */
-    public function avatars(array $query = []): array
+    public function items(string $type, array $query = []): array
     {
-        $document = $this->call('GET', '/avatars', null, $query);
+        $document = $this->call('GET', '/'.rawurlencode($type), null, $query);
 
         return [array_map(fn (array $item) => (array) $item['attributes'], (array) ($document['data'] ?? [])), (array) ($document['meta'] ?? [])];
+    }
+
+    /** @return array<string,mixed> the attributes of an item of a type */
+    public function item(string $type, string $id): array
+    {
+        return $this->resource($this->call('GET', '/'.rawurlencode($type).'/'.rawurlencode($id)));
     }
 
     /**

@@ -34,14 +34,26 @@ describe('pages', function () {
         expect($used)->not->toBeEmpty();
         // Every problem code of the engine has its text
         $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));
-        // Every status of an avatar and every action of its menu has its text, and the message once done
+        // Every role of an avatar has its text
         foreach (W4os\Grav\Forms::ROLES as $role) {
             $used[] = 'role_'.str_replace('-', '_', $role);
         }
-        foreach (W4os\Grav\Forms::ACTIONS as $status => $actions) {
-            $used[] = "status_$status";
-            foreach ($actions as $action) {
-                array_push($used, "action_$action", "manage_$action");
+        // Every label of the lists of the engine (their columns, filters, values, actions), the texts of their statuses and the
+        // message of an action once done
+        $document = OpenSim\Api\Contract::document();
+        $types = array_filter(array_map(fn ($path) => preg_match('#^/grids/\{grid\}/([a-z-]+)$#', $path, $m) === 1 ? $m[1] : null, array_keys($document['paths'])));
+        expect($types)->toContain('avatars', 'regions');
+        foreach ($types as $type) {
+            if (($list = (new W4os\Grav\OpenApi($document))->listOf($type)) === null || $list['columns'] === []) {
+                continue;
+            }
+            $used = array_merge($used, array_column($list['columns'], 'label'), array_filter(array_column($list['columns'], 'tagLabel')), array_column($list['filters'], 'label'));
+            foreach ($list['filters'] as $filter) {
+                $used = array_merge($used, array_filter(array_column($filter['values'], 'label')));
+                $filter['name'] === 'status' && array_push($used, ...array_map(fn ($value) => 'status_'.$value['value'], $filter['values']));
+            }
+            foreach ($list['actions'] as $action) {
+                array_push($used, $action['label'], 'manage_'.$action['name']);
             }
         }
         foreach ($used as $key) {

@@ -166,37 +166,9 @@ describe('account', function () {
         expect($log)->toBe([]);
     });
 
-    test('the managers enable, disable and mail a password link', function () {
-        $forms = forms([[200, avatarDocument()], [200, avatarDocument()], [202, ['meta' => []]]], $log);
-        foreach (['enable', 'disable', 'reset'] as $action) {
-            $forms->manage($action, ['uuid' => 'u1', 'name' => 'Ada Love']);
-        }
-
-        expect(array_map(fn ($r) => $r['method'].' '.parse_url($r['url'], PHP_URL_PATH), $log))->toBe([
-            'PATCH /helpers/api/avatars/u1', 'PATCH /helpers/api/avatars/u1', 'POST /helpers/api/password-resets',
-        ])->and($log[1]['body']['data']['attributes'])->toBe(['active' => false])
-            ->and(formError(fn () => $forms->manage('delete', ['uuid' => 'u1'])))->toBe('w4os.error_invalid_request');
-    });
-
-    test('the status of an avatar gives the entries of its menu', function () {
-        expect(Forms::status(['status' => 'pending', 'active' => false]))->toBe('pending')
-            ->and(Forms::status(['active' => true]))->toBe('active')
-            ->and(Forms::status(['active' => false]))->toBe('disabled')
-            ->and(Forms::ACTIONS[Forms::status(['active' => true])])->toBe(['disable', 'reset'])
-            ->and(Forms::ACTIONS['pending'])->not->toContain('reset')
-            ->and(Forms::actions(['uuid' => 'u1', 'active' => true, 'email' => 'ada@example.org'], 'u1'))->toBe(['reset'])
-            ->and(Forms::actions(['uuid' => 'm1', 'active' => true, 'email' => ''], 'u1'))->toBe(['disable']);
-    });
-
-    test('the list of the managers asks the engine with its filters and sort, and keeps only known values', function () {
-        $query = Forms::listQuery(['search' => ' ada ', 'status' => 'pending', 'role' => 'god', 'sort' => '-role', 'page' => '2']);
-        expect($query['api'])->toBe(['page[size]' => 50, 'page[number]' => 2, 'filter[technical]' => 'no', 'sort' => '-level',
-            'search' => 'ada', 'filter[status]' => 'pending', 'filter[role]' => 'god'])
-            ->and($query['page'])->toBe(['search' => 'ada', 'status' => 'pending', 'role' => 'god', 'sort' => '-role'])
-            ->and(Forms::listQuery(['page' => '3'], 5)['api'])->toMatchArray(['page[size]' => 5, 'page[number]' => 3])
-            ->and(Forms::listQuery(['status' => 'deleted', 'role' => 'x', 'sort' => 'password']))->toBe([
-                'api' => ['page[size]' => 50, 'page[number]' => 1, 'filter[technical]' => 'no', 'sort' => '-created'], 'page' => [],
-            ]);
+    test('a request that mails a token gets the page that takes it, and mails nothing on a test site', function () {
+        expect(forms([])->tokenAttributes('reset'))->toBe(['link' => 'https://site.example.org/reset?token={token}'])
+            ->and(forms([], config: ['send_mail' => false])->tokenAttributes('reset'))->toBe(['link' => 'https://site.example.org/reset?token={token}', 'send' => false]);
     });
 
     test('a manager changes the profile, the email at once (cleared too), and the role only when another one is picked', function () {
@@ -218,11 +190,5 @@ describe('account', function () {
             ->and(formError(fn () => $forms5->edit($edited, ['email' => 'ada@example.org', 'password' => 'a12345', 'password_confirm' => 'b12345'])))->toBe('w4os.error_password_match')
             ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
             ->and($log3)->toBe([]);
-    });
-
-    test('a manager never disables their own avatar', function () {
-        $forms = forms([], $log);
-        expect(formError(fn () => $forms->manage('disable', ['uuid' => 'u1', 'name' => 'Mona'], 'u1')))->toBe('w4os.error_invalid_request')
-            ->and($log)->toBe([]);
     });
 });

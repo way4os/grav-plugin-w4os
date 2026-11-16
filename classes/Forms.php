@@ -220,85 +220,19 @@ final class Forms
         $this->ask(fn () => $this->engine->updateAvatar((string) $avatar['uuid'], ['password' => (string) $data['password']]));
     }
 
-    /** What a manager of the grid can do to an avatar, by its status: the entries of its actions menu, in this order. */
-    public const ACTIONS = [
-        'active' => ['disable', 'reset'],
-        'disabled' => ['enable'],
-        'pending' => ['enable'],
-    ];
-
     /** The roles of the avatars, as the engine names them from their user level. */
     public const ROLES = ['resident', 'god-like', 'customer-service', 'liaison', 'god'];
 
-    /** The columns the list of the managers sorts on: the sort of the engine for each. */
-    public const SORTS = ['name' => 'name', 'email' => 'email', 'role' => 'level', 'lastSeen' => 'lastSeen', 'created' => 'created', 'status' => 'active'];
-
     /**
-     * The list of the managers from the query of its address (search, status, role, sort, page): the query of the engine, and the
-     * query of the page as it is kept in its links.
+     * What the site adds to a request of the engine that mails a link with a token: the page that takes it, and whether the
+     * engine sends the mail.
      *
-     * @param array<string,mixed> $get
-     * @param int $perPage the avatars of a page
-     * @return array{api: array<string,scalar>, page: array<string,string>}
+     * @param string $type the page (reset, confirm)
+     * @return array{link: string, send?: false}
      */
-    public static function listQuery(array $get, int $perPage = 50): array
+    public function tokenAttributes(string $type): array
     {
-        $page = array_filter([
-            'search' => trim((string) ($get['search'] ?? '')),
-            'status' => isset(self::ACTIONS[$get['status'] ?? '']) ? (string) $get['status'] : '',
-            'role' => in_array($get['role'] ?? '', self::ROLES, true) ? (string) $get['role'] : '',
-            'sort' => isset(self::SORTS[ltrim((string) ($get['sort'] ?? ''), '-')]) ? (string) $get['sort'] : '',
-        ], fn (string $value) => $value !== '');
-        $sort = $page['sort'] ?? '-created';
-        $api = ['page[size]' => max(1, $perPage), 'page[number]' => max(1, (int) ($get['page'] ?? 1)), 'filter[technical]' => 'no',
-            'sort' => (str_starts_with($sort, '-') ? '-' : '').self::SORTS[ltrim($sort, '-')]];
-        isset($page['search']) && $api['search'] = $page['search'];
-        isset($page['status']) && $api['filter[status]'] = $page['status'];
-        isset($page['role']) && $api['filter[role]'] = $page['role'];
-
-        return ['api' => $api, 'page' => $page];
-    }
-
-    /** The status of an avatar: active, disabled (by a manager), or pending (waiting for the confirmation of its email). */
-    public static function status(array $avatar): string
-    {
-        $status = (string) ($avatar['status'] ?? '');
-
-        return isset(self::ACTIONS[$status]) ? $status : (! empty($avatar['active']) ? 'active' : 'disabled');
-    }
-
-    /**
-     * The entries of the actions menu of an avatar: the ones of its status, never disabling the manager's own avatar, no reset link
-     * for an avatar without an email.
-     *
-     * @param ?string $self the UUID of the avatar of the manager
-     * @return list<string>
-     */
-    public static function actions(array $avatar, ?string $self = null): array
-    {
-        $actions = self::ACTIONS[self::status($avatar)];
-        // Never disabling the manager's own avatar; no reset link for an avatar without an email (the models, the technical ones)
-        $without = [...(($avatar['uuid'] ?? null) === $self ? ['disable'] : []), ...(trim((string) ($avatar['email'] ?? '')) === '' ? ['reset'] : [])];
-
-        return array_values(array_diff($actions, $without));
-    }
-
-    /**
-     * What a manager of the grid does to an avatar: enable, disable, mail a password link.
-     *
-     * @param array<string,mixed> $avatar the avatar acted on (uuid, name)
-     * @param ?string $self the UUID of the avatar of the manager, who never disables it
-     */
-    public function manage(string $action, array $avatar, ?string $self = null): void
-    {
-        $uuid = (string) ($avatar['uuid'] ?? '');
-        ($action === 'disable' && $uuid === $self) && throw new FormError('w4os.error_invalid_request');
-        match ($action) {
-            'enable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => true])),
-            'disable' => $this->ask(fn () => $this->engine->updateAvatar($uuid, ['active' => false])),
-            'reset' => $this->ask(fn () => $this->engine->requestPasswordReset((string) $avatar['name'], $this->tokenLink('reset'), $this->sends())),
-            default => throw new FormError('w4os.error_invalid_request'),
-        };
+        return ['link' => $this->tokenLink($type)] + ($this->sends() ? [] : ['send' => false]);
     }
 
     /**
@@ -334,7 +268,7 @@ final class Forms
     }
 
     /** The text of a problem, by its code; what the engine says (English) goes with it, for the log. */
-    private function error(EngineException $e): FormError
+    public function error(EngineException $e): FormError
     {
         $code = in_array($e->problemCode, self::CODES, true) ? $e->problemCode : ($e->status >= 500 ? 'internal-error' : 'invalid-request');
 
