@@ -84,7 +84,7 @@ w4os:
   profile_key: 'Chiave'
   partner: 'Partner'
   show_in_search: 'Mostra nella ricerca'
-  interests_removed: 'Il viewer non mostra più questa sezione (rimossa nella versione %s).'
+  interests_removed: 'I viewer non mostrano più questa sezione dal 2023.'
   save_button: 'Salva'
   profile_saved: 'Il tuo profilo è salvato.'
   password_title: 'Password'

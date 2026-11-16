@@ -84,7 +84,7 @@ w4os:
   profile_key: 'Allwedd'
   partner: 'Partner'
   show_in_search: 'Dangos yn y chwiliad'
-  interests_removed: 'Nid yw’r gwyliwr yn dangos yr adran hon mwyach (tynnwyd yn fersiwn %s).'
+  interests_removed: 'Nid yw’r gwylwyr yn dangos yr adran hon ers 2023.'
   save_button: 'Cadw'
   profile_saved: 'Mae eich proffil wedi’i gadw.'
   password_title: 'Cyfrinair'

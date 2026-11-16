@@ -84,7 +84,7 @@ w4os:
   profile_key: 'Sleutel'
   partner: 'Partner'
   show_in_search: 'Tonen in zoekresultaten'
-  interests_removed: 'De viewer toont deze sectie niet meer (verwijderd in versie %s).'
+  interests_removed: 'Viewers tonen deze sectie sinds 2023 niet meer.'
   save_button: 'Opslaan'
   profile_saved: 'Je profiel is opgeslagen.'
   password_title: 'Wachtwoord'
