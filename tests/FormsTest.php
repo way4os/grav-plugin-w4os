@@ -136,6 +136,16 @@ describe('account', function () {
             ->and($result['link'])->toBeNull();
     });
 
+    test('sends the check boxes as lists of names when they changed, none to clear them', function () use ($current) {
+        $current += ['wantsList' => ['meet', 'build'], 'skillsList' => ['scripting']];
+        $forms = forms([[200, avatarDocument()]], $log);
+        $forms->profile($current, ['email' => 'ada@example.org', 'wantsList' => ['build', 'meet'], 'skillsList' => []]);
+        $forms->profile($current, ['email' => 'ada@example.org', 'wantsList' => ['wantslist-build' => 'build', 'wantslist-meet' => 'meet'], 'skillsList' => ['scripting']]);
+
+        expect($log)->toHaveCount(1)
+            ->and($log[0]['body']['data']['attributes'])->toBe(['skillsList' => []]);
+    });
+
     test('asks nothing when nothing changed', function () use ($current) {
         forms([], $log)->profile($current, ['email' => 'ada@example.org', 'about' => 'Hi']);
 

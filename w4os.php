@@ -255,6 +255,9 @@ class W4osPlugin extends Plugin
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
         }
+        foreach (Forms::PROFILE_LISTS as $key) {
+            $form->getData()->get($key) === null && $form->setData($key, Forms::checked($avatar[$key] ?? []));
+        }
         // The avatar a manager changes goes with the form: its address has no ?avatar= once posted
         $form->getName() === 'w4os-edit' && $form->setData('avatar', (string) $avatar['uuid']);
     }
@@ -267,6 +270,12 @@ class W4osPlugin extends Plugin
         }
         $form = $event['form'];
         $data = $form->getData()->toArray();
+        // The boxes checked, as posted: none is posted when none is checked (the data of the form keeps the ones it was filled with)
+        if (in_array((string) $event['params'], ['profile', 'edit'], true)) {
+            foreach (Forms::PROFILE_LISTS as $key) {
+                $data[$key] = Forms::checked($this->grav['uri']->post("data.$key") ?? []);
+            }
+        }
         $site = $this->site();
         $forms = $site->forms();
         $routes = $site->routes();

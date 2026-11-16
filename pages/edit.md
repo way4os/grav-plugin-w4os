@@ -25,12 +25,36 @@ form:
       type: textarea
       label: w4os.about
       rows: 5
+    wantsList:
+      type: checkboxes
+      label: w4os.wants
+      classes: w4os-flags
+      options:
+        build: w4os.want_build
+        explore: w4os.want_explore
+        meet: w4os.want_meet
+        group: w4os.want_group
+        buy: w4os.want_buy
+        sell: w4os.want_sell
+        be-hired: w4os.want_be_hired
+        hire: w4os.want_hire
     wants:
       type: text
-      label: w4os.wants
+      placeholder: w4os.wants
+    skillsList:
+      type: checkboxes
+      label: w4os.skills
+      classes: w4os-flags
+      options:
+        textures: w4os.skill_textures
+        architecture: w4os.skill_architecture
+        event-planning: w4os.skill_event_planning
+        modeling: w4os.skill_modeling
+        scripting: w4os.skill_scripting
+        custom-characters: w4os.skill_custom_characters
     skills:
       type: text
-      label: w4os.skills
+      placeholder: w4os.skills
     languages:
       type: w4os_languages
       label: w4os.languages

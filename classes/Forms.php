@@ -13,6 +13,9 @@ final class Forms
     /** The profile fields an avatar edits on the site. */
     public const PROFILE = ['about', 'wants', 'skills', 'languages', 'firstLife', 'profileUrl'];
 
+    /** The check boxes of a profile: lists of the names of their flags (the engine's Avatar::WANTS and Avatar::SKILLS). */
+    public const PROFILE_LISTS = ['wantsList', 'skillsList'];
+
     /** The codes of the problems of the engine (Problem::CODES), each told by the text `w4os.error_<code>` (- as _). */
     public const CODES = [
         'not-found', 'invalid-request', 'invalid-document', 'type-conflict', 'unauthorized', 'method-not-allowed', 'channel-unavailable',
@@ -128,6 +131,19 @@ final class Forms
     }
 
     /**
+     * The names of the boxes checked, sorted: none for nothing (the boxes of a form are posted only when checked).
+     *
+     * @return list<string>
+     */
+    public static function checked(mixed $list): array
+    {
+        $names = array_values(array_unique(array_filter(array_map('strval', (array) $list), fn (string $name) => $name !== '')));
+        sort($names);
+
+        return $names;
+    }
+
+    /**
      * The email and the profile of the avatar signed in: what changed only. A new email changes once the avatar clicks the link
      * mailed to it.
      *
@@ -143,6 +159,11 @@ final class Forms
         foreach (self::PROFILE as $key) {
             if (array_key_exists($key, $data) && trim((string) $data[$key]) !== trim((string) ($current[$key] ?? ''))) {
                 $attributes[$key] = trim((string) $data[$key]);
+            }
+        }
+        foreach (self::PROFILE_LISTS as $key) {
+            if (array_key_exists($key, $data) && ($list = self::checked($data[$key])) !== self::checked($current[$key] ?? [])) {
+                $attributes[$key] = $list;
             }
         }
         $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
