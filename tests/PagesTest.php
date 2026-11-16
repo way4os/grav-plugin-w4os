@@ -46,7 +46,9 @@ describe('pages', function () {
             $used = array_merge($used, array_column($list['columns'], 'label'), array_filter(array_column($list['columns'], 'tagLabel')), array_column($list['filters'], 'label'));
             foreach ($list['filters'] as $filter) {
                 $used = array_merge($used, array_filter(array_column($filter['values'], 'label')));
-                $filter['name'] === 'status' && array_push($used, ...array_map(fn ($value) => 'status_'.$value['value'], $filter['values']));
+                // A status column without labels of its own shows the texts status_<value> of the values of its filter
+                $status = array_filter($list['columns'], fn ($column) => $column['type'] === 'status' && $column['name'] === $filter['name'] && ! isset($column['values']));
+                $status === [] || array_push($used, ...array_map(fn ($value) => 'status_'.$value['value'], $filter['values']));
             }
             foreach ($list['actions'] as $action) {
                 array_push($used, $action['label'], 'manage_'.$action['name']);
