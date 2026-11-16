@@ -4,7 +4,7 @@
 
 The engine API provides everything; the plugin only consumes it. An operation that is missing (a check, a field, a mail) goes into the engine (`opensim-engine`, `src/Api/`), never here. The rules of the names, the passwords and the models are the engine's: the plugin checks only what its forms add (the password typed twice, the terms).
 
-w4os (`~/Projects/w4os`, branch `speculoos`) is the reference of the method: the registration form, the models picker, the profile and account pages, the sign-in with the avatar name or the email are all done there. Follow it.
+w4os (`~/Projects/w4os-wp`, branch `speculoos`) is the reference of the method: the registration form, the models picker, the profile and account pages, the sign-in with the avatar name or the email are all done there. Follow it.
 
 ## Two projects
 
