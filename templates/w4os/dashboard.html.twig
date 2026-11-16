@@ -1,8 +1,15 @@
-{# The managers' dashboard: the blocks of the helpers its page lists (w4os_blocks in its front matter), each in a card of the theme.
-   An entry is the name of a block, or {block: name, wide: true, ...} for a block across the whole width, with its arguments. #}
+{# The managers' dashboard: the blocks of its page (w4os_blocks in its front matter), each in a card of the theme. An entry is the
+   name of a block of the helpers, or {block: name, wide: true, ...} for a block across the whole width, with its arguments, or
+   {card: name} for a card of the plugin (templates/w4os/cards/<name>.html.twig). #}
 <div class="w4os-dashboard-blocks">
     {% for entry in page.header.w4os_blocks ?? [] %}
         {% set entry = entry is iterable ? entry : {block: entry} %}
-        <article class="card w4os-dashboard-block{{ entry.wide ?? false ? ' w4os-dashboard-block-wide' }}"><div class="card-body">{{ w4os_block(entry.block ?? '', entry|filter((value, key) => key not in ['block', 'wide'])) }}</div></article>
+        <article class="card w4os-dashboard-block{{ entry.wide ?? false ? ' w4os-dashboard-block-wide' }}"><div class="card-body">
+            {%- if entry.card is defined -%}
+                {% include 'w4os/cards/' ~ entry.card ~ '.html.twig' ignore missing %}
+            {%- else -%}
+                {{ w4os_block(entry.block ?? '', entry|filter((value, key) => key not in ['block', 'wide'])) }}
+            {%- endif -%}
+        </div></article>
     {% endfor %}
 </div>

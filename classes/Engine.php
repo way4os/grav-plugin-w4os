@@ -181,6 +181,12 @@ final class Engine
         return [array_map(fn (array $item) => (array) $item['attributes'], (array) ($document['data'] ?? [])), (array) ($document['meta'] ?? [])];
     }
 
+    /** @return array<string,mixed> the state of the grid: its level, its simulators (regions, online), its regions (total, online) */
+    public function monitor(): array
+    {
+        return $this->resource($this->call('GET', '/monitor'));
+    }
+
     /** @return array<string,mixed> the attributes of an item of a type */
     public function item(string $type, string $id): array
     {

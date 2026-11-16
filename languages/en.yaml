@@ -82,6 +82,7 @@ w4os:
   profile_tab_notes: 'My Notes'
   profile_tab_account: 'Account'
   profile_key: 'Key'
+  profile_picture: 'Picture'
   partner: 'Partner'
   show_in_search: 'Show in search'
   interests_removed: 'Viewers no longer show this section since 2023.'

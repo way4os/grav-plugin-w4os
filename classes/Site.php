@@ -420,7 +420,7 @@ final class Site
     }
 
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
-    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title'];
+    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title', 'regions' => 'w4os.regions_title'];
 
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its
@@ -563,6 +563,18 @@ final class Site
         $active = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
 
         return $active === 'en' ? 'en' : "$active, en;q=0.5";
+    }
+
+    /** @return array<string,mixed> the state of the grid (Engine::monitor()), kept a minute; empty when the engine cannot say */
+    public function monitor(): array
+    {
+        return (array) ($this->cached('monitor', function () {
+            try {
+                return $this->engine()->monitor() ?: null;
+            } catch (EngineException) {
+                return null;
+            }
+        }, 60) ?? []);
     }
 
     /** The OpenAPI document of the engine, read (OpenApi): kept an hour. */

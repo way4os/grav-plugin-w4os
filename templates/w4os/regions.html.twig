@@ -1,0 +1,6 @@
+{# The list of the regions of the grid, for the managers: the engine's list (w4os_list in the front matter of the page) #}
+{% set data = w4os_list(page.header.w4os_list ?? {type: 'regions'}) %}
+{% include 'w4os/list.html.twig' with {
+    list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: [],
+    texts: {search: 'w4os.search_regions', empty: 'w4os.no_regions', count: 'w4os.regions_count', title: 'w4os.regions_title'}
+} only %}

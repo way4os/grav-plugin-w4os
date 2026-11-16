@@ -172,6 +172,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_models', fn () => $this->site()->models()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar', fn () => self::current()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_monitor', fn () => $this->site()->monitor()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
@@ -252,10 +253,10 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit'], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit', 'regions'], true) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
-        } elseif (in_array($type, ['dashboard', 'manage', 'edit'], true) && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
@@ -265,7 +266,7 @@ class W4osPlugin extends Plugin
             // The name of the avatar in the title; the title of the list when there is no such avatar
             $edited = $this->edited();
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
-        } elseif ($type === 'manage' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+        } elseif (in_array($type, ['manage', 'regions'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $this->listAction((array) ($_POST ?? []));
         }
     }
@@ -580,8 +581,11 @@ class W4osPlugin extends Plugin
             [$items, $meta] = $this->site()->engine()->items($type, $query['api']);
 
             return ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
-        } catch (EngineException) {
-            return ['list' => $list, 'query' => $query['page']] + $error;
+        } catch (EngineException $e) {
+            // What the engine refuses (a simulator it does not know...) said as it is, the rest as a channel down
+            $refused = $e->status >= 400 && $e->status < 500 ? $this->errorText($this->site()->forms()->error($e)) : $error['error'];
+
+            return ['list' => $list, 'query' => $query['page'], 'error' => $refused] + $error;
         }
     }
 

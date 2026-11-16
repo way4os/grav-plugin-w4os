@@ -82,6 +82,7 @@ w4os:
   profile_tab_notes: 'Meine Notizen'
   profile_tab_account: 'Konto'
   profile_key: 'UUID'
+  profile_picture: 'Bild'
   partner: 'Partner'
   show_in_search: 'In Suche anzeigen'
   interests_removed: 'Die Viewer zeigen diesen Bereich seit 2023 nicht mehr an.'

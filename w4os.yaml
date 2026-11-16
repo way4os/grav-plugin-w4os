@@ -69,6 +69,7 @@ routes:
   dashboard: /account/dashboard
   manage: /account/avatars
   edit: /account/avatars/edit
+  regions: /account/regions
   # The pages of the grid the site serves (the grid's config gives these addresses to the viewers): a block of the helpers each
   search: /search
   profile: /profile
