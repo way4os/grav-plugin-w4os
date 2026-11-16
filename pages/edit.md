@@ -7,6 +7,8 @@ form:
   name: w4os-edit
   classes: w4os-form
   fields:
+    avatar:
+      type: hidden
     role:
       type: select
       label: w4os.role

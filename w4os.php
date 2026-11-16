@@ -231,8 +231,10 @@ class W4osPlugin extends Plugin
             $this->profilePage($page[1]);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
-        } elseif ($type === 'edit' && ($edited = $this->edited()) !== null) {
-            $this->grav['page']->title($this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
+        } elseif ($type === 'edit') {
+            // The name of the avatar in the title; the title of the list when there is no such avatar
+            $edited = $this->edited();
+            $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $this->manage((array) ($_POST ?? []));
         }
@@ -253,6 +255,8 @@ class W4osPlugin extends Plugin
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
         }
+        // The avatar a manager changes goes with the form: its address has no ?avatar= once posted
+        $form->getName() === 'w4os-edit' && $form->setData('avatar', (string) $avatar['uuid']);
     }
 
     /** The forms of the pages of the plugin: `process: [{w4os: register}]` in their front matter. */
@@ -477,12 +481,13 @@ class W4osPlugin extends Plugin
         };
     }
 
-    /** The avatar a manager changes (?avatar=<UUID> of the edit page), as the engine has it, once per request. */
+    /** The avatar a manager changes (the UUID the edit form posts, else ?avatar=<UUID> of the page), as the engine has it, once per request. */
     private function edited(): ?array
     {
         static $edited = false;
         if ($edited === false) {
-            $uuid = (string) $this->grav['uri']->query('avatar');
+            $uri = $this->grav['uri'];
+            $uuid = trim((string) ($uri->post('data.avatar') ?: $uri->query('avatar')));
             try {
                 $edited = $uuid !== '' && $this->site()->isManager() ? $this->site()->forms()->avatar($uuid) : null;
             } catch (FormError) {
