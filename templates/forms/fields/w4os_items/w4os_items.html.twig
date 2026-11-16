@@ -1,5 +1,5 @@
 {# The picks or the classifieds (field.kind) of the avatar of a profile form, as its profile page shows them: read only, they are
-   made in the viewer. The list, then each one: its picture, name, description, place (a teleport link) and end #}
+   made in the viewer. The list, then each one: its picture, name, description, place, end and teleport link #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
 {% set items = avatar ? w4os_avatar_items(avatar.uuid, field.kind) : [] %}
 <p class="w4os-note">{{ 'w4os.profile_viewer_only'|t }}</p>
@@ -17,9 +17,10 @@
                     <img class="profile-item-picture" src="{{ w4os_picture(item.picture)|e('html_attr') }}" alt="" width="256" height="192" loading="lazy">
                     <div class="profile-item-text">
                         <h3>{{ item.name }}</h3>
-                        {% if item.description %}<p class="profile-item-description">{{ item.description|nl2br }}</p>{% endif %}
-                        {% if place %}<p class="profile-item-place">{% if item.teleport %}<a class="profile-item-teleport" href="{{ item.teleport|e('html_attr') }}">{{ place }}</a>{% else %}{{ place }}{% endif %}</p>{% endif %}
-                        {% if item.expires %}<p class="profile-item-until">{{ item.expires|date('Y-m-d') }}</p>{% endif %}
+                        <p class="profile-item-description">{% if item.description %}{{ item.description|nl2br }}{% else %}{{ 'w4os.profile_no_description'|t }}{% endif %}</p>
+                        {% if place %}<p class="profile-item-place"><span class="profile-item-label">{{ 'w4os.profile_location'|t }}</span> {{ place }}</p>{% endif %}
+                        {% if item.expires %}<p class="profile-item-until"><span class="profile-item-label">{{ 'w4os.profile_until'|t }}</span> {{ item.expires|date('Y-m-d') }}</p>{% endif %}
+                        {% if item.teleport %}<p><a class="profile-item-teleport" href="{{ item.teleport|e('html_attr') }}">{{ 'w4os.profile_teleport'|t }}</a></p>{% endif %}
                     </div>
                 </article>
             {% endfor %}
