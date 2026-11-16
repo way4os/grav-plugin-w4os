@@ -11,7 +11,7 @@ describe('the page of an item of the engine', function () {
         $region = $api->itemOf('regions');
 
         expect(array_column($region['groups'], 'name'))->toBe(['region', 'simulator'])
-            ->and(array_column($region['fields'], 'name'))->toContain('name', 'teleport', 'enabled')
+            ->and(array_column($region['fields'], 'name'))->toContain('name', 'uri', 'enabled')
             ->and(array_column($region['actions'], 'name'))->toBe(['enable', 'disable'])
             ->and($api->itemOf('avatars')['groups'][0])->toBe(['name' => 'inworld', 'label' => 'profile_tab_inworld'])
             ->and($api->itemOf('nothing'))->toBeNull();
@@ -84,7 +84,7 @@ test('a picture says what stands for it when there is none: a person for the ava
     $api = new OpenApi(Contract::document());
     $name = array_column($api->listOf('avatars')['columns'], null, 'name')['name'];
     $picture = array_column($api->itemOf('avatars')['fields'], null, 'name')['profileImage'];
-    $map = array_column($api->listOf('regions')['columns'], null, 'name')['mapImage'];
+    $map = array_column($api->listOf('regions')['columns'], null, 'name')['name'];
 
     expect($name['default'] ?? null)->toBe('person')
         ->and($picture['default'] ?? null)->toBe('person')

@@ -179,6 +179,7 @@ w4os:
   column_name: 'Naam'
   column_nick: 'Korte naam'
   column_address: 'Adres'
+  column_server: 'Server'
   column_enabled: 'Ingeschakeld'
   filter_remote: 'Op een andere machine'
   filter_hypergrid: 'Hypergrid'

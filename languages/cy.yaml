@@ -179,6 +179,7 @@ w4os:
   column_name: 'Enw'
   column_nick: 'Llysenw'
   column_address: 'Cyfeiriad'
+  column_server: 'Gweinydd'
   column_enabled: 'Galluogwyd'
   filter_remote: 'Ar beiriant arall'
   filter_hypergrid: 'Hypergrid'
