@@ -180,6 +180,20 @@ class W4osPlugin extends Plugin
     public function onPagesInitialized(): void
     {
         $this->site()->addPage($this->grav['uri']->path());
+        $this->loginTexts();
+    }
+
+    /**
+     * The title and the heading of the sign-in page of the Login plugin, from the catalog: the texts it translates them with
+     * (its own page, before it adds it).
+     */
+    private function loginTexts(): void
+    {
+        $title = $this->site()->translate('w4os.login_title');
+        $lang = $this->grav['language']->getLanguage() ?: 'en';
+        foreach (['LOGIN_PAGE_TITLE', 'LOGIN_PAGE_HEADING'] as $key) {
+            $this->grav['languages']->set("$lang.PLUGIN_LOGIN.$key", $title);
+        }
     }
 
     /**
