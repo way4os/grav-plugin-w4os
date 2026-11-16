@@ -92,9 +92,21 @@ class W4osPlugin extends Plugin
         try {
             $avatar = $this->site()->forms()->signIn($login, $password);
         } catch (FormError $e) {
-            if ($e->key !== 'w4os.error_sign_in_refused') {
-                $this->grav['messages']->add($this->site()->translate($e->key), 'error');
-                $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
+            // A wrong name or password: the accounts of the site try, and the Login plugin says it failed, without a reason
+            if ($e->key === 'w4os.error_sign_in_refused') {
+                return;
+            }
+            // One message: the failure, then its reason
+            $event->setMessage(sprintf(
+                '<strong>%s</strong><br>%s',
+                htmlspecialchars($this->site()->translate('w4os.sign_in_failed')),
+                htmlspecialchars($this->site()->translate($e->key)),
+            ), 'error');
+            $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
+            // The avatar exists and is refused: no other account signs in with its name
+            if (in_array($e->key, ['w4os.error_account_disabled', 'w4os.error_email_unconfirmed'], true)) {
+                $event->setStatus(UserLoginEvent::AUTHENTICATION_FAILURE);
+                $event->stopPropagation();
             }
 
             return;
