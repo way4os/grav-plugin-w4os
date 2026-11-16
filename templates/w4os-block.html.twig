@@ -1,0 +1,13 @@
+{# A page of the grid the site serves (pages/search.md, profile.md, guide.md): the block of the helpers alone, under its own title.
+   A viewer that asks gets it without the top bar, the menus and the footer of the site (the helpers' detection of a viewer). #}
+{% extends 'partials/base.html.twig' %}
+
+{% block header %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
+{% block footer %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
+{% block mobile %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
+
+{% block content %}
+    <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
+        {{ w4os_block(page.header.w4os_block, w4os_page_args()) }}
+    </div>
+{% endblock %}

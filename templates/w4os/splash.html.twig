@@ -1,5 +1,5 @@
 {# A page laid out like the splash page of the helpers (the one a viewer shows), with their blocks: what the grid is on the left,
-   the page then the popular places in the middle, the message of the day on the right. Front matter: `template: w4os/splash`. #}
+   the page, the popular places and the destinations guide in the middle, the message of the day on the right. Front matter: `template: w4os/splash`. #}
 {% extends 'partials/base.html.twig' %}
 
 {% block content %}
@@ -11,6 +11,7 @@
         <article class="content-item w4os-splash-main">
             {{ page.content|raw }}
             {{ w4os_block('popular-places') }}
+            {{ w4os_block('destination_guide') }}
         </article>
         <aside class="w4os-splash-right">
             {{ w4os_block('motd') }}

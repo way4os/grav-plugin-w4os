@@ -67,5 +67,9 @@ routes:
   account: /account
   manage: /account/avatars
   edit: /account/avatars/edit
+  # The pages of the grid the site serves (the grid's config gives these addresses to the viewers): a block of the helpers each
+  search: /search
+  profile: /profile
+  guide: /guide
   # The pictures of the grid (the models), served by the bundled engine
   assets: /grid-assets

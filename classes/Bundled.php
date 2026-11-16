@@ -61,26 +61,16 @@ final class Bundled
     }
 
     /**
-     * Whether an address of the site is one the helpers of the grid serve: under the address of the helpers (`/helpers`), or one of
-     * the web services the grid gives the viewers and the simulators (welcome, search, profiles, economy, offline messages...). The
-     * config of the grid says them, as it does for w4os: its WebURL and its services must be the ones of the site.
+     * Whether an address of the site is under the base of the helpers of the grid (`/helpers` by default): they serve what is there.
+     * Every other address is the site's, the pages of the grid it serves included (search, profiles, guide). Helpers at the root of
+     * the site are a site of their own: nothing is theirs here.
      */
     public function serves(string $path): bool
     {
         $grid = $this->grid();
-        if ($grid === null) {
-            return false;
-        }
-        $addresses = array_merge([(string) $grid->helpersUrl()], array_values($grid->addresses(true)));
-        foreach ($addresses as $url) {
-            // The address of a profile has the name in it
-            $prefix = rtrim((string) preg_replace('#/?\[AGENT_NAME\].*$#', '', (string) parse_url($url, PHP_URL_PATH)), '/');
-            if ($prefix !== '' && ($path === $prefix || str_starts_with($path, "$prefix/"))) {
-                return true;
-            }
-        }
+        $prefix = $grid === null ? '' : rtrim((string) parse_url((string) $grid->helpersUrl(), PHP_URL_PATH), '/');
 
-        return false;
+        return $prefix !== '' && ($path === $prefix || str_starts_with($path, "$prefix/"));
     }
 
     /** Answers the request of this process with the helpers of the grid (their Slim application), and sends the answer. */

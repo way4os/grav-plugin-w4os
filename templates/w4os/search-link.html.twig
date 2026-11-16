@@ -1,0 +1,4 @@
+{# The search of the grid, for the top bar of a theme: its page on the site (route search) #}
+{% if w4os_route('search') %}
+<a class="w4os-search-link" href="{{ base_url_relative ~ w4os_route('search') }}" title="{{ 'w4os.search'|t|e('html_attr') }}"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span class="sr-only">{{ 'w4os.search'|t }}</span></a>
+{% endif %}

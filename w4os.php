@@ -147,6 +147,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatars', fn () => $this->avatars()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_slogan', fn () => $this->site()->slogan()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
@@ -224,6 +226,10 @@ class W4osPlugin extends Plugin
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (in_array($type, ['manage', 'edit'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
+        } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
+            $this->profilePage($page[1]);
+        } elseif ($page[0] === 'search') {
+            $this->grav['page']->title($this->site()->translate('w4os.search'));
         } elseif ($type === 'edit' && ($edited = $this->edited()) !== null) {
             $this->grav['page']->title($this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
@@ -437,6 +443,37 @@ class W4osPlugin extends Plugin
         } catch (EngineException $e) {
             return ['items' => [], 'meta' => [], 'query' => $query['page'], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
         }
+    }
+
+    /** The web profile of an avatar (/profile/First.Last): titled with its name, a 404 for a name that is no avatar's. */
+    private function profilePage(string $name): void
+    {
+        $page = $this->grav['page'];
+        try {
+            $avatar = $name === '' ? null : $this->site()->forms()->avatar(str_replace('.', ' ', $name));
+        } catch (FormError) {
+            $avatar = null;
+        }
+        $avatar === null
+            ? $page->modifyHeader('http_response_code', 404)
+            : $page->title((string) $avatar['name']);
+    }
+
+    /**
+     * The arguments of the block of a page of the grid the site serves: the name of a profile and the topic of a search from the path
+     * (/profile/First.Last, /search/places), the rest from the query.
+     *
+     * @return array<string,string>
+     */
+    private function pageArgs(): array
+    {
+        [$type, $rest] = $this->site()->pageAt($this->grav['uri']->path());
+
+        return match ($type) {
+            'profile' => ['name' => $rest],
+            'search' => $rest !== '' ? ['topic' => $rest] : [],
+            default => [],
+        };
     }
 
     /** The avatar a manager changes (?avatar=<UUID> of the edit page), as the engine has it, once per request. */

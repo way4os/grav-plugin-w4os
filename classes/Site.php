@@ -229,9 +229,39 @@ final class Site
      * The page of the plugin at the route asked for, unless the site has its own page there. The front matter is the one of
      * pages/<type>.md (its forms), title and text come from the language files.
      */
-    public function addPage(string $path): void
+    /** The pages whose route is a prefix: the rest of the path is theirs (a topic of the search, the name of a profile). */
+    public const PREFIX_PAGES = ['search', 'profile'];
+
+    /** The type of the page of the plugin at a path, and the rest of the path after its route (a topic, a name). */
+    public function pageAt(string $path): array
     {
         $type = array_search($path, $this->routes(), true);
+        if ($type !== false) {
+            return [$type, ''];
+        }
+        foreach (self::PREFIX_PAGES as $prefix) {
+            $route = $this->routes()[$prefix] ?? '';
+            if ($route !== '' && $route !== '/' && str_starts_with($path, "$route/")) {
+                return [$prefix, rawurldecode(substr($path, strlen($route) + 1))];
+            }
+        }
+
+        return [false, ''];
+    }
+
+    /** Whether a viewer asks the page (its user agent, as the helpers tell it): the page then shows its content alone. */
+    public function isViewer(): bool
+    {
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
+
+        return class_exists(\OpenSim\Helpers\View\View::class) && method_exists(\OpenSim\Helpers\View\View::class, 'isViewer')
+            && \OpenSim\Helpers\View\View::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+    }
+
+    public function addPage(string $path): void
+    {
+        [$type] = $this->pageAt($path);
         $pages = $this->grav['pages'];
         if ($type === false || ! is_file(dirname(__DIR__)."/pages/$type.md") || $pages->find($path)) {
             return;

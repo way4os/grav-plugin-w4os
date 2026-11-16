@@ -92,3 +92,10 @@ li:empty { display: none; }
 .lead:empty { display: none; }
 .w4os-thumb-large { width: 64px; height: 64px; }
 .w4os-edited { margin-bottom: 1rem; }
+.w4os-search-link { display: inline-flex; align-items: center; padding: 0 .25rem; color: inherit; text-decoration: none; }
+/* The blocks of the helpers in the pages of the site: their hidden labels, the search on one row, its topics together, the guide's
+   own title (an h1 the viewers' panel needs) at the size of a section on the home page */
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.block-search .search-form button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
+.search-topics { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem 1rem; margin: .5rem 0 1rem; }
+.w4os-splash .block-guide h1 { font-size: 1.5rem; }
