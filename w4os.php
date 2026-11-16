@@ -368,7 +368,7 @@ class W4osPlugin extends Plugin
         $avatar = ['uuid' => (string) ($post['uuid'] ?? ''), 'name' => (string) ($post['name'] ?? '')];
         try {
             $this->site()->forms()->manage((string) ($post['action'] ?? ''), $avatar, $this->site()->avatar()['uuid'] ?? null);
-            $query = http_build_query(Forms::listQuery($_GET)['page'] + array_intersect_key($_GET, ['page' => 1]));
+            $query = http_build_query(Forms::listQuery($_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.manage_'.strtolower((string) $post['action']), $route.($query === '' ? '' : "?$query"), [$avatar['name']]);
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
@@ -429,7 +429,7 @@ class W4osPlugin extends Plugin
      */
     private function avatars(): array
     {
-        $query = Forms::listQuery($_GET);
+        $query = Forms::listQuery($_GET, (int) ($this->config->get('plugins.w4os.manage.per_page') ?: 50));
         try {
             [$items, $meta] = $this->site()->engine()->avatars($query['api']);
 

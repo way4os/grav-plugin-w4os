@@ -207,9 +207,10 @@ final class Forms
      * query of the page as it is kept in its links.
      *
      * @param array<string,mixed> $get
+     * @param int $perPage the avatars of a page
      * @return array{api: array<string,scalar>, page: array<string,string>}
      */
-    public static function listQuery(array $get): array
+    public static function listQuery(array $get, int $perPage = 50): array
     {
         $page = array_filter([
             'search' => trim((string) ($get['search'] ?? '')),
@@ -218,7 +219,7 @@ final class Forms
             'sort' => isset(self::SORTS[ltrim((string) ($get['sort'] ?? ''), '-')]) ? (string) $get['sort'] : '',
         ], fn (string $value) => $value !== '');
         $sort = $page['sort'] ?? '-created';
-        $api = ['page[size]' => 50, 'page[number]' => max(1, (int) ($get['page'] ?? 1)), 'filter[technical]' => 'no',
+        $api = ['page[size]' => max(1, $perPage), 'page[number]' => max(1, (int) ($get['page'] ?? 1)), 'filter[technical]' => 'no',
             'sort' => (str_starts_with($sort, '-') ? '-' : '').self::SORTS[ltrim($sort, '-')]];
         isset($page['search']) && $api['search'] = $page['search'];
         isset($page['status']) && $api['filter[status]'] = $page['status'];

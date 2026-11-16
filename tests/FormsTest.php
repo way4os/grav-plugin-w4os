@@ -168,6 +168,7 @@ describe('account', function () {
         expect($query['api'])->toBe(['page[size]' => 50, 'page[number]' => 2, 'filter[technical]' => 'no', 'sort' => '-level',
             'search' => 'ada', 'filter[status]' => 'pending', 'filter[role]' => 'god'])
             ->and($query['page'])->toBe(['search' => 'ada', 'status' => 'pending', 'role' => 'god', 'sort' => '-role'])
+            ->and(Forms::listQuery(['page' => '3'], 5)['api'])->toMatchArray(['page[size]' => 5, 'page[number]' => 3])
             ->and(Forms::listQuery(['status' => 'deleted', 'role' => 'x', 'sort' => 'password']))->toBe([
                 'api' => ['page[size]' => 50, 'page[number]' => 1, 'filter[technical]' => 'no', 'sort' => '-created'], 'page' => [],
             ]);

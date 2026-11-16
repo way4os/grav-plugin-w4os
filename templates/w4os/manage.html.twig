@@ -79,12 +79,16 @@
         </tbody>
     </table>
     </div>
+    {# The pages of the list: the engine pages it (its total, its page), the links keep the search, the filters and the sort #}
+    {% set current = list.meta.page ?? 1 %}
     {% set pages = ((list.meta.total ?? 0) / (list.meta.perPage ?: 50))|round(0, 'ceil') %}
     {% if pages > 1 %}
-        <p class="w4os-pages">
+        <nav class="w4os-pages" aria-label="{{ 'w4os.manage_title'|t|e('html_attr') }}">
+        {% if current > 1 %}<a href="?{{ query|merge({page: current - 1})|url_encode }}" rel="prev" aria-label="‹">‹</a>{% endif %}
         {% for n in 1..pages %}
-            {% if n == (list.meta.page ?? 1) %}<strong>{{ n }}</strong>{% else %}<a href="?{{ query|merge({page: n})|url_encode }}">{{ n }}</a>{% endif %}
+            {% if n == current %}<strong aria-current="page">{{ n }}</strong>{% else %}<a href="?{{ query|merge({page: n})|url_encode }}">{{ n }}</a>{% endif %}
         {% endfor %}
-        </p>
+        {% if current < pages %}<a href="?{{ query|merge({page: current + 1})|url_encode }}" rel="next" aria-label="›">›</a>{% endif %}
+        </nav>
     {% endif %}
 {% endif %}

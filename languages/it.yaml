@@ -166,6 +166,8 @@ w4os:
   admin_confirm_email_help: 'Un nuovo avatar resta inattivo finché non clicca sul link che l’engine gli invia'
   admin_terms: 'Pagina dei termini'
   admin_terms_help: 'Il percorso di una pagina da accettare prima della registrazione; vuoto per nessuna'
+  admin_per_page: 'Avatars per page'
+  admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
   admin_manager_level: 'Livello dei gestori'
   admin_manager_level_help: 'Gli avatar di questo livello o superiore gestiscono gli avatar sul sito (200: gli dei della griglia)'
   admin_save_accounts: 'Tenere gli account Grav'

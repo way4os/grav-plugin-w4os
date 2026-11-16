@@ -132,6 +132,11 @@ form:
               label: w4os.admin_terms
               help: w4os.admin_terms_help
               placeholder: '/terms'
+            manage.per_page:
+              type: number
+              label: w4os.admin_per_page
+              help: w4os.admin_per_page_help
+              validate: { type: int, min: 1, max: 500 }
             manager_level:
               type: number
               label: w4os.admin_manager_level
