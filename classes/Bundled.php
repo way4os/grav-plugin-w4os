@@ -114,6 +114,20 @@ final class Bundled
         return (new View($templates))->block((string) \OpenSim\Helpers\Block\Blocks::name($name), $grid, $args);
     }
 
+    /**
+     * A block and the notices to the visitor its rendering gave (View::notify()), for the zone of messages of the site.
+     *
+     * @param array<string,mixed> $args
+     * @return ?array{html: string, notices: list<array{level: string, text: string}>}
+     */
+    public function rendered(string $name, array $args = []): ?array
+    {
+        $html = $this->block($name, $args);
+        $notices = method_exists(View::class, 'notices') ? View::notices() : [];
+
+        return $html === null ? null : ['html' => $html, 'notices' => $notices];
+    }
+
     /** The engine of the grid: the layout of this server's install, or the folder of the described grid. */
     private function environment(): Environment
     {

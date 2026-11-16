@@ -120,10 +120,10 @@ final class Site
         // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
         $bundled = $this->bundled();
         if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
-            return new Blocks(fn (string $name, array $args) => $this->cached("block $name ".json_encode($args), fn () => $bundled->block($name, $args)));
+            return new Blocks(fn (string $name, array $args) => $this->noticed($this->cached("block $name ".json_encode($args), fn () => $bundled->rendered($name, $args))));
         }
 
-        return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->cached($url, fn () => $this->get($url)));
+        return Blocks::remote((string) ($this->config()['url'] ?? ''), fn (string $url) => $this->noticed($this->cached($url, fn () => $this->block($url))));
     }
 
     /**
@@ -470,15 +470,48 @@ final class Site
     }
 
     /**
-     * Grav's HTTP client, for the engine.
+     * Grav's HTTP client, for the engine and the blocks of the helpers.
      *
-     * @return array{int, string}
+     * @return array{int, string, array<string, list<string>>} the status, the body, the headers
      */
     private function send(string $method, string $url, array $headers, ?string $body): array
     {
         $response = Client::getClient(['timeout' => 15])->request($method, $url, ['headers' => $headers] + ($body === null ? [] : ['body' => $body]));
 
-        return [$response->getStatusCode(), $response->getContent(false)];
+        return [$response->getStatusCode(), $response->getContent(false), $response->getHeaders(false)];
+    }
+
+    /**
+     * A block of the helpers of the grid, and its notices to the visitor (their header X-Helpers-Notices).
+     *
+     * @return ?array{html: string, notices: list<array{level: string, text: string}>}
+     */
+    private function block(string $url): ?array
+    {
+        try {
+            [$status, $body, $headers] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning("w4os: $url: ".$e->getMessage());
+
+            return null;
+        }
+        $notices = json_decode((string) ($headers['x-helpers-notices'][0] ?? ''), true);
+
+        return $status === 200 ? ['html' => $body, 'notices' => is_array($notices) ? $notices : []] : null;
+    }
+
+    /** The HTML of a block, its notices to the visitor added to the messages of the site (shown at the start of the page). */
+    private function noticed(mixed $block): ?string
+    {
+        if (! is_array($block)) {
+            return is_string($block) ? $block : null;
+        }
+        foreach ((array) ($block['notices'] ?? []) as $notice) {
+            $level = in_array($notice['level'] ?? '', ['info', 'warning', 'error'], true) ? $notice['level'] : 'info';
+            $this->grav['messages']->add(htmlspecialchars((string) ($notice['text'] ?? '')), $level);
+        }
+
+        return (string) ($block['html'] ?? '');
     }
 
     private function get(string $url, string $accept = 'text/html'): ?string
