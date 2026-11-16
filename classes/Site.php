@@ -311,6 +311,39 @@ final class Site
         return is_array($avatar) && ($avatar['uuid'] ?? '') !== '' ? $avatar : null;
     }
 
+    /**
+     * The page of the site where an avatar's profile is shown (its route "profile", /profile/First.Last), the one of the avatar
+     * signed in by default; its account page when the site has no profile page.
+     */
+    public function profilePage(?string $name = null): string
+    {
+        $name ??= (string) ($this->avatar()['name'] ?? '');
+        if ($name === '' || ($this->routes()['profile'] ?? '/') === '/') {
+            return $this->url('account');
+        }
+
+        return $this->url('profile').'/'.rawurlencode(str_replace(' ', '.', trim($name)));
+    }
+
+    /**
+     * Where the visitor changes a profile, when they may: their own (the account page), any for a manager (the edit page); null
+     * otherwise.
+     *
+     * @param array<string,mixed> $avatar
+     */
+    public function profileEditUrl(array $avatar): ?string
+    {
+        $uuid = (string) ($avatar['uuid'] ?? '');
+        if ($uuid === '' || ($current = $this->avatar()) === null) {
+            return null;
+        }
+        if ($uuid === $current['uuid']) {
+            return $this->url('account');
+        }
+
+        return $this->isManager() && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
+    }
+
     /** The web page of the profile of an avatar (web-profile of the grid, [AGENT_NAME] as First.Last), null when the grid has none. */
     public function profileUrl(string $name): ?string
     {

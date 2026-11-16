@@ -1,13 +1,16 @@
-{# The languages of an avatar: free text, as in the viewer, with the site's languages and the usual ones to pick from (a datalist) #}
+{# The languages of an avatar: free text, as in the viewer, with the site's languages and the usual ones to pick from (a datalist),
+   suggested again for each language added after a separator (js/languages.js) #}
 {% extends "forms/fields/text/text.html.twig" %}
 
 {% block input_attributes %}
     {{ parent() }}
     list="w4os-languages-{{ field.name|e('html_attr') }}"
+    data-w4os-languages
 {% endblock %}
 
 {% block append %}
     {{ parent() }}
+    {% do assets.addJs('plugin://w4os/js/languages.js', {group: 'bottom', loading: 'defer'}) %}
     <datalist id="w4os-languages-{{ field.name|e('html_attr') }}">
         {% for name in w4os_language_names() %}<option value="{{ name }}"></option>{% endfor %}
     </datalist>

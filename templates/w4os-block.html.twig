@@ -8,6 +8,9 @@
 
 {% block content %}
     <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
+        {# A profile its owner or a manager may change: the way to its edit page #}
+        {% set edit_url = page.header.w4os == 'profile' and not w4os_is_viewer() ? w4os_profile_edit_url() : null %}
+        {% if edit_url %}<p class="w4os-links w4os-profile-edit"><a role="button" href="{{ edit_url|e('html_attr') }}">{{ 'w4os.edit_title'|t('w4os.profile_title'|t) }}</a></p>{% endif %}
         {{ w4os_block(page.header.w4os_block, w4os_page_args()) }}
     </div>
 {% endblock %}

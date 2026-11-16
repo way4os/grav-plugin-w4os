@@ -35,6 +35,9 @@ class W4osPlugin extends Plugin
     /** The avatar signed in, read once per request (the account page). */
     private static ?array $current = null;
 
+    /** The avatar of the profile page shown, once found. */
+    private ?array $profiled = null;
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -113,6 +116,8 @@ class W4osPlugin extends Plugin
         }
         $event->setUser($this->site()->user($avatar));
         $event->setStatus($event::AUTHENTICATION_SUCCESS);
+        // The avatar lands on its profile, unless the sign-in was asked by a page it goes back to
+        $this->grav['session']->redirect_after_login || $event->setRedirect($this->site()->profilePage((string) $avatar['name']));
         $event->stopPropagation();
     }
 
@@ -154,6 +159,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_url', fn (string $name) => $this->site()->profileUrl($name)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid) => $this->site()->picture($uuid)));
@@ -470,6 +477,7 @@ class W4osPlugin extends Plugin
         } catch (FormError) {
             $avatar = null;
         }
+        $this->profiled = $avatar;
         $avatar === null
             ? $page->modifyHeader('http_response_code', 404)
             : $page->title((string) $avatar['name']);
