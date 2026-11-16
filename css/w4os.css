@@ -89,3 +89,5 @@ li:empty { display: none; }
 .block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
 .profile-picture { flex: none; width: 6rem; height: 6rem; max-width: none; border-radius: 50%; object-fit: cover; }
 .lead:empty { display: none; }
+.w4os-thumb-large { width: 64px; height: 64px; }
+.w4os-edited { margin-bottom: 1rem; }

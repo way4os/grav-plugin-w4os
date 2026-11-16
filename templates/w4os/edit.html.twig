@@ -4,5 +4,7 @@
     <p class="notices red">{{ 'w4os.error_not_found'|t }}</p>
 {% else %}
     <p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route('manage') }}">← {{ 'w4os.manage_title'|t }}</a></p>
+    {# What the form does not change: the picture (from the web assets server) and the name #}
+    <div class="w4os-who w4os-edited"><img class="w4os-thumb w4os-thumb-large" src="{{ w4os_picture(edited.profileImage)|e('html_attr') }}" alt="" width="64" height="64"><strong>{{ edited.name }}</strong></div>
     {% include 'forms/form.html.twig' with { form: forms('w4os-edit') } %}
 {% endif %}
