@@ -22,7 +22,7 @@
 .w4os-filters { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: flex-start; margin-bottom: 1rem; }
 .w4os-filters [role=search] { flex: 2 1 18rem; margin: 0; }
 .w4os-filters [role=search] button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
-.w4os-filters select { flex: 1 1 9rem; width: auto; margin: 0; }
+.w4os-filters select, .w4os-filters > input { flex: 1 1 9rem; width: auto; margin: 0; }
 .w4os-list th a { color: inherit; text-decoration: none; white-space: nowrap; }
 .w4os-list { width: 100%; border-collapse: collapse; font-size: .9em; }
 .w4os-list th, .w4os-list td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(127, 127, 127, .25); vertical-align: middle; }
@@ -162,9 +162,10 @@ li:empty { display: none; }
     color: var(--pico-form-element-color, CanvasText);
     border-color: var(--pico-form-element-border-color, rgba(127, 127, 127, .5));
 }
-/* The actions of a profile, its page's and its forms', at the bottom right (the buttons' wrapper of the Form plugin: buttons, or the
-   theme's own class) */
-.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions > div { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
+/* The actions of a profile (its page's and its forms') and of the page of an item, at the bottom right (the buttons' wrapper of
+   the Form plugin: buttons, or the theme's own class) */
+.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions > div, .w4os-form-item .buttons, .w4os-form-item .button-wrapper,
+.w4os-item-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
 /* The managers' dashboard: its blocks in three columns on a wide screen, two on a medium one, one on a phone; a wide block spans
    them all */
 .w4os-dashboard-blocks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
@@ -172,3 +173,7 @@ li:empty { display: none; }
 @media (min-width: 64rem) { .w4os-dashboard-blocks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .w4os-dashboard-blocks > .w4os-dashboard-block { margin: 0; }
 .w4os-dashboard-blocks > .w4os-dashboard-block-wide { grid-column: 1 / -1; }
+/* The page of an item: a value it does not change, its label beside it (above it on a phone) */
+.w4os-value { display: grid; grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr); gap: 0 1rem; align-items: baseline; margin-bottom: .5rem; }
+.w4os-value .form-label, .w4os-value .form-data { margin: 0; }
+@media (max-width: 40rem) { .w4os-value { grid-template-columns: minmax(0, 1fr); } }
