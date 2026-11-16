@@ -160,3 +160,4 @@ form:
             routes.reset: { type: text, label: w4os.reset_title }
             routes.account: { type: text, label: w4os.account_title }
             routes.manage: { type: text, label: w4os.manage_title }
+            routes.edit: { type: text, label: w4os.action_edit }

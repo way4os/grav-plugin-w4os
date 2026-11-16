@@ -1,0 +1,8 @@
+{# A manager changes an avatar of the grid (?avatar=<UUID>): the fields of its own profile form, its email at once #}
+{% set edited = w4os_edited() %}
+{% if edited is empty %}
+    <p class="notices red">{{ 'w4os.error_not_found'|t }}</p>
+{% else %}
+    <p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route('manage') }}">← {{ 'w4os.manage_title'|t }}</a></p>
+    {% include 'forms/form.html.twig' with { form: forms('w4os-edit') } %}
+{% endif %}

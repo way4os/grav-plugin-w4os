@@ -37,12 +37,13 @@
 .w4os-menu summary::-webkit-details-marker { display: none; }
 .w4os-menu summary::after { content: none; }
 .w4os-menu summary:hover, .w4os-menu[open] summary { background: rgba(127, 127, 127, .15); }
-.w4os-menu form { position: absolute; right: 0; z-index: 10; display: flex; flex-direction: column; min-width: 14rem; margin: .2rem 0 0;
+.w4os-menu-list { position: absolute; right: 0; z-index: 10; display: flex; flex-direction: column; min-width: 14rem; margin: .2rem 0 0;
     padding: .25rem 0; background: var(--pico-background-color, #fff); border: 1px solid rgba(127, 127, 127, .3); border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, .15); }
-.w4os-menu form button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: .4rem .8rem; cursor: pointer; text-align: left;
-    white-space: nowrap; font-size: .9em; color: inherit; }
-.w4os-menu form button:hover, .w4os-menu form button:focus-visible { background: rgba(127, 127, 127, .15); }
+.w4os-menu-list form { display: contents; }
+.w4os-menu-list a, .w4os-menu-list button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: .4rem .8rem; cursor: pointer;
+    text-align: left; white-space: nowrap; font-size: .9em; color: inherit; }
+.w4os-menu-list a:hover, .w4os-menu-list a:focus-visible, .w4os-menu-list button:hover, .w4os-menu-list button:focus-visible { background: rgba(127, 127, 127, .15); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .w4os-tag { font-size: .75em; padding: 0 .3rem; border: 1px solid currentColor; border-radius: .3rem; }
 .w4os-pages a, .w4os-pages strong { margin-right: .5rem; }
@@ -84,3 +85,7 @@ li:empty { display: none; }
     .w4os-splash { grid-template-columns: minmax(0, 1fr); }
     .w4os-splash-main { order: -1; }
 }
+/* The profile of an avatar (a block of the helpers): its picture beside its name */
+.block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
+.profile-picture { flex: none; width: 6rem; height: 6rem; max-width: none; border-radius: 50%; object-fit: cover; }
+.lead:empty { display: none; }

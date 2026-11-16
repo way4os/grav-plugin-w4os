@@ -1,0 +1,11 @@
+{# The admin menu, for the managers of the grid, before the menu of the visitor in the top bar of a theme: its entries are the admin
+   pages (w4os_admin_menu: the plugin's, and the ones other plugins add). The label leads to the first one. #}
+{% set items = w4os_admin_menu() %}
+{% if items %}
+<div class="w4os-user-menu w4os-admin-menu">
+    <a class="w4os-user-current" href="{{ items|first.url }}" aria-haspopup="true"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> {{ 'w4os.menu_admin'|t }}</a>
+    <ul class="w4os-user-list">
+        {% for item in items %}<li><a href="{{ item.url }}">{{ item.label }}</a></li>{% endfor %}
+    </ul>
+</div>
+{% endif %}

@@ -55,19 +55,24 @@
                 <td><span class="w4os-status">{{ ('w4os.status_' ~ status)|t }}</span></td>
                 <td class="w4os-actions">
                     {% set actions = w4os_actions(a) %}
-                    {% if actions %}
+                    {% set profile = w4os_profile_url(a.name) %}
                     <details class="w4os-menu">
                         <summary aria-label="{{ ('w4os.actions'|t ~ ': ' ~ a.name)|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}">⋮</summary>
-                        <form method="post">
-                            {{ nonce_field('w4os-manage')|raw }}
-                            <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
-                            <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">
-                            {% for action in actions %}
-                                <button name="action" value="{{ action }}">{{ ('w4os.action_' ~ action)|t }}</button>
-                            {% endfor %}
-                        </form>
+                        <div class="w4os-menu-list">
+                            {% if profile %}<a href="{{ profile }}">{{ 'w4os.action_view'|t }}</a>{% endif %}
+                            {% if w4os_route('edit') %}<a href="{{ base_url_relative ~ w4os_route('edit') ~ '?' ~ {avatar: a.uuid}|url_encode }}">{{ 'w4os.action_edit'|t }}</a>{% endif %}
+                            {% if actions %}
+                            <form method="post">
+                                {{ nonce_field('w4os-manage')|raw }}
+                                <input type="hidden" name="uuid" value="{{ a.uuid|e('html_attr') }}">
+                                <input type="hidden" name="name" value="{{ a.name|e('html_attr') }}">
+                                {% for action in actions %}
+                                    <button name="action" value="{{ action }}">{{ ('w4os.action_' ~ action)|t }}</button>
+                                {% endfor %}
+                            </form>
+                            {% endif %}
+                        </div>
                     </details>
-                    {% endif %}
                 </td>
             </tr>
         {% endfor %}

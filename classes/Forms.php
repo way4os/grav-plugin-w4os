@@ -132,10 +132,11 @@ final class Forms
      * mailed to it.
      *
      * @param array<string,mixed> $current the avatar as the engine has it
+     * @param bool $confirm whether a new email waits for its confirmation (the avatar's own form), else it changes at once (a manager)
      * @return array{avatar: array<string,mixed>, email: ?string, link: ?string} the avatar, the new email waiting for its
      *     confirmation, its link when it was not mailed (test site)
      */
-    public function profile(array $current, array $data): array
+    public function profile(array $current, array $data, bool $confirm = true): array
     {
         $attributes = [];
         foreach (self::PROFILE as $key) {
@@ -149,14 +150,16 @@ final class Forms
         }
         $changed = strtolower($email) !== strtolower(trim((string) ($current['email'] ?? '')));
         if ($changed) {
-            $attributes += ['email' => $email, 'confirmEmail' => true, 'link' => $this->tokenLink('confirm', ['change' => 1])] + ($this->sends() ? [] : ['send' => false]);
+            $attributes += $confirm
+                ? ['email' => $email, 'confirmEmail' => true, 'link' => $this->tokenLink('confirm', ['change' => 1])] + ($this->sends() ? [] : ['send' => false])
+                : ['email' => $email];
         }
         if ($attributes === []) {
             return ['avatar' => $current, 'email' => null, 'link' => null];
         }
         [$avatar, $meta] = $this->ask(fn () => $this->engine->updateAvatar((string) $current['uuid'], $attributes));
 
-        return ['avatar' => $avatar, 'email' => $changed ? $email : null, 'link' => $meta['confirmation']['link'] ?? null];
+        return ['avatar' => $avatar, 'email' => $changed && $confirm ? $email : null, 'link' => $meta['confirmation']['link'] ?? null];
     }
 
     /** A new password for the avatar signed in, once its current one is checked. */

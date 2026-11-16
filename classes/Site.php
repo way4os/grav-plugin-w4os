@@ -46,7 +46,7 @@ final class Site
             return $this->engine;
         }
         if ($bundled = $this->bundled()) {
-            return $this->engine = new Engine('', '', $bundled->nick(), fn ($method, $url, $headers, $body) => array_slice($bundled->route($method, $url, $body), 0, 2), true, $this->url('assets', false));
+            return $this->engine = new Engine('', '', $bundled->nick(), fn ($method, $url, $headers, $body) => array_slice($bundled->route($method, $url, $body), 0, 2), true, $this->path('assets'));
         }
         $config = $this->config();
         $url = trim((string) ($config['api_url'] ?? '')) ?: (trim((string) ($config['url'] ?? '')) === '' ? '' : rtrim($config['url'], '/').'/api');
@@ -210,6 +210,12 @@ final class Site
     }
 
     /** The absolute address of a page of the plugin, in the language of the visitor (or none: the pictures). */
+    /** The path of a route of the plugin on this site, without the host: a page shows it whatever address it was reached at. */
+    public function path(string $type, bool $language = false): string
+    {
+        return rtrim($this->grav['uri']->rootUrl(false), '/').($language ? $this->grav['language']->getLanguageURLPrefix() : '').($this->routes()[$type] ?? '/');
+    }
+
     public function url(string $type, bool $language = true): string
     {
         $route = $this->routes()[$type] ?? '/';
@@ -271,6 +277,54 @@ final class Site
         $avatar = $user && $user->authenticated && $user->authorized ? $user->get('w4os') : null;
 
         return is_array($avatar) && ($avatar['uuid'] ?? '') !== '' ? $avatar : null;
+    }
+
+    /** The web page of the profile of an avatar (web-profile of the grid, [AGENT_NAME] as First.Last), null when the grid has none. */
+    public function profileUrl(string $name): ?string
+    {
+        $pattern = $this->info('web_profile', fn () => $this->engine()->webProfile());
+
+        return $pattern === '' ? null : str_replace('[AGENT_NAME]', rawurlencode(str_replace(' ', '.', trim($name))), $pattern);
+    }
+
+    /**
+     * The slogan of the site in the language of the page: the setting `slogan` of the theme, a text or one by language (else the
+     * default language's), '' without one.
+     */
+    public function slogan(): string
+    {
+        $slogan = $this->grav['config']->get('theme.slogan');
+        if (is_array($slogan)) {
+            $language = $this->grav['language'];
+            $default = (string) ($language->getDefault() ?: 'en');
+            $slogan = $slogan[(string) ($language->getActive() ?: $default)] ?? $slogan[$default] ?? '';
+        }
+
+        return trim((string) $slogan);
+    }
+
+    /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
+    public const ADMIN_PAGES = ['manage' => 'w4os.manage_title'];
+
+    /**
+     * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its
+     * `items`: label and url). None for a visitor who is not a manager.
+     *
+     * @return list<array{label: string, url: string}>
+     */
+    public function adminMenu(): array
+    {
+        if (! $this->isManager()) {
+            return [];
+        }
+        $items = [];
+        foreach (self::ADMIN_PAGES as $type => $label) {
+            isset($this->routes()[$type]) && $items[] = ['label' => $this->translate($label), 'url' => $this->path($type, true)];
+        }
+        $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
+        $this->grav->fireEvent('onW4osAdminMenu', $event);
+
+        return array_values((array) $event['items']);
     }
 
     public function isManager(): bool

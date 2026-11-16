@@ -63,5 +63,6 @@ routes:
   reset: /reset-password
   account: /account
   manage: /account/avatars
+  edit: /account/avatars/edit
   # The pictures of the grid (the models), served by the bundled engine
   assets: /grid-assets

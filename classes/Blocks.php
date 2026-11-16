@@ -13,7 +13,7 @@ final class Blocks
     public const NAMES = ['grid-info', 'grid-status', 'motd', 'destination_guide', 'popular_places', 'directory_info', 'search', 'profile'];
 
     /** The arguments a block takes from the page or the shortcode. */
-    private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang'];
+    private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang', 'assets'];
 
     /**
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read

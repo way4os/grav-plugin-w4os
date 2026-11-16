@@ -42,9 +42,19 @@ final class Engine
     /** The public address of a picture of the grid (a model, a profile), by its asset UUID. */
     public function assetUrl(string $uuid, string $format = 'jpg'): string
     {
-        $file = rawurlencode($uuid).'.'.$format;
+        return $this->assetsUrl().'/'.rawurlencode($uuid).'.'.$format;
+    }
 
-        return $this->assets !== '' ? rtrim($this->assets, '/')."/$file" : $this->url.$this->path("/assets/$file");
+    /** The address the pictures of the grid are under (<UUID>.<format>). */
+    public function assetsUrl(): string
+    {
+        return $this->assets !== '' ? rtrim($this->assets, '/') : $this->url.$this->path('/assets');
+    }
+
+    /** The address of the web profile of the avatars, [AGENT_NAME] for the name (web-profile of /addresses), '' when none. */
+    public function webProfile(): string
+    {
+        return (string) ($this->resource($this->call('GET', '/addresses'))['addresses']['web-profile'] ?? '');
     }
 
     /** The address of the grid's own logo, as its helpers have it (LogoURL), null when it has none. */

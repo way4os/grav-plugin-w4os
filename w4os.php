@@ -147,6 +147,10 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatars', fn () => $this->avatars()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_slogan', fn () => $this->site()->slogan()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_profile_url', fn (string $name) => $this->site()->profileUrl($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid) => $this->site()->picture($uuid)));
@@ -165,6 +169,7 @@ class W4osPlugin extends Plugin
      * [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /]
      * [w4os text="welcome_title" /]: a text of the language files, the name of the grid in its %s ("Welcome to %s")
      * [w4os info="uri" /]: the login URI of the grid (host:port), as text to copy
+     * [w4os slogan /]: the slogan of the site (the theme's setting `slogan`), in the language of the page
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
      */
@@ -174,6 +179,7 @@ class W4osPlugin extends Plugin
         $handlers->add('w4os', fn ($shortcode) => match (true) {
             ($text = (string) $shortcode->getParameter('text', '')) !== '' => htmlspecialchars($this->site()->translate('w4os.'.preg_replace('/[^a-z0-9_]/', '', $text), [$this->site()->gridName()])),
             $shortcode->getParameter('info') === 'uri' => '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>',
+            $shortcode->hasParameter('slogan') => htmlspecialchars($this->site()->slogan()),
             default => $this->block(
                 (string) $shortcode->getParameter('block', ''),
                 array_filter(['name' => $shortcode->getParameter('name'), 'level' => $shortcode->getParameter('level'), 'title' => $shortcode->getParameter('title')]),
@@ -213,21 +219,28 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'manage'], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'manage', 'edit'], true) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
-        } elseif ($type === 'manage' && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['manage', 'edit'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
+        } elseif ($type === 'edit' && ($edited = $this->edited()) !== null) {
+            $this->grav['page']->title($this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
             $this->manage((array) ($_POST ?? []));
         }
     }
 
-    /** The account form shows what the engine has of the avatar signed in. */
+    /** The account form shows what the engine has of the avatar signed in, the form of a manager the avatar it changes. */
     public function onFormInitialized(Event $event): void
     {
         $form = $event['form'];
-        if ($form->getName() !== 'w4os-profile' || ($avatar = self::current()) === null) {
+        $avatar = match ($form->getName()) {
+            'w4os-profile' => self::current(),
+            'w4os-edit' => $this->edited(),
+            default => null,
+        };
+        if ($avatar === null) {
             return;
         }
         foreach (array_merge(['email'], Forms::PROFILE) as $key) {
@@ -283,6 +296,12 @@ class W4osPlugin extends Plugin
                 case 'password':
                     $forms->password($this->requireAvatar(), $data);
                     $this->done('w4os.password_saved', $routes['account']);
+                    // no break
+                case 'edit':
+                    $this->site()->isManager() || throw new FormError('w4os.error_unauthorized');
+                    $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
+                    $forms->profile($edited, $data, false);
+                    $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
             }
         } catch (FormError $e) {
             $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
@@ -394,6 +413,8 @@ class W4osPlugin extends Plugin
         // The helpers translate their blocks: they are asked in the language of the page
         $language = $this->grav['language'];
         $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
+        // The pictures of the grid at the addresses of this site
+        $args['assets'] = $this->site()->engine()->assetsUrl();
         if ($name === 'profile' && empty($args['name']) && ($avatar = $this->site()->avatar())) {
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }
@@ -416,6 +437,22 @@ class W4osPlugin extends Plugin
         } catch (EngineException $e) {
             return ['items' => [], 'meta' => [], 'query' => $query['page'], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
         }
+    }
+
+    /** The avatar a manager changes (?avatar=<UUID> of the edit page), as the engine has it, once per request. */
+    private function edited(): ?array
+    {
+        static $edited = false;
+        if ($edited === false) {
+            $uuid = (string) $this->grav['uri']->query('avatar');
+            try {
+                $edited = $uuid !== '' && $this->site()->isManager() ? $this->site()->forms()->avatar($uuid) : null;
+            } catch (FormError) {
+                $edited = null;
+            }
+        }
+
+        return $edited;
     }
 
     /**
