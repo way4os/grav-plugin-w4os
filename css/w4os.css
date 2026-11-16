@@ -1,5 +1,7 @@
 /* The pages of the w4os plugin and the blocks of the helpers. Light on purpose: the theme does the rest. */
 .w4os-form { max-width: 36rem; }
+/* The forms of a profile as wide as its page, laid out as it is */
+.w4os-form-profile { max-width: none; }
 .w4os-help, .w4os-count { opacity: .8; font-size: .9em; }
 .w4os-links { margin-top: 1rem; }
 .w4os-links .button { margin-right: .5rem; }
@@ -132,8 +134,6 @@ li:empty { display: none; }
 .profile-item-picture { display: block; width: auto; height: auto; max-width: 100%; max-height: 16rem; object-fit: contain; border-radius: .4rem; }
 .profile-item h3 { margin-top: 0; }
 .profile-item-label { font-weight: 600; }
-/* In a form (narrower): beside the list, the picture above the rest, as in the viewer */
-.w4os-form .profile-item { grid-template-columns: 1fr; }
 /* The tabs of the forms on one line, scrolling sideways when they do not fit */
 .w4os-form .form-tabs .tabs-nav { flex-wrap: nowrap; overflow-x: auto; }
 .w4os-form .form-tabs .tabs-nav a { flex: 0 0 auto; white-space: nowrap; }

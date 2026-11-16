@@ -5,7 +5,7 @@ cache_enable: false
 visible: false
 forms:
   w4os-profile:
-    classes: w4os-form
+    classes: 'w4os-form w4os-form-profile'
     fields:
       # The sections of a profile, in the order of the viewer's tabs
       profile:

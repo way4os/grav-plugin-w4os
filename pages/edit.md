@@ -5,7 +5,7 @@ cache_enable: false
 visible: false
 form:
   name: w4os-edit
-  classes: w4os-form
+  classes: 'w4os-form w4os-form-profile'
   fields:
     avatar:
       type: hidden
