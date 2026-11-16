@@ -295,6 +295,8 @@ class W4osPlugin extends Plugin
         if ($avatar === null) {
             return;
         }
+        // The choices of the form (roles, wants, skills) as the engine gives them
+        ($described = $this->site()->openApi()->itemOf('avatars')) === null || $form->setFields(Items::withOptions((array) $form->get('fields'), $described));
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
         }

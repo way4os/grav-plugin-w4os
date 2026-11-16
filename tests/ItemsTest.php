@@ -66,3 +66,16 @@ describe('the page of an item of the engine', function () {
             ->toMatchArray(['about' => 'Hello', 'role' => 'god', 'password' => 'secret1']);
     });
 });
+
+test('a form of the site takes the choices of its fields from the engine', function () {
+    $form = (new OpenApi(Contract::document()))->itemOf('avatars');
+    $fields = ['tabs' => ['type' => 'tabs', 'fields' => ['account' => ['type' => 'tab', 'fields' => [
+        'role' => ['type' => 'select', 'options' => ['old' => 'w4os.old']],
+        'email' => ['type' => 'email'],
+    ]]]]];
+    $role = Items::withOptions($fields, $form)['tabs']['fields']['account']['fields']['role'];
+
+    expect(array_keys($role['options']))->toContain('resident', 'god')->not->toContain('old')
+        ->and($role['options']['resident'])->toBe('w4os.role_resident')
+        ->and(Items::withOptions($fields, $form)['tabs']['fields']['account']['fields']['email'])->toBe(['type' => 'email']);
+});

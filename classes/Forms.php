@@ -192,14 +192,14 @@ final class Forms
 
     /**
      * What a manager changes of an avatar: its profile and its email (at once), and its role when another one is picked (a level
-     * that is not the one of a role stays until then).
+     * that is not the one of a role stays until then; the engine refuses a role it does not know).
      *
      * @param array<string,mixed> $edited the avatar as the engine has it
      */
     public function edit(array $edited, array $data): array
     {
         $role = (string) ($data['role'] ?? '');
-        $extra = in_array($role, self::ROLES, true) && $role !== ($edited['role'] ?? null) ? ['role' => $role] : [];
+        $extra = $role !== '' && $role !== ($edited['role'] ?? null) ? ['role' => $role] : [];
         // A new password when the manager gives one, confirmed; the engine checks it as at registration
         if ((string) ($data['password'] ?? '') !== '') {
             $this->samePassword($data);
@@ -220,9 +220,6 @@ final class Forms
         }
         $this->ask(fn () => $this->engine->updateAvatar((string) $avatar['uuid'], ['password' => (string) $data['password']]));
     }
-
-    /** The roles of the avatars, as the engine names them from their user level. */
-    public const ROLES = ['resident', 'god-like', 'customer-service', 'liaison', 'god'];
 
     /**
      * What the site adds to a request of the engine that mails a link with a token: the page that takes it, and whether the

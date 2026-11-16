@@ -150,6 +150,28 @@ final class Items
     }
 
     /**
+     * The fields of a form of the site (Grav's, nested in tabs and fieldsets) with the choices the engine gives for the item's
+     * fields of the same name (their options), whatever the form says of them.
+     *
+     * @param array<string,mixed> $fields
+     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @return array<string,mixed>
+     */
+    public static function withOptions(array $fields, array $form): array
+    {
+        $engine = array_column(array_filter($form['fields'], fn ($field) => isset($field['options'])), null, 'name');
+        foreach ($fields as $name => $field) {
+            if (! is_array($field)) {
+                continue;
+            }
+            isset($engine[$name]) && $fields[$name]['options'] = self::options($engine[$name]);
+            isset($field['fields']) && $fields[$name]['fields'] = self::withOptions((array) $field['fields'], $form);
+        }
+
+        return $fields;
+    }
+
+    /**
      * The options of a field (value => catalog key) for Grav (value => `w4os.` key).
      *
      * @param array<string,mixed> $field

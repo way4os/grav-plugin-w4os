@@ -34,10 +34,6 @@ describe('pages', function () {
         expect($used)->not->toBeEmpty();
         // Every problem code of the engine has its text
         $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));
-        // Every role of an avatar has its text
-        foreach (W4os\Grav\Forms::ROLES as $role) {
-            $used[] = 'role_'.str_replace('-', '_', $role);
-        }
         // Every label of the lists of the engine (their columns, filters, values, actions), the texts of their statuses and the
         // message of an action once done
         $document = OpenSim\Api\Contract::document();
@@ -54,6 +50,14 @@ describe('pages', function () {
             }
             foreach ($list['actions'] as $action) {
                 array_push($used, $action['label'], 'manage_'.$action['name']);
+            }
+        }
+        // Every label of the pages of the items (their groups, fields and choices)
+        foreach (['avatars', 'regions'] as $type) {
+            $item = (new W4os\Grav\OpenApi($document))->itemOf($type);
+            $used = array_merge($used, array_column($item['groups'], 'label'), array_column($item['fields'], 'label'));
+            foreach ($item['fields'] as $field) {
+                $used = array_merge($used, array_values((array) ($field['options'] ?? [])));
             }
         }
         foreach ($used as $key) {

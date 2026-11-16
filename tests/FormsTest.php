@@ -171,11 +171,12 @@ describe('account', function () {
             ->and(forms([], config: ['send_mail' => false])->tokenAttributes('reset'))->toBe(['link' => 'https://site.example.org/reset?token={token}', 'send' => false]);
     });
 
-    test('a manager changes the profile, the email at once (cleared too), and the role only when another one is picked', function () {
+    test('a manager changes the profile, the email at once (cleared too), and the role only when another one is picked (the engine knows the roles)', function () {
         $edited = ['uuid' => 'u1', 'name' => 'Ada Love', 'email' => 'ada@example.org', 'about' => '', 'role' => 'resident', 'level' => 5];
         forms([[200, avatarDocument()]], $log)->edit($edited, ['role' => 'resident', 'email' => 'new@example.org', 'about' => 'Hi']);
         forms([[200, avatarDocument()]], $log2)->edit($edited, ['role' => 'liaison', 'email' => 'ada@example.org']);
-        forms([], $log3)->edit($edited, ['role' => 'emperor', 'email' => 'ada@example.org']);
+        $forms3 = forms([[422, problem(422, 'unknown role', 'role-unknown')]], $log3);
+        $emperor = formError(fn () => $forms3->edit($edited, ['role' => 'emperor', 'email' => 'ada@example.org']));
 
         $model = ['uuid' => 'm1', 'name' => 'Default Ruth', 'email' => '', 'role' => 'resident'];
         forms([[200, avatarDocument()]], $log6)->edit($model, ['role' => 'resident', 'email' => '', 'about' => 'A model']);
@@ -189,6 +190,7 @@ describe('account', function () {
             ->and($log7[0]['body']['data']['attributes'])->toBe(['email' => ''])
             ->and(formError(fn () => $forms5->edit($edited, ['email' => 'ada@example.org', 'password' => 'a12345', 'password_confirm' => 'b12345'])))->toBe('w4os.error_password_match')
             ->and($log2[0]['body']['data']['attributes'])->toBe(['role' => 'liaison'])
-            ->and($log3)->toBe([]);
+            ->and($log3[0]['body']['data']['attributes'])->toBe(['role' => 'emperor'])
+            ->and($emperor)->toBe('w4os.error_role_unknown');
     });
 });

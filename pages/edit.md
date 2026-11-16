@@ -53,15 +53,8 @@ form:
                   type: checkboxes
                   label: false
                   classes: w4os-flags
-                  options:
-                    build: w4os.want_build
-                    explore: w4os.want_explore
-                    meet: w4os.want_meet
-                    group: w4os.want_group
-                    buy: w4os.want_buy
-                    sell: w4os.want_sell
-                    be-hired: w4os.want_be_hired
-                    hire: w4os.want_hire
+                  # Its choices: the engine's (x-form)
+                  options: {}
                 wants:
                   type: text
                   label: false
@@ -75,13 +68,8 @@ form:
                   type: checkboxes
                   label: false
                   classes: w4os-flags
-                  options:
-                    textures: w4os.skill_textures
-                    architecture: w4os.skill_architecture
-                    event-planning: w4os.skill_event_planning
-                    modeling: w4os.skill_modeling
-                    scripting: w4os.skill_scripting
-                    custom-characters: w4os.skill_custom_characters
+                  # Its choices: the engine's (x-form)
+                  options: {}
                 skills:
                   type: text
                   label: false
@@ -122,12 +110,8 @@ form:
             role:
               type: select
               label: w4os.role
-              options:
-                resident: w4os.role_resident
-                god-like: w4os.role_god_like
-                customer-service: w4os.role_customer_service
-                liaison: w4os.role_liaison
-                god: w4os.role_god
+              # Its choices: the engine's (x-form)
+              options: {}
             email:
               type: email
               label: w4os.email
