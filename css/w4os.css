@@ -97,7 +97,14 @@ li:empty { display: none; }
 .profile-picture { flex: none; width: 6rem; height: 6rem; max-width: none; border-radius: 50%; object-fit: cover; }
 .lead:empty { display: none; }
 .w4os-thumb-large { width: 64px; height: 64px; }
-.w4os-edited { margin-bottom: 1rem; }
+/* The avatar on top of the 2nd Life tab of a profile form, as in the viewer */
+.w4os-identity { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
+.w4os-identity-picture { flex: none; width: 6rem; height: 6rem; object-fit: cover; border-radius: .4rem; }
+.w4os-identity-name { margin: 0 0 .25rem; font-weight: 600; }
+.w4os-identity-details dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem 1rem; margin: 0; }
+.w4os-identity-details dd { margin: 0; }
+/* The edit button of a profile page, on the line of the name */
+.w4os-profile-edit { float: right; margin: 3rem 0 0 1rem; }
 .w4os-search-link { display: inline-flex; align-items: center; padding: 0 .25rem; color: inherit; text-decoration: none; }
 /* The blocks of the helpers in the pages of the site: their hidden labels, the search on one row, its topics together, the guide's
    own title (an h1 the viewers' panel needs) at the size of a section on the home page */

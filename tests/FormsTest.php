@@ -146,6 +146,14 @@ describe('account', function () {
             ->and($log[0]['body']['data']['attributes'])->toBe(['skillsList' => []]);
     });
 
+    test('sends "show in search" when it changed', function () use ($current) {
+        $forms = forms([[200, avatarDocument()]], $log);
+        $forms->profile($current + ['published' => false], ['email' => 'ada@example.org', 'published' => true]);
+        $forms->profile($current + ['published' => true], ['email' => 'ada@example.org', 'published' => true]);
+
+        expect($log)->toHaveCount(1)->and($log[0]['body']['data']['attributes'])->toBe(['published' => true]);
+    });
+
     test('asks nothing when nothing changed', function () use ($current) {
         forms([], $log)->profile($current, ['email' => 'ada@example.org', 'about' => 'Hi']);
 

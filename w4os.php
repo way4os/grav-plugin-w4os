@@ -160,6 +160,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_url', fn (string $name) => $this->site()->profileUrl($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
@@ -265,6 +266,7 @@ class W4osPlugin extends Plugin
         foreach (Forms::PROFILE_LISTS as $key) {
             $form->getData()->get($key) === null && $form->setData($key, Forms::checked($avatar[$key] ?? []));
         }
+        $form->getData()->get('published') === null && $form->setData('published', (bool) ($avatar['published'] ?? false));
         // The avatar a manager changes goes with the form: its address has no ?avatar= once posted
         $form->getName() === 'w4os-edit' && $form->setData('avatar', (string) $avatar['uuid']);
     }
@@ -277,13 +279,14 @@ class W4osPlugin extends Plugin
         }
         $form = $event['form'];
         $data = $form->getData()->toArray();
-        // The boxes checked and the email, as posted: none is posted when no box is checked, and an empty email is not kept in the
-        // data of the form (which keeps what it was filled with)
+        // The boxes checked, the email and "show in search", as posted: nothing is posted for a box not checked, and an empty email
+        // is not kept in the data of the form (which keeps what it was filled with)
         if (in_array((string) $event['params'], ['profile', 'edit'], true)) {
             foreach (Forms::PROFILE_LISTS as $key) {
                 $data[$key] = Forms::checked($this->grav['uri']->post("data.$key") ?? []);
             }
             $data['email'] = trim((string) ($this->grav['uri']->post('data.email') ?? ''));
+            $data['published'] = (bool) $this->grav['uri']->post('data.published');
         }
         $site = $this->site();
         $forms = $site->forms();
@@ -317,9 +320,12 @@ class W4osPlugin extends Plugin
                     $this->done('w4os.reset_done', $login);
                     // no break
                 case 'profile':
-                    $this->requireAvatar();
+                    $avatar = $this->requireAvatar();
+                    // A new password first: a wrong current one changes nothing
+                    $password = (string) ($data['password'] ?? '') !== '';
+                    $password && $forms->password($avatar, $data);
                     $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_channel_unavailable'), $data);
-                    $key = $result['email'] === null ? 'w4os.profile_saved' : ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending');
+                    $key = $result['email'] !== null ? ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending') : ($password ? 'w4os.password_saved' : 'w4os.profile_saved');
                     $this->done($key, $routes['account'], [htmlspecialchars((string) $result['email']), $this->link($result['link'])]);
                     // no break
                 case 'password':
@@ -432,6 +438,16 @@ class W4osPlugin extends Plugin
     private function requireAvatar(): array
     {
         return $this->site()->avatar() ?? throw new FormError('w4os.error_forbidden');
+    }
+
+    /** The name of an avatar by its UUID (a partner), '' when the engine has none. */
+    private function avatarName(?string $uuid): string
+    {
+        try {
+            return trim((string) $uuid, '0-') === '' ? '' : (string) ($this->site()->forms()->avatar((string) $uuid)['name'] ?? '');
+        } catch (FormError) {
+            return '';
+        }
     }
 
     /** The HTML of a block of the helpers; the search and the profile take their arguments from the address too. */

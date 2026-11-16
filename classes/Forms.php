@@ -166,6 +166,10 @@ final class Forms
                 $attributes[$key] = $list;
             }
         }
+        // Shown in search (the profile is public)
+        if (array_key_exists('published', $data) && (bool) $data['published'] !== (bool) ($current['published'] ?? false)) {
+            $attributes['published'] = (bool) $data['published'];
+        }
         $email = trim((string) ($data['email'] ?? ($current['email'] ?? '')));
         // An avatar's own profile has an email; a manager may leave it empty or clear it (the models and the technical accounts have none)
         $email === '' && $confirm && throw new FormError('w4os.error_required');

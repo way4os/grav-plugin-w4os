@@ -7,11 +7,6 @@ forms:
   w4os-profile:
     classes: w4os-form
     fields:
-      email:
-        type: email
-        label: w4os.email
-        autocomplete: email
-        validate: { required: true }
       # The sections of a profile, in the order of the viewer's tabs
       profile:
         type: tabs
@@ -20,10 +15,16 @@ forms:
             type: tab
             title: w4os.profile_tab_second_life
             fields:
+              identity:
+                type: w4os_identity
+                validate: { ignore: true }
               about:
                 type: textarea
                 label: w4os.about
                 rows: 5
+              published:
+                type: checkbox
+                label: w4os.show_in_search
           web:
             type: tab
             title: w4os.profile_tab_web
@@ -38,7 +39,6 @@ forms:
               interests_note:
                 type: w4os_note
                 text: w4os.interests_removed
-                setting: profile.interests_removed_in
                 validate: { ignore: true }
               wants_group:
                 type: fieldset
@@ -89,35 +89,35 @@ forms:
                 type: textarea
                 label: w4os.first_life
                 rows: 3
+          account:
+            type: tab
+            title: w4os.profile_tab_account
+            fields:
+              email:
+                type: email
+                label: w4os.email
+                autocomplete: email
+                validate: { required: true }
+              # A new password, given with the current one (both optional: the rest of the profile saves without them)
+              current:
+                type: password
+                label: w4os.current_password
+                autocomplete: current-password
+              password:
+                type: password
+                label: w4os.new_password
+                help: w4os.password_help
+                autocomplete: new-password
+                minlength: 6
+                maxlength: 16
+              password_confirm:
+                type: password
+                label: w4os.password_confirm
+                autocomplete: new-password
+                minlength: 6
+                maxlength: 16
     buttons:
       - { type: submit, value: w4os.save_button, classes: 'button primary' }
     process:
       - w4os: profile
-  w4os-password:
-    classes: w4os-form
-    fields:
-      current:
-        type: password
-        label: w4os.current_password
-        autocomplete: current-password
-        validate: { required: true }
-      password:
-        type: password
-        label: w4os.new_password
-        help: w4os.password_help
-        autocomplete: new-password
-        minlength: 6
-        maxlength: 16
-        validate: { required: true }
-      password_confirm:
-        type: password
-        label: w4os.password_confirm
-        autocomplete: new-password
-        minlength: 6
-        maxlength: 16
-        validate: { required: true }
-    buttons:
-      - { type: submit, value: w4os.password_button, classes: 'button' }
-    process:
-      - w4os: password
 ---

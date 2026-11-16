@@ -1,20 +1,7 @@
-{% set avatar = w4os_avatar() %}
-{% if avatar is empty %}
+{# The profile of the avatar signed in, organized like the viewer's profile window (the tabs of the form), its account (email,
+   password) in the last tab #}
+{% if w4os_avatar() is empty %}
     <p class="notices red">{{ 'w4os.error_channel_unavailable'|t }}</p>
 {% else %}
-    <div class="w4os-account-head">
-        <p class="w4os-avatar-name"><strong>{{ avatar.name }}</strong>
-            {% if avatar.created %}<span class="w4os-born">{{ 'w4os.born'|t }} {{ avatar.created|date('Y-m-d') }}</span>{% endif %}
-        </p>
-        <p class="w4os-links">
-            {% if w4os_is_manager() and w4os_route('manage') %}<a class="button" href="{{ base_url_relative ~ w4os_route('manage') }}">{{ 'w4os.manage_title'|t }}</a>{% endif %}
-            <a class="button" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.logout'|t }}</a>
-        </p>
-    </div>
-    <div class="w4os-account-profile">{{ w4os_block('profile', { name: avatar.name|replace({' ': '.'}) }) }}</div>
-    <h2>{{ 'w4os.profile_title'|t }}</h2>
-    <p class="w4os-help">{{ 'w4os.profile_text'|t }}</p>
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
-    <h2>{{ 'w4os.password_title'|t }}</h2>
-    {% include 'forms/form.html.twig' with { form: forms('w4os-password') } %}
 {% endif %}
