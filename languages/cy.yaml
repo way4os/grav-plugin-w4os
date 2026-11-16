@@ -76,7 +76,7 @@ w4os:
   online: 'Ar-lein'
   status_active: 'Gweithgar'
   status_disabled: 'Analluogwyd'
-  status_pending: 'Yn aros i''w ebost gael ei gadarnhau'
+  status_pending: 'Yn aros'
   action_enable: 'Galluogi'
   action_disable: 'Analluogi'
   action_reset: 'Anfon dolen i ailosod y cyfrinair'

@@ -76,7 +76,7 @@ w4os:
   online: 'Online'
   status_active: 'Actief'
   status_disabled: 'Uitgeschakeld'
-  status_pending: 'Wacht op de bevestiging van het e-mailadres'
+  status_pending: 'In afwachting'
   action_enable: 'Activeren'
   action_disable: 'Uitschakelen'
   action_reset: 'Een link sturen om het wachtwoord opnieuw in te stellen'

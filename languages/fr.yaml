@@ -76,7 +76,7 @@ w4os:
   online: 'En ligne'
   status_active: 'Actif'
   status_disabled: 'Désactivé'
-  status_pending: 'En attente de la confirmation de son e-mail'
+  status_pending: 'En attente'
   action_enable: 'Activer'
   action_disable: 'Désactiver'
   action_reset: 'Envoyer un lien de réinitialisation du mot de passe'
