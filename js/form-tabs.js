@@ -44,8 +44,9 @@ document.querySelectorAll('.form-tabs .tabs-nav').forEach((nav) => {
         });
     });
     sync();
-    // The tab the address names, once the Form plugin's script listens
-    const asked = () => tabs.find((tab) => `#${name(tab)}` === location.hash);
+    // The tab the address names, once the Form plugin's script listens (the former names of the tabs of a profile lead to theirs)
+    const aliases = { '#second-life': '#inworld', '#first-life': '#real-life' };
+    const asked = () => tabs.find((tab) => `#${name(tab)}` === (aliases[location.hash] || location.hash));
     asked() && document.addEventListener('DOMContentLoaded', () => asked().click());
     // A link to a tab of the page (#picks) opens it
     window.addEventListener('hashchange', () => asked()?.click());

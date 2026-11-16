@@ -13,9 +13,9 @@ form:
     profile:
       type: tabs
       fields:
-        second_life:
+        inworld:
           type: tab
-          title: w4os.profile_tab_second_life
+          title: w4os.profile_tab_inworld
           fields:
             identity:
               type: w4os_identity
@@ -103,9 +103,9 @@ form:
             classifieds_list:
               type: w4os_items
               kind: classifieds
-        first_life:
+        real_life:
           type: tab
-          title: w4os.profile_tab_first_life
+          title: w4os.profile_tab_real_life
           fields:
             first_picture:
               type: w4os_photo
@@ -113,7 +113,7 @@ form:
             firstLife:
               type: textarea
               classes: w4os-autogrow
-              label: w4os.first_life
+              label: w4os.real_life
               rows: 3
         account:
           type: tab
