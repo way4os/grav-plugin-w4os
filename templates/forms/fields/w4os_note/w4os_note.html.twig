@@ -1,0 +1,4 @@
+{# A note of a form (field.text, a text of the language files) with a setting of the plugin as its value (field.setting); nothing
+   while that setting is empty #}
+{% set setting = config.get('plugins.w4os.' ~ field.setting) %}
+{% if setting %}<p class="w4os-note">{{ field.text|t(setting) }}</p>{% endif %}

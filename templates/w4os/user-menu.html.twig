@@ -7,7 +7,7 @@
     {% if grav.user.authenticated %}
         <a class="w4os-user-current" href="{{ grav.user.w4os ? w4os_profile_page() : base_url_relative ~ login_route }}" aria-haspopup="true"><i class="fa-solid fa-user" aria-hidden="true"></i> {{ grav.user.fullname ?: grav.user.username }}</a>
         <ul class="w4os-user-list">
-            {% if grav.user.w4os %}<li><a href="{{ base_url_relative ~ routes.account }}">{{ 'w4os.edit_title'|t('w4os.profile_title'|t) }}</a></li>{% endif %}
+            {% if grav.user.w4os %}<li><a href="{{ base_url_relative ~ routes.account }}">{{ 'w4os.edit_profile'|t }}</a></li>{% endif %}
             <li><a href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e }}">{{ 'w4os.logout'|t }}</a></li>
         </ul>
     {% else %}
