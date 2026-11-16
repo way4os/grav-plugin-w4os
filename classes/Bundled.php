@@ -61,16 +61,21 @@ final class Bundled
     }
 
     /**
-     * Whether an address of the site is under the base of the helpers of the grid (`/helpers` by default): they serve what is there.
-     * Every other address is the site's, the pages of the grid it serves included (search, profiles, guide). Helpers at the root of
-     * the site are a site of their own: nothing is theirs here.
+     * Whether an address of the site is the helpers': under their base (`/helpers` by default), as the engine decides it
+     * (Grid::servedByHelpers(), the path asked on the origin of the base). Every other address is the site's, the pages of the grid
+     * it serves included. Helpers at the root of the site are a site of their own: nothing is theirs here.
      */
     public function serves(string $path): bool
     {
         $grid = $this->grid();
-        $prefix = $grid === null ? '' : rtrim((string) parse_url((string) $grid->helpersUrl(), PHP_URL_PATH), '/');
+        $base = $grid?->helpersUrl();
+        if ($base === null || trim((string) parse_url($base, PHP_URL_PATH), '/') === '') {
+            return false;
+        }
+        $parts = parse_url($base) ?: [];
+        $origin = ($parts['scheme'] ?? 'http').'://'.($parts['host'] ?? '').(isset($parts['port']) ? ':'.$parts['port'] : '');
 
-        return $prefix !== '' && ($path === $prefix || str_starts_with($path, "$prefix/"));
+        return $grid->servedByHelpers($origin.$path);
     }
 
     /** Answers the request of this process with the helpers of the grid (their Slim application), and sends the answer. */

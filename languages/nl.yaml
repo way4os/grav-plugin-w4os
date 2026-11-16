@@ -2,6 +2,7 @@
 # not edit, change those and run composer languages.
 w4os:
   welcome_title: 'Welkom op %s'
+  guide_title: 'Gids voor bestemmingen'
   register_title: 'Mijn Avatar aanmaken'
   register_text: 'Kies hieronder een naam. Zo zullen mensen je in de virtuele wereld zien.'
   register_button: 'Mijn Avatar aanmaken'

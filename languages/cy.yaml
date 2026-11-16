@@ -2,6 +2,7 @@
 # not edit, change those and run composer languages.
 w4os:
   welcome_title: 'Croeso i %s'
+  guide_title: 'Canllaw cyrchfannau'
   register_title: 'Creu Fy Avatar'
   register_text: 'Dewiswch enw isod. Dyma sut bydd pobl yn eich gweld yn y byd rhithwir.'
   register_button: 'Creu Fy Avatar'
