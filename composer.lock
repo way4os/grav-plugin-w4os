@@ -638,7 +638,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "eaf060153c69ed0989d33823fb5f70ebc70a8e9e"
+                "reference": "5aaf51afa2d93e90acea83abe0c9d55de6cafbeb"
             },
             "require": {
                 "ext-curl": "*",
@@ -700,6 +700,9 @@
                 ],
                 "docs": [
                     "php dev/api-docs.php"
+                ],
+                "translations": [
+                    "php dev/translations.php"
                 ]
             },
             "license": [
@@ -723,7 +726,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "fccfa29be0f7170945826cc7dc2f398d8edeeae7"
+                "reference": "8b2dda99ca7d4776453647c9e55d8ad6da4e826e"
             },
             "require": {
                 "ext-curl": "*",
@@ -771,6 +774,15 @@
             "scripts": {
                 "test": [
                     "pest"
+                ],
+                "logos": [
+                    "php -r 'if (getenv(\"COMPOSER_DEV_MODE\") === \"0\") { exit; } foreach (glob(\"vendor/magicoli/opensim-engine/share/images/logos/*.png\") ?: [] as $logo) { copy($logo, \"assets/images/logos/\" . basename($logo)); }'"
+                ],
+                "post-install-cmd": [
+                    "@logos"
+                ],
+                "post-update-cmd": [
+                    "@logos"
                 ]
             },
             "license": [
