@@ -6,8 +6,8 @@
    Its first column is the name of the row; the others show in their column on a wide screen (xl), in a grey line under the name
    on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
-{# The toolbar: the search on the left, the filters on the right (their empty option names them); Enter asks the list again #}
-<form class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3" method="get">
+{# The toolbar: the search, then the filters under it at their width (their empty option names them); Enter asks the list again #}
+<form class="w4os-filters d-flex flex-column gap-2 mb-3" method="get">
     {% if list.search is not null %}
     <div class="input-icon w4os-search" role="search">
         <span class="input-icon-addon"><i class="ti ti-search" aria-hidden="true"></i></span>
@@ -15,7 +15,7 @@
         <button type="submit" class="visually-hidden">{{ 'w4os.search'|t }}</button>
     </div>
     {% endif %}
-    <div class="d-flex flex-wrap gap-2 ms-auto w4os-filter-fields">
+    <div class="d-flex flex-wrap gap-2 w4os-filter-fields">
     {% for filter in list.filters %}
         {% set label = ('w4os.' ~ filter.label)|t %}
         {% if filter.multiple ?? false %}
