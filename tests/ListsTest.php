@@ -12,10 +12,10 @@ describe('a list of the engine', function () {
         $list = (new OpenApi($document))->listOf('avatars');
         $name = $list['columns'][0];
 
-        expect(array_column($list['columns'], 'name'))->toBe(['name', 'email', 'role', 'created', 'lastSeen', 'status'])
+        expect(array_column($list['columns'], 'name'))->toBe(['name', 'email', 'role', 'type', 'created', 'lastSeen', 'status'])
             ->and($name)->toMatchArray(['label' => 'avatar_name', 'type' => 'text', 'sort' => 'name', 'picture' => 'profileImage'])
             // Its status (enabled, online) in one indicators column
-            ->and(array_column($list['columns'][5]['indicators'], 'name'))->toBe(['accountState', 'ban'])
+            ->and(array_column(array_column($list['columns'], null, 'name')['status']['indicators'], 'name'))->toBe(['accountState', 'ban'])
             ->and($list['sort'])->toMatchArray(['default' => '-created', 'descending' => '-'])
             ->and($list['sort']['values'])->toContain('level')
             ->and($list['search'])->toBe(['name', 'email'])

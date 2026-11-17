@@ -23,7 +23,7 @@ final class Forms
         'name-reserved', 'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
         'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed', 'role-unknown', 'role-level-conflict', 'filter-unknown',
         'filter-value-unknown', 'sort-unknown', 'field-read-only', 'flag-unknown', 'owner-unknown', 'estate-shared',
-        'config-not-writable', 'instance-user-required', 'restore-conflict', 'source-not-readable',
+        'config-not-writable', 'instance-user-required', 'restore-conflict', 'source-not-readable', 'post-invalid',
     ];
 
     /**
