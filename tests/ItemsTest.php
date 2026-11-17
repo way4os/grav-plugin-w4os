@@ -50,7 +50,10 @@ describe('the page of an item of the engine', function () {
             ->and(Items::changeable($form, $local, ['owner']))->toBeFalse()
             ->and($fields['id'])->toBe(['type' => 'hidden'])
             ->and(json_encode($fields))->toContain('"enabled":{"type":"checkbox"')->not->toContain('"name":')
-            ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager']))->toBe(['id' => 'r1', 'enabled' => true]);
+            ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager']))->toBe(['id' => 'r1', 'owner' => '', 'roles' => [], 'enabled' => true])
+            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent', 'FallbackRegion'], 'enabled' => '1'], ['manager']))
+            ->toBe(['roles' => ['FallbackRegion', 'Persistent']])
+            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent'], 'enabled' => '1'], ['manager']))->toBe([]);
     });
 
     test('a posted form changes what differs only', function () use ($api) {

@@ -391,12 +391,12 @@ class W4osPlugin extends Plugin
                     $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles']);
                     $id = Lists::id($page['item']);
                     try {
-                        $changes === [] || $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
+                        $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
                     } catch (EngineException $e) {
                         throw $forms->error($e);
                     }
-                    // Saved: the page of the item, as it is now
-                    $this->done('w4os.manage_saved', $this->grav['page']->route().'?'.http_build_query(['id' => $id]), [(string) ($page['item']['name'] ?? '')]);
+                    // Saved: the page of the item, as it is now, with what is left to do (the engine's reminders)
+                    $this->done('w4os.manage_saved', $this->grav['page']->route().'?'.http_build_query(['id' => $id]), [(string) ($page['item']['name'] ?? '')], (array) ($saved['meta']['reminders'] ?? []));
             }
         } catch (FormError $e) {
             $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
@@ -497,10 +497,17 @@ class W4osPlugin extends Plugin
         return '<a href="'.htmlspecialchars($this->grav['base_url_relative'].$this->grav['language']->getLanguageURLPrefix().$route).'" target="_blank">'.htmlspecialchars($route).'</a>';
     }
 
-    /** A message for the next page, and the redirect to it (the form is not sent twice by a reload). */
-    private function done(string $key, string $route, array $vars = []): never
+    /**
+     * A message for the next page, and the redirect to it (the form is not sent twice by a reload).
+     *
+     * @param list<string> $notes what is left to do, as the engine says it (shown after the message, as warnings)
+     */
+    private function done(string $key, string $route, array $vars = [], array $notes = []): never
     {
         $this->grav['messages']->add($this->site()->translate($key, $vars), 'info');
+        foreach ($notes as $note) {
+            $this->grav['messages']->add(htmlspecialchars((string) $note), 'warning');
+        }
         $this->grav->redirectLangSafe($route, 303);
         exit;
     }
