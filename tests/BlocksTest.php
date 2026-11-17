@@ -24,6 +24,12 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('search', ['q' => 'Ada'] + $site), true))->toBe(['q' => 'Ada'] + $site);
     });
 
+    test('asks the guide for the category the page shows', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+
+        expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out']);
+    });
+
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {
         expect(Blocks::kept('search'))->toBeFalse()
             ->and(Blocks::kept('profile'))->toBeTrue()

@@ -695,7 +695,13 @@ class W4osPlugin extends Plugin
     private function block(string $name, array $args = []): string
     {
         $uri = $this->grav['uri'];
-        $args += array_filter(['q' => $uri->query('q'), 'topic' => $uri->query('topic'), 'name' => $name === 'profile' ? $uri->query('name') : null]);
+        $args += array_filter([
+            'q' => $uri->query('q'),
+            'topic' => $uri->query('topic'),
+            'name' => $name === 'profile' ? $uri->query('name') : null,
+            // The category of the guide its cards open (?category=)
+            'category' => $name === 'destination_guide' ? $uri->query('category') : null,
+        ]);
         // The helpers translate their blocks: they are asked in the language of the page
         $language = $this->grav['language'];
         $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
