@@ -174,13 +174,15 @@ li:empty { display: none; }
     border-radius: calc(var(--pico-border-radius, .25rem) / 2);
 }
 .ts-wrapper.multi .ts-control > div.item.active { background: color-mix(in srgb, var(--pico-form-element-color, currentColor) 24%, transparent); color: var(--pico-form-element-color, inherit); }
-.ts-wrapper.plugin-remove_button .ts-control .item .remove[role=button] {
-    width: auto; margin: 0 0 0 .4rem; padding: 0 .35rem; border: 0; border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+.ts-wrapper .ts-control .item .remove[role=button] {
+    display: inline-block; cursor: pointer; text-decoration: none; width: auto; margin: 0 0 0 .4rem; padding: 0 .35rem; border: 0; border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent);
     border-radius: 0; background: none; box-shadow: none; color: inherit; font-size: inherit; line-height: inherit;
 }
-.ts-wrapper.plugin-remove_button .ts-control .item .remove[role=button]:hover { background: color-mix(in srgb, currentColor 15%, transparent); }
+.ts-wrapper .ts-control .item .remove[role=button]:hover { background: color-mix(in srgb, currentColor 15%, transparent); }
 .ts-wrapper .ts-dropdown .option.active { background-color: color-mix(in srgb, var(--pico-form-element-color, currentColor) 12%, transparent); color: inherit; }
 .ts-wrapper .ts-dropdown .create, .ts-wrapper .ts-dropdown .no-results { color: var(--pico-muted-color, GrayText); }
+/* A filter of one value lists its values only: no choice is the label of the field, removed by its × */
+.ts-wrapper .ts-dropdown .option[data-value=""] { display: none; }
 .ts-wrapper .ts-dropdown,
 .ts-dropdown {
     background-color: var(--pico-form-element-background-color, Canvas);

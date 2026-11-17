@@ -15,16 +15,17 @@
         {% set label = ('w4os.' ~ filter.label)|t %}
         {% if filter.multiple ?? false %}
         {# The choices of a filter as the same field (Tom Select, js/filters.js): several values, any of them, its label as its
-           placeholder; or one value, its empty option (its label, greyed) asking for all. The meaning of each value as its tip #}
+           placeholder; or one value, its label greyed while none is chosen, a × to remove it (without the script, its first option
+           asks for any). The meaning of each value as its tip #}
         {% set asked = query[filter.name] ?? [] %}
-        <select name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <select name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
             {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% elseif filter.format is defined %}
         <input type="text" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
-        <select name="{{ filter.name|e('html_attr') }}" data-w4os-filter aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
-            <option value="">{{ label }}</option>
+        <select name="{{ filter.name|e('html_attr') }}" data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+            <option value="">{{ 'w4os.filter_any'|t }}</option>
             {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% endif %}
