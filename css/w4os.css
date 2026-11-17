@@ -167,16 +167,19 @@ li:empty { display: none; }
     border: 0; background: none; box-shadow: none; color: inherit;
 }
 /* The tags of several values (the languages of a profile, a filter) and the option pointed in the list in the theme's colors, for
-   light and dark (Pico's variables when the theme has them, else a tint of its text) */
+   light and dark: a tint of the text of its fields; the button that removes a tag a plain mark, not a button of the theme */
 .ts-wrapper.multi .ts-control > div.item {
-    background: var(--pico-code-background-color, color-mix(in srgb, currentColor 12%, transparent));
-    color: var(--pico-color, inherit);
+    background: color-mix(in srgb, var(--pico-form-element-color, currentColor) 14%, transparent);
+    color: var(--pico-form-element-color, inherit);
     border-radius: calc(var(--pico-border-radius, .25rem) / 2);
 }
-.ts-wrapper.multi .ts-control > div.item.active { background: var(--pico-dropdown-hover-background-color, color-mix(in srgb, currentColor 20%, transparent)); color: var(--pico-color, inherit); }
-.ts-wrapper.plugin-remove_button .ts-control .item .remove { border-color: var(--pico-muted-border-color, color-mix(in srgb, currentColor 25%, transparent)); }
-.ts-wrapper.plugin-remove_button .ts-control .item .remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
-.ts-wrapper .ts-dropdown .option.active { background-color: var(--pico-dropdown-hover-background-color, color-mix(in srgb, currentColor 12%, transparent)); color: inherit; }
+.ts-wrapper.multi .ts-control > div.item.active { background: color-mix(in srgb, var(--pico-form-element-color, currentColor) 24%, transparent); color: var(--pico-form-element-color, inherit); }
+.ts-wrapper.plugin-remove_button .ts-control .item .remove[role=button] {
+    width: auto; margin: 0 0 0 .4rem; padding: 0 .35rem; border: 0; border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    border-radius: 0; background: none; box-shadow: none; color: inherit; font-size: inherit; line-height: inherit;
+}
+.ts-wrapper.plugin-remove_button .ts-control .item .remove[role=button]:hover { background: color-mix(in srgb, currentColor 15%, transparent); }
+.ts-wrapper .ts-dropdown .option.active { background-color: color-mix(in srgb, var(--pico-form-element-color, currentColor) 12%, transparent); color: inherit; }
 .ts-wrapper .ts-dropdown .create, .ts-wrapper .ts-dropdown .no-results { color: var(--pico-muted-color, GrayText); }
 .ts-wrapper .ts-dropdown,
 .ts-dropdown {
