@@ -1,12 +1,12 @@
 {# The parts of the page of an item in the admin (Tabler): its header, its tabs, its details. #}
 
 {# The header (Tabler's page header): the link back to its list, its picture and its name as its list shows them (its first
-   column), its state as badges (the indicators of its list: the icon and the label of each state, in its tone: green, grey, red), its actions at the right:
-   the links given (`links`: url, label, id), then the engine's actions that apply to it, the ones it asks to confirm last, marked #}
+   column), its state as badges (the indicators of its list: the icon and the label of each state, in its tone: green, grey, red), at the right
+   the links given (`links`: url, label, id) and the "…" menu of the engine's actions that apply to it #}
 {% macro header(item, listed, back = null, actions = [], links = []) %}
     {% set first = listed.columns|first %}
     {% set picture = first.picture ?? null %}
-    {% set tones = {ok: 'green', neutral: 'secondary', off: 'secondary', failed: 'red'} %}
+    {% set tones = {ok: 'green', off: 'secondary', failed: 'red'} %}
     {% set id = item.uuid ?? item.id ?? '' %}
     <div class="page-header d-print-none w4os-item-header">
         <div class="container-fluid">
@@ -33,16 +33,28 @@
                 </div>
                 {% if links or actions %}
                 <div class="col-12 col-md-auto ms-auto">
-                    <form method="post" class="btn-list">
+                    <div class="btn-list">
                         {% for link in links %}<a class="btn"{% if link.id is defined %} id="{{ link.id|e('html_attr') }}"{% endif %} href="{{ link.url|e('html_attr') }}">{{ link.label }}</a>{% endfor %}
                         {% if actions %}
-                        {{ nonce_field('w4os-list')|raw }}
-                        <input type="hidden" name="id" value="{{ id|e('html_attr') }}">
-                        {% for action in actions|filter(action => action.ask is not defined) %}<button class="btn" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
-                        {# Confirmed before it is sent, in the words of the engine (`ask`) #}
-                        {% for action in actions|filter(action => action.ask is defined) %}<button class="btn btn-outline-danger" name="action" value="{{ action.name|e('html_attr') }}" data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                        {# The engine's actions in a "…" menu, as the menu of its row in its list: the ones it asks to confirm last, apart and marked #}
+                        <div class="dropdown">
+                            <button type="button" class="btn btn-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ 'w4os.actions'|t|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots" aria-hidden="true"></i></button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <form method="post">
+                                    {{ nonce_field('w4os-list')|raw }}
+                                    <input type="hidden" name="id" value="{{ id|e('html_attr') }}">
+                                    {% set safe = actions|filter(action => action.ask is not defined) %}
+                                    {% set asked = actions|filter(action => action.ask is defined) %}
+                                    {% for action in safe %}<button class="dropdown-item" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                                    {% if asked %}
+                                        {% if safe %}<div class="dropdown-divider"></div>{% endif %}
+                                        {% for action in asked %}<button class="dropdown-item text-danger" name="action" value="{{ action.name|e('html_attr') }}" data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </div>
                         {% endif %}
-                    </form>
+                    </div>
                 </div>
                 {% endif %}
             </div>

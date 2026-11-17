@@ -54,7 +54,7 @@ describe('the page of an item in the admin', function () {
     test('shows its views as tabs of a card, its details in a grid, without its name, picture and state (its header has them)', function () use ($page) {
         $html = item_twig($page)->render('w4os/item.html.twig', []);
 
-        expect($html)->toContain('<ul class="nav nav-tabs card-header-tabs">', 'class="nav-link active" href="&#x3F;id&#x3D;r1"', 'href="&#x3F;id&#x3D;r1&amp;edit&#x3D;1">[w4os.action_edit]',
+        expect($html)->toContain('<ul class="nav nav-tabs card-header-tabs">', 'class="nav-link active" href="&#x3F;id&#x3D;r1" aria-current="page">[w4os.tab_overview]', 'href="&#x3F;id&#x3D;r1&amp;edit&#x3D;1">[w4os.action_edit]',
             '<div class="datagrid">', '<div class="datagrid-title">[w4os.profile_location]</div>', '8015,8012')
             ->and($html)->not->toContain('[w4os.column_region]', '[w4os.column_map]', '[w4os.column_enabled]');
     });

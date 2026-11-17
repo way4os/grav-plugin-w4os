@@ -9,7 +9,7 @@
 {% else %}
     {% set id = page_item.item.uuid ?? page_item.item.id ?? '' %}
     <div class="card w4os-item">
-        {{ parts.tabs([{url: '?' ~ {id: id}|url_encode, label: 'w4os.action_view_item'|t, active: not page_item.edit}]
+        {{ parts.tabs([{url: '?' ~ {id: id}|url_encode, label: 'w4os.tab_overview'|t, active: not page_item.edit}]
             |merge(page_item.changeable ? [{url: '?' ~ {id: id, edit: 1}|url_encode, label: 'w4os.action_edit'|t, active: page_item.edit}] : [])) }}
         <div class="card-body">
         {% if page_item.edit %}

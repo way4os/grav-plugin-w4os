@@ -13,11 +13,11 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item)));
-    $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n items"));
+    $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n ".($key === 'w4os.filters_active' ? 'filters' : 'items')));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
-    $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+    $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => W4os\Grav\Site::date($value, 'fr')));
     $assets = new class {
         public function addCss(string $url): void {}
@@ -45,7 +45,7 @@ describe('the list of a page of the admin', function () {
         // The name is the link of the row
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
             // A value that does not say what it is after the label of its column
-            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.column_slug] demo.solo · [w4os.column_grid] demo · [w4os.column_uri] h:9040 · [w4os.column_port] 9040</div>')
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.label_value:[w4os.column_slug]|demo.solo] · [w4os.label_value:[w4os.column_grid]|demo] · [w4os.label_value:[w4os.column_uri]|h:9040] · [w4os.label_value:[w4os.column_port]|9040]</div>')
             ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
@@ -58,8 +58,14 @@ describe('the list of a page of the admin', function () {
 
         expect(W4os\Grav\Site::date(1794787200, 'en'))->toBe('Nov 16, 2026')
             ->and(W4os\Grav\Site::date(null, 'fr'))->toBe('')
-            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.last_seen] 17 nov. 2026 · [w4os.created] 16 nov. 2026</div>')
+            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.last_seen]|17 nov. 2026] · [w4os.label_value:[w4os.created]|16 nov. 2026]</div>')
             ->and($html)->not->toContain('2026-11-16');
+    });
+
+    test('counts the filters chosen, with a link that removes them and keeps the search and the sort', function () use ($simulators, $solo) {
+        $html = render_list($simulators, [], ['total' => 0], [], ['search' => 'solo', 'enabled' => 'yes', 'sort' => 'name', 'page' => 2]);
+
+        expect($html)->toContain('0 items', ' · 1 filters', 'href="?search=solo&amp;sort=name"', 'role="group" aria-label="&#x5B;w4os.filters&#x5D;"');
     });
 
     test('has a "…" menu of its other actions, the ones the engine asks to confirm last and marked', function () use ($simulators, $solo) {

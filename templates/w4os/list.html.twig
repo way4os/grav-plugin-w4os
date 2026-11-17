@@ -16,7 +16,7 @@
         <button type="submit" class="visually-hidden">{{ 'w4os.search'|t }}</button>
     </div>
     {% endif %}
-    <div class="d-flex flex-wrap gap-2 w4os-filter-fields">
+    <div class="d-flex flex-wrap gap-2 w4os-filter-fields" role="group" aria-label="{{ 'w4os.filters'|t|e('html_attr') }}">
     {% for filter in list.filters %}
         {% set label = ('w4os.' ~ filter.label)|t %}
         {% if filter.multiple ?? false %}
@@ -47,7 +47,15 @@
 {% if error %}
     <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% else %}
-    {% if items is not empty %}<p class="text-secondary w4os-count mb-2">{{ w4os_count(texts.count, meta.total ?? items|length) }}</p>{% endif %}
+    {# The count of its rows, the filters chosen and a link to remove them #}
+    {% set names = list.filters|map(f => f.name) %}
+    {% set active = list.filters|filter(f => (query[f.name] ?? '') is not empty)|length %}
+    {% if items is not empty or active %}
+    <p class="text-secondary w4os-count mb-2">
+        {{ w4os_count(texts.count, meta.total ?? items|length) }}
+        {% if active %} · {{ w4os_count('w4os.filters_active', active) }} <a class="text-secondary" href="?{{ query|filter((v, k) => k not in names and k != 'page')|url_encode }}" title="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ 'w4os.filter_clear'|t|e('html_attr') }}"><i class="ti ti-x" aria-hidden="true"></i></a>{% endif %}
+    </p>
+    {% endif %}
     <div class="card w4os-list-card">
     {% if items is empty %}
         <div class="empty">
@@ -82,7 +90,7 @@
                         {# The other columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
                            number, a name) after the label of its column #}
                         {% set parts = [] %}
-                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.type in bare ? part : ('w4os.' ~ other.label)|t ~ ' ' ~ part]) %}{% endif %}{% endfor %}
+                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.type in bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part)]) %}{% endif %}{% endfor %}
                         {% if parts %}<div class="w4os-subtitle text-secondary d-xl-none">{{ parts|join(' · ') }}</div>{% endif %}
                     </td>
                     {% else %}
