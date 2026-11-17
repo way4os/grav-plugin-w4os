@@ -85,11 +85,11 @@ describe('pages', function () {
         }
     });
 
-    test('every icon of the engine has its icon of Tabler Icons, in the settings a site can change', function () {
+    test('every icon of the engine has its icon of Tabler Icons, in the settings a site can change (one the engine names next may come first)', function () {
         $icons = (array) (Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['icons'] ?? []);
         $engine = (new ReflectionClassConstant(OpenSim\Data\Listing::class, 'ICONS'))->getValue();
 
-        expect(array_keys($icons))->toEqualCanonicalizing($engine);
+        expect(array_keys($icons))->toContain(...$engine);
         foreach ($icons as $classes) {
             expect($classes)->toMatch('/^ti ti-[a-z0-9-]+$/');
             // An icon the font has
