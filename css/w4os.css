@@ -216,7 +216,7 @@ li:empty { display: none; }
 /* The indicators of a list: an icon by state, its tone in the colors of the theme; an icon that is an action is a plain button */
 .w4os-indicators { display: inline-flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .w4os-indicator-form { display: inline; margin: 0; }
-.w4os button.w4os-indicator { width: auto; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; color: inherit; cursor: pointer; }
+.w4os button.w4os-indicator { width: auto; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; cursor: pointer; }
 .w4os-tone-ok { color: var(--pico-ins-color, currentColor); }
 .w4os-tone-neutral { color: var(--pico-color, currentColor); }
 .w4os-tone-off { color: var(--pico-muted-color, currentColor); }
