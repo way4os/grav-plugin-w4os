@@ -72,7 +72,7 @@ final class OpenApi
             return null;
         }
         $groups = array_values(array_map(fn ($group) => ['name' => (string) $group['name'], 'label' => (string) ($group['label'] ?? 'group_'.$group['name'])], array_filter((array) ($x['groups'] ?? []), fn ($group) => isset($group['name']))));
-        $fields = array_values(array_map(fn ($field) => $field + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''], array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
+        $fields = array_values(array_map(fn ($field) => $field + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''] + $this->valuesOf($field), array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
 
         return [
             'type' => $type,
@@ -124,6 +124,20 @@ final class OpenApi
         }
 
         return $filters;
+    }
+
+    /**
+     * The labels of the values of a field with choices (`options`: value => key) as the values of a column (value, label), so its
+     * value is shown by its label too.
+     *
+     * @param array<string,mixed> $field
+     * @return array{values?: list<array{value: string, label: string}>}
+     */
+    private function valuesOf(array $field): array
+    {
+        return isset($field['values']) || ! isset($field['options'])
+            ? []
+            : ['values' => array_map(fn ($value, $label) => ['value' => (string) $value, 'label' => (string) $label], array_keys((array) $field['options']), array_values((array) $field['options']))];
     }
 
     /** @return ?array<string,mixed> the list operation of a type: `GET` on `/grids/{grid}/<type>` or `/<type>` */

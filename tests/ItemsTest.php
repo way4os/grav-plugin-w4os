@@ -13,6 +13,7 @@ describe('the page of an item of the engine', function () {
         expect(array_column($region['groups'], 'name'))->toBe(['region'])
             ->and(array_column($region['fields'], 'name'))->toContain('name', 'uri', 'enabled')
             ->and(array_column($region['actions'], 'name'))->toBe(['enable', 'disable'])
+            ->and(array_column(array_column($region['fields'], null, 'name')['roles']['values'], 'label', 'value'))->toMatchArray(['FallbackRegion' => 'region_flag_fallback_region'])
             ->and($api->itemOf('avatars')['groups'][0])->toBe(['name' => 'inworld', 'label' => 'profile_tab_inworld'])
             ->and($api->itemOf('nothing'))->toBeNull();
     });
