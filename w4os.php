@@ -217,10 +217,9 @@ class W4osPlugin extends Plugin
 
     public function onTwigSiteVariables(): void
     {
-        // The pages of the admin have their own styles (Tabler, css/admin.css); its dashboard keeps the site's until it has its cards
         $page = $this->grav['page'] ?? null;
-        $admin = $page && $page->template() === 'w4os-admin' && ($page->header()->w4os ?? null) !== 'dashboard';
-        $this->config->get('plugins.w4os.built_in_css', true) && ! $admin && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
+            && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
     }
 
     /**

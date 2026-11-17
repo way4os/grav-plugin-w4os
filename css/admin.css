@@ -63,7 +63,7 @@
 .w4os-admin .profile-item-picture { max-width: 100%; max-height: 16rem; object-fit: contain; border-radius: var(--tblr-border-radius); }
 @media (max-width: 40rem) { .w4os-admin .profile-items, .w4os-admin .profile-item { grid-template-columns: 1fr; } }
 /* The tabs of a form (the Form plugin's) as Tabler's tabs, on one line, scrolling sideways when they do not fit */
-.w4os-admin .form-tabs .tabs-nav { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 0; margin: 0 0 1.25rem; padding: 0; border: 0; border-bottom: var(--tblr-border-width) solid var(--tblr-border-color); background: none; }
+.w4os-admin .form-tabs .tabs-nav { display: flex; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; gap: 0; margin: 0 0 1.25rem; padding: 0; border: 0; border-bottom: var(--tblr-border-width) solid var(--tblr-border-color); background: none; }
 .w4os-admin .form-tabs .tab__link { flex: none; padding: .5rem 1rem; margin-bottom: calc(-1 * var(--tblr-border-width)); white-space: nowrap; cursor: pointer; color: var(--tblr-secondary); border: 0; border-bottom: 2px solid transparent; background: none; }
 .w4os-admin .form-tabs .tab__link:hover { color: var(--tblr-body-color); }
 .w4os-admin .form-tabs .tab__link.active { color: var(--tblr-primary); border-bottom-color: var(--tblr-primary); }

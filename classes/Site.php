@@ -689,6 +689,18 @@ final class Site
     }
 
     /**
+     * Whether a page takes the plugin's styles for the site (css/w4os.css): the pages of the admin have their own (Tabler,
+     * css/admin.css), but its dashboard, until it has its cards.
+     *
+     * @param ?string $template the template of the page
+     * @param ?string $page what the page shows (`w4os` of its front matter)
+     */
+    public static function siteStyles(?string $template, ?string $page): bool
+    {
+        return $template !== 'w4os-admin' || $page === 'dashboard';
+    }
+
+    /**
      * A date in the format of a language (`16 nov. 2026` in French), by PHP's Intl formatter; ISO without it.
      *
      * @param int|string|null $value a timestamp or a date PHP reads
