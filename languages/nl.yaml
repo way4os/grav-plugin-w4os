@@ -291,6 +291,7 @@ w4os:
   notice_plan_reserves_nothing: 'Een plan reserveert niets: de plaatsen en poorten die het voorstelt zijn de nu vrije, opnieuw gekozen wanneer het wordt toegepast. Pas een plan toe voordat je het volgende plant, of geef de regio''s in één bestand.'
   notice_import_read_access: 'De bestanden van de oude installatie worden gelezen door de gebruiker die de import uitvoert: geef hem leestoegang (configuratie, includes, regio''s) voordat je toepast.'
   notice_import_stop_source: 'De simulator die nu {regions} draait, blijft draaien tot hij wordt gestopt: stop hem en voorkom dat hij opnieuw start (cron, screen) voordat deze start, de database is dezelfde.'
+  notice_import_no_region: 'Er is geen regio gevonden voor {simulator} in {folder}, de map die zijn configuratie noemt: controleer vóór het toepassen dat hij die leest, anders wordt geen van zijn regio''s gekopieerd.'
   notice_import_enable_start: 'Daarna: {enable}, {start}.'
   notice_restore_start: 'Start {instance} zodra het is hersteld: {command}'
   notice_mail_sent_if_known: 'Als een avatar deze naam of dit e-mailadres heeft, is er een mail naar gestuurd.'

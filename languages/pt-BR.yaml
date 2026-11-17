@@ -291,6 +291,7 @@ w4os:
   notice_plan_reserves_nothing: 'Um plano não reserva nada: os lugares e as portas que ele propõe são os livres agora, escolhidos de novo quando ele é aplicado. Aplique um plano antes de planejar o próximo, ou informe as regiões em um só arquivo.'
   notice_import_read_access: 'Os arquivos da instalação antiga são lidos pelo usuário que executa a importação: dê a ele acesso de leitura (configuração, inclusões, regiões) antes de aplicar.'
   notice_import_stop_source: 'O simulador que roda {regions} agora continua até ser parado: pare-o e impeça que ele inicie de novo (cron, screen) antes de iniciar este, o banco de dados é o mesmo.'
+  notice_import_no_region: 'Nenhuma região foi encontrada para {simulator} em {folder}, a pasta que sua configuração indica: verifique se é essa que ele lê antes de aplicar, nenhuma de suas regiões seria copiada.'
   notice_import_enable_start: 'Depois: {enable}, {start}.'
   notice_restore_start: 'Inicie {instance} depois de restaurado: {command}'
   notice_mail_sent_if_known: 'Se um avatar tem este nome ou este e-mail, uma mensagem foi enviada a ele.'

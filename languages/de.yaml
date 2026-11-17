@@ -291,6 +291,7 @@ w4os:
   notice_plan_reserves_nothing: 'Ein Plan reserviert nichts: die Orte und Ports, die er vorschlägt, sind die jetzt freien und werden beim Anwenden neu gewählt. Wende einen Plan an, bevor du den nächsten planst, oder gib die Regionen in einer Datei an.'
   notice_import_read_access: 'Die Dateien der alten Installation werden vom Benutzer gelesen, der den Import ausführt: gib ihm vor dem Anwenden Lesezugriff darauf (Konfiguration, eingebundene Dateien, Regionen).'
   notice_import_stop_source: 'Der Simulator, der jetzt {regions} betreibt, läuft weiter, bis er gestoppt wird: stoppe ihn und verhindere seinen Neustart (Cron, Screen), bevor dieser startet, die Datenbank ist dieselbe.'
+  notice_import_no_region: 'Für {simulator} wurde in {folder}, dem Ordner, den seine Konfiguration nennt, keine Region gefunden: prüfe vor dem Anwenden, dass er diesen liest, sonst wird keine seiner Regionen kopiert.'
   notice_import_enable_start: 'Dann: {enable}, {start}.'
   notice_restore_start: 'Starte {instance}, sobald es wiederhergestellt ist: {command}'
   notice_mail_sent_if_known: 'Wenn ein Avatar diesen Namen oder diese E-Mail hat, wurde ihm eine Mail geschickt.'
