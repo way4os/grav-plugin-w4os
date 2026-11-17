@@ -153,6 +153,7 @@ w4os:
   status_disabled: 'Désactivé'
   status_pending: 'En attente'
   status_banned: 'Banni'
+  state_grid_banned: 'Banni de la grille'
   state_estate_banned: 'Banni de domaines'
   filter_estate_banned: 'Bans de domaines'
   action_ban: 'Bannir'

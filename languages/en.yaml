@@ -153,6 +153,7 @@ w4os:
   status_disabled: 'Disabled'
   status_pending: 'Pending'
   status_banned: 'Banned'
+  state_grid_banned: 'Banned from the grid'
   state_estate_banned: 'Banned from estates'
   filter_estate_banned: 'Estate bans'
   action_ban: 'Ban'

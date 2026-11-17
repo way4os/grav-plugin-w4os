@@ -153,6 +153,7 @@ w4os:
   status_disabled: 'Analluogwyd'
   status_pending: 'Yn aros'
   status_banned: 'Wedi''i wahardd'
+  state_grid_banned: 'Wedi''i wahardd o''r grid'
   state_estate_banned: 'Wedi''i wahardd o ystadau'
   filter_estate_banned: 'Gwaharddiadau ystadau'
   action_ban: 'Gwahardd'

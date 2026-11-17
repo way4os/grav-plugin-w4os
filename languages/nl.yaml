@@ -153,6 +153,7 @@ w4os:
   status_disabled: 'Uitgeschakeld'
   status_pending: 'In afwachting'
   status_banned: 'Verbannen'
+  state_grid_banned: 'Verbannen uit de grid'
   state_estate_banned: 'Verbannen uit landgoederen'
   filter_estate_banned: 'Landgoedbans'
   action_ban: 'Verbannen'

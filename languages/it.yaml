@@ -153,6 +153,7 @@ w4os:
   status_disabled: 'Disattivato'
   status_pending: 'In attesa'
   status_banned: 'Bannato'
+  state_grid_banned: 'Bannato dalla griglia'
   state_estate_banned: 'Bannato dalle proprietà'
   filter_estate_banned: 'Ban delle proprietà'
   action_ban: 'Banna'
