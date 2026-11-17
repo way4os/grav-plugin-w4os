@@ -68,6 +68,8 @@ composer install
 vendor/bin/pest
 ```
 
+What needs Grav itself (signing in, "remember me", sessions) is tested end to end by w4os-site (`tests/remember-test.sh`), on the Grav tree it builds with this plugin (`W4OS_PLUGIN=<this folder> packaging/build` there).
+
 ## Trying it
 
 On a development machine, never on a live grid: the w4os site (`../w4os-site`) bundles the release zip of this plugin (`dist/`, build it first). Build its package (`apt-package`), install it on the machine of a test grid, `w4os-site setup` with the helpers of that grid, `w4os-site web apache --port <port> --install`. See the DEVELOPERS.md of the w4os site.

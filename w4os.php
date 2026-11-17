@@ -12,6 +12,7 @@ use W4os\Grav\FormError;
 use W4os\Grav\Forms;
 use W4os\Grav\Items;
 use W4os\Grav\Lists;
+use W4os\Grav\RememberTokens;
 use W4os\Grav\Site;
 
 require_once __DIR__.'/classes/EngineException.php';
@@ -47,13 +48,42 @@ class W4osPlugin extends Plugin
     public static function getSubscribedEvents(): array
     {
         return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 0],
+            // Before the Login plugin signs a visitor in by "remember me" (from priority 10000)
+            'onPluginsInitialized' => [['rememberTokens', 10001], ['onPluginsInitialized', 0]],
+            'onUserLoginGuest' => ['onUserLoginGuest', 0],
             // Before the accounts of the site (priority 0), as the LDAP plugin of the Login plugin does
             'onUserLoginAuthenticate' => ['onUserLoginAuthenticate', 1000],
             // Before the Login plugin's own authorization (priority 0): a session back by its remember-me token
             'onUserLoginAuthorize' => ['onUserLoginAuthorize', 1000],
             'onAdminSave' => ['onAdminSave', 0],
         ];
+    }
+
+    /** The "remember me" tokens of the Login plugin, with the requests a browser sends at once (RememberTokens). */
+    public function rememberTokens(): void
+    {
+        if (! isset($this->grav['login']) || $this->isAdmin()) {
+            return;
+        }
+        require_once __DIR__.'/classes/RememberTokens.php';
+        $timeout = (int) $this->config->get('plugins.login.rememberme.timeout');
+        $this->grav['login']->rememberMe()->setStorage(new RememberTokens('user-data://rememberme', $timeout));
+    }
+
+    /** A stolen "remember me" cookie: the browser lands on the sign-in page, told why, its cookie gone. */
+    public function onUserLoginGuest(): void
+    {
+        $rememberMe = $this->grav['login']->rememberMe();
+        $storage = $rememberMe->getStorage();
+        if (! $storage instanceof RememberTokens || ! $storage->stolen()) {
+            return;
+        }
+        $rememberMe->clearCookie(false);
+        $this->grav['messages']->add($this->grav['language']->translate('PLUGIN_LOGIN.REMEMBER_ME_STOLEN_COOKIE'), 'error');
+        $route = (string) $this->grav['login']->getRoute('login');
+        if ($route !== '' && $this->grav['uri']->path() !== '/'.trim($route, '/')) {
+            $this->grav->redirectLangSafe($route, 303);
+        }
     }
 
     public function onPluginsInitialized(): void
