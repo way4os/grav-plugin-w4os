@@ -15,7 +15,7 @@ describe('a list of the engine', function () {
         expect(array_column($list['columns'], 'name'))->toBe(['name', 'email', 'role', 'created', 'lastSeen', 'status'])
             ->and($name)->toMatchArray(['label' => 'avatar_name', 'type' => 'text', 'sort' => 'name', 'picture' => 'profileImage'])
             // Its status (enabled, online) in one indicators column
-            ->and(array_column($list['columns'][5]['indicators'], 'name'))->toBe(['status', 'ban', 'online'])
+            ->and(array_column($list['columns'][5]['indicators'], 'name'))->toBe(['accountState', 'ban'])
             ->and($list['sort'])->toMatchArray(['default' => '-created', 'descending' => '-'])
             ->and($list['sort']['values'])->toContain('level')
             ->and($list['search'])->toBe(['name', 'email'])
