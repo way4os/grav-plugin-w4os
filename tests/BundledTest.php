@@ -42,4 +42,12 @@ describe('bundled engine', function () {
 
         exec('rm -rf '.escapeshellarg($root));
     });
+
+    test('never gives the helpers an address of the engine API: the engine alone serves it', function () {
+        expect(W4os\Grav\Bundled::isApi('/helpers/api', 'https://grid.example.org/helpers'))->toBeTrue()
+            ->and(W4os\Grav\Bundled::isApi('/helpers/api/grids/demo/avatars', 'https://grid.example.org/helpers/'))->toBeTrue()
+            ->and(W4os\Grav\Bundled::isApi('/helpers/apish', 'https://grid.example.org/helpers'))->toBeFalse()
+            ->and(W4os\Grav\Bundled::isApi('/helpers/search', 'https://grid.example.org/helpers'))->toBeFalse()
+            ->and(W4os\Grav\Bundled::isApi('/api/grids', 'https://grid.example.org/helpers'))->toBeFalse();
+    });
 });

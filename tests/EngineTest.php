@@ -10,7 +10,7 @@ describe('engine', function () {
         $engine->signIn('ada@example.org', 'secret');
 
         expect($log[0]['method'])->toBe('POST')
-            ->and($log[0]['url'])->toBe('https://grid.example.org/helpers/api/sign-ins')
+            ->and($log[0]['url'])->toBe('https://grid.example.org/api/sign-ins')
             ->and($log[0]['headers']['Authorization'])->toBe('Bearer osk_test')
             ->and($log[0]['headers']['Content-Type'])->toBe('application/vnd.api+json')
             ->and($log[0]['body'])->toBe(['data' => ['type' => 'sign-ins', 'attributes' => ['name' => 'Ada Love', 'password' => 'secret']]])
@@ -21,8 +21,8 @@ describe('engine', function () {
         $engine = fakeEngine([[200, ['data' => []]]], $log, 'demo');
         $engine->items('avatars', ['search' => 'ada', 'page[size]' => 10]);
 
-        expect($log[0]['url'])->toBe('https://grid.example.org/helpers/api/grids/demo/avatars?search=ada&page%5Bsize%5D=10')
-            ->and($engine->assetUrl('abc'))->toBe('https://grid.example.org/helpers/api/grids/demo/assets/abc.jpg');
+        expect($log[0]['url'])->toBe('https://grid.example.org/api/grids/demo/avatars?search=ada&page%5Bsize%5D=10')
+            ->and($engine->assetUrl('abc'))->toBe('https://grid.example.org/api/grids/demo/assets/abc.jpg');
     });
 
     test('throws the problem the API answers', function () {

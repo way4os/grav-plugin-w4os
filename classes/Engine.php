@@ -6,8 +6,8 @@ namespace W4os\Grav;
  * The OpenSim engine API, as the site uses it: JSON:API documents, problems (RFC 9457) thrown as EngineException, the API key of the
  * site sent as a Bearer token. Plain PHP: the transport is given (Grav's HTTP client in the site, a fake one in the tests).
  *
- * The address is the one of the API (`https://grid.example.org/helpers/api`). A host that serves one grid answers without
- * `/grids/{grid}`; one that serves several needs the nick of the grid.
+ * The address is the one of the engine API, its own (`https://grid.example.org/api`, setting api_url). A host that serves one
+ * grid answers without `/grids/{grid}`; one that serves several needs the nick of the grid.
  */
 final class Engine
 {
