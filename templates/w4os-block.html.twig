@@ -2,6 +2,8 @@
    A viewer that asks gets it without the top bar, the menus and the footer of the site (the helpers' detection of a viewer). #}
 {% extends 'partials/base.html.twig' %}
 
+{# A viewer's panel: the blocks of the helpers draw themselves for it (the guide on one row) #}
+{% block body_classes %}{{ parent() }}{% if w4os_is_viewer() %} viewer{% endif %}{% endblock %}
 {% block header %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
 {% block footer %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}
 {% block mobile %}{% if not w4os_is_viewer() %}{{ parent() }}{% endif %}{% endblock %}

@@ -709,7 +709,28 @@ class W4osPlugin extends Plugin
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }
 
-        return $this->site()->blocks()->html($name, $args);
+        $html = $this->site()->blocks()->html($name, $args);
+        $html === '' || $this->blockFiles($name);
+
+        return $html;
+    }
+
+    /** The styles and the script a block of the helpers needs, from the helpers the plugin bundles (View::blockFiles()). */
+    private function blockFiles(string $name): void
+    {
+        \W4os\Grav\Bundled::library();
+        $view = \OpenSim\Helpers\View\View::class;
+        if (! class_exists($view) || ! method_exists($view, 'blockFiles')) {
+            return;
+        }
+        $assets = $this->grav['assets'];
+        $files = $view::blockFiles($name);
+        foreach ($files['css'] as $file) {
+            $assets->addCss('plugin://w4os/vendor/magicoli/opensim-helpers/assets/'.$file);
+        }
+        foreach ($files['js'] as $file) {
+            $assets->addJs('plugin://w4os/vendor/magicoli/opensim-helpers/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
+        }
     }
 
     /**
