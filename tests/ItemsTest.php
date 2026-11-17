@@ -10,7 +10,7 @@ describe('the page of an item of the engine', function () {
     test('is read from the x-form of its operation', function () use ($api) {
         $region = $api->itemOf('regions');
 
-        expect(array_column($region['groups'], 'name'))->toBe(['region', 'simulator'])
+        expect(array_column($region['groups'], 'name'))->toBe(['region'])
             ->and(array_column($region['fields'], 'name'))->toContain('name', 'uri', 'enabled')
             ->and(array_column($region['actions'], 'name'))->toBe(['enable', 'disable'])
             ->and($api->itemOf('avatars')['groups'][0])->toBe(['name' => 'inworld', 'label' => 'profile_tab_inworld'])

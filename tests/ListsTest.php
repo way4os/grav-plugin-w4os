@@ -73,9 +73,10 @@ describe('a list of the engine', function () {
     });
 
     test('a column gives the labels of its values', function () use ($document) {
-        $roles = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['roles'];
+        $flags = array_column((new OpenApi($document))->listOf('regions')['columns'], null, 'name')['flagNames'];
 
-        expect(array_column($roles['values'], 'label', 'value'))->toMatchArray(['DefaultRegion' => 'region_flag_default_region']);
+        expect(array_column($flags['values'], 'label', 'value'))->toMatchArray(['DefaultRegion' => 'region_flag_default_region'])
+            ->and($flags['values'][0])->toHaveKey('description');
     });
 
     test('a page shows the filters it names, in its order', function () use ($document) {

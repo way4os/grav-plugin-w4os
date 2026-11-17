@@ -13,12 +13,16 @@
 {% endmacro %}
 
 {# The value of a column for a row, drawn by its type; nothing for an empty value. A value the column names (`values`: value,
-   label) shows its label; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place) #}
+   label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place) #}
 {% macro cell(column, item) %}
     {% set value = attribute(item, column.name) ?? null %}
     {% set type = column.type %}
     {% set labels = {} %}
-    {% for known in column.values ?? [] %}{% set labels = labels|merge({(known.value): known.label}) %}{% endfor %}
+    {% set tips = {} %}
+    {% for known in column.values ?? [] %}
+        {% set labels = labels|merge({(known.value): known.label}) %}
+        {% if known.description is defined %}{% set tips = tips|merge({(known.value): known.description}) %}{% endif %}
+    {% endfor %}
     {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% endif %}
     {%- if type == 'date' -%}{{ value ? value|date('Y-m-d') }}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
@@ -28,7 +32,10 @@
     {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="48" height="48">{% endif %}
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
     {%- elseif type == 'hop' -%}{% if value %}<a href="{{ value|e('html_attr') }}" title="{{ value|e('html_attr') }}">{{ ('w4os.' ~ column.label)|t }}</a>{% endif %}
-    {%- else -%}{{ (value is iterable ? value : (value is null ? [] : [value]))|map(v => labels[v] is defined ? ('w4os.' ~ labels[v])|t : v)|join(', ') }}
+    {%- else -%}
+        {%- for v in (value is iterable ? value : (value is null ? [] : [value])) -%}
+            {{ loop.first ? '' : ', ' }}{% if tips[v] is defined %}<span title="{{ ('w4os.' ~ tips[v])|t|e('html_attr') }}">{% endif %}{{ labels[v] is defined ? ('w4os.' ~ labels[v])|t : v }}{% if tips[v] is defined %}</span>{% endif %}
+        {%- endfor -%}
     {%- endif -%}
     {% if column.tag is defined and (attribute(item, column.tag) ?? false) %} <span class="w4os-tag">{{ ('w4os.' ~ (column.tagLabel ?? column.tag))|t }}</span>{% endif %}
     {% if column.picture is defined %}</span></div>{% endif %}
