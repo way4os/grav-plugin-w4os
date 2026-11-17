@@ -23,4 +23,17 @@ describe('templates', function () {
 
         expect($compiled)->toBeGreaterThan(5);
     });
+
+    test('the menu of a row links to the address the row gives (its profile page), and to its edit page by its UUID', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
+        $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, links) }}");
+        $links = [['key' => 'action_view', 'attribute' => 'profilePage'], ['key' => 'action_edit', 'url' => '/edit?avatar={uuid}']];
+        $render = fn (array $item) => $menu->render(['list' => ['actions' => []], 'item' => $item, 'links' => $links]);
+        $ada = $render(['uuid' => 'u1', 'name' => 'Ada  Love', 'profilePage' => 'https://grid.example.org/profile/Ada.Love']);
+
+        expect($ada)->toContain('href="https&#x3A;&#x2F;&#x2F;grid.example.org&#x2F;profile&#x2F;Ada.Love"', 'href="&#x2F;edit&#x3F;avatar&#x3D;u1"')
+            ->and($render(['uuid' => 'u2', 'name' => 'Model Avatar']))->not->toContain('w4os.action_view')->toContain('w4os.action_edit');
+    });
 });

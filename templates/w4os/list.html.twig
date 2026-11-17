@@ -1,7 +1,7 @@
 {# A list of the engine as the site draws it, from the engine's description of it (OpenApi::listOf(): its columns and their types,
    its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query of the
    page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row: key,
-   url with {uuid} and {name}). The labels of the engine are keys of its catalog, under w4os. #}
+   url with {uuid}, or attribute: the address the row gives). The labels of the engine are keys of its catalog, under w4os. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
 {# One row: the search, then the filters, whose empty option names them #}
 <form class="w4os-filters" method="get">

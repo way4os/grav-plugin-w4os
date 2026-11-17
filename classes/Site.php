@@ -379,12 +379,17 @@ final class Site
         return $this->isManager() && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
     }
 
-    /** The web page of the profile of an avatar (web-profile of the grid, [AGENT_NAME] as First.Last), null when the grid has none. */
+    /**
+     * The web page of the profile of an avatar (web-profile of the grid, its name put in as the engine does: Avatar::profileAt()),
+     * null when the grid has none or the name is not First Last.
+     */
     public function profileUrl(string $name): ?string
     {
         $pattern = $this->info('web_profile', fn () => $this->engine()->webProfile());
+        $autoload = dirname(__DIR__).'/vendor/autoload.php';
+        is_file($autoload) && require_once $autoload;
 
-        return $pattern === '' ? null : str_replace('[AGENT_NAME]', rawurlencode(str_replace(' ', '.', trim($name))), $pattern);
+        return $pattern === '' || ! class_exists(\OpenSim\Models\Avatar::class) ? null : \OpenSim\Models\Avatar::profileAt($pattern, $name);
     }
 
     /**

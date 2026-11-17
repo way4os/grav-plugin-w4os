@@ -1,9 +1,8 @@
 {# The list of the avatars, for the managers: the engine's list (w4os_list in the front matter of the page), with the links of the
    site to the profile and the edit page of each #}
 {% set data = w4os_list(page.header.w4os_list ?? {type: 'avatars'}) %}
-{% set links = [] %}
-{% set profile = w4os_profile_url('{name}') %}
-{% if profile %}{% set links = links|merge([{key: 'action_view', url: profile|replace({'%7Bname%7D': '{name}'})}]) %}{% endif %}
+{# The profile of an avatar: the page the engine gives (profilePage), none when the grid has no web profile #}
+{% set links = [{key: 'action_view', attribute: 'profilePage'}] %}
 {% if w4os_route('edit') %}{% set links = links|merge([{key: 'action_edit', url: base_url_relative ~ w4os_route('edit') ~ '?avatar={uuid}'}]) %}{% endif %}
 {% include 'w4os/list.html.twig' with {
     list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: links,
