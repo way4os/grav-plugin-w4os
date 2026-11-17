@@ -230,6 +230,7 @@ final class Items
             'secret' => ['type' => 'password', 'autocomplete' => 'new-password'],
             'url' => ['type' => 'url'],
             'email' => ['type' => 'email'],
+            'avatar' => ['type' => 'w4os_avatar'],
             default => ['type' => 'text'],
         };
 

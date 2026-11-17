@@ -176,6 +176,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_monitor', fn () => $this->site()->monitor()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_item', fn () => $this->item()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
@@ -270,6 +271,8 @@ class W4osPlugin extends Plugin
             // The name of the avatar in the title; the title of the list when there is no such avatar
             $edited = $this->edited();
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
+        } elseif ($type === 'manage' && $this->grav['uri']->query('format') === 'avatars') {
+            $this->avatarsFound((string) $this->grav['uri']->query('search'));
         } elseif (in_array($type, ['manage', 'regions', 'region'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'region') {
@@ -709,6 +712,44 @@ class W4osPlugin extends Plugin
             ($button['id'] ?? '') === 'w4os-view-item' && ($buttons[$i]['url'] = $this->grav['page']->url().'?'.http_build_query(['id' => Lists::id($page['item'])]));
         }
         $form->set('buttons', $page['changeable'] ? $buttons : []);
+    }
+
+    /**
+     * The avatars whose name has what a manager types (the avatar picker of the forms), as JSON: their UUID, name and picture; the
+     * accounts of the services left out.
+     */
+    private function avatarsFound(string $search): never
+    {
+        $found = [];
+        if (mb_strlen(trim($search)) >= 2) {
+            try {
+                [$items] = $this->site()->engine()->items('avatars', ['search' => trim($search), 'filter[technical]' => 'no', 'sort' => 'name', 'page[size]' => 20]);
+                foreach ($items as $avatar) {
+                    $found[] = ['value' => (string) ($avatar['uuid'] ?? ''), 'text' => (string) ($avatar['name'] ?? ''), 'picture' => $this->site()->picture($avatar['profileImage'] ?? null, 'person')];
+                }
+            } catch (EngineException) {
+                $found = [];
+            }
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        header('Cache-Control: no-store');
+        echo json_encode($found, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+
+    /** @return ?array<string,mixed> an avatar of the grid by its UUID (its name and picture for a field), null when none */
+    private function avatarOf(string $uuid): ?array
+    {
+        static $known = [];
+        if (! array_key_exists($uuid, $known)) {
+            try {
+                $known[$uuid] = $uuid === '' ? null : ($this->site()->engine()->item('avatars', $uuid) ?: null);
+            } catch (EngineException) {
+                $known[$uuid] = null;
+            }
+        }
+
+        return $known[$uuid];
     }
 
     /** The avatar a manager changes (the UUID the edit form posts, else ?avatar=<UUID> of the page), as the engine has it, once per request. */

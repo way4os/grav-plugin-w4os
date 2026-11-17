@@ -1,0 +1,18 @@
+{# An avatar of the grid, picked by its name (Tom Select, js/avatar-picker.js, searching the avatars of the managers' list): its
+   picture and its name shown, its UUID sent. Without the script, the avatar it has. #}
+{% extends "forms/field.html.twig" %}
+
+{% block input %}
+    {% set chosen = value ? w4os_avatar_of(value) : null %}
+    {% set source = w4os_route('manage') ? base_url_relative ~ w4os_route('manage') ~ '?format=avatars' : '' %}
+    <div class="{{ form_field_wrapper_classes ?: 'form-select-wrapper' }} {{ field.size }}">
+        <select name="{{ (scope ~ field.name)|fieldName }}" class="{{ form_field_select_classes }} {{ field.classes }}"
+                data-w4os-avatar data-source="{{ source|e('html_attr') }}" aria-label="{{ field.label|t|e('html_attr') }}"
+                {% if required %}required="required"{% endif %}>
+            {% if value %}<option value="{{ value|e('html_attr') }}" data-picture="{{ w4os_picture(chosen.profileImage ?? null, 'person')|e('html_attr') }}" selected>{{ chosen.name ?? value }}</option>{% endif %}
+        </select>
+    </div>
+    {% do assets.addCss('plugin://w4os/assets/tom-select/tom-select.min.css') %}
+    {% do assets.addJs('plugin://w4os/assets/tom-select/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
+    {% do assets.addJs('plugin://w4os/js/avatar-picker.js', {group: 'bottom', loading: 'defer'}) %}
+{% endblock %}
