@@ -293,6 +293,7 @@ w4os:
   notice_import_read_access: 'Mae ffeiliau''r hen osodiad yn cael eu darllen gan y defnyddiwr sy''n rhedeg y mewnforio: rhowch fynediad darllen iddo atynt (ei ffurfweddiad, ei gynnwys, ei ranbarthau) cyn cymhwyso.'
   notice_import_stop_source: 'Mae''r efelychydd sy''n rhedeg {regions} nawr yn dal i redeg nes iddo gael ei atal: ataliwch ef a''i gadw rhag cychwyn eto (ei cron, ei sgrin) cyn i''r un hwn gychwyn, yr un gronfa ddata ydyw.'
   notice_import_no_region: 'Ni chafwyd hyd i ranbarth ar gyfer {simulator} yn {folder}, y ffolder y mae ei ffurfweddiad yn ei enwi: gwiriwch mai dyna''r un y mae''n ei ddarllen cyn cymhwyso, ni fyddai dim o''i ranbarthau yn cael ei gopïo.'
+  notice_import_module_missing: 'Nid yw''r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau''r gosodiad hwn: ni fyddai''r efelychydd yn ei lwytho. Ychwanegwch ef at y modiwlau, neu gadewch y gosodiad allan.'
   notice_import_enable_start: 'Yna: {enable}, {start}.'
   notice_restore_estate_missing: 'Nid oes gan y rhanbarthau {regions} ystâd yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: byddent yn cychwyn heb un. Adferwch eu hystâd yno, neu cysylltwch nhw ag un (estate link region) cyn cychwyn.'
   notice_restore_estate_unchecked: 'Ni ellid gwirio ystadau''r rhanbarthau yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: gwiriwch eu bod yno cyn cychwyn.'
