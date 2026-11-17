@@ -1,16 +1,21 @@
-{# A list of the engine as the site draws it, from the engine's description of it (OpenApi::listOf(): its columns and their types,
-   its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query of the
-   page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row: key,
-   url with {uuid}, or attribute: the address the row gives). The labels of the engine are keys of its catalog, under w4os. #}
+{# A list of the engine as the admin draws it (Tabler), from the engine's description of it (OpenApi::listOf(): its columns and their
+   types, its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query
+   of the page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row:
+   key, url with {uuid}, or attribute: the address the row gives; the first one is the link of its name). The labels of the engine
+   are keys of its catalog, under w4os.
+   Its first column is the name of the row; the others show in their column on a wide screen, in a grey line under the name on a
+   narrow one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
-{# One row: the search, then the filters, whose empty option names them #}
-<form class="w4os-filters" method="get">
+{# The toolbar: the search on the left, the filters on the right (their empty option names them); Enter asks the list again #}
+<form class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3" method="get">
     {% if list.search is not null %}
-    <div role="search">
-        <input type="search" name="search" value="{{ query.search ?? '' }}" placeholder="{{ texts.search|t|e('html_attr') }}" aria-label="{{ texts.search|t|e('html_attr') }}">
-        <button type="submit">{{ 'w4os.search'|t }}</button>
+    <div class="input-icon w4os-search" role="search">
+        <span class="input-icon-addon"><i class="ti ti-search" aria-hidden="true"></i></span>
+        <input type="search" class="form-control" name="search" value="{{ query.search ?? '' }}" placeholder="{{ texts.search|t|e('html_attr') }}" aria-label="{{ texts.search|t|e('html_attr') }}">
+        <button type="submit" class="visually-hidden">{{ 'w4os.search'|t }}</button>
     </div>
     {% endif %}
+    <div class="d-flex flex-wrap gap-2 ms-auto w4os-filter-fields">
     {% for filter in list.filters %}
         {% set label = ('w4os.' ~ filter.label)|t %}
         {% if filter.multiple ?? false %}
@@ -18,59 +23,89 @@
            placeholder; or one value, its label greyed while none is chosen, a × to remove it (without the script, its first option
            asks for any). The meaning of each value as its tip #}
         {% set asked = query[filter.name] ?? [] %}
-        <select name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <select class="form-select" name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
             {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% elseif filter.format is defined %}
-        <input type="text" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <input type="text" class="form-control" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
-        <select name="{{ filter.name|e('html_attr') }}" data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        <select class="form-select" name="{{ filter.name|e('html_attr') }}" data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
             <option value="">{{ 'w4os.filter_any'|t }}</option>
             {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% endif %}
     {% endfor %}
+    </div>
     {% if query.sort is defined %}<input type="hidden" name="sort" value="{{ query.sort }}">{% endif %}
 </form>
 {% if list.filters|filter(f => f.format is not defined) %}
-    {# Its styles are the admin's (Tabler's tabler-vendors) #}
+    {# Its styles are the admin's (Tom Select in Tabler's theme) #}
     {% do assets.addJs('plugin://w4os/vendor/npm-asset/tom-select/dist/js/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
     {% do assets.addJs('plugin://w4os/js/filters.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}
 {% if error %}
-    <p class="notices red">{{ error }}</p>
-{% elseif items is empty %}
-    <p>{{ texts.empty|t }}</p>
+    <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% else %}
-    <p class="w4os-count">{{ w4os_count(texts.count, meta.total ?? items|length) }}</p>
-    <div class="w4os-table-wrap">
-    <table class="w4os-list w4os-{{ list.type|e('html_attr') }}">
-        <thead><tr>
-            {% for column in list.columns %}
-                {% if column.sort is defined %}{{ cells.sorted(column, query, list.sort) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
+    {% if items is not empty %}<p class="text-secondary w4os-count mb-2">{{ w4os_count(texts.count, meta.total ?? items|length) }}</p>{% endif %}
+    <div class="card w4os-list-card">
+    {% if items is empty %}
+        <div class="empty">
+            <p class="empty-title">{{ texts.empty|t }}</p>
+        </div>
+    {% else %}
+        {# The first column, the status (indicators) and the menu at every width; the others on a wide screen only #}
+        {% set shown = {} %}
+        {% for column in list.columns %}{% set shown = shown|merge({(column.name): loop.first or column.type == 'indicators'}) %}{% endfor %}
+        {% set secondary = list.columns|filter(column => not shown[column.name]) %}
+        <div class="table-responsive">
+        <table class="table table-vcenter card-table w4os-list w4os-{{ list.type|e('html_attr') }}">
+            <thead><tr>
+                {% for column in list.columns %}
+                    {% set wide = shown[column.name] ? '' : ' d-none d-lg-table-cell' %}
+                    {% if column.sort is defined %}{{ cells.sorted(column, query, list.sort, wide) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}{{ wide }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
+                {% endfor %}
+                {% if links or list.actions %}<th class="w-1"><span class="visually-hidden">{{ 'w4os.actions'|t }}</span></th>{% endif %}
+            </tr></thead>
+            <tbody>
+            {% for item in items %}
+                {% set id = item.uuid ?? item.id ?? '' %}
+                {# The link of its name: the first link of the page the row has #}
+                {% set href = null %}
+                {% for link in links ?? [] %}{% if href is null %}{% set candidate = link.attribute is defined ? (attribute(item, link.attribute) ?? '') : link.url|replace({'{uuid}': id|url_encode}) %}{% if candidate %}{% set href = candidate %}{% endif %}{% endif %}{% endfor %}
+                <tr{% if item.status is defined and item.status is not iterable %} class="w4os-{{ item.status|e('html_attr') }}"{% endif %}>
+                {% for column in list.columns %}
+                    {% if loop.first %}
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">
+                        {% if href %}<a class="text-reset w4os-row-link" href="{{ href|e('html_attr') }}">{{ cells.cell(column, item, list) }}</a>{% else %}{{ cells.cell(column, item, list) }}{% endif %}
+                        {# The other columns, in a grey line, on a narrow screen #}
+                        {% set parts = [] %}
+                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([part]) %}{% endif %}{% endfor %}
+                        {% if parts %}<div class="w4os-subtitle text-secondary d-lg-none">{{ parts|join(' · ') }}</div>{% endif %}
+                    </td>
+                    {% else %}
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}{{ shown[column.name] ? '' : ' d-none d-lg-table-cell' }}">{{ cells.cell(column, item, list) }}</td>
+                    {% endif %}
+                {% endfor %}
+                {% if links or list.actions %}<td class="w4os-actions">{{ cells.menu(list, item, links) }}</td>{% endif %}
+                </tr>
             {% endfor %}
-            {% if links or list.actions %}<th><span class="sr-only">{{ 'w4os.actions'|t }}</span></th>{% endif %}
-        </tr></thead>
-        <tbody>
-        {% for item in items %}
-            <tr{% if item.status is defined %} class="w4os-{{ item.status|e('html_attr') }}"{% endif %}>
-                {% for column in list.columns %}<td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">{{ cells.cell(column, item, list) }}</td>{% endfor %}
-                {% if links or list.actions %}<td class="w4os-actions">{% if links or w4os_list_actions(list, item) %}{{ cells.menu(list, item, links) }}{% endif %}</td>{% endif %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    </div>
-    {# The pages of the list: the engine pages it (its total, its page), the links keep the search, the filters and the sort #}
-    {% set current = meta.page ?? 1 %}
-    {% set pages = ((meta.total ?? 0) / (meta.perPage ?: 50))|round(0, 'ceil') %}
-    {% if pages > 1 %}
-        <nav class="w4os-pages" aria-label="{{ texts.title|t|e('html_attr') }}">
-        {% if current > 1 %}<a href="?{{ query|merge({page: current - 1})|url_encode }}" rel="prev" aria-label="‹">‹</a>{% endif %}
-        {% for n in 1..pages %}
-            {% if n == current %}<strong aria-current="page">{{ n }}</strong>{% else %}<a href="?{{ query|merge({page: n})|url_encode }}">{{ n }}</a>{% endif %}
-        {% endfor %}
-        {% if current < pages %}<a href="?{{ query|merge({page: current + 1})|url_encode }}" rel="next" aria-label="›">›</a>{% endif %}
-        </nav>
+            </tbody>
+        </table>
+        </div>
+        {# The pages of the list: the engine pages it (its total, its page), the links keep the search, the filters and the sort #}
+        {% set current = meta.page ?? 1 %}
+        {% set pages = ((meta.total ?? 0) / (meta.perPage ?: 50))|round(0, 'ceil') %}
+        {% if pages > 1 %}
+        <div class="card-footer d-flex align-items-center">
+            <ul class="pagination m-0 ms-auto" aria-label="{{ texts.title|t|e('html_attr') }}">
+                <li class="page-item{{ current > 1 ? '' : ' disabled' }}"><a class="page-link" href="?{{ query|merge({page: current - 1})|url_encode }}" rel="prev" aria-label="‹"><i class="ti ti-chevron-left" aria-hidden="true"></i></a></li>
+                {% for n in 1..pages %}
+                <li class="page-item{{ n == current ? ' active' }}"><a class="page-link" href="?{{ query|merge({page: n})|url_encode }}"{% if n == current %} aria-current="page"{% endif %}>{{ n }}</a></li>
+                {% endfor %}
+                <li class="page-item{{ current < pages ? '' : ' disabled' }}"><a class="page-link" href="?{{ query|merge({page: current + 1})|url_encode }}" rel="next" aria-label="›"><i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
+            </ul>
+        </div>
+        {% endif %}
     {% endif %}
+    </div>
 {% endif %}

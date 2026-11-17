@@ -47,8 +47,8 @@ describe('templates', function () {
         $html = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")
             ->render(['list' => ['actions' => []], 'item' => ['id' => 'h:9040', 'name' => 'Test Solo']]);
 
-        expect($html)->toContain('<button name="action" value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;" onclick="return confirm(this.dataset.w4osAsk)">')
-            ->and($html)->toContain('<button name="action" value="start">');
+        expect($html)->toContain('<button name="action" value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;" onclick="return confirm(this.dataset.w4osAsk)" class="dropdown-item text-danger">')
+            ->and($html)->toContain('<button name="action" value="start" class="dropdown-item">');
     });
 
     test('a column with a picture (a region\'s map) shows it as a square thumbnail by its value, the default one when there is none', function () {

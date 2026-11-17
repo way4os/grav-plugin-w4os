@@ -7,3 +7,9 @@
 .w4os-admin .w4os-tone-off { color: var(--tblr-gray-400, var(--tblr-secondary)); }
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
+/* The lists: the search as wide as it reads, the filters at their natural width, the grey line of a row under its name */
+.w4os-admin .w4os-search { min-width: 14rem; flex: 1 1 14rem; max-width: 24rem; }
+.w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { min-width: 10rem; }
+.w4os-admin .w4os-subtitle { font-size: .8125rem; white-space: normal; }
+.w4os-admin .w4os-row-link { font-weight: 500; }
+.w4os-admin .w4os-list-card .table td { white-space: normal; }
