@@ -309,6 +309,27 @@ final class Site
             && \OpenSim\Helpers\View\View::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
     }
 
+    /**
+     * The front matter of a page of the plugin (`manage`, `edit`...): the site's own page at its route when it has one, else the
+     * plugin's (pages/<type>.md).
+     *
+     * @return array<string,mixed>
+     */
+    public function pageHeader(string $type): array
+    {
+        $route = $this->routes()[$type] ?? null;
+        $own = $route === null ? null : $this->grav['pages']->find($route);
+        if ($own !== null) {
+            return (array) json_decode((string) json_encode($own->header()), true);
+        }
+        $file = dirname(__DIR__)."/pages/$type.md";
+        if (! is_file($file) || ! preg_match('/^---\R(.*?)\R---/s', (string) file_get_contents($file), $matter)) {
+            return [];
+        }
+
+        return (array) \Symfony\Component\Yaml\Yaml::parse($matter[1]);
+    }
+
     public function addPage(string $path): void
     {
         [$type] = $this->pageAt($path);
@@ -690,14 +711,14 @@ final class Site
 
     /**
      * Whether a page takes the plugin's styles for the site (css/w4os.css): the pages of the admin have their own (Tabler,
-     * css/admin.css), but its dashboard, until it has its cards.
+     * css/admin.css).
      *
      * @param ?string $template the template of the page
      * @param ?string $page what the page shows (`w4os` of its front matter)
      */
     public static function siteStyles(?string $template, ?string $page): bool
     {
-        return $template !== 'w4os-admin' || $page === 'dashboard';
+        return $template !== 'w4os-admin';
     }
 
     /**
@@ -798,18 +819,6 @@ final class Site
         $active = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
 
         return $active === 'en' ? 'en' : "$active, en;q=0.5";
-    }
-
-    /** @return array<string,mixed> the state of the grid (Engine::monitor()), kept a minute; empty when the engine cannot say */
-    public function monitor(): array
-    {
-        return (array) ($this->cached('monitor', function () {
-            try {
-                return $this->engine()->monitor() ?: null;
-            } catch (EngineException) {
-                return null;
-            }
-        }, 60) ?? []);
     }
 
     /** The OpenAPI document of the engine, read (OpenApi): kept an hour. */

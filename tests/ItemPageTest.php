@@ -70,10 +70,10 @@ describe('the page of an item in the admin', function () {
             ->and($twig->render('w4os/item-header.html.twig', ['page' => ['title' => 'Region']]))->toContain('<h2 class="page-title">Region</h2>');
     });
 
-    test('takes the styles of the admin, not the site\'s, but on the dashboard until it has its cards', function () {
+    test('takes the styles of the admin, not the site\'s', function () {
         expect(Site::siteStyles('w4os-admin', 'item'))->toBeFalse()
             ->and(Site::siteStyles('w4os-admin', 'manage'))->toBeFalse()
-            ->and(Site::siteStyles('w4os-admin', 'dashboard'))->toBeTrue()
+            ->and(Site::siteStyles('w4os-admin', 'dashboard'))->toBeFalse()
             ->and(Site::siteStyles('default', null))->toBeTrue();
     });
 });

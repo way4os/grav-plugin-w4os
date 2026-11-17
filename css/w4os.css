@@ -201,13 +201,6 @@ li:empty { display: none; }
 .w4os .buttons button.secondary, .w4os .button-wrapper button.secondary, .w4os .w4os-item-actions button.secondary {
     background: transparent; color: var(--pico-primary, currentColor); border: var(--pico-border-width, 1px) solid currentColor; box-shadow: none;
 }
-/* The managers' dashboard: its blocks in three columns on a wide screen, two on a medium one, one on a phone; a wide block spans
-   them all */
-.w4os-dashboard-blocks { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-@media (min-width: 48rem) { .w4os-dashboard-blocks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (min-width: 64rem) { .w4os-dashboard-blocks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-.w4os-dashboard-blocks > .w4os-dashboard-block { margin: 0; }
-.w4os-dashboard-blocks > .w4os-dashboard-block-wide { grid-column: 1 / -1; }
 /* The page of an item: a value it does not change, its label beside it (above it on a phone) */
 .w4os-value { display: grid; grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr); gap: 0 1rem; align-items: baseline; margin-bottom: .5rem; }
 .w4os-value .form-label, .w4os-value .form-data { margin: 0; }

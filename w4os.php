@@ -184,7 +184,6 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_models', fn () => $this->site()->models()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar', fn () => self::current()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_monitor', fn () => $this->site()->monitor()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_item', fn () => $this->item()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
@@ -205,6 +204,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value) => Site::date($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'))));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
@@ -649,7 +649,7 @@ class W4osPlugin extends Plugin
      * @param array<string,mixed> $options type, filters, fixed, per_page
      * @return array{list: ?array<string,mixed>, items: list<array<string,mixed>>, meta: array<string,mixed>, query: array<string,string>, error: ?string}
      */
-    private function listing(array $options): array
+    private function listing(array $options, ?array $get = null): array
     {
         $type = (string) ($options['type'] ?? '');
         $list = $this->site()->openApi()->listOf($type);
@@ -663,7 +663,7 @@ class W4osPlugin extends Plugin
         $fixed = (array) ($options['fixed'] ?? []);
         $grid = $this->site()->engine()->grid();
         empty($list['scoped']) && $grid !== '' && in_array('grid', array_column($this->site()->openApi()->listOf($type)['filters'] ?? [], 'name'), true) && $fixed += ['grid' => $grid];
-        $query = Lists::query($list, $_GET, $perPage, $fixed);
+        $query = Lists::query($list, $get ?? $_GET, $perPage, $fixed);
         try {
             [$items, $meta] = $this->site()->engine()->items($type, $query['api'], ! empty($list['scoped']));
 
@@ -674,6 +674,45 @@ class W4osPlugin extends Plugin
 
             return ['list' => $list, 'query' => $query['page'], 'error' => $refused] + $error;
         }
+    }
+
+    /**
+     * The cards of the dashboard (w4os_cards of its page), the ones of the lists the visitor reads: each the rows of a list of the
+     * admin (`page`: its key in the routes) its filters keep (`filter`: name => value), counted, with the address of the list so
+     * filtered; or its first rows as it sorts them (`rows`: how many), each leading to its page (`item`: the key of the page of an
+     * item, its parameter its own).
+     *
+     * @return list<array<string,mixed>>
+     */
+    private function dashboard(): array
+    {
+        $cards = [];
+        foreach ((array) ($this->grav['page']->header()->w4os_cards ?? []) as $card) {
+            $card = (array) $card;
+            $key = (string) ($card['page'] ?? '');
+            $options = (array) ($this->site()->pageHeader($key)['w4os_list'] ?? []);
+            $type = Site::ADMIN_TYPES[$key] ?? null;
+            if ($options === [] || $type === null || ! $this->site()->can($type, 'read')) {
+                continue;
+            }
+            $filter = (array) ($card['filter'] ?? []);
+            $rows = max(0, (int) ($card['rows'] ?? 0));
+            $data = $this->listing(['per_page' => max(1, $rows)] + $options, $filter);
+            $item = isset($card['item']) ? (string) $card['item'] : null;
+            $cards[] = [
+                'page' => $key,
+                'list' => $data['list'],
+                'filter' => $data['query'],
+                'url' => $this->site()->url($key).($data['query'] === [] ? '' : '?'.http_build_query($data['query'])),
+                'total' => $data['error'] === null ? (int) ($data['meta']['total'] ?? count($data['items'])) : null,
+                'rows' => $rows,
+                'items' => $rows > 0 ? $data['items'] : [],
+                'item' => $item === null ? null : ['url' => $this->site()->url($item), 'param' => (string) ($this->site()->pageHeader($item)['w4os_item']['param'] ?? 'id')],
+                'error' => $data['error'],
+            ];
+        }
+
+        return $cards;
     }
 
     /** The web profile of an avatar (/profile/First.Last): titled with its name, a 404 for a name that is no avatar's. */
