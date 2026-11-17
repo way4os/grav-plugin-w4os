@@ -316,7 +316,7 @@ final class Site
      */
     public static function isManagerLevel(int $level): bool
     {
-        return Bundled::library() && $level >= \OpenSim\Models\Avatar::GOD_LEVEL;
+        return Bundled::library() && \OpenSim\Models\Avatar::isGodLevel($level);
     }
 
     /**
