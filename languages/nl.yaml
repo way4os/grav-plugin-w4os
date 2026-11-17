@@ -293,6 +293,8 @@ w4os:
   notice_import_stop_source: 'De simulator die nu {regions} draait, blijft draaien tot hij wordt gestopt: stop hem en voorkom dat hij opnieuw start (cron, screen) voordat deze start, de database is dezelfde.'
   notice_import_no_region: 'Er is geen regio gevonden voor {simulator} in {folder}, de map die zijn configuratie noemt: controleer vóór het toepassen dat hij die leest, anders wordt geen van zijn regio''s gekopieerd.'
   notice_import_enable_start: 'Daarna: {enable}, {start}.'
+  notice_restore_estate_missing: 'De regio''s {regions} hebben geen landgoed in {database}, de database van het grid hier, die blijft zoals ze is: ze zouden zonder starten. Herstel daar hun landgoed, of koppel ze aan een (estate link region) voordat je start.'
+  notice_restore_estate_unchecked: 'De landgoederen van de regio''s konden niet worden gecontroleerd in {database}, de database van het grid hier, die blijft zoals ze is: controleer vóór het starten dat ze er zijn.'
   notice_restore_start: 'Start {instance} zodra het is hersteld: {command}'
   notice_mail_sent_if_known: 'Als een avatar deze naam of dit e-mailadres heeft, is er een mail naar gestuurd.'
   notice_mail_sent: 'Er is een mail naar de avatar gestuurd.'

@@ -293,6 +293,8 @@ w4os:
   notice_import_stop_source: 'Il simulatore che ora esegue {regions} continua finché non viene fermato: fermalo e impediscigli di ripartire (cron, screen) prima di avviare questo, il database è lo stesso.'
   notice_import_no_region: 'Nessuna regione trovata per {simulator} in {folder}, la cartella che la sua configurazione indica: verifica che sia quella che legge prima di applicare, nessuna delle sue regioni verrebbe copiata.'
   notice_import_enable_start: 'Poi: {enable}, {start}.'
+  notice_restore_estate_missing: 'Le regioni {regions} non hanno una proprietà in {database}, il database della griglia qui, mantenuto così com''è: partirebbero senza. Ripristina lì la loro proprietà, o collegale a una (estate link region) prima di avviare.'
+  notice_restore_estate_unchecked: 'Le proprietà delle regioni non si sono potute verificare in {database}, il database della griglia qui, mantenuto così com''è: verifica che ci siano prima di avviare.'
   notice_restore_start: 'Avvia {instance} una volta ripristinato: {command}'
   notice_mail_sent_if_known: 'Se un avatar ha questo nome o questa email, gli è stata inviata una mail.'
   notice_mail_sent: 'È stata inviata una mail all''avatar.'

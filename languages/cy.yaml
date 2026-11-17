@@ -293,6 +293,8 @@ w4os:
   notice_import_stop_source: 'Mae''r efelychydd sy''n rhedeg {regions} nawr yn dal i redeg nes iddo gael ei atal: ataliwch ef a''i gadw rhag cychwyn eto (ei cron, ei sgrin) cyn i''r un hwn gychwyn, yr un gronfa ddata ydyw.'
   notice_import_no_region: 'Ni chafwyd hyd i ranbarth ar gyfer {simulator} yn {folder}, y ffolder y mae ei ffurfweddiad yn ei enwi: gwiriwch mai dyna''r un y mae''n ei ddarllen cyn cymhwyso, ni fyddai dim o''i ranbarthau yn cael ei gopïo.'
   notice_import_enable_start: 'Yna: {enable}, {start}.'
+  notice_restore_estate_missing: 'Nid oes gan y rhanbarthau {regions} ystâd yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: byddent yn cychwyn heb un. Adferwch eu hystâd yno, neu cysylltwch nhw ag un (estate link region) cyn cychwyn.'
+  notice_restore_estate_unchecked: 'Ni ellid gwirio ystadau''r rhanbarthau yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: gwiriwch eu bod yno cyn cychwyn.'
   notice_restore_start: 'Cychwynnwch {instance} unwaith y caiff ei adfer: {command}'
   notice_mail_sent_if_known: 'Pan fydd gan afatar yr enw hwn neu''r e-bost hwn, anfonwyd neges ato.'
   notice_mail_sent: 'Anfonwyd neges at yr afatar.'

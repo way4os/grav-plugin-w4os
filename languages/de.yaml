@@ -293,6 +293,8 @@ w4os:
   notice_import_stop_source: 'Der Simulator, der jetzt {regions} betreibt, läuft weiter, bis er gestoppt wird: stoppe ihn und verhindere seinen Neustart (Cron, Screen), bevor dieser startet, die Datenbank ist dieselbe.'
   notice_import_no_region: 'Für {simulator} wurde in {folder}, dem Ordner, den seine Konfiguration nennt, keine Region gefunden: prüfe vor dem Anwenden, dass er diesen liest, sonst wird keine seiner Regionen kopiert.'
   notice_import_enable_start: 'Dann: {enable}, {start}.'
+  notice_restore_estate_missing: 'Die Regionen {regions} haben kein Estate in {database}, der Datenbank des Grids hier, die so bleibt, wie sie ist: sie würden ohne starten. Stelle ihr Estate dort wieder her oder verknüpfe sie vor dem Start mit einem (estate link region).'
+  notice_restore_estate_unchecked: 'Die Estates der Regionen konnten in {database}, der Datenbank des Grids hier, die so bleibt, wie sie ist, nicht geprüft werden: prüfe vor dem Start, dass sie da sind.'
   notice_restore_start: 'Starte {instance}, sobald es wiederhergestellt ist: {command}'
   notice_mail_sent_if_known: 'Wenn ein Avatar diesen Namen oder diese E-Mail hat, wurde ihm eine Mail geschickt.'
   notice_mail_sent: 'Dem Avatar wurde eine Mail geschickt.'
