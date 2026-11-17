@@ -31,6 +31,7 @@
     {%- elseif type == 'picture' -%}<img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(value, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
     {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="48" height="48">{% endif %}
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
+    {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar ? w4os_profile_url(avatar.name) : null %}<div class="w4os-who"><img class="w4os-thumb w4os-thumb-person" src="{{ w4os_picture(avatar.profileImage ?? null, 'person')|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
     {%- elseif type == 'hop' -%}{% if value %}<a href="{{ value|e('html_attr') }}" title="{{ value|e('html_attr') }}">{{ ('w4os.' ~ column.label)|t }}</a>{% endif %}
     {%- else -%}
         {%- for v in (value is iterable ? value : (value is null ? [] : [value])) -%}

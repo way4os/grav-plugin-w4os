@@ -194,6 +194,8 @@ li:empty { display: none; }
 .w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions > div, .w4os-form-item .buttons, .w4os-form-item .button-wrapper,
 .w4os-item-actions > div, .w4os-item-actions form { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
 .w4os-item-actions form { margin: 0; }
+.w4os-item-actions > div, .w4os-item-actions form { align-items: center; }
+.w4os-item-actions button { margin: 0; }
 /* A secondary button of the plugin's pages and forms (View next to Save, an action next to Edit): an outline in the theme's main
    color, whatever the theme gives every button of a form */
 .w4os .buttons button.secondary, .w4os .button-wrapper button.secondary, .w4os .w4os-item-actions button.secondary {
