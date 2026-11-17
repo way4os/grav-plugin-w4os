@@ -50,6 +50,8 @@ final class OpenApi
             'filters' => isset($x['filters']) ? $this->filtersOf((array) $x['filters']) : $this->filters($parameters),
             'actions' => $this->withAccess((array) ($x['actions'] ?? [])),
             'read' => $this->access('GET', $this->listPath($type)),
+            // A list of the grid (/grids/{grid}/...), else of the machine (its simulators)
+            'scoped' => str_starts_with($this->listPath($type), '/grids/{grid}'),
             'pageSize' => isset($parameters['page[size]']['schema']['default']) ? (int) $parameters['page[size]']['schema']['default'] : null,
         ];
     }
@@ -91,6 +93,7 @@ final class OpenApi
             'actions' => $this->withAccess((array) ($x['actions'] ?? [])),
             'read' => $this->access('GET', $path),
             'change' => $change,
+            'scoped' => str_starts_with($path, '/grids/{grid}'),
         ];
     }
 

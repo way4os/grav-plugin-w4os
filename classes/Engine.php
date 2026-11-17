@@ -168,9 +168,9 @@ final class Engine
      * @param array<string,scalar> $query search, sort, filter[...], page[number], page[size]
      * @return array{list<array<string,mixed>>, array<string,mixed>} the attributes of each, and the meta (total, page, perPage)
      */
-    public function items(string $type, array $query = []): array
+    public function items(string $type, array $query = [], bool $grid = true): array
     {
-        $document = $this->call('GET', '/'.rawurlencode($type), null, $query);
+        $document = $this->call('GET', '/'.rawurlencode($type), null, $query, $grid);
 
         return [array_map(fn (array $item) => (array) $item['attributes'], (array) ($document['data'] ?? [])), (array) ($document['meta'] ?? [])];
     }
@@ -182,9 +182,15 @@ final class Engine
     }
 
     /** @return array<string,mixed> the attributes of an item of a type */
-    public function item(string $type, string $id): array
+    public function item(string $type, string $id, bool $grid = true): array
     {
-        return $this->resource($this->call('GET', '/'.rawurlencode($type).'/'.rawurlencode($id)));
+        return $this->resource($this->call('GET', '/'.rawurlencode($type).'/'.rawurlencode($id), null, [], $grid));
+    }
+
+    /** The nick of the grid the site asks, empty for an API of one grid. */
+    public function grid(): string
+    {
+        return $this->grid;
     }
 
     /**

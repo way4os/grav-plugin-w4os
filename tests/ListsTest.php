@@ -124,8 +124,19 @@ describe('a list of the engine', function () {
         $ada = ['uuid' => 'u1', 'name' => 'Ada Love', 'status' => 'active'];
         expect($actions['reset']['link'] ?? null)->toBe('reset');
 
-        expect(Lists::request($actions['disable'], $ada))->toBe(['PATCH', '/avatars/u1', ['type' => 'avatars', 'id' => 'u1', 'attributes' => ['status' => 'disabled']]])
+        expect(Lists::request($actions['disable'], $ada))->toBe(['PATCH', '/avatars/u1', ['type' => 'avatars', 'id' => 'u1', 'attributes' => ['status' => 'disabled']], true])
             ->and(Lists::request($actions['reset'], $ada, ['link' => 'https://site.example.org/reset?token={token}']))
-            ->toBe(['POST', '/password-resets', ['type' => 'password-resets', 'attributes' => ['name' => 'Ada Love', 'link' => 'https://site.example.org/reset?token={token}']]]);
+            ->toBe(['POST', '/password-resets', ['type' => 'password-resets', 'attributes' => ['name' => 'Ada Love', 'link' => 'https://site.example.org/reset?token={token}']], true]);
+    });
+
+    test('asks an action of a list of the machine outside the grid, its path filled from the row', function () use ($document) {
+        $action = ['name' => 'start', 'method' => 'POST', 'path' => '/instances/{slug}/start'];
+        $simulators = (new OpenApi($document))->listOf('simulators');
+
+        expect(Lists::request($action, ['id' => 'h:9040', 'slug' => 'demo.solo']))->toBe(['POST', '/instances/demo.solo/start', ['type' => 'start', 'attributes' => []], false])
+            ->and(Lists::request(['method' => 'PATCH', 'path' => '/grids/{grid}/regions/{id}'], ['uuid' => 'r 1'])[1])->toBe('/regions/r%201')
+            ->and(Lists::request(['method' => 'PATCH', 'path' => '/grids/{grid}/regions/{id}'], ['uuid' => 'r1'])[3])->toBeTrue()
+            ->and($simulators['scoped'])->toBeFalse()
+            ->and((new OpenApi($document))->listOf('regions')['scoped'])->toBeTrue();
     });
 });

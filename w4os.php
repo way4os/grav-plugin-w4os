@@ -416,7 +416,7 @@ class W4osPlugin extends Plugin
                     $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles'], $this->site()->level());
                     $id = Lists::id($page['item']);
                     try {
-                        $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
+                        $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes], [], ! empty($page['form']['scoped']));
                     } catch (EngineException $e) {
                         throw $forms->error($e);
                     }
@@ -496,12 +496,12 @@ class W4osPlugin extends Plugin
         $described = $item ? $this->site()->openApi()->itemOf($type) : $this->site()->openApi()->listOf($type);
         $name = (string) ($post['action'] ?? '');
         try {
-            $row = $described === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
+            $row = $described === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''), ! empty($described['scoped']));
             $action = array_column($described === null ? [] : Lists::actions($described, $row, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()), null, 'name')[$name] ?? null;
             $action === null && throw new FormError('w4os.error_invalid_request');
             // The page of the site that takes the token of a mail the action sends (`link`)
-            [$method, $path, $data] = Lists::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
-            $this->site()->engine()->call($method, $path, $data);
+            [$method, $path, $data, $scoped] = Lists::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
+            $this->site()->engine()->call($method, $path, $data, [], $scoped);
             $type === 'avatars' && $this->site()->forgetProfile((string) ($row['name'] ?? ''));
             $query = $item
                 ? http_build_query(['id' => Lists::id($row)])
@@ -645,9 +645,13 @@ class W4osPlugin extends Plugin
         }
         $list = Lists::showing($list, isset($options['filters']) ? (array) $options['filters'] : null);
         $perPage = (int) ($options['per_page'] ?? $this->config->get('plugins.w4os.manage.per_page') ?: $list['pageSize'] ?: 50);
-        $query = Lists::query($list, $_GET, $perPage, (array) ($options['fixed'] ?? []));
+        // A list of the machine (its simulators) shows the grid of the site only, when it is filtered by grid
+        $fixed = (array) ($options['fixed'] ?? []);
+        $grid = $this->site()->engine()->grid();
+        empty($list['scoped']) && $grid !== '' && in_array('grid', array_column($this->site()->openApi()->listOf($type)['filters'] ?? [], 'name'), true) && $fixed += ['grid' => $grid];
+        $query = Lists::query($list, $_GET, $perPage, $fixed);
         try {
-            [$items, $meta] = $this->site()->engine()->items($type, $query['api']);
+            [$items, $meta] = $this->site()->engine()->items($type, $query['api'], ! empty($list['scoped']));
 
             return ['list' => Lists::offering($list, $meta, $query['page']), 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
         } catch (EngineException $e) {
@@ -706,7 +710,7 @@ class W4osPlugin extends Plugin
             $uri = $this->grav['uri'];
             $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
             try {
-                $page['item'] = $id === '' || $page['form'] === null ? null : ($this->site()->engine()->item($type, $id) ?: null);
+                $page['item'] = $id === '' || $page['form'] === null ? null : ($this->site()->engine()->item($type, $id, ! empty($page['form']['scoped'])) ?: null);
             } catch (EngineException $e) {
                 $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
             }

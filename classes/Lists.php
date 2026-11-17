@@ -121,24 +121,28 @@ final class Lists
     }
 
     /**
-     * The request of the engine that does an action on a row: its method, its path under the grid, its document.
+     * The request of the engine that does an action on a row: its method, its path (under the grid when it is the grid's), its
+     * document, and whether it is asked under the grid (else of the machine: its simulators, its instances). The `{attribute}`s
+     * of the path are the row's (`{id}` its id).
      *
      * @param array<string,mixed> $action an action of the list
      * @param array<string,mixed> $item the row, its attributes
      * @param array<string,mixed> $more attributes the site adds (the link of its page for a token)
-     * @return array{string, string, array<string,mixed>}
+     * @return array{string, string, array<string,mixed>, bool}
      */
     public static function request(array $action, array $item, array $more = []): array
     {
         $id = self::id($item);
+        $scoped = preg_match('#^/grids/\{grid\}#', (string) $action['path']) === 1;
         $path = (string) preg_replace('#^/grids/\{grid\}#', '', (string) $action['path']);
-        // The type of the document: the last name of the path (`avatars` in /avatars/{id}, `password-resets`)
+        // The type of the document: the last name of the path (`avatars` in /avatars/{id}, `password-resets`, `start`)
         $names = array_values(array_filter(explode('/', $path), fn ($part) => $part !== '' && ! str_starts_with($part, '{')));
         $type = (string) ($names[count($names) - 1] ?? '');
         $attributes = array_map(fn ($value) => self::filled($value, $item), (array) ($action['body'] ?? [])) + $more;
         $data = ['type' => $type] + (str_contains($path, '{id}') ? ['id' => $id] : []) + ['attributes' => $attributes];
+        $path = (string) preg_replace_callback('/\{(\w+)\}/', fn ($m) => rawurlencode($m[1] === 'id' ? $id : (string) ($item[$m[1]] ?? '')), $path);
 
-        return [strtoupper((string) $action['method']), str_replace('{id}', rawurlencode($id), $path), $data];
+        return [strtoupper((string) $action['method']), $path, $data, $scoped];
     }
 
     /** The id of a row: its UUID, as the engine gives it in the attributes. */

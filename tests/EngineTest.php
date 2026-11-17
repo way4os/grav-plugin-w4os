@@ -25,6 +25,17 @@ describe('engine', function () {
             ->and($engine->assetUrl('abc'))->toBe('https://grid.example.org/api/grids/demo/assets/abc.jpg');
     });
 
+    test('asks what belongs to the machine (its simulators) outside the grid', function () {
+        $engine = fakeEngine([[200, ['data' => [['type' => 'simulators', 'id' => 'h:9040', 'attributes' => ['slug' => 'demo.solo']]]]], [200, ['data' => ['type' => 'simulators', 'id' => 'h:9040', 'attributes' => ['slug' => 'demo.solo']]]]], $log, 'demo');
+        [$items] = $engine->items('simulators', ['filter[grid]' => 'demo'], grid: false);
+        $engine->item('simulators', 'h:9040', grid: false);
+
+        expect($items[0]['slug'])->toBe('demo.solo')
+            ->and($log[0]['url'])->toBe('https://grid.example.org/api/simulators?filter%5Bgrid%5D=demo')
+            ->and($log[1]['url'])->toBe('https://grid.example.org/api/simulators/h%3A9040')
+            ->and($engine->grid())->toBe('demo');
+    });
+
     test('throws the problem the API answers', function () {
         $engine = fakeEngine([[403, problem(403, 'The name or the password is wrong.', 'sign-in-refused')], [503, problem(503, 'down')]]);
 
