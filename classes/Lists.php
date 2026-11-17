@@ -145,6 +145,20 @@ final class Lists
         return [strtoupper((string) $action['method']), $path, $data, $scoped];
     }
 
+    /** A value of a row by its name, or its dotted path into an object of the row (`connections.console`); null when it has none. */
+    public static function value(array $item, string $path): mixed
+    {
+        $value = $item;
+        foreach (explode('.', $path) as $part) {
+            if (! is_array($value) || ! array_key_exists($part, $value)) {
+                return null;
+            }
+            $value = $value[$part];
+        }
+
+        return $value;
+    }
+
     /** The id of a row: its UUID, as the engine gives it in the attributes. */
     public static function id(array $item): string
     {
@@ -175,13 +189,13 @@ final class Lists
             return false;
         }
         foreach ((array) ($action['requires'] ?? []) as $attribute) {
-            $value = $item[$attribute] ?? null;
+            $value = self::value($item, (string) $attribute);
             if ($value === null || $value === '' || $value === []) {
                 return false;
             }
         }
         foreach ((array) ($action['when'] ?? []) as $attribute => $values) {
-            $value = $item[$attribute] ?? null;
+            $value = self::value($item, (string) $attribute);
             $met = array_filter((array) $values, fn ($expected) => is_bool($expected) ? $value === $expected : $value !== null && (string) $value === (string) $expected);
             if ($met === []) {
                 return false;

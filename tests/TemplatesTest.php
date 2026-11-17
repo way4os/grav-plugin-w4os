@@ -65,4 +65,27 @@ describe('templates', function () {
             ->and($cell->render(['column' => $map, 'item' => ['name' => 'Test North']]))->toContain('src="&#x2F;pictures&#x2F;none-place.jpg"')
             ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love']]))->toContain('class="w4os-thumb w4os-thumb-person"', 'none-person');
     });
+
+    test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
+        $document = OpenSim\Api\Contract::document();
+        $list = (new W4os\Grav\OpenApi($document))->listOf('simulators');
+        $column = array_column($list['columns'], null, 'name')['status'];
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4os\Grav\Lists::actions($list, $item)));
+        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "fa-$icon"));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'database' => 'none', 'robust' => 'none']];
+        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item, list) }}")->render(['column' => $column, 'item' => $row, 'list' => $list]);
+        $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")->render(['list' => $list, 'item' => $row]);
+
+        expect($cell)->toContain('class="w4os-indicator w4os-tone-ok"', 'fa-power', 'fa-run', 'fa-console', 'w4os-tone-failed', 'fa-screen', 'w4os-tone-neutral', 'fa-file')
+            ->and($cell)->toContain('title="&#x5B;w4os.column_enabled&#x5D;&#x3A;&#x20;&#x5B;w4os.state_enabled&#x5D;"')
+            // The action the row meets is the button of its icon, with its confirmation
+            ->and($cell)->toContain('value="disable"', 'value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;"')
+            ->and($cell)->not->toContain('fa-files', 'fa-database', 'fa-server', 'value="start"', 'value="enable"')
+            // The row's menu keeps the other actions only
+            ->and($menu)->toContain('value="restart"')
+            ->and($menu)->not->toContain('value="stop"', 'value="disable"');
+    });
 });

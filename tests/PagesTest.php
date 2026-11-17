@@ -51,6 +51,12 @@ describe('pages', function () {
                 $status = array_filter($list['columns'], fn ($column) => $column['type'] === 'status' && $column['name'] === $filter['name'] && ! isset($column['values']));
                 $status === [] || array_push($used, ...array_map(fn ($value) => 'status_'.$value['value'], $filter['values']));
             }
+            // The labels of the indicators of a column and of their states
+            foreach ($list['columns'] as $column) {
+                foreach ((array) ($column['indicators'] ?? []) as $indicator) {
+                    $used = array_merge($used, [$indicator['label']], array_column((array) ($indicator['states'] ?? []), 'label'));
+                }
+            }
             foreach ($list['actions'] as $action) {
                 array_push($used, $action['label'], 'manage_'.$action['name'], ...(isset($action['ask']) ? [$action['ask']] : []));
             }
@@ -76,6 +82,16 @@ describe('pages', function () {
                 preg_match_all('/%(\d\$)?s/', $languages['en'][$key], $english);
                 expect(count($mine[0]))->toBe(count($english[0]), $key);
             }
+        }
+    });
+
+    test('every icon of the engine has its icon of the theme (Font Awesome), in the settings a site can change', function () {
+        $icons = (array) (Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['icons'] ?? []);
+        $engine = (new ReflectionClassConstant(OpenSim\Data\Listing::class, 'ICONS'))->getValue();
+
+        expect(array_keys($icons))->toEqualCanonicalizing($engine);
+        foreach ($icons as $classes) {
+            expect($classes)->toMatch('/^fa-(solid|regular) fa-[a-z0-9-]+$/');
         }
     });
 });

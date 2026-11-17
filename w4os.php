@@ -185,6 +185,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        // The classes of the icon of the theme for an icon of the engine (setting icons)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_icon', fn (string $icon) => (string) ($this->config->get('plugins.w4os.icons.'.$icon) ?? '')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_can', fn (string $type, string $what = 'change') => $this->site()->can($type, $what)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));

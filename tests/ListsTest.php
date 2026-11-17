@@ -139,4 +139,14 @@ describe('a list of the engine', function () {
             ->and($simulators['scoped'])->toBeFalse()
             ->and((new OpenApi($document))->listOf('regions')['scoped'])->toBeTrue();
     });
+
+    test('reads an attribute of a row by its dotted path (connections.console), in the conditions of its actions too', function () {
+        $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'connections' => ['console' => 'ok', 'robust' => 'none']];
+        $list = ['actions' => [['name' => 'console', 'method' => 'POST', 'path' => '/x', 'when' => ['connections.console' => ['ok']]], ['name' => 'robust', 'method' => 'POST', 'path' => '/y', 'when' => ['connections.robust' => ['ok']]]]];
+
+        expect(Lists::value($row, 'connections.console'))->toBe('ok')
+            ->and(Lists::value($row, 'connections.nothing'))->toBeNull()
+            ->and(Lists::value($row, 'slug'))->toBe('demo.solo')
+            ->and(array_column(Lists::actions($list, $row), 'name'))->toBe(['console']);
+    });
 });
