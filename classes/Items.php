@@ -19,7 +19,7 @@ final class Items
     {
         return array_values(array_filter([
             $manager ? 'manager' : null,
-            $self !== null && Lists::id($item) === $self ? 'self' : null,
+            $self !== null && \W4OS\Views\Rows::id($item) === $self ? 'self' : null,
             $self !== null && ($item['owner'] ?? null) === $self ? 'owner' : null,
         ]));
     }
@@ -173,7 +173,7 @@ final class Items
      */
     public static function values(array $form, array $item, array $roles, int $level = 0): array
     {
-        $values = ['id' => Lists::id($item)];
+        $values = ['id' => \W4OS\Views\Rows::id($item)];
         foreach ($form['fields'] as $field) {
             if (self::editable($field, $roles, $level) && ($field['type'] ?? '') !== 'secret' && empty($field['writeOnly'])) {
                 $value = $item[$field['name']] ?? null;

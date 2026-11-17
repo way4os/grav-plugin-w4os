@@ -207,7 +207,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? \W4OS\Views\Rows::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
@@ -429,7 +429,7 @@ class W4osPlugin extends Plugin
                     $page = $this->item();
                     $page['item'] === null && throw new FormError('w4os.error_not_found');
                     $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles'], $this->site()->level());
-                    $id = Lists::id($page['item']);
+                    $id = \W4OS\Views\Rows::id($page['item']);
                     try {
                         $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes], [], ! empty($page['form']['scoped']));
                     } catch (EngineException $e) {
@@ -512,14 +512,14 @@ class W4osPlugin extends Plugin
         $name = (string) ($post['action'] ?? '');
         try {
             $row = $described === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''), ! empty($described['scoped']));
-            $action = array_column($described === null ? [] : Lists::actions($described, $row, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()), null, 'name')[$name] ?? null;
+            $action = array_column($described === null ? [] : \W4OS\Views\Rows::actions($described, $row, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()), null, 'name')[$name] ?? null;
             $action === null && throw new FormError('w4os.error_invalid_request');
             // The page of the site that takes the token of a mail the action sends (`link`)
-            [$method, $path, $data, $scoped] = Lists::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
+            [$method, $path, $data, $scoped] = \W4OS\Views\Rows::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
             $this->site()->engine()->call($method, $path, $data, [], $scoped);
             $type === 'avatars' && $this->site()->forgetProfile((string) ($row['name'] ?? ''));
             $query = $item
-                ? http_build_query([(string) ($options['param'] ?? 'id') => Lists::id($row)])
+                ? http_build_query([(string) ($options['param'] ?? 'id') => \W4OS\Views\Rows::id($row)])
                 : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.'.\W4OS\Views\Done::key($name), $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
@@ -797,7 +797,7 @@ class W4osPlugin extends Plugin
         // The button next to Save leads back to the page of the item
         $buttons = (array) $form->get('buttons');
         foreach ($buttons as $i => $button) {
-            ($button['id'] ?? '') === 'w4os-view-item' && ($buttons[$i]['url'] = $this->grav['page']->url().'?'.http_build_query(['id' => Lists::id($page['item'])]));
+            ($button['id'] ?? '') === 'w4os-view-item' && ($buttons[$i]['url'] = $this->grav['page']->url().'?'.http_build_query(['id' => \W4OS\Views\Rows::id($page['item'])]));
         }
         $form->set('buttons', $page['changeable'] ? $buttons : []);
     }

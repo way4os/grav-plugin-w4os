@@ -15,7 +15,7 @@ describe('managers', function () {
         $regions = $api->listOf('regions');
         $region = ['uuid' => 'r1', 'enabled' => true, 'local' => true, 'hyperlink' => false];
         $avatar = ['uuid' => 'a1', 'status' => 'active'];
-        $actions = fn (array $list, array $row, int $level) => array_column(Lists::actions($list, $row, 'me', $level), 'name');
+        $actions = fn (array $list, array $row, int $level) => array_column(W4OS\Views\Rows::actions($list, $row, 'me', $level), 'name');
 
         foreach ([100, 150, 200, 250] as $level) {
             expect(W4OS\Views\Access::allows($avatars['read'], $level))->toBeTrue()
@@ -30,7 +30,7 @@ describe('managers', function () {
 
     test('ban an avatar from the level the action asks (a god), never their own', function () use ($api) {
         $avatars = $api->listOf('avatars');
-        $actions = fn (array $row, int $level, ?string $self = 'me') => array_column(Lists::actions($avatars, $row, $self, $level), 'name');
+        $actions = fn (array $row, int $level, ?string $self = 'me') => array_column(W4OS\Views\Rows::actions($avatars, $row, $self, $level), 'name');
         $active = ['uuid' => 'a1', 'status' => 'active', 'estateBanned' => false];
         $banned = ['uuid' => 'a1', 'status' => 'banned', 'estateBanned' => true];
 

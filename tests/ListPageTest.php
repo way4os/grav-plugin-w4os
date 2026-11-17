@@ -12,7 +12,7 @@ use W4OS\Views\Contract as OpenApi;
 function render_list(array $list, array $items, array $meta, array $links = [], array $query = []): string
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-    $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item)));
+    $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4OS\Views\Rows::actions($list, $item)));
     $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n ".($key === 'w4os.filters_active' ? 'filters' : 'items')));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));

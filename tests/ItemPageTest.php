@@ -16,7 +16,7 @@ function item_twig(array $page = []): Environment
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $twig->addFunction(new TwigFunction('w4os_item', fn () => $page));
     $twig->addFunction(new TwigFunction('w4os_list_of', fn (string $type) => $api->listOf($type)));
-    $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item)));
+    $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4OS\Views\Rows::actions($list, $item)));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => "/$type"));

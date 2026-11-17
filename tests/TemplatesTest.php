@@ -71,7 +71,7 @@ describe('templates', function () {
         $list = (new W4OS\Views\Contract($document))->listOf('simulators');
         $column = array_column($list['columns'], null, 'name')['status'];
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4os\Grav\Lists::actions($list, $item)));
+        $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4OS\Views\Rows::actions($list, $item)));
         $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "fa-$icon"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
