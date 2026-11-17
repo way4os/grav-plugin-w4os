@@ -23,3 +23,5 @@
 .w4os-admin .w4os-list-card .table td { white-space: normal; }
 /* The status icons of a row on one line on a wide screen, as many lines as they need on a narrow one */
 @media (min-width: 1200px) { .w4os-admin .w4os-indicators { flex-wrap: nowrap; } }
+/* In the drawer of a phone, the visitor's block keeps its words (Tabler shows its icons only) */
+@media (max-width: 991.98px) { .w4os-admin .navbar-footer .nav-link-title { display: inline; } }
