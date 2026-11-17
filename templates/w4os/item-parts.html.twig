@@ -1,0 +1,62 @@
+{# The parts of the page of an item in the admin (Tabler): its header, its tabs, its details. #}
+
+{# The header (Tabler's page header): the link back to its list, its picture and its name as its list shows them (its first
+   column), its state as badges (the indicators of its list: the label of each state, in its tone), its actions at the right:
+   the links given (`links`: url, label, id), then the engine's actions that apply to it, the ones it asks to confirm last, marked #}
+{% macro header(item, listed, back = null, actions = [], links = []) %}
+    {% set first = listed.columns|first %}
+    {% set picture = first.picture ?? null %}
+    {% set tones = {ok: 'green', neutral: 'azure', off: 'secondary', failed: 'red'} %}
+    {% set id = item.uuid ?? item.id ?? '' %}
+    <div class="page-header d-print-none w4os-item-header">
+        <div class="container-fluid">
+            <div class="row g-3 align-items-center">
+                {% if picture %}
+                <div class="col-auto">
+                    <img class="w4os-item-picture{{ (first.default ?? null) == 'person' ? ' rounded-circle' : ' rounded' }}" src="{{ w4os_picture(attribute(item, picture) ?? null, first.default ?? null)|e('html_attr') }}" alt="" width="64" height="64">
+                </div>
+                {% endif %}
+                <div class="col">
+                    {% if back %}<div class="page-pretitle"><a href="{{ back.url|e('html_attr') }}"><i class="ti ti-chevron-left" aria-hidden="true"></i>{{ back.label }}</a></div>{% endif %}
+                    <h2 class="page-title">{{ item.name ?? id }}</h2>
+                    <div class="d-flex flex-wrap gap-2 mt-2 w4os-item-states">
+                    {% for column in listed.columns|filter(column => column.type == 'indicators') %}
+                        {% for indicator in column.indicators ?? [] %}
+                            {% set v = item %}
+                            {% for part in indicator.name|split('.') %}{% set v = v is iterable ? (attribute(v, part) ?? null) : null %}{% endfor %}
+                            {% set state = null %}
+                            {% for known in indicator.states ?? [] %}{% if state is null and known.value is same as(v) %}{% set state = known %}{% endif %}{% endfor %}
+                            {% if state %}<span class="badge bg-{{ tones[state.tone] ?? 'secondary' }}-lt"><i class="{{ w4os_icon(indicator.icon)|e('html_attr') }} me-1" aria-hidden="true"></i>{{ ('w4os.' ~ state.label)|t }}</span>{% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    </div>
+                </div>
+                {% if links or actions %}
+                <div class="col-12 col-md-auto ms-auto">
+                    <form method="post" class="btn-list">
+                        {% for link in links %}<a class="btn"{% if link.id is defined %} id="{{ link.id|e('html_attr') }}"{% endif %} href="{{ link.url|e('html_attr') }}">{{ link.label }}</a>{% endfor %}
+                        {% if actions %}
+                        {{ nonce_field('w4os-list')|raw }}
+                        <input type="hidden" name="id" value="{{ id|e('html_attr') }}">
+                        {% for action in actions|filter(action => action.ask is not defined) %}<button class="btn" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                        {# Confirmed before it is sent, in the words of the engine (`ask`) #}
+                        {% for action in actions|filter(action => action.ask is defined) %}<button class="btn btn-outline-danger" name="action" value="{{ action.name|e('html_attr') }}" data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                        {% endif %}
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{# The tabs of an item (Tabler's tabs of a card): its views (`tabs`: url, label, active) #}
+{% macro tabs(tabs) %}
+    {% if tabs|length > 1 %}
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            {% for tab in tabs %}<li class="nav-item"><a class="nav-link{{ tab.active ? ' active' }}" href="{{ tab.url|e('html_attr') }}"{% if tab.active %} aria-current="page"{% endif %}>{{ tab.label }}</a></li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+{% endmacro %}

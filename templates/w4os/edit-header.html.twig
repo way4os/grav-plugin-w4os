@@ -1,0 +1,11 @@
+{# The header of the page where a manager changes an avatar (?avatar=<UUID>): its picture, name and state, its profile page;
+   its title without the avatar #}
+{% import 'w4os/item-parts.html.twig' as parts %}
+{% set edited = w4os_edited() %}
+{% if edited is empty %}
+    {% include 'w4os/admin-header.html.twig' %}
+{% else %}
+    {% set profile = w4os_profile_page(edited.name) %}
+    {{ parts.header(edited, w4os_list_of('avatars') ?? {columns: []}, {url: base_url_relative ~ w4os_route('manage'), label: 'w4os.manage_title'|t}, [],
+        profile ? [{url: profile, label: 'w4os.action_view'|t, id: 'w4os-view-profile'}] : []) }}
+{% endif %}

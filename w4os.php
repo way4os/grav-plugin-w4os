@@ -205,6 +205,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value) => Site::date($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'))));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
@@ -216,7 +217,10 @@ class W4osPlugin extends Plugin
 
     public function onTwigSiteVariables(): void
     {
-        $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        // The pages of the admin have their own styles (Tabler, css/admin.css); its dashboard keeps the site's until it has its cards
+        $page = $this->grav['page'] ?? null;
+        $admin = $page && $page->template() === 'w4os-admin' && ($page->header()->w4os ?? null) !== 'dashboard';
+        $this->config->get('plugins.w4os.built_in_css', true) && ! $admin && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
     }
 
     /**

@@ -1,0 +1,9 @@
+{# The header of the page of an item: its name, its state and its actions (w4os/item-parts.html.twig); its title without the item #}
+{% import 'w4os/item-parts.html.twig' as parts %}
+{% set page_item = w4os_item() %}
+{% if page_item.item is empty %}
+    {% include 'w4os/admin-header.html.twig' %}
+{% else %}
+    {% set back = page_item.list ? {url: base_url_relative ~ w4os_route(page_item.list), label: ('w4os.' ~ page_item.list ~ '_title')|t} : null %}
+    {{ parts.header(page_item.item, w4os_list_of(page_item.type) ?? {columns: []}, back, w4os_list_actions(page_item.form, page_item.item)) }}
+{% endif %}

@@ -80,11 +80,8 @@
         </div>
     </aside>
     <div class="page-wrapper">
-        <div class="page-header d-print-none">
-            <div class="container-fluid">
-                <h2 class="page-title">{{ page.title }}</h2>
-            </div>
-        </div>
+        {# The header of the page: its own (w4os/<page>-header.html.twig: an item's name, status and actions), else its title #}
+        {% include ['w4os/' ~ page.header.w4os ~ '-header.html.twig', 'w4os/admin-header.html.twig'] %}
         <div class="page-body">
             <div class="container-fluid">
                 {# The messages given while the page renders, put here by the plugin #}

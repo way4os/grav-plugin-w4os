@@ -1,10 +1,12 @@
-{# A manager changes an avatar of the grid (?avatar=<UUID>): the tabs of its own profile form, and its account #}
+{# A manager changes an avatar of the grid (?avatar=<UUID>), under its header (w4os/edit-header.html.twig): the tabs of its own
+   profile form, and its account, in a card #}
 {% set edited = w4os_edited() %}
 {% if edited is empty %}
-    <p class="notices red">{{ 'w4os.error_not_found'|t }}</p>
+    <div class="alert alert-danger" role="alert">{{ 'w4os.error_not_found'|t }}</div>
 {% else %}
-    <p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route('manage') }}">← {{ 'w4os.manage_title'|t }}</a></p>
-    {% include 'forms/form.html.twig' with { form: forms('w4os-edit') } %}
+    <div class="card w4os-item"><div class="card-body">
+        {% include 'w4os/admin-form.html.twig' with {form: forms('w4os-edit')} %}
+    </div></div>
 {% endif %}
 {# The tabs of the Form plugin need jQuery (Grav's collection); js/form-tabs.js makes them keyboard tabs, keeps the tab open in
    the address, and grows the text areas where the browser cannot #}

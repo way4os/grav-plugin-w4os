@@ -13,9 +13,8 @@ form:
   # Its fields are the engine's (x-form), set when the form is
   fields: {}
   buttons:
-    # The main action last, at the far right: the page of the item, then Save
-    - { type: button, id: w4os-view-item, value: w4os.action_view_item, url: '', classes: 'button secondary' }
-    - { type: submit, value: w4os.save_button, classes: 'button primary' }
+    # Save, at the far right (the page of the item is the first tab of the card)
+    - { type: submit, value: w4os.save_button, classes: 'btn-primary' }
   process:
     - w4os: item
 ---
