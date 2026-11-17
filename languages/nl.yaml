@@ -339,7 +339,5 @@ w4os:
   admin_terms_help: 'Het pad van een pagina om mee akkoord te gaan voor de registratie; leeg voor geen'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
-  admin_manager_level: 'Niveau van de beheerders'
-  admin_manager_level_help: 'De avatars vanaf dit gebruikersniveau beheren de avatars op de site (200: de goden van de grid)'
   admin_save_accounts: 'Grav-accounts bewaren'
   admin_save_accounts_help: 'Een Grav-account (user/accounts) bewaren voor elke avatar die inlogt; altijd aan met de API-plugin'

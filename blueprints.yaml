@@ -137,11 +137,6 @@ form:
               label: w4os.admin_per_page
               help: w4os.admin_per_page_help
               validate: { type: int, min: 1, max: 500 }
-            manager_level:
-              type: number
-              label: w4os.admin_manager_level
-              help: w4os.admin_manager_level_help
-              validate: { type: int, min: 1 }
             send_mail:
               type: toggle
               label: w4os.admin_send_mail

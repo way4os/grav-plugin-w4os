@@ -49,8 +49,6 @@ register:
   confirm_email: true
   # A page of the site the visitor must agree to (terms of service), as its route; empty for none
   terms: ''
-# The avatars whose level is this or more manage the avatars of the grid on the site (200 and over are the gods of the grid)
-manager_level: 200
 # Keep a Grav account (user/accounts) for each avatar that signs in. Off: the avatar lives in the session only. The API plugin of
 # Grav needs one: it is kept anyway when that plugin is on.
 # The list of the avatars for the managers

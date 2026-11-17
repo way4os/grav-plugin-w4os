@@ -39,7 +39,5 @@ w4os:
   admin_confirm_email_help: 'Ein neuer Avatar bleibt inaktiv, bis er auf den Link klickt, den die Engine ihm schickt'
   admin_terms: 'Seite der Bedingungen'
   admin_terms_help: 'Die Route einer Seite, der man vor der Registrierung zustimmt; leer für keine'
-  admin_manager_level: 'Stufe der Verwalter'
-  admin_manager_level_help: 'Die Avatare ab dieser Benutzerstufe verwalten die Avatare auf der Seite (200: die Götter des Grids)'
   admin_save_accounts: 'Grav-Konten behalten'
   admin_save_accounts_help: 'Für jeden Avatar, der sich anmeldet, ein Grav-Konto (user/accounts) behalten; mit dem API-Plugin immer an'

@@ -339,7 +339,5 @@ w4os:
   admin_terms_help: 'A rota de uma página a aceitar antes do cadastro; vazio para nenhuma'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
-  admin_manager_level: 'Nível dos gestores'
-  admin_manager_level_help: 'Os avatares deste nível ou mais gerenciam os avatares no site (200: os deuses do grid)'
   admin_save_accounts: 'Manter contas Grav'
   admin_save_accounts_help: 'Manter uma conta Grav (user/accounts) para cada avatar que entra; sempre ligado com o plugin API'

@@ -311,15 +311,24 @@ final class Site
     }
 
     /**
-     * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, and the management of the avatars from
-     * the level of the setting "manager_level".
+     * Whether an avatar of this user level manages the grid on the site: a god, as the engine says (its user levels grant every
+     * right below them, the admin pages are the gods' rights).
+     */
+    public static function isManagerLevel(int $level): bool
+    {
+        return Bundled::library() && $level >= \OpenSim\Models\Avatar::GOD_LEVEL;
+    }
+
+    /**
+     * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, and the management of the grid for a
+     * god (isManagerLevel()).
      *
      * @param array<string,mixed> $avatar
      */
     public function user(array $avatar): UserInterface
     {
         $user = $this->grav['accounts']->load(strtolower((string) ($avatar['slug'] ?? $avatar['uuid'])));
-        $manager = (int) ($avatar['level'] ?? 0) >= (int) ($this->config()['manager_level'] ?? 200);
+        $manager = self::isManagerLevel((int) ($avatar['level'] ?? 0));
         $user->set('fullname', (string) $avatar['name']);
         $user->set('email', (string) ($avatar['email'] ?? ''));
         $user->set('state', 'enabled');

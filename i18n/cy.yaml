@@ -39,7 +39,5 @@ w4os:
   admin_confirm_email_help: 'Mae avatar newydd yn anweithredol nes iddo glicio’r ddolen y mae’r engine yn ei hanfon ato'
   admin_terms: 'Tudalen y telerau'
   admin_terms_help: 'Llwybr tudalen i gytuno â hi cyn cofrestru; gwag am ddim'
-  admin_manager_level: 'Lefel y rheolwyr'
-  admin_manager_level_help: 'Mae avatarau’r lefel defnyddiwr hon neu uwch yn rheoli’r avatarau ar y safle (200: duwiau’r grid)'
   admin_save_accounts: 'Cadw cyfrifon Grav'
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
