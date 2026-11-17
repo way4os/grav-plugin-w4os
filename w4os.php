@@ -289,14 +289,14 @@ class W4osPlugin extends Plugin
             $this->profilePage($page[1]);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
+        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
+            $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'edit') {
             // The name of the avatar in the title; the title of the list when there is no such avatar
             $edited = $this->edited();
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && $this->grav['uri']->query('format') === 'avatars') {
             $this->avatarsFound((string) $this->grav['uri']->query('search'));
-        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
-            $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'region') {
             // The name of the item in the title
             $name = (string) ($this->item()['item']['name'] ?? '');
@@ -518,7 +518,7 @@ class W4osPlugin extends Plugin
             $this->site()->engine()->call($method, $path, $data, [], $scoped);
             $type === 'avatars' && $this->site()->forgetProfile((string) ($row['name'] ?? ''));
             $query = $item
-                ? http_build_query(['id' => Lists::id($row)])
+                ? http_build_query([(string) ($options['param'] ?? 'id') => Lists::id($row)])
                 : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.manage_'.$name, $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
@@ -722,7 +722,9 @@ class W4osPlugin extends Plugin
             $type = (string) ($options['type'] ?? '');
             $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
-            $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
+            // Its UUID: in the address (?id=, or the parameter of the page: ?avatar=), posted by its form or by an action
+            $param = (string) ($options['param'] ?? 'id');
+            $id = trim((string) ($uri->post("data.$param") ?: $uri->post('id') ?: $uri->query($param)));
             try {
                 $page['item'] = $id === '' || $page['form'] === null ? null : ($this->site()->engine()->item($type, $id, ! empty($page['form']['scoped'])) ?: null);
             } catch (EngineException $e) {

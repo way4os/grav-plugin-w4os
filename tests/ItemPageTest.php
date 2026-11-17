@@ -32,7 +32,7 @@ describe('the page of an item in the admin', function () {
     $api = new OpenApi(Contract::document());
     $region = ['uuid' => 'r1', 'name' => 'Test East', 'mapImage' => 'm1', 'location' => '8015,8012', 'enabled' => true, 'online' => true, 'local' => true, 'hyperlink' => false];
     $page = ['type' => 'regions', 'list' => 'regions', 'form' => $api->itemOf('regions'), 'item' => $region, 'roles' => ['manager'], 'error' => null,
-        'groups' => [['label' => 'details', 'fields' => [['name' => 'name', 'type' => 'text', 'label' => 'column_region'], ['name' => 'mapImage', 'type' => 'map', 'label' => 'column_map'], ['name' => 'location', 'type' => 'text', 'label' => 'profile_location']]]],
+        'groups' => [['label' => 'details', 'fields' => [['name' => 'name', 'type' => 'text', 'label' => 'column_region'], ['name' => 'mapImage', 'type' => 'map', 'label' => 'column_map'], ['name' => 'location', 'type' => 'text', 'label' => 'profile_location'], ['name' => 'enabled', 'type' => 'boolean', 'label' => 'column_enabled']]]],
         'changeable' => true, 'edit' => false];
 
     test('has a header: back to its list, its picture and name, its state as badges in their tone, its actions, the dangerous ones last and marked', function () use ($page) {
@@ -44,12 +44,19 @@ describe('the page of an item in the admin', function () {
             ->and($html)->toContain('name="action" value="disable"');
     });
 
-    test('shows its views as tabs of a card, its details in a grid, without its name and picture (its header has them)', function () use ($page) {
+    test('has the links its page gives, to the addresses of the item (its profile page)', function () use ($page) {
+        $html = item_twig(['item' => $page['item'] + ['profilePage' => '/profile/Test.East']] + $page)->render('w4os/item-header.html.twig',
+            ['base_url_relative' => '', 'page' => ['header' => ['w4os_item' => ['links' => [['key' => 'action_view', 'attribute' => 'profilePage', 'id' => 'w4os-view-profile'], ['key' => 'none', 'attribute' => 'missing']]]]]]);
+
+        expect($html)->toContain('<a class="btn" id="w4os-view-profile" href="&#x2F;profile&#x2F;Test.East">[w4os.action_view]</a>')->not->toContain('[w4os.none]');
+    });
+
+    test('shows its views as tabs of a card, its details in a grid, without its name, picture and state (its header has them)', function () use ($page) {
         $html = item_twig($page)->render('w4os/item.html.twig', []);
 
         expect($html)->toContain('<ul class="nav nav-tabs card-header-tabs">', 'class="nav-link active" href="&#x3F;id&#x3D;r1"', 'href="&#x3F;id&#x3D;r1&amp;edit&#x3D;1">[w4os.action_edit]',
             '<div class="datagrid">', '<div class="datagrid-title">[w4os.profile_location]</div>', '8015,8012')
-            ->and($html)->not->toContain('[w4os.column_region]', '[w4os.column_map]');
+            ->and($html)->not->toContain('[w4os.column_region]', '[w4os.column_map]', '[w4os.column_enabled]');
     });
 
     test('has no tab to change it when the visitor may not', function () use ($page) {

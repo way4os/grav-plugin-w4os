@@ -3,6 +3,14 @@ template: w4os-admin
 w4os: edit
 cache_enable: false
 visible: false
+# The item of the engine this page shows (?avatar=<UUID>): its type, the page of its list, the parameter of its address
+w4os_item:
+  type: avatars
+  list: manage
+  param: avatar
+  # The links of its header: its profile page (the address the engine gives)
+  links:
+    - { key: action_view, attribute: profilePage, id: w4os-view-profile }
 form:
   name: w4os-edit
   classes: 'w4os-form w4os-form-profile'

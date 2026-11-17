@@ -17,9 +17,10 @@
             {% do assets.add('jquery', 101) %}
             {% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}
         {% else %}
-            {# Its fields, but its name and picture, in its header #}
-            {% set first = (w4os_list_of(page_item.type) ?? {columns: [{}]}).columns|first %}
-            {% set shown = [first.name ?? null, first.picture ?? null] %}
+            {# Its fields, but the ones its header shows: its name, its picture, its state (the indicators of its list) #}
+            {% set columns = (w4os_list_of(page_item.type) ?? {columns: [{}]}).columns %}
+            {% set shown = [columns|first.name ?? null, columns|first.picture ?? null] %}
+            {% for column in columns|filter(column => (column.type ?? null) == 'indicators') %}{% for indicator in column.indicators ?? [] %}{% set shown = shown|merge([indicator.name|split('.')|first]) %}{% endfor %}{% endfor %}
             {% for group in page_item.groups|map(group => group|merge({fields: group.fields|filter(field => field.name not in shown)}))|filter(group => group.fields) %}
                 {% if loop.length > 1 %}<h3 class="card-title{{ loop.first ? '' : ' mt-4' }}">{{ ('w4os.' ~ group.label)|t }}</h3>{% endif %}
                 <div class="datagrid">
