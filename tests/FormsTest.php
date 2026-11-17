@@ -64,6 +64,13 @@ describe('register', function () {
         expect($e->key)->toBe('w4os.error_invalid_request')->and($e->detail)->toBe("'x' is not a UUID");
     });
 
+    test('gives what the engine says it did (its notice), none when it says nothing', function () use ($fields) {
+        $notice = ['code' => 'registered-confirm', 'params' => ['email' => 'ada@example.org'], 'detail' => 'A link is on its way.'];
+
+        expect(forms([[202, registrationDocument(['emailConfirmation' => 'sent', 'notice' => $notice])]])->register($fields)['notice'])->toBe($notice)
+            ->and(forms([[202, registrationDocument(['emailConfirmation' => 'sent'])]])->register($fields)['notice'])->toBeNull();
+    });
+
     test('on a test site, mails nothing and gives the link', function () use ($fields) {
         $answer = registrationDocument(['emailConfirmation' => 'given', 'confirmation' => ['token' => 't', 'link' => 'https://site.example.org/confirm?token=t']]);
         $result = forms([[202, $answer]], $log, ['send_mail' => false])->register($fields);

@@ -42,8 +42,9 @@ final class Forms
      * Register an avatar: First and last name, email, password (twice), model.
      *
      * @param array<string,mixed> $data the fields of the form
-     * @return array{avatar: array<string,mixed>, confirm: bool, sent: bool, link: ?string} the avatar, whether it must confirm
-     *     its email, whether the mail left, the link of the confirmation when it was not mailed (test site)
+     * @return array{avatar: array<string,mixed>, confirm: bool, sent: bool, link: ?string, notice: ?array<string,mixed>} the
+     *     avatar, whether it must confirm its email, whether the mail left, the link of the confirmation when it was not mailed
+     *     (test site), what the engine says it did (its notice)
      */
     public function register(array $data): array
     {
@@ -67,6 +68,7 @@ final class Forms
             'confirm' => $confirm,
             'sent' => ($meta['emailConfirmation'] ?? '') === 'sent',
             'link' => $meta['confirmation']['link'] ?? null,
+            'notice' => is_array($meta['notice'] ?? null) && isset($meta['notice']['code']) ? $meta['notice'] : null,
         ];
     }
 

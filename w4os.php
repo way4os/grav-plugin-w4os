@@ -348,11 +348,13 @@ class W4osPlugin extends Plugin
                     $result = $forms->register($data);
                     $name = (string) $result['avatar']['name'];
                     $site->forgetProfile($name);
+                    // What the engine says it did, in the language of the page; the site's own text with an engine that says nothing
+                    $said = $result['notice'] === null ? null : $site->notice($result['notice']);
                     if ($result['confirm']) {
                         $key = $result['link'] ? 'w4os.registered_test' : ($result['sent'] ? 'w4os.registered_confirm' : 'w4os.registered_not_sent');
-                        $this->done($key, $routes['confirm'], [$name, $this->link($result['link'])]);
+                        $this->done($key, $routes['confirm'], [$name, $this->link($result['link'])], text: $result['link'] ? null : $said);
                     }
-                    $this->done('w4os.registered', $login, [$name]);
+                    $this->done('w4os.registered', $login, [$name], text: $said);
                     // no break: done() redirects
                 case 'resend':
                     // What the engine says it did, in the language of the page; the site's own text with an engine that says nothing
