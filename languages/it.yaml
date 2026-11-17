@@ -269,6 +269,7 @@ w4os:
   error_field_read_only: 'Il nome, la posizione e la dimensione di una regione si cambiano nel suo file, dal suo gestore.'
   error_flag_unknown: 'Questo flag non esiste.'
   error_owner_unknown: 'Questo avatar non esiste.'
+  error_config_not_writable: 'Questo non si può cambiare da qui: i file della griglia appartengono al suo server.'
   error_estate_shared: 'Il proprietario di questa regione è quello della sua proprietà, che ha altre regioni: cambia il proprietario della proprietà.'
   error_filter_unknown: 'Questo elenco non può essere filtrato così.'
   error_filter_value_unknown: 'Questo elenco non può essere filtrato così.'

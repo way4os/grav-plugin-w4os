@@ -269,6 +269,7 @@ w4os:
   error_field_read_only: 'De naam, de plaats en de grootte van een regio worden in haar bestand gewijzigd, door haar beheerder.'
   error_flag_unknown: 'Deze vlag bestaat niet.'
   error_owner_unknown: 'Deze avatar bestaat niet.'
+  error_config_not_writable: 'Dit kan hier niet worden gewijzigd: de bestanden van het grid horen bij zijn server.'
   error_estate_shared: 'De eigenaar van deze regio is die van haar landgoed, dat andere regio''s heeft: wijzig de eigenaar van het landgoed.'
   error_filter_unknown: 'Deze lijst kan niet zo gefilterd worden.'
   error_filter_value_unknown: 'Deze lijst kan niet zo gefilterd worden.'

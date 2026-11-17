@@ -269,6 +269,7 @@ w4os:
   error_field_read_only: 'Mae enw, lle a maint rhanbarth yn cael eu newid yn ei ffeil, gan ei weithredwr.'
   error_flag_unknown: 'Nid yw''r faner hon yn bodoli.'
   error_owner_unknown: 'Nid yw''r afatar hwn yn bodoli.'
+  error_config_not_writable: 'Ni ellir newid hyn o''r fan hon: mae ffeiliau''r grid yn perthyn i''w weinydd.'
   error_estate_shared: 'Perchennog y rhanbarth hwn yw perchennog ei ystâd, sydd â rhanbarthau eraill: newidiwch berchennog yr ystâd.'
   error_filter_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'
   error_filter_value_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'
