@@ -6,8 +6,10 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
         return;
     }
     const tips = Object.fromEntries([...select.options].map((option) => [option.value, option.title]));
+    // The text size the theme gives its fields, whatever the theme
+    const size = getComputedStyle(select).fontSize;
     const tip = (data, escape) => (tips[data.value] ? ` title="${escape(tips[data.value])}"` : '');
-    new TomSelect(select, {
+    const field = new TomSelect(select, {
         plugins: select.multiple ? ['remove_button'] : [],
         placeholder: select.getAttribute('placeholder') || select.getAttribute('aria-label'),
         hidePlaceholder: select.multiple,
@@ -21,4 +23,6 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
             item: (data, escape) => `<div${data.value === '' ? ' class="w4os-filter-all"' : ''}${tip(data, escape)}>${escape(data.text)}</div>`,
         },
     });
+    field.wrapper.style.fontSize = size;
+    field.dropdown.style.fontSize = size;
 });
