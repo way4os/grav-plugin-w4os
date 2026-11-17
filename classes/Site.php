@@ -48,7 +48,18 @@ final class Site
         }
         $config = $this->config();
 
-        return $this->engine = new Engine(self::apiUrl($config), $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...));
+        return $this->engine = new Engine(self::apiUrl($config), $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...), assets: self::picturesUrl($config));
+    }
+
+    /**
+     * The public address of the pictures of the grid with a remote engine: the helpers' (/pictures), the engine API being for the
+     * site only (often on 127.0.0.1); empty without the address of the helpers.
+     */
+    public static function picturesUrl(array $config): string
+    {
+        $helpers = rtrim(trim((string) ($config['url'] ?? '')), '/');
+
+        return $helpers === '' ? '' : "$helpers/pictures";
     }
 
     /** The address of the engine API of a remote engine: its setting `api_url`, never guessed from the helpers'; empty without it. */
@@ -109,7 +120,8 @@ final class Site
             return null;
         }
 
-        return $bundled->route('GET', '/grids/'.rawurlencode($bundled->nick())."/assets/{$m[1]}.{$m[2]}");
+        // From the web: the engine locked, it answers what it says is public only
+        return $bundled->publicRoute('GET', '/grids/'.rawurlencode($bundled->nick())."/assets/{$m[1]}.{$m[2]}");
     }
 
     public function forms(): Forms

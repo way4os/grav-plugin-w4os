@@ -74,4 +74,9 @@ describe('the address of a remote engine', function () {
             ->and(W4os\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers', 'api_url' => ' http://127.0.0.1:8780/api ']))->toBe('http://127.0.0.1:8780/api')
             ->and(W4os\Grav\Site::apiUrl([]))->toBe('');
     });
+
+    test('shows the pictures of the grid at the public address of its helpers, never at the API\'s', function () {
+        expect(W4os\Grav\Site::picturesUrl(['url' => 'https://grid.example.org/helpers/', 'api_url' => 'http://127.0.0.1:8780/api']))->toBe('https://grid.example.org/helpers/pictures')
+            ->and(W4os\Grav\Site::picturesUrl(['api_url' => 'https://grid.example.org/api']))->toBe('');
+    });
 });

@@ -50,4 +50,21 @@ describe('bundled engine', function () {
             ->and(W4os\Grav\Bundled::isApi('/helpers/search', 'https://grid.example.org/helpers'))->toBeFalse()
             ->and(W4os\Grav\Bundled::isApi('/api/grids', 'https://grid.example.org/helpers'))->toBeFalse();
     });
+
+    test('answers the web only what the engine says is public (a picture), never the rest of its API', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        $bundled = new Bundled(
+            ['login' => 'http://grid.example.org:8002/', 'database' => ['host' => 'db.example.org', 'name' => 'robust', 'user' => 'opensim', 'password' => 'secret']],
+            $root,
+            fn (string $url) => '<gridinfo><gridname>Demo World</gridname><gridnick>demo</gridnick><login>http://grid.example.org:8002/</login></gridinfo>',
+        );
+
+        expect($bundled->publicRoute('GET', '/openapi.json')[0])->toBe(200)
+            ->and($bundled->publicRoute('GET', '/grids/demo/assets/00000000-0000-0000-0000-000000000000.jpg?default=person')[0])->not->toBe(401)
+            ->and($bundled->publicRoute('GET', '/grids/demo/avatars')[0])->toBe(401)
+            ->and($bundled->publicRoute('PATCH', '/grids/demo/regions/00000000-0000-0000-0000-000000000000', '{}')[0])->toBe(401)
+            ->and($bundled->route('GET', '/grids/demo/avatars')[0])->not->toBe(401);
+
+        exec('rm -rf '.escapeshellarg($root));
+    });
 });

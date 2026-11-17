@@ -26,6 +26,8 @@ final class Bundled
 
     private ?Router $router = null;
 
+    private ?Router $public = null;
+
     private ?string $nick = null;
 
     /**
@@ -73,6 +75,21 @@ final class Bundled
         $this->router ??= new Router(new Api($this->environment()));
         parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
         $response = $this->router->route($method, (string) parse_url($path, PHP_URL_PATH), $query, (string) $body);
+
+        return [$response->status, $response->body(), $response->headers];
+    }
+
+    /**
+     * A request of the web to the engine (a picture of the grid): locked, the engine answers only what it says is public
+     * (Router::PUBLIC), never the rest of its API, which the site asks in-process (route()).
+     *
+     * @return array{int, string, array<string,string>} the status, the body, the headers
+     */
+    public function publicRoute(string $method, string $path, ?string $body = null): array
+    {
+        $this->public ??= new Router(new Api($this->environment()), authenticator: new \OpenSim\Security\Locked());
+        parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
+        $response = $this->public->route($method, (string) parse_url($path, PHP_URL_PATH), $query, (string) $body);
 
         return [$response->status, $response->body(), $response->headers];
     }
