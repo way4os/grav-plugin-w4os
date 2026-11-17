@@ -1,8 +1,0 @@
-{# A field of the item of a page the visitor does not change (field.field: the engine's field), its value drawn by its type as in
-   the lists #}
-{% import 'w4os/list-cells.html.twig' as cells %}
-{% set page_item = w4os_item() %}
-<div class="form-field w4os-value">
-    <div class="form-label"><label>{{ field.label|t }}</label></div>
-    <div class="form-data">{{ cells.cell(field.field, page_item.item ?? {}) }}</div>
-</div>

@@ -57,8 +57,39 @@ final class Items
     }
 
     /**
-     * The fields of the form of an item for Grav's Form plugin: its groups as tabs (one group: its fields alone), a field the
-     * visitor changes as an input of its type, the others as their value (the field w4os_value), the id of the item hidden.
+     * The groups of an item as its page shows them: each with the fields the visitor sees, in their order; none without any.
+     *
+     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param array<string,mixed> $item
+     * @param list<string> $roles
+     * @return list<array{name: string, label: string, fields: list<array<string,mixed>>}>
+     */
+    public static function groups(array $form, array $item, array $roles): array
+    {
+        $groups = [];
+        foreach ($form['groups'] as $group) {
+            $fields = array_values(array_filter($form['fields'], fn ($field) => $field['group'] === $group['name'] && self::visible($field, $item, $roles)));
+            $fields === [] || $groups[] = $group + ['fields' => $fields];
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Whether the visitor changes something of an item: a field it sees that it may change.
+     *
+     * @param array<string,mixed> $form
+     * @param array<string,mixed> $item
+     * @param list<string> $roles
+     */
+    public static function changeable(array $form, array $item, array $roles): bool
+    {
+        return array_filter($form['fields'], fn ($field) => self::visible($field, $item, $roles) && self::editable($field, $roles)) !== [];
+    }
+
+    /**
+     * The fields of the form of an item for Grav's Form plugin: the ones the visitor changes, each as an input of its type, its
+     * groups as tabs (one group: its fields alone), the id of the item hidden.
      *
      * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
      * @param array<string,mixed> $item
@@ -69,8 +100,8 @@ final class Items
     {
         $groups = [];
         foreach ($form['fields'] as $field) {
-            if (self::visible($field, $item, $roles)) {
-                $groups[$field['group']][$field['name']] = self::editable($field, $roles) ? self::input($field) : ['type' => 'w4os_value', 'label' => 'w4os.'.$field['label'], 'field' => $field];
+            if (self::visible($field, $item, $roles) && self::editable($field, $roles)) {
+                $groups[$field['group']][$field['name']] = self::input($field);
             }
         }
         $fields = ['id' => ['type' => 'hidden']];

@@ -1,20 +1,44 @@
 {# The page of an item of the engine (?id=<UUID>, w4os_item in the front matter: its type, the page of its list): its fields as the
-   engine describes them, the ones the visitor changes in a form, then the actions that apply to it #}
+   engine describes them, by group, then its actions and Edit, at the bottom right; with &edit=1, the form of the fields the visitor
+   changes #}
 {% import 'w4os/list-cells.html.twig' as cells %}
 {% set page_item = w4os_item() %}
 {% if page_item.list %}<p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route(page_item.list) }}">← {{ ('w4os.' ~ page_item.list ~ '_title')|t }}</a></p>{% endif %}
 {% if page_item.item is empty %}
     <p class="notices red">{{ page_item.error ?? 'w4os.error_not_found'|t }}</p>
-{% else %}
+{% elseif page_item.edit %}
     {% include 'forms/form.html.twig' with { form: forms('w4os-item') } %}
+    {% do assets.add('jquery', 101) %}
+    {% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}
+{% else %}
+    {% set id = page_item.item.uuid ?? page_item.item.id ?? '' %}
+    <div class="w4os-item">
+    {% for group in page_item.groups %}
+        <section class="w4os-item-group">
+            {% if page_item.groups|length > 1 %}<h2>{{ ('w4os.' ~ group.label)|t }}</h2>{% endif %}
+            {% for field in group.fields %}
+                <div class="w4os-value">
+                    <div class="form-label"><label>{{ ('w4os.' ~ field.label)|t }}</label></div>
+                    <div class="form-data">{{ cells.cell(field, page_item.item) }}</div>
+                </div>
+            {% endfor %}
+        </section>
+    {% endfor %}
+    </div>
+    {# The actions that apply to it, then Edit, the main one, at the far right #}
     {% set actions = w4os_list_actions(page_item.form, page_item.item) %}
-    {% if actions %}
-    <form class="w4os-item-actions" method="post">
-        {{ nonce_field('w4os-list')|raw }}
-        <input type="hidden" name="id" value="{{ page_item.item.uuid ?? page_item.item.id ?? '' }}">
-        {% for action in actions %}<button class="secondary" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
-    </form>
+    {% if actions or page_item.changeable %}
+    <div class="form-wrapper w4os-item-actions">
+        <div class="{{ form_button_outer_classes ?: 'buttons' }}">
+            {% if actions %}
+            <form method="post">
+                {{ nonce_field('w4os-list')|raw }}
+                <input type="hidden" name="id" value="{{ id|e('html_attr') }}">
+                {% for action in actions %}<button class="{{ form_button_classes ?: 'button' }} button secondary" name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+            </form>
+            {% endif %}
+            {% if page_item.changeable %}<a href="?{{ {id: id, edit: 1}|url_encode }}"><button type="button" class="{{ form_button_classes ?: 'button' }} button primary">{{ 'w4os.action_edit'|t }}</button></a>{% endif %}
+        </div>
+    </div>
     {% endif %}
 {% endif %}
-{% do assets.add('jquery', 101) %}
-{% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}

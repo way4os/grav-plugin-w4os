@@ -36,18 +36,20 @@ describe('the page of an item of the engine', function () {
             ->and(Items::editable($avatar['role'], ['self']))->toBeFalse();
     });
 
-    test('makes the fields of its form: its groups as tabs, what the visitor changes as inputs, the rest as values', function () use ($api) {
+    test('shows its groups with the fields the visitor sees, and a form of the ones it changes', function () use ($api) {
         $form = $api->itemOf('regions');
-        $local = Items::fields($form, ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'local' => true, 'enabled' => true], ['manager']);
-        $link = Items::fields($form, ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true, 'local' => false], ['manager']);
-        $tabs = $local['groups']['fields'];
+        $local = ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'local' => true, 'enabled' => true];
+        $far = ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true, 'local' => false];
+        $names = fn (array $groups) => array_merge(...array_map(fn ($group) => array_column($group['fields'], 'name'), $groups));
+        $fields = Items::fields($form, $local, ['manager']);
 
-        expect($local['id'])->toBe(['type' => 'hidden'])
-            ->and(array_keys($tabs))->toBe(['region', 'simulator'])
-            ->and($tabs['region']['title'])->toBe('w4os.'.$form['groups'][0]['label'])
-            ->and($tabs['region']['fields']['name']['type'])->toBe('w4os_value')
-            ->and($tabs['simulator']['fields']['enabled'])->toMatchArray(['type' => 'checkbox'])
-            ->and(array_keys($link['groups']['fields']['simulator']['fields']))->not->toContain('enabled', 'file')
+        expect($names(Items::groups($form, $local, ['manager'])))->toContain('name', 'enabled')
+            ->and($names(Items::groups($form, $far, ['manager'])))->not->toContain('enabled')
+            ->and(Items::changeable($form, $local, ['manager']))->toBeTrue()
+            ->and(Items::changeable($form, $far, ['manager']))->toBeFalse()
+            ->and(Items::changeable($form, $local, ['owner']))->toBeFalse()
+            ->and($fields['id'])->toBe(['type' => 'hidden'])
+            ->and(json_encode($fields))->toContain('"enabled":{"type":"checkbox"')->not->toContain('"name":')
             ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager']))->toBe(['id' => 'r1', 'enabled' => true]);
     });
 

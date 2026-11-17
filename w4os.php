@@ -395,6 +395,7 @@ class W4osPlugin extends Plugin
                     } catch (EngineException $e) {
                         throw $forms->error($e);
                     }
+                    // Saved: the page of the item, as it is now
                     $this->done('w4os.manage_saved', $this->grav['page']->route().'?'.http_build_query(['id' => $id]), [(string) ($page['item']['name'] ?? '')]);
             }
         } catch (FormError $e) {
@@ -664,7 +665,7 @@ class W4osPlugin extends Plugin
         if ($page === null) {
             $options = (array) ($this->grav['page']->header()->w4os_item ?? []);
             $type = (string) ($options['type'] ?? '');
-            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null];
+            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
             $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
             try {
@@ -672,7 +673,13 @@ class W4osPlugin extends Plugin
             } catch (EngineException $e) {
                 $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
             }
-            $page['item'] === null || $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
+            if ($page['item'] !== null) {
+                $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
+                $page['groups'] = Items::groups($page['form'], $page['item'], $page['roles']);
+                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['roles']);
+                // The page shows the item; its form (&edit=1, or posted) the fields the visitor changes
+                $page['edit'] = $page['changeable'] && ($uri->query('edit') !== null || $uri->post('__form-name__') === 'w4os-item');
+            }
         }
 
         return $page;
@@ -689,8 +696,12 @@ class W4osPlugin extends Plugin
         foreach (Items::values($page['form'], $page['item'], $page['roles']) as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
-        // Nothing to change: no Save button
-        array_filter($page['form']['fields'], fn ($field) => Items::visible($field, $page['item'], $page['roles']) && Items::editable($field, $page['roles'])) === [] && $form->set('buttons', []);
+        // The button next to Save leads back to the page of the item
+        $buttons = (array) $form->get('buttons');
+        foreach ($buttons as $i => $button) {
+            ($button['id'] ?? '') === 'w4os-view-item' && ($buttons[$i]['url'] = $this->grav['page']->url().'?'.http_build_query(['id' => Lists::id($page['item'])]));
+        }
+        $form->set('buttons', $page['changeable'] ? $buttons : []);
     }
 
     /** The avatar a manager changes (the UUID the edit form posts, else ?avatar=<UUID> of the page), as the engine has it, once per request. */
