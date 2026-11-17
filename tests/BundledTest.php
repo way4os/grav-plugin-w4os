@@ -22,9 +22,23 @@ describe('bundled engine', function () {
 
         expect($bundled->nick())->toBe('demo')
             ->and($asked)->toBe(['http://grid.example.org:8002/get_grid_info'])
-            ->and((string) file_get_contents("$root/etc/grids/demo/demo.conf"))->toContain('Remote = "true"')->toContain('GridName = "Demo World"')->toContain('BaseHostname = "grid.example.org"')->toContain('PublicPort = "8002"')
-            ->and((string) file_get_contents("$root/etc/grids/demo/Helpers.ini"))->toContain('Data Source=db.example.org;Port=3306;Database=robust;User ID=opensim;Password=secret')->toContain('gridname = "Demo World"')
+            ->and((string) file_get_contents("$root/etc/grids/demo/demo.conf"))->toContain('Remote = true', 'GridName = Demo World', 'GridNick = demo', 'BaseHostname = grid.example.org', 'PublicPort = 8002', 'PrivatePort = 8003')
+            ->and((string) file_get_contents("$root/etc/grids/demo/Helpers.ini"))->toContain('Data Source=db.example.org;Database=robust;User ID=opensim;Password=secret;Old Guids=true;')->toContain('gridname = "Demo World"')
             ->and(decoct(fileperms("$root/etc/grids/demo/Helpers.ini") & 0777))->toBe('640');
+
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
+    test('refuses a grid whose nick is not one, rather than changing it', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        $bundled = new Bundled(
+            ['login' => 'http://grid.example.org:8002/', 'database' => ['host' => 'db.example.org:3307', 'name' => 'robust', 'user' => 'opensim', 'password' => 'secret']],
+            $root,
+            fn (string $url) => '<gridinfo><gridname>Demo World</gridname><gridnick>Demo World!</gridnick></gridinfo>',
+        );
+
+        expect(fn () => $bundled->nick())->toThrow(W4os\Grav\EngineException::class)
+            ->and(glob("$root/etc/grids/*") ?: [])->toBe([]);
 
         exec('rm -rf '.escapeshellarg($root));
     });

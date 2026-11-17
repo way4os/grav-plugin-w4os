@@ -4,10 +4,14 @@ namespace W4os\Grav;
 
 use OpenSim\Api\Api;
 use OpenSim\Api\Router;
+use OpenSim\Config\ConnectionString;
 use OpenSim\Config\DirectoryLayout;
 use OpenSim\Config\Layout;
 use OpenSim\Helpers\View\View;
 use OpenSim\Models\Grid;
+use OpenSim\Provisioning\GridConf;
+use OpenSim\Provisioning\Presets;
+use OpenSim\Provisioning\RemoteGridPlanner;
 use OpenSim\Runtime\Environment;
 
 /**
@@ -146,8 +150,7 @@ final class Bundled
 
             return $this->environment;
         }
-        $this->nick = $this->describe($login);
-        $this->environment = Environment::system(new Layout([
+        $environment = Environment::system(new Layout([
             'EtcRoot' => "$this->root/etc",
             'VarRoot' => "$this->root/var",
             'DataRoot' => "$this->root/var/data",
@@ -155,8 +158,9 @@ final class Bundled
             'LogsRoot' => "$this->root/logs",
             'BackupRoot' => "$this->root/backups",
         ]));
+        $this->nick = $this->describe($login, $environment);
 
-        return $this->environment;
+        return $this->environment = $environment;
     }
 
     /** The nick of the only grid of this server's install. */
@@ -168,45 +172,37 @@ final class Bundled
     }
 
     /**
-     * Writes the description of a grid that runs elsewhere, from what its login address says (get_grid_info) and the database of
-     * its Robust: `<nick>.conf` (a remote grid) and `Helpers.ini` (its database and its grid info, for the engine and the helpers).
+     * Writes the description of a grid that runs elsewhere, as the engine plans it from its login address (RemoteGridPlanner: what
+     * the grid says of itself, its nick checked, never changed): `<nick>.conf` (a remote grid, GridConf) and `Helpers.ini` (the
+     * database of its Robust and its grid info, for the engine and the helpers).
      *
      * @return string the nick of the grid
+     * @throws EngineException when the engine refuses the grid (a nick that is not one, the one of a grid of this machine)
      */
-    private function describe(string $login): string
+    private function describe(string $login, Environment $environment): string
     {
-        $xml = ($this->fetch)("$login/get_grid_info");
-        $info = [];
-        if (is_string($xml) && ($doc = @simplexml_load_string($xml)) !== false) {
-            foreach ($doc->children() as $element) {
-                $info[$element->getName()] = trim((string) $element);
-            }
+        $scheme = (string) (parse_url($login, PHP_URL_SCHEME) ?: 'http');
+        $said = [];
+        $planned = RemoteGridPlanner::with([
+            'environment' => $environment,
+            'says' => function (string $host, int $port) use ($scheme, &$said): array {
+                return $said = $this->says("$scheme://$host:$port");
+            },
+        ])->plan(['address' => $login] + (trim((string) ($this->settings['grid'] ?? '')) === '' ? [] : ['nick' => trim((string) $this->settings['grid'])]));
+        if ($planned['error'] !== null || $planned['grid'] === null) {
+            throw new EngineException(503, (string) ($planned['error'] ?? 'The grid cannot be described.'), ['code' => 'channel-unavailable']);
         }
-        $nick = preg_replace('/[^A-Za-z0-9._-]/', '_', (string) ($info['gridnick'] ?? ($this->settings['grid'] ?? ''))) ?: 'grid';
-        $directory = "$this->root/etc/grids/$nick";
-        $host = (string) parse_url($login, PHP_URL_HOST);
-        $port = (int) (parse_url($login, PHP_URL_PORT) ?: 8002);
+        $grid = $planned['grid']->describe();
+        (new GridConf())->writeRemote($grid, new Presets([], $environment->layout->etcRoot()));
+        $directory = (string) $grid['directory'];
         $db = (array) ($this->settings['database'] ?? []);
-        $connection = sprintf(
-            'Data Source=%s;Port=%d;Database=%s;User ID=%s;Password=%s;Old Guids=true;SslMode=None;',
-            $db['host'] ?? 'localhost',
-            (int) ($db['port'] ?? 3306),
-            $db['name'] ?? '',
-            $db['user'] ?? '',
-            $db['password'] ?? '',
-        );
+        $port = (int) ($db['port'] ?? 3306);
+        $source = (string) ($db['host'] ?? 'localhost').($port === 3306 ? '' : ":$port");
+        $connection = (string) ConnectionString::for($source, (string) ($db['name'] ?? ''), (string) ($db['user'] ?? ''), (string) ($db['password'] ?? ''));
         $files = [
-            "$nick.conf" => self::ini(['Grid' => [
-                'Remote' => 'true',
-                'GridName' => $info['gridname'] ?? $nick,
-                'GridNick' => $nick,
-                'BaseHostname' => $host,
-                'PublicPort' => (string) $port,
-                'PrivatePort' => (string) ($port + 1),
-            ]]),
             'Helpers.ini' => self::ini([
                 'DatabaseService' => ['StorageProvider' => 'OpenSim.Data.MySQL.dll', 'ConnectionString' => $connection],
-                'GridInfoService' => $info + ['login' => "$login/"],
+                'GridInfoService' => $said + ['login' => rtrim($login, '/').'/'],
             ]),
         ];
         is_dir($directory) || mkdir($directory, 0750, true);
@@ -218,7 +214,25 @@ final class Bundled
             }
         }
 
-        return $nick;
+        return (string) $grid['nick'];
+    }
+
+    /**
+     * What a grid says of itself (get_grid_info at its address), empty when it does not answer.
+     *
+     * @return array<string,string>
+     */
+    private function says(string $address): array
+    {
+        $xml = ($this->fetch)(rtrim($address, '/').'/get_grid_info');
+        $info = [];
+        if (is_string($xml) && ($doc = @simplexml_load_string($xml)) !== false) {
+            foreach ($doc->children() as $element) {
+                $info[$element->getName()] = trim((string) $element);
+            }
+        }
+
+        return $info;
     }
 
     /** @param array<string,array<string,string>> $sections */
