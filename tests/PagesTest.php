@@ -85,13 +85,15 @@ describe('pages', function () {
         }
     });
 
-    test('every icon of the engine has its icon of the theme (Font Awesome), in the settings a site can change', function () {
+    test('every icon of the engine has its icon of Tabler Icons, in the settings a site can change', function () {
         $icons = (array) (Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['icons'] ?? []);
         $engine = (new ReflectionClassConstant(OpenSim\Data\Listing::class, 'ICONS'))->getValue();
 
         expect(array_keys($icons))->toEqualCanonicalizing($engine);
         foreach ($icons as $classes) {
-            expect($classes)->toMatch('/^fa-(solid|regular) fa-[a-z0-9-]+$/');
+            expect($classes)->toMatch('/^ti ti-[a-z0-9-]+$/');
+            // An icon the font has
+            expect((string) file_get_contents(dirname(__DIR__).'/vendor/npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css'))->toContain('.'.substr($classes, 3).':before');
         }
     });
 });

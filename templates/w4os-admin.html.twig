@@ -1,0 +1,102 @@
+{# The admin pages of the plugin (dashboard, simulators, regions, avatars): a layout of its own on Tabler, never the theme's, so a
+   change of theme or of the styles of the site cannot break it; the identity of the site in it (its title, its logo, its accent
+   color as the primary color of Tabler, w4os_brand()), the light or dark mode of the visitor. One sidebar of the sections the
+   visitor opens (w4os_admin_menu()), a drawer on a phone; the page in the main area. #}
+{% set brand = w4os_brand() %}
+{% set menu = w4os_admin_menu() ?? [] %}
+{% set visitor = grav.user.w4os ?? null %}
+<!doctype html>
+<html lang="{{ (grav.language.getActive ?: 'en')|e('html_attr') }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{{ page.title }}{{ brand.title ? ' | ' ~ brand.title }}</title>
+    {# The light or dark mode of the visitor's system, followed when it changes #}
+    <script>
+        (function () {
+            var dark = window.matchMedia('(prefers-color-scheme: dark)');
+            var apply = function () { document.documentElement.setAttribute('data-bs-theme', dark.matches ? 'dark' : 'light'); };
+            apply();
+            dark.addEventListener('change', apply);
+        })();
+    </script>
+    {# Tabler, its icons and the admin's own styles, served by the plugin (vendor/npm-asset, pinned) #}
+    <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/css/tabler.min.css')|e('html_attr') }}">
+    <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/css/tabler-vendors.min.css')|e('html_attr') }}">
+    <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css')|e('html_attr') }}">
+    <link rel="stylesheet" href="{{ url('plugin://w4os/css/admin.css')|e('html_attr') }}">
+    {% if brand.color is defined %}
+    {# The accent color of the site as the primary color of Tabler, its variants derived by Tabler from it #}
+    <style>
+        :root, [data-bs-theme] {
+            --tblr-primary: {{ brand.color }};
+            --tblr-primary-rgb: {{ brand.rgb }};
+            --tblr-primary-lt-rgb: {{ brand['lt-rgb'] }};
+        }
+    </style>
+    {% endif %}
+</head>
+<body class="w4os-admin">
+<div class="page">
+    <aside class="navbar navbar-vertical navbar-expand-lg">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#w4os-sidebar" aria-controls="w4os-sidebar" aria-expanded="false" aria-label="{{ 'w4os.menu_admin'|t|e('html_attr') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="{{ brand.home|e('html_attr') }}" title="{{ brand.title|e('html_attr') }}">
+                {% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="">{% endif %}
+                <span class="w4os-admin-title">{{ brand.title }}</span>
+            </a>
+            <div class="collapse navbar-collapse" id="w4os-sidebar">
+                <ul class="navbar-nav pt-lg-3">
+                    {% for item in menu %}
+                    <li class="nav-item{{ item.active ?? false ? ' active' }}">
+                        <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
+                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                            <span class="nav-link-title">{{ item.label }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {# The visitor: the site, its profile, sign out #}
+                <ul class="navbar-nav mt-lg-auto w4os-admin-visitor">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ brand.home|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-world" aria-hidden="true"></i></span><span class="nav-link-title">{{ brand.title }}</span></a>
+                    </li>
+                    {% if visitor %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ (base_url_relative ~ (config.plugins.w4os.routes.account ?? '/account'))|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-user-circle" aria-hidden="true"></i></span><span class="nav-link-title">{{ visitor.name }}</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-logout" aria-hidden="true"></i></span><span class="nav-link-title">{{ 'w4os.logout'|t }}</span></a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </aside>
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <h2 class="page-title">{{ page.title }}</h2>
+            </div>
+        </div>
+        <div class="page-body">
+            <div class="container-xl">
+                {# The messages given while the page renders, put here by the plugin #}
+                <!-- w4os:admin-messages -->
+                <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
+                    {% include 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/js/tabler.min.js')|e('html_attr') }}" defer></script>
+{# What the page added (the scripts of its lists and forms), once it is rendered #}
+{{ assets.css()|raw }}
+{{ assets.js()|raw }}
+{{ assets.js('bottom')|raw }}
+</body>
+</html>

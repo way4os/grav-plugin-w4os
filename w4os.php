@@ -92,16 +92,17 @@ class W4osPlugin extends Plugin
      */
     public function onOutputGenerated(): void
     {
-        $marker = '<!-- w4os:messages -->';
         $output = (string) $this->grav->output;
-        if (! str_contains($output, $marker)) {
-            return;
-        }
-        // The theme's messages, else the plugin's own
+        // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
-        $template = $twig->twig()->getLoader()->exists('partials/messages.html.twig') ? 'partials/messages.html.twig' : 'w4os/messages.html.twig';
-        $messages = $this->grav['messages']->all() ? $twig->processTemplate($template) : '';
-        $this->grav->output = str_replace($marker, $messages, $output);
+        foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {
+            if (! str_contains($output, $marker)) {
+                continue;
+            }
+            $template ??= $twig->twig()->getLoader()->exists('partials/messages.html.twig') ? 'partials/messages.html.twig' : 'w4os/messages.html.twig';
+            $messages = $this->grav['messages']->all() ? $twig->processTemplate($template) : '';
+            $this->grav->output = $output = str_replace($marker, $messages, $output);
+        }
     }
 
     /**
@@ -193,6 +194,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_slogan', fn () => $this->site()->slogan()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
+        // The identity of the site for its admin pages (their layout, w4os-admin.html.twig)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));

@@ -33,7 +33,20 @@ The site serves the helpers of the grid (`serve_helpers`) the way w4os does: the
 - `classes/Site.php`: the part that knows Grav: settings and API key, Grav's HTTP client and cache, the pages of the plugin, the avatar as a Grav user.
 - `pages/*.md`: the front matter of the pages of the plugin, with their forms (Form plugin, `process: [{w4os: register}]`); title and texts come from the language files (`languages/<lang>.yaml`).
 - `templates/w4os.html.twig` and `templates/w4os/<page>.html.twig`: the pages; `templates/w4os/user-menu.html.twig`: the menu of the visitor, for a theme; `templates/w4os/blocks/grid-status.html.twig`: the status of the grid from the data of its block (`?format=json`), in the language of the site (`classes/Format.php`, intl). `templates/forms/fields/w4os_models`: the models picker. A theme overrides any of them.
+- `templates/w4os-admin.html.twig`: the layout of the admin pages (dashboard, simulators, regions, avatars), the plugin's own on Tabler, never the theme's: the identity of the site in it (`Site::brand()`: its title, its logo, its accent color as `--tblr-primary`), one sidebar of the sections the visitor opens (`Site::adminMenu()`), the visitor's light or dark mode; `css/admin.css` its few additions.
+- `classes/Assets.php`: the libraries of the browser (below).
 - `dev/`: a local development Grav (`dev/grav.sh`, its config in `dev/site`); the pages of a site belong to the site (the w4os site has the default ones), not to the plugin.
+
+## The libraries of the browser
+
+Tabler (`@tabler/core`), Tabler Icons (`@tabler/icons-webfont`) and Tom Select (`tom-select`) are npm releases pinned in `composer.json` as `package` repositories (name `npm-asset/<name>`, its version, the URL of its tarball on registry.npmjs.org and its sha1), required at that version: `composer install` puts them in `vendor/npm-asset/`, and `Assets::prune()` (post-install-cmd, post-update-cmd) keeps of each only what the plugin serves (`Assets::KEEP`) and its license, so the release zip carries them light. To update one, take a release at least two weeks old, then in its `package` entry change the version, the URL and the shasum, which npm gives:
+
+```bash
+curl -s https://registry.npmjs.org/@tabler/core/1.7.3 | python3 -c "import json,sys; d=json.load(sys.stdin)['dist']; print(d['tarball'], d['shasum'])"
+composer update npm-asset/tabler-core       # then commit composer.json and composer.lock
+```
+
+A file of a new version the plugin serves goes in `Assets::KEEP` (and `tests/AssetsTest.php`).
 
 ## How it plugs into Grav
 

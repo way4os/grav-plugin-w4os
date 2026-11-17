@@ -1,0 +1,9 @@
+/* The admin pages (w4os-admin.html.twig, on Tabler): what Tabler does not have of the plugin's own */
+.w4os-admin-logo { height: 2rem; width: auto; margin-right: .5rem; }
+.w4os-admin .navbar-brand { white-space: normal; }
+/* The tones of the indicators, in the colors of Tabler */
+.w4os-admin .w4os-tone-ok { color: var(--tblr-success); }
+.w4os-admin .w4os-tone-neutral { color: var(--tblr-secondary); }
+.w4os-admin .w4os-tone-off { color: var(--tblr-gray-400, var(--tblr-secondary)); }
+.w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
+.w4os-admin .w4os-indicator i { font-size: 1.15rem; }

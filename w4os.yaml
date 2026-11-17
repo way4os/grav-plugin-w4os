@@ -52,19 +52,24 @@ register:
 # The admin pages open from this user level of the grid, one of the engine's (0, 1, 100, 150, 200, 250); each page, action and
 # field then asks its own level, the engine's (README: Who manages the grid on the site)
 admin_level: 100
-# The icons of the indicators of the lists (the engine's names), as classes of the icons of the theme: Font Awesome, which the
-# theme loads (Quark2); another set of icons by its classes
+# The icons of the indicators of the lists (the engine's names), as classes of Tabler Icons, which the admin pages serve (their
+# layout, Tabler); another set of icons by its classes
 icons:
-  power: 'fa-solid fa-power-off'
-  run: 'fa-solid fa-play'
-  online: 'fa-solid fa-signal'
-  console: 'fa-solid fa-terminal'
-  screen: 'fa-solid fa-display'
-  file: 'fa-solid fa-file-lines'
-  files: 'fa-solid fa-folder-open'
-  database: 'fa-solid fa-database'
-  server: 'fa-solid fa-server'
-  account: 'fa-solid fa-user'
+  power: 'ti ti-power'
+  run: 'ti ti-player-play'
+  online: 'ti ti-antenna-bars-5'
+  console: 'ti ti-terminal-2'
+  screen: 'ti ti-device-desktop'
+  file: 'ti ti-file-text'
+  files: 'ti ti-files'
+  database: 'ti ti-database'
+  server: 'ti ti-server'
+  account: 'ti ti-user'
+# The identity of the site in its admin pages: a logo (an address) and an accent color (#rrggbb) of their own; empty: the ones of
+# the theme (its custom_logo, its accent-color), else the logo of the grid and the colors of Tabler
+admin:
+  logo: ''
+  color: ''
 # Keep a Grav account (user/accounts) for each avatar that signs in. Off: the avatar lives in the session only. The API plugin of
 # Grav needs one: it is kept anyway when that plugin is on.
 # The list of the avatars for the managers

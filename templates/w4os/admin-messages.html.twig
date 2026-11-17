@@ -1,0 +1,5 @@
+{# The messages of the site in the admin pages, as alerts of Tabler #}
+{% for message in grav.messages.fetch %}
+    {% set kind = {error: 'danger', warning: 'warning', info: 'info', success: 'success', notice: 'info'}[message.scope] ?? 'info' %}
+    <div class="alert alert-{{ kind }}" role="{{ kind == 'danger' ? 'alert' : 'status' }}">{{ message.message|raw }}</div>
+{% endfor %}

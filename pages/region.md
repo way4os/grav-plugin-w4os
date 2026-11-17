@@ -1,5 +1,5 @@
 ---
-template: w4os
+template: w4os-admin
 w4os: item
 cache_enable: false
 visible: false

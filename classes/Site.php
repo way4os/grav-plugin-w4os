@@ -468,7 +468,15 @@ final class Site
     }
 
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
-    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title', 'regions' => 'w4os.regions_title', 'simulators' => 'w4os.simulators_title'];
+    public const ADMIN_PAGES = [
+        'dashboard' => ['label' => 'w4os.dashboard_title', 'icon' => 'ti ti-layout-dashboard'],
+        'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
+        'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
+        'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
+    ];
+
+    /** The section of the admin a page is in: its list for the page of one item. */
+    public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage'];
 
     /** The items an admin page lists: the page shows to whom the contract lets read them. */
     public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators'];
@@ -484,15 +492,64 @@ final class Site
         if (! $this->isManager()) {
             return [];
         }
+        [$current] = $this->pageAt($this->grav['uri']->path());
+        $section = self::ADMIN_SECTIONS[$current] ?? $current;
         $items = [];
-        foreach (self::ADMIN_PAGES as $type => $label) {
-            isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read')) && $items[] = ['label' => $this->translate($label), 'url' => $this->path($type, true)];
+        foreach (self::ADMIN_PAGES as $type => $page) {
+            isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read'))
+                && $items[] = ['label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section];
         }
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 
         return array_values((array) $event['items']);
     }
+
+    /**
+     * The identity of the site for its admin pages: its title, its logo (the plugin's setting admin.logo, else the theme's
+     * custom_logo, else the logo of the grid), its accent color (admin.color, else the theme's accent-color) for Tabler.
+     *
+     * @return array{title: string, logo: ?string, home: string, color?: string, rgb?: string, lt-rgb?: string}
+     */
+    public function brand(): array
+    {
+        $theme = (array) $this->grav['config']->get('themes.'.$this->grav['config']->get('system.pages.theme'), []);
+        $admin = (array) ($this->config()['admin'] ?? []);
+        $logo = trim((string) ($admin['logo'] ?? ''));
+        if ($logo === '' && is_array($theme['custom_logo'] ?? null) && ($first = reset($theme['custom_logo'])) && isset($first['name'])) {
+            $logo = (string) $this->grav['locator']->findResource('theme://images/logo/'.$first['name'], false);
+            $logo = $logo === '' ? '' : $this->grav['base_url_relative'].'/'.ltrim($logo, '/');
+        }
+        $logo === '' && $logo = (string) ($this->engine()->gridLogo() ?? '');
+
+        return [
+            'title' => (string) $this->grav['config']->get('site.title', ''),
+            'logo' => $logo === '' ? null : $logo,
+            'home' => $this->grav['base_url_relative'] ?: '/',
+        ] + (self::brandColor((string) ($admin['color'] ?? '') ?: (string) ($theme['accent-color'] ?? '')) ?? []);
+    }
+
+    /**
+     * A color of the site as the primary color of Tabler: the hex color, its RGB and the RGB of its light tint (10 % on white);
+     * null for what is not a hex color.
+     *
+     * @return ?array{color: string, rgb: string, lt-rgb: string}
+     */
+    public static function brandColor(?string $hex): ?array
+    {
+        if (preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/i', trim((string) $hex), $m) !== 1) {
+            return null;
+        }
+        $hex = strtolower(strlen($m[1]) === 3 ? preg_replace('/(.)/', '$1$1', $m[1]) : $m[1]);
+        $rgb = array_map('hexdec', str_split($hex, 2));
+
+        return [
+            'color' => "#$hex",
+            'rgb' => implode(',', $rgb),
+            'lt-rgb' => implode(',', array_map(fn (int $c) => (int) round($c * .1 + 255 * .9), $rgb)),
+        ];
+    }
+
 
     /** Whether the visitor reads the admin pages (readsAdmin()). */
     public function isManager(): bool
