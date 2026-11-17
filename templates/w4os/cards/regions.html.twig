@@ -9,7 +9,9 @@
         {% if monitor.simulators ?? [] %}
         <ul class="w4os-simulators">
             {% for simulator in monitor.simulators %}
-                <li>{% if simulator.local and w4os_route('regions') %}<a href="{{ list ~ '?' ~ {simulator: simulator.name}|url_encode }}">{{ simulator.name }}</a>{% else %}{{ simulator.name }}{% endif %}
+                {# The list of its regions: the simulator filter takes its address (host:port of its uri) #}
+                {% set address = (simulator.uri ?? '')|replace({'http://': '', 'https://': ''})|trim('/') %}
+                <li>{% if address and w4os_route('regions') %}<a href="{{ list ~ '?' ~ {'simulator[]': address}|url_encode }}">{{ simulator.name }}</a>{% else %}{{ simulator.name }}{% endif %}
                     <small>{{ 'w4os.regions_online'|t(simulator.online, simulator.regions) }}</small></li>
             {% endfor %}
         </ul>
