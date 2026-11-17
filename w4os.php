@@ -159,6 +159,11 @@ class W4osPlugin extends Plugin
         $password = (string) $object->get('bundled.database.password', '');
         $password === '' || $this->site()->saveDatabasePassword($password);
         $object->undef('bundled.database.password');
+        // A remote engine is reached at its own address only
+        if ($object->get('engine', 'remote') !== 'bundled' && Site::apiUrl((array) $object->toArray()) === '') {
+            $text = $this->site()->translate('w4os.admin_api_url_missing');
+            isset($this->grav['admin']) ? $this->grav['admin']->setMessage($text, 'warning') : $this->grav['messages']->add($text, 'warning');
+        }
     }
 
     /** Templates of the plugin come last, so a theme can override them. */

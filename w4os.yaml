@@ -1,6 +1,6 @@
 enabled: true
 # The engine of the grid, where the site asks everything:
-#   remote   the engine API of the grid, served by its helpers (url, api_key below): the site can be anywhere
+#   remote   the engine API of the grid, at its own address (api_url, api_key below): the site can be anywhere
 #   bundled  the engine and the helpers the plugin bundles (its vendor folder), used as libraries: no API, no key; the grid is
 #            described under "bundled" below. Needs the PHP extensions of the engine (pdo_mysql, mysqli; imagick for the pictures).
 engine: remote
@@ -8,10 +8,10 @@ engine: remote
 # ask (welcome, search, profiles, economy, offline messages, guide...) at the addresses the config of the grid gives, which must be
 # the ones of this site (its WebURL, /helpers). Off: the grid keeps its own helpers, at the address below.
 serve_helpers: false
-# The address of the helpers of the grid, where its blocks are (https://grid.example.org/helpers). The engine API is served there
-# under /api unless api_url says otherwise.
+# The address of the helpers of the grid, where its blocks are (https://grid.example.org/helpers)
 url: ''
-# The address of the engine API, when it is not the /api of the helpers
+# The address of the engine API (engine: remote), required: https://grid.example.org/api, or http://127.0.0.1:8780/api for a
+# site on the machine of the grid (opensim web GRID api)
 api_url: ''
 # The nick of the grid, when the API serves several grids (its addresses are then /grids/{grid}/...); empty for the API of one grid.
 # With the bundled engine and an OpenSim install on this server: the grid of the install, empty for its only grid.

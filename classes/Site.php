@@ -47,9 +47,14 @@ final class Site
             return $this->engine = new Engine('', '', $bundled->nick(), fn ($method, $url, $headers, $body) => array_slice($bundled->route($method, $url, $body), 0, 2), true, $this->path('assets'));
         }
         $config = $this->config();
-        $url = trim((string) ($config['api_url'] ?? '')) ?: (trim((string) ($config['url'] ?? '')) === '' ? '' : rtrim($config['url'], '/').'/api');
 
-        return $this->engine = new Engine($url, $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...));
+        return $this->engine = new Engine(self::apiUrl($config), $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...));
+    }
+
+    /** The address of the engine API of a remote engine: its setting `api_url`, never guessed from the helpers'; empty without it. */
+    public static function apiUrl(array $config): string
+    {
+        return trim((string) ($config['api_url'] ?? ''));
     }
 
     /** The engine and the helpers the plugin bundles, when the settings ask them and the vendor folder is there; null otherwise. */

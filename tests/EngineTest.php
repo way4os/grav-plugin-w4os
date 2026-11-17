@@ -67,3 +67,11 @@ describe('grid info', function () {
         expect($engine->loginUri())->toBe('grid.example.org:8002')->and($engine->gridName())->toBe('Demo World')->and($log)->toHaveCount(1);
     });
 });
+
+describe('the address of a remote engine', function () {
+    test('is its own setting, never the /api of the helpers', function () {
+        expect(W4os\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers']))->toBe('')
+            ->and(W4os\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers', 'api_url' => ' http://127.0.0.1:8780/api ']))->toBe('http://127.0.0.1:8780/api')
+            ->and(W4os\Grav\Site::apiUrl([]))->toBe('');
+    });
+});

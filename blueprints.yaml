@@ -58,7 +58,7 @@ form:
               type: url
               label: w4os.admin_api_url
               help: w4os.admin_api_url_help
-              placeholder: 'https://grid.example.org/helpers/api'
+              placeholder: 'https://grid.example.org/api'
             grid:
               type: text
               label: w4os.admin_grid
