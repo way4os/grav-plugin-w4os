@@ -147,6 +147,12 @@ final class Lists
         return [strtoupper((string) $action['method']), $path, $data, $scoped];
     }
 
+    /** The key of the message a site says once an action is done: `manage_` and its name in snake case (`estateBan`: `manage_estate_ban`). */
+    public static function doneKey(string $action): string
+    {
+        return 'manage_'.strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $action));
+    }
+
     /** A value of a row by its name, or its dotted path into an object of the row (`connections.console`); null when it has none. */
     public static function value(array $item, string $path): mixed
     {

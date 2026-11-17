@@ -58,7 +58,7 @@ describe('pages', function () {
                 }
             }
             foreach ($list['actions'] as $action) {
-                array_push($used, $action['label'], 'manage_'.$action['name'], ...(isset($action['ask']) ? [$action['ask']] : []));
+                array_push($used, $action['label'], W4os\Grav\Lists::doneKey($action['name']), ...(isset($action['ask']) ? [$action['ask']] : []));
             }
         }
         // Every label of the pages of the items (their groups, fields and choices)

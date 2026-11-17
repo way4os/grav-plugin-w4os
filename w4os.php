@@ -520,7 +520,7 @@ class W4osPlugin extends Plugin
             $query = $item
                 ? http_build_query([(string) ($options['param'] ?? 'id') => Lists::id($row)])
                 : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
-            $this->done('w4os.manage_'.$name, $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
+            $this->done('w4os.'.Lists::doneKey($name), $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
             $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
         } catch (FormError $e) {

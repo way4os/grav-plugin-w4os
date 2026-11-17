@@ -151,4 +151,10 @@ describe('a list of the engine', function () {
             ->and(Lists::value($row, 'slug'))->toBe('demo.solo')
             ->and(array_column(Lists::actions($list, $row), 'name'))->toBe(['console']);
     });
+
+    test('says an action done by the message of its name', function () {
+        expect(Lists::doneKey('disable'))->toBe('manage_disable')
+            ->and(Lists::doneKey('estateBan'))->toBe('manage_estate_ban')
+            ->and(Lists::doneKey('estateUnban'))->toBe('manage_estate_unban');
+    });
 });
