@@ -20,10 +20,33 @@ final class Assets
         'npm-asset/tom-select' => ['LICENSE', 'dist/js/tom-select.popular.min.js', 'dist/css/tom-select.min.css'],
     ];
 
-    /** composer's post-install-cmd and post-update-cmd: the vendor folder of the plugin pruned. */
+    /** The translations of Carbon (the dates it tells relatively), one file by locale (`fr.php`, `pt_BR.php`). */
+    public const LOCALES = 'nesbot/carbon/src/Carbon/Lang';
+
+    /** composer's post-install-cmd and post-update-cmd: the vendor folder of the plugin pruned, to the languages of the plugin. */
     public static function composer(object $event): void
     {
-        self::prune((string) $event->getComposer()->getConfig()->get('vendor-dir'));
+        $vendor = (string) $event->getComposer()->getConfig()->get('vendor-dir');
+        self::prune($vendor);
+        self::pruneLocales($vendor, array_map(fn (string $file) => basename($file, '.yaml'), glob(dirname($vendor).'/languages/*.yaml') ?: []));
+    }
+
+    /**
+     * Removes from the translations of Carbon the ones of the languages the plugin has not: a language keeps its own (`fr.php`)
+     * and, for a regional one, its region's (`pt-BR`: `pt.php`, `pt_BR.php`).
+     *
+     * @param list<string> $languages the languages of the plugin (`fr`, `pt-BR`)
+     */
+    public static function pruneLocales(string $vendor, array $languages): void
+    {
+        $keep = [];
+        foreach ($languages as $language) {
+            $keep[explode('-', $language)[0]] = true;
+            $keep[str_replace('-', '_', $language)] = true;
+        }
+        foreach (glob("$vendor/".self::LOCALES.'/*.php') ?: [] as $file) {
+            isset($keep[basename($file, '.php')]) || unlink($file);
+        }
     }
 
     /** Removes from each release in a vendor folder what the plugin does not serve. */

@@ -50,4 +50,15 @@ describe('assets', function () {
         ]);
         exec('rm -rf '.escapeshellarg($vendor));
     });
+
+    test('of the translations of Carbon, only the ones of the languages of the plugin are kept, a region with its language', function () {
+        $vendor = sys_get_temp_dir().'/w4os-locales-'.bin2hex(random_bytes(4));
+        mkdir("$vendor/".Assets::LOCALES, 0777, true);
+        foreach (['en', 'fr', 'fr_CA', 'pt', 'pt_BR', 'pt_PT', 'ja', 'cy'] as $locale) {
+            file_put_contents("$vendor/".Assets::LOCALES."/$locale.php", '<?php return [];');
+        }
+        Assets::pruneLocales($vendor, ['en', 'fr', 'pt-BR', 'cy']);
+
+        expect(array_map(fn ($file) => basename($file, '.php'), glob("$vendor/".Assets::LOCALES.'/*.php')))->toEqualCanonicalizing(['en', 'fr', 'pt', 'pt_BR', 'cy']);
+    });
 });

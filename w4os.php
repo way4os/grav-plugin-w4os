@@ -202,8 +202,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
-        $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => Site::date($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style,
-            fn (int $time) => (string) $this->grav['twig']->twig()->getExtension(\Grav\Common\Twig\Extension\GravExtension::class)->nicetimeFunc($time))));
+        $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => Site::date($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));

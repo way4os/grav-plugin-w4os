@@ -16,7 +16,7 @@ describe('the dashboard', function () {
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
-        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style, fn (int $time) => 'recently')));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style)));
 
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };

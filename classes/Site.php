@@ -721,21 +721,20 @@ final class Site
         return $template !== 'w4os-admin';
     }
 
-    /** How long a date reads relatively in a list ("3 minutes ago"), in seconds; an older one is a short date with its time. */
+    /** How long a date reads relatively in a list ("15 hours ago"), in seconds; an older one is a short date with its time. */
     public const RECENT = 7 * 86400;
 
     /**
      * A date in the format of a language, by PHP's Intl formatter (ISO without it), in a style: `date` the medium date
      * (`16 nov. 2026`), `long` with its time (`16 nov. 2026, 10:00`), `full` the long date with its time (the tip of a date),
-     * `list` relative while it is recent (Grav's `nicetime`, given as `relative`), else the short date with its time
-     * (`16/11/2026 10:00`).
+     * `list` relative while it is recent, as Carbon tells it in the language (`il y a 15 heures`, `15 hours ago`), else the short
+     * date with its time (`16/11/2026 10:00`).
      *
      * @param int|string|null $value a timestamp or a date PHP reads
      * @param string $language the language of the page (`fr`, `pt-BR`)
-     * @param ?\Closure(int): string $relative a timestamp told relatively, in the language of the page
      * @param ?int $now the time it is (a timestamp)
      */
-    public static function date(int|string|null $value, string $language, string $style = 'date', ?\Closure $relative = null, ?int $now = null): string
+    public static function date(int|string|null $value, string $language, string $style = 'date', ?int $now = null): string
     {
         if ($value === null || $value === '' || $value === 0 || $value === '0') {
             return '';
@@ -745,8 +744,13 @@ final class Site
         } catch (\Exception) {
             return (string) $value;
         }
-        if ($style === 'list' && $relative !== null && abs(($now ?? time()) - $date->getTimestamp()) < self::RECENT) {
-            return $relative($date->getTimestamp());
+        $now ??= time();
+        if ($style === 'list' && abs($now - $date->getTimestamp()) < self::RECENT) {
+            Bundled::library();
+            if (class_exists(\Carbon\Carbon::class)) {
+                return \Carbon\Carbon::createFromTimestamp($date->getTimestamp())->locale(str_replace('-', '_', $language))
+                    ->diffForHumans(\Carbon\Carbon::createFromTimestamp($now), \Carbon\CarbonInterface::DIFF_RELATIVE_TO_NOW);
+            }
         }
         $date = $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
         if (! class_exists(\IntlDateFormatter::class)) {

@@ -80,7 +80,10 @@
         "magicoli/opensim-rest-php": "@dev",
         "npm-asset/tabler-core": "1.7.3",
         "npm-asset/tabler-icons-webfont": "3.50.0",
-        "npm-asset/tom-select": "2.6.2"
+        "npm-asset/tom-select": "2.6.2",
+        "nesbot/carbon": "3.15.1",
+        "symfony/translation": "^7.4",
+        "symfony/clock": "^7.4"
     },
     "require-dev": {
         "pestphp/pest": "^4.0",

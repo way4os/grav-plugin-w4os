@@ -48,6 +48,10 @@ composer update npm-asset/tabler-core       # then commit composer.json and comp
 
 A file of a new version the plugin serves goes in `Assets::KEEP` (and `tests/AssetsTest.php`).
 
+## Dates
+
+A date is told by `Site::date()` (Twig filter `w4os_date`, its style): absolute dates by PHP's `IntlDateFormatter` in the language of the page; a recent time in a list (`Site::RECENT`, 7 days) relatively by Carbon (`nesbot/carbon`, `diffForHumans()`: "il y a 15 heures", "15 hours ago", in the right order and case for each language, which Grav's `nicetime` cannot). Carbon is pinned in `composer.json`; its translations are pruned to the languages of the plugin (`languages/*.yaml`) by `Assets::pruneLocales()` in the same post-install step. Its `symfony/translation` and `symfony/clock` are required at `^7.4`, the versions that run on PHP 8.3 (the 8.x ones need PHP 8.4).
+
 ## How it plugs into Grav
 
 - **Sign-in**: `onUserLoginAuthenticate` at priority 1000, the method of the official `login-ldap` plugin: the engine checks the name or email and the password (`POST /sign-ins`); the avatar becomes a Grav user held in the session (`save_accounts` keeps a file; always with the API plugin, which needs one). A refusal lets the accounts of the site try. Its access: `site.login`, `site.w4os.manage` from the level of the setting `admin_level` (one of the engine's `Avatar::LEVELS`, customer service 100 by default): the admin pages open. Each page, action and field then asks the level the contract gives it (`x-access` of its operation, `access.level` of a field of `x-form`; `OpenApi::access()` and `allows()`, which asks the engine's `Api\Access` when the plugin has its library, `Lists::actions()`, `Items::editable()`, `Site::can()`) with the visitor's own level: nothing is written here, and what the visitor may not use is hidden or read only.
