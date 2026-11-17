@@ -180,6 +180,7 @@ w4os:
   filter_simulator: 'Simulateur'
   column_name: 'Nom'
   column_nick: 'Nom court'
+  column_slug: 'Slug'
   column_uri: 'URI'
   column_url: 'URL'
   column_server: 'Serveur'

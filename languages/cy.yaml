@@ -180,6 +180,7 @@ w4os:
   filter_simulator: 'Efelychydd'
   column_name: 'Enw'
   column_nick: 'Llysenw'
+  column_slug: 'Slug'
   column_uri: 'URI'
   column_url: 'URL'
   column_server: 'Gweinydd'
