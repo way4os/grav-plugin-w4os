@@ -49,6 +49,9 @@ register:
   confirm_email: true
   # A page of the site the visitor must agree to (terms of service), as its route; empty for none
   terms: ''
+# The admin pages open from this user level of the grid (one of the engine's: 1, 100, 150, 200, 250); what they change stays
+# for its gods (200 and over)
+admin_level: 100
 # Keep a Grav account (user/accounts) for each avatar that signs in. Off: the avatar lives in the session only. The API plugin of
 # Grav needs one: it is kept anyway when that plugin is on.
 # The list of the avatars for the managers

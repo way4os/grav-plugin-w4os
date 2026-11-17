@@ -342,5 +342,7 @@ w4os:
   admin_terms_help: 'La route d’une page à accepter avant l’inscription ; vide pour aucune'
   admin_per_page: 'Avatars par page'
   admin_per_page_help: 'La liste des avatars des gestionnaires, une page à la fois'
+  admin_admin_level: 'Pages d''admin à partir du niveau'
+  admin_admin_level_help: 'Les avatars de ce niveau ou plus consultent les pages d''admin ; seuls les dieux de la grille (200 et plus) modifient ce qu''elles montrent'
   admin_save_accounts: 'Garder des comptes Grav'
   admin_save_accounts_help: 'Garder un compte Grav (user/accounts) pour chaque avatar qui se connecte ; toujours avec le plugin API'

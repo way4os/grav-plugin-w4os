@@ -13,6 +13,8 @@ w4os:
   admin_db_user: 'Usuário do banco de dados'
   admin_db_password: 'Senha do banco de dados'
   admin_db_password_help: 'Guardada fora da configuração e do git'
+  admin_admin_level: 'Páginas de administração a partir do nível'
+  admin_admin_level_help: 'Os avatares deste nível ou mais consultam as páginas de administração; só os deuses do grid (200 ou mais) alteram o que elas mostram'
   admin_serve_helpers: 'Servir os helpers'
   admin_serve_helpers_help: 'O que os viewers e os simuladores pedem (boas-vindas, busca, perfis, economia, mensagens offline) nos endereços do grid, que devem ser os deste site. Desligado: o grid mantém seus próprios helpers'
   admin_opensim_conf: 'Instalação OpenSim deste servidor'

@@ -342,5 +342,7 @@ w4os:
   admin_terms_help: 'Llwybr tudalen i gytuno â hi cyn cofrestru; gwag am ddim'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
+  admin_admin_level: 'Tudalennau gweinyddu o''r lefel'
+  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn darllen y tudalennau gweinyddu; dim ond duwiau''r grid (200 ac uwch) sy''n newid yr hyn maen nhw''n ei ddangos'
   admin_save_accounts: 'Cadw cyfrifon Grav'
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'

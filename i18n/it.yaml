@@ -13,6 +13,8 @@ w4os:
   admin_db_user: 'Utente del database'
   admin_db_password: 'Password del database'
   admin_db_password_help: 'Tenuta fuori dalla configurazione e da git'
+  admin_admin_level: 'Pagine di amministrazione dal livello'
+  admin_admin_level_help: 'Gli avatar di questo livello o superiore consultano le pagine di amministrazione; solo gli dei della griglia (200 e oltre) modificano ciò che mostrano'
   admin_serve_helpers: 'Servire gli helpers'
   admin_serve_helpers_help: 'Ciò che chiedono viewer e simulatori (benvenuto, ricerca, profili, economia, messaggi offline) agli indirizzi della griglia, che devono essere quelli di questo sito. Disattivato: la griglia tiene i suoi helpers'
   admin_opensim_conf: 'Installazione OpenSim di questo server'

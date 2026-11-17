@@ -41,5 +41,7 @@ w4os:
   admin_terms_help: 'The route of a page to agree to before registering; empty for none'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
+  admin_admin_level: 'Admin pages from level'
+  admin_admin_level_help: 'The avatars of this user level or more read the admin pages; only the gods of the grid (200 and over) change what they show'
   admin_save_accounts: 'Keep Grav accounts'
   admin_save_accounts_help: 'Keep a Grav account (user/accounts) for each avatar that logs in; always on with the API plugin'

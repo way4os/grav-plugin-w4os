@@ -342,5 +342,7 @@ w4os:
   admin_terms_help: 'Il percorso di una pagina da accettare prima della registrazione; vuoto per nessuna'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
+  admin_admin_level: 'Pagine di amministrazione dal livello'
+  admin_admin_level_help: 'Gli avatar di questo livello o superiore consultano le pagine di amministrazione; solo gli dei della griglia (200 e oltre) modificano ciò che mostrano'
   admin_save_accounts: 'Tenere gli account Grav'
   admin_save_accounts_help: 'Tenere un account Grav (user/accounts) per ogni avatar che accede; sempre attivo con il plugin API'

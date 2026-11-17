@@ -137,6 +137,13 @@ form:
               label: w4os.admin_per_page
               help: w4os.admin_per_page_help
               validate: { type: int, min: 1, max: 500 }
+            admin_level:
+              type: select
+              label: w4os.admin_admin_level
+              help: w4os.admin_admin_level_help
+              default: 100
+              data-options@: '\W4os\Grav\Site::adminLevels'
+              validate: { type: int }
             send_mail:
               type: toggle
               label: w4os.admin_send_mail

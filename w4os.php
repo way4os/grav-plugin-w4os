@@ -180,6 +180,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_can_change', fn () => $this->site()->canChange()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
@@ -189,7 +190,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->canChange() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
@@ -262,6 +263,9 @@ class W4osPlugin extends Plugin
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions', 'region'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
+        } elseif ($type === 'edit' && ! $this->site()->canChange()) {
+            // The admin pages are read from the level of the setting, what they change is the gods'
+            $this->grav->redirectLangSafe($routes['manage'] ?? $routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
         } elseif ($page[0] === 'search') {
@@ -388,7 +392,7 @@ class W4osPlugin extends Plugin
                     $this->done('w4os.password_saved', $routes['account']);
                     // no break
                 case 'edit':
-                    $this->site()->isManager() || throw new FormError('w4os.error_unauthorized');
+                    $this->site()->canChange() || throw new FormError('w4os.error_forbidden');
                     $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
                     $forms->edit($edited, $data);
                     $site->forgetProfile((string) $edited['name']);
@@ -397,7 +401,7 @@ class W4osPlugin extends Plugin
                 case 'item':
                     $page = $this->item();
                     $page['item'] === null && throw new FormError('w4os.error_not_found');
-                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles']);
+                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['changing']);
                     $id = Lists::id($page['item']);
                     try {
                         $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
@@ -476,6 +480,11 @@ class W4osPlugin extends Plugin
             return;
         }
         $type = (string) ($options['type'] ?? '');
+        if (! $this->site()->canChange()) {
+            $this->grav['messages']->add($this->site()->translate('w4os.error_forbidden'), 'error');
+
+            return;
+        }
         // The engine's description of the list, or of the item (the same actions)
         $described = $item ? $this->site()->openApi()->itemOf($type) : $this->site()->openApi()->listOf($type);
         $name = (string) ($post['action'] ?? '');
@@ -686,7 +695,7 @@ class W4osPlugin extends Plugin
         if ($page === null) {
             $options = (array) ($this->grav['page']->header()->w4os_item ?? []);
             $type = (string) ($options['type'] ?? '');
-            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
+            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'changing' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
             $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
             try {
@@ -695,9 +704,12 @@ class W4osPlugin extends Plugin
                 $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
             }
             if ($page['item'] !== null) {
-                $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
+                // Who the visitor is to the item: a manager to read it from the level of the setting, to change it as a god
+                $self = $this->site()->avatar()['uuid'] ?? null;
+                $page['roles'] = Items::roles($page['item'], $self, $this->site()->isManager());
+                $page['changing'] = Items::roles($page['item'], $self, $this->site()->canChange());
                 $page['groups'] = Items::groups($page['form'], $page['item'], $page['roles']);
-                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['roles']);
+                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['changing']);
                 // The page shows the item; its form (&edit=1, or posted) the fields the visitor changes
                 $page['edit'] = $page['changeable'] && ($uri->query('edit') !== null || $uri->post('__form-name__') === 'w4os-item');
             }
@@ -713,8 +725,8 @@ class W4osPlugin extends Plugin
         if ($page['form'] === null || $page['item'] === null) {
             return;
         }
-        $form->setFields(Items::fields($page['form'], $page['item'], $page['roles']));
-        foreach (Items::values($page['form'], $page['item'], $page['roles']) as $key => $value) {
+        $form->setFields(Items::fields($page['form'], $page['item'], $page['changing']));
+        foreach (Items::values($page['form'], $page['item'], $page['changing']) as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
         // The button next to Save leads back to the page of the item
@@ -771,7 +783,7 @@ class W4osPlugin extends Plugin
             $uri = $this->grav['uri'];
             $uuid = trim((string) ($uri->post('data.avatar') ?: $uri->query('avatar')));
             try {
-                $edited = $uuid !== '' && $this->site()->isManager() ? $this->site()->forms()->avatar($uuid) : null;
+                $edited = $uuid !== '' && $this->site()->canChange() ? $this->site()->forms()->avatar($uuid) : null;
             } catch (FormError) {
                 $edited = null;
             }

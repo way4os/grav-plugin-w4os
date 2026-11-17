@@ -311,24 +311,54 @@ final class Site
     }
 
     /**
-     * Whether an avatar of this user level manages the grid on the site: a god, as the engine says (its user levels grant every
-     * right below them, the admin pages are the gods' rights).
+     * The levels the admin pages may open from (setting "admin_level"): the engine's user levels (OpenSimulator's: each has every
+     * right of the ones below it) above a resident's, each named by its role.
+     *
+     * @return array<int,string> level => catalog key of its role
      */
-    public static function isManagerLevel(int $level): bool
+    public static function adminLevels(): array
+    {
+        if (! Bundled::library()) {
+            return [];
+        }
+        $levels = [];
+        foreach (array_keys(\OpenSim\Models\Avatar::LEVELS) as $level) {
+            $level > \OpenSim\Models\Avatar::GOD_NOT && $levels[$level] = 'w4os.'.\OpenSim\I18n\Catalog::roleKey(\OpenSim\Models\Avatar::roleOf($level));
+        }
+
+        return $levels;
+    }
+
+    /** The level the admin pages open from: the setting when it is one of adminLevels(), else customer service. */
+    public static function adminLevel(array $config): int
+    {
+        $level = (int) ($config['admin_level'] ?? 0);
+
+        return isset(self::adminLevels()[$level]) ? $level : \OpenSim\Models\Avatar::GOD_CUSTOMER_SERVICE;
+    }
+
+    /** Whether an avatar of this level reads the admin pages (adminLevel()). */
+    public static function readsAdmin(int $level, array $config): bool
+    {
+        return $level >= self::adminLevel($config);
+    }
+
+    /** Whether an avatar of this level changes what the admin pages show (an action, an edit): a god, as the engine says. */
+    public static function changesAdmin(int $level): bool
     {
         return Bundled::library() && \OpenSim\Models\Avatar::isGodLevel($level);
     }
 
     /**
-     * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, and the management of the grid for a
-     * god (isManagerLevel()).
+     * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, the admin pages from the level of the
+     * setting (`site.w4os.manage`, readsAdmin()), what they change for a god (`site.w4os.change`, changesAdmin()).
      *
      * @param array<string,mixed> $avatar
      */
     public function user(array $avatar): UserInterface
     {
         $user = $this->grav['accounts']->load(strtolower((string) ($avatar['slug'] ?? $avatar['uuid'])));
-        $manager = self::isManagerLevel((int) ($avatar['level'] ?? 0));
+        $level = (int) ($avatar['level'] ?? 0);
         $user->set('fullname', (string) $avatar['name']);
         $user->set('email', (string) ($avatar['email'] ?? ''));
         $user->set('state', 'enabled');
@@ -336,7 +366,8 @@ final class Site
         $user->set('w4os', ['uuid' => (string) $avatar['uuid'], 'name' => (string) $avatar['name'], 'level' => (int) ($avatar['level'] ?? 0)]);
         $access = (array) $user->get('access', []);
         $access['site']['login'] = true;
-        $access['site']['w4os']['manage'] = $manager;
+        $access['site']['w4os']['manage'] = self::readsAdmin($level, $this->config());
+        $access['site']['w4os']['change'] = self::changesAdmin($level);
         $user->set('access', $access);
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();
@@ -384,7 +415,7 @@ final class Site
             return $this->url('account');
         }
 
-        return $this->isManager() && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
+        return $this->canChange() && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
     }
 
     /**
@@ -450,11 +481,20 @@ final class Site
         return array_values((array) $event['items']);
     }
 
+    /** Whether the visitor reads the admin pages (readsAdmin()). */
     public function isManager(): bool
     {
         $user = $this->grav['user'] ?? null;
 
         return $this->avatar() !== null && (bool) $user->authorize('site.w4os.manage');
+    }
+
+    /** Whether the visitor changes what the admin pages show (changesAdmin()). */
+    public function canChange(): bool
+    {
+        $user = $this->grav['user'] ?? null;
+
+        return $this->isManager() && (bool) $user->authorize('site.w4os.change');
     }
 
     /** Keep the API key typed on the settings page in user-data (not in the configuration): see onAdminSave. */
