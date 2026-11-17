@@ -5,7 +5,7 @@
 {% set cards = w4os_dashboard() %}
 <div class="row row-deck row-cards">
     {% for card in cards|filter(card => not card.rows) %}
-    <div class="col-sm-6 col-xl-3">
+    <div class="col-6 col-xl-3">
         <a class="card card-link w4os-stat" href="{{ card.url|e('html_attr') }}">
             <div class="card-body">
                 <div class="subheader">{{ ('w4os.' ~ card.page ~ '_title')|t }}</div>
