@@ -70,3 +70,8 @@
 .w4os-admin .form-tabs .tabs-content { padding: 0; border: 0; background: none; }
 .w4os-admin .form-tabs .tab__content { display: none; }
 .w4os-admin .form-tabs .tab__content.active { display: block; }
+/* The choices of a form as Tabler's checks: a box and its label, in columns */
+.w4os-admin .checkboxes { display: grid; grid-template-columns: repeat(auto-fill, 1.5rem minmax(10rem, 1fr)); align-items: center; gap: .5rem 0; }
+.w4os-admin .checkboxes label, .w4os-admin .form-input-wrapper > .form-check-input + label { margin: 0 0 0 .5rem; }
+.w4os-admin .form-check-input { margin: 0; vertical-align: middle; }
+.w4os-admin .form-label:empty, .w4os-admin .form-label-wrapper:has(> .form-label:empty) { display: none; }

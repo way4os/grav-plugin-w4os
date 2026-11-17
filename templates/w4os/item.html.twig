@@ -17,8 +17,11 @@
             {% do assets.add('jquery', 101) %}
             {% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}
         {% else %}
-            {% for group in page_item.groups %}
-                {% if page_item.groups|length > 1 %}<h3 class="card-title{{ loop.first ? '' : ' mt-4' }}">{{ ('w4os.' ~ group.label)|t }}</h3>{% endif %}
+            {# Its fields, but its name and picture, in its header #}
+            {% set first = (w4os_list_of(page_item.type) ?? {columns: [{}]}).columns|first %}
+            {% set shown = [first.name ?? null, first.picture ?? null] %}
+            {% for group in page_item.groups|map(group => group|merge({fields: group.fields|filter(field => field.name not in shown)}))|filter(group => group.fields) %}
+                {% if loop.length > 1 %}<h3 class="card-title{{ loop.first ? '' : ' mt-4' }}">{{ ('w4os.' ~ group.label)|t }}</h3>{% endif %}
                 <div class="datagrid">
                 {% for field in group.fields %}
                     <div class="datagrid-item">
