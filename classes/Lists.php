@@ -147,8 +147,19 @@ final class Lists
         return [strtoupper((string) $action['method']), $path, $data, $scoped];
     }
 
-    /** The key of the message a site says once an action is done: `manage_` and its name in snake case (`estateBan`: `manage_estate_ban`). */
+    /**
+     * The key of the message a site says once an action is done (`estateBan`: `manage_estate_ban`): the engine's Catalog says it
+     * when the plugin has the engine's library; doneKeyByRule() without it (a remote engine and no vendor folder).
+     */
     public static function doneKey(string $action): string
+    {
+        return Bundled::library() && method_exists(\OpenSim\I18n\Catalog::class, 'doneKey')
+            ? \OpenSim\I18n\Catalog::doneKey($action)
+            : self::doneKeyByRule($action);
+    }
+
+    /** The rule of Catalog::doneKey(): `manage_` and the name of the action in snake case. */
+    public static function doneKeyByRule(string $action): string
     {
         return 'manage_'.strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $action));
     }

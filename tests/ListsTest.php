@@ -152,9 +152,14 @@ describe('a list of the engine', function () {
             ->and(array_column(Lists::actions($list, $row), 'name'))->toBe(['console']);
     });
 
-    test('says an action done by the message of its name', function () {
-        expect(Lists::doneKey('disable'))->toBe('manage_disable')
-            ->and(Lists::doneKey('estateBan'))->toBe('manage_estate_ban')
-            ->and(Lists::doneKey('estateUnban'))->toBe('manage_estate_unban');
+    test('says an action done by the message the engine names, by the same rule without its library', function () use ($document) {
+        $api = new OpenApi($document);
+        foreach (['avatars', 'regions', 'simulators'] as $type) {
+            foreach ($api->listOf($type)['actions'] as $action) {
+                expect(Lists::doneKey($action['name']))->toBe(OpenSim\I18n\Catalog::doneKey($action['name']))
+                    ->and(Lists::doneKeyByRule($action['name']))->toBe(OpenSim\I18n\Catalog::doneKey($action['name']));
+            }
+        }
+        expect(Lists::doneKeyByRule('estateBan'))->toBe('manage_estate_ban');
     });
 });
