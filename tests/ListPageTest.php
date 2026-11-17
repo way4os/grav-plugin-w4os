@@ -43,8 +43,8 @@ describe('the list of a page of the admin', function () {
 
         // The name is the link of the row
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
-            ->and($html)->toMatch('~<div class="w4os-subtitle text-secondary d-lg-none">.*demo\.solo.*demo.*h:9040~s')
-            ->and($html)->toContain('<th class="w4os-cell-text d-none d-lg-table-cell">')
+            ->and($html)->toMatch('~<div class="w4os-subtitle text-secondary d-xl-none">.*demo\.solo.*demo.*h:9040~s')
+            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
     });

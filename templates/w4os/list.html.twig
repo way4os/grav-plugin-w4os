@@ -3,8 +3,8 @@
    of the page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row:
    key, url with {uuid}, or attribute: the address the row gives; the first one is the link of its name). The labels of the engine
    are keys of its catalog, under w4os.
-   Its first column is the name of the row; the others show in their column on a wide screen, in a grey line under the name on a
-   narrow one; the status (indicators) and the "…" menu at every width. #}
+   Its first column is the name of the row; the others show in their column on a wide screen (xl), in a grey line under the name
+   on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
 {# The toolbar: the search on the left, the filters on the right (their empty option names them); Enter asks the list again #}
 <form class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3" method="get">
@@ -61,7 +61,7 @@
         <table class="table table-vcenter card-table w4os-list w4os-{{ list.type|e('html_attr') }}">
             <thead><tr>
                 {% for column in list.columns %}
-                    {% set wide = shown[column.name] ? '' : ' d-none d-lg-table-cell' %}
+                    {% set wide = shown[column.name] ? '' : ' d-none d-xl-table-cell' %}
                     {% if column.sort is defined %}{{ cells.sorted(column, query, list.sort, wide) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}{{ wide }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
                 {% endfor %}
                 {% if links or list.actions %}<th class="w-1"><span class="visually-hidden">{{ 'w4os.actions'|t }}</span></th>{% endif %}
@@ -80,10 +80,10 @@
                         {# The other columns, in a grey line, on a narrow screen #}
                         {% set parts = [] %}
                         {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([part]) %}{% endif %}{% endfor %}
-                        {% if parts %}<div class="w4os-subtitle text-secondary d-lg-none">{{ parts|join(' · ') }}</div>{% endif %}
+                        {% if parts %}<div class="w4os-subtitle text-secondary d-xl-none">{{ parts|join(' · ') }}</div>{% endif %}
                     </td>
                     {% else %}
-                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}{{ shown[column.name] ? '' : ' d-none d-lg-table-cell' }}">{{ cells.cell(column, item, list) }}</td>
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}{{ shown[column.name] ? '' : ' d-none d-xl-table-cell' }}">{{ cells.cell(column, item, list) }}</td>
                     {% endif %}
                 {% endfor %}
                 {% if links or list.actions %}<td class="w4os-actions">{{ cells.menu(list, item, links) }}</td>{% endif %}
