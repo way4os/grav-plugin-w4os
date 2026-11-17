@@ -166,6 +166,19 @@ li:empty { display: none; }
     flex: 1 1 4rem; width: auto; height: auto; min-height: 0; margin: 0; padding: 0;
     border: 0; background: none; box-shadow: none; color: inherit;
 }
+/* The tags of several values (the languages of a profile, a filter) and the option pointed in the list in the theme's colors, for
+   light and dark (Pico's variables when the theme has them, else a tint of its text) */
+.ts-wrapper.multi .ts-control > div.item {
+    background: var(--pico-code-background-color, color-mix(in srgb, currentColor 12%, transparent));
+    color: var(--pico-color, inherit);
+    border-radius: calc(var(--pico-border-radius, .25rem) / 2);
+}
+.ts-wrapper.multi .ts-control > div.item.active { background: var(--pico-dropdown-hover-background-color, color-mix(in srgb, currentColor 20%, transparent)); color: var(--pico-color, inherit); }
+.ts-wrapper.plugin-remove_button .ts-control .item .remove { border-color: var(--pico-muted-border-color, color-mix(in srgb, currentColor 25%, transparent)); }
+.ts-wrapper.plugin-remove_button .ts-control .item .remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); }
+.ts-wrapper .ts-dropdown .option.active { background-color: var(--pico-dropdown-hover-background-color, color-mix(in srgb, currentColor 12%, transparent)); color: inherit; }
+.ts-wrapper .ts-dropdown .create, .ts-wrapper .ts-dropdown .no-results { color: var(--pico-muted-color, GrayText); }
+.ts-wrapper .ts-dropdown,
 .ts-dropdown {
     background-color: var(--pico-form-element-background-color, Canvas);
     color: var(--pico-form-element-color, CanvasText);
