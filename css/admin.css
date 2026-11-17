@@ -11,8 +11,9 @@
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
 /* The lists: the search as wide as it reads, the filters at their natural width, the grey line of a row under its name */
-.w4os-admin .w4os-filters { align-items: stretch; }
-.w4os-admin .w4os-filters .w4os-search { flex: none; width: 100%; max-width: 32rem; }
+.w4os-admin .w4os-filters { flex-direction: row; flex-wrap: wrap; align-items: center; }
+.w4os-admin .w4os-filters .w4os-search { flex: 1 1 16rem; max-width: 28rem; }
+.w4os-admin .w4os-filter-fields { flex: 0 1 auto; }
 .w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { width: auto; flex: 0 1 12rem; min-width: 10rem; }
 /* A row: at the size of the page, about 56 px high (more with its grey line), its name larger than its details */
 .w4os-admin .w4os-list-card .table { font-size: 1em; }

@@ -80,7 +80,8 @@ describe('templates', function () {
         $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")->render(['list' => $list, 'item' => $row]);
 
         expect($cell)->toContain('class="w4os-indicator w4os-tone-ok"', 'fa-power', 'fa-run', 'fa-console', 'w4os-tone-failed', 'fa-screen', 'w4os-tone-neutral', 'fa-file')
-            ->and($cell)->toContain('title="&#x5B;w4os.column_enabled&#x5D;&#x3A;&#x20;&#x5B;w4os.state_enabled&#x5D;"')
+            ->and($cell)->toContain('title="&#x5B;w4os.state_enabled&#x5D;"', '<span class="sr-only visually-hidden">[w4os.state_enabled] (')
+            ->and($cell)->not->toContain('column_enabled')
             // The action the row meets is the button of its icon, with its confirmation
             ->and($cell)->toContain('value="disable"', 'value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;"')
             ->and($cell)->not->toContain('fa-files', 'fa-database', 'fa-server', 'value="start"', 'value="enable"')

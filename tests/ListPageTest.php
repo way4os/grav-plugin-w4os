@@ -18,6 +18,7 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+    $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => W4os\Grav\Site::date($value, 'fr')));
     $assets = new class {
         public function addCss(string $url): void {}
         public function addJs(string $url, array $options = []): void {}
@@ -34,7 +35,7 @@ describe('the list of a page of the admin', function () {
     test('is a card of Tabler: its search in a toolbar, its rows in a table that keeps in its width', function () use ($simulators, $solo) {
         $html = render_list($simulators, [$solo], ['total' => 1]);
 
-        expect($html)->toContain('class="card w4os-list-card"', 'class="table table-vcenter card-table', 'class="input-icon w4os-search"', 'ti ti-search', '1 items')
+        expect($html)->toContain('class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3"', 'class="card w4os-list-card"', 'class="table table-vcenter card-table', 'class="input-icon w4os-search"', 'ti ti-search', '1 items')
             ->and($html)->not->toContain('<button type="submit">');
     });
 
@@ -43,10 +44,22 @@ describe('the list of a page of the admin', function () {
 
         // The name is the link of the row
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
-            ->and($html)->toMatch('~<div class="w4os-subtitle text-secondary d-xl-none">.*demo\.solo.*demo.*h:9040~s')
+            // A value that does not say what it is after the label of its column
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.column_slug] demo.solo · [w4os.column_grid] demo · [w4os.column_uri] h:9040 · [w4os.column_port] 9040</div>')
             ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
+    });
+
+    test('shows a date in the format of the language, after its label; an email or a role bare', function () {
+        $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
+        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'role' => 'resident', 'created' => 1794787200, 'lastSeen' => '2026-11-17T10:00:00Z', 'status' => 'active'];
+        $html = render_list($avatars, [$bart], ['total' => 1]);
+
+        expect(W4os\Grav\Site::date(1794787200, 'en'))->toBe('Nov 16, 2026')
+            ->and(W4os\Grav\Site::date(null, 'fr'))->toBe('')
+            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.last_seen] 17 nov. 2026 · [w4os.created] 16 nov. 2026</div>')
+            ->and($html)->not->toContain('2026-11-16');
     });
 
     test('has a "…" menu of its other actions, the ones the engine asks to confirm last and marked', function () use ($simulators, $solo) {

@@ -689,6 +689,30 @@ final class Site
     }
 
     /**
+     * A date in the format of a language (`16 nov. 2026` in French), by PHP's Intl formatter; ISO without it.
+     *
+     * @param int|string|null $value a timestamp or a date PHP reads
+     * @param string $language the language of the page (`fr`, `pt-BR`)
+     */
+    public static function date(int|string|null $value, string $language): string
+    {
+        if ($value === null || $value === '' || $value === 0 || $value === '0') {
+            return '';
+        }
+        try {
+            $date = is_numeric($value) ? (new \DateTimeImmutable)->setTimestamp((int) $value) : new \DateTimeImmutable((string) $value);
+        } catch (\Exception) {
+            return (string) $value;
+        }
+        if (! class_exists(\IntlDateFormatter::class)) {
+            return $date->format('Y-m-d');
+        }
+        $formatter = new \IntlDateFormatter(str_replace('-', '_', $language), \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
+
+        return (string) $formatter->format($date->setTimezone(new \DateTimeZone(date_default_timezone_get())));
+    }
+
+    /**
      * How long the site waits for an answer (seconds): a read is quick; a change waits for its end, as the engine does (an instance
      * stopped, then started again).
      */

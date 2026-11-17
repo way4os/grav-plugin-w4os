@@ -6,8 +6,9 @@
    Its first column is the name of the row; the others show in their column on a wide screen (xl), in a grey line under the name
    on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
-{# The toolbar: the search, then the filters under it at their width (their empty option names them); Enter asks the list again #}
-<form class="w4os-filters d-flex flex-column gap-2 mb-3" method="get">
+{# The toolbar: the search, then the filters at their width (their empty option names them), on one line when there is room;
+   Enter asks the list again #}
+<form class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3" method="get">
     {% if list.search is not null %}
     <div class="input-icon w4os-search" role="search">
         <span class="input-icon-addon"><i class="ti ti-search" aria-hidden="true"></i></span>
@@ -57,6 +58,7 @@
         {% set shown = {} %}
         {% for column in list.columns %}{% set shown = shown|merge({(column.name): loop.first or column.type == 'indicators'}) %}{% endfor %}
         {% set secondary = list.columns|filter(column => not shown[column.name]) %}
+        {% set bare = ['email', 'role', 'status', 'size', 'avatar', 'map', 'picture', 'boolean', 'hop'] %}
         <div class="table-responsive">
         <table class="table table-vcenter card-table w4os-list w4os-{{ list.type|e('html_attr') }}">
             <thead><tr>
@@ -77,9 +79,10 @@
                     {% if loop.first %}
                     <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">
                         {% if href %}<a class="text-reset w4os-row-link" href="{{ href|e('html_attr') }}">{{ cells.cell(column, item, list) }}</a>{% else %}{{ cells.cell(column, item, list) }}{% endif %}
-                        {# The other columns, in a grey line, on a narrow screen #}
+                        {# The other columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
+                           number, a name) after the label of its column #}
                         {% set parts = [] %}
-                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([part]) %}{% endif %}{% endfor %}
+                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.type in bare ? part : ('w4os.' ~ other.label)|t ~ ' ' ~ part]) %}{% endif %}{% endfor %}
                         {% if parts %}<div class="w4os-subtitle text-secondary d-xl-none">{{ parts|join(' · ') }}</div>{% endif %}
                     </td>
                     {% else %}
