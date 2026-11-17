@@ -23,15 +23,15 @@
         {% set labels = labels|merge({(known.value): known.label}) %}
         {% if known.description is defined %}{% set tips = tips|merge({(known.value): known.description}) %}{% endif %}
     {% endfor %}
-    {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% endif %}
+    {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32"><span>{% endif %}
     {%- if type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
     {%- elseif type == 'status' -%}{% if value is not empty %}<span class="w4os-status">{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.status_' ~ value)|t }}</span>{% endif %}
     {%- elseif type == 'role' -%}{% if value is not empty %}{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.role_' ~ value|replace({'-': '_'}))|t }}{% else %}{{ item.level ?? '' }}{% endif %}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}
-    {%- elseif type == 'picture' -%}<img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(value, column.default ?? null)|e('html_attr') }}" alt="" loading="lazy" width="32" height="32">
-    {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" loading="lazy" width="48" height="48">{% endif %}
+    {%- elseif type == 'picture' -%}<img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(value, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32">
+    {%- elseif type == 'map' -%}{% if value %}<img class="w4os-map-thumb" src="{{ w4os_picture(value)|e('html_attr') }}" alt="" width="48" height="48">{% endif %}
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
-    {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar.profilePage ?? null %}<div class="w4os-who"><img class="w4os-thumb w4os-thumb-person" src="{{ w4os_picture(avatar.profileImage ?? null, 'person')|e('html_attr') }}" alt="" loading="lazy" width="32" height="32"><span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
+    {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar.profilePage ?? null %}<div class="w4os-who"><img class="w4os-thumb w4os-thumb-person" src="{{ w4os_picture(avatar.profileImage ?? null, 'person')|e('html_attr') }}" alt="" width="32" height="32"><span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
     {%- elseif type == 'indicators' -%}
         {# Its indicators: an icon by the state of each value (its tone, its label as its title), none for a value no state lists;
            the action of the list the row meets among the indicator's is the button of the icon, with its confirmation (ask). The label
