@@ -23,7 +23,7 @@ function item_twig(array $page = []): Environment
     $twig->addFunction(new TwigFunction('nonce_field', fn () => '<input type="hidden" name="nonce">'));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-    $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => Site::date($value, 'fr')));
+    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style, fn (int $time) => 'recently')));
 
     return $twig;
 }

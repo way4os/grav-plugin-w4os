@@ -117,7 +117,7 @@ w4os:
   filters_active: '%d filtros ativos'
   label_value: '%1$s: %2$s'
   tab_overview: 'Visão geral'
-  column_status: 'Estado'
+  column_status: 'Status'
   state_enabled: 'Ativado'
   state_disabled: 'Desativado'
   state_running: 'Em execução'

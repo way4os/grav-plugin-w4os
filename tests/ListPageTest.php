@@ -18,7 +18,7 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
-    $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => W4os\Grav\Site::date($value, 'fr')));
+    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4os\Grav\Site::date($value, 'fr', $style, fn (int $time) => 'recently')));
     $assets = new class {
         public function addCss(string $url): void {}
         public function addJs(string $url, array $options = []): void {}
@@ -45,21 +45,31 @@ describe('the list of a page of the admin', function () {
         // The name is the link of the row
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
             // A value that does not say what it is after the label of its column
-            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.label_value:[w4os.column_slug]|demo.solo] · [w4os.label_value:[w4os.column_grid]|demo] · [w4os.label_value:[w4os.column_uri]|h:9040] · [w4os.label_value:[w4os.column_port]|9040]</div>')
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.label_value:[w4os.column_grid]|demo] · [w4os.label_value:[w4os.column_port]|9040]</div>')
+            // Its address under its name, at every width (the first of its subtitle attributes that has one)
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary">h:9040</div>')
             ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
     });
 
-    test('shows a date in the format of the language, after its label; an email or a role bare', function () {
+    test('shows a time relatively while it is recent, else as a short date with its time, its full date as its tip; an email or a role bare', function () {
         $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
-        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'role' => 'resident', 'created' => 1794787200, 'lastSeen' => '2026-11-17T10:00:00Z', 'status' => 'active'];
+        $recent = time() - 3 * 86400;
+        $old = 1794787200;
+        $older = time() - 60 * 86400;
+        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'role' => 'resident', 'created' => $older, 'lastSeen' => $recent, 'status' => 'active'];
         $html = render_list($avatars, [$bart], ['total' => 1]);
+        $short = W4os\Grav\Site::date($older, 'fr', 'list');
 
-        expect(W4os\Grav\Site::date(1794787200, 'en'))->toBe('Nov 16, 2026')
+        expect(W4os\Grav\Site::date($old, 'en', 'list', fn (int $time) => 'recently', $old + 3600))->toBe('recently')
+            ->and(W4os\Grav\Site::date($old, 'en', 'list', fn (int $time) => 'recently', $old + 8 * 86400))->toMatch('~^11/16/26, \\d{1,2}:\\d{2}\\s?[AP]M$~u')
+            ->and(W4os\Grav\Site::date($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
+            ->and(W4os\Grav\Site::date($old, 'en'))->toBe('Nov 16, 2026')
             ->and(W4os\Grav\Site::date(null, 'fr'))->toBe('')
-            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.last_seen]|17 nov. 2026] · [w4os.label_value:[w4os.created]|16 nov. 2026]</div>')
-            ->and($html)->not->toContain('2026-11-16');
+            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.born]|'.$short.'] · [w4os.label_value:[w4os.last_seen]|recently]</div>')
+            ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
+            ->and($html)->not->toContain(date('Y-m-d', $older));
     });
 
     test('counts the filters chosen, with a link that removes them and keeps the search and the sort', function () use ($simulators, $solo) {

@@ -721,13 +721,21 @@ final class Site
         return $template !== 'w4os-admin';
     }
 
+    /** How long a date reads relatively in a list ("3 minutes ago"), in seconds; an older one is a short date with its time. */
+    public const RECENT = 7 * 86400;
+
     /**
-     * A date in the format of a language (`16 nov. 2026` in French), by PHP's Intl formatter; ISO without it.
+     * A date in the format of a language, by PHP's Intl formatter (ISO without it), in a style: `date` the medium date
+     * (`16 nov. 2026`), `long` with its time (`16 nov. 2026, 10:00`), `full` the long date with its time (the tip of a date),
+     * `list` relative while it is recent (Grav's `nicetime`, given as `relative`), else the short date with its time
+     * (`16/11/2026 10:00`).
      *
      * @param int|string|null $value a timestamp or a date PHP reads
      * @param string $language the language of the page (`fr`, `pt-BR`)
+     * @param ?\Closure(int): string $relative a timestamp told relatively, in the language of the page
+     * @param ?int $now the time it is (a timestamp)
      */
-    public static function date(int|string|null $value, string $language): string
+    public static function date(int|string|null $value, string $language, string $style = 'date', ?\Closure $relative = null, ?int $now = null): string
     {
         if ($value === null || $value === '' || $value === 0 || $value === '0') {
             return '';
@@ -737,12 +745,21 @@ final class Site
         } catch (\Exception) {
             return (string) $value;
         }
-        if (! class_exists(\IntlDateFormatter::class)) {
-            return $date->format('Y-m-d');
+        if ($style === 'list' && $relative !== null && abs(($now ?? time()) - $date->getTimestamp()) < self::RECENT) {
+            return $relative($date->getTimestamp());
         }
-        $formatter = new \IntlDateFormatter(str_replace('-', '_', $language), \IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE);
+        $date = $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        if (! class_exists(\IntlDateFormatter::class)) {
+            return $date->format($style === 'date' ? 'Y-m-d' : 'Y-m-d H:i');
+        }
+        [$day, $time] = match ($style) {
+            'list' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
+            'long' => [\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
+            'full' => [\IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
+            default => [\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE],
+        };
 
-        return (string) $formatter->format($date->setTimezone(new \DateTimeZone(date_default_timezone_get())));
+        return (string) (new \IntlDateFormatter(str_replace('-', '_', $language), $day, $time))->format($date);
     }
 
     /**

@@ -87,6 +87,9 @@
                     {% if loop.first %}
                     <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">
                         {% if href %}<a class="text-reset w4os-row-link" href="{{ href|e('html_attr') }}">{{ cells.cell(column, item, list) }}</a>{% else %}{{ cells.cell(column, item, list) }}{% endif %}
+                        {# Its address under its name (`subtitle`: the first of its attributes that has one), a link when the row gives one (`subtitleLink`) #}
+                        {% set subtitle = (column.subtitle ?? [])|map(name => (attribute(item, name) ?? ''))|filter(v => v is not empty)|first %}
+                        {% if subtitle %}{% set to = attribute(item, column.subtitleLink ?? '') ?? null %}<div class="w4os-subtitle text-secondary">{% if to %}<a class="text-secondary" href="{{ to|e('html_attr') }}">{{ subtitle }}</a>{% else %}{{ subtitle }}{% endif %}</div>{% endif %}
                         {# The other columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
                            number, a name) after the label of its column #}
                         {% set parts = [] %}

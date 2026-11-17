@@ -47,7 +47,7 @@ w4os:
   new_password: 'Neues Passwort'
   current_password: 'Aktuelles Passwort'
   account_title: 'Avatar-Profil'
-  born: 'Geboren'
+  born: 'Geboren am'
   profile_title: 'Profil'
   profile_text: 'Was andere in der Welt von dir sehen (Bild und Interessen werden im Viewer eingestellt).'
   about: 'Über'

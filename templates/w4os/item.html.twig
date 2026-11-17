@@ -27,7 +27,7 @@
                 {% for field in group.fields %}
                     <div class="datagrid-item">
                         <div class="datagrid-title">{{ ('w4os.' ~ field.label)|t }}</div>
-                        <div class="datagrid-content">{{ cells.cell(field, page_item.item) }}</div>
+                        <div class="datagrid-content">{{ cells.cell(field, page_item.item, null, 'long') }}</div>
                     </div>
                 {% endfor %}
                 </div>

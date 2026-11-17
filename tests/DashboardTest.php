@@ -16,7 +16,7 @@ describe('the dashboard', function () {
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
-        $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => Site::date($value, 'fr')));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style, fn (int $time) => 'recently')));
 
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
@@ -29,11 +29,12 @@ describe('the dashboard', function () {
     });
 
     test('lists the first rows of a list, each leading to its page, with the date it is sorted by in the format of the language', function () use ($api, $render) {
-        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => 1794787200, 'profileImage' => null];
+        $created = time() - 60 * 86400;
+        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
         $html = $render([['page' => 'manage', 'list' => $api->listOf('avatars'), 'filter' => [], 'url' => '/avatars', 'total' => 16, 'rows' => 5, 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('href="/avatars/edit?avatar=a1"', 'Bart Simpson', '16 nov. 2026', '[w4os.created]')
-            ->not->toContain('2026-11-16', 'w4os-stat');
+        expect($html)->toContain('href="/avatars/edit?avatar=a1"', 'Bart Simpson', Site::date($created, 'fr', 'list'), '[w4os.born]')
+            ->not->toContain(date('Y-m-d', $created), 'w4os-stat');
     });
 
     test('says so in one sentence when a list has no row', function () use ($api, $render) {

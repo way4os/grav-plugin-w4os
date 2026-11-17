@@ -13,8 +13,10 @@
 {% endmacro %}
 
 {# The value of a column for a row, drawn by its type; nothing for an empty value. A value the column names (`values`: value,
-   label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place) #}
-{% macro cell(column, item, list = null) %}
+   label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place);
+   a day as a date; a time (datetime) in the style `dates` (Site::date(): `list` relative while recent, `long` with its time), its
+   full date as its tip #}
+{% macro cell(column, item, list = null, dates = 'list') %}
     {% set value = attribute(item, column.name) ?? null %}
     {% set type = column.type %}
     {% set labels = {} %}
@@ -25,6 +27,7 @@
     {% endfor %}
     {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32"><span>{% endif %}
     {%- if type == 'date' -%}{{ value|w4os_date }}
+    {%- elseif type == 'datetime' -%}{% if value %}<time title="{{ value|w4os_date('full')|e('html_attr') }}">{{ value|w4os_date(dates) }}</time>{% endif %}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
     {%- elseif type == 'status' -%}{% if value is not empty %}<span class="w4os-status">{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.status_' ~ value)|t }}</span>{% endif %}
     {%- elseif type == 'role' -%}{% if value is not empty %}{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.role_' ~ value|replace({'-': '_'}))|t }}{% else %}{{ item.level ?? '' }}{% endif %}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}
