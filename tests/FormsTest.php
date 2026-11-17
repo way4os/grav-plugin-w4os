@@ -87,6 +87,7 @@ describe('sign-in and passwords', function () {
 
         expect($refused(403, 'email-unconfirmed'))->toBe('w4os.error_email_unconfirmed')
             ->and($refused(403, 'account-disabled'))->toBe('w4os.error_account_disabled')
+            ->and($refused(403, 'account-banned'))->toBe('w4os.error_account_banned')
             ->and($refused(403, 'sign-in-refused'))->toBe('w4os.error_sign_in_refused')
             ->and($refused(503, null))->toBe('w4os.error_channel_unavailable');
     });

@@ -212,4 +212,5 @@ li:empty { display: none; }
 .w4os button.w4os-indicator { width: auto; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; cursor: pointer; }
 .w4os-tone-ok { color: var(--pico-ins-color, currentColor); }
 .w4os-tone-off { color: var(--pico-muted-color, currentColor); }
+.w4os-tone-warning { color: var(--pico-mark-background-color, currentColor); }
 .w4os-tone-failed { color: var(--pico-del-color, currentColor); }

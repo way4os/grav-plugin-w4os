@@ -19,8 +19,8 @@ final class Forms
     /** The codes of the problems of the engine (Problem::CODES), each told by the text `w4os.error_<code>` (- as _). */
     public const CODES = [
         'not-found', 'invalid-request', 'invalid-document', 'type-conflict', 'unauthorized', 'method-not-allowed', 'channel-unavailable',
-        'instance-failed', 'internal-error', 'sign-in-refused', 'account-disabled', 'email-unconfirmed', 'name-invalid', 'name-reserved',
-        'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
+        'instance-failed', 'internal-error', 'sign-in-refused', 'account-disabled', 'account-banned', 'email-unconfirmed', 'name-invalid',
+        'name-reserved', 'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
         'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed', 'role-unknown', 'role-level-conflict', 'filter-unknown',
         'filter-value-unknown', 'sort-unknown', 'field-read-only', 'flag-unknown', 'owner-unknown', 'estate-shared',
         'config-not-writable', 'instance-user-required', 'restore-conflict', 'source-not-readable',

@@ -28,6 +28,18 @@ describe('managers', function () {
             ->and($actions($regions, $region, 250))->toBe(['disable']);
     });
 
+    test('ban an avatar from the level the action asks (a god), never their own', function () use ($api) {
+        $avatars = $api->listOf('avatars');
+        $actions = fn (array $row, int $level, ?string $self = 'me') => array_column(Lists::actions($avatars, $row, $self, $level), 'name');
+        $active = ['uuid' => 'a1', 'status' => 'active', 'estateBanned' => false];
+        $banned = ['uuid' => 'a1', 'status' => 'banned', 'estateBanned' => true];
+
+        expect($actions($active, 150))->not->toContain('ban', 'estateBan')
+            ->and($actions($active, 200))->toContain('ban', 'estateBan')
+            ->and($actions($banned, 200))->toContain('unban', 'estateUnban')->not->toContain('ban', 'disable')
+            ->and($actions($active, 200, 'a1'))->not->toContain('ban', 'estateBan');
+    });
+
     test('allowed by the engine\'s Access when it is there, by the same rule read in the contract without it', function () use ($api) {
         foreach (Contract::document()['paths'] as $path => $operations) {
             foreach ($operations as $method => $operation) {

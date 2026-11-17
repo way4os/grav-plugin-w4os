@@ -15,12 +15,12 @@ describe('a list of the engine', function () {
         expect(array_column($list['columns'], 'name'))->toBe(['name', 'email', 'role', 'created', 'lastSeen', 'status'])
             ->and($name)->toMatchArray(['label' => 'avatar_name', 'type' => 'text', 'sort' => 'name', 'picture' => 'profileImage'])
             // Its status (enabled, online) in one indicators column
-            ->and(array_column($list['columns'][5]['indicators'], 'name'))->toBe(['status', 'online'])
+            ->and(array_column($list['columns'][5]['indicators'], 'name'))->toBe(['status', 'estateBanned', 'online'])
             ->and($list['sort'])->toMatchArray(['default' => '-created', 'descending' => '-'])
             ->and($list['sort']['values'])->toContain('level')
             ->and($list['search'])->toBe(['name', 'email'])
             ->and(array_column($list['filters'], 'name'))->toContain('status', 'role', 'technical')
-            ->and(array_column($list['actions'], 'name'))->toBe(['enable', 'disable', 'reset'])
+            ->and(array_column($list['actions'], 'name'))->toBe(['enable', 'disable', 'reset', 'ban', 'unban', 'estateBan', 'estateUnban'])
             ->and((new OpenApi($document))->listOf('nothing'))->toBeNull();
     });
 
@@ -113,10 +113,10 @@ describe('a list of the engine', function () {
         $names = fn (array $item, ?string $self = null) => array_column(Lists::actions($list, $item, $self), 'name');
         $regions = (new OpenApi($document))->listOf('regions');
 
-        expect($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org']))->toBe(['disable', 'reset'])
-            ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => '']))->toBe(['disable'])
+        expect($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org']))->toBe(['disable', 'reset', 'ban'])
+            ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => '']))->toBe(['disable', 'ban'])
             ->and($names(['uuid' => 'u1', 'status' => 'active', 'email' => 'ada@example.org'], 'u1'))->toBe(['reset'])
-            ->and($names(['uuid' => 'u1', 'status' => 'pending', 'email' => 'ada@example.org']))->toBe(['enable'])
+            ->and($names(['uuid' => 'u1', 'status' => 'pending', 'email' => 'ada@example.org']))->toBe(['enable', 'ban'])
             ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'local' => true, 'enabled' => false]), 'name'))->toBe(['enable'])
             ->and(array_column(Lists::actions($regions, ['uuid' => 'r1', 'enabled' => null]), 'name'))->toBe([]);
     });

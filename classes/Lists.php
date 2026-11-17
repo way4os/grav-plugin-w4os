@@ -106,7 +106,8 @@ final class Lists
     /**
      * The actions of a row: the ones whose conditions it meets and that whoever acts may do. `when`: each attribute has one of the
      * values; `requires`: each attribute has a value; `notSelf`: the row is not the avatar of whoever acts; `access`: their level
-     * (OpenApi::allows(), on their own account when the row is theirs).
+     * (OpenApi::allows(), on their own account when the row is theirs); `level`: at least this level, when the action asks more than
+     * its operation (a ban: a god).
      *
      * @param array<string,mixed> $list
      * @param array<string,mixed> $item
@@ -117,7 +118,8 @@ final class Lists
     public static function actions(array $list, array $item, ?string $self = null, ?int $level = null): array
     {
         return array_values(array_filter($list['actions'], fn (array $action) => self::applies($action, $item, $self)
-            && ($level === null || ! isset($action['access']) || OpenApi::allows($action['access'], $level, $self !== null && self::id($item) === $self))));
+            && ($level === null || ((! isset($action['access']) || OpenApi::allows($action['access'], $level, $self !== null && self::id($item) === $self))
+                && $level >= (int) ($action['level'] ?? 0)))));
     }
 
     /**

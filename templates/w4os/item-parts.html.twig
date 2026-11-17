@@ -1,12 +1,12 @@
 {# The parts of the page of an item in the admin (Tabler): its header, its tabs, its details. #}
 
 {# The header (Tabler's page header): the link back to its list, its picture and its name as its list shows them (its first
-   column), its state as badges (the indicators of its list: the icon and the label of each state, in its tone: green, grey, red), at the right
+   column), its state as badges (the indicators of its list: the icon and the label of each state, in its tone: green, grey, orange, red), at the right
    the links given (`links`: url, label, id) and the "…" menu of the engine's actions that apply to it #}
 {% macro header(item, listed, back = null, actions = [], links = []) %}
     {% set first = listed.columns|first %}
     {% set picture = first.picture ?? null %}
-    {% set tones = {ok: 'green', off: 'secondary', failed: 'red'} %}
+    {% set tones = {ok: 'green', off: 'secondary', warning: 'orange', failed: 'red'} %}
     {% set id = item.uuid ?? item.id ?? '' %}
     <div class="page-header d-print-none w4os-item-header">
         <div class="container-fluid">
