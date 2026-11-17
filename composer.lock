@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1903716ea4bd863e8c9b2eea309e7edf",
+    "content-hash": "a63bc9711f5bafaa04c18fc474480988",
     "packages": [
         {
             "name": "fig/http-message-util",
@@ -638,7 +638,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "5aaf51afa2d93e90acea83abe0c9d55de6cafbeb"
+                "reference": "8e91e4b4468a51c2cae1021768b554f9228332ac"
             },
             "require": {
                 "ext-curl": "*",
@@ -656,9 +656,9 @@
                 "magicoli/container-tools": "@dev",
                 "magicoli/kick-inside": "^0.1.0",
                 "magicoli/opensim-rest-php": "@dev",
-                "nubs/random-name-generator": "^2.2",
                 "php": ">=8.2",
                 "phpxmlrpc/phpxmlrpc": "^4.11",
+                "platoniq/random-name-generator": "^1.0",
                 "psr/http-factory": "^1.1",
                 "psr/http-message": "^2.0",
                 "psr/http-server-handler": "^1.0",
@@ -900,57 +900,34 @@
             "time": "2026-07-09T19:38:47+00:00"
         },
         {
-            "name": "nubs/random-name-generator",
-            "version": "v2.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nubs/random-name-generator.git",
-                "reference": "50abf24519badc5795a43c831f1d2a1faa45cb77"
-            },
+            "name": "npm-asset/tabler-core",
+            "version": "1.7.3",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nubs/random-name-generator/zipball/50abf24519badc5795a43c831f1d2a1faa45cb77",
-                "reference": "50abf24519badc5795a43c831f1d2a1faa45cb77",
-                "shasum": ""
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.3.tgz",
+                "shasum": "79b23adb6bf8bc6c6f3fcec8949226a938bc1d5a"
             },
-            "require": {
-                "php": "~5.6 || ~7.0 || ~8.0"
+            "type": "library"
+        },
+        {
+            "name": "npm-asset/tabler-icons-webfont",
+            "version": "3.50.0",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.50.0.tgz",
+                "shasum": "5580c8af3cfde6ed42b03bd6e33b9e73397ff79d"
             },
-            "require-dev": {
-                "cinam/randomizer": ">=1.1.1,<2.0",
-                "php-coveralls/php-coveralls": "~2.4",
-                "phpunit/phpunit": "^5.0 || ^6.5 || ^7.0 || ^9.0",
-                "squizlabs/php_codesniffer": "~2.3"
+            "type": "library"
+        },
+        {
+            "name": "npm-asset/tom-select",
+            "version": "2.6.2",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.6.2.tgz",
+                "shasum": "07693442309eefa5b57c6beee6005195f3f956a4"
             },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Nubs\\RandomNameGenerator\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Spencer Rinehart",
-                    "email": "anubis@overthemonkey.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A library to create interesting, sometimes entertaining, random names.",
-            "keywords": [
-                "alliteration",
-                "generator",
-                "random",
-                "video game"
-            ],
-            "support": {
-                "issues": "https://github.com/nubs/random-name-generator/issues",
-                "source": "https://github.com/nubs/random-name-generator/tree/v2.2.0"
-            },
-            "time": "2021-01-12T13:46:08+00:00"
+            "type": "library"
         },
         {
             "name": "php-di/invoker",
@@ -1182,6 +1159,63 @@
                 "source": "https://github.com/gggeek/phpxmlrpc/tree/4.11.6"
             },
             "time": "2026-10-26T19:03:59+00:00"
+        },
+        {
+            "name": "platoniq/random-name-generator",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Platoniq/random-name-generator.git",
+                "reference": "9ef94c634eda37ed1732d1152bf278eed7048a35"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Platoniq/random-name-generator/zipball/9ef94c634eda37ed1732d1152bf278eed7048a35",
+                "reference": "9ef94c634eda37ed1732d1152bf278eed7048a35",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6 || ~7.0 || ~8.0"
+            },
+            "require-dev": {
+                "cinam/randomizer": "^1.1",
+                "php-coveralls/php-coveralls": "^2.9",
+                "phpunit/phpunit": "^13.4",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Platoniq\\RandomNameGenerator\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Spencer Rinehart",
+                    "email": "anubis@overthemonkey.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Platoniq",
+                    "email": "dev@platoniq.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A library to create interesting, sometimes entertaining, random names with multi-language support.",
+            "keywords": [
+                "alliteration",
+                "generator",
+                "random",
+                "video game"
+            ],
+            "support": {
+                "source": "https://github.com/Platoniq/random-name-generator/tree/v1.0"
+            },
+            "time": "2026-10-13T14:10:58+00:00"
         },
         {
             "name": "psr/container",

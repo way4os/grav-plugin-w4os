@@ -35,13 +35,52 @@
             "options": {
                 "symlink": true
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/tabler-core",
+                "version": "1.7.3",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.3.tgz",
+                    "shasum": "79b23adb6bf8bc6c6f3fcec8949226a938bc1d5a"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/tabler-icons-webfont",
+                "version": "3.50.0",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.50.0.tgz",
+                    "shasum": "5580c8af3cfde6ed42b03bd6e33b9e73397ff79d"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/tom-select",
+                "version": "2.6.2",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.6.2.tgz",
+                    "shasum": "07693442309eefa5b57c6beee6005195f3f956a4"
+                }
+            }
         }
     ],
     "require": {
         "php": "^8.3",
         "magicoli/opensim-engine": "@dev",
         "magicoli/opensim-helpers": "@dev",
-        "magicoli/opensim-rest-php": "@dev"
+        "magicoli/opensim-rest-php": "@dev",
+        "npm-asset/tabler-core": "1.7.3",
+        "npm-asset/tabler-icons-webfont": "3.50.0",
+        "npm-asset/tom-select": "2.6.2"
     },
     "require-dev": {
         "pestphp/pest": "^4.0",
@@ -56,7 +95,13 @@
     },
     "scripts": {
         "test": "pest",
-        "languages": "php dev/languages.php"
+        "languages": "php dev/languages.php",
+        "post-install-cmd": [
+            "W4os\\Grav\\Assets::composer"
+        ],
+        "post-update-cmd": [
+            "W4os\\Grav\\Assets::composer"
+        ]
     },
     "config": {
         "allow-plugins": {
