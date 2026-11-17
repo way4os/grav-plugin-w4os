@@ -402,10 +402,12 @@ final class Site
      * setting (`site.w4os.manage`, readsAdmin()); then each page, action and field from its own level (the contract's, level()).
      *
      * @param array<string,mixed> $avatar
+     * @param ?UserInterface $user the user to update (a session back by "remember me": the one the Login plugin signed in, its state
+     *     kept), else the account of the avatar
      */
-    public function user(array $avatar): UserInterface
+    public function user(array $avatar, ?UserInterface $user = null): UserInterface
     {
-        $user = $this->grav['accounts']->load(strtolower((string) ($avatar['slug'] ?? $avatar['uuid'])));
+        $user ??= $this->grav['accounts']->load(strtolower((string) ($avatar['slug'] ?? $avatar['uuid'])));
         $level = (int) ($avatar['level'] ?? 0);
         $user->set('fullname', (string) $avatar['name']);
         $user->set('email', (string) ($avatar['email'] ?? ''));

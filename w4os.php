@@ -183,7 +183,8 @@ class W4osPlugin extends Plugin
 
             return;
         }
-        $event->setUser($this->site()->user($avatar));
+        // The user the Login plugin signed in, updated in place: it keeps its state (authenticated)
+        $this->site()->user($avatar, $user);
     }
 
     /** The API key and the password of the database typed on the settings page are kept out of the configuration (and of git). */
