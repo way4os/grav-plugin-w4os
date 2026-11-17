@@ -10,13 +10,19 @@
 .w4os-admin .w4os-tone-off { color: var(--tblr-gray-400, var(--tblr-secondary)); }
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
-/* The lists: the search as wide as it reads, the filters at their natural width, the grey line of a row under its name */
-.w4os-admin .w4os-filters { flex-direction: row; flex-wrap: wrap; align-items: center; }
+/* The lists: the search as wide as it reads, the filters at their width on its line, else together on the next one; the grey line of a row under its name */
+.w4os-admin .w4os-filters { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
 .w4os-admin .w4os-filters .w4os-search { flex: 1 1 16rem; max-width: 28rem; }
-.w4os-admin .w4os-filter-fields { flex: 1 1 auto; }
+.w4os-admin .w4os-filter-fields { flex: 0 1 auto; }
 /* Tom Select framed as Tabler frames a select (its wrapper), over the site's styles */
 .w4os-admin .ts-wrapper.form-select { border: var(--tblr-border-width) var(--tblr-border-style) var(--tblr-border-color); background: var(--tblr-bg-forms) var(--tblr-form-select-bg-img) no-repeat right .75rem center / 16px 12px; }
-.w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { width: auto; flex: 0 1 12rem; min-width: 10rem; }
+.w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { flex: none; width: 12rem; }
+/* On a phone, the search and the filters each on the whole width */
+@media (max-width: 575.98px) {
+  .w4os-admin .w4os-filters .w4os-search { max-width: none; }
+  .w4os-admin .w4os-filter-fields { flex: 1 1 100%; }
+  .w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { flex: 1 1 10rem; width: auto; }
+}
 /* A row: at the size of the page, about 56 px high (more with its grey line), its name larger than its details */
 .w4os-admin .w4os-list-card .table { font-size: 1em; }
 .w4os-admin .w4os-list-card .table > tbody > tr > td { padding-block: .875rem; }
