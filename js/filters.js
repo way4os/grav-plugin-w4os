@@ -12,7 +12,8 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
         placeholder: select.getAttribute('placeholder') || select.getAttribute('aria-label'),
         hidePlaceholder: select.multiple,
         allowEmptyOption: !select.multiple,
-        controlInput: select.multiple ? undefined : null,
+        // One value: picked, not typed
+        ...(select.multiple ? {} : { controlInput: null }),
         closeAfterSelect: true,
         maxOptions: null,
         render: {

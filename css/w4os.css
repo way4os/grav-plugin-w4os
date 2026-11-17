@@ -155,6 +155,9 @@ li:empty { display: none; }
     align-items: center;
     box-shadow: none;
 }
+/* Tom Select's own field (white when one value is chosen, a smaller text) as the theme's */
+.ts-wrapper.full .ts-control, .ts-wrapper.single .ts-control { background-color: var(--pico-form-element-background-color, transparent); }
+.ts-wrapper .ts-control, .ts-wrapper .ts-control input, .ts-dropdown { font-size: inherit; line-height: inherit; color: var(--pico-form-element-color, inherit); }
 .ts-wrapper.focus .ts-control {
     border-color: transparent;
     box-shadow: 0 0 0 2px var(--q2-focus-ring, var(--pico-form-element-focus-color, Highlight)), 0 0 0 3px var(--q2-bg, transparent);
