@@ -1,8 +1,9 @@
 {# A list of the engine as the admin draws it (Tabler), from the engine's description of it (Contract::listOf() of w4os-views:
-   its columns and their types, its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query
-   of the page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row:
-   key, url with {uuid}, or attribute: the address the row gives; the first one is the link of its name). The labels of the engine
-   are keys of its catalog, under w4os.
+   its columns and their types, its sorts, its filters and their values, its search, the actions of a row). Variables: list,
+   items, meta, query (the query of the page), fixed (the filters the page always asks one value of: their column and the filter
+   are left out), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a
+   row: key, url with {uuid}, or attribute: the address the row gives; the first one is the link of its name). The labels of the
+   engine are keys of its catalog, under w4os.
    What it shows comes from w4os-views (ListView): its first column is the name of the row, the secondary ones show in their column
    on a wide screen (xl), in a grey line under the name on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
@@ -49,7 +50,7 @@
 {% else %}
     {# What to show, from w4os-views (ListView): the columns and the secondary ones, the rows with their link, address,
        indicators and menu, the filters chosen and the query that removes them, the pages #}
-    {% set view = w4os_list_view(list, items, meta, query, links ?? []) %}
+    {% set view = w4os_list_view(list, items, meta, query, links ?? [], fixed ?? {}) %}
     {% if view.rows is not empty or view.activeFilters %}
     <p class="text-secondary w4os-count mb-2">
         {{ w4os_count(texts.count, view.total) }}

@@ -9,10 +9,10 @@ use W4os\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
 
 /** The list of a page of the admin, rendered by its template with the plugin's functions as plain stubs. */
-function render_list(array $list, array $items, array $meta, array $links = [], array $query = []): string
+function render_list(array $list, array $items, array $meta, array $links = [], array $query = [], array $fixed = []): string
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-    $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links)));
+    $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links, fixed: $fixed)));
     $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4OS\Views\Rows::actions($list, $item)));
     $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n ".($key === 'w4os.filters_active' ? 'filters' : 'items')));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
@@ -25,7 +25,7 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
         public function addJs(string $url, array $options = []): void {}
     };
 
-    return $twig->render('w4os/list.html.twig', ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query, 'error' => null, 'links' => $links, 'assets' => $assets,
+    return $twig->render('w4os/list.html.twig', ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query, 'fixed' => $fixed, 'error' => null, 'links' => $links, 'assets' => $assets,
         'texts' => ['search' => 'w4os.search_simulators', 'empty' => 'w4os.no_simulators', 'count' => 'w4os.simulators_count', 'title' => 'w4os.simulators_title']]);
 }
 
@@ -75,6 +75,11 @@ describe('the list of a page of the admin', function () {
             ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.born]|'.$short.'] · [w4os.label_value:[w4os.last_seen]|il y a 3 jours]</div>')
             ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
             ->and($html)->not->toContain(date('Y-m-d', $older));
+    });
+
+    test('leaves out the column of a filter the page fixes (the grid of the site)', function () use ($simulators, $solo) {
+        expect(render_list($simulators, [$solo], ['total' => 1]))->toContain('[w4os.column_grid]')
+            ->and(render_list($simulators, [$solo], ['total' => 1], [], [], ['grid' => 'demo']))->not->toContain('[w4os.column_grid]');
     });
 
     test('counts the filters chosen, with a link that removes them and keeps the search and the sort', function () use ($simulators, $solo) {

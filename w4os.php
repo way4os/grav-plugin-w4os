@@ -242,9 +242,10 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
-        // The view of a list (w4os-views): its actions only for a manager, from their level, never on their own row when it says so
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = []) => \W4OS\Views\ListView::of(
-            $this->site()->isManager() ? $list : ['actions' => []] + $list, $items, $meta, $query, $links, $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager() ? $this->site()->level() : null)));
+        // The view of a list (w4os-views): its actions only for a manager, from their level, never on their own row when it says so;
+        // the column and the filter of a filter the page fixes (the grid of the site) left out
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => \W4OS\Views\ListView::of(
+            $this->site()->isManager() ? $list : ['actions' => []] + $list, $items, $meta, $query, $links, $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager() ? $this->site()->level() : null, $fixed)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? \W4OS\Views\Rows::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
@@ -706,12 +707,12 @@ class W4osPlugin extends Plugin
         try {
             [$items, $meta] = $this->site()->engine()->items($type, $query['api'], ! empty($list['scoped']));
 
-            return ['list' => Lists::offering($list, $meta, $query['page']), 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'error' => null];
+            return ['list' => Lists::offering($list, $meta, $query['page']), 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'fixed' => $fixed, 'error' => null];
         } catch (EngineException $e) {
             // What the engine refuses (a simulator it does not know...) said as it is, the rest as a channel down
             $refused = $e->status >= 400 && $e->status < 500 ? $this->errorText($this->site()->forms()->error($e)) : $error['error'];
 
-            return ['list' => $list, 'query' => $query['page'], 'error' => $refused] + $error;
+            return ['list' => $list, 'query' => $query['page'], 'fixed' => $fixed, 'error' => $refused] + $error;
         }
     }
 

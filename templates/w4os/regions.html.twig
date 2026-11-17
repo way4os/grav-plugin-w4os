@@ -3,6 +3,6 @@
 {% set data = w4os_list(page.header.w4os_list ?? {type: 'regions'}) %}
 {% set links = w4os_route('region') ? [{key: w4os_can('regions') ? 'action_edit' : 'action_view_item', url: base_url_relative ~ w4os_route('region') ~ '?id={uuid}'}] : [] %}
 {% include 'w4os/list.html.twig' with {
-    list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: links,
+    list: data.list, items: data.items, meta: data.meta, query: data.query, fixed: data.fixed ?? {}, error: data.error, links: links,
     texts: {search: 'w4os.search_regions', empty: 'w4os.no_regions', count: 'w4os.regions_count', title: 'w4os.regions_title'}
 } %}
