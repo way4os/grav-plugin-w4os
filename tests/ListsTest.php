@@ -101,7 +101,9 @@ describe('a list of the engine', function () {
         $uuid = '0b7c5c3a-1d2e-4f50-9a6b-7c8d9e0f1a2b';
 
         expect(Lists::query($list, ['owner' => $uuid], 10)['api'])->toHaveKey('filter[owner]', $uuid)
-            ->and(Lists::query($list, ['owner' => 'Ada'], 10)['api'])->not->toHaveKey('filter[owner]');
+            ->and(Lists::query($list, ['owner' => 'Ada'], 10)['api'])->not->toHaveKey('filter[owner]')
+            ->and(Lists::query($list, ['owner' => "$uuid-x"], 10)['api'])->not->toHaveKey('filter[owner]')
+            ->and(Lists::query($list, ['owner' => strtoupper($uuid)], 10)['api'])->toHaveKey('filter[owner]');
     });
 
     test('gives a row the actions it allows', function () use ($document) {

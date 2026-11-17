@@ -155,7 +155,7 @@ final class Lists
             return mb_strlen($value) <= 200;
         }
         if (isset($filter['format'])) {
-            return $filter['format'] === 'uuid' ? preg_match('/^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i', $value) === 1 : mb_strlen($value) <= 200;
+            return $filter['format'] === 'uuid' ? Bundled::library() && \OpenSim\Text\Uuid::isValid($value) : mb_strlen($value) <= 200;
         }
 
         return in_array($value, array_column($filter['values'], 'value'), true);

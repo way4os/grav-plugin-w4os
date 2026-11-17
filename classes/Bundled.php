@@ -36,6 +36,19 @@ final class Bundled
      */
     public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '') {}
 
+    /** The libraries the plugin bundles (its vendor folder: the engine, the helpers), loaded once; whether the engine is there. */
+    public static function library(): bool
+    {
+        static $loaded = null;
+        if ($loaded === null) {
+            $autoload = dirname(__DIR__).'/vendor/autoload.php';
+            is_file($autoload) && require_once $autoload;
+            $loaded = class_exists(\OpenSim\Models\Grid::class);
+        }
+
+        return $loaded;
+    }
+
     /** Whether the plugin has its vendor folder (the release zip, or composer install). */
     public static function available(): bool
     {

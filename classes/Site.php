@@ -58,8 +58,7 @@ final class Site
         if ($this->bundled !== null || ($this->config()['engine'] ?? 'remote') !== 'bundled') {
             return $this->bundled;
         }
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
         if (! Bundled::available()) {
             $this->grav['log']->error('w4os: the engine is set to bundled, but the plugin has no vendor folder (the release zip has one)');
 
@@ -156,8 +155,7 @@ final class Site
      */
     public function logo(string $file): ?string
     {
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
         if (! class_exists(\OpenSim\Assets\Logos::class) || ! in_array($file, \OpenSim\Assets\Logos::FILES, true)) {
             return null;
         }
@@ -178,8 +176,7 @@ final class Site
      */
     public function picture(?string $uuid, ?string $default = null): string
     {
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
         $person = $default === 'person';
         $none = $uuid === null || trim($uuid, "0- ") === '';
         $placeholder = class_exists(\OpenSim\Assets\WebAssets::class)
@@ -286,8 +283,7 @@ final class Site
     /** Whether a viewer asks the page (its user agent, as the helpers tell it): the page then shows its content alone. */
     public function isViewer(): bool
     {
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
 
         return class_exists(\OpenSim\Helpers\View\View::class) && method_exists(\OpenSim\Helpers\View\View::class, 'isViewer')
             && \OpenSim\Helpers\View\View::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
@@ -386,8 +382,7 @@ final class Site
     public function profileUrl(string $name): ?string
     {
         $pattern = $this->info('web_profile', fn () => $this->engine()->webProfile());
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
 
         return $pattern === '' || ! class_exists(\OpenSim\Models\Avatar::class) ? null : \OpenSim\Models\Avatar::profileAt($pattern, $name);
     }
@@ -550,8 +545,7 @@ final class Site
      */
     public function count(string $key, int $n): string
     {
-        $autoload = dirname(__DIR__).'/vendor/autoload.php';
-        is_file($autoload) && require_once $autoload;
+        Bundled::library();
         $name = (string) preg_replace('/^w4os\./', '', $key);
         if (! class_exists(\OpenSim\I18n\Catalog::class) || ! isset(\OpenSim\I18n\Catalog::SINGULARS[$name])) {
             return $this->translate($key, [$n]);
