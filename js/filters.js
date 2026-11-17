@@ -1,6 +1,6 @@
 // The choices of the filters of a list as one kind of field (Tom Select, select[data-w4os-filter]): several values as tags, or one
-// value; the label of the filter greyed while nothing is chosen, a × to remove a value (data-clear: its text), the meaning of each
-// value as its tip. The select asks the list again when it changes (its onchange), with or without this script; without it, the
+// value after the label of the filter (data-chosen: "Label: %s"); the label greyed while nothing is chosen, a × to remove a value
+// (data-clear: its text), the meaning of each value as its tip. The select asks the list again when it changes (its onchange), with or without this script; without it, the
 // empty option of one value asks for any.
 document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
     if (typeof TomSelect === 'undefined') {
@@ -8,6 +8,7 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
     }
     const label = select.getAttribute('placeholder') || select.getAttribute('aria-label') || '';
     const clear = select.dataset.clear || '';
+    const chosen = select.dataset.chosen || '%s';
     const tips = Object.fromEntries([...select.options].map((option) => [option.value, option.title]));
     // The text size the theme gives its fields, whatever the theme
     const size = getComputedStyle(select).fontSize;
@@ -25,7 +26,7 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
             option: (data, escape) => `<div${tip(data, escape)}>${escape(data.text)}</div>`,
             item: (data, escape) => (data.value === ''
                 ? `<div class="w4os-filter-all">${escape(label)}</div>`
-                : `<div${tip(data, escape)}>${escape(data.text)}${select.multiple ? '' : remove(escape)}</div>`),
+                : `<div${tip(data, escape)}>${select.multiple ? escape(data.text) : escape(chosen).replace('%s', escape(data.text)) + remove(escape)}</div>`),
         },
     });
     // The × of one value removes it, without opening the list
