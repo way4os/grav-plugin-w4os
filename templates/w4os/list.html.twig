@@ -1,10 +1,10 @@
-{# A list of the engine as the admin draws it (Tabler), from the engine's description of it (Contract::listOf() of w4os-views: its columns and their
-   types, its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query
+{# A list of the engine as the admin draws it (Tabler), from the engine's description of it (Contract::listOf() of w4os-views:
+   its columns and their types, its sorts, its filters and their values, its search, the actions of a row). Variables: list, items, meta, query (the query
    of the page), error, texts (the keys of its search placeholder, of no row, of the count, of its title), links (the links of a row:
    key, url with {uuid}, or attribute: the address the row gives; the first one is the link of its name). The labels of the engine
    are keys of its catalog, under w4os.
-   Its first column is the name of the row; the others show in their column on a wide screen (xl), in a grey line under the name
-   on a narrower one; the status (indicators) and the "…" menu at every width. #}
+   What it shows comes from w4os-views (ListView): its first column is the name of the row, the secondary ones show in their column
+   on a wide screen (xl), in a grey line under the name on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
 {# The toolbar: the search, then the filters at their width (their empty option names them), on one line when there is room;
    Enter asks the list again #}
@@ -47,76 +47,66 @@
 {% if error %}
     <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% else %}
-    {# The count of its rows, the filters chosen and a link to remove them #}
-    {% set names = list.filters|map(f => f.name) %}
-    {% set active = list.filters|filter(f => (query[f.name] ?? '') is not empty)|length %}
-    {% if items is not empty or active %}
+    {# What to show, from w4os-views (ListView): the columns and the secondary ones, the rows with their link, address,
+       indicators and menu, the filters chosen and the query that removes them, the pages #}
+    {% set view = w4os_list_view(list, items, meta, query, links ?? []) %}
+    {% if view.rows is not empty or view.activeFilters %}
     <p class="text-secondary w4os-count mb-2">
-        {{ w4os_count(texts.count, meta.total ?? items|length) }}
-        {% if active %} · {{ w4os_count('w4os.filters_active', active) }} <a class="text-secondary" href="?{{ query|filter((v, k) => k not in names and k != 'page')|url_encode }}" title="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ 'w4os.filter_clear'|t|e('html_attr') }}"><i class="ti ti-x" aria-hidden="true"></i></a>{% endif %}
+        {{ w4os_count(texts.count, view.total) }}
+        {% if view.activeFilters %} · {{ w4os_count('w4os.filters_active', view.activeFilters) }} <a class="text-secondary" href="?{{ view.clearQuery|url_encode }}" title="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ 'w4os.filter_clear'|t|e('html_attr') }}"><i class="ti ti-x" aria-hidden="true"></i></a>{% endif %}
     </p>
     {% endif %}
     <div class="card w4os-list-card">
-    {% if items is empty %}
+    {% if view.rows is empty %}
         <div class="empty">
             <p class="empty-title">{{ texts.empty|t }}</p>
         </div>
     {% else %}
-        {# The first column, the status (indicators) and the menu at every width; the others on a wide screen only #}
-        {% set shown = {} %}
-        {% for column in list.columns %}{% set shown = shown|merge({(column.name): loop.first or column.type == 'indicators'}) %}{% endfor %}
-        {% set secondary = list.columns|filter(column => not shown[column.name]) %}
-        {% set bare = ['email', 'role', 'status', 'size', 'avatar', 'map', 'picture', 'boolean', 'hop'] %}
+        {% set menu = links or list.actions %}
         <div class="table-responsive">
         <table class="table table-vcenter card-table w4os-list w4os-{{ list.type|e('html_attr') }}">
             <thead><tr>
-                {% for column in list.columns %}
-                    {% set wide = shown[column.name] ? '' : ' d-none d-xl-table-cell' %}
-                    {% if column.sort is defined %}{{ cells.sorted(column, query, list.sort, wide) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}{{ wide }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
+                {% for column in view.columns %}
+                    {% set wide = column.primary ? '' : ' d-none d-xl-table-cell' %}
+                    {% if column.sort %}{{ cells.sorted(column, view.query, wide) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}{{ wide }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
                 {% endfor %}
-                {% if links or list.actions %}<th class="w-1"><span class="visually-hidden">{{ 'w4os.actions'|t }}</span></th>{% endif %}
+                {% if menu %}<th class="w-1"><span class="visually-hidden">{{ 'w4os.actions'|t }}</span></th>{% endif %}
             </tr></thead>
             <tbody>
-            {% for item in items %}
-                {% set id = item.uuid ?? item.id ?? '' %}
-                {# The link of its name: the first link of the page the row has #}
-                {% set href = null %}
-                {% for link in links ?? [] %}{% if href is null %}{% set candidate = link.attribute is defined ? (attribute(item, link.attribute) ?? '') : link.url|replace({'{uuid}': id|url_encode}) %}{% if candidate %}{% set href = candidate %}{% endif %}{% endif %}{% endfor %}
-                <tr{% if item.status is defined and item.status is not iterable %} class="w4os-{{ item.status|e('html_attr') }}"{% endif %}>
-                {% for column in list.columns %}
-                    {% if loop.first %}
-                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}">
-                        {% if href %}<a class="text-reset w4os-row-link" href="{{ href|e('html_attr') }}">{{ cells.cell(column, item, list) }}</a>{% else %}{{ cells.cell(column, item, list) }}{% endif %}
-                        {# Its address under its name (`subtitle`: the first of its attributes that has one), a link when the row gives one (`subtitleLink`) #}
-                        {% set subtitle = (column.subtitle ?? [])|map(name => (attribute(item, name) ?? ''))|filter(v => v is not empty)|first %}
-                        {% if subtitle %}{% set to = attribute(item, column.subtitleLink ?? '') ?? null %}<div class="w4os-subtitle text-secondary">{% if to %}<a class="text-secondary" href="{{ to|e('html_attr') }}">{{ subtitle }}</a>{% else %}{{ subtitle }}{% endif %}</div>{% endif %}
-                        {# The other columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
+            {% for row in view.rows %}
+                <tr{% if row.status %} class="w4os-{{ row.status|e('html_attr') }}"{% endif %}>
+                {% for column in view.columns %}
+                    {% if column.type == 'indicators' %}
+                    <td class="w4os-cell-indicators{{ column.primary ? '' : ' d-none d-xl-table-cell' }}">{{ cells.indicators(row.indicators[column.name] ?? [], row) }}</td>
+                    {% elseif loop.first %}
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}">
+                        {% if row.link %}<a class="text-reset w4os-row-link" href="{{ row.link|e('html_attr') }}">{{ cells.cell(column.definition, row.item) }}</a>{% else %}{{ cells.cell(column.definition, row.item) }}{% endif %}
+                        {% if row.subtitle %}<div class="w4os-subtitle text-secondary">{% if row.subtitleLink %}<a class="text-secondary" href="{{ row.subtitleLink|e('html_attr') }}">{{ row.subtitle }}</a>{% else %}{{ row.subtitle }}{% endif %}</div>{% endif %}
+                        {# The secondary columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
                            number, a name) after the label of its column #}
                         {% set parts = [] %}
-                        {% for other in secondary %}{% set part = cells.cell(other, item, list)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.type in bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part)]) %}{% endif %}{% endfor %}
+                        {% for other in view.secondary %}{% set part = cells.cell(other.definition, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part)]) %}{% endif %}{% endfor %}
                         {% if parts %}<div class="w4os-subtitle text-secondary d-xl-none">{{ parts|join(' · ') }}</div>{% endif %}
                     </td>
                     {% else %}
-                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.picture is defined ? ' w4os-cell-who' }}{{ shown[column.name] ? '' : ' d-none d-xl-table-cell' }}">{{ cells.cell(column, item, list) }}</td>
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' d-none d-xl-table-cell' }}">{{ cells.cell(column.definition, row.item) }}</td>
                     {% endif %}
                 {% endfor %}
-                {% if links or list.actions %}<td class="w4os-actions">{{ cells.menu(list, item, links) }}</td>{% endif %}
+                {% if menu %}<td class="w4os-actions">{{ cells.menu(row) }}</td>{% endif %}
                 </tr>
             {% endfor %}
             </tbody>
         </table>
         </div>
-        {# The pages of the list: the engine pages it (its total, its page), the links keep the search, the filters and the sort #}
-        {% set current = meta.page ?? 1 %}
-        {% set pages = ((meta.total ?? 0) / (meta.perPage ?: 50))|round(0, 'ceil') %}
-        {% if pages > 1 %}
+        {# The pages of the list: the links keep the search, the filters and the sort #}
+        {% if view.pages > 1 %}
         <div class="card-footer d-flex align-items-center">
             <ul class="pagination m-0 ms-auto" aria-label="{{ texts.title|t|e('html_attr') }}">
-                <li class="page-item{{ current > 1 ? '' : ' disabled' }}"><a class="page-link" href="?{{ query|merge({page: current - 1})|url_encode }}" rel="prev" aria-label="‹"><i class="ti ti-chevron-left" aria-hidden="true"></i></a></li>
-                {% for n in 1..pages %}
-                <li class="page-item{{ n == current ? ' active' }}"><a class="page-link" href="?{{ query|merge({page: n})|url_encode }}"{% if n == current %} aria-current="page"{% endif %}>{{ n }}</a></li>
+                <li class="page-item{{ view.page > 1 ? '' : ' disabled' }}"><a class="page-link" href="?{{ view.query|merge({page: view.page - 1})|url_encode }}" rel="prev" aria-label="‹"><i class="ti ti-chevron-left" aria-hidden="true"></i></a></li>
+                {% for n in 1..view.pages %}
+                <li class="page-item{{ n == view.page ? ' active' }}"><a class="page-link" href="?{{ view.query|merge({page: n})|url_encode }}"{% if n == view.page %} aria-current="page"{% endif %}>{{ n }}</a></li>
                 {% endfor %}
-                <li class="page-item{{ current < pages ? '' : ' disabled' }}"><a class="page-link" href="?{{ query|merge({page: current + 1})|url_encode }}" rel="next" aria-label="›"><i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
+                <li class="page-item{{ view.page < view.pages ? '' : ' disabled' }}"><a class="page-link" href="?{{ view.query|merge({page: view.page + 1})|url_encode }}" rel="next" aria-label="›"><i class="ti ti-chevron-right" aria-hidden="true"></i></a></li>
             </ul>
         </div>
         {% endif %}

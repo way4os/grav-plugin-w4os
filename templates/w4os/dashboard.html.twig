@@ -38,8 +38,8 @@
             {% for item in card.items %}
                 {% set id = item.uuid ?? item.id ?? '' %}
                 <a class="list-group-item list-group-item-action d-flex align-items-center gap-3" href="{{ card.item ? (card.item.url ~ '?' ~ {(card.item.param): id}|url_encode) : card.url }}">
-                    <span class="flex-fill text-truncate">{{ cells.cell(first, item, card.list)|striptags('<img><div><span>')|raw }}</span>
-                    {% if by %}<span class="text-secondary text-nowrap">{{ cells.cell(by, item, card.list) }}</span>{% endif %}
+                    <span class="flex-fill text-truncate">{{ cells.cell(first, item)|striptags('<img><div><span>')|raw }}</span>
+                    {% if by %}<span class="text-secondary text-nowrap">{{ cells.cell(by, item) }}</span>{% endif %}
                 </a>
             {% else %}
                 <div class="empty"><p class="empty-title">{{ ('w4os.no_' ~ card.list.type)|t }}</p></div>

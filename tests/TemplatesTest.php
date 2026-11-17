@@ -5,6 +5,20 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/** The indicators and the menu of a row, as w4os/list.html.twig draws them from its view (w4os-views' ListView). */
+function row_html(array $list, array $item, array $links = [], string $icons = 'ti'): array
+{
+    $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+    $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "$icons-$icon"));
+    $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+    $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
+    $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+    $row = W4OS\Views\ListView::of($list, [$item], [], [], $links)->rows[0];
+    $template = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{% for name, indicators in row.indicators %}{{ cells.indicators(indicators, row) }}{% endfor %}|{{ cells.menu(row) }}");
+
+    return array_combine(['indicators', 'menu'], explode('|', $template->render(['row' => $row]), 2));
+}
+
 describe('templates', function () {
     test('every template of the plugin compiles', function () {
         $loader = new FilesystemLoader(dirname(__DIR__).'/templates');
@@ -25,27 +39,20 @@ describe('templates', function () {
     });
 
     test('the menu of a row links to the address the row gives (its profile page), and to its edit page by its UUID', function () {
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
-        $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, links) }}");
         $links = [['key' => 'action_view', 'attribute' => 'profilePage'], ['key' => 'action_edit', 'url' => '/edit?avatar={uuid}']];
-        $render = fn (array $item) => $menu->render(['list' => ['actions' => []], 'item' => $item, 'links' => $links]);
-        $ada = $render(['uuid' => 'u1', 'name' => 'Ada  Love', 'profilePage' => 'https://grid.example.org/profile/Ada.Love']);
+        $list = ['columns' => [['name' => 'name']], 'actions' => []];
+        $ada = row_html($list, ['uuid' => 'u1', 'name' => 'Ada  Love', 'profilePage' => 'https://grid.example.org/profile/Ada.Love'], $links)['menu'];
 
         expect($ada)->toContain('href="https&#x3A;&#x2F;&#x2F;grid.example.org&#x2F;profile&#x2F;Ada.Love"', 'href="&#x2F;edit&#x3F;avatar&#x3D;u1"')
-            ->and($render(['uuid' => 'u2', 'name' => 'Model Avatar']))->not->toContain('w4os.action_view')->toContain('w4os.action_edit');
+            ->and(row_html($list, ['uuid' => 'u2', 'name' => 'Model Avatar'], $links)['menu'])->not->toContain('w4os.action_view')->toContain('w4os.action_edit');
     });
 
     test('an action the engine asks to confirm (ask) is confirmed before it is sent, in the language of the page', function () {
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => $name === 'w4os_list_actions' ? [
-            ['name' => 'stop', 'label' => 'action_stop', 'ask' => 'ask_stop_instance'],
-            ['name' => 'start', 'label' => 'action_start'],
-        ] : ''));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $html = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")
-            ->render(['list' => ['actions' => []], 'item' => ['id' => 'h:9040', 'name' => 'Test Solo']]);
+        $list = ['columns' => [['name' => 'name']], 'actions' => [
+            ['name' => 'stop', 'label' => 'action_stop', 'ask' => 'ask_stop_instance', 'method' => 'POST', 'path' => '/x'],
+            ['name' => 'start', 'label' => 'action_start', 'method' => 'POST', 'path' => '/y'],
+        ]];
+        $html = row_html($list, ['id' => 'h:9040', 'name' => 'Test Solo'])['menu'];
 
         expect($html)->toContain('<button name="action" value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;" onclick="return confirm(this.dataset.w4osAsk)" class="dropdown-item text-danger">')
             ->and($html)->toContain('<button name="action" value="start" class="dropdown-item">');
@@ -55,6 +62,7 @@ describe('templates', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => '/pictures/'.($uuid ?? "none-$default").'.jpg'));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
         $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
         $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
         $map = ['name' => 'name', 'type' => 'text', 'picture' => 'mapImage', 'default' => 'place'];
@@ -67,17 +75,9 @@ describe('templates', function () {
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
-        $document = OpenSim\Api\Contract::document();
-        $list = (new W4OS\Views\Contract($document))->listOf('simulators');
-        $column = array_column($list['columns'], null, 'name')['status'];
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4OS\Views\Rows::actions($list, $item)));
-        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "fa-$icon"));
-        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $list = (new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators');
         $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'state' => 'running', 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'mysql' => 'none', 'sqlite' => 'none']];
-        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item, list) }}")->render(['column' => $column, 'item' => $row, 'list' => $list]);
-        $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")->render(['list' => $list, 'item' => $row]);
+        ['indicators' => $cell, 'menu' => $menu] = row_html($list, $row, [], 'fa');
 
         expect($cell)->toContain('class="w4os-indicator w4os-tone-ok"', 'fa-power', 'fa-play', 'fa-console', 'w4os-tone-failed', 'fa-screen', 'w4os-tone-off', 'fa-file')
             ->and($cell)->toContain('title="&#x5B;w4os.state_enabled&#x5D;"', '<span class="sr-only visually-hidden">[w4os.state_enabled] (')
@@ -90,37 +90,27 @@ describe('templates', function () {
             ->and($menu)->not->toContain('value="stop"', 'value="disable"');
     });
     test('an indicator shows the icon of its state when the state has one, its own else', function () {
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti-$icon"));
-        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => []));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $column = ['name' => 'status', 'type' => 'indicators', 'indicators' => [['name' => 'running', 'label' => 'running', 'icon' => 'run', 'states' => [
+        $list = ['columns' => [['name' => 'name'], ['name' => 'status', 'type' => 'indicators', 'indicators' => [['name' => 'running', 'label' => 'running', 'icon' => 'run', 'states' => [
             ['value' => true, 'label' => 'state_running', 'tone' => 'ok', 'icon' => 'pause'],
             ['value' => false, 'label' => 'state_stopped', 'tone' => 'off'],
-        ]]]];
-        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
+        ]]]]]];
 
-        expect($cell->render(['column' => $column, 'item' => ['running' => true]]))->toContain('ti-pause', 'w4os-tone-ok')->not->toContain('ti-run')
-            ->and($cell->render(['column' => $column, 'item' => ['running' => false]]))->toContain('ti-run', 'w4os-tone-off');
+        expect(row_html($list, ['running' => true])['indicators'])->toContain('ti-pause', 'w4os-tone-ok')->not->toContain('ti-run')
+            ->and(row_html($list, ['running' => false])['indicators'])->toContain('ti-run', 'w4os-tone-off');
     });
 
     test('a ban, a presence show by their icons, never by their color alone: a user banned or online, the world cancelled or crossed', function () {
         $api = new W4OS\Views\Contract(OpenSim\Api\Contract::document());
-        $account = array_column($api->listOf('avatars')['columns'], null, 'name')['status'];
-        $place = array_column($api->listOf('regions')['columns'], null, 'name')['status'];
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti-$icon"));
-        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => []));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $cell = fn (array $column, array $item) => $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}")->render(['column' => $column, 'item' => $item]);
-        $hard = $cell($account, ['uuid' => 'a1', 'accountState' => 'banned', 'ban' => 'hard']);
-        $estates = $cell($account, ['uuid' => 'a2', 'accountState' => 'active', 'ban' => 'estates']);
-        $online = $cell($account, ['uuid' => 'a3', 'accountState' => 'online', 'ban' => null]);
+        $avatars = ['actions' => []] + $api->listOf('avatars');
+        $regions = ['actions' => []] + $api->listOf('regions');
+        $hard = row_html($avatars, ['uuid' => 'a1', 'accountState' => 'banned', 'ban' => 'hard'])['indicators'];
+        $estates = row_html($avatars, ['uuid' => 'a2', 'accountState' => 'active', 'ban' => 'estates'])['indicators'];
+        $online = row_html($avatars, ['uuid' => 'a3', 'accountState' => 'online', 'ban' => null])['indicators'];
 
         expect($hard)->toMatch('~w4os-tone-failed[^>]*><i class="ti-account-banned"~')->toMatch('~w4os-tone-failed[^>]*><i class="ti-ban"~')
             ->and($estates)->toMatch('~w4os-tone-ok[^>]*><i class="ti-account"~')->toMatch('~w4os-tone-warning[^>]*><i class="ti-ban"~')->not->toContain('ti-account-banned')
             ->and($online)->toMatch('~w4os-tone-ok[^>]*><i class="ti-account-online"~')->not->toContain('ti-ban')
-            ->and($cell($place, ['uuid' => 'r1', 'enabled' => true, 'online' => false]))->toMatch('~w4os-tone-off[^>]*><i class="ti-offline"~')
-            ->and($cell($place, ['uuid' => 'r1', 'enabled' => true, 'online' => true]))->toMatch('~w4os-tone-ok[^>]*><i class="ti-online"~');
+            ->and(row_html($regions, ['uuid' => 'r1', 'enabled' => true, 'online' => false])['indicators'])->toMatch('~w4os-tone-off[^>]*><i class="ti-offline"~')
+            ->and(row_html($regions, ['uuid' => 'r1', 'enabled' => true, 'online' => true])['indicators'])->toMatch('~w4os-tone-ok[^>]*><i class="ti-online"~');
     });
 });
