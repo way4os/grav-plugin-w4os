@@ -376,18 +376,6 @@ final class Site
     }
 
     /**
-     * The web page of the profile of an avatar (web-profile of the grid, its name put in as the engine does: Avatar::profileAt()),
-     * null when the grid has none or the name is not First Last.
-     */
-    public function profileUrl(string $name): ?string
-    {
-        $pattern = $this->info('web_profile', fn () => $this->engine()->webProfile());
-        Bundled::library();
-
-        return $pattern === '' || ! class_exists(\OpenSim\Models\Avatar::class) ? null : \OpenSim\Models\Avatar::profileAt($pattern, $name);
-    }
-
-    /**
      * The slogan of the site in the language of the page: the setting `slogan` of the theme, a text or one by language (else the
      * default language's), '' without one.
      */
