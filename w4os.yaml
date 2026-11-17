@@ -59,7 +59,7 @@ icons:
   run: 'ti ti-player-play'
   play: 'ti ti-player-play'
   pause: 'ti ti-player-pause'
-  online: 'ti ti-world'
+  online: 'ti ti-world-check'
   console: 'ti ti-terminal-2'
   screen: 'ti ti-device-desktop'
   file: 'ti ti-file-text'
