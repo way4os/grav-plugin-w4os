@@ -21,6 +21,8 @@ describe('assets', function () {
         $files = [
             'npm-asset/tabler-core/package.json', 'npm-asset/tabler-core/README.md', 'npm-asset/tabler-core/dist/css/tabler.min.css', 'npm-asset/tabler-core/dist/css/tabler-vendors.min.css',
             'npm-asset/tabler-core/dist/js/tabler.min.js', 'npm-asset/tabler-core/dist/img/flags/fr.svg', 'npm-asset/tabler-core/scss/tabler.scss',
+            'npm-asset/tabler-core/dist/libs/tom-select/LICENSE', 'npm-asset/tabler-core/dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
+            'npm-asset/tabler-core/dist/libs/tom-select/dist/js/tom-select.base.min.js',
             'npm-asset/tabler-icons-webfont/LICENSE', 'npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.woff2', 'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons-200.arrows-1.woff2',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.ttf',
@@ -40,6 +42,7 @@ describe('assets', function () {
         expect($left)->toEqualCanonicalizing([
             'npm-asset/tabler-core/package.json', 'npm-asset/tabler-core/dist/css/tabler.min.css', 'npm-asset/tabler-core/dist/css/tabler-vendors.min.css',
             'npm-asset/tabler-core/dist/js/tabler.min.js',
+            'npm-asset/tabler-core/dist/libs/tom-select/LICENSE', 'npm-asset/tabler-core/dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
             'npm-asset/tabler-icons-webfont/LICENSE', 'npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.woff2',
             'npm-asset/tom-select/LICENSE', 'npm-asset/tom-select/dist/js/tom-select.popular.min.js', 'npm-asset/tom-select/dist/css/tom-select.min.css',

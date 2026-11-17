@@ -11,7 +11,11 @@ final class Assets
 {
     /** What the plugin serves of each release, from its folder (a pattern takes the matching files of a folder). */
     public const KEEP = [
-        'npm-asset/tabler-core' => ['package.json', 'dist/css/tabler.min.css', 'dist/css/tabler-vendors.min.css', 'dist/js/tabler.min.js'],
+        'npm-asset/tabler-core' => [
+            'package.json', 'dist/css/tabler.min.css', 'dist/css/tabler-vendors.min.css', 'dist/js/tabler.min.js',
+            // Tom Select in the styles of Tabler (Bootstrap 5)
+            'dist/libs/tom-select/LICENSE', 'dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
+        ],
         'npm-asset/tabler-icons-webfont' => ['LICENSE', 'dist/tabler-icons.min.css', 'dist/fonts/tabler-icons.*.woff2'],
         'npm-asset/tom-select' => ['LICENSE', 'dist/js/tom-select.popular.min.js', 'dist/css/tom-select.min.css'],
     ];
