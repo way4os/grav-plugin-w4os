@@ -172,7 +172,7 @@ final class Engine
     {
         $document = $this->call('GET', '/'.rawurlencode($type), null, $query, $grid);
 
-        return [array_map(fn (array $item) => (array) $item['attributes'], (array) ($document['data'] ?? [])), (array) ($document['meta'] ?? [])];
+        return [array_map(fn (array $item) => self::attributes($item), (array) ($document['data'] ?? [])), (array) ($document['meta'] ?? [])];
     }
 
     /** @return array<string,mixed> the state of the grid: its level, its simulators (regions, online), its regions (total, online) */
@@ -290,6 +290,19 @@ final class Engine
     /** @return array<string,mixed> the attributes of the primary resource of a document */
     private function resource(array $document): array
     {
-        return (array) ($document['data']['attributes'] ?? []);
+        return isset($document['data']) && is_array($document['data']) ? self::attributes($document['data']) : [];
+    }
+
+    /**
+     * The attributes of a resource, with its id when they have none of their own (a simulator, `host:port`).
+     *
+     * @param array<string,mixed> $resource
+     * @return array<string,mixed>
+     */
+    private static function attributes(array $resource): array
+    {
+        $attributes = (array) ($resource['attributes'] ?? []);
+
+        return $attributes + (isset($resource['id']) && ! isset($attributes['uuid']) ? ['id' => (string) $resource['id']] : []);
     }
 }

@@ -26,11 +26,15 @@ describe('engine', function () {
     });
 
     test('asks what belongs to the machine (its simulators) outside the grid', function () {
-        $engine = fakeEngine([[200, ['data' => [['type' => 'simulators', 'id' => 'h:9040', 'attributes' => ['slug' => 'demo.solo']]]]], [200, ['data' => ['type' => 'simulators', 'id' => 'h:9040', 'attributes' => ['slug' => 'demo.solo']]]]], $log, 'demo');
+        $simulator = ['type' => 'simulators', 'id' => 'h:9040', 'attributes' => ['slug' => 'demo.solo']];
+        $engine = fakeEngine([[200, ['data' => [$simulator]]], [200, ['data' => $simulator]], [200, ['data' => $simulator]]], $log, 'demo');
         [$items] = $engine->items('simulators', ['filter[grid]' => 'demo'], grid: false);
         $engine->item('simulators', 'h:9040', grid: false);
 
+        // A row whose attributes have no id of their own (a simulator) keeps the one of its resource
         expect($items[0]['slug'])->toBe('demo.solo')
+            ->and($items[0]['id'])->toBe('h:9040')
+            ->and($engine->item('simulators', 'h:9040', grid: false)['id'] ?? null)->toBe('h:9040')
             ->and($log[0]['url'])->toBe('https://grid.example.org/api/simulators?filter%5Bgrid%5D=demo')
             ->and($log[1]['url'])->toBe('https://grid.example.org/api/simulators/h%3A9040')
             ->and($engine->grid())->toBe('demo');
