@@ -24,6 +24,12 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('search', ['q' => 'Ada'] + $site), true))->toBe(['q' => 'Ada'] + $site);
     });
 
+    test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {
+        expect(Blocks::kept('search'))->toBeFalse()
+            ->and(Blocks::kept('profile'))->toBeTrue()
+            ->and(Blocks::kept('grid-info'))->toBeTrue();
+    });
+
     test('a block that is not one, or not public, is never asked', function () {
         $blocks = Blocks::remote('https://grid.example.org/helpers', fn () => throw new LogicException('asked'));
 

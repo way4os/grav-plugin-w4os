@@ -40,7 +40,7 @@ bundled:
 send_mail: true
 # The style sheet of the plugin (its pages, the models picker, the blocks); off when the theme styles them
 built_in_css: true
-# How long (seconds) the blocks of the helpers and the avatar models are kept before being read again
+# How long (seconds) the blocks of the helpers (but the search) and the avatar models are kept before being read again
 cache: 60
 register:
   # Registration on the site: off, nobody registers here

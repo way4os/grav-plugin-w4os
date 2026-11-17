@@ -117,13 +117,16 @@ final class Site
         // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
         $bundled = $this->bundled();
         if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
-            return new Blocks(fn (string $name, array $args) => $this->noticed($this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $bundled->rendered($name, $args))));
+            return new Blocks(fn (string $name, array $args) => $this->noticed(Blocks::kept($name)
+                ? $this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $bundled->rendered($name, $args))
+                : $bundled->rendered($name, $args)));
         }
 
         return Blocks::remote((string) ($this->config()['url'] ?? ''), function (string $url) {
             parse_str((string) parse_url($url, PHP_URL_QUERY), $args);
+            $name = basename((string) parse_url($url, PHP_URL_PATH));
 
-            return $this->noticed($this->cached($url.$this->profileVersion(basename((string) parse_url($url, PHP_URL_PATH)), $args), fn () => $this->block($url)));
+            return $this->noticed(Blocks::kept($name) ? $this->cached($url.$this->profileVersion($name, $args), fn () => $this->block($url)) : $this->block($url));
         });
     }
 

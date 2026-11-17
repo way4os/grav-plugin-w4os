@@ -12,6 +12,9 @@ final class Blocks
     /** The blocks a visitor may see; `health` is for the managers, with the API key. */
     public const NAMES = ['grid-info', 'grid-status', 'motd', 'destination_guide', 'popular_places', 'directory_info', 'search', 'profile', 'new_users'];
 
+    /** The blocks the site does not keep: their content changes with what is asked and at once (a profile published since). */
+    private const LIVE = ['search'];
+
     /** The arguments a block takes from the page or the shortcode. */
     private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url'];
 
@@ -19,6 +22,12 @@ final class Blocks
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read
      */
     public function __construct(private \Closure $fetch) {}
+
+    /** Whether the site keeps a block a while (the setting `cache`), or asks for it each time. */
+    public static function kept(string $name): bool
+    {
+        return ! in_array(str_replace('-', '_', strtolower(trim($name))), self::LIVE, true);
+    }
 
     /**
      * The blocks the helpers of a grid serve at their address (`https://grid.example.org/helpers`).
