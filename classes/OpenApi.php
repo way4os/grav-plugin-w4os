@@ -153,12 +153,32 @@ final class OpenApi
     }
 
     /**
-     * Whether a person of this level may do an operation (its access, access()): anybody when it needs no level, on their own
-     * account when it allows it (`self`), else from its level. As the engine's Api\Access::allows().
+     * Whether a person of this level may do an operation (its access, access()): the engine's Api\Access says it when the plugin
+     * has the engine's library; allowsByContract() without it (a remote engine and no vendor folder).
+     *
+     * @param array{level: ?int, self: bool, operation?: string} $access
+     */
+    public static function allows(array $access, int $level, bool $own = false): bool
+    {
+        $operation = (string) ($access['operation'] ?? '');
+        if ($operation !== '' && Bundled::library() && class_exists(\OpenSim\Api\Access::class)) {
+            try {
+                return \OpenSim\Api\Access::allows($level, $operation, $own);
+            } catch (\InvalidArgumentException) {
+                // An operation of a newer engine than the library: its access as the contract gives it
+            }
+        }
+
+        return self::allowsByContract($access, $level, $own);
+    }
+
+    /**
+     * The rule of Api\Access::allows() on the access the contract gives: anybody when it needs no level, on one's own account when
+     * it allows it (`self`), else from its level.
      *
      * @param array{level: ?int, self: bool} $access
      */
-    public static function allows(array $access, int $level, bool $own = false): bool
+    public static function allowsByContract(array $access, int $level, bool $own = false): bool
     {
         return $access['level'] === null || ($own && $access['self']) || $level >= $access['level'];
     }
@@ -167,20 +187,21 @@ final class OpenApi
      * Who may do an operation, as the contract says (`x-access`: the lowest level on what is not one's own, whether one may on
      * one's own account); an engine that does not say it yet: its rule (Api\Access::of()).
      *
-     * @return array{level: ?int, self: bool}
+     * @return array{level: ?int, self: bool, operation: string}
      */
     public function access(string $method, string $path): array
     {
         $operation = (array) ($this->document['paths'][$path][strtolower($method)] ?? []);
+        $id = ['operation' => (string) ($operation['operationId'] ?? '')];
         if (isset($operation['x-access']) && is_array($operation['x-access'])) {
             $level = $operation['x-access']['level'] ?? null;
 
-            return ['level' => $level === null ? null : (int) $level, 'self' => (bool) ($operation['x-access']['self'] ?? false)];
+            return ['level' => $level === null ? null : (int) $level, 'self' => (bool) ($operation['x-access']['self'] ?? false)] + $id;
         }
 
-        return Bundled::library() && class_exists(\OpenSim\Api\Access::class)
-            ? \OpenSim\Api\Access::of($method, $path, (string) ($operation['operationId'] ?? ''))
-            : ['level' => PHP_INT_MAX, 'self' => false];
+        return (Bundled::library() && class_exists(\OpenSim\Api\Access::class)
+            ? \OpenSim\Api\Access::of($method, $path, $id['operation'])
+            : ['level' => PHP_INT_MAX, 'self' => false]) + $id;
     }
 
     /**

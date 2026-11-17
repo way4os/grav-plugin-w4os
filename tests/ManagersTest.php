@@ -28,6 +28,25 @@ describe('managers', function () {
             ->and($actions($regions, $region, 250))->toBe(['disable']);
     });
 
+    test('allowed by the engine\'s Access when it is there, by the same rule read in the contract without it', function () use ($api) {
+        foreach (Contract::document()['paths'] as $path => $operations) {
+            foreach ($operations as $method => $operation) {
+                if (! is_array($operation) || ! isset($operation['operationId'], $operation['x-access'])) {
+                    continue;
+                }
+                $access = $api->access($method, $path);
+                expect($access['operation'])->toBe($operation['operationId']);
+                foreach (array_keys(Avatar::LEVELS) as $level) {
+                    foreach ([false, true] as $own) {
+                        $engine = OpenSim\Api\Access::allows($level, $operation['operationId'], $own);
+                        expect(OpenApi::allowsByContract($access, $level, $own))->toBe($engine, "{$operation['operationId']} at $level")
+                            ->and(OpenApi::allows($access, $level, $own))->toBe($engine);
+                    }
+                }
+            }
+        }
+    });
+
     test('change on an item the fields of their level: an avatar\'s details from 100, its role and a region from 200', function () use ($api) {
         $avatar = array_column($api->itemOf('avatars')['fields'], null, 'name');
         $region = array_column($api->itemOf('regions')['fields'], null, 'name');
