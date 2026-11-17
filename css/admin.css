@@ -1,4 +1,7 @@
 /* The admin pages (w4os-admin.html.twig, on Tabler): what Tabler does not have of the plugin's own */
+/* A comfortable reading size on a large screen, through Tabler's own base size (14 px on a phone, 15 px then 16 px) */
+@media (min-width: 992px) { :root { --tblr-body-font-size: .9375rem; } }
+@media (min-width: 1200px) { :root { --tblr-body-font-size: 1rem; } }
 .w4os-admin-logo { height: 2rem; width: auto; margin-right: .5rem; }
 .w4os-admin .navbar-brand { white-space: normal; }
 /* The tones of the indicators, in the colors of Tabler */
@@ -8,10 +11,11 @@
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
 /* The lists: the search as wide as it reads, the filters at their natural width, the grey line of a row under its name */
-.w4os-admin .w4os-filters .w4os-search { flex: none; width: 100%; max-width: 24rem; }
+.w4os-admin .w4os-filters .w4os-search { flex: none; width: 100%; max-width: 32rem; }
 .w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { width: auto; flex: 0 1 12rem; min-width: 10rem; }
-.w4os-admin .w4os-subtitle { font-size: .8125rem; white-space: normal; }
-.w4os-admin .w4os-row-link { font-weight: 500; }
+/* A row: its name larger than its details */
+.w4os-admin .w4os-row-link { font-size: 1.0625em; font-weight: 600; }
+.w4os-admin .w4os-subtitle { font-size: .875em; margin-top: .125rem; white-space: normal; }
 .w4os-admin .w4os-list-card .table td { white-space: normal; }
 /* The status icons of a row on one line on a wide screen, as many lines as they need on a narrow one */
 @media (min-width: 1200px) { .w4os-admin .w4os-indicators { flex-wrap: nowrap; } }
