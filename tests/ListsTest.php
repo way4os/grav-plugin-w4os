@@ -2,7 +2,7 @@
 
 use OpenSim\Api\Contract;
 use W4os\Grav\Lists;
-use W4os\Grav\OpenApi;
+use W4OS\Views\Contract as OpenApi;
 
 describe('a list of the engine', function () {
     // The engine's own document, as /openapi.json gives it
@@ -152,14 +152,4 @@ describe('a list of the engine', function () {
             ->and(array_column(Lists::actions($list, $row), 'name'))->toBe(['console']);
     });
 
-    test('says an action done by the message the engine names, by the same rule without its library', function () use ($document) {
-        $api = new OpenApi($document);
-        foreach (['avatars', 'regions', 'simulators'] as $type) {
-            foreach ($api->listOf($type)['actions'] as $action) {
-                expect(Lists::doneKey($action['name']))->toBe(OpenSim\I18n\Catalog::doneKey($action['name']))
-                    ->and(Lists::doneKeyByRule($action['name']))->toBe(OpenSim\I18n\Catalog::doneKey($action['name']));
-            }
-        }
-        expect(Lists::doneKeyByRule('estateBan'))->toBe('manage_estate_ban');
-    });
 });

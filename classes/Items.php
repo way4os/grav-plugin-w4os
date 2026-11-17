@@ -3,7 +3,7 @@
 namespace W4os\Grav;
 
 /**
- * The page of an item of the engine (a region...), from its description (OpenApi::itemOf()): who the visitor is to it (its roles),
+ * The page of an item of the engine (a region...), from its description (Contract::itemOf()): who the visitor is to it (its roles),
  * the fields it sees and the ones it changes (their condition and access), the fields of its form for Grav's Form plugin, and what
  * a posted form changes.
  */
@@ -66,7 +66,7 @@ final class Items
     /**
      * The groups of an item as its page shows them: each with the fields the visitor sees, in their order; none without any.
      *
-     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param array<string,mixed> $form the item's description (Contract::itemOf())
      * @param array<string,mixed> $item
      * @param list<string> $roles
      * @return list<array{name: string, label: string, fields: list<array<string,mixed>>}>
@@ -99,7 +99,7 @@ final class Items
      * The fields of the form of an item for Grav's Form plugin: the ones the visitor changes, each as an input of its type, its
      * groups as tabs (one group: its fields alone), the id of the item hidden.
      *
-     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param array<string,mixed> $form the item's description (Contract::itemOf())
      * @param array<string,mixed> $item
      * @param list<string> $roles
      * @return array<string,array<string,mixed>>
@@ -193,7 +193,7 @@ final class Items
      * fields of the same name (their options), whatever the form says of them.
      *
      * @param array<string,mixed> $fields
-     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param array<string,mixed> $form the item's description (Contract::itemOf())
      * @return array<string,mixed>
      */
     public static function withOptions(array $fields, array $form): array
@@ -214,7 +214,7 @@ final class Items
      * The fields of an item the visitor may not change (editable()), whatever they see: what a form of the site leaves out, and what
      * it never sends for them.
      *
-     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param array<string,mixed> $form the item's description (Contract::itemOf())
      * @param list<string> $roles
      * @return list<string>
      */

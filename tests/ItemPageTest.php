@@ -6,7 +6,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use W4os\Grav\Lists;
-use W4os\Grav\OpenApi;
+use W4OS\Views\Contract as OpenApi;
 use W4os\Grav\Site;
 
 /** The templates of the admin with the plugin's functions as plain stubs; the item of the page as `w4os_item()` gives it. */
@@ -23,7 +23,7 @@ function item_twig(array $page = []): Environment
     $twig->addFunction(new TwigFunction('nonce_field', fn () => '<input type="hidden" name="nonce">'));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style)));
+    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
 
     return $twig;
 }

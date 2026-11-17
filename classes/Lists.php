@@ -2,8 +2,10 @@
 
 namespace W4os\Grav;
 
+use W4OS\Views\Access;
+
 /**
- * A list of the engine on a page of the site, from its description (OpenApi::listOf()): the filters the page shows, the query of
+ * A list of the engine on a page of the site, from its description (Contract::listOf()): the filters the page shows, the query of
  * the engine and the query the page keeps in its links, built from the address (search, filters, sort, page) and checked against
  * what the list allows, the actions of a row and the request of the engine that does one.
  */
@@ -29,7 +31,7 @@ final class Lists
     /**
      * The query of the engine and the one of the page.
      *
-     * @param array<string,mixed> $list the list (OpenApi::listOf()), with the filters the page shows
+     * @param array<string,mixed> $list the list (Contract::listOf()), with the filters the page shows
      * @param array<string,mixed> $get the query of the address
      * @param array<string,scalar> $fixed the filters the page always asks the engine (`technical => no`)
      * @return array{api: array<string,scalar>, page: array<string,string|list<string>>}
@@ -106,7 +108,7 @@ final class Lists
     /**
      * The actions of a row: the ones whose conditions it meets and that whoever acts may do. `when`: each attribute has one of the
      * values; `requires`: each attribute has a value; `notSelf`: the row is not the avatar of whoever acts; `access`: their level
-     * (OpenApi::allows(), on their own account when the row is theirs); `level`: at least this level, when the action asks more than
+     * (Access::allows(), on their own account when the row is theirs); `level`: at least this level, when the action asks more than
      * its operation (a ban: a god).
      *
      * @param array<string,mixed> $list
@@ -118,7 +120,7 @@ final class Lists
     public static function actions(array $list, array $item, ?string $self = null, ?int $level = null): array
     {
         return array_values(array_filter($list['actions'], fn (array $action) => self::applies($action, $item, $self)
-            && ($level === null || ((! isset($action['access']) || OpenApi::allows($action['access'], $level, $self !== null && self::id($item) === $self))
+            && ($level === null || ((! isset($action['access']) || Access::allows($action['access'], $level, $self !== null && self::id($item) === $self))
                 && $level >= (int) ($action['level'] ?? 0)))));
     }
 
@@ -145,23 +147,6 @@ final class Lists
         $path = (string) preg_replace_callback('/\{(\w+)\}/', fn ($m) => rawurlencode($m[1] === 'id' ? $id : (string) ($item[$m[1]] ?? '')), $path);
 
         return [strtoupper((string) $action['method']), $path, $data, $scoped];
-    }
-
-    /**
-     * The key of the message a site says once an action is done (`estateBan`: `manage_estate_ban`): the engine's Catalog says it
-     * when the plugin has the engine's library; doneKeyByRule() without it (a remote engine and no vendor folder).
-     */
-    public static function doneKey(string $action): string
-    {
-        return Bundled::library() && method_exists(\OpenSim\I18n\Catalog::class, 'doneKey')
-            ? \OpenSim\I18n\Catalog::doneKey($action)
-            : self::doneKeyByRule($action);
-    }
-
-    /** The rule of Catalog::doneKey(): `manage_` and the name of the action in snake case. */
-    public static function doneKeyByRule(string $action): string
-    {
-        return 'manage_'.strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $action));
     }
 
     /** A value of a row by its name, or its dotted path into an object of the row (`connections.console`); null when it has none. */

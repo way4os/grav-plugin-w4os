@@ -6,6 +6,8 @@ use Grav\Common\Grav;
 use Grav\Common\HTTP\Client;
 use Grav\Common\Page\Page;
 use Grav\Common\User\Interfaces\UserInterface;
+use W4OS\Views\Access;
+use W4OS\Views\Contract;
 
 /**
  * The part that knows Grav: the settings and the secrets, the engine (the API of the grid through Grav's HTTP client, or the engine
@@ -602,13 +604,13 @@ final class Site
 
     /**
      * Whether the visitor, in the admin pages, may read (`read`) or change (`change`) the items of a type, as the contract says for
-     * their level (OpenApi::allows()).
+     * their level (Access::allows()).
      */
     public function can(string $type, string $what = 'change'): bool
     {
         $access = $this->isManager() ? ($this->openApi()->itemOf($type)[$what] ?? $this->openApi()->listOf($type)[$what] ?? null) : null;
 
-        return $access !== null && OpenApi::allows($access, $this->level());
+        return $access !== null && Access::allows($access, $this->level());
     }
 
     /** Keep the API key typed on the settings page in user-data (not in the configuration): see onAdminSave. */
@@ -721,51 +723,6 @@ final class Site
         return $template !== 'w4os-admin';
     }
 
-    /** How long a date reads relatively in a list ("15 hours ago"), in seconds; an older one is a short date with its time. */
-    public const RECENT = 7 * 86400;
-
-    /**
-     * A date in the format of a language, by PHP's Intl formatter (ISO without it), in a style: `date` the medium date
-     * (`16 nov. 2026`), `long` with its time (`16 nov. 2026, 10:00`), `full` the long date with its time (the tip of a date),
-     * `list` relative while it is recent, as Carbon tells it in the language (`il y a 15 heures`, `15 hours ago`), else the short
-     * date with its time (`16/11/2026 10:00`).
-     *
-     * @param int|string|null $value a timestamp or a date PHP reads
-     * @param string $language the language of the page (`fr`, `pt-BR`)
-     * @param ?int $now the time it is (a timestamp)
-     */
-    public static function date(int|string|null $value, string $language, string $style = 'date', ?int $now = null): string
-    {
-        if ($value === null || $value === '' || $value === 0 || $value === '0') {
-            return '';
-        }
-        try {
-            $date = is_numeric($value) ? (new \DateTimeImmutable)->setTimestamp((int) $value) : new \DateTimeImmutable((string) $value);
-        } catch (\Exception) {
-            return (string) $value;
-        }
-        $now ??= time();
-        if ($style === 'list' && abs($now - $date->getTimestamp()) < self::RECENT) {
-            Bundled::library();
-            if (class_exists(\Carbon\Carbon::class)) {
-                return \Carbon\Carbon::createFromTimestamp($date->getTimestamp())->locale(str_replace('-', '_', $language))
-                    ->diffForHumans(\Carbon\Carbon::createFromTimestamp($now), \Carbon\CarbonInterface::DIFF_RELATIVE_TO_NOW);
-            }
-        }
-        $date = $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-        if (! class_exists(\IntlDateFormatter::class)) {
-            return $date->format($style === 'date' ? 'Y-m-d' : 'Y-m-d H:i');
-        }
-        [$day, $time] = match ($style) {
-            'list' => [\IntlDateFormatter::SHORT, \IntlDateFormatter::SHORT],
-            'long' => [\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT],
-            'full' => [\IntlDateFormatter::LONG, \IntlDateFormatter::SHORT],
-            default => [\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE],
-        };
-
-        return (string) (new \IntlDateFormatter(str_replace('-', '_', $language), $day, $time))->format($date);
-    }
-
     /**
      * How long the site waits for an answer (seconds): a read is quick; a change waits for its end, as the engine does (an instance
      * stopped, then started again).
@@ -842,10 +799,10 @@ final class Site
         return $active === 'en' ? 'en' : "$active, en;q=0.5";
     }
 
-    /** The OpenAPI document of the engine, read (OpenApi): kept an hour. */
-    public function openApi(): OpenApi
+    /** The contract of the engine (its OpenAPI document), read: kept an hour. */
+    public function openApi(): Contract
     {
-        return new OpenApi((array) ($this->cached('openapi', function () {
+        return new Contract((array) ($this->cached('openapi', function () {
             try {
                 return $this->engine()->openapi() ?: null;
             } catch (EngineException) {

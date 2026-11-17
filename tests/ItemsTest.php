@@ -2,7 +2,7 @@
 
 use OpenSim\Api\Contract;
 use W4os\Grav\Items;
-use W4os\Grav\OpenApi;
+use W4OS\Views\Contract as OpenApi;
 
 describe('the page of an item of the engine', function () {
     $api = new OpenApi(Contract::document());

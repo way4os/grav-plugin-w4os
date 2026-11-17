@@ -5,7 +5,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\OpenApi;
+use W4OS\Views\Contract as OpenApi;
 use W4os\Grav\Site;
 
 describe('the dashboard', function () {
@@ -16,7 +16,7 @@ describe('the dashboard', function () {
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
-        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => Site::date($value, 'fr', $style)));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
 
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
@@ -33,7 +33,7 @@ describe('the dashboard', function () {
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
         $html = $render([['page' => 'manage', 'list' => $api->listOf('avatars'), 'filter' => [], 'url' => '/avatars', 'total' => 16, 'rows' => 5, 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('href="/avatars/edit?avatar=a1"', 'Bart Simpson', Site::date($created, 'fr', 'list'), '[w4os.born]')
+        expect($html)->toContain('href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.born]')
             ->not->toContain(date('Y-m-d', $created), 'w4os-stat');
     });
 

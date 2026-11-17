@@ -68,7 +68,7 @@ describe('templates', function () {
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
         $document = OpenSim\Api\Contract::document();
-        $list = (new W4os\Grav\OpenApi($document))->listOf('simulators');
+        $list = (new W4OS\Views\Contract($document))->listOf('simulators');
         $column = array_column($list['columns'], null, 'name')['status'];
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_list_actions', fn (array $list, array $item) => W4os\Grav\Lists::actions($list, $item)));
@@ -105,7 +105,7 @@ describe('templates', function () {
     });
 
     test('a ban, a presence show by their icons, never by their color alone: a user banned or online, the world cancelled or crossed', function () {
-        $api = new W4os\Grav\OpenApi(OpenSim\Api\Contract::document());
+        $api = new W4OS\Views\Contract(OpenSim\Api\Contract::document());
         $account = array_column($api->listOf('avatars')['columns'], null, 'name')['status'];
         $place = array_column($api->listOf('regions')['columns'], null, 'name')['status'];
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));

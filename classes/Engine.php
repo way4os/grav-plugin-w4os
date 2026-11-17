@@ -127,7 +127,7 @@ final class Engine
     }
 
     /**
-     * The OpenAPI document of the engine (`/openapi.json`, at the root of the API): what it gives, its lists among them (OpenApi).
+     * The OpenAPI document of the engine (`/openapi.json`, at the root of the API): what it gives, its lists among them (W4OS\Views\Contract).
      *
      * @return array<string,mixed>
      */

@@ -5,6 +5,14 @@
     "license": "AGPL-3.0-or-later",
     "repositories": [
         {
+            "name": "magicoli/w4os-views",
+            "url": "../w4os-views/",
+            "type": "path",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
             "name": "magicoli/opensim-engine",
             "url": "../opensim-engine/",
             "type": "path",
@@ -81,9 +89,7 @@
         "npm-asset/tabler-core": "1.7.3",
         "npm-asset/tabler-icons-webfont": "3.50.0",
         "npm-asset/tom-select": "2.6.2",
-        "nesbot/carbon": "3.15.1",
-        "symfony/translation": "^7.4",
-        "symfony/clock": "^7.4"
+        "magicoli/w4os-views": "@dev"
     },
     "require-dev": {
         "pestphp/pest": "^4.0",

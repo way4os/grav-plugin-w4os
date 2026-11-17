@@ -41,7 +41,7 @@ describe('pages', function () {
         $types = array_unique(array_filter(array_map(fn ($path) => preg_match('#^(?:/grids/\{grid\})?/([a-z-]+)$#', $path, $m) === 1 ? $m[1] : null, array_keys($document['paths']))));
         expect($types)->toContain('avatars', 'regions', 'simulators');
         foreach ($types as $type) {
-            if (($list = (new W4os\Grav\OpenApi($document))->listOf($type)) === null || $list['columns'] === []) {
+            if (($list = (new W4OS\Views\Contract($document))->listOf($type)) === null || $list['columns'] === []) {
                 continue;
             }
             $used = array_merge($used, array_column($list['columns'], 'label'), array_filter(array_column($list['columns'], 'tagLabel')), array_column($list['filters'], 'label'));
@@ -58,12 +58,12 @@ describe('pages', function () {
                 }
             }
             foreach ($list['actions'] as $action) {
-                array_push($used, $action['label'], W4os\Grav\Lists::doneKey($action['name']), ...(isset($action['ask']) ? [$action['ask']] : []));
+                array_push($used, $action['label'], W4OS\Views\Done::key($action['name']), ...(isset($action['ask']) ? [$action['ask']] : []));
             }
         }
         // Every label of the pages of the items (their groups, fields and choices)
         foreach (['avatars', 'regions'] as $type) {
-            $item = (new W4os\Grav\OpenApi($document))->itemOf($type);
+            $item = (new W4OS\Views\Contract($document))->itemOf($type);
             $used = array_merge($used, array_column($item['groups'], 'label'), array_column($item['fields'], 'label'));
             foreach ($item['fields'] as $field) {
                 $used = array_merge($used, array_values((array) ($field['options'] ?? [])));

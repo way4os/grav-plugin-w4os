@@ -19,11 +19,12 @@ require_once __DIR__.'/classes/Engine.php';
 require_once __DIR__.'/classes/FormError.php';
 require_once __DIR__.'/classes/Forms.php';
 require_once __DIR__.'/classes/Blocks.php';
-require_once __DIR__.'/classes/OpenApi.php';
 require_once __DIR__.'/classes/Lists.php';
 require_once __DIR__.'/classes/Items.php';
 require_once __DIR__.'/classes/Bundled.php';
 require_once __DIR__.'/classes/Site.php';
+// The libraries of the plugin (the view models of w4os-views, the engine and the helpers when it bundles them)
+is_file(__DIR__.'/vendor/autoload.php') && require_once __DIR__.'/vendor/autoload.php';
 
 /**
  * The website of an OpenSimulator grid, as a thin bridge to the engine API: avatars register (with a model, confirming their
@@ -202,7 +203,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
-        $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => Site::date($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style)));
+        $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => \W4OS\Views\Dates::format($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
@@ -520,7 +521,7 @@ class W4osPlugin extends Plugin
             $query = $item
                 ? http_build_query([(string) ($options['param'] ?? 'id') => Lists::id($row)])
                 : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
-            $this->done('w4os.'.Lists::doneKey($name), $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
+            $this->done('w4os.'.\W4OS\Views\Done::key($name), $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
             $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
         } catch (FormError $e) {
@@ -749,7 +750,7 @@ class W4osPlugin extends Plugin
 
     /**
      * The item of the page of an item (?id=, or the id its form posts; w4os_item in its front matter): its description by the
-     * engine (OpenApi::itemOf()), the item, the roles of the visitor for it.
+     * engine (Contract::itemOf()), the item, the roles of the visitor for it.
      *
      * @return array{type: string, list: ?string, form: ?array<string,mixed>, item: ?array<string,mixed>, roles: list<string>, error: ?string}
      */

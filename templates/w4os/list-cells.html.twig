@@ -14,7 +14,7 @@
 
 {# The value of a column for a row, drawn by its type; nothing for an empty value. A value the column names (`values`: value,
    label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place);
-   a day as a date; a time (datetime) in the style `dates` (Site::date(): `list` relative while recent, `long` with its time), its
+   a day as a date; a time (datetime) in the style `dates` (W4OS\Views\Dates: `list` relative while recent, `long` with its time), its
    full date as its tip #}
 {% macro cell(column, item, list = null, dates = 'list') %}
     {% set value = attribute(item, column.name) ?? null %}

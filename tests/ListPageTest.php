@@ -6,7 +6,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use W4os\Grav\Lists;
-use W4os\Grav\OpenApi;
+use W4OS\Views\Contract as OpenApi;
 
 /** The list of a page of the admin, rendered by its template with the plugin's functions as plain stubs. */
 function render_list(array $list, array $items, array $meta, array $links = [], array $query = []): string
@@ -18,7 +18,7 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
-    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4os\Grav\Site::date($value, 'fr', $style)));
+    $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
     $assets = new class {
         public function addCss(string $url): void {}
         public function addJs(string $url, array $options = []): void {}
@@ -60,17 +60,17 @@ describe('the list of a page of the admin', function () {
         $older = time() - 60 * 86400;
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'role' => 'resident', 'created' => $older, 'lastSeen' => $recent, 'status' => 'active'];
         $html = render_list($avatars, [$bart], ['total' => 1]);
-        $short = W4os\Grav\Site::date($older, 'fr', 'list');
+        $short = W4OS\Views\Dates::format($older, 'fr', 'list');
 
         $later = $old + 15 * 3600;
-        expect(W4os\Grav\Site::date($old, 'fr', 'list', $later))->toBe('il y a 15 heures')
-            ->and(W4os\Grav\Site::date($old, 'en', 'list', $later))->toBe('15 hours ago')
-            ->and(W4os\Grav\Site::date($old, 'pt-BR', 'list', $later))->toBe('há 15 horas')
-            ->and(W4os\Grav\Site::date($old, 'de', 'list', $old + 3 * 86400))->toBe('vor 3 Tagen')
-            ->and(W4os\Grav\Site::date($old, 'en', 'list', $old + 8 * 86400))->toMatch('~^11/16/26, \\d{1,2}:\\d{2}\\s?[AP]M$~u')
-            ->and(W4os\Grav\Site::date($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
-            ->and(W4os\Grav\Site::date($old, 'en'))->toBe('Nov 16, 2026')
-            ->and(W4os\Grav\Site::date(null, 'fr'))->toBe('')
+        expect(W4OS\Views\Dates::format($old, 'fr', 'list', $later))->toBe('il y a 15 heures')
+            ->and(W4OS\Views\Dates::format($old, 'en', 'list', $later))->toBe('15 hours ago')
+            ->and(W4OS\Views\Dates::format($old, 'pt-BR', 'list', $later))->toBe('há 15 horas')
+            ->and(W4OS\Views\Dates::format($old, 'de', 'list', $old + 3 * 86400))->toBe('vor 3 Tagen')
+            ->and(W4OS\Views\Dates::format($old, 'en', 'list', $old + 8 * 86400))->toMatch('~^11/16/26, \\d{1,2}:\\d{2}\\s?[AP]M$~u')
+            ->and(W4OS\Views\Dates::format($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
+            ->and(W4OS\Views\Dates::format($old, 'en'))->toBe('Nov 16, 2026')
+            ->and(W4OS\Views\Dates::format(null, 'fr'))->toBe('')
             ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.born]|'.$short.'] · [w4os.label_value:[w4os.last_seen]|il y a 3 jours]</div>')
             ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
             ->and($html)->not->toContain(date('Y-m-d', $older));
