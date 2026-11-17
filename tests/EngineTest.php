@@ -94,4 +94,10 @@ describe('the address of a remote engine', function () {
         expect(W4os\Grav\Site::picturesUrl(['url' => 'https://grid.example.org/helpers/', 'api_url' => 'http://127.0.0.1:8780/api']))->toBe('https://grid.example.org/helpers/pictures')
             ->and(W4os\Grav\Site::picturesUrl(['api_url' => 'https://grid.example.org/api']))->toBe('');
     });
+
+    test('waits for the end of a change (an instance restarted), not for a read', function () {
+        expect(W4os\Grav\Site::timeout('GET'))->toBe(15)
+            ->and(W4os\Grav\Site::timeout('POST'))->toBeGreaterThanOrEqual(300)
+            ->and(W4os\Grav\Site::timeout('patch'))->toBe(W4os\Grav\Site::timeout('POST'));
+    });
 });

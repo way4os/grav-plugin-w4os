@@ -618,13 +618,22 @@ final class Site
     }
 
     /**
+     * How long the site waits for an answer (seconds): a read is quick; a change waits for its end, as the engine does (an instance
+     * stopped, then started again).
+     */
+    public static function timeout(string $method): int
+    {
+        return strtoupper($method) === 'GET' ? 15 : 300;
+    }
+
+    /**
      * Grav's HTTP client, for the engine and the blocks of the helpers.
      *
      * @return array{int, string, array<string, list<string>>} the status, the body, the headers
      */
     private function send(string $method, string $url, array $headers, ?string $body): array
     {
-        $response = Client::getClient(['timeout' => 15])->request($method, $url, ['headers' => $headers] + ($body === null ? [] : ['body' => $body]));
+        $response = Client::getClient(['timeout' => self::timeout($method)])->request($method, $url, ['headers' => $headers] + ($body === null ? [] : ['body' => $body]));
 
         return [$response->getStatusCode(), $response->getContent(false), $response->getHeaders(false)];
     }
