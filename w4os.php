@@ -600,6 +600,10 @@ class W4osPlugin extends Plugin
         $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
         // The pictures of the grid at the addresses of this site
         $args['assets'] = $this->site()->engine()->assetsUrl();
+        // The links of the helpers to the pages of this site, in the language of the page
+        $routes = $this->site()->routes();
+        ($routes['search'] ?? '/') === '/' || $args['search_url'] = $this->site()->url('search');
+        ($routes['profile'] ?? '/') === '/' || $args['web_profile_url'] = $this->site()->url('profile').'/[AGENT_NAME]';
         if ($name === 'profile' && empty($args['name']) && ($avatar = $this->site()->avatar())) {
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }

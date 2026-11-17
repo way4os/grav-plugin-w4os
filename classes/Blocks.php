@@ -13,7 +13,7 @@ final class Blocks
     public const NAMES = ['grid-info', 'grid-status', 'motd', 'destination_guide', 'popular_places', 'directory_info', 'search', 'profile', 'new_users'];
 
     /** The arguments a block takes from the page or the shortcode. */
-    private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang', 'assets'];
+    private const ARGS = ['name', 'q', 'topic', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url'];
 
     /**
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read
@@ -35,7 +35,8 @@ final class Blocks
     /**
      * The HTML of a block, empty when it is not one or cannot be read.
      *
-     * @param array<string,scalar> $args name (profile), q and topic (search), level, title
+     * @param array<string,scalar> $args name (profile), q and topic (search), level, title, the addresses of the site's pages for
+     *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME])
      */
     public function html(string $name, array $args = []): string
     {

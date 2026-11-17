@@ -17,6 +17,13 @@ describe('blocks', function () {
             ->and($asked)->toHaveCount(3);
     });
 
+    test('gives the helpers the addresses of the site\'s pages, in its language, for their links', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args, JSON_UNESCAPED_SLASHES));
+        $site = ['search_url' => 'https://site.example.org/fr/search', 'web_profile_url' => 'https://site.example.org/fr/profile/[AGENT_NAME]'];
+
+        expect(json_decode($blocks->html('search', ['q' => 'Ada'] + $site), true))->toBe(['q' => 'Ada'] + $site);
+    });
+
     test('a block that is not one, or not public, is never asked', function () {
         $blocks = Blocks::remote('https://grid.example.org/helpers', fn () => throw new LogicException('asked'));
 
