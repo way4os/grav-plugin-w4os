@@ -75,16 +75,16 @@ describe('templates', function () {
         $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "fa-$icon"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'database' => 'none', 'robust' => 'none']];
+        $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'state' => 'running', 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'mysql' => 'none', 'sqlite' => 'none']];
         $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item, list) }}")->render(['column' => $column, 'item' => $row, 'list' => $list]);
         $menu = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")->render(['list' => $list, 'item' => $row]);
 
-        expect($cell)->toContain('class="w4os-indicator w4os-tone-ok"', 'fa-power', 'fa-run', 'fa-console', 'w4os-tone-failed', 'fa-screen', 'w4os-tone-neutral', 'fa-file')
+        expect($cell)->toContain('class="w4os-indicator w4os-tone-ok"', 'fa-power', 'fa-play', 'fa-console', 'w4os-tone-failed', 'fa-screen', 'w4os-tone-off', 'fa-file')
             ->and($cell)->toContain('title="&#x5B;w4os.state_enabled&#x5D;"', '<span class="sr-only visually-hidden">[w4os.state_enabled] (')
             ->and($cell)->not->toContain('column_enabled')
             // The action the row meets is the button of its icon, with its confirmation
             ->and($cell)->toContain('value="disable"', 'value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;"')
-            ->and($cell)->not->toContain('fa-files', 'fa-database', 'fa-server', 'value="start"', 'value="enable"')
+            ->and($cell)->not->toContain('fa-files', 'fa-database', 'fa-pause', 'value="start"', 'value="enable"')
             // The row's menu keeps the other actions only
             ->and($menu)->toContain('value="restart"')
             ->and($menu)->not->toContain('value="stop"', 'value="disable"');
