@@ -131,6 +131,7 @@ w4os:
   role_customer_service: 'Kundenservice'
   role_liaison: 'Verbindungsperson'
   role_god: 'Gott'
+  role_maintenance: 'Wartung'
   action_enable: 'Aktivieren'
   action_disable: 'Deaktivieren'
   action_reset: 'Link zum Zurücksetzen des Passworts senden'

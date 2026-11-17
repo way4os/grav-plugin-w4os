@@ -131,6 +131,7 @@ w4os:
   role_customer_service: 'Gwasanaeth Cwsmeriaid'
   role_liaison: 'Swyddog cyswllt'
   role_god: 'Duw'
+  role_maintenance: 'Cynnal a chadw'
   action_enable: 'Galluogi'
   action_disable: 'Analluogi'
   action_reset: 'Anfon dolen i ailosod y cyfrinair'

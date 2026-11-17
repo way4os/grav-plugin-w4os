@@ -131,6 +131,7 @@ w4os:
   role_customer_service: 'Klantenservice'
   role_liaison: 'Contactpersoon'
   role_god: 'God'
+  role_maintenance: 'Onderhoud'
   action_enable: 'Activeren'
   action_disable: 'Uitschakelen'
   action_reset: 'Een link sturen om het wachtwoord opnieuw in te stellen'

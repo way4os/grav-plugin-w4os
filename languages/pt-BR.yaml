@@ -131,6 +131,7 @@ w4os:
   role_customer_service: 'Atendimento ao Cliente'
   role_liaison: 'Contato'
   role_god: 'Deus'
+  role_maintenance: 'Manutenção'
   action_enable: 'Ativar'
   action_disable: 'Desativar'
   action_reset: 'Enviar um link de redefinição de senha'
