@@ -12,7 +12,7 @@ function fakeEngine(array $answers, ?array &$log = null, string $grid = '', stri
 {
     $log = [];
 
-    return new Engine('https://grid.example.org/helpers/api/', $key, $grid, function (string $method, string $url, array $headers, ?string $body) use (&$answers, &$log) {
+    return new Engine('https://grid.example.org/api/', $key, $grid, function (string $method, string $url, array $headers, ?string $body) use (&$answers, &$log) {
         $log[] = ['method' => $method, 'url' => $url, 'headers' => $headers, 'body' => $body === null ? null : json_decode($body, true)];
         [$status, $document] = array_shift($answers) ?? [500, null];
 

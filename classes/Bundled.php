@@ -86,13 +86,24 @@ final class Bundled
     {
         $grid = $this->grid();
         $base = $grid?->helpersUrl();
-        if ($base === null || trim((string) parse_url($base, PHP_URL_PATH), '/') === '') {
+        if ($base === null || trim((string) parse_url($base, PHP_URL_PATH), '/') === '' || self::isApi($path, $base)) {
             return false;
         }
         $parts = parse_url($base) ?: [];
         $origin = ($parts['scheme'] ?? 'http').'://'.($parts['host'] ?? '').(isset($parts['port']) ? ':'.$parts['port'] : '');
 
         return $grid->servedByHelpers($origin.$path);
+    }
+
+    /**
+     * Whether an address of the site is the engine API under the base of the helpers (/helpers/api...): never theirs to answer, the
+     * engine alone serves its API, at its own address.
+     */
+    public static function isApi(string $path, string $base): bool
+    {
+        $api = rtrim((string) parse_url($base, PHP_URL_PATH), '/').'/api';
+
+        return $path === $api || str_starts_with($path, "$api/");
     }
 
     /** Answers the request of this process with the helpers of the grid (their Slim application), then does what waits for it. */
