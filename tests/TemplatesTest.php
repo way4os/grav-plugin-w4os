@@ -103,4 +103,19 @@ describe('templates', function () {
         expect($cell->render(['column' => $column, 'item' => ['running' => true]]))->toContain('ti-pause', 'w4os-tone-ok')->not->toContain('ti-run')
             ->and($cell->render(['column' => $column, 'item' => ['running' => false]]))->toContain('ti-run', 'w4os-tone-off');
     });
+
+    test('a ban shows by its icons, never by its color alone: the account off and the sign in red, or the sign in orange', function () {
+        $list = (new W4os\Grav\OpenApi(OpenSim\Api\Contract::document()))->listOf('avatars');
+        $column = array_column($list['columns'], null, 'name')['status'];
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti-$icon"));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => []));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $cell = fn (array $item) => $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}")->render(['column' => $column, 'item' => $item]);
+        $hard = $cell(['uuid' => 'a1', 'status' => 'banned', 'ban' => 'hard', 'online' => false]);
+        $estates = $cell(['uuid' => 'a2', 'status' => 'active', 'ban' => 'estates', 'online' => false]);
+
+        expect($hard)->toMatch('~w4os-tone-failed[^>]*><i class="ti-user-off"~')->toMatch('~w4os-tone-failed[^>]*><i class="ti-ban"~')->not->toContain('ti-account')
+            ->and($estates)->toMatch('~w4os-tone-ok[^>]*><i class="ti-account"~')->toMatch('~w4os-tone-warning[^>]*><i class="ti-ban"~')->not->toContain('ti-user-off');
+    });
 });
