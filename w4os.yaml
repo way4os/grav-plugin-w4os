@@ -71,7 +71,7 @@ icons:
   account-online: 'ti ti-user-check'
   account-banned: 'ti ti-user-cancel'
   user-off: 'ti ti-user-cancel'
-  ban: 'ti ti-ban'
+  ban: 'ti ti-world-cancel'
 # The identity of the site in its admin pages: a logo (an address) and an accent color (#rrggbb) of their own; empty: the ones of
 # the theme (its custom_logo, its accent-color), else the logo of the grid and the colors of Tabler
 admin:
