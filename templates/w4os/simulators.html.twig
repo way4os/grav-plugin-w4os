@@ -1,0 +1,7 @@
+{# The simulators of the grid, for the managers: the engine's list (w4os_list in the front matter of the page) and its actions
+   (start, stop, restart, enable, disable) as the visitor's level allows them #}
+{% set data = w4os_list(page.header.w4os_list ?? {type: 'simulators'}) %}
+{% include 'w4os/list.html.twig' with {
+    list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: [],
+    texts: {search: 'w4os.search_simulators', empty: 'w4os.no_simulators', count: 'w4os.simulators_count', title: 'w4os.simulators_title'}
+} %}

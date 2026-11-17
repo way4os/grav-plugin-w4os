@@ -37,8 +37,9 @@ describe('pages', function () {
         // Every label of the lists of the engine (their columns, filters, values, actions), the texts of their statuses and the
         // message of an action once done
         $document = OpenSim\Api\Contract::document();
-        $types = array_filter(array_map(fn ($path) => preg_match('#^/grids/\{grid\}/([a-z-]+)$#', $path, $m) === 1 ? $m[1] : null, array_keys($document['paths'])));
-        expect($types)->toContain('avatars', 'regions');
+        // The lists of a grid and the ones of the machine (its simulators)
+        $types = array_unique(array_filter(array_map(fn ($path) => preg_match('#^(?:/grids/\{grid\})?/([a-z-]+)$#', $path, $m) === 1 ? $m[1] : null, array_keys($document['paths']))));
+        expect($types)->toContain('avatars', 'regions', 'simulators');
         foreach ($types as $type) {
             if (($list = (new W4os\Grav\OpenApi($document))->listOf($type)) === null || $list['columns'] === []) {
                 continue;
@@ -51,7 +52,7 @@ describe('pages', function () {
                 $status === [] || array_push($used, ...array_map(fn ($value) => 'status_'.$value['value'], $filter['values']));
             }
             foreach ($list['actions'] as $action) {
-                array_push($used, $action['label'], 'manage_'.$action['name']);
+                array_push($used, $action['label'], 'manage_'.$action['name'], ...(isset($action['ask']) ? [$action['ask']] : []));
             }
         }
         // Every label of the pages of the items (their groups, fields and choices)

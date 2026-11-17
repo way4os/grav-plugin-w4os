@@ -263,10 +263,10 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'dashboard', 'manage', 'edit', 'regions', 'region'], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
-        } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions', 'region'], true) && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif (isset(Site::ADMIN_TYPES[$type]) && ! $this->site()->can(Site::ADMIN_TYPES[$type], $type === 'edit' ? 'change' : 'read')) {
             // The admin pages open from the level of the setting; each one then from the level the contract gives it
@@ -281,7 +281,7 @@ class W4osPlugin extends Plugin
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && $this->grav['uri']->query('format') === 'avatars') {
             $this->avatarsFound((string) $this->grav['uri']->query('search'));
-        } elseif (in_array($type, ['manage', 'regions', 'region'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
+        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'region') {
             // The name of the item in the title

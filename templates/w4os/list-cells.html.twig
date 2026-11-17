@@ -58,7 +58,8 @@
             <form method="post">
                 {{ nonce_field('w4os-list')|raw }}
                 <input type="hidden" name="id" value="{{ id|e('html_attr') }}">
-                {% for action in actions %}<button name="action" value="{{ action.name|e('html_attr') }}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
+                {# An action the engine asks to confirm (`ask`, a key of its catalog) is confirmed before it is sent #}
+                {% for action in actions %}<button name="action" value="{{ action.name|e('html_attr') }}"{% if action.ask is defined %} data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)"{% endif %}>{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
             </form>
             {% endif %}
         </div>

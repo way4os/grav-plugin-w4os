@@ -468,10 +468,10 @@ final class Site
     }
 
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
-    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title', 'regions' => 'w4os.regions_title'];
+    public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title', 'regions' => 'w4os.regions_title', 'simulators' => 'w4os.simulators_title'];
 
     /** The items an admin page lists: the page shows to whom the contract lets read them. */
-    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions'];
+    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators'];
 
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its

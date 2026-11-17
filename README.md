@@ -16,6 +16,7 @@ It is one piece of the w4os family:
 - **Forgotten password**: a link by mail to choose a new one.
 - **My avatar**: the profile of the avatar, the text of its profile (about, wants, skills, languages, real life, web page), its password, and its email: a new address changes once the link mailed to it is clicked.
 - **Avatars of the grid**, for its managers (see [Who manages the grid on the site](#who-manages-the-grid-on-the-site)): search, see each one's status (active, disabled, waiting for the confirmation of its email), and from its actions menu enable or disable it, or mail it a password link.
+- **Simulators of the grid**, for its managers: their state (enabled, running), and from their actions menu start, stop (asked to confirm) or restart them, as the engine allows the visitor's level (a god).
 - **Blocks of the helpers** in any page, as a shortcode or in a template: grid info, grid status (in the language of the site, numbers and area as the language writes them), message of the day, search, popular places, destination guide, directory, profile.
 - **Menu of the visitor** for the top bar of a theme: the avatar signed in (my avatar, sign out), else sign in, register (while registration is open), lost password: `{% include 'w4os/user-menu.html.twig' %}`.
 - **Search** in the top bar: `{% include 'w4os/search-link.html.twig' %}`, to the search page of the site.
@@ -110,3 +111,4 @@ The mails (confirmation, password) are sent by the engine: on the machine of the
 ## License
 
 AGPL-3.0-or-later, like w4os and the OpenSim engine.
+| Simulators of the grid (managers: start, stop, restart, as their level allows) | `/account/simulators` |

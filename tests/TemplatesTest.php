@@ -36,4 +36,18 @@ describe('templates', function () {
         expect($ada)->toContain('href="https&#x3A;&#x2F;&#x2F;grid.example.org&#x2F;profile&#x2F;Ada.Love"', 'href="&#x2F;edit&#x3F;avatar&#x3D;u1"')
             ->and($render(['uuid' => 'u2', 'name' => 'Model Avatar']))->not->toContain('w4os.action_view')->toContain('w4os.action_edit');
     });
+
+    test('an action the engine asks to confirm (ask) is confirmed before it is sent, in the language of the page', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => $name === 'w4os_list_actions' ? [
+            ['name' => 'stop', 'label' => 'action_stop', 'ask' => 'ask_stop_instance'],
+            ['name' => 'start', 'label' => 'action_start'],
+        ] : ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $html = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.menu(list, item, []) }}")
+            ->render(['list' => ['actions' => []], 'item' => ['id' => 'h:9040', 'name' => 'Test Solo']]);
+
+        expect($html)->toContain('<button name="action" value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;" onclick="return confirm(this.dataset.w4osAsk)">')
+            ->and($html)->toContain('<button name="action" value="start">');
+    });
 });
