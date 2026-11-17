@@ -506,6 +506,38 @@ final class Site
     }
 
     /**
+     * A notice of the engine (what is left to do, a note) in the language of the page: its text in the language files
+     * (`notice_<code>`, its {params} put in), else its English detail; an old notice is its text already.
+     *
+     * @param string|array{code?: string, params?: array<string,scalar>, detail?: string} $notice
+     */
+    public function notice(string|array $notice): string
+    {
+        return self::noticeText($notice, fn (string $key) => $this->translate($key));
+    }
+
+    /**
+     * The text of a notice (Site::notice()), with the translation of a key of the language files given.
+     *
+     * @param string|array{code?: string, params?: array<string,scalar>, detail?: string} $notice
+     * @param \Closure(string $key): string $translate the text of a key, the key itself when there is none
+     */
+    public static function noticeText(string|array $notice, \Closure $translate): string
+    {
+        if (is_string($notice)) {
+            return $notice;
+        }
+        $key = 'w4os.notice_'.str_replace('-', '_', (string) ($notice['code'] ?? ''));
+        $text = isset($notice['code']) ? $translate($key) : $key;
+        if ($text === $key || $text === '') {
+            return (string) ($notice['detail'] ?? ($notice['code'] ?? ''));
+        }
+        $params = (array) ($notice['params'] ?? []);
+
+        return strtr($text, array_combine(array_map(fn ($name) => '{'.$name.'}', array_keys($params)), array_map('strval', array_values($params))) ?: []);
+    }
+
+    /**
      * A count in the language of the page, in the form its number takes there (the engine's catalog: `%d region`, `%d regions`);
      * a text without forms as the language files have it.
      *

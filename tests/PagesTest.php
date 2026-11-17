@@ -29,8 +29,8 @@ describe('pages', function () {
             preg_match_all('/[\'"]w4os\.([a-z][a-z0-9_]*[a-z0-9])/', (string) file_get_contents($file), $keys);
             $used = array_merge($used, $keys[1]);
         }
-        // Keys built from a variable: the titles of the pages, the actions and messages of the managers
-        $used = array_diff(array_unique($used), ['manage', 'action', 'error']);
+        // Keys built from a variable: the titles of the pages, the actions and messages of the managers, the notices of the engine
+        $used = array_diff(array_unique($used), ['manage', 'action', 'error', 'notice']);
         expect($used)->not->toBeEmpty();
         // Every problem code of the engine has its text
         $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));

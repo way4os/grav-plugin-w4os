@@ -503,13 +503,13 @@ class W4osPlugin extends Plugin
     /**
      * A message for the next page, and the redirect to it (the form is not sent twice by a reload).
      *
-     * @param list<string> $notes what is left to do, as the engine says it (shown after the message, as warnings)
+     * @param list<string|array<string,mixed>> $notes what is left to do, as the engine says it (its notices, shown after the message, as warnings)
      */
     private function done(string $key, string $route, array $vars = [], array $notes = []): never
     {
         $this->grav['messages']->add($this->site()->translate($key, $vars), 'info');
         foreach ($notes as $note) {
-            $this->grav['messages']->add(htmlspecialchars((string) $note), 'warning');
+            $this->grav['messages']->add(htmlspecialchars($this->site()->notice(is_array($note) ? $note : (string) $note)), 'warning');
         }
         $this->grav->redirectLangSafe($route, 303);
         exit;
