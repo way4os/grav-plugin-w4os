@@ -270,6 +270,7 @@ w4os:
   error_flag_unknown: 'Nid yw''r faner hon yn bodoli.'
   error_owner_unknown: 'Nid yw''r afatar hwn yn bodoli.'
   error_config_not_writable: 'Ni ellir newid hyn o''r fan hon: mae ffeiliau''r grid yn perthyn i''w weinydd.'
+  error_instance_user_required: 'Ni ellir gwneud hyn o''r fan hon: mae''r efelychwyr yn cael eu cychwyn a''u hatal ar eu gweinydd.'
   error_estate_shared: 'Perchennog y rhanbarth hwn yw perchennog ei ystâd, sydd â rhanbarthau eraill: newidiwch berchennog yr ystâd.'
   error_filter_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'
   error_filter_value_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'

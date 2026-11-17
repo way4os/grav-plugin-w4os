@@ -356,12 +356,17 @@ class W4osPlugin extends Plugin
                     $this->done('w4os.registered', $login, [$name]);
                     // no break: done() redirects
                 case 'resend':
-                    $link = $forms->resendConfirmation((string) ($data['name'] ?? ''));
-                    $this->done($link ? 'w4os.confirm_resent_test' : 'w4os.confirm_resent', $routes['confirm'], [$this->link($link)]);
+                    // What the engine says it did, in the language of the page; the site's own text with an engine that says nothing
+                    $resent = $forms->resendConfirmation((string) ($data['name'] ?? ''));
+                    $resent['link']
+                        ? $this->done('w4os.confirm_resent_test', $routes['confirm'], [$this->link($resent['link'])])
+                        : $this->done('w4os.confirm_resent', $routes['confirm'], text: $resent['notice'] === null ? null : $site->notice($resent['notice']));
                     // no break
                 case 'forgot':
-                    $forms->forgot($data);
-                    $this->done($forms->sends() ? 'w4os.forgot_sent' : 'w4os.forgot_test', $routes['forgot']);
+                    $notice = $forms->forgot($data);
+                    $forms->sends()
+                        ? $this->done('w4os.forgot_sent', $routes['forgot'], text: $notice === null ? null : $site->notice($notice))
+                        : $this->done('w4os.forgot_test', $routes['forgot']);
                     // no break
                 case 'reset':
                     $forms->reset($data);
@@ -504,10 +509,11 @@ class W4osPlugin extends Plugin
      * A message for the next page, and the redirect to it (the form is not sent twice by a reload).
      *
      * @param list<string|array<string,mixed>> $notes what is left to do, as the engine says it (its notices, shown after the message, as warnings)
+     * @param ?string $text the message as the engine says it (a notice in the language of the page), instead of the one of the key
      */
-    private function done(string $key, string $route, array $vars = [], array $notes = []): never
+    private function done(string $key, string $route, array $vars = [], array $notes = [], ?string $text = null): never
     {
-        $this->grav['messages']->add($this->site()->translate($key, $vars), 'info');
+        $this->grav['messages']->add($text === null ? $this->site()->translate($key, $vars) : htmlspecialchars($text), 'info');
         foreach ($notes as $note) {
             $this->grav['messages']->add(htmlspecialchars($this->site()->notice(is_array($note) ? $note : (string) $note)), 'warning');
         }

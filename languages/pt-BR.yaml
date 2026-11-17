@@ -270,6 +270,7 @@ w4os:
   error_flag_unknown: 'Esta flag não existe.'
   error_owner_unknown: 'Este avatar não existe.'
   error_config_not_writable: 'Isto não pode ser alterado daqui: os arquivos do grid pertencem ao seu servidor.'
+  error_instance_user_required: 'Isto não pode ser feito daqui: os simuladores são iniciados e parados no seu servidor.'
   error_estate_shared: 'O dono desta região é o dono da sua propriedade, que tem outras regiões: altere o dono da propriedade.'
   error_filter_unknown: 'Esta lista não pode ser filtrada assim.'
   error_filter_value_unknown: 'Esta lista não pode ser filtrada assim.'

@@ -270,6 +270,7 @@ w4os:
   error_flag_unknown: 'Diese Markierung gibt es nicht.'
   error_owner_unknown: 'Diesen Avatar gibt es nicht.'
   error_config_not_writable: 'Das lässt sich von hier aus nicht ändern: die Dateien des Grids gehören seinem Server.'
+  error_instance_user_required: 'Das ist von hier aus nicht möglich: die Simulatoren werden auf ihrem Server gestartet und gestoppt.'
   error_estate_shared: 'Der Eigentümer dieser Region ist der ihres Estates, das weitere Regionen hat: ändere den Eigentümer des Estates.'
   error_filter_unknown: 'Diese Liste lässt sich so nicht filtern.'
   error_filter_value_unknown: 'Diese Liste lässt sich so nicht filtern.'

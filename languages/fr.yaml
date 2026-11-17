@@ -270,6 +270,7 @@ w4os:
   error_flag_unknown: 'Ce drapeau n''existe pas.'
   error_owner_unknown: 'Cet avatar n''existe pas.'
   error_config_not_writable: 'Ceci ne peut pas être changé d''ici : les fichiers de la grille appartiennent à son serveur.'
+  error_instance_user_required: 'Ceci ne peut pas être fait d''ici : les simulateurs sont démarrés et arrêtés sur leur serveur.'
   error_estate_shared: 'Le propriétaire de cette région est celui de son domaine, qui a d''autres régions : changez le propriétaire du domaine.'
   error_filter_unknown: 'Cette liste ne peut pas être filtrée ainsi.'
   error_filter_value_unknown: 'Cette liste ne peut pas être filtrée ainsi.'

@@ -84,10 +84,22 @@ describe('sign-in and passwords', function () {
             ->and($refused(503, null))->toBe('w4os.error_channel_unavailable');
     });
 
-    test('the forgotten password mails a link to the reset page', function () {
-        forms([[202, ['meta' => ['message' => 'sent']]]], $log)->forgot(['login' => 'ada@example.org']);
+    test('the forgotten password mails a link to the reset page, and says what the engine says of it', function () {
+        $notice = ['code' => 'mail-sent-if-known', 'params' => [], 'detail' => 'If an avatar has this name or email, a link is on its way.'];
+        $said = forms([[202, ['meta' => ['message' => $notice['detail'], 'notice' => $notice]]]], $log)->forgot(['login' => 'ada@example.org']);
+        $older = forms([[202, ['meta' => ['message' => 'sent']]]])->forgot(['login' => 'ada@example.org']);
 
-        expect($log[0]['body']['data']['attributes'])->toBe(['email' => 'ada@example.org', 'link' => 'https://site.example.org/reset?token={token}']);
+        expect($log[0]['body']['data']['attributes'])->toBe(['email' => 'ada@example.org', 'link' => 'https://site.example.org/reset?token={token}'])
+            ->and($said)->toBe($notice)
+            ->and($older)->toBeNull();
+    });
+
+    test('a new confirmation link is mailed, and says what the engine says of it; on a test site, the link', function () {
+        $notice = ['code' => 'mail-sent', 'params' => [], 'detail' => 'The mail is sent.'];
+
+        expect(forms([[202, ['meta' => ['message' => $notice['detail'], 'notice' => $notice]]]])->resendConfirmation('Ada Love'))->toBe(['link' => null, 'notice' => $notice])
+            ->and(forms([[200, ['data' => [['attributes' => ['link' => 'https://site.example.org/confirm?token=t']]]]]], config: ['send_mail' => false])->resendConfirmation('Ada Love'))
+            ->toBe(['link' => 'https://site.example.org/confirm?token=t', 'notice' => null]);
     });
 
     test('on a test site, the forgotten password mails nothing and shows nothing', function () {

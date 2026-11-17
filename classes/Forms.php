@@ -23,7 +23,7 @@ final class Forms
         'name-taken', 'password-required', 'password-invalid', 'email-invalid', 'email-required', 'model-unknown', 'link-invalid',
         'field-unknown', 'token-refused', 'no-confirmation-pending', 'mail-failed', 'role-unknown', 'role-level-conflict', 'filter-unknown',
         'filter-value-unknown', 'sort-unknown', 'field-read-only', 'flag-unknown', 'owner-unknown', 'estate-shared',
-        'config-not-writable',
+        'config-not-writable', 'instance-user-required',
     ];
 
     /**
@@ -79,32 +79,37 @@ final class Forms
     /**
      * Mail a new confirmation link to an avatar that waits for it (by name).
      *
-     * @return ?string the link, when it is not mailed (test site)
+     * @return array{link: ?string, notice: ?array<string,mixed>} the link, when it is not mailed (test site); what the engine says
+     *     it did, when it is
      */
-    public function resendConfirmation(string $name): ?string
+    public function resendConfirmation(string $name): array
     {
         $given = $this->ask(fn () => $this->engine->requestEmailConfirmation(trim($name), $this->tokenLink('confirm'), $this->sends()));
 
-        return $given['link'] ?? null;
+        return ['link' => $given['link'] ?? null, 'notice' => $given['notice'] ?? null];
     }
 
     /**
      * Mail a link to choose a new password. The answer is the same whether the name or the email is someone's or not; on a test
      * site nothing is mailed and the link is not shown (it opens the account of anyone): the API gives the token.
+     *
+     * @return ?array<string,mixed> what the engine says it did (its notice), null when it says nothing
      */
-    public function forgot(array $data): void
+    public function forgot(array $data): ?array
     {
         $login = trim((string) ($data['login'] ?? ''));
         if ($login === '') {
             throw new FormError('w4os.error_required');
         }
         try {
-            $this->engine->requestPasswordReset($login, $this->tokenLink('reset'), $this->sends());
+            return $this->engine->requestPasswordReset($login, $this->tokenLink('reset'), $this->sends());
         } catch (EngineException $e) {
             // Nobody has this name or email: said only when nothing is mailed, the visitor is not told
             if ($e->problemCode !== 'not-found') {
                 throw $this->error($e);
             }
+
+            return null;
         }
     }
 

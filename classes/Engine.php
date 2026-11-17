@@ -196,12 +196,28 @@ final class Engine
     /**
      * Mail a link to choose a new password to the avatar a name or an email is. The same answer whether it is someone's or not.
      *
+     * @return ?array<string,mixed> what the engine says it did (its notice), null when it says nothing
      * @param string $link the page that takes the token, `{token}` in it
      */
-    public function requestPasswordReset(string $login, string $link, bool $send = true): void
+    public function requestPasswordReset(string $login, string $link, bool $send = true): ?array
     {
         $key = str_contains($login, '@') ? 'email' : 'name';
-        $this->call('POST', '/password-resets', ['type' => 'password-resets', 'attributes' => [$key => trim($login), 'link' => $link] + ($send ? [] : ['send' => false])]);
+        $document = $this->call('POST', '/password-resets', ['type' => 'password-resets', 'attributes' => [$key => trim($login), 'link' => $link] + ($send ? [] : ['send' => false])]);
+
+        return self::notice($document);
+    }
+
+    /**
+     * What the engine says it did, to tell the visitor (its notice: code, params, English detail), null when it says nothing.
+     *
+     * @param array<string,mixed> $document
+     * @return ?array<string,mixed>
+     */
+    private static function notice(array $document): ?array
+    {
+        $notice = $document['meta']['notice'] ?? null;
+
+        return is_array($notice) && isset($notice['code']) ? $notice : null;
     }
 
     /** @return array<string,mixed> the avatar whose password changed */
@@ -213,13 +229,13 @@ final class Engine
     /**
      * Mail a new link to confirm its email to an avatar that waits for it.
      *
-     * @return array<string,mixed> the token given (token, link, expires) when it is not mailed
+     * @return array<string,mixed> the token given (token, link, expires) when it is not mailed, else what the engine says (notice)
      */
     public function requestEmailConfirmation(string $avatar, string $link, bool $send = true): array
     {
         $document = $this->call('POST', '/email-confirmations', ['type' => 'email-confirmations', 'attributes' => ['avatar' => $avatar, 'link' => $link] + ($send ? [] : ['send' => false])]);
 
-        return $send ? [] : (array) ($document['data'][0]['attributes'] ?? []);
+        return $send ? ['notice' => self::notice($document)] : (array) ($document['data'][0]['attributes'] ?? []);
     }
 
     /** @return array<string,mixed> the avatar, now active */
