@@ -312,7 +312,7 @@ final class Site
 
     /**
      * The levels the admin pages may open from (setting "admin_level"): the engine's user levels (OpenSimulator's: each has every
-     * right of the ones below it) above a resident's, each named by its role.
+     * right of the ones below it), each named by its role.
      *
      * @return array<int,string> level => catalog key of its role
      */
@@ -323,7 +323,7 @@ final class Site
         }
         $levels = [];
         foreach (array_keys(\OpenSim\Models\Avatar::LEVELS) as $level) {
-            $level > \OpenSim\Models\Avatar::GOD_NOT && $levels[$level] = 'w4os.'.\OpenSim\I18n\Catalog::roleKey(\OpenSim\Models\Avatar::roleOf($level));
+            $levels[$level] = 'w4os.'.\OpenSim\I18n\Catalog::roleKey(\OpenSim\Models\Avatar::roleOf($level));
         }
 
         return $levels;
@@ -332,7 +332,7 @@ final class Site
     /** The level the admin pages open from: the setting when it is one of adminLevels(), else customer service. */
     public static function adminLevel(array $config): int
     {
-        $level = (int) ($config['admin_level'] ?? 0);
+        $level = is_numeric($config['admin_level'] ?? null) ? (int) $config['admin_level'] : -1;
 
         return isset(self::adminLevels()[$level]) ? $level : \OpenSim\Models\Avatar::GOD_CUSTOMER_SERVICE;
     }
@@ -343,15 +343,9 @@ final class Site
         return $level >= self::adminLevel($config);
     }
 
-    /** Whether an avatar of this level changes what the admin pages show (an action, an edit): a god, as the engine says. */
-    public static function changesAdmin(int $level): bool
-    {
-        return Bundled::library() && \OpenSim\Models\Avatar::isGodLevel($level);
-    }
-
     /**
      * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, the admin pages from the level of the
-     * setting (`site.w4os.manage`, readsAdmin()), what they change for a god (`site.w4os.change`, changesAdmin()).
+     * setting (`site.w4os.manage`, readsAdmin()); then each page, action and field from its own level (the contract's, level()).
      *
      * @param array<string,mixed> $avatar
      */
@@ -367,7 +361,6 @@ final class Site
         $access = (array) $user->get('access', []);
         $access['site']['login'] = true;
         $access['site']['w4os']['manage'] = self::readsAdmin($level, $this->config());
-        $access['site']['w4os']['change'] = self::changesAdmin($level);
         $user->set('access', $access);
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();
@@ -415,7 +408,7 @@ final class Site
             return $this->url('account');
         }
 
-        return $this->canChange() && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
+        return $this->can('avatars') && isset($this->routes()['edit']) ? $this->url('edit').'?'.http_build_query(['avatar' => $uuid]) : null;
     }
 
     /**
@@ -460,6 +453,9 @@ final class Site
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
     public const ADMIN_PAGES = ['dashboard' => 'w4os.dashboard_title', 'manage' => 'w4os.manage_title', 'regions' => 'w4os.regions_title'];
 
+    /** The items an admin page lists: the page shows to whom the contract lets read them. */
+    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions'];
+
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its
      * `items`: label and url). None for a visitor who is not a manager.
@@ -473,7 +469,7 @@ final class Site
         }
         $items = [];
         foreach (self::ADMIN_PAGES as $type => $label) {
-            isset($this->routes()[$type]) && $items[] = ['label' => $this->translate($label), 'url' => $this->path($type, true)];
+            isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read')) && $items[] = ['label' => $this->translate($label), 'url' => $this->path($type, true)];
         }
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
@@ -489,12 +485,21 @@ final class Site
         return $this->avatar() !== null && (bool) $user->authorize('site.w4os.manage');
     }
 
-    /** Whether the visitor changes what the admin pages show (changesAdmin()). */
-    public function canChange(): bool
+    /** The user level of the visitor, as the engine gave it at sign-in; 0 for nobody. */
+    public function level(): int
     {
-        $user = $this->grav['user'] ?? null;
+        return (int) ($this->avatar()['level'] ?? 0);
+    }
 
-        return $this->isManager() && (bool) $user->authorize('site.w4os.change');
+    /**
+     * Whether the visitor, in the admin pages, may read (`read`) or change (`change`) the items of a type, as the contract says for
+     * their level (OpenApi::allows()).
+     */
+    public function can(string $type, string $what = 'change'): bool
+    {
+        $access = $this->isManager() ? ($this->openApi()->itemOf($type)[$what] ?? $this->openApi()->listOf($type)[$what] ?? null) : null;
+
+        return $access !== null && OpenApi::allows($access, $this->level());
     }
 
     /** Keep the API key typed on the settings page in user-data (not in the configuration): see onAdminSave. */

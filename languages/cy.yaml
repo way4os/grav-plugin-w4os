@@ -343,6 +343,6 @@ w4os:
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
   admin_admin_level: 'Tudalennau gweinyddu o''r lefel'
-  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn darllen y tudalennau gweinyddu; dim ond duwiau''r grid (200 ac uwch) sy''n newid yr hyn maen nhw''n ei ddangos'
+  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn mynd i mewn i''r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine'
   admin_save_accounts: 'Cadw cyfrifon Grav'
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'

@@ -48,7 +48,8 @@ final class OpenApi
             'sort' => ['default' => (string) $sort['default'], 'values' => array_values(array_map('strval', (array) $sort['values'])), 'descending' => (string) $sort['descending']],
             'search' => isset($parameters['search']) ? array_values((array) ($x['search'] ?? [])) : null,
             'filters' => isset($x['filters']) ? $this->filtersOf((array) $x['filters']) : $this->filters($parameters),
-            'actions' => array_values(array_filter((array) ($x['actions'] ?? []), fn ($action) => isset($action['name'], $action['method'], $action['path']))),
+            'actions' => $this->withAccess((array) ($x['actions'] ?? [])),
+            'read' => $this->access('GET', $this->listPath($type)),
             'pageSize' => isset($parameters['page[size]']['schema']['default']) ? (int) $parameters['page[size]']['schema']['default'] : null,
         ];
     }
@@ -63,22 +64,33 @@ final class OpenApi
     public function itemOf(string $type): ?array
     {
         $x = null;
-        foreach ((array) ($this->document['paths'] ?? []) as $path => $item) {
-            if (preg_match('#^(/grids/\{grid\})?/'.preg_quote($type, '#').'/\{id\}$#', (string) $path) === 1 && isset($item['get']['x-form'])) {
+        $path = '';
+        foreach ((array) ($this->document['paths'] ?? []) as $candidate => $item) {
+            if (preg_match('#^(/grids/\{grid\})?/'.preg_quote($type, '#').'/\{id\}$#', (string) $candidate) === 1 && isset($item['get']['x-form'])) {
                 $x = (array) $item['get']['x-form'];
+                $path = (string) $candidate;
             }
         }
         if ($x === null) {
             return null;
         }
         $groups = array_values(array_map(fn ($group) => ['name' => (string) $group['name'], 'label' => (string) ($group['label'] ?? 'group_'.$group['name'])], array_filter((array) ($x['groups'] ?? []), fn ($group) => isset($group['name']))));
-        $fields = array_values(array_map(fn ($field) => $field + ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''] + $this->valuesOf($field), array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
+        // Who changes the item (its PATCH), and each field: its own level, else the one of the change
+        $change = isset($this->document['paths'][$path]['patch']) ? $this->access('PATCH', $path) : null;
+        $fields = array_values(array_map(function ($field) use ($groups, $change) {
+            $field += ['label' => 'field_'.$field['name'], 'type' => 'text', 'group' => $groups[0]['name'] ?? ''] + $this->valuesOf($field);
+            empty($field['readOnly']) && $change !== null && ! isset($field['access']['level']) && $field['access']['level'] = $change['level'];
+
+            return $field;
+        }, array_filter((array) ($x['fields'] ?? []), fn ($field) => isset($field['name']))));
 
         return [
             'type' => $type,
             'groups' => $groups,
             'fields' => $fields,
-            'actions' => array_values(array_filter((array) ($x['actions'] ?? []), fn ($action) => isset($action['name'], $action['method'], $action['path']))),
+            'actions' => $this->withAccess((array) ($x['actions'] ?? [])),
+            'read' => $this->access('GET', $path),
+            'change' => $change,
         ];
     }
 
@@ -138,6 +150,62 @@ final class OpenApi
         return isset($field['values']) || ! isset($field['options'])
             ? []
             : ['values' => array_map(fn ($value, $label) => ['value' => (string) $value, 'label' => (string) $label], array_keys((array) $field['options']), array_values((array) $field['options']))];
+    }
+
+    /**
+     * Whether a person of this level may do an operation (its access, access()): anybody when it needs no level, on their own
+     * account when it allows it (`self`), else from its level. As the engine's Api\Access::allows().
+     *
+     * @param array{level: ?int, self: bool} $access
+     */
+    public static function allows(array $access, int $level, bool $own = false): bool
+    {
+        return $access['level'] === null || ($own && $access['self']) || $level >= $access['level'];
+    }
+
+    /**
+     * Who may do an operation, as the contract says (`x-access`: the lowest level on what is not one's own, whether one may on
+     * one's own account); an engine that does not say it yet: its rule (Api\Access::of()).
+     *
+     * @return array{level: ?int, self: bool}
+     */
+    public function access(string $method, string $path): array
+    {
+        $operation = (array) ($this->document['paths'][$path][strtolower($method)] ?? []);
+        if (isset($operation['x-access']) && is_array($operation['x-access'])) {
+            $level = $operation['x-access']['level'] ?? null;
+
+            return ['level' => $level === null ? null : (int) $level, 'self' => (bool) ($operation['x-access']['self'] ?? false)];
+        }
+
+        return Bundled::library() && class_exists(\OpenSim\Api\Access::class)
+            ? \OpenSim\Api\Access::of($method, $path, (string) ($operation['operationId'] ?? ''))
+            : ['level' => PHP_INT_MAX, 'self' => false];
+    }
+
+    /**
+     * The actions of a list or an item, each with who may do it (`access`).
+     *
+     * @param array<mixed> $actions
+     * @return list<array<string,mixed>>
+     */
+    private function withAccess(array $actions): array
+    {
+        $actions = array_values(array_filter($actions, fn ($action) => isset($action['name'], $action['method'], $action['path'])));
+
+        return array_map(fn ($action) => $action + ['access' => $this->access((string) $action['method'], (string) $action['path'])], $actions);
+    }
+
+    /** The path of the list of a type in the document. */
+    private function listPath(string $type): string
+    {
+        foreach (array_keys((array) ($this->document['paths'] ?? [])) as $path) {
+            if (preg_match('#^(/grids/\{grid\})?/'.preg_quote($type, '#').'$#', (string) $path) === 1) {
+                return (string) $path;
+            }
+        }
+
+        return '';
     }
 
     /** @return ?array<string,mixed> the list operation of a type: `GET` on `/grids/{grid}/<type>` or `/<type>` */

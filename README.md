@@ -15,7 +15,7 @@ It is one piece of the w4os family:
 - **Sign in** with the name of the avatar (`First Last`) or its email, on the page of the Login plugin, titled "Login" in the language of the page. The accounts of the site (its administrators) keep working. Under its button, "Register – Lost Password" (register while registration is open): `{% include 'w4os/login-links.html.twig' %}` after the form, in a theme's `templates/login.html.twig`, with `route_forgot: false` in the settings of the Login plugin (its own button goes away; this plugin's page answers at `/forgot_password`).
 - **Forgotten password**: a link by mail to choose a new one.
 - **My avatar**: the profile of the avatar, the text of its profile (about, wants, skills, languages, real life, web page), its password, and its email: a new address changes once the link mailed to it is clicked.
-- **Avatars of the grid**, for its managers (read from the user level of the setting `admin_level`, customer service 100 by default; changed by the gods of the grid, 200 and over): search, see each one's status (active, disabled, waiting for the confirmation of its email), and from its actions menu enable or disable it, or mail it a password link.
+- **Avatars of the grid**, for its managers (see [Who manages the grid on the site](#who-manages-the-grid-on-the-site)): search, see each one's status (active, disabled, waiting for the confirmation of its email), and from its actions menu enable or disable it, or mail it a password link.
 - **Blocks of the helpers** in any page, as a shortcode or in a template: grid info, grid status (in the language of the site, numbers and area as the language writes them), message of the day, search, popular places, destination guide, directory, profile.
 - **Menu of the visitor** for the top bar of a theme: the avatar signed in (my avatar, sign out), else sign in, register (while registration is open), lost password: `{% include 'w4os/user-menu.html.twig' %}`.
 - **Search** in the top bar: `{% include 'w4os/search-link.html.twig' %}`, to the search page of the site.
@@ -50,6 +50,14 @@ What shows only while registration is open (setting `register.enabled`), such as
 ```
 
 Inside a list item, the shortcode goes after the number: the item left empty is hidden, and the list is numbered without it.
+
+## Who manages the grid on the site
+
+The setting **Admin pages from level** (`admin_level`) is the lowest user level of the grid that enters the admin pages of the site: one of OpenSimulator's levels (0 resident, 1 god-like, 100 customer service, 150 liaison, 200 god, 250 maintenance), customer service by default. Inside, each page, action and field asks its own level, the one the engine gives it, and the visitor's own level decides, as in the world: a level has every right of the ones below it, never one above.
+
+So reading the lists and caring for the accounts (an avatar's details, its email, its password, enabling or disabling it) needs customer service (100); changing an avatar's role or level, a region, an instance needs a god (200).
+
+For example, on a grid where Gudule is a god (200) and Suzi a liaison (150), Suzi has nearly all the gods' rights in the world. With the setting at 200, only Gudule manages the grid from the website; Suzi keeps her rights in the world. With it at 150, Suzi also manages the grid from the website, as far as her level 150 allows: she sees the lists and cares for the accounts, but she does not change a role or a region.
 
 ## Standalone
 

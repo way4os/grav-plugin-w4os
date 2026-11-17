@@ -14,7 +14,7 @@ w4os:
   admin_db_password: 'Databasewachtwoord'
   admin_db_password_help: 'Buiten de configuratie en git gehouden'
   admin_admin_level: 'Beheerpagina''s vanaf niveau'
-  admin_admin_level_help: 'De avatars vanaf dit gebruikersniveau bekijken de beheerpagina''s; alleen de goden van de grid (200 en hoger) wijzigen wat ze tonen'
+  admin_admin_level_help: 'De avatars vanaf dit gebruikersniveau komen in de beheerpagina''s; elke pagina, actie en elk veld vraagt dan zijn eigen niveau, dat van de engine'
   admin_serve_helpers: 'De helpers aanbieden'
   admin_serve_helpers_help: 'Wat viewers en simulators vragen (welkom, zoeken, profielen, economie, offline berichten) op de adressen van de grid, die die van deze site moeten zijn. Uit: de grid houdt zijn eigen helpers'
   admin_opensim_conf: 'OpenSim-installatie van deze server'

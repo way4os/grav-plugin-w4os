@@ -46,14 +46,21 @@ final class Items
     }
 
     /**
-     * Whether a field is changed by one of the roles: not read only, and `access.edit` (the managers without it).
+     * Whether a field is changed by the visitor: not read only, and one of its roles is in `access.edit` (the managers without it);
+     * a manager from the level of the field (`access.level`, the contract's), the item's own visitor or owner without one.
      *
      * @param array<string,mixed> $field
      * @param list<string> $roles
+     * @param int $level the user level of the visitor
      */
-    public static function editable(array $field, array $roles): bool
+    public static function editable(array $field, array $roles, int $level = 0): bool
     {
-        return empty($field['readOnly']) && array_intersect((array) ($field['access']['edit'] ?? ['manager']), $roles) !== [];
+        $by = array_intersect((array) ($field['access']['edit'] ?? ['manager']), $roles);
+        if (! empty($field['readOnly']) || $by === []) {
+            return false;
+        }
+
+        return array_diff($by, ['manager']) !== [] || $level >= (int) ($field['access']['level'] ?? PHP_INT_MAX);
     }
 
     /**
@@ -81,10 +88,11 @@ final class Items
      * @param array<string,mixed> $form
      * @param array<string,mixed> $item
      * @param list<string> $roles
+     * @param int $level the user level of the visitor
      */
-    public static function changeable(array $form, array $item, array $roles): bool
+    public static function changeable(array $form, array $item, array $roles, int $level = 0): bool
     {
-        return array_filter($form['fields'], fn ($field) => self::visible($field, $item, $roles) && self::editable($field, $roles)) !== [];
+        return array_filter($form['fields'], fn ($field) => self::visible($field, $item, $roles) && self::editable($field, $roles, $level)) !== [];
     }
 
     /**
@@ -96,11 +104,11 @@ final class Items
      * @param list<string> $roles
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(array $form, array $item, array $roles): array
+    public static function fields(array $form, array $item, array $roles, int $level = 0): array
     {
         $groups = [];
         foreach ($form['fields'] as $field) {
-            if (self::visible($field, $item, $roles) && self::editable($field, $roles)) {
+            if (self::visible($field, $item, $roles) && self::editable($field, $roles, $level)) {
                 $groups[$field['group']][$field['name']] = self::input($field);
             }
         }
@@ -128,11 +136,11 @@ final class Items
      * @param list<string> $roles
      * @return array<string,mixed>
      */
-    public static function changes(array $form, array $item, array $posted, array $roles): array
+    public static function changes(array $form, array $item, array $posted, array $roles, int $level = 0): array
     {
         $changes = [];
         foreach ($form['fields'] as $field) {
-            if (! self::visible($field, $item, $roles) || ! self::editable($field, $roles)) {
+            if (! self::visible($field, $item, $roles) || ! self::editable($field, $roles, $level)) {
                 continue;
             }
             $name = $field['name'];
@@ -163,11 +171,11 @@ final class Items
      * @param list<string> $roles
      * @return array<string,mixed>
      */
-    public static function values(array $form, array $item, array $roles): array
+    public static function values(array $form, array $item, array $roles, int $level = 0): array
     {
         $values = ['id' => Lists::id($item)];
         foreach ($form['fields'] as $field) {
-            if (self::editable($field, $roles) && ($field['type'] ?? '') !== 'secret' && empty($field['writeOnly'])) {
+            if (self::editable($field, $roles, $level) && ($field['type'] ?? '') !== 'secret' && empty($field['writeOnly'])) {
                 $value = $item[$field['name']] ?? null;
                 $values[$field['name']] = match ($field['type']) {
                     'boolean' => (bool) $value,
@@ -197,6 +205,39 @@ final class Items
             }
             isset($engine[$name]) && $fields[$name]['options'] = self::options($engine[$name]);
             isset($field['fields']) && $fields[$name]['fields'] = self::withOptions((array) $field['fields'], $form);
+        }
+
+        return $fields;
+    }
+
+    /**
+     * The fields of an item the visitor may not change (editable()), whatever they see: what a form of the site leaves out, and what
+     * it never sends for them.
+     *
+     * @param array<string,mixed> $form the item's description (OpenApi::itemOf())
+     * @param list<string> $roles
+     * @return list<string>
+     */
+    public static function locked(array $form, array $roles, int $level): array
+    {
+        return array_values(array_map(fn ($field) => (string) $field['name'], array_filter($form['fields'], fn ($field) => ! self::editable($field, $roles, $level))));
+    }
+
+    /**
+     * The fields of a form of the site (Grav's, nested in tabs and fieldsets) without some of them, by name.
+     *
+     * @param array<string,mixed> $fields
+     * @param list<string> $names
+     * @return array<string,mixed>
+     */
+    public static function without(array $fields, array $names): array
+    {
+        foreach ($fields as $name => $field) {
+            if (in_array((string) $name, $names, true)) {
+                unset($fields[$name]);
+            } elseif (is_array($field) && isset($field['fields'])) {
+                $fields[$name]['fields'] = self::without((array) $field['fields'], $names);
+            }
         }
 
         return $fields;

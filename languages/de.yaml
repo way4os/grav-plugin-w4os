@@ -343,6 +343,6 @@ w4os:
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
   admin_admin_level: 'Admin-Seiten ab Stufe'
-  admin_admin_level_help: 'Die Avatare ab dieser Benutzerstufe sehen die Admin-Seiten; nur die Götter des Grids (ab 200) ändern, was sie zeigen'
+  admin_admin_level_help: 'Die Avatare ab dieser Benutzerstufe betreten die Admin-Seiten; jede Seite, Aktion und jedes Feld verlangt dann seine eigene Stufe, die der Engine'
   admin_save_accounts: 'Grav-Konten behalten'
   admin_save_accounts_help: 'Für jeden Avatar, der sich anmeldet, ein Grav-Konto (user/accounts) behalten; mit dem API-Plugin immer an'

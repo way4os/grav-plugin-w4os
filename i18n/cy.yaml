@@ -14,7 +14,7 @@ w4os:
   admin_db_password: 'Cyfrinair y gronfa ddata'
   admin_db_password_help: 'Wedi’i gadw y tu allan i’r ffurfweddiad ac i git'
   admin_admin_level: 'Tudalennau gweinyddu o''r lefel'
-  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn darllen y tudalennau gweinyddu; dim ond duwiau''r grid (200 ac uwch) sy''n newid yr hyn maen nhw''n ei ddangos'
+  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn mynd i mewn i''r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine'
   admin_serve_helpers: 'Gwasanaethu’r helpers'
   admin_serve_helpers_help: 'Yr hyn y mae’r gwylwyr a’r efelychwyr yn ei ofyn (croeso, chwilio, proffiliau, economi, negeseuon all-lein) ar gyfeiriadau’r grid, sy’n gorfod bod yn rhai’r safle hwn. I ffwrdd: mae’r grid yn cadw ei helpers ei hun'
   admin_opensim_conf: 'Gosodiad OpenSim y gweinydd hwn'

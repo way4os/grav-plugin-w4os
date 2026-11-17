@@ -104,17 +104,20 @@ final class Lists
     }
 
     /**
-     * The actions of a row: the ones whose conditions it meets. `when`: each attribute has one of the values; `requires`: each
-     * attribute has a value; `notSelf`: the row is not the avatar of whoever acts.
+     * The actions of a row: the ones whose conditions it meets and that whoever acts may do. `when`: each attribute has one of the
+     * values; `requires`: each attribute has a value; `notSelf`: the row is not the avatar of whoever acts; `access`: their level
+     * (OpenApi::allows(), on their own account when the row is theirs).
      *
      * @param array<string,mixed> $list
      * @param array<string,mixed> $item
      * @param ?string $self the UUID of the avatar of whoever acts
+     * @param ?int $level the user level of whoever acts; null: not checked
      * @return list<array<string,mixed>>
      */
-    public static function actions(array $list, array $item, ?string $self = null): array
+    public static function actions(array $list, array $item, ?string $self = null, ?int $level = null): array
     {
-        return array_values(array_filter($list['actions'], fn (array $action) => self::applies($action, $item, $self)));
+        return array_values(array_filter($list['actions'], fn (array $action) => self::applies($action, $item, $self)
+            && ($level === null || ! isset($action['access']) || OpenApi::allows($action['access'], $level, $self !== null && self::id($item) === $self))));
     }
 
     /**

@@ -3,7 +3,7 @@
 {% set data = w4os_list(page.header.w4os_list ?? {type: 'avatars'}) %}
 {# The profile of an avatar: the page the engine gives (profilePage), none when the grid has no web profile #}
 {% set links = [{key: 'action_view', attribute: 'profilePage'}] %}
-{% if w4os_route('edit') and w4os_can_change() %}{% set links = links|merge([{key: 'action_edit', url: base_url_relative ~ w4os_route('edit') ~ '?avatar={uuid}'}]) %}{% endif %}
+{% if w4os_route('edit') and w4os_can('avatars') %}{% set links = links|merge([{key: 'action_edit', url: base_url_relative ~ w4os_route('edit') ~ '?avatar={uuid}'}]) %}{% endif %}
 {% include 'w4os/list.html.twig' with {
     list: data.list, items: data.items, meta: data.meta, query: data.query, error: data.error, links: links,
     texts: {search: 'w4os.search_avatars', empty: 'w4os.no_avatars', count: 'w4os.avatars_count', title: 'w4os.manage_title'}

@@ -30,9 +30,9 @@ describe('the page of an item of the engine', function () {
 
         expect(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => true], ['manager']))->toBeTrue()
             ->and(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => false], ['manager']))->toBeFalse()
-            ->and(Items::editable($fields['enabled'], ['manager']))->toBeTrue()
+            ->and(Items::editable($fields['enabled'], ['manager'], 200))->toBeTrue()
             ->and(Items::editable($fields['enabled'], ['owner']))->toBeFalse()
-            ->and(Items::editable($fields['name'], ['manager']))->toBeFalse()
+            ->and(Items::editable($fields['name'], ['manager'], 200))->toBeFalse()
             ->and(Items::editable($avatar['about'], ['self']))->toBeTrue()
             ->and(Items::editable($avatar['role'], ['self']))->toBeFalse();
     });
@@ -42,19 +42,19 @@ describe('the page of an item of the engine', function () {
         $local = ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'local' => true, 'enabled' => true];
         $far = ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true, 'local' => false];
         $names = fn (array $groups) => array_merge(...array_map(fn ($group) => array_column($group['fields'], 'name'), $groups));
-        $fields = Items::fields($form, $local, ['manager']);
+        $fields = Items::fields($form, $local, ['manager'], 200);
 
         expect($names(Items::groups($form, $local, ['manager'])))->toContain('name', 'enabled')
             ->and($names(Items::groups($form, $far, ['manager'])))->not->toContain('enabled')
-            ->and(Items::changeable($form, $local, ['manager']))->toBeTrue()
-            ->and(Items::changeable($form, $far, ['manager']))->toBeFalse()
+            ->and(Items::changeable($form, $local, ['manager'], 200))->toBeTrue()
+            ->and(Items::changeable($form, $far, ['manager'], 200))->toBeFalse()
             ->and(Items::changeable($form, $local, ['owner']))->toBeFalse()
             ->and($fields['id'])->toBe(['type' => 'hidden'])
             ->and(json_encode($fields))->toContain('"enabled":{"type":"checkbox"', '"owner":{"type":"w4os_avatar"')->not->toContain('"name":')
-            ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager']))->toBe(['id' => 'r1', 'owner' => '', 'roles' => [], 'enabled' => true])
-            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent', 'FallbackRegion'], 'enabled' => '1'], ['manager']))
+            ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager'], 200))->toBe(['id' => 'r1', 'owner' => '', 'roles' => [], 'enabled' => true])
+            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent', 'FallbackRegion'], 'enabled' => '1'], ['manager'], 200))
             ->toBe(['roles' => ['FallbackRegion', 'Persistent']])
-            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent'], 'enabled' => '1'], ['manager']))->toBe([]);
+            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent'], 'enabled' => '1'], ['manager'], 200))->toBe([]);
     });
 
     test('a posted form changes what differs only', function () use ($api) {
@@ -62,13 +62,13 @@ describe('the page of an item of the engine', function () {
         $avatar = $api->itemOf('avatars');
         $ada = ['uuid' => 'u1', 'about' => 'Hi', 'wantsList' => ['meet', 'build'], 'role' => 'resident'];
 
-        expect(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['manager']))->toBe(['enabled' => false])
-            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], ['enabled' => '1'], ['manager']))->toBe([])
-            ->and(Items::changes($region, ['hyperlink' => false, 'local' => false, 'enabled' => null], [], ['manager']))->toBe([])
+        expect(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['manager'], 200))->toBe(['enabled' => false])
+            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], ['enabled' => '1'], ['manager'], 200))->toBe([])
+            ->and(Items::changes($region, ['hyperlink' => false, 'local' => false, 'enabled' => null], [], ['manager'], 200))->toBe([])
             ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['owner']))->toBe([])
             ->and(Items::changes($avatar, $ada, ['about' => 'Hi', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => ''], ['self']))
             ->toBe([])
-            ->and(Items::changes($avatar, $ada, ['about' => 'Hello', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => 'secret1'], ['manager']))
+            ->and(Items::changes($avatar, $ada, ['about' => 'Hello', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => 'secret1'], ['manager'], 200))
             ->toMatchArray(['about' => 'Hello', 'role' => 'god', 'password' => 'secret1']);
     });
 });

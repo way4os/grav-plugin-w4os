@@ -180,7 +180,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_can_change', fn () => $this->site()->canChange()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_can', fn (string $type, string $what = 'change') => $this->site()->can($type, $what)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
@@ -190,7 +190,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->canChange() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null) : []));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? Lists::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
@@ -263,9 +263,9 @@ class W4osPlugin extends Plugin
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (in_array($type, ['dashboard', 'manage', 'edit', 'regions', 'region'], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
-        } elseif ($type === 'edit' && ! $this->site()->canChange()) {
-            // The admin pages are read from the level of the setting, what they change is the gods'
-            $this->grav->redirectLangSafe($routes['manage'] ?? $routes['account']);
+        } elseif (isset(Site::ADMIN_TYPES[$type]) && ! $this->site()->can(Site::ADMIN_TYPES[$type], $type === 'edit' ? 'change' : 'read')) {
+            // The admin pages open from the level of the setting; each one then from the level the contract gives it
+            $this->grav->redirectLangSafe($type === 'edit' && isset($routes['manage']) ? $routes['manage'] : $routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
         } elseif ($page[0] === 'search') {
@@ -302,8 +302,13 @@ class W4osPlugin extends Plugin
         if ($avatar === null) {
             return;
         }
-        // The choices of the form (roles, wants, skills) as the engine gives them
-        ($described = $this->site()->openApi()->itemOf('avatars')) === null || $form->setFields(Items::withOptions((array) $form->get('fields'), $described));
+        // The choices of the form (roles, wants, skills) as the engine gives them; without the fields the visitor's level may not
+        // change (an avatar's role below a god)
+        $described = $this->site()->openApi()->itemOf('avatars');
+        $described === null || $form->setFields(Items::without(
+            Items::withOptions((array) $form->get('fields'), $described),
+            $form->getName() === 'w4os-edit' ? Items::locked($described, ['manager'], $this->site()->level()) : [],
+        ));
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
         }
@@ -392,16 +397,18 @@ class W4osPlugin extends Plugin
                     $this->done('w4os.password_saved', $routes['account']);
                     // no break
                 case 'edit':
-                    $this->site()->canChange() || throw new FormError('w4os.error_forbidden');
+                    $this->site()->can('avatars') || throw new FormError('w4os.error_forbidden');
                     $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
-                    $forms->edit($edited, $data);
+                    // Never what the visitor's level may not change, whatever is posted
+                    $described = $site->openApi()->itemOf('avatars');
+                    $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(Items::locked($described, ['manager'], $site->level()))));
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
                     // no break
                 case 'item':
                     $page = $this->item();
                     $page['item'] === null && throw new FormError('w4os.error_not_found');
-                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['changing']);
+                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles'], $this->site()->level());
                     $id = Lists::id($page['item']);
                     try {
                         $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes]);
@@ -480,17 +487,12 @@ class W4osPlugin extends Plugin
             return;
         }
         $type = (string) ($options['type'] ?? '');
-        if (! $this->site()->canChange()) {
-            $this->grav['messages']->add($this->site()->translate('w4os.error_forbidden'), 'error');
-
-            return;
-        }
         // The engine's description of the list, or of the item (the same actions)
         $described = $item ? $this->site()->openApi()->itemOf($type) : $this->site()->openApi()->listOf($type);
         $name = (string) ($post['action'] ?? '');
         try {
             $row = $described === null ? [] : $this->site()->engine()->item($type, (string) ($post['id'] ?? ''));
-            $action = array_column($described === null ? [] : Lists::actions($described, $row, $this->site()->avatar()['uuid'] ?? null), null, 'name')[$name] ?? null;
+            $action = array_column($described === null ? [] : Lists::actions($described, $row, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()), null, 'name')[$name] ?? null;
             $action === null && throw new FormError('w4os.error_invalid_request');
             // The page of the site that takes the token of a mail the action sends (`link`)
             [$method, $path, $data] = Lists::request($action, $row, isset($action['link']) ? $this->site()->forms()->tokenAttributes((string) $action['link']) : []);
@@ -695,7 +697,7 @@ class W4osPlugin extends Plugin
         if ($page === null) {
             $options = (array) ($this->grav['page']->header()->w4os_item ?? []);
             $type = (string) ($options['type'] ?? '');
-            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'changing' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
+            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
             $id = trim((string) ($uri->post('data.id') ?: $uri->post('id') ?: $uri->query('id')));
             try {
@@ -704,12 +706,10 @@ class W4osPlugin extends Plugin
                 $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
             }
             if ($page['item'] !== null) {
-                // Who the visitor is to the item: a manager to read it from the level of the setting, to change it as a god
-                $self = $this->site()->avatar()['uuid'] ?? null;
-                $page['roles'] = Items::roles($page['item'], $self, $this->site()->isManager());
-                $page['changing'] = Items::roles($page['item'], $self, $this->site()->canChange());
+                $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
                 $page['groups'] = Items::groups($page['form'], $page['item'], $page['roles']);
-                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['changing']);
+                // What the visitor changes: the fields of its level (the contract's)
+                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['roles'], $this->site()->level());
                 // The page shows the item; its form (&edit=1, or posted) the fields the visitor changes
                 $page['edit'] = $page['changeable'] && ($uri->query('edit') !== null || $uri->post('__form-name__') === 'w4os-item');
             }
@@ -725,8 +725,8 @@ class W4osPlugin extends Plugin
         if ($page['form'] === null || $page['item'] === null) {
             return;
         }
-        $form->setFields(Items::fields($page['form'], $page['item'], $page['changing']));
-        foreach (Items::values($page['form'], $page['item'], $page['changing']) as $key => $value) {
+        $form->setFields(Items::fields($page['form'], $page['item'], $page['roles'], $this->site()->level()));
+        foreach (Items::values($page['form'], $page['item'], $page['roles'], $this->site()->level()) as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
         // The button next to Save leads back to the page of the item
@@ -783,7 +783,7 @@ class W4osPlugin extends Plugin
             $uri = $this->grav['uri'];
             $uuid = trim((string) ($uri->post('data.avatar') ?: $uri->query('avatar')));
             try {
-                $edited = $uuid !== '' && $this->site()->canChange() ? $this->site()->forms()->avatar($uuid) : null;
+                $edited = $uuid !== '' && $this->site()->can('avatars') ? $this->site()->forms()->avatar($uuid) : null;
             } catch (FormError) {
                 $edited = null;
             }
