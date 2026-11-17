@@ -33,7 +33,7 @@
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
     {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar.profilePage ?? null %}<div class="w4os-who"><img class="w4os-thumb w4os-thumb-person" src="{{ w4os_picture(avatar.profileImage ?? null, 'person')|e('html_attr') }}" alt="" width="32" height="32"><span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
     {%- elseif type == 'indicators' -%}
-        {# Its indicators: an icon by the state of each value (its tone, its label as its title), none for a value no state lists;
+        {# Its indicators: an icon by the state of each value (the state's own icon, else the indicator's; its tone, its label as its title), none for a value no state lists;
            the action of the list the row meets among the indicator's is the button of the icon, with its confirmation (ask). The label
            of a state says it all (`Stopped`, `OpenSim.ini`) #}
         {% set allowed = {} %}
@@ -48,8 +48,8 @@
                 {% set text = ('w4os.' ~ state.label)|t %}
                 {% set action = null %}
                 {% for name in indicator.actions ?? [] %}{% if action is null and allowed[name] is defined %}{% set action = allowed[name] %}{% endif %}{% endfor %}
-                {% if action %}<form method="post" class="w4os-indicator-form">{{ nonce_field('w4os-list')|raw }}<input type="hidden" name="id" value="{{ (item.uuid ?? item.id ?? '')|e('html_attr') }}"><button name="action" value="{{ action.name|e('html_attr') }}"{% if action.ask is defined %} data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)"{% endif %} class="w4os-indicator w4os-tone-{{ state.tone|e('html_attr') }}" title="{{ text|e('html_attr') }}"><i class="{{ w4os_icon(indicator.icon)|e('html_attr') }}" aria-hidden="true"></i><span class="sr-only visually-hidden">{{ text }} ({{ ('w4os.' ~ action.label)|t }})</span></button></form>
-                {%- else -%}<span class="w4os-indicator w4os-tone-{{ state.tone|e('html_attr') }}" title="{{ text|e('html_attr') }}"><i class="{{ w4os_icon(indicator.icon)|e('html_attr') }}" aria-hidden="true"></i><span class="sr-only visually-hidden">{{ text }}</span></span>{% endif %}
+                {% if action %}<form method="post" class="w4os-indicator-form">{{ nonce_field('w4os-list')|raw }}<input type="hidden" name="id" value="{{ (item.uuid ?? item.id ?? '')|e('html_attr') }}"><button name="action" value="{{ action.name|e('html_attr') }}"{% if action.ask is defined %} data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)"{% endif %} class="w4os-indicator w4os-tone-{{ state.tone|e('html_attr') }}" title="{{ text|e('html_attr') }}"><i class="{{ w4os_icon(state.icon ?? indicator.icon)|e('html_attr') }}" aria-hidden="true"></i><span class="sr-only visually-hidden">{{ text }} ({{ ('w4os.' ~ action.label)|t }})</span></button></form>
+                {%- else -%}<span class="w4os-indicator w4os-tone-{{ state.tone|e('html_attr') }}" title="{{ text|e('html_attr') }}"><i class="{{ w4os_icon(state.icon ?? indicator.icon)|e('html_attr') }}" aria-hidden="true"></i><span class="sr-only visually-hidden">{{ text }}</span></span>{% endif %}
             {% endif %}
         {%- endfor -%}
         </span>

@@ -1,12 +1,12 @@
 {# The parts of the page of an item in the admin (Tabler): its header, its tabs, its details. #}
 
 {# The header (Tabler's page header): the link back to its list, its picture and its name as its list shows them (its first
-   column), its state as badges (the indicators of its list: the label of each state, in its tone), its actions at the right:
+   column), its state as badges (the indicators of its list: the icon and the label of each state, in its tone: green, grey, red), its actions at the right:
    the links given (`links`: url, label, id), then the engine's actions that apply to it, the ones it asks to confirm last, marked #}
 {% macro header(item, listed, back = null, actions = [], links = []) %}
     {% set first = listed.columns|first %}
     {% set picture = first.picture ?? null %}
-    {% set tones = {ok: 'green', neutral: 'azure', off: 'secondary', failed: 'red'} %}
+    {% set tones = {ok: 'green', neutral: 'secondary', off: 'secondary', failed: 'red'} %}
     {% set id = item.uuid ?? item.id ?? '' %}
     <div class="page-header d-print-none w4os-item-header">
         <div class="container-fluid">
@@ -26,7 +26,7 @@
                             {% for part in indicator.name|split('.') %}{% set v = v is iterable ? (attribute(v, part) ?? null) : null %}{% endfor %}
                             {% set state = null %}
                             {% for known in indicator.states ?? [] %}{% if state is null and known.value is same as(v) %}{% set state = known %}{% endif %}{% endfor %}
-                            {% if state %}<span class="badge bg-{{ tones[state.tone] ?? 'secondary' }}-lt"><i class="{{ w4os_icon(indicator.icon)|e('html_attr') }} me-1" aria-hidden="true"></i>{{ ('w4os.' ~ state.label)|t }}</span>{% endif %}
+                            {% if state %}<span class="badge bg-{{ tones[state.tone] ?? 'secondary' }}-lt"><i class="{{ w4os_icon(state.icon ?? indicator.icon)|e('html_attr') }} me-1" aria-hidden="true"></i>{{ ('w4os.' ~ state.label)|t }}</span>{% endif %}
                         {% endfor %}
                     {% endfor %}
                     </div>

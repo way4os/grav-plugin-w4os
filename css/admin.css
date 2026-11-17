@@ -4,10 +4,9 @@
 @media (min-width: 1200px) { :root { --tblr-body-font-size: 1rem; } }
 .w4os-admin-logo { height: 2rem; width: auto; margin-right: .5rem; }
 .w4os-admin .navbar-brand { white-space: normal; }
-/* The tones of the indicators, in the colors of Tabler */
+/* The tones of the indicators in three colors of Tabler: green when good, grey when off as it should be, red on an error */
 .w4os-admin .w4os-tone-ok { color: var(--tblr-success); }
-.w4os-admin .w4os-tone-neutral { color: var(--tblr-secondary); }
-.w4os-admin .w4os-tone-off { color: var(--tblr-gray-400, var(--tblr-secondary)); }
+.w4os-admin .w4os-tone-neutral, .w4os-admin .w4os-tone-off { color: var(--tblr-secondary); }
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
 /* The lists: the search as wide as it reads, the filters at their width on its line, else together on the next one; the grey line of a row under its name */

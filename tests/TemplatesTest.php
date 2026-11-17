@@ -89,4 +89,18 @@ describe('templates', function () {
             ->and($menu)->toContain('value="restart"')
             ->and($menu)->not->toContain('value="stop"', 'value="disable"');
     });
+    test('an indicator shows the icon of its state when the state has one, its own else', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti-$icon"));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => []));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $column = ['name' => 'status', 'type' => 'indicators', 'indicators' => [['name' => 'running', 'label' => 'running', 'icon' => 'run', 'states' => [
+            ['value' => true, 'label' => 'state_running', 'tone' => 'ok', 'icon' => 'pause'],
+            ['value' => false, 'label' => 'state_stopped', 'tone' => 'off'],
+        ]]]];
+        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
+
+        expect($cell->render(['column' => $column, 'item' => ['running' => true]]))->toContain('ti-pause', 'w4os-tone-ok')->not->toContain('ti-run')
+            ->and($cell->render(['column' => $column, 'item' => ['running' => false]]))->toContain('ti-run', 'w4os-tone-off');
+    });
 });
