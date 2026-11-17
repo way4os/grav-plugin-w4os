@@ -13,9 +13,12 @@
 /* The lists: the search as wide as it reads, the filters at their natural width, the grey line of a row under its name */
 .w4os-admin .w4os-filters .w4os-search { flex: none; width: 100%; max-width: 32rem; }
 .w4os-admin .w4os-filter-fields .ts-wrapper, .w4os-admin .w4os-filter-fields > select, .w4os-admin .w4os-filter-fields > input { width: auto; flex: 0 1 12rem; min-width: 10rem; }
-/* A row: its name larger than its details */
-.w4os-admin .w4os-row-link { font-size: 1.0625em; font-weight: 600; }
-.w4os-admin .w4os-subtitle { font-size: .875em; margin-top: .125rem; white-space: normal; }
+/* A row: at the size of the page, about 56 px high (more with its grey line), its name larger than its details */
+.w4os-admin .w4os-list-card .table { font-size: 1em; }
+.w4os-admin .w4os-list-card .table > tbody > tr > td { padding-block: .875rem; }
+.w4os-admin .w4os-list-card .table > tbody > tr > td:first-child { font-size: 1.0625em; font-weight: 600; }
+.w4os-admin .w4os-list-card .table > tbody > tr > td:first-child .w4os-subtitle { font-weight: 400; }
+.w4os-admin .w4os-subtitle { font-size: .8125em; margin-top: .125rem; white-space: normal; }
 .w4os-admin .w4os-list-card .table td { white-space: normal; }
 /* The status icons of a row on one line on a wide screen, as many lines as they need on a narrow one */
 @media (min-width: 1200px) { .w4os-admin .w4os-indicators { flex-wrap: nowrap; } }
