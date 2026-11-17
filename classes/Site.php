@@ -383,6 +383,20 @@ final class Site
         return $level >= self::adminLevel($config);
     }
 
+    /** The refusals of the engine at a sign-in that end it: no other account of the site signs in with the avatar's name. */
+    public const REFUSED = ['w4os.error_account_disabled', 'w4os.error_account_banned', 'w4os.error_email_unconfirmed'];
+
+    /**
+     * Whether a session that comes back by its remember-me token goes on, for the avatar as the engine has it now: only an active
+     * one; a banned, disabled or pending avatar, or one the engine no longer has (null), is refused.
+     *
+     * @param ?array<string,mixed> $avatar
+     */
+    public static function resumes(?array $avatar): bool
+    {
+        return $avatar !== null && ($avatar['status'] ?? null) === 'active';
+    }
+
     /**
      * The visitor as a Grav user, once the engine signed the avatar in. Its access: the site, the admin pages from the level of the
      * setting (`site.w4os.manage`, readsAdmin()); then each page, action and field from its own level (the contract's, level()).

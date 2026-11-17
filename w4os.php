@@ -50,6 +50,8 @@ class W4osPlugin extends Plugin
             'onPluginsInitialized' => ['onPluginsInitialized', 0],
             // Before the accounts of the site (priority 0), as the LDAP plugin of the Login plugin does
             'onUserLoginAuthenticate' => ['onUserLoginAuthenticate', 1000],
+            // Before the Login plugin's own authorization (priority 0): a session back by its remember-me token
+            'onUserLoginAuthorize' => ['onUserLoginAuthorize', 1000],
             'onAdminSave' => ['onAdminSave', 0],
         ];
     }
@@ -133,7 +135,7 @@ class W4osPlugin extends Plugin
             ), 'error');
             $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
             // The avatar exists and is refused: no other account signs in with its name
-            if (in_array($e->key, ['w4os.error_account_disabled', 'w4os.error_email_unconfirmed'], true)) {
+            if (in_array($e->key, Site::REFUSED, true)) {
                 $event->setStatus(UserLoginEvent::AUTHENTICATION_FAILURE);
                 $event->stopPropagation();
             }
@@ -149,6 +151,39 @@ class W4osPlugin extends Plugin
         $onLoginPage = $this->grav['uri']->path() === '/'.trim((string) $this->grav['config']->get('plugins.login.route', '/login'), '/');
         $event->setRedirect(Site::landing($asked, $onLoginPage, $session->redirect_after_login ?? null, $this->site()->profilePage((string) $avatar['name'])));
         $event->stopPropagation();
+    }
+
+    /**
+     * A session that comes back by its remember-me token (the Login plugin, `remember_me_login`): the avatar as the engine has it
+     * now, its level and its access with it (the admin pages, each action). A banned, disabled or deleted avatar is refused and its
+     * tokens dropped; an engine that cannot be asked refuses this time and keeps them.
+     */
+    public function onUserLoginAuthorize(UserLoginEvent $event): void
+    {
+        $user = $event->getUser();
+        $uuid = (string) (((array) $user->get('w4os', []))['uuid'] ?? '');
+        if (! $event->getOption('remember_me_login') || $uuid === '') {
+            return;
+        }
+        $gone = false;
+        try {
+            $avatar = $this->site()->forms()->avatar($uuid);
+        } catch (FormError $e) {
+            $avatar = null;
+            $gone = $e->key === 'w4os.error_not_found';
+        }
+        if (! Site::resumes($avatar)) {
+            if ($avatar !== null || $gone) {
+                $remember = $this->grav['login']->rememberMe();
+                $remember->clearCookie();
+                $remember->getStorage()->cleanAllTriplets((string) $user->username);
+            }
+            $event->setStatus($event::AUTHORIZATION_DENIED);
+            $event->stopPropagation();
+
+            return;
+        }
+        $event->setUser($this->site()->user($avatar));
     }
 
     /** The API key and the password of the database typed on the settings page are kept out of the configuration (and of git). */
