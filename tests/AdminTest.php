@@ -51,3 +51,18 @@ describe('admin', function () {
             ->and($html)->not->toContain('partials/base');
     });
 });
+
+describe('sign-in', function () {
+    test('lands on the avatar\'s own profile, unless a page asked for the sign-in', function () {
+        $profile = 'https://site.example.org/fr/profile/Ada.Love';
+
+        // From the sign-in page: the profile, whatever page the Login plugin kept on the way (its after_login route, the last page seen)
+        expect(Site::landing(null, true, '/account', $profile))->toBe($profile)
+            ->and(Site::landing(null, true, null, $profile))->toBe($profile)
+            // A page of the plugin that sent the visitor to sign in: back there
+            ->and(Site::landing('/account/regions', true, '/account', $profile))->toBe('/account/regions')
+            // A protected page of the site that showed the sign-in form itself: stays there
+            ->and(Site::landing(null, false, '/members', $profile))->toBe('/members')
+            ->and(Site::landing(null, false, null, $profile))->toBe($profile);
+    });
+});

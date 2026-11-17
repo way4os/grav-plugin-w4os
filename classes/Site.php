@@ -410,6 +410,20 @@ final class Site
     }
 
     /**
+     * Where an avatar lands once signed in: back on the page of the plugin that sent it to sign in, or on the protected page of the
+     * site that showed the sign-in form itself (the one the Login plugin kept); from the sign-in page, its own profile, whatever
+     * page the Login plugin kept on the way (its after_login route, the last page seen).
+     *
+     * @param ?string $asked the page of the plugin that sent the visitor to sign in
+     * @param bool $onLoginPage whether the visitor signed in on the sign-in page
+     * @param ?string $kept the page the Login plugin kept (session redirect_after_login)
+     */
+    public static function landing(?string $asked, bool $onLoginPage, ?string $kept, string $profile): string
+    {
+        return ($asked ?: null) ?? (! $onLoginPage && $kept ? $kept : $profile);
+    }
+
+    /**
      * Where the visitor changes a profile, when they may: their own (the account page), any for a manager (the edit page); null
      * otherwise.
      *

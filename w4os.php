@@ -141,8 +141,12 @@ class W4osPlugin extends Plugin
         }
         $event->setUser($this->site()->user($avatar));
         $event->setStatus($event::AUTHENTICATION_SUCCESS);
-        // The avatar lands on its profile, unless the sign-in was asked by a page it goes back to
-        $this->grav['session']->redirect_after_login || $event->setRedirect($this->site()->profilePage((string) $avatar['name']));
+        // The avatar lands on its profile, unless the sign-in was asked by a page it goes back to (Site::landing())
+        $session = $this->grav['session'];
+        $asked = $session->w4os_after_login ?? null;
+        unset($session->w4os_after_login);
+        $onLoginPage = $this->grav['uri']->path() === '/'.trim((string) $this->grav['config']->get('plugins.login.route', '/login'), '/');
+        $event->setRedirect(Site::landing($asked, $onLoginPage, $session->redirect_after_login ?? null, $this->site()->profilePage((string) $avatar['name'])));
         $event->stopPropagation();
     }
 
@@ -269,7 +273,8 @@ class W4osPlugin extends Plugin
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
         } elseif (in_array($type, ['account', 'dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
-            $this->grav['session']->redirect_after_login = $path;
+            // The page goes back there once signed in (Site::landing())
+            $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (in_array($type, ['dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
