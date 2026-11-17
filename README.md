@@ -103,6 +103,8 @@ The pages of the plugin are served at these routes unless the site has its own p
 | New password (the link of the mail) | `/reset-password` |
 | My avatar | `/account` |
 | Avatars of the grid (managers) | `/account/avatars` |
+| Regions of the grid (managers), and the page of each | `/account/regions`, `/account/regions/region` |
+| Simulators of the grid (managers: start, stop, restart, as their level allows) | `/account/simulators` |
 | Sign in (Login plugin) | `/login` |
 | Pictures of the grid (bundled engine) | `/grid-assets` |
 
@@ -111,4 +113,3 @@ The mails (confirmation, password) are sent by the engine: on the machine of the
 ## License
 
 AGPL-3.0-or-later, like w4os and the OpenSim engine.
-| Simulators of the grid (managers: start, stop, restart, as their level allows) | `/account/simulators` |
