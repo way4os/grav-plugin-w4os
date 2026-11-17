@@ -50,4 +50,19 @@ describe('templates', function () {
         expect($html)->toContain('<button name="action" value="stop" data-w4os-ask="&#x5B;w4os.ask_stop_instance&#x5D;" onclick="return confirm(this.dataset.w4osAsk)">')
             ->and($html)->toContain('<button name="action" value="start">');
     });
+
+    test('a column with a picture (a region\'s map) shows it as a square thumbnail by its value, the default one when there is none', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => '/pictures/'.($uuid ?? "none-$default").'.jpg'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
+        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
+        $map = ['name' => 'name', 'type' => 'text', 'picture' => 'mapImage', 'default' => 'place'];
+        $person = ['name' => 'name', 'type' => 'text', 'picture' => 'profileImage', 'default' => 'person'];
+
+        expect($cell->render(['column' => $map, 'item' => ['name' => 'Test East', 'mapImage' => 'm1']]))
+            ->toContain('<img class="w4os-thumb" src="&#x2F;pictures&#x2F;m1.jpg"', 'Test East')
+            ->and($cell->render(['column' => $map, 'item' => ['name' => 'Test North']]))->toContain('src="&#x2F;pictures&#x2F;none-place.jpg"')
+            ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love']]))->toContain('class="w4os-thumb w4os-thumb-person"', 'none-person');
+    });
 });
