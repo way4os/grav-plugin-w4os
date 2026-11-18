@@ -256,12 +256,67 @@ final class Site
     /** @return array<string,string> the route of each page of the plugin, by its type */
     public function routes(): array
     {
-        $routes = array_map(fn ($route) => '/'.trim((string) $route, '/'), (array) ($this->config()['routes'] ?? []));
+        $routes = array_map(fn ($route) => '/'.trim((string) $route, '/'), array_filter((array) ($this->config()['routes'] ?? [])));
+        $config = $this->grav['config'];
+        $reserved = array_filter([(string) $config->get('plugins.admin.route', ''), (string) $config->get('plugins.admin2.route', '')]);
+        $set = $routes['admin'] ?? self::ADMIN_ROUTE;
+        $routes = self::adminRoutes($routes, $reserved);
+        $set === $routes['admin'] || $this->grav['log']->warning("w4os: the admin route $set is under the route of Grav's admin: {$routes['admin']} instead");
         if (! ($this->config()['register']['enabled'] ?? true)) {
             unset($routes['register'], $routes['confirm']);
         }
 
         return $routes;
+    }
+
+    /** The admin route of the plugin by default, and its sections in it. */
+    public const ADMIN_ROUTE = '/w4os';
+
+    public const ADMIN_ROUTES = [
+        'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'regions' => '/regions', 'region' => '/regions/region',
+        'simulators' => '/simulators', 'settings' => '/settings',
+    ];
+
+    /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
+    public const OLD_ADMIN_ROUTES = [
+        'dashboard' => '/account/dashboard', 'manage' => '/account/avatars', 'edit' => '/account/avatars/edit', 'regions' => '/account/regions',
+        'region' => '/account/regions/region', 'simulators' => '/account/simulators', 'settings' => '/account/settings',
+    ];
+
+    /**
+     * The routes with the admin pages under the admin route of the plugin (routes.admin, /w4os), each section in it unless the
+     * site names one itself; the default route when the one set is under a route of Grav's admin (its plugins admin, admin2 take
+     * all of theirs).
+     *
+     * @param array<string,string> $routes the routes of the plugin
+     * @param list<string> $reserved the routes of Grav's admin plugins
+     * @return array<string,string>
+     */
+    public static function adminRoutes(array $routes, array $reserved): array
+    {
+        $admin = '/'.trim((string) ($routes['admin'] ?? self::ADMIN_ROUTE), '/');
+        foreach ($reserved as $route) {
+            $route = '/'.trim($route, '/');
+            if ($admin === $route || str_starts_with($admin, rtrim($route, '/').'/')) {
+                $admin = self::ADMIN_ROUTE;
+            }
+        }
+        $routes['admin'] = $admin;
+        foreach (self::ADMIN_ROUTES as $type => $section) {
+            if (! isset($routes[$type]) || $routes[$type] === (self::OLD_ADMIN_ROUTES[$type] ?? null)) {
+                $routes[$type] = $admin === '/' ? ($section ?: '/') : $admin.$section;
+            }
+        }
+
+        return $routes;
+    }
+
+    /** The new address of an admin page reached at its old one (under /account), null for any other. */
+    public static function movedRoute(string $path, array $routes): ?string
+    {
+        $type = array_search('/'.trim($path, '/'), self::OLD_ADMIN_ROUTES, true);
+
+        return $type !== false && ($routes[$type] ?? null) !== self::OLD_ADMIN_ROUTES[$type] ? $routes[$type] : null;
     }
 
     /** The absolute address of a page of the plugin, in the language of the visitor (or none: the pictures). */

@@ -92,15 +92,10 @@ routes:
   forgot: /forgot_password
   reset: /reset-password
   account: /account
-  # The managers' dashboard: the blocks of its page (pages/dashboard.md), the first entry of the admin menu (not /admin: Grav's Admin plugin)
-  dashboard: /account/dashboard
-  manage: /account/avatars
-  edit: /account/avatars/edit
-  regions: /account/regions
-  region: /account/regions/region
-  simulators: /account/simulators
-  # The settings of the site (its theme...), for the managers the engine lets change them
-  settings: /account/settings
+  # The admin pages of the grid and of the site (the dashboard there, its sections in it: /w4os/avatars, /w4os/regions,
+  # /w4os/simulators, /w4os/settings...); never under the route of Grav's admin (admin, admin2), which takes all of its own.
+  # A section can have its own route (routes.regions...)
+  admin: /w4os
   # The pages of the grid the site serves (the grid's config gives these addresses to the viewers): a block of the helpers each
   search: /search
   profile: /profile

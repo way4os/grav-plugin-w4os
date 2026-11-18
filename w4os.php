@@ -369,6 +369,11 @@ class W4osPlugin extends Plugin
 
     public function onPagesInitialized(): void
     {
+        // An admin page at its address of before (under /account): its own now, for good (301), its query kept
+        if (($moved = Site::movedRoute($this->grav['uri']->path(), $this->site()->routes())) !== null) {
+            $query = (string) ($_SERVER['QUERY_STRING'] ?? '');
+            $this->grav->redirectLangSafe($moved.($query === '' ? '' : "?$query"), 301);
+        }
         $this->site()->addMenu();
         $this->site()->addPage($this->grav['uri']->path());
         $this->loginTexts();

@@ -172,6 +172,7 @@ form:
             routes.forgot: { type: text, label: w4os.forgot_title }
             routes.reset: { type: text, label: w4os.reset_title }
             routes.account: { type: text, label: w4os.edit_profile }
+            routes.admin: { type: text, label: w4os.admin_route, help: w4os.admin_route_help }
             routes.dashboard: { type: text, label: w4os.dashboard_title }
             routes.settings: { type: text, label: w4os.admin_site_settings }
             routes.manage: { type: text, label: w4os.manage_title }

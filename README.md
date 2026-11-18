@@ -127,9 +127,11 @@ The pages of the plugin are served at these routes unless the site has its own p
 | Lost password (the link under the sign-in button leads there) | `/forgot_password` |
 | New password (the link of the mail) | `/reset-password` |
 | My avatar | `/account` |
-| Avatars of the grid (managers) | `/account/avatars` |
-| Regions of the grid (managers), and the page of each | `/account/regions`, `/account/regions/region` |
-| Simulators of the grid (managers: start, stop, restart, as their level allows) | `/account/simulators` |
+| The dashboard of the managers (`routes.admin`, never under the route of Grav's admin; the old `/account/...` addresses lead there) | `/w4os` |
+| Avatars of the grid (managers) | `/w4os/avatars` |
+| Regions of the grid (managers), and the page of each | `/w4os/regions`, `/w4os/regions/region` |
+| Simulators of the grid (managers: start, stop, restart, as their level allows) | `/w4os/simulators` |
+| Settings of the site (its theme, its logo and favicon; the managers the engine lets change them) | `/w4os/settings` |
 | Sign in (Login plugin) | `/login` |
 | Pictures of the grid (bundled engine) | `/grid-assets` |
 
