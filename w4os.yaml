@@ -99,6 +99,8 @@ routes:
   regions: /account/regions
   region: /account/regions/region
   simulators: /account/simulators
+  # The settings of the site (its theme...), for the managers the engine lets change them
+  settings: /account/settings
   # The pages of the grid the site serves (the grid's config gives these addresses to the viewers): a block of the helpers each
   search: /search
   profile: /profile

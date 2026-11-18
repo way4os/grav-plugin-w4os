@@ -1,0 +1,33 @@
+<?php
+
+use Symfony\Component\Yaml\Yaml;
+use Twig\Environment;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+use W4os\Grav\Site;
+
+describe('the settings of the site', function () {
+    test('write Grav\'s own setting in the configuration of the site, nothing else of it', function () {
+        $config = ['home' => ['alias' => '/home'], 'pages' => ['theme' => 'w4os', 'markdown' => ['extra' => true]]];
+
+        expect(Site::withSetting($config, 'pages.theme', 'mundana'))->toBe(['home' => ['alias' => '/home'], 'pages' => ['theme' => 'mundana', 'markdown' => ['extra' => true]]])
+            ->and(Site::withSetting([], 'pages.theme', 'mundana'))->toBe(['pages' => ['theme' => 'mundana']]);
+    });
+
+    test('have their page in the admin: the theme first, its sections as side tabs (Tabler\'s settings layout)', function () {
+        $header = Yaml::parse(explode('---', (string) file_get_contents(dirname(__DIR__).'/pages/settings.md'))[1]);
+        $twig = new Environment(new ChainLoader([new ArrayLoader(['forms/form.html.twig' => '<form id="{{ form.name }}"></form>']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
+        $twig->addFunction(new TwigFunction('forms', fn (string $name) => ['name' => $name]));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $html = $twig->render('w4os/settings.html.twig', ['page' => ['header' => $header]]);
+
+        expect($header)->toMatchArray(['template' => 'w4os-admin', 'w4os' => 'settings'])
+            ->and(array_keys($header['form']['fields']))->toBe(['appearance'])
+            ->and(array_keys($header['form']['fields']['appearance']['fields']))->toBe(['theme'])
+            ->and($header['form']['process'])->toBe([['w4os' => 'settings']])
+            ->and($html)->toContain('class="list-group list-group-transparent"', 'href="#w4os-settings-appearance"', '[w4os.admin_site_appearance]', '<form id="w4os-settings"></form>');
+    });
+});

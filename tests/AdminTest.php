@@ -15,7 +15,7 @@ describe('admin', function () {
     });
 
     test('has its sections in their order, each with its icon of Tabler', function () {
-        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'simulators', 'regions', 'manage'])
+        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'simulators', 'regions', 'manage', 'settings'])
             ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-');
     });
 

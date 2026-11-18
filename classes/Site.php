@@ -593,6 +593,7 @@ final class Site
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
+        'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
 
     /** The section of the admin a page is in: its list for the page of one item. */
@@ -617,6 +618,7 @@ final class Site
         $items = [];
         foreach (self::ADMIN_PAGES as $type => $page) {
             isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read'))
+                && ($type !== 'settings' || $this->canSettings())
                 && $items[] = ['label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section];
         }
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
@@ -694,6 +696,42 @@ final class Site
         $access = $this->isManager() ? ($this->openApi()->itemOf($type)[$what] ?? $this->openApi()->listOf($type)[$what] ?? null) : null;
 
         return $access !== null && Access::allows($access, $this->level());
+    }
+
+    /** Whether the visitor changes the settings of the site: a manager of the level the engine says (x-site, Access::site()). */
+    public function canSettings(): bool
+    {
+        return $this->isManager() && Access::allows($this->openApi()->siteAccess('settings'), $this->level());
+    }
+
+    /**
+     * A setting of Grav saved in the configuration of the site (config://<file>.yaml, user/config), as Grav's admin writes it: the
+     * one key, nothing else of the configuration (what Grav or its environment adds stays out of the file).
+     */
+    public function saveSetting(string $file, string $key, mixed $value): void
+    {
+        $yaml = \Grav\Common\File\CompiledYamlFile::instance($this->grav['locator']->findResource("config://$file.yaml", true, true));
+        $yaml->save(self::withSetting((array) $yaml->content(), $key, $value));
+        $yaml->free();
+        $this->grav['config']->set("$file.$key", $value);
+    }
+
+    /**
+     * A configuration with one setting changed, by its dotted key (`pages.theme`).
+     *
+     * @param array<string,mixed> $config
+     * @return array<string,mixed>
+     */
+    public static function withSetting(array $config, string $key, mixed $value): array
+    {
+        $node = &$config;
+        foreach (explode('.', $key) as $part) {
+            is_array($node[$part] ?? null) || $node[$part] = [];
+            $node = &$node[$part];
+        }
+        $node = $value;
+
+        return $config;
     }
 
     /** Keep the API key typed on the settings page in user-data (not in the configuration): see onAdminSave. */

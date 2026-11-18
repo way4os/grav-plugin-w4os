@@ -420,3 +420,8 @@ w4os:
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
   admin_menu: 'Entry in the menu'
   admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
+  admin_site_settings: 'Site settings'
+  admin_site_appearance: 'Appearance'
+  admin_site_theme: 'Theme'
+  admin_site_theme_help: 'The theme of the site, among the ones installed'
+  admin_site_saved: 'The settings of the site are saved.'

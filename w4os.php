@@ -378,12 +378,14 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', 'settings', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
             // The page goes back there once signed in (Site::landing())
             $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (in_array($type, ['dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
+        } elseif ($type === 'settings' && ! $this->site()->canSettings()) {
+            $this->grav->redirectLangSafe(isset($routes['dashboard']) && $this->site()->isManager() ? $routes['dashboard'] : $routes['account']);
         } elseif (isset(Site::ADMIN_TYPES[$type]) && ! $this->site()->can(Site::ADMIN_TYPES[$type], $type === 'edit' ? 'change' : 'read')) {
             // The admin pages open from the level of the setting; each one then from the level the contract gives it
             $this->grav->redirectLangSafe($type === 'edit' && isset($routes['manage']) ? $routes['manage'] : $routes['account']);
@@ -434,6 +436,15 @@ class W4osPlugin extends Plugin
         $form = $event['form'];
         if ($form->getName() === 'w4os-item') {
             $this->itemForm($form);
+
+            return;
+        }
+        if ($form->getName() === 'w4os-settings') {
+            // The themes installed (Grav's list, their names), the one of the site chosen
+            $fields = (array) $form->get('fields');
+            $fields['appearance']['fields']['theme']['options'] = array_map(fn ($theme) => (string) ($theme['name'] ?? ''), $this->grav['themes']->all());
+            $form->setFields($fields);
+            $form->getData()->get('theme') === null && $form->setData('theme', (string) $this->grav['config']->get('system.pages.theme'));
 
             return;
         }
@@ -556,6 +567,14 @@ class W4osPlugin extends Plugin
                     $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(\W4OS\Views\FormView::locked($described, ['manager'], $site->level()))));
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
+                    // no break
+                case 'settings':
+                    $site->canSettings() || throw new FormError('w4os.error_forbidden');
+                    $theme = (string) ($data['theme'] ?? '');
+                    array_key_exists($theme, $this->grav['themes']->all()) || throw new FormError('w4os.error_invalid_request');
+                    // Grav's own setting of the theme, as its admin writes it
+                    $site->saveSetting('system', 'pages.theme', $theme);
+                    $this->done('w4os.admin_site_saved', $routes['settings']);
                     // no break
                 case 'post':
                     $posts = $this->ownPosts() ?? throw new FormError('w4os.error_forbidden');

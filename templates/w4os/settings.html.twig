@@ -1,0 +1,21 @@
+{# The settings of the site, in Tabler's settings layout: its sections as side tabs (the fieldsets of the form), the form beside
+   them #}
+{% set sections = page.header.form.fields|filter(field => field.type == 'fieldset') %}
+<div class="card">
+    <div class="row g-0">
+        <div class="col-12 col-md-3 border-end">
+            <div class="card-body">
+                <nav class="list-group list-group-transparent" aria-label="{{ 'w4os.admin_site_settings'|t|e('html_attr') }}">
+                    {% for name, section in sections %}
+                        <a href="#w4os-settings-{{ name|e('html_attr') }}" class="list-group-item list-group-item-action d-flex align-items-center{{ loop.first ? ' active' }}">{{ section.title|t }}</a>
+                    {% endfor %}
+                </nav>
+            </div>
+        </div>
+        <div class="col-12 col-md-9">
+            <div class="card-body">
+                {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-settings') } %}
+            </div>
+        </div>
+    </div>
+</div>
