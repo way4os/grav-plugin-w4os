@@ -85,5 +85,7 @@
 .w4os-settings fieldset { border: 0; margin: 0; padding: 0; }
 /* A label with a help: Grav's forms put it in a span.tooltip (the help in data-tooltip), which Tabler (Bootstrap) hides; the label
    shown, its help in small under it */
-.w4os-admin .form-label .tooltip { position: static; display: inline; opacity: 1; z-index: auto; font: inherit; line-height: inherit; }
-.w4os-admin .form-label .tooltip::after { content: attr(data-tooltip); display: block; margin-top: .15rem; font-size: .85em; font-weight: 400; color: var(--tblr-secondary); }
+.w4os-admin .form-label:has(.tooltip) { display: flex; flex-wrap: wrap; column-gap: .25rem; }
+.w4os-admin .form-label .tooltip { display: contents; position: static; opacity: 1; z-index: auto; font: inherit; line-height: inherit; }
+.w4os-admin .form-label .tooltip::after { content: attr(data-tooltip); order: 2; flex-basis: 100%; margin-top: .15rem; font-size: .85em; font-weight: 400; color: var(--tblr-secondary); }
+.w4os-admin .form-label:has(.tooltip) .required { order: 1; }
