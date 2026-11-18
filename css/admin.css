@@ -93,3 +93,11 @@
 .w4os-themes .w4os-theme-none { display: block; aspect-ratio: 4 / 3; background: var(--tblr-bg-surface-secondary); }
 .w4os-themes .form-imagecheck { display: block; }
 .w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+/* The horizontal forms of the admin (w4os/admin-form.html.twig): a field without a label of its own on the left (a box to check)
+   in the column of the fields; the label column's text where the label is, not on its line */
+@media (min-width: 768px) {
+    .w4os-admin .form-field.row > .col-md-9:first-child { margin-left: 25%; }
+}
+.w4os-admin .form-field.row > .col-form-label .form-label { margin-bottom: 0; }
+/* The drop zone of a file (the Form plugin's Dropzone, Tabler's look): its message as text, not a button of the browser */
+.w4os-admin .dropzone .dz-button { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; }

@@ -68,3 +68,15 @@ describe('sign-in', function () {
             ->and(Site::landing(null, false, null, $profile))->toBe($profile);
     });
 });
+
+describe('the forms of the admin', function () {
+    test('are Tabler\'s horizontal forms, one rule for them all: the label and its help on the left, the field on the right', function () {
+        $form = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig');
+
+        expect($form)->toContain("form_field_outer_classes = 'mb-3 row'", "form_field_outer_label_classes = 'col-12 col-md-3 col-form-label'", "form_field_outer_data_classes = 'col-12 col-md-9'");
+        // Every form of the admin goes through it
+        foreach (['edit', 'item', 'settings'] as $page) {
+            expect((string) file_get_contents(dirname(__DIR__)."/templates/w4os/$page.html.twig"))->toContain("'w4os/admin-form.html.twig'");
+        }
+    });
+});

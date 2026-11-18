@@ -1,5 +1,9 @@
-{# A form of the plugin in the admin (form): the Form plugin's form in Tabler's classes, by the variables the Form plugin reads #}
-{% set form_field_outer_classes = 'mb-3' %}
+{# A form of the plugin in the admin (form): the Form plugin's form in Tabler's classes, by the variables the Form plugin reads;
+   Tabler's horizontal form, the label and its help in a column on the left, the field on the right, one under the other on a
+   narrow screen #}
+{% set form_field_outer_classes = 'mb-3 row' %}
+{% set form_field_outer_label_classes = 'col-12 col-md-3 col-form-label' %}
+{% set form_field_outer_data_classes = 'col-12 col-md-9' %}
 {% set form_field_label_classes = 'form-label' %}
 {% set form_field_input_classes = 'form-control' %}
 {% set form_field_select_classes = 'form-select' %}
