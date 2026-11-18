@@ -11,5 +11,5 @@
         {% set url = attribute(page_item.item, link.attribute) ?? null %}
         {% if url %}{% set links = links|merge([{url: url, label: ('w4os.' ~ link.key)|t} + (link.id is defined ? {id: link.id} : {})]) %}{% endif %}
     {% endfor %}
-    {{ parts.header(page_item.item, w4os_list_of(page_item.type) ?? {columns: []}, back, w4os_list_actions(page_item.form, page_item.item), links) }}
+    {{ parts.header(w4os_item_view(page_item), back, links) }}
 {% endif %}

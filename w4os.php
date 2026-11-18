@@ -272,12 +272,17 @@ class W4osPlugin extends Plugin
         $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => \W4OS\Views\Dates::format($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_of', fn (string $type) => $this->site()->openApi()->listOf($type)));
         // The view of a list (w4os-views): its actions only for a manager, from their level, never on their own row when it says so;
         // the column and the filter of a filter the page fixes (the grid of the site) left out
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => \W4OS\Views\ListView::of(
             $this->site()->isManager() ? $list : ['actions' => []] + $list, $items, $meta, $query, $links, $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager() ? $this->site()->level() : null, $fixed)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_list_actions', fn (array $list, array $item) => $this->site()->isManager() ? \W4OS\Views\Rows::actions($list, $item, $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : []));
+        // The view of the item of a page (w4os_item()): its header and its details (w4os-views ItemView); its actions for a manager
+        $twig->addFunction(new \Twig\TwigFunction('w4os_item_view', fn (array $page) => \W4OS\Views\ItemView::of(
+            $this->site()->openApi()->listOf((string) $page['type']) ?? ['columns' => []],
+            (array) $page['item'],
+            (array) ($page['groups'] ?? []),
+            $this->site()->isManager() && is_array($page['form'] ?? null) ? \W4OS\Views\Rows::actions($page['form'], (array) $page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : [],
+        )));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
