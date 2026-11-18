@@ -784,6 +784,56 @@ final class Site
         return $access !== null && Access::allows($access, $this->level());
     }
 
+    /** The fields of a theme the brand of the site goes to, by setting of the site, in the order a theme may have them. */
+    public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
+
+    /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
+    public const BRAND_SWITCHES = ['custom_logo_enabled'];
+
+    /**
+     * The fields of the active theme the brand of the site goes to (its logo, its favicon): the first of each its blueprint has,
+     * none for a theme without them (its own choice stands).
+     *
+     * @param \Closure(string $field): bool $has whether the blueprint of the theme has a field
+     * @return array<string,string> setting of the site => field of the theme
+     */
+    public static function brandFields(\Closure $has): array
+    {
+        $fields = [];
+        foreach (self::BRAND_FIELDS as $setting => $candidates) {
+            foreach ($candidates as $field) {
+                if (! isset($fields[$setting]) && $has($field)) {
+                    $fields[$setting] = $field;
+                }
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
+     * The switches of the active theme that show its logo once set, on.
+     *
+     * @param \Closure(string $field): bool $has
+     * @return array<string,bool>
+     */
+    public static function brandSwitches(\Closure $has): array
+    {
+        return array_fill_keys(array_values(array_filter(self::BRAND_SWITCHES, $has)), true);
+    }
+
+    /**
+     * The fields of the active theme's blueprint, as Grav resolves it (its imports too): the definition of one by its name, null
+     * when it has none.
+     */
+    public function themeField(string $field): ?array
+    {
+        $theme = $this->grav['themes']->get((string) $this->grav['config']->get('system.pages.theme'));
+        $property = $theme?->blueprints()->schema()->getProperty($field);
+
+        return is_array($property) ? $property : null;
+    }
+
     /** Whether the visitor changes the settings of the site: a manager of the level the engine says (x-site, Access::site()). */
     public function canSettings(): bool
     {

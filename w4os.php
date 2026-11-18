@@ -469,8 +469,24 @@ class W4osPlugin extends Plugin
                 $themes[$folder] = (string) ($theme->blueprints()->get('name') ?: $folder);
             }
             $fields['appearance']['fields']['theme']['options'] = $themes;
+            // The brand of the site in the active theme's own fields: where the theme keeps the files, the ones it takes; none of
+            // them for a theme without such a field
+            $active = (string) $this->grav['config']->get('system.pages.theme');
+            $brand = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
+            foreach (array_keys(Site::BRAND_FIELDS) as $setting) {
+                if (! isset($brand[$setting])) {
+                    unset($fields['appearance']['fields'][$setting]);
+                    continue;
+                }
+                $field = (array) $this->site()->themeField($brand[$setting]);
+                $fields['appearance']['fields'][$setting] = ['destination' => (string) ($field['destination'] ?? 'theme://images'), 'accept' => $field['accept'] ?? ['image/*']]
+                    + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
+            }
             $form->setFields($fields);
-            $form->getData()->get('theme') === null && $form->setData('theme', (string) $this->grav['config']->get('system.pages.theme'));
+            $form->getData()->get('theme') === null && $form->setData('theme', $active);
+            foreach ($brand as $setting => $field) {
+                $form->getData()->get($setting) === null && $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
+            }
 
             return;
         }
@@ -598,6 +614,15 @@ class W4osPlugin extends Plugin
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
                     $theme = (string) ($data['theme'] ?? '');
                     array_key_exists($theme, $this->grav['themes']->all()) || throw new FormError('w4os.error_invalid_request');
+                    // The brand of the site in the fields of the theme the form was made for (the active one), as Grav's admin writes
+                    // them: the files uploaded, their original names; the switch that shows the logo on with it
+                    $active = (string) $this->grav['config']->get('system.pages.theme');
+                    $has = fn (string $field) => $site->themeField($field) !== null;
+                    foreach (Site::brandFields($has) as $setting => $field) {
+                        $files = (array) ($form->getData()->get($setting) ?? []);
+                        $site->saveSetting("themes/$active", $field, $files);
+                        $setting === 'logo' && $files !== [] && array_map(fn ($switch) => $site->saveSetting("themes/$active", $switch, true), array_keys(Site::brandSwitches($has)));
+                    }
                     // Grav's own setting of the theme, as its admin writes it
                     $site->saveSetting('system', 'pages.theme', $theme);
                     $this->done('w4os.admin_site_saved', $routes['settings']);

@@ -33,8 +33,22 @@ describe('the settings of the site', function () {
 
         expect($header)->toMatchArray(['template' => 'w4os-admin', 'w4os' => 'settings'])
             ->and(array_keys($header['form']['fields']))->toBe(['appearance'])
-            ->and(array_keys($header['form']['fields']['appearance']['fields']))->toBe(['theme'])
-            ->and($header['form']['process'])->toBe([['w4os' => 'settings']])
+            ->and(array_keys($header['form']['fields']['appearance']['fields']))->toBe(['theme', 'logo', 'favicon'])
+            ->and($header['form']['process'])->toBe([['upload' => true], ['w4os' => 'settings']])
             ->and($html)->toContain('class="list-group list-group-transparent"', 'href="#w4os-settings-appearance"', '[w4os.admin_site_appearance]', '<form id="w4os-settings"></form>');
+    });
+});
+
+describe('the brand of the site', function () {
+    test('goes to the active theme\'s own fields, the ones its blueprint has, nothing for a theme without them', function () {
+        $has = fn (array $fields) => fn (string $name) => in_array($name, $fields, true);
+
+        expect(Site::brandFields($has(['custom_logo', 'custom_logo_mobile', 'custom_favicon'])))->toBe(['logo' => 'custom_logo', 'favicon' => 'custom_favicon'])
+            ->and(Site::brandFields($has(['custom_logo_enabled', 'custom_logo'])))->toBe(['logo' => 'custom_logo'])
+            ->and(Site::brandFields($has(['custom_logo', 'favicon'])))->toBe(['logo' => 'custom_logo', 'favicon' => 'favicon'])
+            ->and(Site::brandFields($has([])))->toBe([])
+            // Editorial shows its logo once it is enabled: the switch goes with it
+            ->and(Site::brandSwitches($has(['custom_logo_enabled', 'custom_logo'])))->toBe(['custom_logo_enabled' => true])
+            ->and(Site::brandSwitches($has(['custom_logo'])))->toBe([]);
     });
 });
