@@ -1,0 +1,7 @@
+/* A page of the plugin in a viewer's panel (w4os-viewer.html.twig), over the style of the helpers' own pages: small titles, no space
+   above the content, the panel's whole width */
+body.w4os-viewer .layout { padding: .5rem .75rem; }
+body.w4os-viewer .w4os-page > :first-child, body.w4os-viewer .block:first-child { margin-top: 0; }
+body.w4os-viewer h1, body.w4os-viewer .block-title { font-size: 1.25rem; line-height: 1.3; margin: 0 0 .5rem; }
+body.w4os-viewer h2 { font-size: 1.05rem; margin: 1rem 0 .5rem; }
+body.w4os-viewer .block { padding: .75rem 1rem; }

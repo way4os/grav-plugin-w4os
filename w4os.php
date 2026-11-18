@@ -107,7 +107,8 @@ class W4osPlugin extends Plugin
             exit;
         }
         $this->enable([
-            'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
+            // Before the Login plugin: its login status is the menu of the visitor (partials/login-status.html.twig)
+            'onTwigTemplatePaths' => ['onTwigTemplatePaths', 10],
             'onTwigInitialized' => ['onTwigInitialized', 0],
             'onTwigSiteVariables' => ['onTwigSiteVariables', 0],
             'onShortcodeHandlers' => ['onShortcodeHandlers', 0],
@@ -127,6 +128,8 @@ class W4osPlugin extends Plugin
     public function onOutputGenerated(): void
     {
         $output = (string) $this->grav->output;
+        // The sign-in page: "remember me" checked
+        $this->grav['uri']->path() === $this->grav['config']->get('plugins.login.route', '/login') && $this->grav->output = $output = Site::rememberChecked($output);
         // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
         foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {
@@ -301,6 +304,11 @@ class W4osPlugin extends Plugin
         $page = $this->grav['page'] ?? null;
         $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        // The files of the page before the theme writes its head: a theme may write its assets before its content
+        if ($this->sitePage()) {
+            ($block = (string) ($page->header()->w4os_block ?? '')) === '' || $this->blockFiles($block);
+            in_array((string) $page->header()->w4os, ['profile', 'account'], true) && $this->grav['assets']->addJs('plugin://w4os/js/keep-tab.js', ['group' => 'bottom', 'loading' => 'defer']);
+        }
     }
 
     /**
@@ -384,6 +392,16 @@ class W4osPlugin extends Plugin
             $name = (string) ($this->item()['item']['name'] ?? '');
             $name === '' || $this->grav['page']->title($name);
         }
+        // A page of the plugin in a viewer's panel: its own bare page, not the theme's (as the sitemap plugin gives its own)
+        $this->sitePage() && $this->site()->isViewer() && $this->grav['twig']->template = 'w4os-viewer.html.twig';
+    }
+
+    /** Whether the page is one of the plugin's that shows in the site (pages/*.md), not one of its admin pages. */
+    private function sitePage(): bool
+    {
+        $page = $this->grav['page'] ?? null;
+
+        return $page !== null && isset($page->header()->w4os) && $page->template() !== 'w4os-admin';
     }
 
     /** The account form shows what the engine has of the avatar signed in, the form of a manager the avatar it changes. */

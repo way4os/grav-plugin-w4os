@@ -319,6 +319,15 @@ final class Site
     }
 
     /**
+     * The sign-in form of the Login plugin with "remember me" checked, as on a social network: the Login plugin has no setting for
+     * it, and its form is the same in every theme.
+     */
+    public static function rememberChecked(string $html): string
+    {
+        return (string) preg_replace('/<input type="checkbox" value="1" name="rememberme" id="#rememberme"(?! checked)/', '$0 checked', $html);
+    }
+
+    /**
      * The front matter of a page of the plugin (`manage`, `edit`...): the site's own page at its route when it has one, else the
      * plugin's (pages/<type>.md).
      *
