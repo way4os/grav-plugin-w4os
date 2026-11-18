@@ -51,8 +51,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand" href="{{ brand.home|e('html_attr') }}" title="{{ brand.title|e('html_attr') }}">
-                {% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="">{% endif %}
-                <span class="w4os-admin-title">{{ brand.title }}</span>
+                {# The logo of the site alone, its title as its text; the title without a logo #}
+                {% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="{{ brand.title|e('html_attr') }}">{% else %}<span class="w4os-admin-title">{{ brand.title }}</span>{% endif %}
             </a>
             <div class="collapse navbar-collapse" id="w4os-sidebar">
                 <ul class="navbar-nav pt-lg-3">

@@ -43,6 +43,9 @@ describe('admin', function () {
         }, 'assets' => $assets, 'grav' => ['user' => ['w4os' => ['name' => 'Eli Mail']]]]);
 
         expect($html)->toContain('<aside class="navbar navbar-vertical navbar-expand-lg"', 'Friendly Fowl', 'src="&#x2F;logo.png"')
+            // The logo alone in the brand, the title of the site as its text
+            ->and($html)->toContain('src="&#x2F;logo.png" alt="Friendly&#x20;Fowl"')
+            ->and($html)->not->toContain('w4os-admin-title')
             ->and($html)->toContain('--tblr-primary: #8428df', '--tblr-primary-rgb: 132,40,223')
             ->and($html)->toMatch('~<li class="nav-item active">\s*<a class="nav-link" href="&#x2F;account&#x2F;regions"~')
             ->and($html)->toContain('<i class="ti&#x20;ti-dashboard"', 'navbar-toggler', '<!-- w4os:admin-messages -->')
