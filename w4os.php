@@ -110,6 +110,7 @@ class W4osPlugin extends Plugin
             exit;
         }
         $this->enable([
+            'onThemeInitialized' => ['onThemeInitialized', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onTwigInitialized' => ['onTwigInitialized', 0],
             'onTwigSiteVariables' => ['onTwigSiteVariables', 0],
@@ -251,6 +252,18 @@ class W4osPlugin extends Plugin
     }
 
     /** Templates of the plugin come last, so a theme can override them. */
+    /**
+     * The logo and the favicon of the site found by any theme (its theme://images/logo and favicon) in the site's own data first,
+     * where the settings page puts them: kept across upgrades, served by the web servers as the images a site uploads.
+     */
+    public function onThemeInitialized(): void
+    {
+        $locator = $this->grav['locator'];
+        foreach (Site::brandPaths((string) $this->grav['config']->get('system.pages.theme')) as $prefix => $paths) {
+            $locator->addPath('theme', $prefix, $paths);
+        }
+    }
+
     public function onTwigTemplatePaths(): void
     {
         $this->grav['twig']->twig_paths[] = __DIR__.'/templates';

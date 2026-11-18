@@ -66,3 +66,12 @@ describe('the choice of the theme', function () {
             ->and($html)->not->toMatch('/value="quark2"[^>]*checked/');
     });
 });
+
+describe('the files of the brand of the site', function () {
+    test('are the site\'s data, found first where any theme looks for its logo and favicon, the theme\'s own after', function () {
+        expect(Site::brandPaths('quark2'))->toBe([
+            'images/logo' => ['user://data/theme/images/logo', 'themes://quark2/images/logo'],
+            'images/favicon' => ['user://data/theme/images/favicon', 'themes://quark2/images/favicon'],
+        ]);
+    });
+});

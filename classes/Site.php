@@ -787,6 +787,22 @@ final class Site
     /** The fields of a theme the brand of the site goes to, by setting of the site, in the order a theme may have them. */
     public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
 
+    /**
+     * Where a theme finds the logo and the favicon of the site (theme://images/logo, theme://images/favicon): the site's own data
+     * first (user/data, where Grav serves the images a site uploads, kept across upgrades), the theme's folder after (its own).
+     *
+     * @return array<string,list<string>> prefix of theme:// => its paths, in their order
+     */
+    public static function brandPaths(string $theme): array
+    {
+        $paths = [];
+        foreach (['logo', 'favicon'] as $folder) {
+            $paths["images/$folder"] = ["user://data/theme/images/$folder", "themes://$theme/images/$folder"];
+        }
+
+        return $paths;
+    }
+
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
     public const BRAND_SWITCHES = ['custom_logo_enabled'];
 
