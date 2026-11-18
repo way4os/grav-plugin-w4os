@@ -119,3 +119,11 @@ describe('the home page of a grid', function () {
             ->and(W4os\Grav\Site::shortcodeBlocks('No block'))->toBe([]);
     });
 });
+
+describe('a page of an earlier version', function () {
+    test('laid out by the splash template of the plugin is the home page made content, nothing to change on an upgrade', function () {
+        expect(W4os\Grav\Site::isSplash('w4os/splash'))->toBeTrue()
+            ->and(W4os\Grav\Site::isSplash('default'))->toBeFalse()
+            ->and(W4os\Grav\Site::isSplash(null))->toBeFalse();
+    });
+});

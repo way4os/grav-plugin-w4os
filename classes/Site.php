@@ -413,6 +413,12 @@ final class Site
         }
     }
 
+    /** Whether a page asks the splash template of an earlier version of the plugin (`w4os/splash`): the home page, made content. */
+    public static function isSplash(?string $template): bool
+    {
+        return $template === 'w4os/splash';
+    }
+
     /**
      * The blocks of the helpers the text of a page shows through its shortcodes ([w4os block="..."], [w4os-home]), by their names
      * in the helpers (grid_status), for their files before the theme writes its head.

@@ -46,6 +46,9 @@ class W4osPlugin extends Plugin
     /** The avatar of the profile page shown, once found. */
     private ?array $profiled = null;
 
+    /** The page of an earlier version laid out by the splash template of the plugin (now the theme's default page, onPageInitialized). */
+    private $splash = null;
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -311,7 +314,7 @@ class W4osPlugin extends Plugin
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
         // The files of the blocks the text of a page shows (its shortcodes), before the theme writes its head
         if ($page !== null && ! $this->sitePage()) {
-            foreach (Site::shortcodeBlocks((string) $page->rawMarkdown()) as $block) {
+            foreach (Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) as $block) {
                 $this->blockFiles($block);
             }
         }
@@ -381,6 +384,13 @@ class W4osPlugin extends Plugin
      */
     public function onPageInitialized(): void
     {
+        // A page an earlier version laid out with the splash template of the plugin (w4os/splash, gone): the theme's default page,
+        // the blocks of the home page around its text, as [w4os-home] does; nothing to change on an upgrade
+        $page = $this->grav['page'] ?? null;
+        if ($page !== null && Site::isSplash($page->template())) {
+            $page->template('default');
+            $this->splash = $page;
+        }
         $path = $this->grav['uri']->path();
         $routes = $this->site()->routes();
         $type = array_search($path, $routes, true);
@@ -439,6 +449,7 @@ class W4osPlugin extends Plugin
         $page = $event['page'];
         $this->sitePage($page) && $page === ($this->grav['page'] ?? null)
             && $page->setRawContent($this->grav['twig']->processTemplate('w4os/page.html.twig', ['page' => $page]));
+        $page === $this->splash && $page->setRawContent($this->grav['twig']->processTemplate('w4os/home.html.twig', ['content' => (string) $page->getRawContent()]));
     }
 
     /** The account form shows what the engine has of the avatar signed in, the form of a manager the avatar it changes. */
