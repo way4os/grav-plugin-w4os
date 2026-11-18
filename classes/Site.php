@@ -881,6 +881,62 @@ final class Site
     /** The folders of the brand of the site (its logo, its favicon), in its data (served, kept across upgrades). */
     public const BRAND_FOLDERS = ['logo' => 'user://data/theme/images/logo', 'favicon' => 'user://data/theme/images/favicon'];
 
+    /**
+     * What some themes show of their demo site, hidden through their own options (settings and visibility, never their styles):
+     * Hadron's menu link to getgrav.org and its untranslated language icons, Learn2's link to the repository of its demo.
+     */
+    public const THEME_SETTINGS = [
+        'hadron' => ['menu' => null, 'langswitcher.format' => 'short'],
+        'learn2' => ['github.position' => 'off'],
+    ];
+
+    /** The fields of a theme that name a file of its logo or its favicon. */
+    public const THEME_FILE_FIELDS = ['custom_logo', 'custom_logo_mobile', 'custom_favicon', 'favicon'];
+
+    /**
+     * The settings the plugin gives a theme for this request: its logo or favicon fields cleared where their files are missing (a
+     * demo site's), its THEME_SETTINGS; nothing the site set itself in its own configuration of the theme.
+     *
+     * @param array<string,mixed> $config the configuration of the theme as Grav has it
+     * @param list<string> $own the settings (dotted) the site's own configuration of the theme has
+     * @return array<string,mixed> setting (dotted) => its value
+     */
+    public static function themeFixes(string $theme, array $config, array $own, \Closure $exists): array
+    {
+        $fixes = [];
+        foreach (self::THEME_FILE_FIELDS as $field) {
+            $files = $config[$field] ?? null;
+            if (! is_array($files) || $files === []) {
+                continue;
+            }
+            $found = array_filter($files, fn ($file, $path) => $exists(ltrim((string) (is_array($file) ? ($file['path'] ?? $path) : $path), '/')), ARRAY_FILTER_USE_BOTH);
+            $found === [] && $fixes[$field] = null;
+        }
+        $fixes += self::THEME_SETTINGS[$theme] ?? [];
+
+        return array_diff_key($fixes, array_flip($own));
+    }
+
+    /** The settings the plugin gives the active theme (themeFixes()), in memory for this request, nothing written. */
+    public function applyThemeFixes(): void
+    {
+        $theme = (string) $this->grav['config']->get('system.pages.theme');
+        $file = (string) $this->grav['locator']->findResource("config://themes/$theme.yaml");
+        $own = $file === '' ? [] : array_keys(\Grav\Common\Utils::arrayFlattenDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($file)->content()));
+        // A setting the site sets as a whole (a list, a section) counts for what it holds
+        foreach ($own as $key) {
+            for ($dot = strrpos($key, '.'); $dot !== false; $dot = strrpos($key, '.')) {
+                $key = substr($key, 0, $dot);
+                $own[] = $key;
+            }
+        }
+        $config = (array) $this->grav['config']->get("themes.$theme", []);
+        foreach (self::themeFixes($theme, $config, array_values(array_unique($own)), fn (string $path) => is_file(GRAV_ROOT.'/'.$path)) as $key => $value) {
+            $this->grav['config']->set("themes.$theme.$key", $value);
+            $this->grav['config']->set("theme.$key", $value);
+        }
+    }
+
     public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
 
     /**

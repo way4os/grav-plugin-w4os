@@ -252,9 +252,14 @@ class W4osPlugin extends Plugin
     }
 
     /** Templates of the plugin come last, so a theme can override them. */
-    /** The brand of the site given to the active theme, whatever the theme. */
+    /** The settings the plugin gives the active theme (the leftovers of a demo out), then the brand of the site, whatever the theme. */
     public function onThemeInitialized(): void
     {
+        try {
+            $this->site()->applyThemeFixes();
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning('w4os: the settings of the theme not given: '.$e->getMessage());
+        }
         $this->site()->applyBrand();
     }
 
