@@ -28,4 +28,13 @@ describe('the menu of the site', function () {
         expect(array_column($menu, 'type'))->toBe(['search', 'profile', 'admin'])
             ->and($entry($menu, 'admin'))->toMatchArray(['route' => '/account/dashboard', 'label' => 'w4os.menu_admin', 'children' => $admin]);
     });
+
+    test('titles each entry by its label, for the themes that list the pages by their title (Apple Notes); the admin by its dashboard', function () use ($routes, $admin, $entry) {
+        $menu = Site::menuEntries($routes, true, $admin);
+
+        expect(Site::menuTitleKey($entry($menu, 'profile')))->toBe('w4os.menu_account')
+            ->and(Site::menuTitleKey($entry($menu, 'search')))->toBe('w4os.search')
+            ->and(Site::menuTitleKey($entry($menu, 'admin')))->toBe('w4os.dashboard_title')
+            ->and(Site::menuTitleKey($entry($menu, 'profile')['children'][0]))->toBe('w4os.edit_profile');
+    });
 });

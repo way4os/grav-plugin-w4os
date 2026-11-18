@@ -384,6 +384,15 @@ final class Site
         }
     }
 
+    /**
+     * The title of the page of an entry of the menu: its label, for the themes that list the pages by their title (Apple Notes);
+     * the admin keeps the title of its dashboard.
+     */
+    public static function menuTitleKey(array $entry): string
+    {
+        return $entry['type'] === 'admin' ? self::titleKey('dashboard') : (string) $entry['label'];
+    }
+
     /** An entry of the menu as a page of the tree, visible, under its parent; a page of the site at its route wins. */
     private function menuPage(array $entry, $parent): void
     {
@@ -393,6 +402,7 @@ final class Site
         }
         $page = $this->pluginPage($entry['type'] === 'admin' ? 'dashboard' : $entry['type'], $entry['route']);
         $page->menu($this->translate($entry['label']));
+        $page->title($this->translate(self::menuTitleKey($entry)));
         // Visible for the themes that read it from its front matter too (Apple Notes)
         $page->visible(true);
         $page->modifyHeader('visible', true);
