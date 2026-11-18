@@ -862,10 +862,75 @@ final class Site
      */
     public function saveSetting(string $file, string $key, mixed $value): void
     {
-        $yaml = \Grav\Common\File\CompiledYamlFile::instance($this->grav['locator']->findResource("config://$file.yaml", true, true));
-        $yaml->save(self::withSetting((array) $yaml->content(), $key, $value));
-        $yaml->free();
+        $this->writeSettings($file, fn (array $config) => self::withSetting($config, $key, $value));
         $this->grav['config']->set("$file.$key", $value);
+    }
+
+    /**
+     * A setting of a theme saved in the configuration of the site only while it is not the theme's own default (its <theme>.yaml):
+     * back to the default, it leaves the configuration, so the site follows the defaults of later versions of the theme.
+     */
+    public function saveThemeSetting(string $theme, string $key, mixed $value): void
+    {
+        $own = (string) $this->grav['locator']->findResource("themes://$theme/$theme.yaml");
+        $default = $own === '' ? null : \Grav\Common\Utils::getDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($own)->content(), $key);
+        if (! self::isDefault($value, $default)) {
+            $this->saveSetting("themes/$theme", $key, $value);
+
+            return;
+        }
+        if ($this->grav['locator']->findResource("config://themes/$theme.yaml") !== false) {
+            $this->writeSettings("themes/$theme", fn (array $config) => self::withoutSetting($config, $key));
+        }
+        $this->grav['config']->set("themes.$theme.$key", $default);
+    }
+
+    /**
+     * Whether a setting is the default: the same files (a list of files by their paths, what Grav's file fields keep), the same
+     * value, or nothing set where the default is nothing.
+     */
+    public static function isDefault(mixed $value, mixed $default): bool
+    {
+        if ($default === null) {
+            return in_array($value, [null, [], false, ''], true);
+        }
+        if (is_array($value) && is_array($default) && ! (array_is_list($value) && array_is_list($default))) {
+            $paths = array_keys($value);
+            $defaults = array_keys($default);
+            sort($paths);
+            sort($defaults);
+
+            return $paths === $defaults;
+        }
+
+        return $value === $default;
+    }
+
+    /**
+     * A configuration without one setting, by its dotted key, and without the sections that leaves empty.
+     *
+     * @param array<string,mixed> $config
+     * @return array<string,mixed>
+     */
+    public static function withoutSetting(array $config, string $key): array
+    {
+        [$first, $rest] = array_pad(explode('.', $key, 2), 2, null);
+        if ($rest !== null && is_array($config[$first] ?? null)) {
+            $config[$first] = self::withoutSetting($config[$first], $rest);
+        }
+        if ($rest === null || ($config[$first] ?? null) === []) {
+            unset($config[$first]);
+        }
+
+        return $config;
+    }
+
+    /** One configuration file of the site rewritten (config://<file>.yaml), then read at once by the next request. */
+    private function writeSettings(string $file, \Closure $change): void
+    {
+        $yaml = \Grav\Common\File\CompiledYamlFile::instance($this->grav['locator']->findResource("config://$file.yaml", true, true));
+        $yaml->save($change((array) $yaml->content()));
+        $yaml->free();
         // The next request reads it at once, the site's pages too: Grav's own clearing of its cache (the list of the configuration
         // files it otherwise trusts for system.cache.check.interval, the compiled files and templates), as its admin offers it
         \Grav\Common\Cache::clearCache('standard');

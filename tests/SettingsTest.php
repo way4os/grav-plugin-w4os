@@ -24,6 +24,26 @@ describe('the settings of the site', function () {
             ->and(Site::withSetting([], 'pages.theme', 'mundana'))->toBe(['pages' => ['theme' => 'mundana']]);
     });
 
+    test('of a theme stay out of the configuration of the site while they are the theme\'s own defaults', function () {
+        $logo = ['user/themes/w4os/images/logo/opensimulator-logo.png' => ['name' => 'opensimulator-logo.png', 'type' => 'image/png', 'path' => 'user/themes/w4os/images/logo/opensimulator-logo.png']];
+        $posted = ['user/themes/w4os/images/logo/opensimulator-logo.png' => ['name' => 'opensimulator-logo.png', 'type' => 'image/png', 'size' => 17395, 'path' => 'user/themes/w4os/images/logo/opensimulator-logo.png']];
+        $mine = ['user/data/theme/images/logo/mine.png' => ['name' => 'mine.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/logo/mine.png']];
+
+        // The same files (by their paths), the same switch, nothing set where the theme has nothing: its defaults
+        expect(Site::isDefault($posted, $logo))->toBeTrue()
+            ->and(Site::isDefault(true, true))->toBeTrue()
+            ->and(Site::isDefault([], null))->toBeTrue()
+            ->and(Site::isDefault($mine, $logo))->toBeFalse()
+            ->and(Site::isDefault([], $logo))->toBeFalse()
+            ->and(Site::isDefault($mine, null))->toBeFalse()
+            ->and(Site::isDefault(true, false))->toBeFalse();
+        // A setting back to its default leaves the configuration, with the sections it empties
+        expect(Site::withoutSetting(['custom_logo' => $mine, 'accent-color' => '#123456'], 'custom_logo'))->toBe(['accent-color' => '#123456'])
+            ->and(Site::withoutSetting(['pages' => ['theme' => 'woo']], 'pages.theme'))->toBe([])
+            ->and(Site::withoutSetting(['pages' => ['theme' => 'woo', 'markdown' => ['extra' => true]]], 'pages.theme'))->toBe(['pages' => ['markdown' => ['extra' => true]]])
+            ->and(Site::withoutSetting(['accent-color' => '#123456'], 'custom_logo'))->toBe(['accent-color' => '#123456']);
+    });
+
     test('have their page in the admin: the theme first, its sections as side tabs (Tabler\'s settings layout)', function () {
         $header = Yaml::parse(explode('---', (string) file_get_contents(dirname(__DIR__).'/pages/settings.md'))[1]);
         $twig = new Environment(new ChainLoader([new ArrayLoader(['forms/form.html.twig' => '<form id="{{ form.name }}"></form>']), new FilesystemLoader(dirname(__DIR__).'/templates')]));

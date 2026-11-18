@@ -600,13 +600,14 @@ class W4osPlugin extends Plugin
                     $theme = (string) ($data['theme'] ?? '');
                     array_key_exists($theme, $this->grav['themes']->all()) || throw new FormError('w4os.error_invalid_request');
                     // The brand of the site in the fields of the theme the form was made for (the active one), as Grav's admin writes
-                    // them: the files uploaded, their original names; the switch that shows the logo on with it
+                    // them: the files uploaded, their original names; the switch that shows the logo on with it. Only what is not
+                    // the theme's own default is kept, so the site follows the defaults of its later versions
                     $active = (string) $this->grav['config']->get('system.pages.theme');
                     $has = fn (string $field) => $site->themeField($field) !== null;
                     foreach (Site::brandFields($has) as $setting => $field) {
                         $files = (array) ($form->getData()->get($setting) ?? []);
-                        $site->saveSetting("themes/$active", $field, $files);
-                        $setting === 'logo' && $files !== [] && array_map(fn ($switch) => $site->saveSetting("themes/$active", $switch, true), array_keys(Site::brandSwitches($has)));
+                        $site->saveThemeSetting($active, $field, $files);
+                        $setting === 'logo' && $files !== [] && array_map(fn ($switch) => $site->saveThemeSetting($active, $switch, true), array_keys(Site::brandSwitches($has)));
                     }
                     // Grav's own setting of the theme, as its admin writes it
                     $site->saveSetting('system', 'pages.theme', $theme);
