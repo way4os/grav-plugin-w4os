@@ -12,7 +12,7 @@ final class Posts
 {
     /**
      * The fields of the form that writes a post, for Grav's Form plugin: compact, a text of one line that grows as it is written,
-     * its label as its placeholder.
+     * its label as its placeholder (the Form plugin's display_label: false).
      *
      * @return array<string,array<string,mixed>>
      */
@@ -21,7 +21,7 @@ final class Posts
         $fields = [];
         foreach ($view->fields as $field) {
             $input = Items::input($field);
-            $input['type'] === 'textarea' && $input = ['classes' => $input['classes'].' w4os-post-field', 'rows' => 1, 'placeholder' => $input['label']] + $input;
+            $input['type'] === 'textarea' && $input = ['classes' => $input['classes'].' w4os-post-field', 'rows' => 1, 'placeholder' => $input['label'], 'display_label' => false] + $input;
             unset($input['label'], $input['help']);
             $fields[(string) $field['name']] = $input;
         }

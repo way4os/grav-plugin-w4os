@@ -21,7 +21,7 @@ describe('the posts of a profile', function () {
 
     test('are written in the field the engine describes, compact: one line that grows, its label as its placeholder, its length at most, required', function () use ($view) {
         expect(Posts::fields($view))->toEqual(['content' => [
-            'type' => 'textarea', 'classes' => 'w4os-autogrow w4os-post-field', 'rows' => 1, 'placeholder' => 'w4os.post_label',
+            'type' => 'textarea', 'classes' => 'w4os-autogrow w4os-post-field', 'rows' => 1, 'placeholder' => 'w4os.post_label', 'display_label' => false,
             'validate' => ['required' => true, 'max' => 1000],
         ]]);
     });
