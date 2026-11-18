@@ -12,7 +12,9 @@ describe('the admin pages', function () {
         ])
             ->and(Site::adminRoutes(['admin' => '/grid-admin', 'regions' => '/our-regions'], []))->toMatchArray(['dashboard' => '/grid-admin', 'regions' => '/our-regions', 'region' => '/grid-admin/regions/region'])
             // A site that kept the routes of before (under /account): the admin route
-            ->and(Site::adminRoutes(['admin' => '/w4os', 'regions' => '/account/regions', 'dashboard' => '/account/dashboard'], []))->toMatchArray(['dashboard' => '/w4os', 'regions' => '/w4os/regions']);
+            ->and(Site::adminRoutes(['admin' => '/w4os', 'regions' => '/account/regions', 'dashboard' => '/account/dashboard'], []))->toMatchArray(['dashboard' => '/w4os', 'regions' => '/w4os/regions'])
+            // The base no route of its own: the dashboard is the page there
+            ->and(Site::adminRoutes($routes, []))->not->toHaveKey('admin');
     });
 
     test('never under the route of Grav\'s admin (admin, admin2): the default route then', function () {

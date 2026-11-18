@@ -259,9 +259,10 @@ final class Site
         $routes = array_map(fn ($route) => '/'.trim((string) $route, '/'), array_filter((array) ($this->config()['routes'] ?? [])));
         $config = $this->grav['config'];
         $reserved = array_filter([(string) $config->get('plugins.admin.route', ''), (string) $config->get('plugins.admin2.route', '')]);
-        $set = $routes['admin'] ?? self::ADMIN_ROUTE;
+        $set = '/'.trim((string) ($routes['admin'] ?? self::ADMIN_ROUTE), '/');
         $routes = self::adminRoutes($routes, $reserved);
-        $set === $routes['admin'] || $this->grav['log']->warning("w4os: the admin route $set is under the route of Grav's admin: {$routes['admin']} instead");
+        $set === $routes['dashboard'] || isset($this->config()['routes']['dashboard'])
+            || $this->grav['log']->warning("w4os: the admin route $set is under the route of Grav's admin: {$routes['dashboard']} instead");
         if (! ($this->config()['register']['enabled'] ?? true)) {
             unset($routes['register'], $routes['confirm']);
         }
@@ -301,7 +302,8 @@ final class Site
                 $admin = self::ADMIN_ROUTE;
             }
         }
-        $routes['admin'] = $admin;
+        // The base of the sections, no page of its own (the dashboard is there)
+        unset($routes['admin']);
         foreach (self::ADMIN_ROUTES as $type => $section) {
             if (! isset($routes[$type]) || $routes[$type] === (self::OLD_ADMIN_ROUTES[$type] ?? null)) {
                 $routes[$type] = $admin === '/' ? ($section ?: '/') : $admin.$section;
