@@ -67,6 +67,16 @@ with them is the theme's choice, and its own settings stay the user's. Some them
 - **Quark**, **Quark 2** and their children, **Woo** and **Apple Notes** include no language switcher; Mundana, Future2021 and
   Editorial include Grav's own (`partials/langswitcher.html.twig`).
 
+### Recommended themes
+
+Free themes that run on Grav 2 and show the pages and the menu of the plugin as they should: **Quark 2** (the base of the site's
+own theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Mundana**, **Future2021**, **Editorial**, **Learn2**
+(its menu in a sidebar), **Woo**, **Apple Notes** and **Hypertext** (plain HTML, no styles of its own). **Hadron** (a child of
+Quark 2) runs too, once its own settings are set (its logo, the labels of its language switcher).
+
+Not recommended: **Quark Photofolio**, which has no menu of the site, and **Saturn**, unmaintained since 2021 (its search bar needs
+a plugin of its own).
+
 ## Who manages the grid on the site
 
 The setting **Admin pages from level** (`admin_level`) is the lowest user level of the grid that enters the admin pages of the site: one of OpenSimulator's levels (0 resident, 1 god-like, 100 customer service, 150 liaison, 200 god, 250 maintenance), customer service by default. Inside, each page, action and field asks its own level, the one the engine gives it, and the visitor's own level decides, as in the world: a level has every right of the ones below it, never one above.
