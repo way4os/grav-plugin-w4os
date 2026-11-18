@@ -19,9 +19,9 @@ const PROFILE_HTML = '<div class="profile"><section id="profile-inworld" class="
 describe('the posts of a profile', function () {
     $view = PostsView::of((new OpenApi(Contract::document()))->postsOf(), 'u1', 'u1');
 
-    test('are written in the field the engine describes: a text of its length at most, required, its label and help', function () use ($view) {
-        expect(Posts::fields($view))->toBe(['content' => [
-            'type' => 'textarea', 'classes' => 'w4os-autogrow', 'rows' => 3, 'label' => 'w4os.post_label', 'help' => 'w4os.post_help',
+    test('are written in the field the engine describes, compact: one line that grows, its label as its placeholder, its length at most, required', function () use ($view) {
+        expect(Posts::fields($view))->toEqual(['content' => [
+            'type' => 'textarea', 'classes' => 'w4os-autogrow w4os-post-field', 'rows' => 1, 'placeholder' => 'w4os.post_label',
             'validate' => ['required' => true, 'max' => 1000],
         ]]);
     });
@@ -36,13 +36,13 @@ describe('the posts of a profile', function () {
             ->and(Posts::inFeed('<p>Not found</p>', '<form></form>', fn () => 'x'))->toBe('<p>Not found</p>');
     });
 
-    test('have a delete button each, asked before, with the nonce of the form and the id of the post', function () use ($view) {
+    test('have their actions in a small menu each (⋯), delete asked before, with the nonce of the form and the id of the post', function () use ($view) {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('nonce_field', fn (string $action) => "<input type=\"hidden\" name=\"nonce\" value=\"$action\">"));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/post-actions.html.twig', ['view' => $view, 'post' => 'p1']);
 
-        expect($html)->toContain('<form method="post" class="w4os-post-actions">', '<input type="hidden" name="nonce" value="w4os-post">', '<input type="hidden" name="post" value="p1">',
+        expect($html)->toContain('<details class="w4os-post-menu">', '<summary aria-label="&#x5B;w4os.actions&#x5D;" title="&#x5B;w4os.actions&#x5D;">⋯</summary>', '<form method="post" class="w4os-post-actions">', '<input type="hidden" name="nonce" value="w4os-post">', '<input type="hidden" name="post" value="p1">',
             '<button name="action" value="deletePost" data-w4os-ask="&#x5B;w4os.ask_delete_post&#x5D;" onclick="return confirm(this.dataset.w4osAsk)"', '[w4os.action_delete_post]</button>');
     });
 });

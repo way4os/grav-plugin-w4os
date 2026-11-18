@@ -11,7 +11,8 @@ use W4OS\Views\PostsView;
 final class Posts
 {
     /**
-     * The fields of the form that writes a post, for Grav's Form plugin.
+     * The fields of the form that writes a post, for Grav's Form plugin: compact, a text of one line that grows as it is written,
+     * its label as its placeholder.
      *
      * @return array<string,array<string,mixed>>
      */
@@ -19,7 +20,10 @@ final class Posts
     {
         $fields = [];
         foreach ($view->fields as $field) {
-            $fields[(string) $field['name']] = Items::input($field);
+            $input = Items::input($field);
+            $input['type'] === 'textarea' && $input = ['classes' => $input['classes'].' w4os-post-field', 'rows' => 1, 'placeholder' => $input['label']] + $input;
+            unset($input['label'], $input['help']);
+            $fields[(string) $field['name']] = $input;
         }
 
         return $fields;

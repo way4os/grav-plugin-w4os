@@ -103,20 +103,9 @@ li:empty { display: none; }
 }
 /* The profile of an avatar (a block of the helpers): its picture beside its name */
 .block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
-/* The pictures of a profile in their own proportions, never cut nor stretched; the 2nd and 1st Life tabs as the viewer's: the
-   picture, then the rest beside it (under it on a narrow screen) */
-/* The banner of a profile, over every tab: its picture beside its name and what the engine marks for it (birth, role) */
-.profile-banner { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin-bottom: 1rem; }
-.profile-banner .profile-photo { max-width: min(100%, 12rem); max-height: 9rem; }
-.profile-banner .block-title { margin: 0 0 .25rem; }
-.profile-banner .profile-banner-details { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .15rem .75rem; }
-.profile-banner .profile-banner-bare { margin: .15rem 0 0; }
-.profile-banner-details dt, .profile-banner-details dd { margin: 0; }
-.profile-identity { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; margin-bottom: 1rem; }
-.profile-photo { display: block; flex: none; width: auto; height: auto; max-width: min(100%, 20rem); max-height: 16rem; object-fit: contain; border-radius: .4rem; }
-.profile-identity-details { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: .25rem 1rem; }
-.profile-identity-details dd { margin: 0; }
-/* The details of a profile (its groups, its interests...), label left and value right, in any theme */
+/* The rest of a profile (its banner, its pictures, its stream): the styles of its block, css/profile.css of the helpers */
+/* The details of a profile (its groups, its interests...), label left and value right, in any theme: the groups of the account page
+   too */
 .profile-details { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25rem 1rem; margin: 0 0 1rem; }
 .profile-details dt, .profile-details dd { margin: 0; }
 .lead:empty { display: none; }
@@ -234,3 +223,20 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 /* What the plugin and the helpers hide (the tabs of a profile) stays hidden, whatever a theme says of the display of its elements
    (Editorial: section { display: block }) */
 .w4os [hidden] { display: none !important; }
+
+/* The stream of its own avatar: the field compact (one line, growing as it is written or once it has the focus), a small button;
+   the actions of a post in a small menu at its end (⋯), the size of the text, in the colors of the page */
+.w4os-post-form { margin: 0 0 1.5rem; }
+.w4os-post-form .form-field, .w4os-post-form .form-group { margin-bottom: .5rem; }
+.w4os-post-form textarea.w4os-post-field { min-height: 2.5rem; height: auto; resize: vertical; }
+.w4os-post-form textarea.w4os-post-field:focus, .w4os-post-form textarea.w4os-post-field:not(:placeholder-shown) { min-height: 5rem; }
+.w4os-post-form button, .w4os-post-form .button { padding: .3rem .9rem; font-size: .875rem; min-height: 0; }
+.w4os-post-menu { position: relative; font-size: .9em; }
+.w4os-post-menu summary { list-style: none; cursor: pointer; padding: 0 .35rem; line-height: 1.2; opacity: .6; border-radius: .25rem; }
+.w4os-post-menu summary::-webkit-details-marker { display: none; }
+.w4os-post-menu summary:hover, .w4os-post-menu[open] summary { opacity: 1; }
+.w4os-post-menu .w4os-post-actions { position: absolute; right: 0; top: 100%; z-index: 20; display: grid; min-width: 8rem; margin: .25rem 0 0; padding: .25rem;
+    color: CanvasText; background: Canvas; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: .4rem; box-shadow: 0 2px 8px rgb(0 0 0 / .15); }
+.w4os-post-menu .w4os-post-action { all: unset; display: block; padding: .3rem .6rem; border-radius: .25rem; cursor: pointer; font: inherit; }
+.w4os-post-menu .w4os-post-action:hover, .w4os-post-menu .w4os-post-action:focus-visible { background: color-mix(in srgb, currentColor 10%, transparent); }
+.w4os-post-menu .w4os-danger { color: #b91c1c; }
