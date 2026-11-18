@@ -56,4 +56,4 @@ w4os:
   admin_site_logo: 'Logo'
   admin_site_logo_help: 'Le logo du site, dans le réglage propre au thème'
   admin_site_favicon: 'Favicon'
-  admin_site_favicon_help: 'L''icône du site dans les onglets des navigateurs, dans le réglage propre au thème'
+  admin_site_favicon_help: 'L’icône du site dans les onglets des navigateurs, dans le réglage propre au thème'
