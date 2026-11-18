@@ -146,10 +146,7 @@ final class Forms
      */
     public static function checked(mixed $list): array
     {
-        $names = array_values(array_unique(array_filter(array_map('strval', (array) $list), fn (string $name) => $name !== '')));
-        sort($names);
-
-        return $names;
+        return \W4OS\Views\FormView::checked($list);
     }
 
     /**

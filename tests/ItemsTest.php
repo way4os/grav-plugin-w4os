@@ -18,58 +18,13 @@ describe('the page of an item of the engine', function () {
             ->and($api->itemOf('nothing'))->toBeNull();
     });
 
-    test('knows who the visitor is to it', function () {
-        expect(Items::roles(['uuid' => 'u1', 'owner' => 'u2'], 'u2', false))->toBe(['owner'])
-            ->and(Items::roles(['uuid' => 'u1'], 'u1', true))->toBe(['manager', 'self'])
-            ->and(Items::roles(['uuid' => 'u1'], null, false))->toBe([]);
-    });
-
-    test('shows a field by its condition, lets change it by its access', function () use ($api) {
-        $fields = array_column($api->itemOf('regions')['fields'], null, 'name');
-        $avatar = array_column($api->itemOf('avatars')['fields'], null, 'name');
-
-        expect(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => true], ['manager']))->toBeTrue()
-            ->and(Items::visible($fields['enabled'], ['hyperlink' => false, 'local' => false], ['manager']))->toBeFalse()
-            ->and(Items::editable($fields['enabled'], ['manager'], 200))->toBeTrue()
-            ->and(Items::editable($fields['enabled'], ['owner']))->toBeFalse()
-            ->and(Items::editable($fields['name'], ['manager'], 200))->toBeFalse()
-            ->and(Items::editable($avatar['about'], ['self']))->toBeTrue()
-            ->and(Items::editable($avatar['role'], ['self']))->toBeFalse();
-    });
-
-    test('shows its groups with the fields the visitor sees, and a form of the ones it changes', function () use ($api) {
+    test('its form for Grav: the inputs of the fields the viewer changes (w4os-views FormView), the id hidden', function () use ($api) {
         $form = $api->itemOf('regions');
         $local = ['uuid' => 'r1', 'name' => 'Welcome', 'hyperlink' => false, 'local' => true, 'enabled' => true];
-        $far = ['uuid' => 'r2', 'name' => 'Far', 'hyperlink' => true, 'local' => false];
-        $names = fn (array $groups) => array_merge(...array_map(fn ($group) => array_column($group['fields'], 'name'), $groups));
-        $fields = Items::fields($form, $local, ['manager'], 200);
+        $fields = Items::fields(W4OS\Views\FormView::of($form, $local, null, true, 200));
 
-        expect($names(Items::groups($form, $local, ['manager'])))->toContain('name', 'enabled')
-            ->and($names(Items::groups($form, $far, ['manager'])))->not->toContain('enabled')
-            ->and(Items::changeable($form, $local, ['manager'], 200))->toBeTrue()
-            ->and(Items::changeable($form, $far, ['manager'], 200))->toBeFalse()
-            ->and(Items::changeable($form, $local, ['owner']))->toBeFalse()
-            ->and($fields['id'])->toBe(['type' => 'hidden'])
-            ->and(json_encode($fields))->toContain('"enabled":{"type":"checkbox"', '"owner":{"type":"w4os_avatar"')->not->toContain('"name":')
-            ->and(Items::values($form, ['uuid' => 'r1', 'enabled' => true], ['manager'], 200))->toBe(['id' => 'r1', 'owner' => '', 'roles' => [], 'enabled' => true])
-            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent', 'FallbackRegion'], 'enabled' => '1'], ['manager'], 200))
-            ->toBe(['roles' => ['FallbackRegion', 'Persistent']])
-            ->and(Items::changes($form, $local + ['roles' => ['Persistent']], ['roles' => ['Persistent'], 'enabled' => '1'], ['manager'], 200))->toBe([]);
-    });
-
-    test('a posted form changes what differs only', function () use ($api) {
-        $region = $api->itemOf('regions');
-        $avatar = $api->itemOf('avatars');
-        $ada = ['uuid' => 'u1', 'about' => 'Hi', 'wantsList' => ['meet', 'build'], 'role' => 'resident'];
-
-        expect(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['manager'], 200))->toBe(['enabled' => false])
-            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], ['enabled' => '1'], ['manager'], 200))->toBe([])
-            ->and(Items::changes($region, ['hyperlink' => false, 'local' => false, 'enabled' => null], [], ['manager'], 200))->toBe([])
-            ->and(Items::changes($region, ['hyperlink' => false, 'local' => true, 'enabled' => true], [], ['owner']))->toBe([])
-            ->and(Items::changes($avatar, $ada, ['about' => 'Hi', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => ''], ['self']))
-            ->toBe([])
-            ->and(Items::changes($avatar, $ada, ['about' => 'Hello', 'wantsList' => ['build', 'meet'], 'role' => 'god', 'password' => 'secret1'], ['manager'], 200))
-            ->toMatchArray(['about' => 'Hello', 'role' => 'god', 'password' => 'secret1']);
+        expect($fields['id'])->toBe(['type' => 'hidden'])
+            ->and(json_encode($fields))->toContain('"enabled":{"type":"checkbox"', '"owner":{"type":"w4os_avatar"')->not->toContain('"name":');
     });
 });
 

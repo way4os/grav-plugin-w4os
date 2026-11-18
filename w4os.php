@@ -402,7 +402,7 @@ class W4osPlugin extends Plugin
         $described = $this->site()->openApi()->itemOf('avatars');
         $described === null || $form->setFields(Items::without(
             Items::withOptions((array) $form->get('fields'), $described),
-            $form->getName() === 'w4os-edit' ? Items::locked($described, ['manager'], $this->site()->level()) : [],
+            $form->getName() === 'w4os-edit' ? \W4OS\Views\FormView::locked($described, ['manager'], $this->site()->level()) : [],
         ));
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));
@@ -496,14 +496,14 @@ class W4osPlugin extends Plugin
                     $edited = $this->edited() ?? throw new FormError('w4os.error_not_found');
                     // Never what the visitor's level may not change, whatever is posted
                     $described = $site->openApi()->itemOf('avatars');
-                    $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(Items::locked($described, ['manager'], $site->level()))));
+                    $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(\W4OS\Views\FormView::locked($described, ['manager'], $site->level()))));
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
                     // no break
                 case 'item':
                     $page = $this->item();
                     $page['item'] === null && throw new FormError('w4os.error_not_found');
-                    $changes = Items::changes($page['form'], $page['item'], (array) ($this->grav['uri']->post('data') ?? []), $page['roles'], $this->site()->level());
+                    $changes = $page['view']->changes((array) ($this->grav['uri']->post('data') ?? []));
                     $id = \W4OS\Views\Rows::id($page['item']);
                     try {
                         $saved = $changes === [] ? [] : $site->engine()->call('PATCH', '/'.rawurlencode($page['type']).'/'.rawurlencode($id), ['type' => $page['type'], 'id' => $id, 'attributes' => $changes], [], ! empty($page['form']['scoped']));
@@ -865,7 +865,7 @@ class W4osPlugin extends Plugin
         if ($page === null) {
             $options = (array) ($this->grav['page']->header()->w4os_item ?? []);
             $type = (string) ($options['type'] ?? '');
-            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
+            $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'view' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
             // Its UUID: in the address (?id=, or the parameter of the page: ?avatar=), posted by its form or by an action
             $param = (string) ($options['param'] ?? 'id');
@@ -876,10 +876,13 @@ class W4osPlugin extends Plugin
                 $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
             }
             if ($page['item'] !== null) {
-                $page['roles'] = Items::roles($page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager());
-                $page['groups'] = Items::groups($page['form'], $page['item'], $page['roles']);
-                // What the visitor changes: the fields of its level (the contract's)
-                $page['changeable'] = Items::changeable($page['form'], $page['item'], $page['roles'], $this->site()->level());
+                // Its form for the visitor (w4os-views FormView): who it is to the item, the fields it sees, the ones it changes (of its
+                // level, the contract's)
+                $view = \W4OS\Views\FormView::of($page['form'], $page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->isManager(), $this->site()->level());
+                $page['view'] = $view;
+                $page['roles'] = $view->roles;
+                $page['groups'] = $view->groups;
+                $page['changeable'] = $view->changeable;
                 // The page shows the item; its form (&edit=1, or posted) the fields the visitor changes
                 $page['edit'] = $page['changeable'] && ($uri->query('edit') !== null || $uri->post('__form-name__') === 'w4os-item');
             }
@@ -895,8 +898,8 @@ class W4osPlugin extends Plugin
         if ($page['form'] === null || $page['item'] === null) {
             return;
         }
-        $form->setFields(Items::fields($page['form'], $page['item'], $page['roles'], $this->site()->level()));
-        foreach (Items::values($page['form'], $page['item'], $page['roles'], $this->site()->level()) as $key => $value) {
+        $form->setFields(Items::fields($page['view']));
+        foreach ($page['view']->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
         // The button next to Save leads back to the page of the item

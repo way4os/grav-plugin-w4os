@@ -45,24 +45,24 @@ describe('managers', function () {
         $avatar = array_column($api->itemOf('avatars')['fields'], null, 'name');
         $region = array_column($api->itemOf('regions')['fields'], null, 'name');
 
-        expect(Items::editable($avatar['email'], ['manager'], 150))->toBeTrue()
-            ->and(Items::editable($avatar['email'], ['manager'], 100))->toBeTrue()
-            ->and(Items::editable($avatar['role'], ['manager'], 150))->toBeFalse()
-            ->and(Items::editable($avatar['role'], ['manager'], 200))->toBeTrue()
-            ->and(Items::editable($avatar['about'], ['self'], 0))->toBeTrue()
-            ->and(Items::editable($avatar['role'], ['self'], 0))->toBeFalse()
-            ->and(Items::editable($region['roles'], ['manager'], 150))->toBeFalse()
-            ->and(Items::editable($region['roles'], ['manager'], 200))->toBeTrue()
-            ->and(Items::editable($region['roles'], [], 250))->toBeFalse()
-            ->and(Items::changeable($api->itemOf('regions'), ['local' => true, 'hyperlink' => false], ['manager'], 150))->toBeFalse();
+        expect(W4OS\Views\FormView::editable($avatar['email'], ['manager'], 150))->toBeTrue()
+            ->and(W4OS\Views\FormView::editable($avatar['email'], ['manager'], 100))->toBeTrue()
+            ->and(W4OS\Views\FormView::editable($avatar['role'], ['manager'], 150))->toBeFalse()
+            ->and(W4OS\Views\FormView::editable($avatar['role'], ['manager'], 200))->toBeTrue()
+            ->and(W4OS\Views\FormView::editable($avatar['about'], ['self'], 0))->toBeTrue()
+            ->and(W4OS\Views\FormView::editable($avatar['role'], ['self'], 0))->toBeFalse()
+            ->and(W4OS\Views\FormView::editable($region['roles'], ['manager'], 150))->toBeFalse()
+            ->and(W4OS\Views\FormView::editable($region['roles'], ['manager'], 200))->toBeTrue()
+            ->and(W4OS\Views\FormView::editable($region['roles'], [], 250))->toBeFalse()
+            ->and(W4OS\Views\FormView::of($api->itemOf('regions'), ['local' => true, 'hyperlink' => false], null, true, 150)->changeable)->toBeFalse();
     });
 
     test('leave out of a form of the site the fields they may not change, and what is posted for them', function () use ($api) {
         $form = $api->itemOf('avatars');
         $fields = ['account' => ['type' => 'tab', 'fields' => ['email' => ['type' => 'email'], 'role' => ['type' => 'select']]], 'avatar' => ['type' => 'hidden']];
 
-        expect(Items::locked($form, ['manager'], 150))->toContain('role')->not->toContain('email', 'about')
-            ->and(Items::locked($form, ['manager'], 200))->not->toContain('role')
+        expect(W4OS\Views\FormView::locked($form, ['manager'], 150))->toContain('role')->not->toContain('email', 'about')
+            ->and(W4OS\Views\FormView::locked($form, ['manager'], 200))->not->toContain('role')
             ->and(Items::without($fields, ['role']))->toBe(['account' => ['type' => 'tab', 'fields' => ['email' => ['type' => 'email']]], 'avatar' => ['type' => 'hidden']]);
     });
 
