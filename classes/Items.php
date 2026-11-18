@@ -91,12 +91,13 @@ final class Items
     }
 
     /**
-     * An input of the Form plugin for a field of the engine, by its type.
+     * An input of the Form plugin for a field of the engine, by its type; one it needs (`required`) or whose length it limits
+     * (`maxLength`) is checked so.
      *
      * @param array<string,mixed> $field
      * @return array<string,mixed>
      */
-    private static function input(array $field): array
+    public static function input(array $field): array
     {
         $input = match ($field['type']) {
             'text' => ['type' => 'textarea', 'classes' => 'w4os-autogrow', 'rows' => 3],
@@ -111,6 +112,8 @@ final class Items
             default => ['type' => 'text'],
         };
 
-        return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []);
+        $validate = array_filter(['required' => ! empty($field['required']) ?: null, 'max' => isset($field['maxLength']) ? (int) $field['maxLength'] : null], fn ($rule) => $rule !== null);
+
+        return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
     }
 }

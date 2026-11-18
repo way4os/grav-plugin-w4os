@@ -14,7 +14,14 @@
     <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
         {# A profile its owner or a manager may change: the way to its edit page #}
         {% set edit_url = page.header.w4os == 'profile' and not w4os_is_viewer() ? w4os_profile_edit_url() : null %}
-        {{ w4os_block(page.header.w4os_block, w4os_page_args()) }}
+        {# The stream of a profile its own avatar looks at: the form that writes a post at its top, a delete button on each post #}
+        {% set posts = page.header.w4os == 'profile' ? w4os_posts() : null %}
+        {% if posts %}
+            {% set compose %}{% include 'forms/form.html.twig' with { form: forms('w4os-post') } %}{% endset %}
+            {{ w4os_in_feed(w4os_block(page.header.w4os_block, w4os_page_args()), compose, posts) }}
+        {% else %}
+            {{ w4os_block(page.header.w4os_block, w4os_page_args()) }}
+        {% endif %}
         {% if edit_url %}
             {# Its actions under it, where the edit page has its own, as the Form plugin draws its buttons (the theme's classes); the
                tab open goes with the button (js/keep-tab.js) #}

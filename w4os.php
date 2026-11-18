@@ -12,6 +12,7 @@ use W4os\Grav\FormError;
 use W4os\Grav\Forms;
 use W4os\Grav\Items;
 use W4os\Grav\Lists;
+use W4os\Grav\Posts;
 use W4os\Grav\RememberTokens;
 use W4os\Grav\Site;
 
@@ -285,6 +286,10 @@ class W4osPlugin extends Plugin
         )));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
+        // The stream of the profile shown, for its own avatar signed in on the site (not in a viewer): the form that writes a post,
+        // the actions of its posts; and the profile of the helpers with them in its stream
+        $twig->addFunction(new \Twig\TwigFunction('w4os_posts', fn () => $this->profiled !== null && ! $this->site()->isViewer() && ($this->profiled['uuid'] ?? null) === ($this->site()->avatar()['uuid'] ?? false) ? $this->ownPosts() : null));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_in_feed', fn (string $html, string $form, \W4OS\Views\PostsView $view) => Posts::inFeed($html, $form, fn (string $post) => $this->grav['twig']->processTemplate('w4os/post-actions.html.twig', ['view' => $view, 'post' => $post])), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
@@ -363,6 +368,7 @@ class W4osPlugin extends Plugin
             $this->grav->redirectLangSafe($type === 'edit' && isset($routes['manage']) ? $routes['manage'] : $routes['account']);
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
+            ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'], $_POST['post']) && $this->postAction((array) $_POST);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
         } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
@@ -386,6 +392,15 @@ class W4osPlugin extends Plugin
         $form = $event['form'];
         if ($form->getName() === 'w4os-item') {
             $this->itemForm($form);
+
+            return;
+        }
+        if ($form->getName() === 'w4os-post') {
+            // The field the engine describes, its button
+            if (($posts = $this->ownPosts()) !== null) {
+                $form->setFields(Posts::fields($posts));
+                $form->set('buttons', array_map(fn (array $button) => ['value' => 'w4os.'.$posts->submit] + $button, (array) $form->get('buttons')));
+            }
 
             return;
         }
@@ -500,6 +515,18 @@ class W4osPlugin extends Plugin
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
                     // no break
+                case 'post':
+                    $posts = $this->ownPosts() ?? throw new FormError('w4os.error_forbidden');
+                    try {
+                        $site->engine()->call(...$this->postRequest($posts->write(trim((string) ($data['content'] ?? '')))));
+                    } catch (EngineException $e) {
+                        throw $forms->error($e);
+                    }
+                    $site->forgetProfile((string) $site->avatar()['name']);
+                    // Written: the field empty again
+                    $form->reset();
+                    $this->done('w4os.'.\W4OS\Views\Done::key('post'), $site->profilePage());
+                    // no break
                 case 'item':
                     $page = $this->item();
                     $page['item'] === null && throw new FormError('w4os.error_not_found');
@@ -564,6 +591,49 @@ class W4osPlugin extends Plugin
     private function link(?string $url): string
     {
         return $url ? '<a href="'.htmlspecialchars($url).'">'.htmlspecialchars($url).'</a>' : '';
+    }
+
+    /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */
+    private function ownPosts(): ?\W4OS\Views\PostsView
+    {
+        $avatar = $this->site()->avatar();
+        $posts = $avatar === null ? null : $this->site()->openApi()->postsOf();
+
+        return $posts === null ? null : \W4OS\Views\PostsView::of($posts, (string) $avatar['uuid'], (string) $avatar['uuid'], $this->site()->level());
+    }
+
+    /**
+     * The arguments of Engine::call() for a request of PostsView.
+     *
+     * @param array{string, string, array<string,mixed>, bool} $request
+     * @return array{string, string, ?array<string,mixed>, array<string,scalar>, bool}
+     */
+    private function postRequest(array $request): array
+    {
+        [$method, $path, $data, $scoped] = $request;
+
+        return [$method, $path, $method === 'DELETE' ? null : $data, [], $scoped];
+    }
+
+    /** An action of an avatar on a post of its own stream, from its profile page (a form with its nonce). */
+    private function postAction(array $post): void
+    {
+        if (! Utils::verifyNonce((string) ($post['nonce'] ?? ''), 'w4os-post')) {
+            $this->grav['messages']->add($this->site()->translate('w4os.error_nonce'), 'error');
+
+            return;
+        }
+        $name = (string) $post['action'];
+        try {
+            $request = $this->ownPosts()?->request($name, (string) $post['post']) ?? throw new FormError('w4os.error_invalid_request');
+            $this->site()->engine()->call(...$this->postRequest($request));
+            $this->site()->forgetProfile((string) $this->site()->avatar()['name']);
+            $this->done('w4os.'.\W4OS\Views\Done::key($name), $this->site()->profilePage());
+        } catch (EngineException $e) {
+            $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
+        } catch (FormError $e) {
+            $this->grav['messages']->add($this->errorText($e), 'error');
+        }
     }
 
     /**

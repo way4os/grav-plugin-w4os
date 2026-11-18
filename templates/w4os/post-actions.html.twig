@@ -1,0 +1,5 @@
+{# The actions of a post of the visitor's own stream (w4os-views PostsView), posted to its profile page; the ones the engine asks
+   to confirm (ask) are confirmed first #}
+<form method="post" class="w4os-post-actions">{{ nonce_field('w4os-post')|raw }}<input type="hidden" name="post" value="{{ post|e('html_attr') }}">
+    {%- for action in view.actions %}<button name="action" value="{{ action.name|e('html_attr') }}"{% if action.ask %} data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)"{% endif %} class="{{ form_button_classes ?: 'button' }} button{% if action.danger %} w4os-danger{% endif %}">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor -%}
+</form>
