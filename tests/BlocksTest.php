@@ -30,11 +30,12 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out']);
     });
 
-    test('gives the helpers the user agent of the visitor, so the engine links for where the page is shown', function () {
+    test('gives the helpers the class of the visitor (client), so the engine links for where the page is shown', function () {
         $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
-        $agent = 'Mozilla/5.0 SecondLife/7.1.9 (Firestorm)';
 
-        expect(json_decode($blocks->html('popular_places', ['agent' => $agent]), true))->toBe(['agent' => $agent]);
+        expect(json_decode($blocks->html('popular_places', ['client' => 'viewer']), true))->toBe(['client' => 'viewer'])
+            // Not its user agent: the site keeps one copy of a block per class, not per browser
+            ->and(json_decode($blocks->html('popular_places', ['agent' => 'Mozilla/5.0 Chrome/131']), true))->toBe([]);
     });
 
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {

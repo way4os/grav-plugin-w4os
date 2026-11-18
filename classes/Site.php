@@ -305,10 +305,17 @@ final class Site
     /** Whether a viewer asks the page (its user agent, as the engine tells it): the page then shows its content alone. */
     public function isViewer(): bool
     {
+        return $this->client() === 'viewer';
+    }
+
+    /** The class of the visitor, as the engine tells it from its user agent (Destination::client()): `viewer` or `browser`. */
+    public function client(): string
+    {
         Bundled::library();
 
-        return class_exists(\OpenSim\Hypergrid\Destination::class) && method_exists(\OpenSim\Hypergrid\Destination::class, 'isViewer')
-            && \OpenSim\Hypergrid\Destination::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+        return class_exists(\OpenSim\Hypergrid\Destination::class) && method_exists(\OpenSim\Hypergrid\Destination::class, 'client')
+            ? \OpenSim\Hypergrid\Destination::client((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''))
+            : 'browser';
     }
 
     /**

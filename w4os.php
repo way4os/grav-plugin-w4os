@@ -701,8 +701,9 @@ class W4osPlugin extends Plugin
             'name' => $name === 'profile' ? $uri->query('name') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
-            // The user agent of the visitor: the engine tells a viewer and gives the links it takes (the helpers see the site)
-            'agent' => (string) ($_SERVER['HTTP_USER_AGENT'] ?? ''),
+            // The class of the visitor, as the engine tells it (viewer or browser): the links of the block are the ones it takes (the
+            // helpers see the site, not the visitor); one copy of a block per class is kept
+            'client' => $this->site()->client(),
         ]);
         // The helpers translate their blocks: they are asked in the language of the page
         $language = $this->grav['language'];
