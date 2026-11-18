@@ -128,8 +128,7 @@ forms:
                 minlength: 6
                 maxlength: 16
     buttons:
-      # The main action last, at the far right: the profile page of the avatar (its address set when the form is), then Save
-      - { type: button, id: w4os-view-profile, value: w4os.action_view, url: '', classes: 'button secondary' }
+      # Save, the theme's button (the profile page of the avatar is a plain link of the page, templates/w4os/account.html.twig)
       - { type: submit, value: w4os.save_button, classes: 'button primary' }
     process:
       - w4os: profile

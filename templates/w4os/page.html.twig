@@ -16,11 +16,11 @@
             {{ w4os_block(page.header.w4os_block, w4os_page_args()|merge({title: ''})) }}
         {% endif %}
         {% if edit_url %}
-            {# Its actions under it, where the edit page has its own, as the Form plugin draws its buttons (the theme's classes); the
-               tab open goes with the button (js/keep-tab.js) #}
+            {# Its action under it, a link with the theme's classes of a button (the Form plugin's form_button_classes); the tab open
+               goes with it (js/keep-tab.js) #}
             <div class="form-wrapper w4os-profile-actions">
                 <div class="{{ form_button_outer_classes ?: 'buttons' }}">
-                    <a href="{{ edit_url|e('html_attr') }}" data-w4os-keep-tab><button type="button" class="{{ form_button_classes ?: 'button' }} button primary">{{ 'w4os.action_edit'|t }}</button></a>
+                    <a href="{{ edit_url }}" class="{{ form_button_classes ?: 'button' }}" data-w4os-keep-tab>{{ 'w4os.action_edit'|t }}</a>
                 </div>
             </div>
         {% endif %}

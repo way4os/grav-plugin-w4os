@@ -127,3 +127,21 @@ describe('a page of an earlier version', function () {
             ->and(W4os\Grav\Site::isSplash(null))->toBeFalse();
     });
 });
+
+describe('the styles of the plugin in the site', function () {
+    test('lay out only: no colours of a theme (its variables) nor of their own, the theme\'s buttons and links as they are', function () {
+        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.css');
+
+        expect($css)->not->toMatch('/--pico-|--q2-/')
+            ->and($css)->not->toMatch('/#[0-9a-f]{3,8}\b|rgba?\(/i')
+            ->and($css)->not->toMatch('/button[^{]*\{[^}]*(background|color|border)\s*:/');
+        // A link is a link, never around a button (the Form plugin's button with an address does it: none of the plugin's has one)
+        foreach (glob(dirname(__DIR__).'/templates/w4os/{page,account,home,post-actions,login-links}.html.twig', GLOB_BRACE) as $file) {
+            expect((string) file_get_contents($file))->not->toMatch('/<a[^>]*>\s*<button/');
+        }
+        foreach (glob(dirname(__DIR__).'/pages/*.md') as $file) {
+            $page = (string) file_get_contents($file);
+            str_contains($page, 'template: w4os-admin') || expect($page)->not->toMatch('/type: button[^}]*url:/');
+        }
+    });
+});

@@ -15,47 +15,8 @@
 .w4os-model:hover figure { opacity: .8; }
 .w4os-model input:checked + figure { opacity: 1; outline: 2px solid currentColor; }
 .w4os-model input:focus-visible + figure { outline: 2px dashed currentColor; }
-.w4os-model img { display: block; width: 100%; max-width: none; background: rgba(127, 127, 127, .2); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: .4rem; }
+.w4os-model img { display: block; width: 100%; max-width: none; background: color-mix(in srgb, currentColor 15%, transparent); height: auto; aspect-ratio: 1; object-fit: cover; border-radius: .4rem; }
 .w4os-model figcaption { text-align: center; padding: .3rem 0; }
-
-/* The lists of the engine (the avatars, for the managers) */
-.w4os-filters { display: flex; flex-wrap: wrap; gap: .5rem; align-items: flex-start; margin-bottom: 1rem; }
-.w4os-filters [role=search] { flex: 1 1 16rem; margin: 0; }
-.w4os-filters [role=search] button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
-.w4os-filters select, .w4os-filters > input { flex: 0 1 auto; width: auto; margin: 0; }
-.w4os-filters > input { width: 10rem; }
-.w4os-filters .ts-wrapper { flex: 0 1 auto; min-width: 12rem; margin: 0; }
-/* A filter with nothing chosen shows its label as the placeholders do */
-.w4os-filters .ts-control .w4os-filter-all, .w4os-filters .ts-control > input::placeholder { color: var(--pico-form-element-placeholder-color, GrayText); }
-.w4os-list th a { color: inherit; text-decoration: none; white-space: nowrap; }
-.w4os-list { width: 100%; border-collapse: collapse; font-size: .9em; }
-.w4os-list th, .w4os-list td { text-align: left; padding: .35rem .5rem; border-bottom: 1px solid rgba(127, 127, 127, .25); vertical-align: middle; }
-.w4os-list tr.w4os-disabled td:not(.w4os-actions) { opacity: .6; }
-.w4os-cell-who { white-space: nowrap; }
-.w4os-who { display: flex; align-items: center; gap: .5rem; }
-/* A picture beside a value: square with the theme's small radius (a place, a map), round for a person */
-.w4os-thumb { flex: none; width: 32px; height: 32px; max-width: none; object-fit: cover; border-radius: var(--pico-border-radius, .25rem); }
-.w4os-thumb-person { border-radius: 50%; }
-.w4os-status { display: inline-block; min-width: 6rem; }
-.w4os-pending .w4os-status { font-style: italic; }
-.w4os-actions { width: 1%; text-align: right; }
-.w4os-menu { position: relative; display: inline-block; }
-.w4os-menu summary { list-style: none; cursor: pointer; padding: 0 .6rem; font-size: 1.2em; line-height: 1.6; border-radius: 4px; }
-.w4os-menu summary::-webkit-details-marker { display: none; }
-.w4os-menu summary::after { content: none; }
-.w4os-menu summary:hover, .w4os-menu[open] summary { background: rgba(127, 127, 127, .15); }
-.w4os-menu-list { position: absolute; right: 0; z-index: 10; display: flex; flex-direction: column; min-width: 14rem; margin: .2rem 0 0;
-    padding: .25rem 0; background: var(--pico-background-color, #fff); border: 1px solid rgba(127, 127, 127, .3); border-radius: 6px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .15); }
-.w4os-menu-list form { display: contents; }
-.w4os-menu-list a, .w4os-menu-list button { all: unset; box-sizing: border-box; display: block; width: 100%; padding: .4rem .8rem; cursor: pointer;
-    text-align: left; white-space: nowrap; font-size: .9em; color: inherit; }
-.w4os-menu-list a:hover, .w4os-menu-list a:focus-visible, .w4os-menu-list button:hover, .w4os-menu-list button:focus-visible { background: rgba(127, 127, 127, .15); }
-.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.w4os-tag { font-size: .75em; padding: 0 .3rem; border: 1px solid currentColor; border-radius: .3rem; }
-.w4os-pages { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem; margin: 1rem 0; }
-.w4os-pages a, .w4os-pages strong { min-width: 2rem; padding: .2rem .5rem; text-align: center; border-radius: 4px; }
-.w4os-pages strong { background: rgba(127, 127, 127, .15); }
 
 /* The blocks of the helpers */
 .block { margin: 1.5rem 0; }
@@ -69,31 +30,11 @@
 .block-table { border-collapse: collapse; }
 .block-table th, .block-table td { text-align: left; padding: .25rem .75rem .25rem 0; }
 
-/* The menu of the visitor (templates/w4os/user-menu.html.twig): its label is a link, its list opens on hover or focus, as the
-   languages of oli-langswitcher do */
-.w4os-user-menu { position: relative; display: flex; align-items: center; }
-.w4os-user-current { white-space: nowrap; text-decoration: none; color: inherit; }
-.w4os-user-list { position: absolute; top: 100%; right: 0; z-index: 50; display: grid; gap: 0.1rem; min-width: 12rem; margin: 0; padding: 0.35rem; list-style: none; color: CanvasText; background: Canvas;
-    border: 1px solid rgba(127, 127, 127, 0.35); border-radius: var(--q2-radius-md, 0.5rem); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); visibility: hidden; opacity: 0; transition: opacity 0.15s; }
-.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible; opacity: 1; }
-nav .w4os-user-list li, .w4os-user-list li { display: block; width: auto; margin: 0; padding: 0; list-style: none; }
-nav .w4os-user-list a, .w4os-user-list a { display: block; margin: 0; padding: 0.4rem 0.6rem; border-radius: var(--q2-radius-sm, 0.4rem); color: inherit; line-height: 1.2; white-space: nowrap; text-decoration: none; }
-.w4os-user-list a:hover, .w4os-user-list a:focus-visible { background: rgba(127, 127, 127, 0.15); }
-.overlay .w4os-user-menu { flex-direction: column; align-items: flex-start; }
-.overlay .w4os-user-list { position: static; visibility: visible; opacity: 1; box-shadow: none; border: 0; background: none; }
-
 /* The login URI to copy: one click selects it whole */
 .w4os-login-uri { user-select: all; cursor: text; }
 .w4os-login-links { margin: 1rem 0 0; text-align: center; font-size: .9em; }
 /* A list item emptied by [w4os-register] while registration is closed: hidden, the list numbered without it */
 li:empty { display: none; }
-/* A phone: a list without its emails and dates (the avatars: the name, the role, the status and the actions) */
-@media (max-width: 600px) {
-    .w4os-list .w4os-cell-email, .w4os-list .w4os-cell-date { display: none; }
-    .w4os-list th, .w4os-list td { padding-inline: .25rem; }
-    .w4os-cell-who { white-space: normal; }
-    .w4os-status { min-width: 0; }
-}
 /* The home page of a grid (templates/w4os/home.html.twig): one column, the text first; beside it, where the content is wide enough,
    what the grid is and its news; in three columns, as the splash page of the helpers, where it is wider still */
 .w4os-home { container-type: inline-size; }
@@ -125,7 +66,6 @@ li:empty { display: none; }
 .w4os-identity-name { margin: 0 0 .25rem; font-weight: 600; }
 .w4os-identity-details dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem 1rem; margin: 0; }
 .w4os-identity-details dd { margin: 0; }
-.w4os-search-link { display: inline-flex; align-items: center; padding: 0 .25rem; color: inherit; text-decoration: none; }
 /* The blocks of the helpers in the pages of the site: their hidden labels, the search on one row, its topics together, the guide's
    own title (an h1 the viewers' panel needs) at the size of a section on the home page */
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -153,82 +93,24 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 @media (max-width: 40rem) { .profile-items, .profile-item { grid-template-columns: 1fr; } }
 .w4os-photo { margin-bottom: 1rem; }
 
-/* Tom Select (the languages of a profile) as one field of the theme: one border, one line high while the tags fit, the theme's
-   field colors (Pico's variables when the theme has them) and focus ring */
-.ts-wrapper { border: 0; padding: 0; background: none; box-shadow: none; height: auto; }
-.ts-wrapper .ts-control {
-    border: var(--pico-border-width, 1px) solid var(--pico-form-element-border-color, rgba(127, 127, 127, .5));
-    border-radius: var(--pico-border-radius, .25rem);
-    background-color: var(--pico-form-element-background-color, transparent);
-    color: var(--pico-form-element-color, inherit);
-    min-height: calc(1rem * var(--pico-line-height, 1.5) + var(--pico-form-element-spacing-vertical, .5rem) * 2 + var(--pico-border-width, 1px) * 2);
-    padding: calc(var(--pico-form-element-spacing-vertical, .5rem) / 2) var(--pico-form-element-spacing-horizontal, .75rem);
-    align-items: center;
-    box-shadow: none;
-}
-/* Tom Select's own field (white when one value is chosen, a smaller text) as the theme's */
-.ts-wrapper.full .ts-control, .ts-wrapper.single .ts-control { background-color: var(--pico-form-element-background-color, transparent); }
-.ts-wrapper .ts-control, .ts-wrapper .ts-control input, .ts-dropdown { font-size: inherit; line-height: inherit; color: var(--pico-form-element-color, inherit); }
-.ts-wrapper.focus .ts-control {
-    border-color: transparent;
-    box-shadow: 0 0 0 2px var(--q2-focus-ring, var(--pico-form-element-focus-color, Highlight)), 0 0 0 3px var(--q2-bg, transparent);
-}
-.ts-wrapper .ts-control > input {
-    flex: 1 1 4rem; width: auto; height: auto; min-height: 0; margin: 0; padding: 0;
-    border: 0; background: none; box-shadow: none; color: inherit;
-}
-/* The tags of several values (the languages of a profile, a filter) and the option pointed in the list in the theme's colors, for
-   light and dark: a tint of the text of its fields; the button that removes a tag a plain mark, not a button of the theme */
-.ts-wrapper.multi .ts-control > div.item {
-    background: color-mix(in srgb, var(--pico-form-element-color, currentColor) 14%, transparent);
-    color: var(--pico-form-element-color, inherit);
-    border-radius: calc(var(--pico-border-radius, .25rem) / 2);
-}
-.ts-wrapper.multi .ts-control > div.item.active { background: color-mix(in srgb, var(--pico-form-element-color, currentColor) 24%, transparent); color: var(--pico-form-element-color, inherit); }
-.ts-wrapper .ts-control .item .remove[role=button] {
-    display: inline-block; cursor: pointer; text-decoration: none; width: auto; margin: 0 0 0 .4rem; padding: 0 .35rem; border: 0; border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent);
-    border-radius: 0; background: none; box-shadow: none; color: inherit; font-size: inherit; line-height: inherit;
-}
-.ts-wrapper .ts-control .item .remove[role=button]:hover { background: color-mix(in srgb, currentColor 15%, transparent); }
-.ts-wrapper .ts-dropdown .option.active { background-color: color-mix(in srgb, var(--pico-form-element-color, currentColor) 12%, transparent); color: inherit; }
-.ts-wrapper .ts-dropdown .create, .ts-wrapper .ts-dropdown .no-results { color: var(--pico-muted-color, GrayText); }
-/* A filter of one value lists its values only: no choice is the label of the field, removed by its × */
-.ts-wrapper .ts-dropdown .option[data-value=""] { display: none; }
-.ts-wrapper .ts-dropdown,
-.ts-dropdown {
-    background-color: var(--pico-form-element-background-color, Canvas);
-    color: var(--pico-form-element-color, CanvasText);
-    border-color: var(--pico-form-element-border-color, rgba(127, 127, 127, .5));
-}
-/* The actions of a profile (its page's and its forms') and of the page of an item, at the bottom right (the buttons' wrapper of
-   the Form plugin: buttons, or the theme's own class) */
-.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions > div, .w4os-form-item .buttons, .w4os-form-item .button-wrapper,
-.w4os-item-actions > div, .w4os-item-actions form { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .5rem; }
-.w4os-item-actions form { margin: 0; }
-.w4os-item-actions > div, .w4os-item-actions form { align-items: center; }
-.w4os-item-actions button { margin: 0; }
-/* A secondary button of the plugin's pages and forms (View next to Save, an action next to Edit): an outline in the theme's main
-   color, whatever the theme gives every button of a form */
-.w4os .buttons button.secondary, .w4os .button-wrapper button.secondary, .w4os .w4os-item-actions button.secondary {
-    background: transparent; color: var(--pico-primary, currentColor); border: var(--pico-border-width, 1px) solid currentColor; box-shadow: none;
-}
-/* The page of an item: a value it does not change, its label beside it (above it on a phone) */
-.w4os-value { display: grid; grid-template-columns: minmax(8rem, 14rem) minmax(0, 1fr); gap: 0 1rem; align-items: baseline; margin-bottom: .5rem; }
-.w4os-value .form-label, .w4os-value .form-data { margin: 0; }
-@media (max-width: 40rem) { .w4os-value { grid-template-columns: minmax(0, 1fr); } }
+/* Tom Select (the languages of a profile) as one field: one line high while the tags fit, its lines and tints from the colour of
+   the text, its list on the page's own background */
+.ts-wrapper .ts-control { border: 1px solid color-mix(in srgb, currentColor 35%, transparent); border-radius: .25rem; background: transparent; color: inherit; min-height: 2.5rem; padding: .25rem .5rem; align-items: center; box-shadow: none; }
+.ts-wrapper.full .ts-control, .ts-wrapper.single .ts-control { background: transparent; }
+.ts-wrapper .ts-control, .ts-wrapper .ts-control input, .ts-dropdown { font-size: inherit; line-height: inherit; color: inherit; }
+.ts-wrapper.focus .ts-control { outline: 2px solid currentColor; outline-offset: 1px; box-shadow: none; }
+.ts-wrapper .ts-control > input { flex: 1 1 4rem; width: auto; height: auto; min-height: 0; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; color: inherit; }
+.ts-wrapper.multi .ts-control > div.item { background: color-mix(in srgb, currentColor 14%, transparent); color: inherit; border-radius: .2rem; }
+.ts-wrapper.multi .ts-control > div.item.active { background: color-mix(in srgb, currentColor 24%, transparent); color: inherit; }
+.ts-wrapper .ts-control .item .remove[role=button] { display: inline-block; cursor: pointer; text-decoration: none; margin: 0 0 0 .4rem; padding: 0 .35rem; border-left: 1px solid color-mix(in srgb, currentColor 30%, transparent); }
+.ts-wrapper .ts-dropdown .option.active { background: color-mix(in srgb, currentColor 12%, transparent); color: inherit; }
+.ts-wrapper .ts-dropdown .create, .ts-wrapper .ts-dropdown .no-results { opacity: .7; }
+.ts-dropdown { background: Canvas; color: CanvasText; border-color: color-mix(in srgb, currentColor 35%, transparent); }
 
-/* The indicators of a list: an icon by state, its tone in the colors of the theme; an icon that is an action is a plain button */
-.w4os-indicators { display: inline-flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-.w4os-indicator-form { display: inline; margin: 0; }
-.w4os button.w4os-indicator { width: auto; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; cursor: pointer; }
-.w4os-tone-ok { color: var(--pico-ins-color, currentColor); }
-.w4os-tone-off { color: var(--pico-muted-color, currentColor); }
-.w4os-tone-warning { color: var(--pico-mark-background-color, currentColor); }
-.w4os-tone-failed { color: var(--pico-del-color, currentColor); }
+/* The actions of a profile (its page and its forms) at the bottom right, in the wrapper of the buttons of the Form plugin */
+.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .5rem; }
 
-/* The ways out of the account page (its profile, the admin, sign out), and the links under the sign-in form, in any theme */
-.w4os-account-links ul { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0 0 1rem; padding: 0; list-style: none; }
-.w4os-account-links li { margin: 0; padding: 0; list-style: none; }
+/* The links under the sign-in form, in any theme */
 #grav-login .w4os-login-links { margin: 1rem 0 0; text-align: center; }
 /* What the plugin and the helpers hide (the tabs of a profile) stays hidden, whatever a theme says of the display of its elements
    (Editorial: section { display: block }) */
@@ -247,7 +129,6 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-post-menu summary::marker, .w4os-post-menu summary::before, .w4os-post-menu summary::after { content: none; display: none; }
 .w4os-post-menu summary:hover, .w4os-post-menu[open] summary { opacity: 1; }
 .w4os-post-menu .w4os-post-actions { position: absolute; right: 0; top: 100%; z-index: 20; display: grid; min-width: 8rem; margin: .25rem 0 0; padding: .25rem;
-    color: CanvasText; background: Canvas; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: .4rem; box-shadow: 0 2px 8px rgb(0 0 0 / .15); }
+    color: CanvasText; background: Canvas; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: .4rem; }
 .w4os-post-menu .w4os-post-action { all: unset; display: block; padding: .3rem .6rem; border-radius: .25rem; cursor: pointer; font: inherit; }
 .w4os-post-menu .w4os-post-action:hover, .w4os-post-menu .w4os-post-action:focus-visible { background: color-mix(in srgb, currentColor 10%, transparent); }
-.w4os-post-menu .w4os-danger { color: #b91c1c; }
