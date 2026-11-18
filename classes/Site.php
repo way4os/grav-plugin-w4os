@@ -958,7 +958,8 @@ final class Site
     public function applyBrand(): void
     {
         $brand = array_filter((array) $this->grav['config']->get('plugins.w4os.brand', []));
-        if ($brand === []) {
+        // Without a brand, only a theme whose own files were replaced by it before (to put them back)
+        if ($brand === [] && ! is_dir($this->keptFiles((string) $this->grav['config']->get('system.pages.theme')))) {
             return;
         }
         // Whatever a theme declares, the site's pages open: the theme as it is then, the cause in Grav's log
@@ -988,6 +989,115 @@ final class Site
         foreach (self::themeBrand($brand, $fields, $copies, self::brandSwitches($has)) as $field => $value) {
             $this->grav['config']->set("themes.$theme.$field", $value);
             $this->grav['config']->set("theme.$field", $value);
+        }
+        // A theme without a field for it, the file it takes it from (Woo's images/logo.png): the site's there, the theme's own
+        // put back without it
+        $folder = (string) $this->grav['locator']->findResource("themes://$theme", true);
+        foreach ($folder === '' ? [] : $this->fixedFilesOf($folder) as $setting => $file) {
+            if (isset($fields[$setting])) {
+                continue;
+            }
+            $files = (array) ($brand[$setting] ?? []);
+            $source = $files === [] ? null : GRAV_ROOT.'/'.ltrim((string) (reset($files)['path'] ?? ''), '/');
+            self::brandOver($source !== null && is_file($source) ? $source : null, "$folder/$file", $this->keptFiles($theme)."/$file");
+        }
+    }
+
+    /**
+     * What of the brand of the site the active theme shows: the logo, the favicon, through a field of its own or the file it takes
+     * them from (fixedBrandFiles()).
+     *
+     * @return array<string,true>
+     */
+    public function brandSupport(): array
+    {
+        $theme = (string) $this->grav['config']->get('system.pages.theme');
+        $folder = (string) $this->grav['locator']->findResource("themes://$theme", true);
+        $found = self::brandFields(fn (string $field) => $this->themeField($field) !== null) + ($folder === '' ? [] : $this->fixedFilesOf($folder));
+
+        return array_map(fn () => true, $found);
+    }
+
+    /** What the brand of the site keeps of a theme's own files it replaced (user/data/w4os/theme-files/<theme>). */
+    private function keptFiles(string $theme): string
+    {
+        return rtrim((string) $this->grav['locator']->findResource('user://data', true), '/')."/w4os/theme-files/$theme";
+    }
+
+    /** @return array<string,string> fixedBrandFiles() of a theme's folder, kept in Grav's cache until its templates change */
+    private function fixedFilesOf(string $folder): array
+    {
+        $cache = $this->grav['cache'];
+        $key = 'w4os-brand-files-'.md5($folder.'@'.(int) @filemtime("$folder/templates"));
+        $files = $cache->fetch($key);
+        if (! is_array($files)) {
+            $files = self::fixedBrandFiles($folder);
+            $cache->save($key, $files);
+        }
+
+        return $files;
+    }
+
+    /** The files a theme takes its logo or its favicon from by a fixed name (no field for them): the place the brand goes. */
+    public const FIXED_BRAND_FILES = [
+        'logo' => ['images/logo.png', 'images/logo.svg', 'img/logo.png'],
+        'favicon' => ['images/favicon.png', 'images/favicon.ico', 'img/favicon.png', 'img/favicon.ico'],
+    ];
+
+    /**
+     * The files a theme takes its logo and its favicon from by a fixed name: the first of FIXED_BRAND_FILES its templates name.
+     *
+     * @return array<string,string> setting => the file, from the theme's folder
+     */
+    public static function fixedBrandFiles(string $folder): array
+    {
+        $templates = '';
+        if (is_dir("$folder/templates")) {
+            foreach (new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator("$folder/templates", \FilesystemIterator::SKIP_DOTS)) as $file) {
+                str_ends_with($file->getFilename(), '.twig') && $templates .= (string) file_get_contents($file->getPathname());
+            }
+        }
+        $found = [];
+        foreach (self::FIXED_BRAND_FILES as $setting => $files) {
+            foreach ($files as $file) {
+                if (str_contains($templates, $file)) {
+                    $found[$setting] = $file;
+                    break;
+                }
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * A theme's fixed file given the site's (its own kept the first time and after an update of the theme), or its own put back
+     * when the site has none ($source null). What it wrote is known by its checksum, kept beside the theme's own.
+     */
+    public static function brandOver(?string $source, string $target, string $kept): void
+    {
+        $mark = "$kept.w4os";
+        $ours = is_file($mark) ? trim((string) file_get_contents($mark)) : '';
+        $current = is_file($target) ? (string) md5_file($target) : '';
+        if ($source === null) {
+            if (is_file($kept) && $current === $ours) {
+                @copy($kept, $target);
+            }
+            @unlink($kept);
+            @unlink($mark);
+
+            return;
+        }
+        $wanted = (string) md5_file($source);
+        if ($current === $wanted) {
+            return;
+        }
+        // The theme's own (first, or after an update of the theme), not what the brand wrote before
+        if ($current !== '' && $current !== $ours) {
+            (is_dir(dirname($kept)) || @mkdir(dirname($kept), 0775, true)) && @copy($target, $kept);
+        }
+        if ((is_dir(dirname($target)) || @mkdir(dirname($target), 0775, true)) && @copy($source, $target)) {
+            (is_dir(dirname($mark)) || @mkdir(dirname($mark), 0775, true)) && file_put_contents($mark, $wanted);
         }
     }
 

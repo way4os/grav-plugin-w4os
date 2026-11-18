@@ -711,7 +711,7 @@ class W4osPlugin extends Plugin
         $fields['appearance']['fields']['theme']['thumbnails'] = $thumbnails;
         // The brand of the site, its own whatever the theme (applyBrand() gives it to the active one): its files in its data; a
         // notice under a field the active theme has no place for
-        $supported = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
+        $supported = $this->site()->brandSupport();
         $notices = ['logo' => 'w4os.admin_site_logo_unsupported', 'favicon' => 'w4os.admin_site_favicon_unsupported'];
         foreach (Site::BRAND_FOLDERS as $setting => $folder) {
             $fields['appearance']['fields'][$setting]['destination'] = (string) $this->grav['locator']->findResource($folder, false, true);

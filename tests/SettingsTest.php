@@ -101,6 +101,36 @@ describe('the brand of the site', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
+    test('goes into the file a theme takes it from when it has no field for it (Woo\'s images/logo.png), its own put back without it', function () {
+        $root = sys_get_temp_dir().'/w4os-fixed-'.bin2hex(random_bytes(4));
+        mkdir("$root/user/themes/woo/templates/partials", 0777, true);
+        mkdir("$root/user/themes/woo/images", 0777, true);
+        mkdir("$root/user/data/brand", 0777, true);
+        file_put_contents("$root/user/themes/woo/templates/partials/header.html.twig", '<img src="{{ theme_url }}/images/logo.png"> <link href="{{ theme_url }}/images/favicon.png">');
+        file_put_contents("$root/user/themes/woo/images/logo.png", 'woo');
+        file_put_contents("$root/user/themes/woo/images/footer-logo.png", 'footer');
+        file_put_contents("$root/user/data/brand/a.png", 'brand a');
+        file_put_contents("$root/user/data/brand/b.png", 'brand b');
+        $logo = "$root/user/themes/woo/images/logo.png";
+        $kept = "$root/user/data/w4os/theme-files/woo/images/logo.png";
+
+        expect(Site::fixedBrandFiles("$root/user/themes/woo"))->toBe(['logo' => 'images/logo.png', 'favicon' => 'images/favicon.png']);
+        // The site's logo where Woo takes it, Woo's own kept once; another logo of the site, Woo's own still the one kept
+        Site::brandOver("$root/user/data/brand/a.png", $logo, $kept);
+        expect(file_get_contents($logo))->toBe('brand a')->and(file_get_contents($kept))->toBe('woo');
+        Site::brandOver("$root/user/data/brand/b.png", $logo, $kept);
+        expect(file_get_contents($logo))->toBe('brand b')->and(file_get_contents($kept))->toBe('woo');
+        // An update of Woo: its new own kept, the site's logo again
+        file_put_contents($logo, 'woo 2');
+        Site::brandOver("$root/user/data/brand/b.png", $logo, $kept);
+        expect(file_get_contents($logo))->toBe('brand b')->and(file_get_contents($kept))->toBe('woo 2');
+        // No logo for the site: Woo's own back, nothing kept
+        Site::brandOver(null, $logo, $kept);
+        expect(file_get_contents($logo))->toBe('woo 2')->and(file_exists($kept))->toBeFalse()
+            ->and(file_get_contents("$root/user/themes/woo/images/footer-logo.png"))->toBe('footer');
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
     test('leaves the streams of Grav as they are (no folder of the site in the theme\'s)', function () {
         foreach (['w4os.php', ...glob(dirname(__DIR__).'/classes/*.php')] as $file) {
             expect((string) file_get_contents(str_starts_with($file, '/') ? $file : dirname(__DIR__)."/$file"))->not->toContain("addPath('theme'");
