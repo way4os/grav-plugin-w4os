@@ -951,8 +951,10 @@ final class Site
             $destination = self::brandDestination((string) ($this->themeField($field)['destination'] ?? ''));
             $folders[$setting] = (string) ($this->grav['locator']->findResource($destination, false, true) ?: '');
         }
+        // Both the theme's settings and their copy as the active theme's (config.theme, what theme_var() reads)
         foreach (self::themeBrand($brand, $fields, $folders, self::brandSwitches($has)) as $field => $value) {
             $this->grav['config']->set("themes.$theme.$field", $value);
+            $this->grav['config']->set("theme.$field", $value);
         }
     }
 
