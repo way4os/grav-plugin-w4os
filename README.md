@@ -55,6 +55,18 @@ What shows only while registration is open (setting `register.enabled`), such as
 
 Inside a list item, the shortcode goes after the number: the item left empty is hidden, and the list is numbered without it.
 
+## Themes
+
+The plugin works with any theme: its pages use the theme's default page and its entries are pages of the menu. What a theme does
+with them is the theme's choice, and its own settings stay the user's. Some themes seen so far:
+
+- **Mundana** adds its own sign-in link and the list of every language to its menu bar (its settings `menu_login` and
+  `menu_langswitcher`, on by default).
+- **Apple Notes** has no menu: its column lists the pages beside the one shown, by their titles, without their children.
+- **Quark Photofolio** lists the sections of the page shown, not the pages of the site: it has no menu of the site.
+- **Quark**, **Quark 2** and their children, **Woo** and **Apple Notes** include no language switcher; Mundana, Future2021 and
+  Editorial include Grav's own (`partials/langswitcher.html.twig`).
+
 ## Who manages the grid on the site
 
 The setting **Admin pages from level** (`admin_level`) is the lowest user level of the grid that enters the admin pages of the site: one of OpenSimulator's levels (0 resident, 1 god-like, 100 customer service, 150 liaison, 200 god, 250 maintenance), customer service by default. Inside, each page, action and field asks its own level, the one the engine gives it, and the visitor's own level decides, as in the world: a level has every right of the ones below it, never one above.
