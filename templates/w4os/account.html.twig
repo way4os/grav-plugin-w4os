@@ -6,6 +6,6 @@
     {# Its actions at the top right of the content, on the line of the tabs of the form: the profile page of the avatar, signing out
        (found here too in a theme without the entries under my avatar in its menu) #}
     {% import 'w4os/icons.html.twig' as icons %}
-    <div class="w4os-page-actions">{{ icons.action('eye', w4os_profile_page(), 'w4os.action_view'|t) }}{{ icons.action('logout', base_url_relative ~ w4os_logout_route(), 'w4os.logout'|t) }}</div>
+    <div class="w4os-page-actions">{{ icons.action('eye', w4os_profile_page(), 'w4os.action_view'|t, ' data-w4os-keep-tab') }}{{ icons.action('logout', base_url_relative ~ w4os_logout_route(), 'w4os.logout'|t) }}</div>
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
 {% endif %}
