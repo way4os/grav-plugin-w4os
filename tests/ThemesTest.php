@@ -101,6 +101,25 @@ describe('the title of a page of the plugin', function () {
     });
 });
 
+describe('the actions of a page of the plugin', function () {
+    test('are icons at the top right of its content: edit on a profile the visitor may change, the theme\'s text color', function () {
+        $twig = themeless_twig(false);
+        $twig->addFunction(new TwigFunction('w4os_profile_edit_url', fn () => '/account'));
+        $html = $twig->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
+
+        expect($html)->toContain('<div class="w4os-page-actions">', 'href="&#x2F;account"', 'aria-label="&#x5B;w4os.edit_profile&#x5D;"', 'title="&#x5B;w4os.edit_profile&#x5D;"', '<svg', 'stroke="currentColor"')
+            ->and(strpos($html, 'w4os-page-actions'))->toBeLessThan(strpos($html, '<section class="block block-profile">'))
+            ->and($html)->not->toContain('class="button"');
+    });
+
+    test('use the same icons in the lists of the admin: view and edit as icons of the row, its other actions in its menu', function () {
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/list-cells.html.twig');
+
+        expect($template)->toContain('ti ti-eye', 'ti ti-pencil')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/icons.html.twig'))->toContain('eye', 'pencil', 'logout');
+    });
+});
+
 describe('the home page of a grid', function () {
     test('is content of any page (a shortcode), its text first, the blocks of the grid beside it only where there is room', function () {
         $twig = themeless_twig();

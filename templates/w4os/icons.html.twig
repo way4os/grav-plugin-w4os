@@ -1,0 +1,18 @@
+{# The icons of the actions of the pages of the plugin, the same on every theme and in the admin (Tabler Icons, MIT,
+   https://tabler.io/icons): inline, in the color of the text around them (currentColor), no icon font needed #}
+{% macro icon(name) %}
+    {%- set paths = {
+        eye: ['M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0', 'M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6'],
+        pencil: ['M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4', 'M13.5 6.5l4 4'],
+        logout: ['M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2', 'M9 12h12l-3 -3', 'M18 15l3 -3'],
+    } -%}
+    <svg xmlns="http://www.w3.org/2000/svg" class="w4os-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+        {%- for d in paths[name] ?? [] %}<path d="{{ d }}"/>{% endfor -%}
+    </svg>
+{%- endmacro %}
+
+{# An action as an icon link: its text as its title and for screen readers #}
+{% macro action(name, url, label, attributes = '') %}
+    {%- import _self as icons -%}
+    <a class="w4os-page-action" href="{{ url|e('html_attr') }}" title="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}"{{ attributes|raw }}>{{ icons.icon(name) }}</a>
+{%- endmacro %}

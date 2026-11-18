@@ -114,7 +114,7 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .ts-dropdown { background: Canvas; color: CanvasText; border-color: color-mix(in srgb, currentColor 35%, transparent); }
 
 /* The actions of a profile (its page and its forms) at the bottom right, in the wrapper of the buttons of the Form plugin */
-.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper, .w4os-profile-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .5rem; }
+.w4os-form-profile .buttons, .w4os-form-profile .button-wrapper { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: .5rem; }
 
 /* The links under the sign-in form, in any theme */
 #grav-login .w4os-login-links { margin: 1rem 0 0; text-align: center; }
@@ -138,3 +138,10 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
     color: CanvasText; background: Canvas; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: .4rem; }
 .w4os-post-menu .w4os-post-action { all: unset; display: block; padding: .3rem .6rem; border-radius: .25rem; cursor: pointer; font: inherit; }
 .w4os-post-menu .w4os-post-action:hover, .w4os-post-menu .w4os-post-action:focus-visible { background: color-mix(in srgb, currentColor 10%, transparent); }
+
+/* The actions of a page (icons: view, edit, sign out), at the top right of its content, on the line of its tabs; in the color of
+   the text around them */
+.w4os-page-actions { float: right; display: flex; gap: .25rem; margin: 0 0 .5rem 1rem; position: relative; z-index: 1; }
+.w4os-page-action { display: inline-flex; padding: .35rem; color: inherit; text-decoration: none; line-height: 1; }
+.w4os-page-action:hover, .w4os-page-action:focus-visible { opacity: .7; }
+.w4os-icon { width: 1.25rem; height: 1.25rem; }

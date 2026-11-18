@@ -102,12 +102,14 @@ describe('the list of a page of the admin', function () {
         expect($html)->toContain('0 items', ' · 1 filters', 'href="?search=solo&amp;sort=name"', 'role="group" aria-label="&#x5B;w4os.filters&#x5D;"');
     });
 
-    test('has a "…" menu of its other actions, the ones the engine asks to confirm last and marked', function () use ($simulators, $solo) {
+    test('has its view and edit links as icons (eye, pencil), a "…" menu of its other actions, the ones the engine asks to confirm last and marked', function () use ($simulators, $solo) {
         $html = render_list($simulators, [$solo], ['total' => 1], [['key' => 'action_view_item', 'url' => '/sim?id={uuid}']]);
         $menu = substr($html, strpos($html, 'class="dropdown w4os-menu"'));
 
-        expect($menu)->toContain('ti ti-dots', 'data-bs-toggle="dropdown"', 'class="dropdown-item" href=', '<div class="dropdown-divider"></div>')
-            ->and($menu)->toMatch('~dropdown-divider.*value="restart"[^>]*class="dropdown-item text-danger"~s');
+        expect($html)->toMatch('~<a class="btn btn-ghost-secondary btn-icon btn-sm" href="&#x2F;sim&#x3F;id&#x3D;[^"]*" title="&#x5B;w4os.action_view_item&#x5D;"[^>]*><i class="ti ti-eye"~')
+            ->and($menu)->toContain('ti ti-dots', 'data-bs-toggle="dropdown"')->not->toContain('class="dropdown-item" href=')
+            // Nothing above the asked ones here (the view is an icon): no divider before them
+            ->and($menu)->toMatch('~value="restart"[^>]*class="dropdown-item text-danger"~s')->not->toContain('dropdown-divider');
     });
 
     test('says so in one sentence when it has no row', function () use ($simulators) {

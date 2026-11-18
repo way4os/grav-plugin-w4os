@@ -54,14 +54,21 @@
     </span>
 {% endmacro %}
 
-{# The "…" menu of a row (Tabler's dropdown): its links (view, edit), then its other actions (RowView), posted to the page; the
-   ones the engine asks to confirm (`ask`) last, apart and marked #}
+{# The actions of a row: its links (view, edit) as icons, the same as on the pages of the site (eye, pencil); then the "…" menu
+   (Tabler's dropdown) of its other actions (RowView), posted to the page, the ones the engine asks to confirm (`ask`) last, apart
+   and marked #}
 {% macro menu(row) %}
-    {% if row.links or row.actions %}
+    {% set icons = {action_view: 'ti ti-eye', action_view_item: 'ti ti-eye', action_edit: 'ti ti-pencil'} %}
+    {% for link in row.links %}
+        {% set label = ('w4os.' ~ link.key)|t %}
+        {% if icons[link.key] is defined %}<a class="btn btn-ghost-secondary btn-icon btn-sm" href="{{ link.url|e('html_attr') }}" title="{{ label|e('html_attr') }}" aria-label="{{ (label ~ ': ' ~ (row.item.name ?? ''))|e('html_attr') }}"><i class="{{ icons[link.key] }}" aria-hidden="true"></i></a>{% endif %}
+    {% endfor %}
+    {% set others = row.links|filter(link => icons[link.key] is not defined) %}
+    {% if others or row.actions %}
     <div class="dropdown w4os-menu">
         <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" aria-label="{{ ('w4os.actions'|t ~ ': ' ~ (row.item.name ?? ''))|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots" aria-hidden="true"></i></button>
         <div class="dropdown-menu dropdown-menu-end">
-            {% for link in row.links %}<a class="dropdown-item" href="{{ link.url|e('html_attr') }}">{{ ('w4os.' ~ link.key)|t }}</a>{% endfor %}
+            {% for link in others %}<a class="dropdown-item" href="{{ link.url|e('html_attr') }}">{{ ('w4os.' ~ link.key)|t }}</a>{% endfor %}
             {% if row.actions %}
             {% set safe = row.actions|filter(action => not action.danger) %}
             {% set asked = row.actions|filter(action => action.danger) %}
@@ -70,7 +77,7 @@
                 <input type="hidden" name="id" value="{{ row.id|e('html_attr') }}">
                 {% for action in safe %}<button name="action" value="{{ action.name|e('html_attr') }}" class="dropdown-item">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
                 {% if asked %}
-                    {% if row.links or safe %}<div class="dropdown-divider"></div>{% endif %}
+                    {% if others or safe %}<div class="dropdown-divider"></div>{% endif %}
                     {# Confirmed before it is sent, in the words of the engine (`ask`, a key of its catalog) #}
                     {% for action in asked %}<button name="action" value="{{ action.name|e('html_attr') }}" data-w4os-ask="{{ ('w4os.' ~ action.ask)|t|e('html_attr') }}" onclick="return confirm(this.dataset.w4osAsk)" class="dropdown-item text-danger">{{ ('w4os.' ~ action.label)|t }}</button>{% endfor %}
                 {% endif %}

@@ -9,20 +9,16 @@
         {% set edit_url = page.header.w4os == 'profile' and not w4os_is_viewer() ? w4os_profile_edit_url() : null %}
         {# The stream of a profile its own avatar looks at: the form that writes a post at its top, a delete button on each post #}
         {% set posts = page.header.w4os == 'profile' ? w4os_posts() : null %}
+        {# Its action at the top right of the content, on the line of its tabs: an icon (the tab open goes with it, js/keep-tab.js) #}
+        {% if edit_url %}
+            {% import 'w4os/icons.html.twig' as icons %}
+            <div class="w4os-page-actions">{{ icons.action('pencil', edit_url, 'w4os.edit_profile'|t, ' data-w4os-keep-tab') }}</div>
+        {% endif %}
         {% if posts %}
             {% set compose %}{% include 'forms/form.html.twig' with { form: forms('w4os-post') } %}{% endset %}
             {{ w4os_in_feed(w4os_block(page.header.w4os_block, w4os_page_args()|merge({title: ''})), compose, posts) }}
         {% else %}
             {{ w4os_block(page.header.w4os_block, w4os_page_args()|merge({title: ''})) }}
-        {% endif %}
-        {% if edit_url %}
-            {# Its action under it, a link with the theme's classes of a button (the Form plugin's form_button_classes); the tab open
-               goes with it (js/keep-tab.js) #}
-            <div class="form-wrapper w4os-profile-actions">
-                <div class="{{ form_button_outer_classes ?: 'buttons' }}">
-                    <a href="{{ edit_url }}" class="{{ form_button_classes ?: 'button' }}" data-w4os-keep-tab>{{ 'w4os.action_edit'|t }}</a>
-                </div>
-            </div>
         {% endif %}
     {% else %}
         {% include 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
