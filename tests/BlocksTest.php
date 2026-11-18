@@ -38,6 +38,12 @@ describe('blocks', function () {
             ->and(json_decode($blocks->html('popular_places', ['agent' => 'Mozilla/5.0 Chrome/131']), true))->toBe([]);
     });
 
+    test('asks the helpers for the stream of a profile alone when the page asks it (feed_only)', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+
+        expect(json_decode($blocks->html('profile', ['name' => 'Ada.Love', 'feed_only' => 'true']), true))->toBe(['name' => 'Ada.Love', 'feed_only' => 'true']);
+    });
+
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {
         expect(Blocks::kept('search'))->toBeFalse()
             ->and(Blocks::kept('profile'))->toBeTrue()

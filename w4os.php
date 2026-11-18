@@ -704,6 +704,8 @@ class W4osPlugin extends Plugin
             'q' => $uri->query('q'),
             'topic' => $uri->query('topic'),
             'name' => $name === 'profile' ? $uri->query('name') : null,
+            // The stream of a profile alone, when the page asks it (a viewer gets it so anyway, the helpers know it by its class)
+            'feed_only' => $name === 'profile' ? $uri->query('feed_only') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
             // The class of the visitor, as the engine tells it (viewer or browser): the links of the block are the ones it takes (the

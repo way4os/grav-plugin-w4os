@@ -16,7 +16,7 @@ final class Blocks
     private const LIVE = ['search'];
 
     /** The arguments a block takes from the page or the shortcode. */
-    private const ARGS = ['name', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client'];
+    private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client'];
 
     /**
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read
@@ -44,7 +44,7 @@ final class Blocks
     /**
      * The HTML of a block, empty when it is not one or cannot be read.
      *
-     * @param array<string,scalar> $args name (profile), q and topic (search), category (destination_guide), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
+     * @param array<string,scalar> $args name and feed_only (profile: its stream alone), q and topic (search), category (destination_guide), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
      *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME])
      */
     public function html(string $name, array $args = []): string
