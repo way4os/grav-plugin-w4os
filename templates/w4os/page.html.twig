@@ -1,11 +1,9 @@
 {# The content of a page of the plugin (pages/*.md), in a theme's page or in a viewer's panel (w4os-viewer.html.twig): a block of
-   the helpers (search, profile, guide: `w4os_block` of the page), else its part (templates/w4os/<type>.html.twig). Its title first,
-   as the text of a page of the site has its own (most themes show the content of a page alone; the plugin drops it where the theme
-   shows the title itself, Site::withoutDuplicateTitle()); a viewer's layout has its own. #}
+   the helpers (search, profile, guide: `w4os_block` of the page), else its part (templates/w4os/<type>.html.twig). The title of the
+   page is the theme's to show: the page has none of its own, its block neither. #}
 {# The messages given while the page renders (the notices of the blocks of the helpers), put here by the plugin #}
 <!-- w4os:messages -->
 <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
-    {% if not w4os_is_viewer() %}<h1 class="w4os-page-title">{{ page.title }}</h1>{% endif %}
     {% if page.header.w4os_block %}
         {# A profile its owner or a manager may change: the way to its edit page #}
         {% set edit_url = page.header.w4os == 'profile' and not w4os_is_viewer() ? w4os_profile_edit_url() : null %}

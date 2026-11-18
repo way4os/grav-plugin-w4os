@@ -139,11 +139,6 @@ class W4osPlugin extends Plugin
                 && $output = Site::withLoginLinks($output, $this->grav['twig']->processTemplate('w4os/login-links.html.twig'));
             $this->grav->output = $output;
         }
-        // A page of the plugin: its title once, the theme's where it shows it itself
-        if ($this->sitePage() && ($page = $this->grav['page'] ?? null) !== null) {
-            $output = Site::withoutDuplicateTitle($output, (string) $page->title());
-            $this->grav->output = $output;
-        }
         // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
         foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {
