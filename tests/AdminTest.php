@@ -59,6 +59,19 @@ describe('admin', function () {
     });
 });
 
+describe('the brand of the admin', function () {
+    test('is the site\'s own logo (the admin setting, else the brand of the site), never the one of the theme of the site', function () {
+        $brand = ['logo' => ['user/data/theme/images/logo/fowl.png' => ['name' => 'fowl.png', 'path' => 'user/data/theme/images/logo/fowl.png']]];
+        $exists = fn (string $path) => $path === 'user/data/theme/images/logo/fowl.png';
+
+        expect(Site::adminLogo('', $brand, $exists))->toBe('user/data/theme/images/logo/fowl.png')
+            ->and(Site::adminLogo('/my-logo.png', $brand, $exists))->toBe('/my-logo.png')
+            ->and(Site::adminLogo('', [], $exists))->toBeNull()
+            ->and(Site::adminLogo('', $brand, fn () => false))->toBeNull()
+            ->and(Site::adminLogo('', ['logo' => ['../x.png' => ['path' => '../../x.png']]], fn () => true))->toBeNull();
+    });
+});
+
 describe('sign-in', function () {
     test('lands on the avatar\'s own profile, unless a page asked for the sign-in', function () {
         $profile = 'https://site.example.org/fr/profile/Ada.Love';

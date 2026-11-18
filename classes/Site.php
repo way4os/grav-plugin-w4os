@@ -783,8 +783,9 @@ final class Site
     }
 
     /**
-     * The identity of the site for its admin pages: its title, its logo (the plugin's setting admin.logo, else the theme's
-     * custom_logo, else the logo of the grid), its accent color (admin.color, else the theme's accent-color) for Tabler.
+     * The identity of the site for its admin pages: its title, its logo (adminLogo(): the plugin's setting admin.logo, else the
+     * brand of the site, never the theme's; else the logo of the grid), its accent color (admin.color, else the theme's accent-color)
+     * for Tabler.
      *
      * @return array{title: string, logo: ?string, home: string, color?: string, rgb?: string, lt-rgb?: string}
      */
@@ -792,14 +793,8 @@ final class Site
     {
         $theme = (array) $this->grav['config']->get('themes.'.$this->grav['config']->get('system.pages.theme'), []);
         $admin = (array) ($this->config()['admin'] ?? []);
-        $logo = trim((string) ($admin['logo'] ?? ''));
-        if ($logo === '' && is_array($theme['custom_logo'] ?? null) && ($first = reset($theme['custom_logo'])) && isset($first['name'])) {
-            // The file where the site keeps it (its path, as Grav's file fields write it), else where the theme looks for it
-            $path = ltrim((string) ($first['path'] ?? ''), '/');
-            $logo = $path !== '' && ! str_contains($path, '..') && is_file(GRAV_ROOT.'/'.$path) ? $path
-                : (string) $this->grav['locator']->findResource('theme://images/logo/'.$first['name'], false);
-            $logo = $logo === '' ? '' : $this->grav['base_url_relative'].'/'.ltrim($logo, '/');
-        }
+        $logo = (string) self::adminLogo((string) ($admin['logo'] ?? ''), (array) ($this->config()['brand'] ?? []), fn (string $path) => is_file(GRAV_ROOT.'/'.$path));
+        $logo !== '' && ! str_contains($logo, '://') && ! str_starts_with($logo, '/') && $logo = $this->grav['base_url_relative'].'/'.$logo;
         $logo === '' && $logo = (string) ($this->engine()->gridLogo() ?? '');
 
         return [
@@ -807,6 +802,23 @@ final class Site
             'logo' => $logo === '' ? null : $logo,
             'home' => $this->grav['base_url_relative'] ?: '/',
         ] + (self::brandColor((string) ($admin['color'] ?? '') ?: (string) ($theme['accent-color'] ?? '')) ?? []);
+    }
+
+    /**
+     * The logo of the admin, whatever the theme of the site: the admin's own setting (an address), else the logo of the brand of the
+     * site (its file, a path of the site); null without one (the logo of the grid then).
+     *
+     * @param array<string,mixed> $brand the brand of the site (plugins.w4os.brand)
+     */
+    public static function adminLogo(string $setting, array $brand, \Closure $exists): ?string
+    {
+        if (trim($setting) !== '') {
+            return trim($setting);
+        }
+        $files = (array) ($brand['logo'] ?? []);
+        $path = ltrim((string) (($files === [] ? [] : (array) reset($files))['path'] ?? ''), '/');
+
+        return $path !== '' && ! str_contains($path, '..') && $exists($path) ? $path : null;
     }
 
     /**
