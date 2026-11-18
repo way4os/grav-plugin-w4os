@@ -44,6 +44,13 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('profile', ['name' => 'Ada.Love', 'feed_only' => 'true']), true))->toBe(['name' => 'Ada.Love', 'feed_only' => 'true']);
     });
 
+    test('asks a block without its title when the page shows its own (an empty title)', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+
+        expect(json_decode($blocks->html('profile', ['name' => 'Ada.Love', 'title' => '']), true))->toBe(['name' => 'Ada.Love', 'title' => ''])
+            ->and(json_decode($blocks->html('profile', ['name' => 'Ada.Love']), true))->toBe(['name' => 'Ada.Love']);
+    });
+
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {
         expect(Blocks::kept('search'))->toBeFalse()
             ->and(Blocks::kept('profile'))->toBeTrue()

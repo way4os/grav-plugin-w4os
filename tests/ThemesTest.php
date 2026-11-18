@@ -9,7 +9,9 @@ use Twig\TwigFunction;
 function themeless_twig(): Environment
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-    $twig->addFunction(new TwigFunction('w4os_block', fn (string $name) => "<section class=\"block block-$name\"><h1 class=\"block-title\">Bart Simpson</h1></section>", ['is_safe' => ['html']]));
+    // A block with its title, none when the page asks it without (an empty title)
+    $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\">".(($args['title'] ?? null) === '' ? '' : '<h1 class="block-title">Bart Simpson</h1>').'</section>', ['is_safe' => ['html']]));
+    $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
     $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => true));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
@@ -47,8 +49,9 @@ describe('themes', function () {
         expect($html)->toStartWith('<!doctype html>')
             ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/magicoli/opensim-helpers/assets/css/page.css">', '<link href="plugin://w4os/css/viewer.css">',
                 '<div class="w4os w4os-page w4os-profile">', '<section class="block block-profile">')
-            // The block has its own title: the page adds none
-            ->and(substr_count($html, '<h1'))->toBe(1);
+            // The page is the theme there: it shows the title of the page, the block none
+            ->and(substr_count($html, '<h1'))->toBe(1)
+            ->and($html)->toContain('<h1>Bart Simpson</h1>')->not->toContain('block-title');
     });
 });
 
@@ -131,5 +134,14 @@ describe('the sign-in page links', function () {
         expect(W4os\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><form id="search"></form><section id="grav-login">'.$form.'<p class="links"></p></section><section id="other"></section></main>')
             ->and(W4os\Grav\Site::withLoginLinks('<section style="height: 80vh">'.$form.'</section>', '<p class="links"></p>'))->toBe('<section style="height: 80vh">'.$form.'<p class="links"></p></section>')
             ->and(W4os\Grav\Site::withLoginLinks('<p>No form</p>', '<p class="links"></p>'))->toBe('<p>No form</p>');
+    });
+});
+
+describe('the title of a page of the plugin', function () {
+    test('is the theme\'s to show: the content of the page has none, its block neither', function () {
+        $html = themeless_twig()->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
+
+        expect($html)->toContain('<section class="block block-profile">')->not->toContain('<h1')
+            ->and(file_get_contents(dirname(__DIR__).'/templates/w4os/page.html.twig'))->not->toContain('page.title');
     });
 });

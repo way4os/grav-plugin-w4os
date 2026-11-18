@@ -1,6 +1,6 @@
 {# The content of a page of the plugin (pages/*.md), in a theme's page or in a viewer's panel (w4os-viewer.html.twig): a block of
-   the helpers (search, profile, guide: `w4os_block` of the page) under its own title, else the title of the page and its part
-   (templates/w4os/<type>.html.twig). #}
+   the helpers (search, profile, guide: `w4os_block` of the page), else its part (templates/w4os/<type>.html.twig). The title of the
+   page is the theme's to show: the page has none of its own, its block neither. #}
 {# The messages given while the page renders (the notices of the blocks of the helpers), put here by the plugin #}
 <!-- w4os:messages -->
 <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
@@ -11,9 +11,9 @@
         {% set posts = page.header.w4os == 'profile' ? w4os_posts() : null %}
         {% if posts %}
             {% set compose %}{% include 'forms/form.html.twig' with { form: forms('w4os-post') } %}{% endset %}
-            {{ w4os_in_feed(w4os_block(page.header.w4os_block, w4os_page_args()), compose, posts) }}
+            {{ w4os_in_feed(w4os_block(page.header.w4os_block, w4os_page_args()|merge({title: ''})), compose, posts) }}
         {% else %}
-            {{ w4os_block(page.header.w4os_block, w4os_page_args()) }}
+            {{ w4os_block(page.header.w4os_block, w4os_page_args()|merge({title: ''})) }}
         {% endif %}
         {% if edit_url %}
             {# Its actions under it, where the edit page has its own, as the Form plugin draws its buttons (the theme's classes); the
@@ -25,7 +25,6 @@
             </div>
         {% endif %}
     {% else %}
-        <h1>{{ page.title }}</h1>
         {% include 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
     {% endif %}
 </div>

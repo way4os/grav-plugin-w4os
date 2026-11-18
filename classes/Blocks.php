@@ -55,7 +55,8 @@ final class Blocks
         if (! in_array($name, self::NAMES, true)) {
             return '';
         }
-        $query = array_filter(array_intersect_key($args, array_flip(self::ARGS)), fn ($v) => $v !== null && $v !== '');
+        // An empty title is asked as it is: the block leaves its title to the page
+        $query = array_filter(array_intersect_key($args, array_flip(self::ARGS)), fn ($v, $k) => $v !== null && ($v !== '' || $k === 'title'), ARRAY_FILTER_USE_BOTH);
         $html = ($this->fetch)($name, $query);
 
         return is_string($html) ? trim($html) : '';
