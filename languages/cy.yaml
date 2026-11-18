@@ -429,3 +429,5 @@ w4os:
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
   admin_site_favicon: 'Favicon'
   admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
+  admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
+  admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'

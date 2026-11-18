@@ -794,20 +794,8 @@ final class Site
     public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
 
     /**
-     * Where a theme finds the logo and the favicon of the site (theme://images, its logo and favicon folders in it): the site's own
-     * data first (user/data, where Grav serves the images a site uploads, kept across upgrades), the theme's folder after (its own).
-     *
-     * @return array<string,list<string>> prefix of theme:// => its paths, in their order
-     */
-    public static function brandPaths(string $theme): array
-    {
-        return ['images' => ['user://data/theme/images', "themes://$theme/images"]];
-    }
-
-    /**
-     * Where the file of a brand field of a theme goes, as a stream of the site: its own stream (theme://images/logo), its theme@
-     * token as a stream (Grav's older theme@:/images, theme://images), a plain folder of the site in its data (user://data/theme/…);
-     * theme://images when it names none.
+     * Where the file of a brand field of a theme goes, as Grav reads it: its own stream (theme://images/logo), its theme@ token as
+     * a stream (Grav's older theme@:/images, theme://images), a plain folder of the site as it is; theme://images when it names none.
      */
     public static function brandDestination(string $destination): string
     {
@@ -819,7 +807,7 @@ final class Site
             return rtrim('theme://'.$token[1], '/');
         }
 
-        return str_contains($destination, '://') ? $destination : 'user://data/theme/'.trim($destination, '/');
+        return str_contains($destination, '://') ? $destination : trim($destination, '/');
     }
 
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */

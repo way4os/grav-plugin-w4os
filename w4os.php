@@ -252,17 +252,9 @@ class W4osPlugin extends Plugin
     }
 
     /** Templates of the plugin come last, so a theme can override them. */
-    /**
-     * The logo and the favicon of the site found by any theme (its theme://images/logo and favicon) in the site's own data first,
-     * where the settings page puts them: kept across upgrades, served by the web servers as the images a site uploads.
-     */
+    /** The brand of the site given to the active theme, whatever the theme. */
     public function onThemeInitialized(): void
     {
-        $locator = $this->grav['locator'];
-        foreach (Site::brandPaths((string) $this->grav['config']->get('system.pages.theme')) as $prefix => $paths) {
-            $locator->addPath('theme', $prefix, $paths);
-        }
-        // The logo and the favicon of the site in the active theme's own fields, whatever the theme
         $this->site()->applyBrand();
     }
 
@@ -717,9 +709,13 @@ class W4osPlugin extends Plugin
         }
         $fields['appearance']['fields']['theme']['options'] = $themes;
         $fields['appearance']['fields']['theme']['thumbnails'] = $thumbnails;
-        // The brand of the site, its own whatever the theme (applyBrand() gives it to the active one): its files in its data
+        // The brand of the site, its own whatever the theme (applyBrand() gives it to the active one): its files in its data; a
+        // notice under a field the active theme has no place for
+        $supported = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
+        $notices = ['logo' => 'w4os.admin_site_logo_unsupported', 'favicon' => 'w4os.admin_site_favicon_unsupported'];
         foreach (Site::BRAND_FOLDERS as $setting => $folder) {
             $fields['appearance']['fields'][$setting]['destination'] = (string) $this->grav['locator']->findResource($folder, false, true);
+            isset($supported[$setting]) || $fields['appearance']['fields'][$setting]['description'] = $notices[$setting];
         }
         $form->setFields($fields);
         // The values as the site has them now, whatever the form kept: its brand, else what the active theme kept of its own

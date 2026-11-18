@@ -88,16 +88,12 @@ describe('the choice of the theme', function () {
 });
 
 describe('the files of the brand of the site', function () {
-    test('are the site\'s data, found first where any theme looks for its logo and favicon, the theme\'s own after', function () {
-        expect(Site::brandPaths('quark2'))->toBe(['images' => ['user://data/theme/images', 'themes://quark2/images']]);
-    });
-
-    test('go where each theme asks, in the site\'s data: its stream, its theme@ token, a plain folder of the site', function () {
+    test('go where each theme asks, as Grav reads it: its stream, its theme@ token, a plain folder of the site', function () {
         expect(Site::brandDestination('theme://images/logo'))->toBe('theme://images/logo')
             ->and(Site::brandDestination('theme@:/images'))->toBe('theme://images')
             ->and(Site::brandDestination('@theme:/images/favicon'))->toBe('theme://images/favicon')
             ->and(Site::brandDestination('image://favicon'))->toBe('image://favicon')
-            ->and(Site::brandDestination('media/logo'))->toBe('user://data/theme/media/logo')
+            ->and(Site::brandDestination('media/logo'))->toBe('media/logo')
             ->and(Site::brandDestination(''))->toBe('theme://images');
     });
 });
