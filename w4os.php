@@ -275,6 +275,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_slogan', fn () => $this->site()->slogan()));
+        // The fields of the settings of the site for the active theme, again before the form shows (settingsFields())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_settings_fields', fn ($form) => $form === null ? null : $this->settingsFields($form)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
         // The identity of the site for its admin pages (their layout, w4os-admin.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
@@ -462,31 +464,7 @@ class W4osPlugin extends Plugin
             return;
         }
         if ($form->getName() === 'w4os-settings') {
-            // The themes installed (Grav's list), each by the name its blueprint gives, the one of the site chosen
-            $fields = (array) $form->get('fields');
-            $themes = [];
-            foreach ($this->grav['themes']->all() as $folder => $theme) {
-                $themes[$folder] = (string) ($theme->blueprints()->get('name') ?: $folder);
-            }
-            $fields['appearance']['fields']['theme']['options'] = $themes;
-            // The brand of the site in the active theme's own fields: where the theme keeps the files, the ones it takes; none of
-            // them for a theme without such a field
-            $active = (string) $this->grav['config']->get('system.pages.theme');
-            $brand = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
-            foreach (array_keys(Site::BRAND_FIELDS) as $setting) {
-                if (! isset($brand[$setting])) {
-                    unset($fields['appearance']['fields'][$setting]);
-                    continue;
-                }
-                $field = (array) $this->site()->themeField($brand[$setting]);
-                $fields['appearance']['fields'][$setting] = ['destination' => (string) ($field['destination'] ?? 'theme://images'), 'accept' => $field['accept'] ?? ['image/*']]
-                    + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
-            }
-            $form->setFields($fields);
-            $form->getData()->get('theme') === null && $form->setData('theme', $active);
-            foreach ($brand as $setting => $field) {
-                $form->getData()->get($setting) === null && $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
-            }
+            $this->settingsFields($form);
 
             return;
         }
@@ -703,6 +681,43 @@ class W4osPlugin extends Plugin
     private function link(?string $url): string
     {
         return $url ? '<a href="'.htmlspecialchars($url).'">'.htmlspecialchars($url).'</a>' : '';
+    }
+
+    /**
+     * The fields of the settings of the site for the active theme: the themes installed (Grav's list, their names), the one of the
+     * site chosen; the brand of the site in the active theme's own fields (where it keeps the files, the ones it takes), none of
+     * them for a theme without such a field. Set when the form is made and again before it shows: the Form plugin keeps a form it
+     * made in its cache, and the active theme may have changed since.
+     */
+    private function settingsFields($form): void
+    {
+        // From the fields the page gives (a field left out for a theme comes back for another), the themes installed (Grav's list),
+        // each by the name its blueprint gives, the one of the site chosen
+        $fields = (array) ($form->getPage()->header()->form['fields'] ?? $form->get('fields'));
+        $themes = [];
+        foreach ($this->grav['themes']->all() as $folder => $theme) {
+            $themes[$folder] = (string) ($theme->blueprints()->get('name') ?: $folder);
+        }
+        $fields['appearance']['fields']['theme']['options'] = $themes;
+        // The brand of the site in the active theme's own fields: where the theme keeps the files, the ones it takes; none of
+        // them for a theme without such a field
+        $active = (string) $this->grav['config']->get('system.pages.theme');
+        $brand = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
+        foreach (array_keys(Site::BRAND_FIELDS) as $setting) {
+            if (! isset($brand[$setting])) {
+                unset($fields['appearance']['fields'][$setting]);
+                continue;
+            }
+            $field = (array) $this->site()->themeField($brand[$setting]);
+            $fields['appearance']['fields'][$setting] = ['destination' => (string) ($field['destination'] ?? 'theme://images'), 'accept' => $field['accept'] ?? ['image/*']]
+                + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
+        }
+        $form->setFields($fields);
+        $form->getData()->get('theme') === null && $form->setData('theme', $active);
+        foreach ($brand as $setting => $field) {
+            $form->getData()->get($setting) === null && $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
+        }
+
     }
 
     /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */

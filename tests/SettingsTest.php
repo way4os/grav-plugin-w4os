@@ -28,6 +28,7 @@ describe('the settings of the site', function () {
         $header = Yaml::parse(explode('---', (string) file_get_contents(dirname(__DIR__).'/pages/settings.md'))[1]);
         $twig = new Environment(new ChainLoader([new ArrayLoader(['forms/form.html.twig' => '<form id="{{ form.name }}"></form>']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
         $twig->addFunction(new TwigFunction('forms', fn (string $name) => ['name' => $name]));
+        $twig->addFunction(new TwigFunction('w4os_settings_fields', fn ($form) => null));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/settings.html.twig', ['page' => ['header' => $header]]);
 
