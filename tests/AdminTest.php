@@ -48,6 +48,8 @@ describe('admin', function () {
             ->and($html)->toContain('<i class="ti&#x20;ti-dashboard"', 'navbar-toggler', '<!-- w4os:admin-messages -->')
             ->and($html)->toContain('href="&#x2F;user&#x2F;plugins&#x2F;w4os&#x2F;vendor&#x2F;npm-asset&#x2F;tabler-core&#x2F;dist&#x2F;css&#x2F;tabler.min.css"', 'tabler-icons.min.css', 'tabler.min.js')
             ->and($html)->toContain('Eli Mail')
+            // The icon of w4os, whatever the theme
+            ->and($html)->toContain('<link rel="icon" type="image/png" sizes="32x32" href="&#x2F;user&#x2F;plugins&#x2F;w4os&#x2F;vendor&#x2F;magicoli&#x2F;opensim-engine&#x2F;share&#x2F;images&#x2F;logos&#x2F;cropped-w4os-logo-v1-square-32x32.png"', 'rel="apple-touch-icon"')
             // The visitor's block at the bottom of the sidebar, the page as wide as the content area
             ->and($html)->toContain('<div class="navbar-footer">', '<div class="container-fluid">')
             ->and($html)->not->toContain('partials/base');

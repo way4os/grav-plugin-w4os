@@ -1,12 +1,12 @@
 {# The choice of the theme of the site as a gallery (the settings of the site): the themes installed, each its picture (the
    thumbnail.jpg Grav gives its blueprint) and its name, the current one checked; a radio each, Tabler's selectable cards
-   (form-imagecheck), no script #}
+   (form-imagecheck) as many a row as the width holds, no script #}
 {% extends "forms/field.html.twig" %}
 
 {% block input %}
-    <div class="row g-2 w4os-themes" role="radiogroup">
+    <div class="w4os-themes" role="radiogroup">
         {% for theme, name in field.options %}
-            <div class="col-6 col-sm-4 col-lg-3">
+            <div>
                 <label class="form-imagecheck mb-1">
                     <input type="radio" name="{{ (scope ~ field.name)|fieldName }}" value="{{ theme|e('html_attr') }}" class="form-imagecheck-input"{% if theme == value %} checked{% endif %}{% if field.validate.required %} required{% endif %}>
                     <span class="form-imagecheck-figure">

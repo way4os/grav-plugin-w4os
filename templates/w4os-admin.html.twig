@@ -12,6 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ page.title }}{{ brand.title ? ' | ' ~ brand.title }}</title>
+    {# The icon of w4os, the admin's own whatever the theme, its favicon and its icon for a phone's home screen #}
+    {% set icons = 'plugin://w4os/vendor/magicoli/opensim-engine/share/images/logos/cropped-w4os-logo-v1-square-' %}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url(icons ~ '32x32.png')|e('html_attr') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ url(icons ~ '192x192.png')|e('html_attr') }}">
+    <link rel="apple-touch-icon" href="{{ url(icons ~ '180x180.png')|e('html_attr') }}">
     {# The light or dark mode of the visitor's system, followed when it changes #}
     <script>
         (function () {
