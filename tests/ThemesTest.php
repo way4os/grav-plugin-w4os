@@ -6,13 +6,13 @@ use Twig\TwigFilter;
 use Twig\TwigFunction;
 
 /** The templates of the plugin alone, no theme: Grav's functions and the plugin's as stubs, the assets written as they are asked. */
-function themeless_twig(): Environment
+function themeless_twig(bool $viewer = true): Environment
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     // A block with its title, none when the page asks it without (an empty title)
     $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\">".(($args['title'] ?? null) === '' ? '' : '<h1 class="block-title">Bart Simpson</h1>').'</section>', ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
-    $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => true));
+    $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => $viewer));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
 
@@ -93,11 +93,17 @@ describe('the sign-in page links', function () {
 });
 
 describe('the title of a page of the plugin', function () {
-    test('is the theme\'s to show: the content of the page has none, its block neither', function () {
+    test('heads its content, as the text of a page of the site does (# Title): the themes show the content alone', function () {
+        $html = themeless_twig(false)->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
+
+        expect($html)->toContain('<h1>Bart Simpson</h1>', '<section class="block block-profile">')
+            ->and(strpos($html, '<h1>'))->toBeLessThan(strpos($html, '<section class="block block-profile">'));
+    });
+
+    test('is the viewer\'s layout\'s in a viewer (its own heading)', function () {
         $html = themeless_twig()->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
 
-        expect($html)->toContain('<section class="block block-profile">')->not->toContain('<h1')
-            ->and(file_get_contents(dirname(__DIR__).'/templates/w4os/page.html.twig'))->not->toContain('page.title');
+        expect($html)->not->toContain('<h1');
     });
 });
 

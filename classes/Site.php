@@ -400,6 +400,11 @@ final class Site
             ['type' => 'account', 'route' => $routes['account'], 'label' => 'w4os.edit_profile'],
             ['type' => 'logout', 'route' => self::logoutRoute($routes), 'label' => 'w4os.logout'],
         ] : [];
+        // A visitor: signing in (the page of the Login plugin) and creating an avatar
+        if (! $signedIn) {
+            isset($routes['login']) && $mine[] = ['type' => 'login', 'route' => $routes['login'], 'label' => 'w4os.login_title'];
+            isset($routes['register']) && $mine[] = ['type' => 'register', 'route' => $routes['register'], 'label' => 'w4os.register_title'];
+        }
         isset($routes['profile']) && $entries[] = ['type' => 'profile', 'route' => $routes['profile'], 'label' => 'w4os.menu_account', 'children' => $mine];
         $admin === [] || ! isset($routes['dashboard']) || $entries[] = ['type' => 'admin', 'route' => $routes['dashboard'], 'label' => 'w4os.menu_admin', 'children' => $admin];
 
@@ -436,7 +441,8 @@ final class Site
             return;
         }
         $root = $this->grav['pages']->root();
-        foreach (self::menuEntries($this->routes(), $this->avatar() !== null, $this->isManager() ? $this->adminSections() : []) as $entry) {
+        $routes = $this->routes() + ['login' => '/'.trim((string) ($this->grav['config']->get('plugins.login.route') ?: '/login'), '/')];
+        foreach (self::menuEntries($routes, $this->avatar() !== null, $this->isManager() ? $this->adminSections() : []) as $entry) {
             $this->menuPage($entry, $root);
         }
     }
@@ -457,7 +463,13 @@ final class Site
         if ($pages->find($entry['route'])) {
             return;
         }
-        $page = $this->pluginPage($entry['type'] === 'admin' ? 'dashboard' : $entry['type'], $entry['route']);
+        // The sign-in: the page of the Login plugin, as it makes it (it puts its own there when the page is asked)
+        $page = $entry['type'] === 'login'
+            ? (isset($this->grav['login']) ? $this->grav['login']->getPage('login', $entry['route']) : null)
+            : $this->pluginPage($entry['type'] === 'admin' ? 'dashboard' : $entry['type'], $entry['route']);
+        if ($page === null) {
+            return;
+        }
         $page->menu($this->translate($entry['label']));
         $page->title($this->translate(self::menuTitleKey($entry)));
         // Visible for the themes that read it from its front matter too (Apple Notes)
@@ -852,7 +864,8 @@ final class Site
 
     /**
      * Where the file of a brand field of a theme goes, as Grav reads it: its own stream (theme://images/logo), its theme@ token as
-     * a stream (Grav's older theme@:/images, theme://images), a plain folder of the site as it is; theme://images when it names none.
+     * a stream (Grav's older theme@:/images, theme://images), a plain folder in user/ (Hadron's media/logo, its own defaults in
+     * user/media/logo); theme://images when it names none.
      */
     public static function brandDestination(string $destination): string
     {
@@ -864,7 +877,7 @@ final class Site
             return rtrim('theme://'.$token[1], '/');
         }
 
-        return str_contains($destination, '://') ? $destination : trim($destination, '/');
+        return str_contains($destination, '://') ? $destination : 'user://'.trim($destination, '/');
     }
 
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
