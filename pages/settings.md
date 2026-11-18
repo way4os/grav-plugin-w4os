@@ -20,8 +20,8 @@ form:
           label: w4os.admin_site_theme
           help: w4os.admin_site_theme_help
           validate: { required: true }
-        # The brand of the site, in the active theme's own fields (its custom_logo, its custom_favicon or favicon): shown only when
-        # the theme has them, their destination and the files they take the theme's (set when the form is made)
+        # The brand of the site, its own whatever the theme (given to the active one in its own fields, custom_logo, custom_favicon
+        # or favicon...): its files in its data (their destination set when the form is made)
         logo:
           type: file
           label: w4os.admin_site_logo
@@ -37,7 +37,7 @@ form:
   buttons:
     - { type: submit, value: w4os.save_button, classes: 'btn-primary' }
   process:
-    # The files uploaded moved to their destination first, the theme's
+    # The files uploaded moved to their destination first, the site's data
     - upload: true
     - w4os: settings
 ---

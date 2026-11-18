@@ -262,6 +262,8 @@ class W4osPlugin extends Plugin
         foreach (Site::brandPaths((string) $this->grav['config']->get('system.pages.theme')) as $prefix => $paths) {
             $locator->addPath('theme', $prefix, $paths);
         }
+        // The logo and the favicon of the site in the active theme's own fields, whatever the theme
+        $this->site()->applyBrand();
     }
 
     public function onTwigTemplatePaths(): void
@@ -599,15 +601,19 @@ class W4osPlugin extends Plugin
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
                     $theme = (string) ($data['theme'] ?? '');
                     array_key_exists($theme, $this->grav['themes']->all()) || throw new FormError('w4os.error_invalid_request');
-                    // The brand of the site in the fields of the theme the form was made for (the active one), as Grav's admin writes
-                    // them: the files uploaded, their original names; the switch that shows the logo on with it. Only what is not
-                    // the theme's own default is kept, so the site follows the defaults of its later versions
+                    // The brand of the site, its own (the plugin's setting brand), the files uploaded with their original names; what
+                    // the active theme kept of its own before is the site's now, out of the theme's configuration
                     $active = (string) $this->grav['config']->get('system.pages.theme');
                     $has = fn (string $field) => $site->themeField($field) !== null;
-                    foreach (Site::brandFields($has) as $setting => $field) {
+                    $fields = Site::brandFields($has);
+                    foreach (array_keys(Site::BRAND_FOLDERS) as $setting) {
                         $files = (array) ($form->getData()->get($setting) ?? []);
-                        $site->saveThemeSetting($active, $field, $files);
-                        $setting === 'logo' && $files !== [] && array_map(fn ($switch) => $site->saveThemeSetting($active, $switch, true), array_keys(Site::brandSwitches($has)));
+                        // The theme's own file is no brand of the site: each theme keeps its own
+                        isset($fields[$setting]) && Site::isDefault($files, $site->themeDefault($active, $fields[$setting])) && $files = [];
+                        $files === [] ? $site->removeSetting('plugins/w4os', "brand.$setting") : $site->saveSetting('plugins/w4os', "brand.$setting", $files);
+                    }
+                    foreach ([...array_values($fields), ...array_keys(Site::brandSwitches($has))] as $field) {
+                        $site->removeSetting("themes/$active", $field);
                     }
                     // Grav's own setting of the theme, as its admin writes it
                     $site->saveSetting('system', 'pages.theme', $theme);
@@ -711,27 +717,24 @@ class W4osPlugin extends Plugin
         }
         $fields['appearance']['fields']['theme']['options'] = $themes;
         $fields['appearance']['fields']['theme']['thumbnails'] = $thumbnails;
-        // The brand of the site in the active theme's own fields: where the theme keeps the files, the ones it takes; none of
-        // them for a theme without such a field
-        $active = (string) $this->grav['config']->get('system.pages.theme');
-        $brand = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
-        foreach (array_keys(Site::BRAND_FIELDS) as $setting) {
-            if (! isset($brand[$setting])) {
-                unset($fields['appearance']['fields'][$setting]);
-                continue;
-            }
-            $field = (array) $this->site()->themeField($brand[$setting]);
-            // The folder of the theme as a path of the site (theme:// is read only to the Form plugin's copy), where it is made
-            $destination = Site::brandDestination((string) ($field['destination'] ?? ''));
-            $destination = (string) ($this->grav['locator']->findResource($destination, false, true) ?: $destination);
-            $fields['appearance']['fields'][$setting] = ['destination' => $destination, 'accept' => $field['accept'] ?? ['image/*']]
-                + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
+        // The brand of the site, its own whatever the theme (applyBrand() gives it to the active one): its files in its data
+        foreach (Site::BRAND_FOLDERS as $setting => $folder) {
+            $fields['appearance']['fields'][$setting]['destination'] = (string) $this->grav['locator']->findResource($folder, false, true);
         }
         $form->setFields($fields);
-        // The values as the site has them now, whatever the form kept
+        // The values as the site has them now, whatever the form kept: its brand, else what the active theme kept of its own
+        // before the brand was the site's (a site saved before; its first save makes it the site's)
+        $active = (string) $this->grav['config']->get('system.pages.theme');
         $form->setData('theme', $active);
-        foreach ($brand as $setting => $field) {
-            $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
+        $brand = (array) $this->grav['config']->get('plugins.w4os.brand', []);
+        $fields = Site::brandFields(fn (string $field) => $this->site()->themeField($field) !== null);
+        foreach (array_keys(Site::BRAND_FOLDERS) as $setting) {
+            $files = (array) ($brand[$setting] ?? []);
+            if ($files === [] && isset($fields[$setting])) {
+                $own = (array) $this->grav['config']->get("themes.$active.{$fields[$setting]}", []);
+                $files = Site::isDefault($own, $this->site()->themeDefault($active, $fields[$setting])) ? [] : $own;
+            }
+            $form->setData($setting, $files);
         }
     }
 

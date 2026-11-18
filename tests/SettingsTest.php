@@ -101,3 +101,26 @@ describe('the files of the brand of the site', function () {
             ->and(Site::brandDestination(''))->toBe('theme://images');
     });
 });
+
+describe('the brand of the site', function () {
+    test('is given to the active theme in its own fields, named the way the theme finds the files', function () {
+        $logo = ['user/data/theme/images/logo/fowl.png' => ['name' => 'fowl.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/logo/fowl.png']];
+        $icon = ['user/data/theme/images/favicon/fowl-icon.png' => ['name' => 'fowl-icon.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/favicon/fowl-icon.png']];
+        $brand = ['logo' => $logo, 'favicon' => $icon];
+
+        // Quark2: theme://images/logo and theme://images/favicon, the files by their names in them
+        expect(Site::themeBrand($brand, ['logo' => 'custom_logo', 'favicon' => 'custom_favicon'], ['logo' => 'user/data/theme/images/logo', 'favicon' => 'user/data/theme/images/favicon'], []))
+            ->toBe(['custom_logo' => $logo, 'custom_favicon' => $icon])
+        // Future2021: its favicon in theme://images, the file by its path from there
+            ->and(Site::themeBrand($brand, ['logo' => 'custom_logo', 'favicon' => 'favicon'], ['logo' => 'user/data/theme/images/logo', 'favicon' => 'user/data/theme/images'], [])['favicon'])
+            ->toBe(['user/data/theme/images/favicon/fowl-icon.png' => ['name' => 'favicon/fowl-icon.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/favicon/fowl-icon.png']])
+        // Hadron: a folder of its own, the file by its path (its templates read the path)
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/media/logo'], [])['custom_logo'])->toBe($logo)
+        // Editorial: its switch on with the logo
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/images/logo'], ['custom_logo_enabled' => true]))
+            ->toBe(['custom_logo' => $logo, 'custom_logo_enabled' => true])
+        // Nothing set for the site, a theme without the field: the theme as it is
+            ->and(Site::themeBrand(['logo' => [], 'favicon' => $icon], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/images/logo'], ['custom_logo_enabled' => true]))->toBe([]);
+    });
+});
+

@@ -788,6 +788,9 @@ final class Site
     }
 
     /** The fields of a theme the brand of the site goes to, by setting of the site, in the order a theme may have them. */
+    /** The folders of the brand of the site (its logo, its favicon), in its data (served, kept across upgrades). */
+    public const BRAND_FOLDERS = ['logo' => 'user://data/theme/images/logo', 'favicon' => 'user://data/theme/images/favicon'];
+
     public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
 
     /**
@@ -882,23 +885,75 @@ final class Site
         $this->grav['config']->set("$file.$key", $value);
     }
 
-    /**
-     * A setting of a theme saved in the configuration of the site only while it is not the theme's own default (its <theme>.yaml):
-     * back to the default, it leaves the configuration, so the site follows the defaults of later versions of the theme.
-     */
-    public function saveThemeSetting(string $theme, string $key, mixed $value): void
+    /** A setting of a theme as the theme gives it (its <theme>.yaml), null when it has none. */
+    public function themeDefault(string $theme, string $key): mixed
     {
         $own = (string) $this->grav['locator']->findResource("themes://$theme/$theme.yaml");
-        $default = $own === '' ? null : \Grav\Common\Utils::getDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($own)->content(), $key);
-        if (! self::isDefault($value, $default)) {
-            $this->saveSetting("themes/$theme", $key, $value);
 
+        return $own === '' ? null : \Grav\Common\Utils::getDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($own)->content(), $key);
+    }
+
+    /** A setting removed from the configuration of the site (config://<file>.yaml), the sections it empties with it. */
+    public function removeSetting(string $file, string $key): void
+    {
+        if ($this->grav['locator']->findResource("config://$file.yaml") !== false) {
+            $this->writeSettings($file, fn (array $config) => self::withoutSetting($config, $key));
+        }
+    }
+
+    /**
+     * The brand of the site (its logo and its favicon, the plugin's setting brand) as the settings of a theme: in the theme's own
+     * fields (brandFields()), each file named from the folder the theme takes it in (its destination, resolved) so that the
+     * theme finds it there (theme://images/favicon/… for a theme that looks in theme://images), its own name elsewhere; the
+     * switches that show the logo on with it. Nothing for what the site has not set or the theme has no field for.
+     *
+     * @param array<string,array<string,array<string,mixed>>> $brand setting (logo, favicon) => its files, by their paths
+     * @param array<string,string> $fields setting => the field of the theme
+     * @param array<string,string> $folders setting => the folder of the field, a path of the site
+     * @param array<string,bool> $switches the switches of the theme (brandSwitches())
+     * @return array<string,mixed> field of the theme => its value
+     */
+    public static function themeBrand(array $brand, array $fields, array $folders, array $switches): array
+    {
+        $settings = [];
+        foreach ($fields as $setting => $field) {
+            $files = (array) ($brand[$setting] ?? []);
+            if ($files === []) {
+                continue;
+            }
+            $folder = trim((string) ($folders[$setting] ?? ''), '/');
+            foreach ($files as $path => $file) {
+                $path = trim((string) ($file['path'] ?? $path), '/');
+                $file['name'] = $folder !== '' && str_starts_with($path, "$folder/") ? substr($path, strlen($folder) + 1) : basename($path);
+                $settings[$field][$path] = $file;
+            }
+            $setting === 'logo' && $settings += $switches;
+        }
+
+        return $settings;
+    }
+
+    /**
+     * The brand of the site given to the active theme for this request (its configuration in memory, nothing written): the same
+     * logo and favicon whatever the theme, until the site sets none (each theme its own then).
+     */
+    public function applyBrand(): void
+    {
+        $brand = array_filter((array) $this->grav['config']->get('plugins.w4os.brand', []));
+        if ($brand === []) {
             return;
         }
-        if ($this->grav['locator']->findResource("config://themes/$theme.yaml") !== false) {
-            $this->writeSettings("themes/$theme", fn (array $config) => self::withoutSetting($config, $key));
+        $theme = (string) $this->grav['config']->get('system.pages.theme');
+        $has = fn (string $field) => $this->themeField($field) !== null;
+        $fields = self::brandFields($has);
+        $folders = [];
+        foreach ($fields as $setting => $field) {
+            $destination = self::brandDestination((string) ($this->themeField($field)['destination'] ?? ''));
+            $folders[$setting] = (string) ($this->grav['locator']->findResource($destination, false, true) ?: '');
         }
-        $this->grav['config']->set("themes.$theme.$key", $default);
+        foreach (self::themeBrand($brand, $fields, $folders, self::brandSwitches($has)) as $field => $value) {
+            $this->grav['config']->set("themes.$theme.$field", $value);
+        }
     }
 
     /**

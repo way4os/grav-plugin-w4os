@@ -54,6 +54,6 @@ w4os:
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
   admin_site_logo: 'Logo'
-  admin_site_logo_help: 'The logo of the site, in the theme’s own setting; a PNG works with every theme'
+  admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
   admin_site_favicon: 'Favicon'
-  admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, in the theme''s own setting'
+  admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
