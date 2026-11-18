@@ -132,6 +132,16 @@ describe('the home page of a grid', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('@container');
     });
 
+    test('has its main column a section, its blocks titled h2, its side columns asides, their blocks titled h3', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\"><".($args['level'] ?? 'h3')." class=\"block-title\">$name</".($args['level'] ?? 'h3').'></section>', ['is_safe' => ['html']]));
+        $html = $twig->render('w4os/home.html.twig', ['content' => '<h1>Welcome</h1>']);
+
+        expect($html)->toContain('<section class="w4os-home-main">', '<aside class="w4os-home-grid">', '<aside class="w4os-home-news">')
+            ->and($html)->toContain('<h2 class="block-title">popular-places</h2>', '<h2 class="block-title">destination_guide</h2>')
+            ->and($html)->toContain('<h3 class="block-title">grid-info</h3>', '<h3 class="block-title">grid-status</h3>', '<h3 class="block-title">motd</h3>');
+    });
+
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
         expect(W4os\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
             ->and(W4os\Grav\Site::shortcodeBlocks('[w4os block="grid-status" /] and [w4os block="profile" name="A.B" /]'))->toBe(['grid_status', 'profile'])
