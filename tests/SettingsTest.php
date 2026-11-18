@@ -61,62 +61,47 @@ describe('the settings of the site', function () {
 });
 
 describe('the brand of the site', function () {
-    test('goes to the active theme\'s own fields, the ones its blueprint has, nothing for a theme without them', function () {
-        $has = fn (array $fields) => fn (string $name) => in_array($name, $fields, true);
-
-        expect(Site::brandFields($has(['custom_logo', 'custom_logo_mobile', 'custom_favicon'])))->toBe(['logo' => 'custom_logo', 'favicon' => 'custom_favicon'])
-            ->and(Site::brandFields($has(['custom_logo_enabled', 'custom_logo'])))->toBe(['logo' => 'custom_logo'])
-            ->and(Site::brandFields($has(['custom_logo', 'favicon'])))->toBe(['logo' => 'custom_logo', 'favicon' => 'favicon'])
-            ->and(Site::brandFields($has([])))->toBe([])
-            // Editorial shows its logo once it is enabled: the switch goes with it
-            ->and(Site::brandSwitches($has(['custom_logo_enabled', 'custom_logo'])))->toBe(['custom_logo_enabled' => true])
-            ->and(Site::brandSwitches($has(['custom_logo'])))->toBe([]);
-    });
-});
-
-describe('the choice of the theme', function () {
-    test('is a gallery of the themes installed, each its picture and name, the current one checked, a radio each', function () {
-        $twig = new Environment(new ChainLoader([new ArrayLoader(['forms/field.html.twig' => '{% block input %}{% endblock %}']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
-        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $twig->addFilter(new TwigFilter('fieldName', fn ($name) => "data[$name]"));
-        $html = $twig->render('forms/fields/w4os_themes/w4os_themes.html.twig', ['field' => ['name' => 'theme', 'options' => ['quark2' => 'Quark 2', 'woo' => 'Woo'], 'thumbnails' => ['quark2' => '/user/themes/quark2/thumbnail.jpg']], 'value' => 'woo', 'scope' => '']);
-
-        expect($html)->toContain('class="form-imagecheck', 'type="radio" name="data[theme]" value="quark2"', '<img src="/user/themes/quark2/thumbnail.jpg"', 'Quark 2', 'Woo', 'w4os-theme-none')
-            ->and($html)->toMatch('/value="woo"[^>]*checked/')
-            ->and($html)->not->toMatch('/value="quark2"[^>]*checked/');
-    });
-});
-
-describe('the files of the brand of the site', function () {
-    test('go where each theme asks, as Grav reads it: its stream, its theme@ token, a plain folder of the site', function () {
-        expect(Site::brandDestination('theme://images/logo'))->toBe('theme://images/logo')
-            ->and(Site::brandDestination('theme@:/images'))->toBe('theme://images')
-            ->and(Site::brandDestination('@theme:/images/favicon'))->toBe('theme://images/favicon')
-            ->and(Site::brandDestination('image://favicon'))->toBe('image://favicon')
-            ->and(Site::brandDestination('media/logo'))->toBe('media/logo')
-            ->and(Site::brandDestination(''))->toBe('theme://images');
-    });
-});
-
-describe('the brand of the site', function () {
-    test('is given to the active theme in its own fields, named the way the theme finds the files', function () {
+    test('is given to the active theme in its own fields, as their upload would: the copy in the theme, its name and path', function () {
         $logo = ['user/data/theme/images/logo/fowl.png' => ['name' => 'fowl.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/logo/fowl.png']];
         $icon = ['user/data/theme/images/favicon/fowl-icon.png' => ['name' => 'fowl-icon.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/favicon/fowl-icon.png']];
         $brand = ['logo' => $logo, 'favicon' => $icon];
+        $copy = fn (string $path) => [$path => ['name' => basename($path), 'type' => 'image/png', 'path' => $path]];
 
-        // Quark2: theme://images/logo and theme://images/favicon, the files by their names in them
-        expect(Site::themeBrand($brand, ['logo' => 'custom_logo', 'favicon' => 'custom_favicon'], ['logo' => 'user/data/theme/images/logo', 'favicon' => 'user/data/theme/images/favicon'], []))
-            ->toBe(['custom_logo' => $logo, 'custom_favicon' => $icon])
-        // Future2021: its favicon in theme://images, the file by its path from there
-            ->and(Site::themeBrand($brand, ['logo' => 'custom_logo', 'favicon' => 'favicon'], ['logo' => 'user/data/theme/images/logo', 'favicon' => 'user/data/theme/images'], [])['favicon'])
-            ->toBe(['user/data/theme/images/favicon/fowl-icon.png' => ['name' => 'favicon/fowl-icon.png', 'type' => 'image/png', 'path' => 'user/data/theme/images/favicon/fowl-icon.png']])
-        // Hadron: a folder of its own, the file by its path (its templates read the path)
-            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/media/logo'], [])['custom_logo'])->toBe($logo)
+        expect(Site::themeBrand($brand, ['logo' => 'custom_logo', 'favicon' => 'favicon'], ['logo' => 'user/themes/future2021/images/logo/fowl.png', 'favicon' => 'user/themes/future2021/images/fowl-icon.png'], []))
+            ->toBe(['custom_logo' => $copy('user/themes/future2021/images/logo/fowl.png'), 'favicon' => $copy('user/themes/future2021/images/fowl-icon.png')])
         // Editorial: its switch on with the logo
-            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/images/logo'], ['custom_logo_enabled' => true]))
-            ->toBe(['custom_logo' => $logo, 'custom_logo_enabled' => true])
-        // Nothing set for the site, a theme without the field: the theme as it is
-            ->and(Site::themeBrand(['logo' => [], 'favicon' => $icon], ['logo' => 'custom_logo'], ['logo' => 'user/data/theme/images/logo'], ['custom_logo_enabled' => true]))->toBe([]);
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/themes/editorial/images/logo/fowl.png'], ['custom_logo_enabled' => true]))
+            ->toBe(['custom_logo' => $copy('user/themes/editorial/images/logo/fowl.png'), 'custom_logo_enabled' => true])
+        // Nothing set for the site, a theme without the field, a copy that could not be made: the theme as it is
+            ->and(Site::themeBrand(['logo' => [], 'favicon' => $icon], ['logo' => 'custom_logo'], ['logo' => 'user/themes/quark2/images/logo/fowl.png'], ['custom_logo_enabled' => true]))->toBe([])
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], [], []))->toBe([]);
+    });
+
+    test('is copied where the theme takes it, never over a file of the theme, again once a theme update erased it', function () {
+        $root = sys_get_temp_dir().'/w4os-brand-'.bin2hex(random_bytes(4));
+        mkdir("$root/user/data/brand", 0777, true);
+        mkdir("$root/user/themes/quark2/images/logo", 0777, true);
+        file_put_contents("$root/user/data/brand/logo.png", 'site');
+        file_put_contents("$root/user/data/brand/fowl.png", 'fowl');
+        // The theme's own logo.png: the site's beside it
+        file_put_contents("$root/user/themes/quark2/images/logo/logo.png", 'theme');
+        $folder = 'user/themes/quark2/images/logo';
+
+        expect(Site::brandCopy($root, 'user/data/brand/fowl.png', $folder))->toBe("$folder/fowl.png")
+            ->and(file_get_contents("$root/$folder/fowl.png"))->toBe('fowl')
+            ->and(Site::brandCopy($root, 'user/data/brand/logo.png', $folder))->toBe("$folder/site-logo.png")
+            ->and(file_get_contents("$root/$folder/logo.png"))->toBe('theme')
+            ->and(file_get_contents("$root/$folder/site-logo.png"))->toBe('site');
+        // Erased by an update of the theme, its folder too: made again
+        exec('rm -rf '.escapeshellarg("$root/user/themes/quark2"));
+        expect(Site::brandCopy($root, 'user/data/brand/fowl.png', $folder))->toBe("$folder/fowl.png")
+            ->and(Site::brandCopy($root, 'user/data/brand/missing.png', $folder))->toBeNull();
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
+    test('leaves the streams of Grav as they are (no folder of the site in the theme\'s)', function () {
+        foreach (['w4os.php', ...glob(dirname(__DIR__).'/classes/*.php')] as $file) {
+            expect((string) file_get_contents(str_starts_with($file, '/') ? $file : dirname(__DIR__)."/$file"))->not->toContain("addPath('theme'");
+        }
     });
 });
-

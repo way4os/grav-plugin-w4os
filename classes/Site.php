@@ -890,31 +890,27 @@ final class Site
     }
 
     /**
-     * The brand of the site (its logo and its favicon, the plugin's setting brand) as the settings of a theme: in the theme's own
-     * fields (brandFields()), each file named from the folder the theme takes it in (its destination, resolved) so that the
-     * theme finds it there (theme://images/favicon/… for a theme that looks in theme://images), its own name elsewhere; the
-     * switches that show the logo on with it. Nothing for what the site has not set or the theme has no field for.
+     * The brand of the site (its logo and its favicon, the plugin's setting brand) as the settings of a theme, as the upload of
+     * the theme's own fields would write them (brandFields()): each the copy made in the theme (brandCopy()), by its name and its
+     * path; the switches that show the logo on with it. Nothing for what the site has not set, the theme has no field for or could
+     * not be copied.
      *
      * @param array<string,array<string,array<string,mixed>>> $brand setting (logo, favicon) => its files, by their paths
      * @param array<string,string> $fields setting => the field of the theme
-     * @param array<string,string> $folders setting => the folder of the field, a path of the site
+     * @param array<string,string> $copies setting => the path of its copy in the theme
      * @param array<string,bool> $switches the switches of the theme (brandSwitches())
      * @return array<string,mixed> field of the theme => its value
      */
-    public static function themeBrand(array $brand, array $fields, array $folders, array $switches): array
+    public static function themeBrand(array $brand, array $fields, array $copies, array $switches): array
     {
         $settings = [];
         foreach ($fields as $setting => $field) {
-            $files = (array) ($brand[$setting] ?? []);
-            if ($files === []) {
+            $file = reset($brand[$setting]) ?: null;
+            $copy = (string) ($copies[$setting] ?? '');
+            if (! is_array($file) || $copy === '') {
                 continue;
             }
-            $folder = trim((string) ($folders[$setting] ?? ''), '/');
-            foreach ($files as $path => $file) {
-                $path = trim((string) ($file['path'] ?? $path), '/');
-                $file['name'] = $folder !== '' && str_starts_with($path, "$folder/") ? substr($path, strlen($folder) + 1) : basename($path);
-                $settings[$field][$path] = $file;
-            }
+            $settings[$field] = [$copy => ['name' => basename($copy), 'type' => (string) ($file['type'] ?? ''), 'path' => $copy]];
             $setting === 'logo' && $settings += $switches;
         }
 
@@ -922,8 +918,41 @@ final class Site
     }
 
     /**
-     * The brand of the site given to the active theme for this request (its configuration in memory, nothing written): the same
-     * logo and favicon whatever the theme, until the site sets none (each theme its own then).
+     * A file of the brand of the site copied into the folder a theme takes it in (paths of the site, from its root), as the
+     * upload of the theme's field puts it: by its own name, by "site-<name>" beside a different file of the theme of that name
+     * (never over it); made again when missing (a theme updated). Null when the file is missing or the copy fails.
+     */
+    public static function brandCopy(string $root, string $source, string $folder): ?string
+    {
+        $from = "$root/".ltrim($source, '/');
+        if (! is_file($from)) {
+            return null;
+        }
+        $folder = trim($folder, '/');
+        $same = fn (string $to) => is_file($to) && filesize($to) === filesize($from) && md5_file($to) === md5_file($from);
+        foreach ([basename($source), 'site-'.basename($source)] as $i => $name) {
+            $to = "$root/$folder/$name";
+            if ($same($to)) {
+                return "$folder/$name";
+            }
+            // The theme's own file of that name stays; the second name is the site's own
+            if ($i === 0 && file_exists($to)) {
+                continue;
+            }
+            if ((is_dir(dirname($to)) || @mkdir(dirname($to), 0775, true)) && @copy($from, $to)) {
+                return "$folder/$name";
+            }
+
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
+     * The brand of the site given to the active theme for this request, as the upload of its own fields would (its files copied
+     * where the theme takes them, its settings in memory): the same logo and favicon whatever the theme, until the site sets none
+     * (each theme its own then).
      */
     public function applyBrand(): void
     {
@@ -934,13 +963,16 @@ final class Site
         $theme = (string) $this->grav['config']->get('system.pages.theme');
         $has = fn (string $field) => $this->themeField($field) !== null;
         $fields = self::brandFields($has);
-        $folders = [];
+        $copies = [];
         foreach ($fields as $setting => $field) {
-            $destination = self::brandDestination((string) ($this->themeField($field)['destination'] ?? ''));
-            $folders[$setting] = (string) ($this->grav['locator']->findResource($destination, false, true) ?: '');
+            $file = reset($brand[$setting]) ?: null;
+            $folder = (string) ($this->grav['locator']->findResource(self::brandDestination((string) ($this->themeField($field)['destination'] ?? '')), false, true) ?: '');
+            if (is_array($file) && $folder !== '' && ($copy = self::brandCopy(GRAV_ROOT, (string) ($file['path'] ?? ''), $folder)) !== null) {
+                $copies[$setting] = $copy;
+            }
         }
         // Both the theme's settings and their copy as the active theme's (config.theme, what theme_var() reads)
-        foreach (self::themeBrand($brand, $fields, $folders, self::brandSwitches($has)) as $field => $value) {
+        foreach (self::themeBrand($brand, $fields, $copies, self::brandSwitches($has)) as $field => $value) {
             $this->grav['config']->set("themes.$theme.$field", $value);
             $this->grav['config']->set("theme.$field", $value);
         }
