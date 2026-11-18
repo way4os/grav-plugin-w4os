@@ -59,6 +59,7 @@
    and marked #}
 {% macro menu(row) %}
     {% set icons = {action_view: 'ti ti-eye', action_view_item: 'ti ti-eye', action_edit: 'ti ti-pencil'} %}
+    <div class="btn-list flex-nowrap justify-content-end">
     {% for link in row.links %}
         {% set label = ('w4os.' ~ link.key)|t %}
         {% if icons[link.key] is defined %}<a class="btn btn-ghost-secondary btn-icon btn-sm" href="{{ link.url|e('html_attr') }}" title="{{ label|e('html_attr') }}" aria-label="{{ (label ~ ': ' ~ (row.item.name ?? ''))|e('html_attr') }}"><i class="{{ icons[link.key] }}" aria-hidden="true"></i></a>{% endif %}
@@ -86,4 +87,5 @@
         </div>
     </div>
     {% endif %}
+    </div>
 {% endmacro %}
