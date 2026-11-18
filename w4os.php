@@ -695,10 +695,14 @@ class W4osPlugin extends Plugin
         // each by the name its blueprint gives, the one of the site chosen
         $fields = (array) ($form->getPage()->header()->form['fields'] ?? $form->get('fields'));
         $themes = [];
+        $thumbnails = [];
         foreach ($this->grav['themes']->all() as $folder => $theme) {
             $themes[$folder] = (string) ($theme->blueprints()->get('name') ?: $folder);
+            // The picture of the theme, as Grav gives it (its thumbnail.jpg, the address Themes::get() sets in its blueprint)
+            $thumbnails[$folder] = (string) ($theme->blueprints()->get('thumbnail') ?: '');
         }
         $fields['appearance']['fields']['theme']['options'] = $themes;
+        $fields['appearance']['fields']['theme']['thumbnails'] = $thumbnails;
         // The brand of the site in the active theme's own fields: where the theme keeps the files, the ones it takes; none of
         // them for a theme without such a field
         $active = (string) $this->grav['config']->get('system.pages.theme');

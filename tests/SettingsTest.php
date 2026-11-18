@@ -53,3 +53,16 @@ describe('the brand of the site', function () {
             ->and(Site::brandSwitches($has(['custom_logo'])))->toBe([]);
     });
 });
+
+describe('the choice of the theme', function () {
+    test('is a gallery of the themes installed, each its picture and name, the current one checked, a radio each', function () {
+        $twig = new Environment(new ChainLoader([new ArrayLoader(['forms/field.html.twig' => '{% block input %}{% endblock %}']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $twig->addFilter(new TwigFilter('fieldName', fn ($name) => "data[$name]"));
+        $html = $twig->render('forms/fields/w4os_themes/w4os_themes.html.twig', ['field' => ['name' => 'theme', 'options' => ['quark2' => 'Quark 2', 'woo' => 'Woo'], 'thumbnails' => ['quark2' => '/user/themes/quark2/thumbnail.jpg']], 'value' => 'woo', 'scope' => '']);
+
+        expect($html)->toContain('class="form-imagecheck', 'type="radio" name="data[theme]" value="quark2"', '<img src="/user/themes/quark2/thumbnail.jpg"', 'Quark 2', 'Woo', 'w4os-theme-none')
+            ->and($html)->toMatch('/value="woo"[^>]*checked/')
+            ->and($html)->not->toMatch('/value="quark2"[^>]*checked/');
+    });
+});

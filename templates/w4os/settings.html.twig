@@ -1,8 +1,6 @@
 {# The settings of the site, in Tabler's settings layout: its sections as narrow side tabs (the fieldsets of the form), the form
-   beside them; its choices as the other choices of the admin (Tom Select, js/select.js) #}
+   beside them #}
 {% set sections = page.header.form.fields|filter(field => field.type == 'fieldset') %}
-{% do assets.addJs('plugin://w4os/vendor/npm-asset/tom-select/dist/js/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
-{% do assets.addJs('plugin://w4os/js/select.js', {group: 'bottom', loading: 'defer'}) %}
 <div class="card w4os-settings-card">
     <div class="row g-0">
         <div class="col-12 col-md-auto border-end w4os-settings-nav">

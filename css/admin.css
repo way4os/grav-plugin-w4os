@@ -89,3 +89,7 @@
 .w4os-admin .form-label .tooltip { display: contents; position: static; opacity: 1; z-index: auto; font: inherit; line-height: inherit; }
 .w4os-admin .form-label .tooltip::after { content: attr(data-tooltip); order: 2; flex-basis: 100%; margin-top: .15rem; font-size: .85em; font-weight: 400; color: var(--tblr-secondary); }
 .w4os-admin .form-label:has(.tooltip) .required { order: 1; }
+/* A theme without a picture in the gallery of the settings: a neutral card of the same size */
+.w4os-themes .w4os-theme-none { display: block; aspect-ratio: 4 / 3; background: var(--tblr-bg-surface-secondary); }
+.w4os-themes .form-imagecheck { display: block; }
+.w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
