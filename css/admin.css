@@ -93,7 +93,7 @@
 .w4os-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .5rem; }
 .w4os-themes .w4os-theme-none { display: block; aspect-ratio: 4 / 3; background: var(--tblr-bg-surface-secondary); }
 .w4os-themes .form-imagecheck { display: block; }
-.w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; width: 100%; }
+.w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; width: 100%; }
 /* The horizontal forms of the admin (w4os/admin-form.html.twig): a field without a label of its own on the left (a box to check)
    in the column of the fields; the label column's text where the label is, not on its line */
 @media (min-width: 768px) {
