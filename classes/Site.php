@@ -805,6 +805,27 @@ final class Site
     }
 
     /**
+     * A page without the title the plugin heads its content with (h1.w4os-page-title) when the theme shows the title of the page
+     * itself: another heading (h1 to h3) of the same text, whatever its case or its link.
+     */
+    public static function withoutDuplicateTitle(string $html, string $title): string
+    {
+        $text = fn (string $s) => mb_strtolower(trim(preg_replace('/\s+/u', ' ', html_entity_decode(strip_tags($s), ENT_QUOTES | ENT_HTML5, 'UTF-8'))));
+        $wanted = $text($title);
+        if ($wanted === '' || ! str_contains($html, 'w4os-page-title')) {
+            return $html;
+        }
+        preg_match_all('~<(h[1-3])\b([^>]*)>(.*?)</\1>~is', $html, $headings, PREG_SET_ORDER);
+        foreach ($headings as $heading) {
+            if (! str_contains($heading[2], 'w4os-page-title') && $text($heading[3]) === $wanted) {
+                return (string) preg_replace('~<h1 class="w4os-page-title">.*?</h1>\s*~s', '', $html, 1);
+            }
+        }
+
+        return $html;
+    }
+
+    /**
      * The styles the site adds to a page, for the admin: the plugin's own and the Form plugin's (its drop zones), none of the other
      * plugins of the site (their front-end looks stay out of Tabler).
      */

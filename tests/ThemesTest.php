@@ -96,8 +96,17 @@ describe('the title of a page of the plugin', function () {
     test('heads its content, as the text of a page of the site does (# Title): the themes show the content alone', function () {
         $html = themeless_twig(false)->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
 
-        expect($html)->toContain('<h1>Bart Simpson</h1>', '<section class="block block-profile">')
-            ->and(strpos($html, '<h1>'))->toBeLessThan(strpos($html, '<section class="block block-profile">'));
+        expect($html)->toContain('<h1 class="w4os-page-title">Bart Simpson</h1>', '<section class="block block-profile">')
+            ->and(strpos($html, '<h1'))->toBeLessThan(strpos($html, '<section class="block block-profile">'));
+    });
+
+    test('is the theme\'s alone where the theme shows the title of a page itself (Editorial, Learn2, Mundana): no title twice', function () {
+        $ours = '<div class="w4os w4os-page"><h1 class="w4os-page-title">Créer mon avatar</h1><form></form></div>';
+
+        expect(W4os\Grav\Site::withoutDuplicateTitle('<header><h2 class="major"><a href="/register">Cr&eacute;er mon avatar</a></h2></header>'.$ours, 'Créer mon avatar'))
+            ->not->toContain('w4os-page-title')->toContain('<form></form>')
+            ->and(W4os\Grav\Site::withoutDuplicateTitle('<header><h1>My grid</h1></header>'.$ours, 'Créer mon avatar'))->toContain('<h1 class="w4os-page-title">Créer mon avatar</h1>')
+            ->and(W4os\Grav\Site::withoutDuplicateTitle('<h1 class="title">CRÉER MON AVATAR</h1>'.$ours, 'Créer mon avatar'))->not->toContain('w4os-page-title');
     });
 
     test('is the viewer\'s layout\'s in a viewer (its own heading)', function () {

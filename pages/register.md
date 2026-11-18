@@ -30,7 +30,7 @@ form:
     password:
       type: password
       label: w4os.password
-      help: w4os.password_help
+      description: w4os.password_help
       autocomplete: new-password
       minlength: 6
       maxlength: 16

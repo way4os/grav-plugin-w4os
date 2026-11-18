@@ -139,6 +139,11 @@ class W4osPlugin extends Plugin
                 && $output = Site::withLoginLinks($output, $this->grav['twig']->processTemplate('w4os/login-links.html.twig'));
             $this->grav->output = $output;
         }
+        // A page of the plugin: its title once, the theme's where it shows it itself
+        if ($this->sitePage() && ($page = $this->grav['page'] ?? null) !== null) {
+            $output = Site::withoutDuplicateTitle($output, (string) $page->title());
+            $this->grav->output = $output;
+        }
         // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
         foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {
@@ -274,6 +279,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_logout_route', fn () => Site::logoutRoute($this->site()->routes())));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
         // The classes of the icon of the theme for an icon of the engine (setting icons)
         $twig->addFunction(new \Twig\TwigFunction('w4os_icon', fn (string $icon) => (string) ($this->config->get('plugins.w4os.icons.'.$icon) ?? '')));
