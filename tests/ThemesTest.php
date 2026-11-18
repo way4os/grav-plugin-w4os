@@ -58,7 +58,10 @@ describe('the sign-in page', function () {
 
         expect(W4os\Grav\Site::rememberChecked($form))->toContain('<input type="checkbox" value="1" name="rememberme" id="#rememberme" checked>')
             ->and(W4os\Grav\Site::rememberChecked(W4os\Grav\Site::rememberChecked($form)))->toBe(W4os\Grav\Site::rememberChecked($form))
-            ->and(W4os\Grav\Site::rememberChecked('<p>No form</p>'))->toBe('<p>No form</p>');
+            ->and(W4os\Grav\Site::rememberChecked('<p>No form</p>'))->toBe('<p>No form</p>')
+            // A theme's own form (Mundana's: its classes first)
+            ->and(W4os\Grav\Site::rememberChecked('<input class="form-check-input" type="checkbox" value="1" name="rememberme" id="#rememberme">'))
+            ->toBe('<input class="form-check-input" type="checkbox" value="1" name="rememberme" id="#rememberme" checked>');
     });
 });
 
@@ -121,10 +124,12 @@ describe('the menu of the site', function () {
 });
 
 describe('the sign-in page links', function () {
-    test('come under the form of the Login plugin, whatever the theme', function () {
-        $page = '<main><section id="grav-login"><form></form></section><section id="other"></section></main>';
+    test('come under the sign-in form, the Login plugin\'s or a theme\'s own', function () {
+        $form = '<form method="post"><button type="submit" name="task" value="login.login">Log in</button></form>';
+        $page = '<main><form id="search"></form><section id="grav-login">'.$form.'</section><section id="other"></section></main>';
 
-        expect(W4os\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><section id="grav-login"><form></form><p class="links"></p></section><section id="other"></section></main>')
+        expect(W4os\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><form id="search"></form><section id="grav-login">'.$form.'<p class="links"></p></section><section id="other"></section></main>')
+            ->and(W4os\Grav\Site::withLoginLinks('<section style="height: 80vh">'.$form.'</section>', '<p class="links"></p>'))->toBe('<section style="height: 80vh">'.$form.'<p class="links"></p></section>')
             ->and(W4os\Grav\Site::withLoginLinks('<p>No form</p>', '<p class="links"></p>'))->toBe('<p>No form</p>');
     });
 });

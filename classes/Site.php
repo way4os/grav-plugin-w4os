@@ -318,13 +318,13 @@ final class Site
             : 'browser';
     }
 
-    /** The sign-in page with links under the form of the Login plugin (its section `grav-login`, the same in every theme). */
+    /** The sign-in page with links under its form, the Login plugin's or a theme's own: the form of the task `login.login`. */
     public static function withLoginLinks(string $html, string $links): string
     {
-        $start = strpos($html, '<section id="grav-login"');
-        $end = $start === false ? false : strpos($html, '</section>', $start);
+        $task = strpos($html, 'value="login.login"');
+        $end = $task === false ? false : strpos($html, '</form>', $task);
 
-        return $end === false ? $html : substr($html, 0, $end).$links.substr($html, $end);
+        return $end === false ? $html : substr($html, 0, $end + 7).$links.substr($html, $end + 7);
     }
 
     /** The text of the entry of the visitor in the menu of the site: log in, else the account of the avatar signed in. */
@@ -334,21 +334,28 @@ final class Site
     }
 
     /**
-     * The entry of the visitor in the menu of the site (setting `menu`), as every theme draws the pages: the account page, visible,
-     * titled "Log in" for a visitor (the page leads to the sign-in) or "My avatar".
+     * The entries of the plugin in the menu of the site (setting `menu`), as every theme draws the pages: the search, and the
+     * account page titled "Log in" for a visitor (the page leads to the sign-in) or "My avatar".
      */
     public function addMenu(): void
     {
-        $route = $this->routes()['account'] ?? null;
-        $pages = $this->grav['pages'];
-        if (! ($this->config()['menu'] ?? true) || $route === null || $pages->find($route)) {
+        if (! ($this->config()['menu'] ?? true)) {
             return;
         }
-        $page = $this->pluginPage('account', $route);
-        $page->menu($this->translate(self::menuKey($this->avatar())));
-        $page->visible(true);
-        $page->parent($pages->root());
-        $pages->addPage($page, $route);
+        $pages = $this->grav['pages'];
+        foreach (['search' => 'w4os.search', 'account' => self::menuKey($this->avatar())] as $type => $key) {
+            $route = $this->routes()[$type] ?? null;
+            if ($route === null || $pages->find($route)) {
+                continue;
+            }
+            $page = $this->pluginPage($type, $route);
+            $page->menu($this->translate($key));
+            // Visible for the themes that read it from its front matter too (Apple Notes)
+            $page->visible(true);
+            $page->modifyHeader('visible', true);
+            $page->parent($pages->root());
+            $pages->addPage($page, $route);
+        }
     }
 
     /** A page of the plugin (pages/<type>.md) at a route of the site, under a folder of its own so that each one is its own page. */
@@ -360,18 +367,18 @@ final class Site
         $page->route($route);
         $page->slug(basename($route));
         // The account page is where the avatar edits its profile: the title of its menu entry and button
-        $page->title($this->translate($type === 'account' ? 'w4os.edit_profile' : 'w4os.'.$type.'_title'));
+        $page->title($this->translate(match ($type) { 'account' => 'w4os.edit_profile', 'search' => 'w4os.search', default => 'w4os.'.$type.'_title' }));
 
         return $page;
     }
 
     /**
-     * The sign-in form of the Login plugin with "remember me" checked, as on a social network: the Login plugin has no setting for
-     * it, and its form is the same in every theme.
+     * The sign-in form with "remember me" checked, as on a social network: the Login plugin has no setting for it; its box is
+     * `rememberme` in its form and in the ones of the themes.
      */
     public static function rememberChecked(string $html): string
     {
-        return (string) preg_replace('/<input type="checkbox" value="1" name="rememberme" id="#rememberme"(?! checked)/', '$0 checked', $html);
+        return (string) preg_replace_callback('/<input\b[^>]*\bname="rememberme"[^>]*>/', fn ($m) => str_contains($m[0], ' checked') ? $m[0] : substr($m[0], 0, -1).' checked>', $html);
     }
 
     /**
