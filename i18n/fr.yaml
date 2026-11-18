@@ -54,6 +54,6 @@ w4os:
   admin_site_theme_help: 'Le thème du site, parmi ceux installés'
   admin_site_saved: 'Les réglages du site sont enregistrés.'
   admin_site_logo: 'Logo'
-  admin_site_logo_help: 'Le logo du site, dans le réglage propre au thème'
+  admin_site_logo_help: 'Le logo du site, dans le réglage propre au thème ; un PNG marche avec tous les thèmes'
   admin_site_favicon: 'Favicon'
   admin_site_favicon_help: 'L’icône du site dans les onglets des navigateurs, dans le réglage propre au thème'
