@@ -86,3 +86,36 @@ describe('the login status', function () {
             ->and($render(['authenticated' => false]))->toContain('href="/login"', '[w4os.log_in]');
     });
 });
+
+describe('the pages of the plugin', function () {
+    test('show in the default page of any theme, the plugin filling their content; the admin pages keep their own layout', function () {
+        foreach (glob(dirname(__DIR__).'/pages/*.md') as $file) {
+            $header = Symfony\Component\Yaml\Yaml::parse(explode('---', file_get_contents($file))[1]);
+            expect($header['template'])->toBe($header['template'] === 'w4os-admin' ? 'w4os-admin' : 'default', basename($file));
+        }
+        // No template of the plugin needs the blocks of a theme (Quark's header, content, footer...)
+        foreach (glob(dirname(__DIR__).'/templates/*.twig') as $file) {
+            expect(file_get_contents($file))->not->toContain("extends 'partials/base.html.twig'", basename($file));
+        }
+    });
+});
+
+describe('the menu of the site', function () {
+    test('has the entry of the visitor, as every theme draws the pages: log in, else the account of the avatar', function () {
+        expect(W4os\Grav\Site::menuKey(null))->toBe('w4os.log_in')
+            ->and(W4os\Grav\Site::menuKey(['uuid' => 'u1', 'name' => 'Ada Love']))->toBe('w4os.menu_account');
+    });
+
+    test('leads to the account page, which has the profile, the admin for a manager and sign out, whatever the theme', function () {
+        $twig = themeless_twig();
+        $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => [['url' => '/admin', 'label' => 'Avatars']]));
+        $twig->addFunction(new TwigFunction('w4os_profile_page', fn () => '/profile/Ada.Love'));
+        $twig->addFunction(new TwigFunction('url', fn ($url) => $url));
+        $html = $twig->render('w4os/account-links.html.twig', ['uri' => new class {
+            public function path(): string { return '/account'; }
+            public function addNonce(string $url): string { return "$url/nonce"; }
+        }, 'config' => ['system' => ['param_sep' => ':']]]);
+
+        expect($html)->toContain('href="/profile/Ada.Love"', '[w4os.profile_title]', 'href="/admin"', '[w4os.menu_admin]', 'login.logout', '[w4os.logout]');
+    });
+});

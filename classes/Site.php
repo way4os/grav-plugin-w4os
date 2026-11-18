@@ -318,6 +318,44 @@ final class Site
             : 'browser';
     }
 
+    /** The text of the entry of the visitor in the menu of the site: log in, else the account of the avatar signed in. */
+    public static function menuKey(?array $avatar): string
+    {
+        return $avatar === null ? 'w4os.log_in' : 'w4os.menu_account';
+    }
+
+    /**
+     * The entry of the visitor in the menu of the site (setting `menu`), as every theme draws the pages: the account page, visible,
+     * titled "Log in" for a visitor (the page leads to the sign-in) or "My avatar".
+     */
+    public function addMenu(): void
+    {
+        $route = $this->routes()['account'] ?? null;
+        $pages = $this->grav['pages'];
+        if (! ($this->config()['menu'] ?? true) || $route === null || $pages->find($route)) {
+            return;
+        }
+        $page = $this->pluginPage('account', $route);
+        $page->menu($this->translate(self::menuKey($this->avatar())));
+        $page->visible(true);
+        $page->parent($pages->root());
+        $pages->addPage($page, $route);
+    }
+
+    /** A page of the plugin (pages/<type>.md) at a route of the site, under a folder of its own so that each one is its own page. */
+    private function pluginPage(string $type, string $route): Page
+    {
+        $page = new Page();
+        $page->init(new \SplFileInfo(dirname(__DIR__).'/pages/'.$type.'.md'));
+        $page->path(dirname(__DIR__).'/pages/'.$type);
+        $page->route($route);
+        $page->slug(basename($route));
+        // The account page is where the avatar edits its profile: the title of its menu entry and button
+        $page->title($this->translate($type === 'account' ? 'w4os.edit_profile' : 'w4os.'.$type.'_title'));
+
+        return $page;
+    }
+
     /**
      * The sign-in form of the Login plugin with "remember me" checked, as on a social network: the Login plugin has no setting for
      * it, and its form is the same in every theme.
@@ -352,16 +390,13 @@ final class Site
     {
         [$type] = $this->pageAt($path);
         $pages = $this->grav['pages'];
-        if ($type === false || ! is_file(dirname(__DIR__)."/pages/$type.md") || $pages->find($path)) {
+        $found = $pages->find($path);
+        // A page of the site at that route wins; the plugin's own already there (the entry of the menu) is the one shown
+        if ($type === false || ! is_file(dirname(__DIR__)."/pages/$type.md") || ($found && ! isset($found->header()->w4os))) {
             return;
         }
-        $page = new Page();
-        $page->init(new \SplFileInfo(dirname(__DIR__).'/pages/'.$type.'.md'));
-        $page->route($path);
-        $page->slug(basename($path));
-        // The account page is where the avatar edits its profile: the title of its menu entry and button
-        $page->title($this->translate($type === 'account' ? 'w4os.edit_profile' : 'w4os.'.$type.'_title'));
-        $pages->addPage($page, $path);
+        $page = $found ?? $this->pluginPage($type, $path);
+        $found || $pages->addPage($page, $path);
         unset($this->grav['page']);
         $this->grav['page'] = $page;
     }

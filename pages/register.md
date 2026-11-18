@@ -1,5 +1,5 @@
 ---
-template: w4os
+template: default
 w4os: register
 cache_enable: false
 visible: false

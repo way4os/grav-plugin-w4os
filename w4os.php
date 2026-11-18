@@ -117,6 +117,7 @@ class W4osPlugin extends Plugin
             'onPageInitialized' => ['onPageInitialized', 0],
             'onFormInitialized' => ['onFormInitialized', 0],
             'onFormProcessed' => ['onFormProcessed', 0],
+            'onPageContentProcessed' => ['onPageContentProcessed', 0],
             'onOutputGenerated' => ['onOutputGenerated', 0],
         ]);
     }
@@ -307,6 +308,12 @@ class W4osPlugin extends Plugin
         // The files of the page before the theme writes its head: a theme may write its assets before its content
         if ($this->sitePage()) {
             ($block = (string) ($page->header()->w4os_block ?? '')) === '' || $this->blockFiles($block);
+            // The tabs of the Form plugin need jQuery (Grav's collection); js/form-tabs.js makes them keyboard tabs, keeps the tab
+            // open in the address, and grows the text areas where the browser cannot
+            if ((string) $page->header()->w4os === 'account') {
+                $this->grav['assets']->add('jquery', 101);
+                $this->grav['assets']->addJs('plugin://w4os/js/form-tabs.js', ['group' => 'bottom', 'loading' => 'defer']);
+            }
             in_array((string) $page->header()->w4os, ['profile', 'account'], true) && $this->grav['assets']->addJs('plugin://w4os/js/keep-tab.js', ['group' => 'bottom', 'loading' => 'defer']);
         }
     }
@@ -337,6 +344,7 @@ class W4osPlugin extends Plugin
 
     public function onPagesInitialized(): void
     {
+        $this->site()->addMenu();
         $this->site()->addPage($this->grav['uri']->path());
         $this->loginTexts();
     }
@@ -396,12 +404,23 @@ class W4osPlugin extends Plugin
         $this->sitePage() && $this->site()->isViewer() && $this->grav['twig']->template = 'w4os-viewer.html.twig';
     }
 
-    /** Whether the page is one of the plugin's that shows in the site (pages/*.md), not one of its admin pages. */
-    private function sitePage(): bool
+    /** Whether a page (the one shown by default) is one of the plugin's that shows in the site (pages/*.md), not an admin page. */
+    private function sitePage($page = null): bool
     {
-        $page = $this->grav['page'] ?? null;
+        $page ??= $this->grav['page'] ?? null;
 
         return $page !== null && isset($page->header()->w4os) && $page->template() !== 'w4os-admin';
+    }
+
+    /**
+     * The content of a page of the plugin, in the default page of the theme (any theme has one): its part, rendered by the plugin
+     * (w4os/page.html.twig), as shortcode-core fills a page with what it renders.
+     */
+    public function onPageContentProcessed(Event $event): void
+    {
+        $page = $event['page'];
+        $this->sitePage($page) && $page === ($this->grav['page'] ?? null)
+            && $page->setRawContent($this->grav['twig']->processTemplate('w4os/page.html.twig', ['page' => $page]));
     }
 
     /** The account form shows what the engine has of the avatar signed in, the form of a manager the avatar it changes. */

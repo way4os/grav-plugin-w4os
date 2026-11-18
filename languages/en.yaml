@@ -145,6 +145,7 @@ w4os:
   connection_sqlite: 'SQLite'
   connection_sqlite_failed: 'SQLite unreadable'
   menu_admin: 'Admin'
+  menu_account: 'My avatar'
   dashboard_title: 'Dashboard'
   manage_title: 'Avatars'
   search_avatars: 'Name or email'
@@ -416,3 +417,5 @@ w4os:
   admin_admin_level_help: 'The avatars of this user level or more enter the admin pages; each page, action and field then asks its own level, the engine''s'
   admin_save_accounts: 'Keep Grav accounts'
   admin_save_accounts_help: 'Keep a Grav account (user/accounts) for each avatar that logs in; always on with the API plugin'
+  admin_menu: 'Entry in the menu'
+  admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'

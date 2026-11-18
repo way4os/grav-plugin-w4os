@@ -46,3 +46,5 @@ w4os:
   admin_admin_level_help: 'Les avatars de ce niveau ou plus entrent dans les pages d''admin ; chaque page, action et champ demande ensuite son propre niveau, celui de l''engine'
   admin_save_accounts: 'Garder des comptes Grav'
   admin_save_accounts_help: 'Garder un compte Grav (user/accounts) pour chaque avatar qui se connecte ; toujours avec le plugin API'
+  admin_menu: 'Entrée dans le menu'
+  admin_menu_help: 'Une entrée dans le menu du site, avec n''importe quel thème : se connecter, ou le compte de l''avatar connecté (son profil, la déconnexion)'

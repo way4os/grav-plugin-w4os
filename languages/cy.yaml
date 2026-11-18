@@ -145,6 +145,7 @@ w4os:
   connection_sqlite: 'SQLite'
   connection_sqlite_failed: 'SQLite yn annarllenadwy'
   menu_admin: 'Gweinyddu'
+  menu_account: 'Fy afatar'
   dashboard_title: 'Bwrdd rheoli'
   manage_title: 'Avatars'
   search_avatars: 'Enw neu ebost'
@@ -416,3 +417,5 @@ w4os:
   admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn mynd i mewn i''r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine'
   admin_save_accounts: 'Cadw cyfrifon Grav'
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
+  admin_menu: 'Entry in the menu'
+  admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'

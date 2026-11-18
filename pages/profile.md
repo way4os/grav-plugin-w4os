@@ -1,5 +1,5 @@
 ---
-template: w4os-block
+template: default
 w4os: profile
 w4os_block: profile
 cache_enable: false

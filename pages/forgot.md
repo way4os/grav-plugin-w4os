@@ -1,5 +1,5 @@
 ---
-template: w4os
+template: default
 w4os: forgot
 cache_enable: false
 visible: false

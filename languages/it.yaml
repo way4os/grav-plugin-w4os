@@ -145,6 +145,7 @@ w4os:
   connection_sqlite: 'SQLite'
   connection_sqlite_failed: 'SQLite illeggibile'
   menu_admin: 'Admin'
+  menu_account: 'Il mio avatar'
   dashboard_title: 'Bacheca'
   manage_title: 'Avatar'
   search_avatars: 'Nome o email'
@@ -416,3 +417,5 @@ w4os:
   admin_admin_level_help: 'Gli avatar di questo livello o superiore entrano nelle pagine di amministrazione; ogni pagina, azione e campo chiede poi il proprio livello, quello dell''engine'
   admin_save_accounts: 'Tenere gli account Grav'
   admin_save_accounts_help: 'Tenere un account Grav (user/accounts) per ogni avatar che accede; sempre attivo con il plugin API'
+  admin_menu: 'Entry in the menu'
+  admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'

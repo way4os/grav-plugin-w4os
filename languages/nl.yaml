@@ -145,6 +145,7 @@ w4os:
   connection_sqlite: 'SQLite'
   connection_sqlite_failed: 'SQLite onleesbaar'
   menu_admin: 'Beheer'
+  menu_account: 'Mijn avatar'
   dashboard_title: 'Dashboard'
   manage_title: 'Avatars'
   search_avatars: 'Naam of e-mail'
@@ -416,3 +417,5 @@ w4os:
   admin_admin_level_help: 'De avatars vanaf dit gebruikersniveau komen in de beheerpagina''s; elke pagina, actie en elk veld vraagt dan zijn eigen niveau, dat van de engine'
   admin_save_accounts: 'Grav-accounts bewaren'
   admin_save_accounts_help: 'Een Grav-account (user/accounts) bewaren voor elke avatar die inlogt; altijd aan met de API-plugin'
+  admin_menu: 'Entry in the menu'
+  admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'

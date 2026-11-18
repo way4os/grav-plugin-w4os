@@ -107,6 +107,12 @@ form:
               help: w4os.admin_built_in_css_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
+            menu:
+              type: toggle
+              label: w4os.admin_menu
+              help: w4os.admin_menu_help
+              options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
+              validate: { type: bool }
             cache:
               type: number
               label: w4os.admin_cache
