@@ -51,3 +51,23 @@ test('a picture says what stands for it when there is none: a person for the ava
         ->and($picture['default'] ?? null)->toBe('person')
         ->and($map['default'] ?? null)->toBe('place');
 });
+
+describe('the fields of a profile the grid does not allow', function () {
+    test('are the ones whose setting of the grid is off (meta.settings of the item), as the contract says (AllowUserProfileWebURLs)', function () {
+        $described = ['fields' => [['name' => 'about'], ['name' => 'profileUrl', 'setting' => 'allowProfileUrls'], ['name' => 'firstLife']]];
+
+        expect(W4os\Grav\Items::unallowed($described, ['allowProfileUrls' => false]))->toBe(['profileUrl'])
+            ->and(W4os\Grav\Items::unallowed($described, ['allowProfileUrls' => true]))->toBe([])
+            ->and(W4os\Grav\Items::unallowed($described, []))->toBe([]);
+    });
+
+    test('leave the form without them, and without a tab left empty', function () {
+        $fields = ['tabs' => ['type' => 'tabs', 'fields' => [
+            'world' => ['type' => 'tab', 'fields' => ['about' => ['type' => 'textarea']]],
+            'web' => ['type' => 'tab', 'fields' => ['profileUrl' => ['type' => 'url']]],
+        ]]];
+
+        expect(W4os\Grav\Items::without($fields, ['profileUrl'])['tabs']['fields'])->toHaveKey('world')->not->toHaveKey('web');
+    });
+});
+

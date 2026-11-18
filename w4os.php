@@ -507,9 +507,12 @@ class W4osPlugin extends Plugin
         // The choices of the form (roles, wants, skills) as the engine gives them; without the fields the visitor's level may not
         // change (an avatar's role below a god)
         $described = $this->site()->openApi()->itemOf('avatars');
+        // Nor the fields its grid does not allow (the web address of a profile with AllowUserProfileWebURLs false), as the contract
+        // says (their `setting`, off in the settings of the item's grid)
         $described === null || $form->setFields(Items::without(
             Items::withOptions((array) $form->get('fields'), $described),
-            $form->getName() === 'w4os-edit' ? \W4OS\Views\FormView::locked($described, ['manager'], $this->site()->level()) : [],
+            [...($form->getName() === 'w4os-edit' ? \W4OS\Views\FormView::locked($described, ['manager'], $this->site()->level()) : []),
+                ...Items::unallowed($described, (array) ($avatar['meta']['settings'] ?? []))],
         ));
         foreach (array_merge(['email', 'role'], Forms::PROFILE) as $key) {
             $form->getData()->get($key) === null && $form->setData($key, (string) ($avatar[$key] ?? ''));

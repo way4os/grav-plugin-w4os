@@ -123,7 +123,10 @@ final class Engine
     /** @return array<string,mixed> the attributes of an avatar, by UUID or name */
     public function avatar(string $id): array
     {
-        return $this->resource($this->call('GET', '/avatars/'.rawurlencode($id)));
+        $document = $this->call('GET', '/avatars/'.rawurlencode($id));
+
+        // What the item says beside its attributes (meta: the settings of its grid, its form as its grid has it)
+        return $this->resource($document) + (isset($document['meta']) ? ['meta' => (array) $document['meta']] : []);
     }
 
     /**

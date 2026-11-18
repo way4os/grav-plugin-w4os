@@ -73,10 +73,32 @@ final class Items
                 unset($fields[$name]);
             } elseif (is_array($field) && isset($field['fields'])) {
                 $fields[$name]['fields'] = self::without((array) $field['fields'], $names);
+                // A tab or a section left without a field goes with them
+                if ($fields[$name]['fields'] === [] && $field['fields'] !== [] && in_array($field['type'] ?? '', ['tab', 'section', 'fieldset'], true)) {
+                    unset($fields[$name]);
+                }
             }
         }
 
         return $fields;
+    }
+
+    /**
+     * The fields of an item the grid does not allow, as the contract says: the ones whose `setting` is off in the settings of the
+     * item's grid (its `meta.settings`), the web address of a profile with AllowUserProfileWebURLs false.
+     *
+     * @param array<string,mixed> $described the form of the model (x-form)
+     * @param array<string,mixed> $settings the settings of the grid of the item
+     * @return list<string>
+     */
+    public static function unallowed(array $described, array $settings): array
+    {
+        $names = [];
+        foreach ((array) ($described['fields'] ?? []) as $field) {
+            isset($field['setting']) && ($settings[$field['setting']] ?? true) === false && $names[] = (string) $field['name'];
+        }
+
+        return $names;
     }
 
     /**
