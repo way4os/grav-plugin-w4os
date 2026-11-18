@@ -709,7 +709,10 @@ class W4osPlugin extends Plugin
                 continue;
             }
             $field = (array) $this->site()->themeField($brand[$setting]);
-            $fields['appearance']['fields'][$setting] = ['destination' => (string) ($field['destination'] ?? 'theme://images'), 'accept' => $field['accept'] ?? ['image/*']]
+            // The folder of the theme as a path of the site (theme:// is read only to the Form plugin's copy), where it is made
+            $destination = (string) ($field['destination'] ?? 'theme://images');
+            $destination = (string) ($this->grav['locator']->findResource($destination, false, true) ?: $destination);
+            $fields['appearance']['fields'][$setting] = ['destination' => $destination, 'accept' => $field['accept'] ?? ['image/*']]
                 + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
         }
         $form->setFields($fields);
@@ -718,7 +721,6 @@ class W4osPlugin extends Plugin
         foreach ($brand as $setting => $field) {
             $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
         }
-
     }
 
     /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */
