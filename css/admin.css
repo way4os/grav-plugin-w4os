@@ -81,6 +81,9 @@
 
 /* The settings of the site: narrow side tabs, the form beside them in the rest of the width */
 @media (min-width: 768px) { .w4os-settings-nav { width: 13rem; } }
+/* The columns of the settings and of the horizontal forms narrower than their content's widest piece (a picture, a drop zone):
+   their content fits them, never past the card */
+.w4os-settings-main, .w4os-admin .form-field.row > [class*="col-"] { min-width: 0; }
 .w4os-settings fieldset { border: 0; margin: 0; padding: 0; }
 /* A label with a help: Grav's forms put it in a span.tooltip (the help in data-tooltip), which Tabler (Bootstrap) hides; the label
    shown, its help in small under it */
@@ -90,10 +93,14 @@
 .w4os-admin .form-label:has(.tooltip) .required { order: 1; }
 /* A theme without a picture in the gallery of the settings: a neutral card of the same size */
 /* The gallery of the themes: as many cards a row as the width of the field holds */
-.w4os-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: .5rem; }
+.w4os-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: .5rem; }
+.w4os-themes > * { min-width: 0; }
 .w4os-themes .w4os-theme-none { display: block; aspect-ratio: 4 / 3; background: var(--tblr-bg-surface-secondary); }
 .w4os-themes .form-imagecheck { display: block; }
-.w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; width: 100%; }
+.w4os-themes .form-imagecheck-image { aspect-ratio: 4 / 3; object-fit: cover; object-position: top; width: 100%; min-width: 0; max-width: 100%; }
+/* A file of a drop zone: its button to remove it under its picture, where Dropzone puts it, not over it */
+.w4os-admin .dropzone { max-width: 100%; }
+.w4os-admin .form-input-file.dropzone .dz-preview .dz-remove { position: static; display: flex; margin: .5rem auto 0; }
 /* The horizontal forms of the admin (w4os/admin-form.html.twig): a field without a label of its own on the left (a box to check)
    in the column of the fields; the label column's text where the label is, not on its line */
 @media (min-width: 768px) {
