@@ -713,9 +713,10 @@ class W4osPlugin extends Plugin
                 + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];
         }
         $form->setFields($fields);
-        $form->getData()->get('theme') === null && $form->setData('theme', $active);
+        // The values as the site has them now, whatever the form kept
+        $form->setData('theme', $active);
         foreach ($brand as $setting => $field) {
-            $form->getData()->get($setting) === null && $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
+            $form->setData($setting, (array) $this->grav['config']->get("themes.$active.$field", []));
         }
 
     }
