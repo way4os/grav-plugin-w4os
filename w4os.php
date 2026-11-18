@@ -129,8 +129,13 @@ class W4osPlugin extends Plugin
     public function onOutputGenerated(): void
     {
         $output = (string) $this->grav->output;
-        // The sign-in page: "remember me" checked
-        $this->grav['uri']->path() === $this->grav['config']->get('plugins.login.route', '/login') && $this->grav->output = $output = Site::rememberChecked($output);
+        // The sign-in page: "remember me" checked, the links to register and to a lost password under the form
+        if ($this->grav['uri']->path() === $this->grav['config']->get('plugins.login.route', '/login')) {
+            $output = Site::rememberChecked($output);
+            ! str_contains($output, 'w4os-login-links') && ! ($this->grav['user']->authenticated ?? false)
+                && $output = Site::withLoginLinks($output, $this->grav['twig']->processTemplate('w4os/login-links.html.twig'));
+            $this->grav->output = $output;
+        }
         // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
         foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {

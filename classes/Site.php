@@ -318,6 +318,15 @@ final class Site
             : 'browser';
     }
 
+    /** The sign-in page with links under the form of the Login plugin (its section `grav-login`, the same in every theme). */
+    public static function withLoginLinks(string $html, string $links): string
+    {
+        $start = strpos($html, '<section id="grav-login"');
+        $end = $start === false ? false : strpos($html, '</section>', $start);
+
+        return $end === false ? $html : substr($html, 0, $end).$links.substr($html, $end);
+    }
+
     /** The text of the entry of the visitor in the menu of the site: log in, else the account of the avatar signed in. */
     public static function menuKey(?array $avatar): string
     {

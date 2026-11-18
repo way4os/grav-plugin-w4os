@@ -119,3 +119,12 @@ describe('the menu of the site', function () {
         expect($html)->toContain('href="/profile/Ada.Love"', '[w4os.profile_title]', 'href="/admin"', '[w4os.menu_admin]', 'login.logout', '[w4os.logout]');
     });
 });
+
+describe('the sign-in page links', function () {
+    test('come under the form of the Login plugin, whatever the theme', function () {
+        $page = '<main><section id="grav-login"><form></form></section><section id="other"></section></main>';
+
+        expect(W4os\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><section id="grav-login"><form></form><p class="links"></p></section><section id="other"></section></main>')
+            ->and(W4os\Grav\Site::withLoginLinks('<p>No form</p>', '<p class="links"></p>'))->toBe('<p>No form</p>');
+    });
+});
