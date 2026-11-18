@@ -30,10 +30,11 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out']);
     });
 
-    test('tells the helpers that a viewer asks, so their links are the viewer\'s', function () {
+    test('gives the helpers the user agent of the visitor, so the engine links for where the page is shown', function () {
         $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+        $agent = 'Mozilla/5.0 SecondLife/7.1.9 (Firestorm)';
 
-        expect(json_decode($blocks->html('popular_places', ['viewer' => '1']), true))->toBe(['viewer' => '1']);
+        expect(json_decode($blocks->html('popular_places', ['agent' => $agent]), true))->toBe(['agent' => $agent]);
     });
 
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {

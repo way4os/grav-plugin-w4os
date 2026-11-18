@@ -302,13 +302,13 @@ final class Site
         return [false, ''];
     }
 
-    /** Whether a viewer asks the page (its user agent, as the helpers tell it): the page then shows its content alone. */
+    /** Whether a viewer asks the page (its user agent, as the engine tells it): the page then shows its content alone. */
     public function isViewer(): bool
     {
         Bundled::library();
 
-        return class_exists(\OpenSim\Helpers\View\View::class) && method_exists(\OpenSim\Helpers\View\View::class, 'isViewer')
-            && \OpenSim\Helpers\View\View::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
+        return class_exists(\OpenSim\Hypergrid\Destination::class) && method_exists(\OpenSim\Hypergrid\Destination::class, 'isViewer')
+            && \OpenSim\Hypergrid\Destination::isViewer((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''));
     }
 
     /**
