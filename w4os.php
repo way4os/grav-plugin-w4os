@@ -722,7 +722,7 @@ class W4osPlugin extends Plugin
             }
             $field = (array) $this->site()->themeField($brand[$setting]);
             // The folder of the theme as a path of the site (theme:// is read only to the Form plugin's copy), where it is made
-            $destination = (string) ($field['destination'] ?? 'theme://images');
+            $destination = Site::brandDestination((string) ($field['destination'] ?? ''));
             $destination = (string) ($this->grav['locator']->findResource($destination, false, true) ?: $destination);
             $fields['appearance']['fields'][$setting] = ['destination' => $destination, 'accept' => $field['accept'] ?? ['image/*']]
                 + (isset($field['filesize']) ? ['filesize' => $field['filesize']] : []) + $fields['appearance']['fields'][$setting];

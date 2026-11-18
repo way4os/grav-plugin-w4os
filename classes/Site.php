@@ -725,7 +725,10 @@ final class Site
         $admin = (array) ($this->config()['admin'] ?? []);
         $logo = trim((string) ($admin['logo'] ?? ''));
         if ($logo === '' && is_array($theme['custom_logo'] ?? null) && ($first = reset($theme['custom_logo'])) && isset($first['name'])) {
-            $logo = (string) $this->grav['locator']->findResource('theme://images/logo/'.$first['name'], false);
+            // The file where the site keeps it (its path, as Grav's file fields write it), else where the theme looks for it
+            $path = ltrim((string) ($first['path'] ?? ''), '/');
+            $logo = $path !== '' && ! str_contains($path, '..') && is_file(GRAV_ROOT.'/'.$path) ? $path
+                : (string) $this->grav['locator']->findResource('theme://images/logo/'.$first['name'], false);
             $logo = $logo === '' ? '' : $this->grav['base_url_relative'].'/'.ltrim($logo, '/');
         }
         $logo === '' && $logo = (string) ($this->engine()->gridLogo() ?? '');
@@ -788,19 +791,32 @@ final class Site
     public const BRAND_FIELDS = ['logo' => ['custom_logo'], 'favicon' => ['custom_favicon', 'favicon']];
 
     /**
-     * Where a theme finds the logo and the favicon of the site (theme://images/logo, theme://images/favicon): the site's own data
-     * first (user/data, where Grav serves the images a site uploads, kept across upgrades), the theme's folder after (its own).
+     * Where a theme finds the logo and the favicon of the site (theme://images, its logo and favicon folders in it): the site's own
+     * data first (user/data, where Grav serves the images a site uploads, kept across upgrades), the theme's folder after (its own).
      *
      * @return array<string,list<string>> prefix of theme:// => its paths, in their order
      */
     public static function brandPaths(string $theme): array
     {
-        $paths = [];
-        foreach (['logo', 'favicon'] as $folder) {
-            $paths["images/$folder"] = ["user://data/theme/images/$folder", "themes://$theme/images/$folder"];
+        return ['images' => ['user://data/theme/images', "themes://$theme/images"]];
+    }
+
+    /**
+     * Where the file of a brand field of a theme goes, as a stream of the site: its own stream (theme://images/logo), its theme@
+     * token as a stream (Grav's older theme@:/images, theme://images), a plain folder of the site in its data (user://data/theme/…);
+     * theme://images when it names none.
+     */
+    public static function brandDestination(string $destination): string
+    {
+        $destination = trim($destination);
+        if ($destination === '') {
+            return 'theme://images';
+        }
+        if (preg_match('~^(?:theme@|@theme@?):?/*(.*)$~', $destination, $token)) {
+            return rtrim('theme://'.$token[1], '/');
         }
 
-        return $paths;
+        return str_contains($destination, '://') ? $destination : 'user://data/theme/'.trim($destination, '/');
     }
 
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
