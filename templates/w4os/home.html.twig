@@ -1,0 +1,20 @@
+{# The home page of a grid, as content of any page (the shortcode [w4os-home]...[/w4os-home], in the theme's default page): the
+   text of the page, the popular places and the guide, then what the grid is (its info, its status) and its message of the day.
+   Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
+   column, if it has one, stays the theme's. #}
+<div class="w4os-home">
+    <div class="w4os-home-layout">
+        <div class="w4os-home-main">
+            {{ content|raw }}
+            {{ w4os_block('popular-places') }}
+            {{ w4os_block('destination_guide') }}
+        </div>
+        <div class="w4os-home-grid">
+            {{ w4os_block('grid-info') }}
+            {{ w4os_block('grid-status') }}
+        </div>
+        <div class="w4os-home-news">
+            {{ w4os_block('motd') }}
+        </div>
+    </div>
+</div>

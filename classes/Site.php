@@ -413,6 +413,20 @@ final class Site
         }
     }
 
+    /**
+     * The blocks of the helpers the text of a page shows through its shortcodes ([w4os block="..."], [w4os-home]), by their names
+     * in the helpers (grid_status), for their files before the theme writes its head.
+     *
+     * @return list<string>
+     */
+    public static function shortcodeBlocks(string $raw): array
+    {
+        $blocks = str_contains($raw, '[w4os-home') ? ['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'] : [];
+        preg_match_all('/\[w4os\s[^\]]*\bblock="([^"]+)"/', $raw, $found);
+
+        return array_values(array_unique([...$blocks, ...array_map(fn ($name) => str_replace('-', '_', strtolower($name)), $found[1])]));
+    }
+
     /** The key of the title of a page of the plugin, in the catalog or the texts of the plugin. */
     public static function titleKey(string $type): string
     {

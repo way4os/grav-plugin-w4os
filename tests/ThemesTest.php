@@ -100,3 +100,22 @@ describe('the title of a page of the plugin', function () {
             ->and(file_get_contents(dirname(__DIR__).'/templates/w4os/page.html.twig'))->not->toContain('page.title');
     });
 });
+
+describe('the home page of a grid', function () {
+    test('is content of any page (a shortcode), its text first, the blocks of the grid beside it only where there is room', function () {
+        $twig = themeless_twig();
+        $html = $twig->render('w4os/home.html.twig', ['content' => '<h1>Welcome</h1>']);
+
+        expect($html)->toContain('<div class="w4os-home">', '<div class="w4os-home-layout">', '<section class="block block-grid-info">', '<section class="block block-motd">')
+            ->and(strpos($html, '<h1>Welcome</h1>'))->toBeLessThan(strpos($html, 'block-grid-info'))
+            ->and(strpos($html, 'block-popular-places'))->toBeLessThan(strpos($html, 'block-grid-info'))
+            ->and(file_exists(dirname(__DIR__).'/templates/w4os/splash.html.twig'))->toBeFalse()
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('@container');
+    });
+
+    test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
+        expect(W4os\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
+            ->and(W4os\Grav\Site::shortcodeBlocks('[w4os block="grid-status" /] and [w4os block="profile" name="A.B" /]'))->toBe(['grid_status', 'profile'])
+            ->and(W4os\Grav\Site::shortcodeBlocks('No block'))->toBe([]);
+    });
+});

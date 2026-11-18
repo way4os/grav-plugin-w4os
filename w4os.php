@@ -309,6 +309,12 @@ class W4osPlugin extends Plugin
         $page = $this->grav['page'] ?? null;
         $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        // The files of the blocks the text of a page shows (its shortcodes), before the theme writes its head
+        if ($page !== null && ! $this->sitePage()) {
+            foreach (Site::shortcodeBlocks((string) $page->rawMarkdown()) as $block) {
+                $this->blockFiles($block);
+            }
+        }
         // The files of the page before the theme writes its head: a theme may write its assets before its content
         if ($this->sitePage()) {
             ($block = (string) ($page->header()->w4os_block ?? '')) === '' || $this->blockFiles($block);
@@ -329,6 +335,7 @@ class W4osPlugin extends Plugin
      * [w4os slogan /]: the slogan of the site (the theme's setting `slogan`), in the language of the page
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
+     * [w4os-home]...[/w4os-home]: the home page of a grid around the text, its blocks beside it where there is room
      */
     public function onShortcodeHandlers(): void
     {
@@ -344,6 +351,8 @@ class W4osPlugin extends Plugin
         });
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
         $handlers->add('w4os-register', fn ($shortcode) => isset($this->site()->routes()['register']) ? (string) $shortcode->getContent() : '');
+        // [w4os-home]...[/w4os-home]: the home page of a grid around its text (templates/w4os/home.html.twig)
+        $handlers->add('w4os-home', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/home.html.twig', ['content' => (string) $shortcode->getContent()]));
     }
 
     public function onPagesInitialized(): void

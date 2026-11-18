@@ -37,7 +37,7 @@ The presentation and help pages are plain Markdown files of the site (`user/page
 
 In a template: `{{ w4os_block('grid-status') }}`.
 
-A page laid out like the splash page of the helpers (the one a viewer shows: grid info and status on the left, the page and the popular places in the middle, the message of the day on the right), with `template: w4os/splash` in its front matter.
+The home page of a grid, as the content of any page in the site's theme: `[w4os-home]` ... `[/w4os-home]` around its text gives the text, the popular places and the destination guide, with the grid info and status and the message of the day beside them where the content is wide enough (three columns as the splash page of the helpers where it is wider still), under them otherwise. The theme's own column, if it has one, stays the theme's.
 
 What only a visitor with no avatar signed in sees (an invitation to register), in a page with `cache_enable: false`:
 

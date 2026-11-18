@@ -94,12 +94,20 @@ li:empty { display: none; }
     .w4os-cell-who { white-space: normal; }
     .w4os-status { min-width: 0; }
 }
-/* The splash layout: the columns of the splash page of the helpers, one column with the page first on a narrow screen */
-.w4os-splash { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); }
-.w4os-splash aside { overflow-wrap: anywhere; }
-@media (max-width: 52rem) {
-    .w4os-splash { grid-template-columns: minmax(0, 1fr); }
-    .w4os-splash-main { order: -1; }
+/* The home page of a grid (templates/w4os/home.html.twig): one column, the text first; beside it, where the content is wide enough,
+   what the grid is and its news; in three columns, as the splash page of the helpers, where it is wider still */
+.w4os-home { container-type: inline-size; }
+.w4os-home-layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+.w4os-home-grid, .w4os-home-news { overflow-wrap: anywhere; }
+@container (min-width: 46rem) {
+    .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+    .w4os-home-main { grid-row: span 2; }
+}
+@container (min-width: 72rem) {
+    .w4os-home-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); }
+    .w4os-home-main { grid-row: auto; grid-column: 2; }
+    .w4os-home-grid { grid-column: 1; grid-row: 1; }
+    .w4os-home-news { grid-column: 3; grid-row: 1; }
 }
 /* The profile of an avatar (a block of the helpers): its picture beside its name */
 .block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
@@ -123,7 +131,7 @@ li:empty { display: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .block-search .search-form button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
 .search-topics { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem 1rem; margin: .5rem 0 1rem; }
-.w4os-splash .block-guide h1 { font-size: 1.5rem; }
+.w4os-home .block-guide h1 { font-size: 1.5rem; }
 /* The guide in a viewer's panel: it fills it, without the spacing of the site's pages */
 body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .container, .w4os-page) { margin: 0; padding: 0; max-width: none; }
 /* The text areas of the forms grow with their text (a script does it where the browser cannot) */
