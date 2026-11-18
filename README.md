@@ -68,13 +68,14 @@ avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 
   alone (no title on the pages of the plugin), Grav's sign-in status beside the menu, and no language switcher; Quark takes its
   favicon from `images/favicon.png` (the site's is put there).
 - **Hadron** ships the logos, the favicon and a menu link of its demo site, and untranslated labels for its language switcher:
-  the site (w4os-site) clears them in its defaults (`user/config/themes/hadron.yaml`); its row of languages takes two lines when
-  someone is signed in.
-- **Mundana** adds its own sign-in link and the list of every language to its menu bar (its settings `menu_login` and
-  `menu_langswitcher`, on by default), and a drop cap on the first paragraph of a page.
+  the plugin clears them for each request (its logo fields naming missing files, its `menu`, its `langswitcher.format` to the
+  codes of the languages), unless the site set them itself; its row of languages takes two lines when someone is signed in.
+- **Mundana** dates every page as a post (its date not translated), titles it in its own header above the content, lists every
+  language in words in its menu bar and draws large serif headings: a structure to start a theme of one's own from, not a theme to
+  use as it is.
 - **Editorial**, **Future2021**, **Learn2**, **Apple Notes** and **Hypertext** show the title of a page themselves.
-- **Learn2** draws its own logo (no field for one: the settings page says so); its "edit this page" link goes to its demo
-  repository unless `github.position` is off (the site's defaults turn it off).
+- **Learn2** draws its own logo (no field for one: the settings page says so); its "edit this page" link to the repository of
+  its demo is turned off by the plugin (`github.position`), unless the site set it itself.
 - **Woo** takes its logo from `images/logo.png` (the site's is put there, its own kept and put back without one) and shows no
   entries under my avatar in its menu: a visitor signs in from the link of the registration page, a resident signs out from the
   account page.
@@ -86,12 +87,13 @@ avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 
 
 ### Recommended themes
 
-Free themes that run on Grav 2 and show the pages, the menu, the sign-in and the sign-out of the plugin as they should:
-**Quark 2** (the base of the site's own theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron** (with the
-site's defaults), **Mundana**, **Future2021**, **Editorial**, **Learn2** (its menu in a sidebar), **Woo**, **Apple Notes** and
-**Hypertext** (plain HTML).
+Free themes that run on Grav 2 and look as they should with the plugin alone, on a new site as on an existing one (the plugin
+fixes what a theme does only through its settings and what it shows, never its styles): **Quark 2** (the base of the site's own
+theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron**, **Future2021**, **Editorial**, **Learn2** (its
+menu in a sidebar), **Woo**, **Apple Notes** and **Hypertext** (plain HTML).
 
-Not recommended: **Quark Photofolio**, which has no menu of the site, and **Saturn**, unmaintained since 2021.
+Not recommended: **Mundana** (a base for a theme of one's own, see above), **Quark Photofolio**, which has no menu of the site,
+and **Saturn**, unmaintained since 2021.
 
 ## Who manages the grid on the site
 
