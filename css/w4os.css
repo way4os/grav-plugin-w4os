@@ -232,7 +232,7 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-post-form textarea.w4os-post-field:focus, .w4os-post-form textarea.w4os-post-field:not(:placeholder-shown) { min-height: 5rem; }
 .w4os-post-form button, .w4os-post-form .button { padding: .3rem .9rem; font-size: .875rem; min-height: 0; }
 .w4os-post-menu { position: relative; font-size: .9em; }
-.w4os-post-menu summary { list-style: none; cursor: pointer; padding: 0 .35rem; line-height: 1.2; opacity: .6; border-radius: .25rem; }
+.w4os-post-menu summary { list-style: none; cursor: pointer; padding: 0 .35rem; line-height: 1.2; opacity: .75; border-radius: .25rem; }
 .w4os-post-menu summary::-webkit-details-marker { display: none; }
 .w4os-post-menu summary:hover, .w4os-post-menu[open] summary { opacity: 1; }
 .w4os-post-menu .w4os-post-actions { position: absolute; right: 0; top: 100%; z-index: 20; display: grid; min-width: 8rem; margin: .25rem 0 0; padding: .25rem;
