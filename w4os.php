@@ -107,8 +107,7 @@ class W4osPlugin extends Plugin
             exit;
         }
         $this->enable([
-            // Before the Login plugin: its login status is the menu of the visitor (partials/login-status.html.twig)
-            'onTwigTemplatePaths' => ['onTwigTemplatePaths', 10],
+            'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onTwigInitialized' => ['onTwigInitialized', 0],
             'onTwigSiteVariables' => ['onTwigSiteVariables', 0],
             'onShortcodeHandlers' => ['onShortcodeHandlers', 0],
@@ -389,6 +388,9 @@ class W4osPlugin extends Plugin
         } elseif (isset(Site::ADMIN_TYPES[$type]) && ! $this->site()->can(Site::ADMIN_TYPES[$type], $type === 'edit' ? 'change' : 'read')) {
             // The admin pages open from the level of the setting; each one then from the level the contract gives it
             $this->grav->redirectLangSafe($type === 'edit' && isset($routes['manage']) ? $routes['manage'] : $routes['account']);
+        } elseif ($path === Site::logoutRoute($routes)) {
+            // Sign out, as the Login plugin does it (its task, with its nonce)
+            $this->grav->redirectLangSafe(\Grav\Common\Uri::addNonce('/task'.$this->grav['config']->get('system.param_sep', ':').'login.logout', 'logout-form', 'logout-nonce'));
         } elseif (($page = $this->site()->pageAt($path))[0] === 'profile') {
             $this->profilePage($page[1]);
             ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'], $_POST['post']) && $this->postAction((array) $_POST);
@@ -958,10 +960,22 @@ class W4osPlugin extends Plugin
         return $cards;
     }
 
-    /** The web profile of an avatar (/profile/First.Last): titled with its name, a 404 for a name that is no avatar's. */
+    /**
+     * The web profile of an avatar (/profile/First.Last): titled with its name, a 404 for a name that is no avatar's. The profile
+     * page alone (/profile, my avatar in the menu) is the one of the avatar signed in; for a visitor, the way to make one
+     * (registration, else the sign-in).
+     */
     private function profilePage(string $name): void
     {
         $page = $this->grav['page'];
+        if ($name === '') {
+            $own = $this->site()->avatar();
+            if ($own === null) {
+                $routes = $this->site()->routes();
+                $this->grav->redirectLangSafe($routes['register'] ?? $this->grav['config']->get('plugins.login.route', '/login'));
+            }
+            $name = str_replace(' ', '.', (string) $own['name']);
+        }
         try {
             $avatar = $name === '' ? null : $this->site()->forms()->avatar(str_replace('.', ' ', $name));
         } catch (FormError) {

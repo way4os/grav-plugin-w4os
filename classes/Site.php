@@ -327,34 +327,79 @@ final class Site
         return $end === false ? $html : substr($html, 0, $end + 7).$links.substr($html, $end + 7);
     }
 
-    /** The text of the entry of the visitor in the menu of the site: log in, else the account of the avatar signed in. */
-    public static function menuKey(?array $avatar): string
+    /**
+     * The menu of the site, one menu of the pages (as every theme draws them): the search; my avatar, to the profile, with under it
+     * once signed in the edit of the profile and sign out; the admin for a manager, to its dashboard, its sections under it.
+     *
+     * @param array<string,string> $routes the routes of the plugin
+     * @param list<array{type: string, route: string, label: string}> $admin the sections of the admin the visitor opens
+     * @return list<array{type: string, route: string, label: string, children: list<array<string,mixed>>}>
+     */
+    public static function menuEntries(array $routes, bool $signedIn, array $admin): array
     {
-        return $avatar === null ? 'w4os.log_in' : 'w4os.menu_account';
+        $entries = [];
+        isset($routes['search']) && $entries[] = ['type' => 'search', 'route' => $routes['search'], 'label' => 'w4os.search', 'children' => []];
+        $mine = $signedIn && isset($routes['account']) ? [
+            ['type' => 'account', 'route' => $routes['account'], 'label' => 'w4os.edit_profile'],
+            ['type' => 'logout', 'route' => self::logoutRoute($routes), 'label' => 'w4os.logout'],
+        ] : [];
+        isset($routes['profile']) && $entries[] = ['type' => 'profile', 'route' => $routes['profile'], 'label' => 'w4os.menu_account', 'children' => $mine];
+        $admin === [] || ! isset($routes['dashboard']) || $entries[] = ['type' => 'admin', 'route' => $routes['dashboard'], 'label' => 'w4os.menu_admin', 'children' => $admin];
+
+        return $entries;
+    }
+
+    /** The route that signs the visitor out (the task of the Login plugin), under the account. */
+    public static function logoutRoute(array $routes): string
+    {
+        return rtrim((string) ($routes['account'] ?? '/account'), '/').'/logout';
     }
 
     /**
-     * The entries of the plugin in the menu of the site (setting `menu`), as every theme draws the pages: the search, and the
-     * account page titled "Log in" for a visitor (the page leads to the sign-in) or "My avatar".
+     * The sections of the admin the visitor opens, for the menu of the site: its pages but the dashboard (the admin's own link).
+     *
+     * @return list<array{type: string, route: string, label: string}>
      */
+    public function adminSections(): array
+    {
+        $sections = [];
+        foreach (self::ADMIN_PAGES as $type => $page) {
+            $type !== 'dashboard' && isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read'))
+                && ($type !== 'settings' || $this->canSettings())
+                && $sections[] = ['type' => $type, 'route' => $this->routes()[$type], 'label' => $page['label']];
+        }
+
+        return $sections;
+    }
+
+    /** The menu of the site (setting `menu`, menuEntries()) as pages of the tree of Grav, under its root, their children under them. */
     public function addMenu(): void
     {
         if (! ($this->config()['menu'] ?? true)) {
             return;
         }
+        $root = $this->grav['pages']->root();
+        foreach (self::menuEntries($this->routes(), $this->avatar() !== null, $this->isManager() ? $this->adminSections() : []) as $entry) {
+            $this->menuPage($entry, $root);
+        }
+    }
+
+    /** An entry of the menu as a page of the tree, visible, under its parent; a page of the site at its route wins. */
+    private function menuPage(array $entry, $parent): void
+    {
         $pages = $this->grav['pages'];
-        foreach (['search' => 'w4os.search', 'account' => self::menuKey($this->avatar())] as $type => $key) {
-            $route = $this->routes()[$type] ?? null;
-            if ($route === null || $pages->find($route)) {
-                continue;
-            }
-            $page = $this->pluginPage($type, $route);
-            $page->menu($this->translate($key));
-            // Visible for the themes that read it from its front matter too (Apple Notes)
-            $page->visible(true);
-            $page->modifyHeader('visible', true);
-            $page->parent($pages->root());
-            $pages->addPage($page, $route);
+        if ($pages->find($entry['route'])) {
+            return;
+        }
+        $page = $this->pluginPage($entry['type'] === 'admin' ? 'dashboard' : $entry['type'], $entry['route']);
+        $page->menu($this->translate($entry['label']));
+        // Visible for the themes that read it from its front matter too (Apple Notes)
+        $page->visible(true);
+        $page->modifyHeader('visible', true);
+        $page->parent($parent);
+        $pages->addPage($page, $entry['route']);
+        foreach ($entry['children'] ?? [] as $child) {
+            $this->menuPage($child, $page);
         }
     }
 

@@ -68,31 +68,6 @@ describe('the sign-in page', function () {
     });
 });
 
-describe('the login status', function () {
-    $render = function (array $user) {
-        $twig = themeless_twig();
-        $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => ($user['manager'] ?? false) ? [['url' => '/admin', 'label' => 'Avatars']] : []));
-        $twig->addFunction(new TwigFunction('w4os_profile_page', fn () => '/profile/Ada.Love'));
-        $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => "/$type"));
-        $twig->addFunction(new TwigFunction('url', fn ($url) => $url));
-
-        return $twig->render('partials/login-status.html.twig', ['grav' => ['user' => $user], 'base_url_relative' => '', 'uri' => new class {
-            public function path(): string { return '/'; }
-            public function addNonce(string $url): string { return "$url/nonce"; }
-        }, 'config' => ['plugins' => ['w4os' => ['routes' => ['account' => '/account', 'forgot' => '/forgot']], 'login' => ['route' => '/login']], 'system' => ['param_sep' => ':']]]);
-    };
-
-    test('is the menu of the visitor wherever a theme shows Grav\'s login status: its avatar, its account, sign out; the admin for a manager', function () use ($render) {
-        $ada = $render(['authenticated' => true, 'fullname' => 'Ada Love', 'w4os' => ['uuid' => 'u1']]);
-
-        expect($ada)->toContain('class="login-status', 'href="/profile/Ada.Love"', 'Ada Love', 'href="/account"', 'login.logout', '[w4os.logout]')
-            ->not->toContain('[w4os.menu_admin]')
-            ->and($render(['authenticated' => true, 'fullname' => 'Mona', 'w4os' => ['uuid' => 'u2'], 'manager' => true]))->toContain('[w4os.menu_admin]', 'href="/admin"')
-            // Not signed in: the way to sign in
-            ->and($render(['authenticated' => false]))->toContain('href="/login"', '[w4os.log_in]');
-    });
-});
-
 describe('the pages of the plugin', function () {
     test('show in the default page of any theme, the plugin filling their content; the admin pages keep their own layout', function () {
         foreach (glob(dirname(__DIR__).'/pages/*.md') as $file) {
@@ -103,26 +78,6 @@ describe('the pages of the plugin', function () {
         foreach (glob(dirname(__DIR__).'/templates/*.twig') as $file) {
             expect(file_get_contents($file))->not->toContain("extends 'partials/base.html.twig'", basename($file));
         }
-    });
-});
-
-describe('the menu of the site', function () {
-    test('has the entry of the visitor, as every theme draws the pages: log in, else the account of the avatar', function () {
-        expect(W4os\Grav\Site::menuKey(null))->toBe('w4os.log_in')
-            ->and(W4os\Grav\Site::menuKey(['uuid' => 'u1', 'name' => 'Ada Love']))->toBe('w4os.menu_account');
-    });
-
-    test('leads to the account page, which has the profile, the admin for a manager and sign out, whatever the theme', function () {
-        $twig = themeless_twig();
-        $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => [['url' => '/admin', 'label' => 'Avatars']]));
-        $twig->addFunction(new TwigFunction('w4os_profile_page', fn () => '/profile/Ada.Love'));
-        $twig->addFunction(new TwigFunction('url', fn ($url) => $url));
-        $html = $twig->render('w4os/account-links.html.twig', ['uri' => new class {
-            public function path(): string { return '/account'; }
-            public function addNonce(string $url): string { return "$url/nonce"; }
-        }, 'config' => ['system' => ['param_sep' => ':']]]);
-
-        expect($html)->toContain('href="/profile/Ada.Love"', '[w4os.profile_title]', 'href="/admin"', '[w4os.menu_admin]', 'login.logout', '[w4os.logout]');
     });
 });
 

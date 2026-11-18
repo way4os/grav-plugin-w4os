@@ -3,6 +3,5 @@
 {% if w4os_avatar() is empty %}
     <p class="notices red">{{ 'w4os.error_channel_unavailable'|t }}</p>
 {% else %}
-    {% include 'w4os/account-links.html.twig' %}
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
 {% endif %}
