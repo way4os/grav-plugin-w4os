@@ -57,25 +57,41 @@ Inside a list item, the shortcode goes after the number: the item left empty is 
 
 ## Themes
 
-The plugin works with any theme: its pages use the theme's default page and its entries are pages of the menu. What a theme does
-with them is the theme's choice, and its own settings stay the user's. Some themes seen so far:
+The plugin works with any theme: its pages use the theme's default page and its entries are pages of the menu (my avatar, with
+signing in and creating an avatar under it for a visitor, editing the profile and signing out once signed in; the admin for a
+manager). What a theme does with them is the theme's choice, and its own settings stay the user's: the plugin prints no title of
+its own on its pages (the theme shows it or not), and gives the logo and the favicon of the site to the theme in its own fields or
+files (see the settings of the site). The account page has its own sign-out link, for the themes that show no entries under my
+avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 and 393 px):
 
+- **Quark 2** and its children (**Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron**) show the content of a page
+  alone (no title on the pages of the plugin), Grav's sign-in status beside the menu, and no language switcher; Quark takes its
+  favicon from `images/favicon.png` (the site's is put there).
+- **Hadron** ships the logos, the favicon and a menu link of its demo site, and untranslated labels for its language switcher:
+  the site (w4os-site) clears them in its defaults (`user/config/themes/hadron.yaml`); its row of languages takes two lines when
+  someone is signed in.
 - **Mundana** adds its own sign-in link and the list of every language to its menu bar (its settings `menu_login` and
-  `menu_langswitcher`, on by default).
+  `menu_langswitcher`, on by default), and a drop cap on the first paragraph of a page.
+- **Editorial**, **Future2021**, **Learn2**, **Apple Notes** and **Hypertext** show the title of a page themselves.
+- **Learn2** draws its own logo (no field for one: the settings page says so); its "edit this page" link goes to its demo
+  repository unless `github.position` is off (the site's defaults turn it off).
+- **Woo** takes its logo from `images/logo.png` (the site's is put there, its own kept and put back without one) and shows no
+  entries under my avatar in its menu: a visitor signs in from the link of the registration page, a resident signs out from the
+  account page.
 - **Apple Notes** has no menu: its column lists the pages beside the one shown, by their titles, without their children.
+- **Hypertext** is plain HTML, no styles of its own; its favicon has a fixed name (the settings page says it shows none of the
+  site's).
 - **Quark Photofolio** lists the sections of the page shown, not the pages of the site: it has no menu of the site.
-- **Quark**, **Quark 2** and their children, **Woo** and **Apple Notes** include no language switcher; Mundana, Future2021 and
-  Editorial include Grav's own (`partials/langswitcher.html.twig`).
+- **Saturn**, unmaintained since 2021, has no logo field and its search bar needs a plugin of its own.
 
 ### Recommended themes
 
-Free themes that run on Grav 2 and show the pages and the menu of the plugin as they should: **Quark 2** (the base of the site's
-own theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Mundana**, **Future2021**, **Editorial**, **Learn2**
-(its menu in a sidebar), **Woo**, **Apple Notes** and **Hypertext** (plain HTML, no styles of its own). **Hadron** (a child of
-Quark 2) runs too, once its own settings are set (its logo, the labels of its language switcher).
+Free themes that run on Grav 2 and show the pages, the menu, the sign-in and the sign-out of the plugin as they should:
+**Quark 2** (the base of the site's own theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron** (with the
+site's defaults), **Mundana**, **Future2021**, **Editorial**, **Learn2** (its menu in a sidebar), **Woo**, **Apple Notes** and
+**Hypertext** (plain HTML).
 
-Not recommended: **Quark Photofolio**, which has no menu of the site, and **Saturn**, unmaintained since 2021 (its search bar needs
-a plugin of its own).
+Not recommended: **Quark Photofolio**, which has no menu of the site, and **Saturn**, unmaintained since 2021.
 
 ## Who manages the grid on the site
 
