@@ -72,6 +72,21 @@ describe('the brand of the admin', function () {
     });
 });
 
+describe('the styles of the admin', function () {
+    test('are Tabler\'s and its own: the plugin\'s and the Form plugin\'s (its drop zones), none of the other plugins of the site', function () {
+        $css = implode("\n", [
+            '<link href="/user/plugins/form/assets/form-styles.css?6afe" type="text/css" rel="stylesheet">',
+            '<link href="/user/plugins/login/css/login.css?6afe" type="text/css" rel="stylesheet">',
+            '<link href="/user/plugins/oli-langswitcher/css/oli-langswitcher.css?6afe" type="text/css" rel="stylesheet">',
+            '<link href="/user/plugins/w4os/vendor/magicoli/opensim-helpers/assets/profile.css" type="text/css" rel="stylesheet">',
+            '<link href="/user/themes/quark2/css/theme.css" type="text/css" rel="stylesheet">',
+        ]);
+
+        expect(Site::adminCss($css))->toContain('form-styles.css', 'opensim-helpers/assets/profile.css')
+            ->not->toContain('login.css')->not->toContain('oli-langswitcher')->not->toContain('quark2');
+    });
+});
+
 describe('sign-in', function () {
     test('lands on the avatar\'s own profile, unless a page asked for the sign-in', function () {
         $profile = 'https://site.example.org/fr/profile/Ada.Love';

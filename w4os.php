@@ -287,6 +287,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_menu', fn () => $this->site()->adminMenu()));
         // The identity of the site for its admin pages (their layout, w4os-admin.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));

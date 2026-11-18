@@ -805,6 +805,15 @@ final class Site
     }
 
     /**
+     * The styles the site adds to a page, for the admin: the plugin's own and the Form plugin's (its drop zones), none of the other
+     * plugins of the site (their front-end looks stay out of Tabler).
+     */
+    public static function adminCss(string $html): string
+    {
+        return (string) preg_replace_callback('~<link\b[^>]*>\s*~i', fn (array $m) => preg_match('~href="[^"]*/plugins/(w4os|form)/~', $m[0]) ? $m[0] : '', $html);
+    }
+
+    /**
      * The logo of the admin, whatever the theme of the site: the admin's own setting (an address), else the logo of the brand of the
      * site (its file, a path of the site); null without one (the logo of the grid then).
      *
