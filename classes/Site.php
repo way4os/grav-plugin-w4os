@@ -358,6 +358,17 @@ final class Site
         }
     }
 
+    /** The key of the title of a page of the plugin, in the catalog or the texts of the plugin. */
+    public static function titleKey(string $type): string
+    {
+        return match ($type) {
+            'account' => 'w4os.edit_profile',
+            'search' => 'w4os.search',
+            'settings' => 'w4os.admin_site_settings',
+            default => 'w4os.'.$type.'_title',
+        };
+    }
+
     /** A page of the plugin (pages/<type>.md) at a route of the site, under a folder of its own so that each one is its own page. */
     private function pluginPage(string $type, string $route): Page
     {
@@ -367,7 +378,7 @@ final class Site
         $page->route($route);
         $page->slug(basename($route));
         // The account page is where the avatar edits its profile: the title of its menu entry and button
-        $page->title($this->translate(match ($type) { 'account' => 'w4os.edit_profile', 'search' => 'w4os.search', default => 'w4os.'.$type.'_title' }));
+        $page->title($this->translate(self::titleKey($type)));
 
         return $page;
     }

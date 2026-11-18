@@ -18,6 +18,8 @@ form:
           type: select
           label: w4os.admin_site_theme
           help: w4os.admin_site_theme_help
+          # The same field as the other choices of the admin (Tom Select, js/select.js)
+          datasets: { w4os-select: one }
           validate: { required: true }
   buttons:
     - { type: submit, value: w4os.save_button, classes: 'btn-primary' }

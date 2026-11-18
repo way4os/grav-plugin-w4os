@@ -440,9 +440,13 @@ class W4osPlugin extends Plugin
             return;
         }
         if ($form->getName() === 'w4os-settings') {
-            // The themes installed (Grav's list, their names), the one of the site chosen
+            // The themes installed (Grav's list), each by the name its blueprint gives, the one of the site chosen
             $fields = (array) $form->get('fields');
-            $fields['appearance']['fields']['theme']['options'] = array_map(fn ($theme) => (string) ($theme['name'] ?? ''), $this->grav['themes']->all());
+            $themes = [];
+            foreach ($this->grav['themes']->all() as $folder => $theme) {
+                $themes[$folder] = (string) ($theme->blueprints()->get('name') ?: $folder);
+            }
+            $fields['appearance']['fields']['theme']['options'] = $themes;
             $form->setFields($fields);
             $form->getData()->get('theme') === null && $form->setData('theme', (string) $this->grav['config']->get('system.pages.theme'));
 

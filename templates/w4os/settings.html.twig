@@ -1,9 +1,11 @@
-{# The settings of the site, in Tabler's settings layout: its sections as side tabs (the fieldsets of the form), the form beside
-   them #}
+{# The settings of the site, in Tabler's settings layout: its sections as narrow side tabs (the fieldsets of the form), the form
+   beside them; its choices as the other choices of the admin (Tom Select, js/select.js) #}
 {% set sections = page.header.form.fields|filter(field => field.type == 'fieldset') %}
-<div class="card">
+{% do assets.addJs('plugin://w4os/vendor/npm-asset/tom-select/dist/js/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
+{% do assets.addJs('plugin://w4os/js/select.js', {group: 'bottom', loading: 'defer'}) %}
+<div class="card w4os-settings-card">
     <div class="row g-0">
-        <div class="col-12 col-md-3 border-end">
+        <div class="col-12 col-md-auto border-end w4os-settings-nav">
             <div class="card-body">
                 <nav class="list-group list-group-transparent" aria-label="{{ 'w4os.admin_site_settings'|t|e('html_attr') }}">
                     {% for name, section in sections %}
@@ -12,8 +14,8 @@
                 </nav>
             </div>
         </div>
-        <div class="col-12 col-md-9">
-            <div class="card-body">
+        <div class="col">
+            <div class="card-body w4os-settings-body">
                 {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-settings') } %}
             </div>
         </div>

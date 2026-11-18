@@ -10,6 +10,13 @@ use Twig\TwigFunction;
 use W4os\Grav\Site;
 
 describe('the settings of the site', function () {
+    test('have their page titled in the language of the page, as every page of the plugin', function () {
+        expect(Site::titleKey('settings'))->toBe('w4os.admin_site_settings')
+            ->and(Site::titleKey('account'))->toBe('w4os.edit_profile')
+            ->and(Site::titleKey('search'))->toBe('w4os.search')
+            ->and(Site::titleKey('register'))->toBe('w4os.register_title');
+    });
+
     test('write Grav\'s own setting in the configuration of the site, nothing else of it', function () {
         $config = ['home' => ['alias' => '/home'], 'pages' => ['theme' => 'w4os', 'markdown' => ['extra' => true]]];
 
