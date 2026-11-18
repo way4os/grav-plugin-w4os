@@ -221,3 +221,6 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-account-links ul { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0 0 1rem; padding: 0; list-style: none; }
 .w4os-account-links li { margin: 0; padding: 0; list-style: none; }
 #grav-login .w4os-login-links { margin: 1rem 0 0; text-align: center; }
+/* What the plugin and the helpers hide (the tabs of a profile) stays hidden, whatever a theme says of the display of its elements
+   (Editorial: section { display: block }) */
+.w4os [hidden] { display: none !important; }
