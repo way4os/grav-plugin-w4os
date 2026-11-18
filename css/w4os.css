@@ -1,5 +1,11 @@
 /* The pages of the w4os plugin and the blocks of the helpers. Light on purpose: the theme does the rest. */
-.w4os-form { max-width: 36rem; }
+.w4os-form { max-width: 44rem; container-type: inline-size; }
+/* A field of a form of the plugin with its label beside it, where the form is wide enough: the label (and its help) in a margin on
+   the left, the field on the right; one under the other otherwise. Only the layout: the theme's markup and looks as they are */
+@container (min-width: 34rem) {
+    .w4os-form .form-field:has(> :first-child label):has(> :nth-child(2)) { display: grid; grid-template-columns: minmax(8rem, 1fr) minmax(0, 3fr); gap: 0 1rem; align-items: start; }
+    .w4os-form .form-field:has(> :first-child label) > :first-child { margin: 0; padding-top: .4rem; }
+}
 /* The forms of a profile as wide as its page, laid out as it is */
 .w4os-form-profile { max-width: none; }
 .w4os-help, .w4os-count { opacity: .8; font-size: .9em; }
