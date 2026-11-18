@@ -5,3 +5,6 @@ body.w4os-viewer .w4os-page > :first-child, body.w4os-viewer .block:first-child 
 body.w4os-viewer h1, body.w4os-viewer .block-title { font-size: 1.25rem; line-height: 1.3; margin: 0 0 .5rem; }
 body.w4os-viewer h2 { font-size: 1.05rem; margin: 1rem 0 .5rem; }
 body.w4os-viewer .block { padding: .75rem 1rem; }
+/* The banner of a profile, smaller in a small panel */
+body.w4os-viewer .profile-banner .profile-photo { max-width: 6rem; max-height: 5rem; }
+body.w4os-viewer .profile-banner { gap: .75rem; margin-bottom: .5rem; }

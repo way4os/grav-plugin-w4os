@@ -74,6 +74,7 @@ w4os:
   profile_other: 'Arall'
   profile_sections: 'Adrannau’r proffil'
   profile_tab_inworld: 'Yn y byd'
+  profile_tab_about: 'Amdanaf'
   profile_tab_web: 'Gwe'
   profile_tab_feed: 'Ffrwd'
   post_label: 'New post'

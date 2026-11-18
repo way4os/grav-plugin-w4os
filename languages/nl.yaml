@@ -74,6 +74,7 @@ w4os:
   profile_other: 'Overig'
   profile_sections: 'Onderdelen van het profiel'
   profile_tab_inworld: 'In-world'
+  profile_tab_about: 'Over'
   profile_tab_web: 'Web'
   profile_tab_feed: 'Feed'
   post_label: 'New post'
