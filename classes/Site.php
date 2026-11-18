@@ -905,7 +905,8 @@ final class Site
     {
         $settings = [];
         foreach ($fields as $setting => $field) {
-            $file = reset($brand[$setting]) ?: null;
+            $files = (array) ($brand[$setting] ?? []);
+            $file = $files === [] ? null : reset($files);
             $copy = (string) ($copies[$setting] ?? '');
             if (! is_array($file) || $copy === '') {
                 continue;
@@ -960,12 +961,24 @@ final class Site
         if ($brand === []) {
             return;
         }
+        // Whatever a theme declares, the site's pages open: the theme as it is then, the cause in Grav's log
+        try {
+            $this->giveBrand($brand);
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning('w4os: the brand of the site not given to the theme: '.$e->getMessage());
+        }
+    }
+
+    /** @param array<string,mixed> $brand the brand of the site, as applyBrand() gives it */
+    private function giveBrand(array $brand): void
+    {
         $theme = (string) $this->grav['config']->get('system.pages.theme');
         $has = fn (string $field) => $this->themeField($field) !== null;
         $fields = self::brandFields($has);
         $copies = [];
         foreach ($fields as $setting => $field) {
-            $file = reset($brand[$setting]) ?: null;
+            $files = (array) ($brand[$setting] ?? []);
+            $file = $files === [] ? null : reset($files);
             $folder = (string) ($this->grav['locator']->findResource(self::brandDestination((string) ($this->themeField($field)['destination'] ?? '')), false, true) ?: '');
             if (is_array($file) && $folder !== '' && ($copy = self::brandCopy(GRAV_ROOT, (string) ($file['path'] ?? ''), $folder)) !== null) {
                 $copies[$setting] = $copy;

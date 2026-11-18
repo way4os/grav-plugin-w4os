@@ -74,7 +74,9 @@ describe('the brand of the site', function () {
             ->toBe(['custom_logo' => $copy('user/themes/editorial/images/logo/fowl.png'), 'custom_logo_enabled' => true])
         // Nothing set for the site, a theme without the field, a copy that could not be made: the theme as it is
             ->and(Site::themeBrand(['logo' => [], 'favicon' => $icon], ['logo' => 'custom_logo'], ['logo' => 'user/themes/quark2/images/logo/fowl.png'], ['custom_logo_enabled' => true]))->toBe([])
-            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], [], []))->toBe([]);
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], [], []))->toBe([])
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo', 'favicon' => 'favicon'], ['logo' => 'user/themes/quark2/images/logo/fowl.png'], []))
+            ->toBe(['custom_logo' => $copy('user/themes/quark2/images/logo/fowl.png')]);
     });
 
     test('is copied where the theme takes it, never over a file of the theme, again once a theme update erased it', function () {
