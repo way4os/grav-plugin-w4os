@@ -30,6 +30,12 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out']);
     });
 
+    test('tells the helpers that a viewer asks, so their links are the viewer\'s', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+
+        expect(json_decode($blocks->html('popular_places', ['viewer' => '1']), true))->toBe(['viewer' => '1']);
+    });
+
     test('keeps every block a while but the search, whose results change as soon as a profile is published', function () {
         expect(Blocks::kept('search'))->toBeFalse()
             ->and(Blocks::kept('profile'))->toBeTrue()

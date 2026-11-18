@@ -701,6 +701,8 @@ class W4osPlugin extends Plugin
             'name' => $name === 'profile' ? $uri->query('name') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
+            // A viewer asks: the teleport links of the block are the ones it takes (the helpers see the site, not the viewer)
+            'viewer' => $this->site()->isViewer() ? '1' : null,
         ]);
         // The helpers translate their blocks: they are asked in the language of the page
         $language = $this->grav['language'];
