@@ -216,3 +216,8 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-tone-off { color: var(--pico-muted-color, currentColor); }
 .w4os-tone-warning { color: var(--pico-mark-background-color, currentColor); }
 .w4os-tone-failed { color: var(--pico-del-color, currentColor); }
+
+/* The ways out of the account page (its profile, the admin, sign out), and the links under the sign-in form, in any theme */
+.w4os-account-links ul { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; margin: 0 0 1rem; padding: 0; list-style: none; }
+.w4os-account-links li { margin: 0; padding: 0; list-style: none; }
+#grav-login .w4os-login-links { margin: 1rem 0 0; text-align: center; }
