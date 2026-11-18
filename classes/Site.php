@@ -850,9 +850,9 @@ final class Site
         $yaml->save(self::withSetting((array) $yaml->content(), $key, $value));
         $yaml->free();
         $this->grav['config']->set("$file.$key", $value);
-        // The next request reads it at once, the site's pages too: Grav's own invalidation after a change of its configuration (the
-        // configuration and its compiled files, PHP's caches)
-        \Grav\Common\Cache::invalidateCache();
+        // The next request reads it at once, the site's pages too: Grav's own clearing of its cache (the list of the configuration
+        // files it otherwise trusts for system.cache.check.interval, the compiled files and templates), as its admin offers it
+        \Grav\Common\Cache::clearCache('standard');
     }
 
     /**
