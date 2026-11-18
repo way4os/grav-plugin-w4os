@@ -7,6 +7,10 @@
    What it shows comes from w4os-views (ListView): its first column is the name of the row, the secondary ones show in their column
    on a wide screen (xl), in a grey line under the name on a narrower one; the status (indicators) and the "…" menu at every width. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
+{# What to show, from w4os-views (ListView): the filters and what the page asks of them, the columns and the secondary ones, the
+   rows with their link, address, indicators and menu, the filters chosen and the query that removes them, the pages #}
+{# None when the engine does not describe the list (it does not answer): the error alone #}
+{% set view = list ? w4os_list_view(list, error ? [] : items, error ? {} : meta, query, links ?? [], fixed ?? {}) : null %}
 {# The toolbar: the search, then the filters at their width (their empty option names them), on one line when there is room;
    Enter asks the list again #}
 <form class="w4os-filters d-flex flex-wrap align-items-center gap-2 mb-3" method="get">
@@ -18,29 +22,28 @@
     </div>
     {% endif %}
     <div class="d-flex flex-wrap gap-2 w4os-filter-fields" role="group" aria-label="{{ 'w4os.filters'|t|e('html_attr') }}">
-    {% for filter in list.filters %}
+    {% for filter in view ? view.filters : [] %}
         {% set label = ('w4os.' ~ filter.label)|t %}
-        {% if filter.multiple ?? false %}
+        {% if filter.field == 'multiple' %}
         {# The choices of a filter as the same field (Tom Select, js/filters.js): several values, any of them, its label as its
            placeholder; or one value, its label greyed while none is chosen, a × to remove it (without the script, its first option
            asks for any). The meaning of each value as its tip #}
-        {% set asked = query[filter.name] ?? [] %}
         <select class="form-select" name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.value in asked ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
-        {% elseif filter.format is defined %}
-        <input type="text" class="form-control" name="{{ filter.name|e('html_attr') }}" value="{{ query[filter.name] ?? '' }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
+        {% elseif filter.field == 'text' %}
+        <input type="text" class="form-control" name="{{ filter.name|e('html_attr') }}" value="{{ filter.chosen|first|default('') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
         <select class="form-select" name="{{ filter.name|e('html_attr') }}" data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" data-chosen="{{ 'w4os.label_value'|t(label, '%s')|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
             <option value="">{{ 'w4os.filter_any'|t }}</option>
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description is defined %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ (query[filter.name] ?? '') == value.value ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
         </select>
         {% endif %}
     {% endfor %}
     </div>
     {% if query.sort is defined %}<input type="hidden" name="sort" value="{{ query.sort }}">{% endif %}
 </form>
-{% if list.filters|filter(f => f.format is not defined) %}
+{% if view and view.filters|filter(f => f.field != 'text') %}
     {# Its styles are the admin's (Tom Select in Tabler's theme) #}
     {% do assets.addJs('plugin://w4os/vendor/npm-asset/tom-select/dist/js/tom-select.popular.min.js', {group: 'bottom', loading: 'defer'}) %}
     {% do assets.addJs('plugin://w4os/js/filters.js', {group: 'bottom', loading: 'defer'}) %}
@@ -48,9 +51,6 @@
 {% if error %}
     <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% else %}
-    {# What to show, from w4os-views (ListView): the columns and the secondary ones, the rows with their link, address,
-       indicators and menu, the filters chosen and the query that removes them, the pages #}
-    {% set view = w4os_list_view(list, items, meta, query, links ?? [], fixed ?? {}) %}
     {% if view.rows is not empty or view.activeFilters %}
     <p class="text-secondary w4os-count mb-2">
         {{ w4os_count(texts.count, view.total) }}

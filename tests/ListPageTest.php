@@ -9,7 +9,7 @@ use W4os\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
 
 /** The list of a page of the admin, rendered by its template with the plugin's functions as plain stubs. */
-function render_list(array $list, array $items, array $meta, array $links = [], array $query = [], array $fixed = []): string
+function render_list(?array $list, array $items, array $meta, array $links = [], array $query = [], array $fixed = [], ?string $error = null): string
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links, fixed: $fixed)));
@@ -25,7 +25,7 @@ function render_list(array $list, array $items, array $meta, array $links = [], 
         public function addJs(string $url, array $options = []): void {}
     };
 
-    return $twig->render('w4os/list.html.twig', ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query, 'fixed' => $fixed, 'error' => null, 'links' => $links, 'assets' => $assets,
+    return $twig->render('w4os/list.html.twig', ['list' => $list, 'items' => $items, 'meta' => $meta, 'query' => $query, 'fixed' => $fixed, 'error' => $error, 'links' => $links, 'assets' => $assets,
         'texts' => ['search' => 'w4os.search_simulators', 'empty' => 'w4os.no_simulators', 'count' => 'w4os.simulators_count', 'title' => 'w4os.simulators_title']]);
 }
 
@@ -80,6 +80,21 @@ describe('the list of a page of the admin', function () {
     test('leaves out the column of a filter the page fixes (the grid of the site)', function () use ($simulators, $solo) {
         expect(render_list($simulators, [$solo], ['total' => 1]))->toContain('[w4os.column_grid]')
             ->and(render_list($simulators, [$solo], ['total' => 1], [], [], ['grid' => 'demo']))->not->toContain('[w4os.column_grid]');
+    });
+
+    test('its filters drawn from their views: the value the page asks selected, a filter the page fixes not in the toolbar', function () use ($simulators, $solo) {
+        $html = render_list($simulators, [$solo], ['total' => 1], [], ['enabled' => 'yes', 'server' => 'h1']);
+
+        expect($html)->toMatch('#<select[^>]*name="enabled"[^>]*>.*?<option value="yes"[^>]*selected#s')
+            ->and($html)->toMatch('#<input type="text"[^>]*name="server"[^>]*value="h1"#')
+            ->and(render_list($simulators, [$solo], ['total' => 1]))->toContain('name="grid"')
+            ->and(render_list($simulators, [$solo], ['total' => 1], [], [], ['grid' => 'demo']))->not->toContain('name="grid"');
+    });
+
+    test('a list the engine does not describe (it does not answer): its error alone, no filters', function () {
+        $html = render_list(null, [], [], [], [], [], 'The engine does not answer');
+
+        expect($html)->toContain('class="alert alert-danger"', 'The engine does not answer')->and($html)->not->toContain('<select');
     });
 
     test('counts the filters chosen, with a link that removes them and keeps the search and the sort', function () use ($simulators, $solo) {
