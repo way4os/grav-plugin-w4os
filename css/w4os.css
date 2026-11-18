@@ -133,7 +133,7 @@ li:empty { display: none; }
 .search-topics { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem 1rem; margin: .5rem 0 1rem; }
 .w4os-home .block-guide h1 { font-size: 1.5rem; }
 /* The titles of the guide in its own colors (its dark panel), whatever the theme says of the color of titles */
-#guide :is(h1, h2) { color: inherit; }
+#guide :is(h1, h2, h3, .block-title) { color: inherit; }
 /* The guide in a viewer's panel: it fills it, without the spacing of the site's pages */
 body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .container, .w4os-page) { margin: 0; padding: 0; max-width: none; }
 /* The text areas of the forms grow with their text (a script does it where the browser cannot) */
