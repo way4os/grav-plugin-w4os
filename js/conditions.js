@@ -28,7 +28,14 @@ document.querySelectorAll('form[data-w4os-conditions]').forEach((form) => {
             form.querySelectorAll(`.w4os-snippet-for-${name}`).forEach((snippet) => snippet.classList.toggle('w4os-unmet', !met));
         });
     };
+    // The parts of a database hidden while its default is checked
+    const defaults = () => form.querySelectorAll('input[type="checkbox"][name$="[useDefault]"]').forEach((box) => {
+        const name = box.name.slice('data['.length, -'][useDefault]'.length);
+        form.querySelectorAll(`.w4os-fallback-of-${name}`).forEach((part) => part.classList.toggle('w4os-unmet', box.checked));
+    });
     apply();
+    defaults();
+    form.addEventListener('change', defaults);
     form.addEventListener('change', apply);
     form.addEventListener('input', apply);
 });

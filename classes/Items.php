@@ -43,11 +43,19 @@ final class Items
                 continue;
             }
             if (in_array($field['name'], $changed, true)) {
-                $groups[$field['group']][$field['name']] = self::input($field, $translate, $base)
+                $input = self::input($field, $translate, $base);
+                // A database whose default is kept now: its parts hidden
+                if (! empty($view->values[$field['name']]['useDefault'])) {
+                    foreach ($input['fields'] ?? [] as $name => $part) {
+                        isset($part['outerclasses']) && $input['fields'][$name]['outerclasses'] .= ' w4os-unmet';
+                    }
+                }
+                $groups[$field['group']][$field['name']] = $input
                     // A field the values of the form hide for now (its condition), shown by the script of the form as they change
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
             } elseif (in_array($field['name'], $readOnly, true)) {
-                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1]);
+                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1])
+                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
             } else {
                 continue;
             }
@@ -156,9 +164,10 @@ final class Items
      */
     public static function conditions(FormView $view): array
     {
-        $names = array_column($view->fields, 'name');
+        // On the fields of the form, the ones shown and unchangeable included (the script reads them too)
+        $names = [...array_column($view->fields, 'name'), ...array_column($view->shown, 'name')];
         $conditions = [];
-        foreach ($view->fields as $field) {
+        foreach ([...$view->fields, ...$view->shown] as $field) {
             FormView::live($field, $names) && $conditions[$field['name']] = array_map(fn ($values) => array_values((array) $values), (array) $field['condition']);
         }
 
@@ -195,8 +204,11 @@ final class Items
         // A database: its parts, each its input (data[<name>][<part>])
         if ($field['type'] === 'connection-string') {
             $parts = [];
+            // Its default (a database the grid has without it) first: its parts hidden while it is checked
+            isset($field['fallback']) && $parts[$field['name'].'.useDefault'] = ['type' => 'checkbox', 'label' => 'w4os.'.$field['fallback']];
             foreach ((array) ($field['fields'] ?? []) as $part) {
-                $parts[$field['name'].'.'.$part['name']] = self::input($part + ['type' => 'string'], $translate, $base);
+                $parts[$field['name'].'.'.$part['name']] = self::input($part + ['type' => 'string'], $translate, $base)
+                    + (isset($field['fallback']) ? ['outerclasses' => 'w4os-fallback-of-'.$field['name']] : []);
             }
 
             return ['type' => 'fieldset', 'title' => 'w4os.'.$field['label'], 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);

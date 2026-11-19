@@ -41,7 +41,7 @@ describe('the settings pages of the services of the grid', function () {
         $database = $fields['searchDatabase'];
 
         expect($database)->toMatchArray(['type' => 'fieldset', 'title' => 'w4os.setting_search_database'])
-            ->and(array_keys($database['fields']))->toBe(['searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
+            ->and(array_keys($database['fields']))->toBe(['searchDatabase.useDefault', 'searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
             ->and($database['fields']['searchDatabase.port'])->toMatchArray(['type' => 'number', 'placeholder' => '3306', 'label' => 'w4os.db_port'])
             ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password'])
             ->and($fields['dataServices'])->toMatchArray(['disabled' => true]);
@@ -140,5 +140,17 @@ describe('the settings pages of the services of the grid', function () {
 
         expect($fields['path']['help'])->toBe(strtr($french['notice_setting_file_unwritable'], ['{file}' => 'Robust.HG.ini']))
             ->and($fields['path']['help'])->not->toContain('This server');
+    });
+
+    test('a database the grid has a default for starts with its Use default, its parts hidden while it is checked', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'searchDatabase' => null], null, true, 250), shown: true);
+        $parts = $fields['searchDatabase']['fields'];
+
+        expect(array_key_first($parts))->toBe('searchDatabase.useDefault')
+            ->and($parts['searchDatabase.useDefault'])->toMatchArray(['type' => 'checkbox', 'label' => 'w4os.db_use_default'])
+            ->and($parts['searchDatabase.host']['outerclasses'])->toContain('w4os-fallback-of-searchDatabase', 'w4os-unmet')
+            ->and(Items::fields(FormView::of($form, ['provide' => true, 'searchDatabase' => ['host' => 'db']], null, true, 250), shown: true)['searchDatabase']['fields']['searchDatabase.host']['outerclasses'])
+            ->not->toContain('w4os-unmet');
     });
 });
