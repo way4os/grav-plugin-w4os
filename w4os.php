@@ -116,7 +116,8 @@ class W4osPlugin extends Plugin
             'onThemeInitialized' => ['onThemeInitialized', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onTwigInitialized' => ['onTwigInitialized', 0],
-            'onTwigSiteVariables' => ['onTwigSiteVariables', 0],
+            // Last, once the others set their variables: the text of a page with blocks rendered before the theme shows its messages
+            'onTwigSiteVariables' => [['onTwigSiteVariables', 0], ['onTwigSiteVariablesLast', -1000]],
             'onShortcodeHandlers' => ['onShortcodeHandlers', 0],
             // Before the Login plugin, whose forgot-password route is the one of this plugin
             'onPagesInitialized' => ['onPagesInitialized', 10],
@@ -332,8 +333,6 @@ class W4osPlugin extends Plugin
 
     public function onTwigSiteVariables(): void
     {
-        // The blocks of the text of the page (its shortcodes) it could not read, said before the theme shows its messages
-        $this->blockFailures === [] || $this->blockNotices();
         $page = $this->grav['page'] ?? null;
         $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
@@ -1063,6 +1062,18 @@ class W4osPlugin extends Plugin
         $block = (string) ($this->grav['page']->header()->w4os_block ?? '');
 
         return $block === '' ? null : \W4os\Grav\Blocks::name($block);
+    }
+
+    /**
+     * The text of a page that shows blocks of the helpers (its shortcodes), rendered before the theme shows its messages (Grav
+     * renders it when its template asks it, after them): the blocks it could not read are said with the messages of the page.
+     */
+    public function onTwigSiteVariablesLast(): void
+    {
+        $page = $this->grav['page'] ?? null;
+        $page !== null && ! $this->sitePage() && Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) !== []
+            && $page->content();
+        $this->blockFailures === [] || $this->blockNotices();
     }
 
     /**
