@@ -98,6 +98,10 @@ describe('templates', function () {
             ->and($cell->render(['column' => $columns['memory'], 'item' => ['memory' => 95, 'memoryUsed' => 15565, 'memoryTotal' => 16384]]))
             ->toContain('bg-danger', '[w4os.usage_of:[w4os.unit_mb:15,565]|[w4os.unit_mb:16,384]]')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => []]))->not->toContain('progress');
+        // The size of a region: its width and its height in meters (the engine's unit_dimensions), in the language of the page
+        $size = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['size'];
+        expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('[w4os.unit_dimensions:512|1,024]')
+            ->and($cell->render(['column' => $size, 'item' => ['size' => 256]]))->toContain('[w4os.unit_dimensions:256|256]');
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
