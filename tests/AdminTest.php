@@ -237,8 +237,8 @@ describe('the sidebar of the admin', function () {
             ->and($html)->toContain('<img class="navbar-brand-image w4os-admin-icon" src="&#x2F;favicon.png" alt=""', '<span class="w4os-admin-brand-full">', 'data-bs-toggle="sidebar-folded" aria-pressed="false" aria-label="&#x5B;w4os.admin_sidebar_pin&#x5D;"')
             // A page with pages under it opens them as a flyout in the rail, closed by a click elsewhere
             ->and($html)->toContain('data-bs-toggle="dropdown" data-bs-auto-close="outside"')
-            // The title of each entry as the tooltip of its icon
-            ->and($html)->toContain('<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="Regions">');
+            // No tooltip on the icons: a hover unfolds their titles
+            ->and($html)->not->toContain('data-bs-toggle="tooltip"');
     });
 
     test('folds to its icons below xl while the manager has saved no choice, a saved choice always winning (node --test tests/js)', function () {

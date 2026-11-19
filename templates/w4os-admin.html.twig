@@ -64,7 +64,7 @@
                        (Tabler's dropdown menu) on the page of one of them #}
                     <li class="nav-item dropdown{{ item.active ? ' active' }}">
                         <a class="nav-link dropdown-toggle" href="{{ item.url|e('html_attr') }}" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="{{ item.active ? 'true' : 'false' }}">
-                            {% if item.icon is defined %}<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ item.label|e('html_attr') }}"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                         <div class="dropdown-menu{{ item.active ? ' show' }}">
@@ -76,7 +76,7 @@
                     {% else %}
                     <li class="nav-item{{ item.active ?? false ? ' active' }}">
                         <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
-                            {% if item.icon is defined %}<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ item.label|e('html_attr') }}"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                     </li>
