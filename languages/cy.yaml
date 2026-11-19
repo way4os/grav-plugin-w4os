@@ -667,6 +667,7 @@ w4os:
   kind_backup: 'Copi wrth gefn'
   column_area: Arwynebedd
   unit_km2: '%s km²'
+  unit_dimensions: '%1$s × %2$s m'
   unit_mb: '%s MB'
   unit_percent: '%s %%'
   usage_of: '%1$s o %2$s'

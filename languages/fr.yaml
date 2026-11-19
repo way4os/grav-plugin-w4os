@@ -106,7 +106,7 @@ w4os:
   economy_helper_uri: "URI de l'assistant d'économie"
   economy_helper_uri_help: "Réglez l'URL dans la configuration de Robust."
   economy_help_helpers: "Les assistants d'économie sont des scripts additionnels, nécessaires si vous implémentez une économie dans votre grille (avec une monnaie réelle ou factice)."
-  economy_help_scripts: "Les scripts permettent la communication entre le serveur de monnaie et la grille: mise à jour de la balance, estimation du coût d'achat de maonnaie, vente d'objets et de terrains, paiements..."
+  economy_help_scripts: "Les scripts permettent la communication entre le serveur de monnaie et la grille: mise à jour du solde, estimation du coût d'achat de monnaie, vente d'objets et de terrains, paiements..."
   economy_help_module: 'Cette extension fournit uniquement les assistants web requis par le module du serveur de devises. Un module tiers doit être installé et configuré sur le simulateur, par exemple :'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: "Des binaires prêts à l'emploi et des exemples de fichiers de configuration sont téléchargeables ici : github.com/magicoli/opensim-helpers"
@@ -449,7 +449,7 @@ w4os:
   setting_economy_module_help: 'Se change avec les options de la grille, qui règlent le module et ce dont il a besoin.'
   economy_module_free: 'Transactions gratuites uniquement'
   economy_module_gloebit: Gloebit
-  economy_module_moneyserver: 'MoneyServer générique, pour utilier une monnaie factice ou un fournisseur alternatif.'
+  economy_module_moneyserver: 'MoneyServer générique, pour utiliser une monnaie factice ou un fournisseur alternatif.'
   economy_module_podex: Podex
   setting_sell_enabled: 'Activer la vente'
   setting_price_upload: 'Prix de téléversement'
@@ -560,7 +560,7 @@ w4os:
   service_text_images: 'Texte en image'
   service_text_images_help: "Fait une image d'un texte, pour un script dans le monde (textgen.php)."
   service_assets: 'Serveur web de ressources'
-  service_assets_help: 'Un serveur web de ressources (web assets server) est requis pour afficher les images du monde virtuel sur le site web (par exempe les images de profil).'
+  service_assets_help: 'Un serveur web de ressources (web assets server) est requis pour afficher les images du monde virtuel sur le site web (par exemple les images de profil).'
   service_instant_message: 'Service des messages instantanés'
   service_instant_message_help: 'Les messages entre les avatars de grilles différentes (hypergrid).'
   health_unset: 'Non défini : ni servi ni testé.'
@@ -667,6 +667,7 @@ w4os:
   kind_backup: Sauvegarde
   column_area: Surface
   unit_km2: '%s km²'
+  unit_dimensions: '%1$s × %2$s m'
   unit_mb: '%s Mo'
   unit_percent: '%s %%'
   usage_of: '%1$s sur %2$s'
