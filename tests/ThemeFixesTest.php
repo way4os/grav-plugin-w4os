@@ -18,14 +18,14 @@ describe('the settings the plugin gives a theme', function () {
     });
 
     test('hide what a theme shows of its demo through its own options (Hadron\'s menu link, Learn2\'s repository link)', function () use ($hadron) {
-        expect(Site::themeFixes('hadron', $hadron, [], fn () => true))->toMatchArray(['menu' => null, 'langswitcher.format' => 'short'])
+        expect(Site::themeFixes('hadron', $hadron, [], fn () => true))->toMatchArray(['custommenus.enabled' => false, 'langswitcher.format' => 'short'])
             ->and(Site::themeFixes('learn2', [], [], fn () => true))->toMatchArray(['github.position' => 'off'])
             ->and(Site::themeFixes('quark2', [], [], fn () => true))->toBe([]);
     });
 
     test('never change what the site set itself', function () use ($hadron) {
-        $fixes = Site::themeFixes('hadron', $hadron, ['menu', 'custom_logo'], fn () => false);
+        $fixes = Site::themeFixes('hadron', $hadron, ['custommenus.enabled', 'custom_logo'], fn () => false);
 
-        expect($fixes)->not->toHaveKey('menu')->not->toHaveKey('custom_logo')->toHaveKey('favicon');
+        expect($fixes)->not->toHaveKey('custommenus.enabled')->not->toHaveKey('custom_logo')->toHaveKey('favicon');
     });
 });

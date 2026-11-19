@@ -897,10 +897,10 @@ final class Site
 
     /**
      * What some themes show of their demo site, hidden through their own options (settings and visibility, never their styles):
-     * Hadron's menu link to getgrav.org and its untranslated language icons, Learn2's link to the repository of its demo.
+     * Hadron's menu links (getgrav.org, its option custommenus) and its untranslated language icons, Learn2's link to the repository of its demo.
      */
     public const THEME_SETTINGS = [
-        'hadron' => ['menu' => null, 'langswitcher.format' => 'short'],
+        'hadron' => ['custommenus.enabled' => false, 'langswitcher.format' => 'short'],
         'learn2' => ['github.position' => 'off'],
     ];
 
