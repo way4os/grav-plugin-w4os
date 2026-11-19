@@ -797,6 +797,8 @@ w4os:
   admin_health_problems: 'The health of the grid found %d problems:'
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
+  admin_snippet_lines: 'Lines to add to %s'
+  admin_snippet_example: Example
   admin_task_run: 'Run now'
   admin_task_last: 'Last run %s'
   admin_task_never: 'Never run'
