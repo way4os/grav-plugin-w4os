@@ -428,6 +428,9 @@ w4os:
   db_name: "Enw'r gronfa ddata"
   db_user: Defnyddiwr
   db_password: Cyfrinair
+  db_use_default: "Defnyddio'r rhagosodiad (yr un fath â'r brif gronfa ddata)"
+  db_use_simulator: "Defnyddio'r rhagosodiad (cronfa ddata'r efelychydd)"
+  economy_database: 'Cronfa Ddata Economi'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'

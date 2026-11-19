@@ -428,6 +428,9 @@ w4os:
   db_name: Datenbankname
   db_user: Benutzer
   db_password: Passwort
+  db_use_default: 'Standard verwenden (wie die Hauptdatenbank)'
+  db_use_simulator: 'Standard verwenden (die Datenbank des Simulators)'
+  economy_database: Wirtschaftsdatenbank
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'

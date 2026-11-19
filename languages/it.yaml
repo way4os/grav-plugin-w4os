@@ -428,6 +428,9 @@ w4os:
   db_name: 'Nome del database'
   db_user: Utente
   db_password: Password
+  db_use_default: 'Usa il predefinito (come il database principale)'
+  db_use_simulator: 'Usa il predefinito (il database del simulatore)'
+  economy_database: 'Database Economico'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'
