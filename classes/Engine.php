@@ -169,6 +169,12 @@ final class Engine
         return $this->resource($this->call('PATCH', '/settings/'.rawurlencode($group), ['type' => 'settings', 'id' => $group, 'attributes' => $values]));
     }
 
+    /** @return array<string,mixed> what the engine of the grid's machine says of it for the helpers of a site (its grid, its config, its destinations, checkedAt) */
+    public function siteDescription(): array
+    {
+        return $this->resource($this->call('GET', '/site-description'));
+    }
+
     /** @return list<array<string,mixed>> the tasks the engine runs now and then, each its id, name, scope (its grid), last run */
     public function tasks(): array
     {

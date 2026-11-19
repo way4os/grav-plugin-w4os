@@ -129,7 +129,7 @@ With the bundled engine, the site can also serve the helpers of the grid itself 
 
 Off (the default), the grid keeps the helpers it has, at the **Helpers address** of the settings, and the blocks come from there.
 
-The engine and the helpers read nothing from the server: the grid comes from the site's settings, its login address (the site describes it in its own folder) or, with the login address empty, the folder of the config of the grids (**Config of the grids**: `/etc/opensim` on a machine of the grid, or a copy of it); its databases are reached with the access of the settings (host, port, user, password), each with its own name, wherever they are; what they write is in the site's folders. The pictures need PHP `imagick` with JPEG 2000 (OpenJPEG).
+The engine and the helpers read nothing from the server, no folder of config: with the address and key of the engine API, the grid is what the engine of its machine says of it for a site (kept in the site's data, asked again after the cache time); without them, the site describes it from its login address in its own folder. Its databases are reached with the access of the settings (host, port, user, password), each with its own name, wherever they are; what they write is in the site's folders. The pictures need PHP `imagick` with JPEG 2000 (OpenJPEG).
 
 ## Requirements
 

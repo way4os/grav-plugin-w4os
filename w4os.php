@@ -537,7 +537,9 @@ class W4osPlugin extends Plugin
             // The settings of the service of the page as the engine describes them, what the options of the grid set shown, its button
             $service = $this->service();
             if ($service['view'] !== null) {
-                $this->viewForm($form, $service['view'], true, (array) ($service['meta']['snippets'] ?? []), (string) ($service['meta']['service']['base'] ?? ''), (array) ($service['meta']['fixed'] ?? []));
+                $site = rtrim((string) ($service['meta']['service']['base'] ?? '') ?: (string) $this->grav['uri']->rootUrl(true), '/');
+                $bases = ['site' => $site, 'helpers' => rtrim((string) ($service['meta']['service']['helpers'] ?? '') ?: "$site/helpers", '/')];
+                $this->viewForm($form, $service['view'], true, (array) ($service['meta']['snippets'] ?? []), $bases, (array) ($service['meta']['fixed'] ?? []));
                 $form->set('buttons', $service['changeable'] ? array_map(fn (array $button) => ['value' => 'w4os.'.$service['submit']] + $button, (array) $form->get('buttons')) : []);
             }
 
@@ -1483,10 +1485,10 @@ class W4osPlugin extends Plugin
      * A form of the site from the form of the viewer (w4os-views FormView): its fields, filled with the values of the item, and the
      * conditions its script shows or hides them by as it is changed (js/conditions.js).
      */
-    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, array $snippets = [], string $base = '', array $fixed = []): void
+    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, array $snippets = [], string|array $base = '', array $fixed = []): void
     {
-        $base = $base !== '' ? $base : (string) $this->grav['uri']->rootUrl(true);
-        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim($base, '/'), $snippets, $fixed));
+        $base = $base !== '' ? $base : rtrim((string) $this->grav['uri']->rootUrl(true), '/');
+        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), $base, $snippets, $fixed));
         foreach ($view->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }

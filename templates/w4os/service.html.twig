@@ -47,4 +47,11 @@
             </div>
         {% endif %}
     </div>
+    {# The examples of the page (a list of destinations), at its bottom, apart from its settings #}
+    {% for example in service.meta.examples ?? [] %}
+        <div class="card mt-3">
+            <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ example.label)|t }}</h3></div>
+            <div class="card-body"><pre class="mb-0">{{ example.text }}</pre></div>
+        </div>
+    {% endfor %}
 {% endif %}

@@ -22,15 +22,14 @@ describe('the settings pages of the services of the grid', function () {
             ->and(Site::serviceGroup('models'))->toBeNull();
     });
 
-    test('shows what the options of the grid set, unchangeable, and the rest to change', function () {
+    test('shows the choice of the module and, with Provide off, the address of the service elsewhere', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('offline');
-        $fields = Items::fields(FormView::of($form, ['offlineModule' => 'OfflineMessageModule', 'offlineMessageUrl' => 'https://play.example.org/offline', 'mailSender' => ''], null, true, 250), shown: true);
+        $fields = Items::fields(FormView::of($form, ['provide' => false, 'offlineModule' => 'OfflineMessageModule', 'offlineMessageUrl' => 'https://play.example.org/offline', 'mailSender' => ''], null, true, 250), shown: true);
 
-        expect($fields['offlineModule'])->toMatchArray(['type' => 'select', 'disabled' => true, 'label' => 'w4os.setting_offline_module'])
-            // The address of a service the site does not provide is changed here (Provide off)
+        expect($fields['offlineModule'])->toMatchArray(['type' => 'select', 'label' => 'w4os.setting_offline_module'])
+            ->and($fields['offlineModule'])->not->toHaveKey('disabled')
             ->and($fields['offlineMessageUrl'])->toMatchArray(['type' => 'url'])
-            ->and($fields['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org'])
-            ->and($fields['mailSender'])->not->toHaveKey('disabled');
+            ->and($fields['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org', 'outerclasses' => 'w4os-unmet']);
     });
 
     test('a database as its parts, its password never filled in', function () {
@@ -43,8 +42,7 @@ describe('the settings pages of the services of the grid', function () {
         expect($database)->toMatchArray(['type' => 'fieldset', 'title' => 'w4os.setting_search_database'])
             ->and(array_keys($database['fields']))->toBe(['searchDatabase.useDefault', 'searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
             ->and($database['fields']['searchDatabase.port'])->toMatchArray(['type' => 'number', 'placeholder' => '3306', 'label' => 'w4os.db_port'])
-            ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password'])
-            ->and($fields['dataServices'])->toMatchArray(['disabled' => true]);
+            ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password']);
     });
 
     $render = function (array $service) {
@@ -89,7 +87,7 @@ describe('the settings pages of the services of the grid', function () {
         expect($fields['provide'])->toMatchArray(['type' => 'checkbox'])
             ->and($fields['provide']['wrapper_classes'] ?? '')->toContain('form-switch')
             ->and($names[array_search('path', $names, true) + 1])->toBe('path_snippets')
-            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'w4os.admin_snippet_lines', 'markdown' => true])
+            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'w4os.snippet_ini', 'markdown' => true])
             ->and($fields['path_snippets']['content'])->toContain("```ini\n[GridInfoService]\n    economy = http://grid.example.org/helpers\n```");
     });
 
@@ -126,7 +124,7 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields($view, shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', fixed: $fixed);
 
         expect($fields['path'])->toMatchArray(['disabled' => true, 'help' => 'this server cannot write Robust.HG.ini, where the grid reads it: set it there by hand'])
-            ->and($fields['path_fixed'])->toMatchArray(['type' => 'display', 'label' => 'w4os.admin_snippet_lines'])
+            ->and($fields['path_fixed'])->toMatchArray(['type' => 'display', 'label' => 'w4os.snippet_ini'])
             ->and($fields['path_fixed']['content'])->toContain('DestinationGuide = http://grid.example.org/guide')
             ->and(Items::unfixed(['path' => '', 'guideSource' => 'other.txt'], $fixed))->toBe(['guideSource' => 'other.txt']);
     });
@@ -169,19 +167,22 @@ describe('the settings pages of the services of the grid', function () {
             ->and($template)->toContain('forms/fields/text/text.html.twig');
     });
 
-    test('names the lines of a file as what they are, and puts an example after the settings, never between them', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
-        $snippets = [
-            'guideSource' => [['file' => null, 'label' => 'guide_example', 'text' => "Hypergrid examples\nhop://example.org:8002/Place"]],
-            'path' => [['file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]],
-        ];
-        $texts = ['w4os.admin_snippet_lines' => 'Lines to add to %s', 'w4os.guide_example' => 'Example of a destinations file'];
-        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/guide', 'guideSource' => 'destinations.txt'], null, true, 250), shown: true, translate: fn ($key) => $texts[$key] ?? $key, snippets: $snippets);
-        $names = array_keys($fields);
+    test('names the lines of a file as the engine names them, and a path on the base the engine says (the site, or its helpers)', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $snippets = ['path' => [['label' => 'snippet_ini', 'file' => 'OpenSim.ini', 'text' => "[Search]\n    SearchURL = http://grid.example.org/helpers/query.php"]]];
+        $texts = ['w4os.snippet_ini' => 'Lines to add to %s'];
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/query.php'], null, true, 250), shown: true, translate: fn ($key) => $texts[$key] ?? $key,
+            base: ['site' => 'http://grid.example.org', 'helpers' => 'http://grid.example.org/helpers'], snippets: $snippets);
 
-        expect($fields['path_snippets']['label'])->toBe('Lines to add to Robust.HG.ini')
-            ->and($fields['guideSource_snippets']['label'])->toBe('Example of a destinations file')
-            ->and(end($names))->toBe('guideSource_snippets')
-            ->and($names[array_search('guideSource', $names, true) + 1])->not->toBe('guideSource_snippets');
+        expect($fields['path_snippets']['label'])->toBe('Lines to add to OpenSim.ini')
+            ->and($fields['path']['base'])->toBe('http://grid.example.org/helpers');
+    });
+
+    test('shows the examples of a page at its bottom, apart from its settings', function () use ($render) {
+        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
+        $html = $render(['view' => $view, 'meta' => ['examples' => [['label' => 'guide_example', 'text' => "Section 1\nName|grid.example.org:8002"]]]]);
+
+        expect($html)->toContain('[w4os.guide_example]', "Section 1\nName|grid.example.org:8002")
+            ->and(strpos($html, '[w4os.guide_example]'))->toBeGreaterThan(strpos($html, '<form id="w4os-service">'));
     });
 });

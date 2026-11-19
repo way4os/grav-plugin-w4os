@@ -2,6 +2,13 @@
 
 use W4os\Grav\Bundled;
 
+/** What the engine of the grid's machine says of it for a site (GET /grids/{grid}/site-description), with this config. */
+function bundled_description(array $config): array
+{
+    return ['grid' => ['nick' => 'demo', 'name' => 'Demo Grid', 'baseHostname' => 'grid.example.org', 'publicPort' => 8002, 'standalone' => false],
+        'config' => $config, 'destinations' => null, 'checkedAt' => '2026-11-19T00:00:00Z'];
+}
+
 describe('bundled engine', function () {
     test('is there with the vendor folder', function () {
         expect(Bundled::available())->toBeTrue();
@@ -43,21 +50,31 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
-    test('reads the grid from the config folder the site gives, its databases with the access the site gives, never the install of the server', function () {
+    test('never reads a folder of config, the one the settings name or the one of the machine', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
         mkdir("$root/etc/grids/demo", 0700, true);
         file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
-        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n    PrivatePort = 8003\n[DatabaseService]\n    StorageProvider = \"OpenSim.Data.MySQL.dll\"\n    ConnectionString = \"Data Source=localhost;Database=demo_robust;User ID=opensim;Password=grid;Old Guids=true;\"\n");
-        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo', 'database' => ['host' => 'db.example.org:3307', 'user' => 'site', 'password' => 'secret']], "$root/site", fn () => null, "$root/site/cache");
+        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n");
+        $bundled = new Bundled(['config' => "$root/etc", 'opensim_conf' => "$root/etc/opensim.conf", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+
+        expect($bundled->grid())->toBeNull()
+            ->and(is_dir("$root/site/etc/grids/demo"))->toBeFalse();
+
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
+    test('builds its grid from the description the engine of the machine gives, its databases with the access the site gives', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        $bundled = new Bundled(['grid' => 'demo', 'database' => ['host' => 'db.example.org:3307', 'user' => 'site', 'password' => 'secret']], "$root/site", fn () => null, "$root/site/cache",
+            describe: fn () => bundled_description(['Robust' => ['DatabaseService' => ['ConnectionString' => 'Data Source=;Database=demo_robust;']]]));
         $grid = $bundled->grid();
         $connection = (string) $grid?->config()?->find('DatabaseService', 'ConnectionString');
 
         expect($bundled->nick())->toBe('demo')
-            ->and($connection)->toContain('Data Source=db.example.org:3307;', 'Database=demo_robust;', 'User ID=site;', 'Old Guids=true;')
-            ->and($connection)->not->toContain('localhost')
+            ->and($grid?->name())->toBe('Demo Grid')
+            ->and($connection)->toContain('Data Source=db.example.org', 'Database=demo_robust;', 'User ID=site;')
             // What it writes is the site's
-            ->and($grid->environment()->layout->etcRoot())->toBe("$root/etc")
-            ->and($grid->environment()->layout->stateRoot())->toStartWith("$root/site")
+            ->and($grid->environment()->layout->etcRoot())->toStartWith("$root/site")
             ->and($grid->environment()->layout->cacheRoot())->toBe("$root/site/cache");
 
         exec('rm -rf '.escapeshellarg($root));
@@ -65,10 +82,8 @@ describe('bundled engine', function () {
 
     test('says a block whose database cannot be reached is unavailable, with why, never an empty or missing answer', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
-        mkdir("$root/etc/grids/demo", 0700, true);
-        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
-        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n[DatabaseService]\n    ConnectionString = \"Data Source=db.example.org;Database=demo_robust;User ID=opensim;Password=grid;\"\n");
-        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+        $bundled = new Bundled(['grid' => 'demo', 'database' => ['host' => 'db.example.org', 'user' => 'site', 'password' => 'secret']], "$root/site", fn () => null, "$root/site/cache",
+            describe: fn () => bundled_description(['Robust' => ['DatabaseService' => ['ConnectionString' => 'Data Source=;Database=demo_robust;']]]));
         OpenSim\Data\Connections::using(static fn () => null);
 
         expect(fn () => $bundled->rendered('profile', ['name' => 'Ada.Love']))->toThrow(W4os\Grav\BlockUnavailable::class, 'cannot be reached');
@@ -121,11 +136,8 @@ describe('bundled engine', function () {
 
     test('sends a picture to the external web assets service of the grid when nothing here reads JPEG 2000, as the engine says', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
-        mkdir("$root/etc/grids/demo", 0700, true);
-        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
-        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n    PrivatePort = 8003\n");
-        file_put_contents("$root/etc/grids/demo/Helpers.ini", "[Helpers]\n    HelpersURL = \"https://play.example.org/helpers\"\n    AssetsURL = \"https://assets.example.org/a\"\n");
-        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+        $bundled = new Bundled(['grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache",
+            describe: fn () => bundled_description(['Helpers' => ['Helpers' => ['HelpersURL' => 'https://play.example.org/helpers', 'AssetsURL' => 'https://assets.example.org/a']]]));
         [$status, , $headers] = $bundled->publicRoute('GET', '/grids/demo/assets/cb2052ae-d161-43e9-b11b-c834217823cd.jpg');
 
         expect([$status, $headers['Location'] ?? null])->toBe([302, 'https://assets.example.org/a/cb2052ae-d161-43e9-b11b-c834217823cd.jpg']);

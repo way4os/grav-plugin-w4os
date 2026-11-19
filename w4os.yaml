@@ -29,8 +29,6 @@ bundled:
     port: 3306
     name: ''
     user: ''
-  # The opensim.conf of the install of this server, when it is not in one of the usual places
-  opensim_conf: ''
 # The API key of the site, made on the machine of the grid: opensim api-key create <label>. Typed on the settings page of the
 # plugin, which keeps it in user-data://w4os/api.json (never in this file nor in git). The environment (GRAV_CONFIG__PLUGINS__W4OS__API_KEY)
 # can set it too.

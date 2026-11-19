@@ -8,18 +8,18 @@ use OpenSim\Config\ConnectionString;
 use OpenSim\Config\Layout;
 use OpenSim\Helpers\View\View;
 use OpenSim\Models\Grid;
+use OpenSim\Models\SiteDescription;
 use OpenSim\Provisioning\GridConf;
 use OpenSim\Provisioning\Presets;
 use OpenSim\Provisioning\RemoteGridPlanner;
 use OpenSim\Runtime\Environment;
 
 /**
- * The engine and the helpers the plugin bundles (its vendor folder), used as libraries: no API to reach, no key, no package of
- * the system, nothing read from the install of the server. The grid is either one of the config folder the site gives (its
- * setting `config`: /etc/opensim on a machine of the grid, or a copy of it), or a grid described by its login address and the
- * database of its Robust: the plugin writes its description in a folder of the site, the way a web host without OpenSimulator
- * gives the helpers what they need (a remote grid `<nick>.conf` and a `Helpers.ini`). Its databases are reached with the access
- * the site gives (`database`), each with its own name; what it writes is in the site's folders.
+ * The engine and the helpers the plugin bundles (its vendor folder), used as libraries: no package of the system, nothing read from
+ * the install of the server, no folder of config. Its grid is made of what the engine of the grid's machine says of it for a site
+ * (its API: GET /grids/{grid}/site-description), or described from its login address and the database of its Robust, written in a
+ * folder of the site. Its databases are reached with the access the site gives (`database`), each with its own name; what it
+ * writes is in the site's folders.
  */
 final class Bundled
 {
@@ -35,14 +35,19 @@ final class Bundled
     private bool $unavailable = false;
 
     /**
-     * @param array<string,mixed> $settings login, database (host, port, name, user, password), config (the folder of the config of
-     *     the grids; opensim_conf, its opensim.conf), grid
+     * @param array<string,mixed> $settings login (the address of a grid it describes), database (host, port, name, user, password),
+     *     grid
      * @param string $root the folder of the site where a described grid is written (etc/grids/<nick>)
      * @param \Closure(string $url): ?string $fetch the body at an address (get_grid_info of a described grid)
      * @param string $cache the folder of the caches of the engine for this site (the pictures it converts...), one the site writes to
      * @param string $store the file of the settings the site keeps for the engine (SettingsFile), read before the files of the grid
+     * @param ?\Closure(): ?array<string,mixed> $describe what the engine of the grid's machine says of it for a site
+     *     (GET /grids/{grid}/site-description), null when it cannot tell
      */
-    public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '', private string $store = '') {}
+    public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '', private string $store = '', private ?\Closure $describe = null) {}
+
+    /** The grid, once made. */
+    private ?Grid $grid = null;
 
     /** The libraries the plugin bundles (its vendor folder: the engine, the helpers), loaded once; whether the engine is there. */
     public static function library(): bool
@@ -66,7 +71,7 @@ final class Bundled
     /** The nick of the grid, as the engine knows it. */
     public function nick(): string
     {
-        $this->environment();
+        $this->grid();
 
         return (string) $this->nick;
     }
@@ -78,7 +83,7 @@ final class Bundled
      */
     public function route(string $method, string $path, ?string $body = null): array
     {
-        $this->router ??= new Router(new Api($this->environment()));
+        $this->router ??= new Router($this->api());
         parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
         $response = $this->router->route($method, (string) parse_url($path, PHP_URL_PATH), $query, (string) $body);
 
@@ -93,7 +98,7 @@ final class Bundled
      */
     public function publicRoute(string $method, string $path, ?string $body = null): array
     {
-        $this->public ??= new Router(new Api($this->environment()), authenticator: new \OpenSim\Security\Locked());
+        $this->public ??= new Router($this->api(), authenticator: new \OpenSim\Security\Locked());
         parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
         $response = $this->public->route($method, (string) parse_url($path, PHP_URL_PATH), $query, (string) $body);
 
@@ -167,10 +172,35 @@ final class Bundled
         method_exists(\OpenSim\Helpers\Http\Action\Engine::class, 'finish') && \OpenSim\Helpers\Http\Action\Engine::finish();
     }
 
-    /** The grid, as the engine finds it. */
+    /**
+     * The grid: made of what the engine of its machine says of it for a site (`describe`), else described from its login address
+     * (`login`); never read from a folder of config. Null when neither tells it.
+     */
     public function grid(): ?Grid
     {
-        return Grid::find($this->environment(), $this->nick());
+        if ($this->grid !== null) {
+            return $this->grid;
+        }
+        $description = $this->describe !== null ? ($this->describe)() : null;
+        if (is_array($description) && trim((string) ($description['grid']['nick'] ?? '')) !== '') {
+            $this->grid = SiteDescription::grid($this->environment(), $description);
+            $this->nick = $this->grid->nick();
+
+            return $this->grid;
+        }
+        $login = rtrim(trim((string) ($this->settings['login'] ?? '')), '/');
+        if ($login === '') {
+            return null;
+        }
+        $this->nick ??= $this->describe($login, $this->environment());
+
+        return $this->grid = Grid::find($this->environment(), $this->nick);
+    }
+
+    /** The API of the engine for the grid of the site, whatever folder it would look in. */
+    private function api(): Api
+    {
+        return new Api($this->environment(), config: static fn (Grid $grid) => $grid->config(), grids: fn (string $nick) => $nick === $this->nick() ? $this->grid() : null);
     }
 
     /**
@@ -214,37 +244,21 @@ final class Bundled
     }
 
     /**
-     * The engine of the grid, from the site's own settings, never the install of the server: the config of the grids in the folder
-     * the site gives (`config`, else the folder of `opensim_conf`, else /etc/opensim), or the folder of the described grid (`login`);
-     * what it writes in the site's folders; its databases with the access the site gives (`database`, DatabaseAccess).
+     * The engine of the grid, from the site's own settings, never the install of the server: what it writes in the site's folders
+     * (a described grid in its own etc), its databases with the access the site gives (`database`, DatabaseAccess), the settings it
+     * keeps (`store`).
      */
     private function environment(): Environment
     {
-        if ($this->environment !== null) {
-            return $this->environment;
-        }
-        $login = rtrim(trim((string) ($this->settings['login'] ?? '')), '/');
-        $own = [
+        return $this->environment ??= Environment::system(new Layout([
+            'EtcRoot' => "$this->root/etc",
             'VarRoot' => "$this->root/var",
             'DataRoot' => "$this->root/var/data",
             'TasksRoot' => "$this->root/var/cron",
             'CacheRoot' => $this->cache !== '' ? $this->cache : "$this->root/cache",
             'LogsRoot' => "$this->root/logs",
             'BackupRoot' => "$this->root/backups",
-        ];
-        if ($login === '') {
-            $config = rtrim(trim((string) ($this->settings['config'] ?? '')), '/');
-            $conf = trim((string) ($this->settings['opensim_conf'] ?? ''));
-            $config !== '' || $config = $conf !== '' ? dirname($conf) : '/etc/opensim';
-            $this->environment = Environment::system(new Layout(['EtcRoot' => $config] + $own), databases: $this->databaseAccess(), settings: $this->kept());
-            $this->nick = trim((string) ($this->settings['grid'] ?? '')) ?: $this->onlyGrid();
-
-            return $this->environment;
-        }
-        $environment = Environment::system(new Layout(['EtcRoot' => "$this->root/etc"] + $own), databases: $this->databaseAccess(), settings: $this->kept());
-        $this->nick = $this->describe($login, $environment);
-
-        return $this->environment = $environment;
+        ]), databases: $this->databaseAccess(), settings: $this->kept());
     }
 
     /** The settings the site keeps for the engine (`store`, SettingsFile), read before the files of the grid; null without a file. */
@@ -271,14 +285,6 @@ final class Bundled
         }
 
         return new \OpenSim\Data\DatabaseAccess($host, $port, $user, (string) ($db['password'] ?? ''));
-    }
-
-    /** The nick of the only grid of this server's install. */
-    private function onlyGrid(): string
-    {
-        $grids = Grid::all($this->environment)->items();
-
-        return count($grids) === 1 ? $grids[0]->id() : '';
     }
 
     /**

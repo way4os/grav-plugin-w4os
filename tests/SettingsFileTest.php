@@ -22,11 +22,8 @@ describe('the settings the site keeps for its engine', function () {
 
     test('are what the bundled engine reads before the files of the grid', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
-        mkdir("$root/etc/grids/demo", 0700, true);
-        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
-        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n");
         (new SettingsFile("$root/site/engine-settings.json"))->set('MoneyServer', 'MoneyScriptAccessKey', 'site-key');
-        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache", "$root/site/engine-settings.json");
+        $bundled = new Bundled(['grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache", "$root/site/engine-settings.json", fn () => bundled_description([]));
 
         expect($bundled->grid()?->config()?->find('MoneyServer', 'MoneyScriptAccessKey'))->toBe('site-key');
 

@@ -22,6 +22,9 @@ final class Site
     /** Where the password of the database of a described grid is kept, out of the configuration. */
     public const DATABASE_SECRET = 'user-data://w4os/database.json';
 
+    /** What the engine of the grid's machine says of it for the helpers of the site, kept with its time (keptDescription()). */
+    public const SITE_DESCRIPTION = 'user-data://w4os/site-description.json';
+
     /** The settings the site keeps for its bundled engine (SettingsFile): the key of the money, what its settings pages change. */
     public const ENGINE_SETTINGS = 'user-data://w4os/engine-settings.json';
 
@@ -213,8 +216,54 @@ final class Site
         $cache = (string) $this->grav['locator']->findResource('cache://w4os/opensim', true, true);
 
         $data = (string) $this->grav['locator']->findResource('user-data://w4os', true, true);
+        // The grid of the helpers: what the engine of its machine says of it, through its API, when the site has one; else the one it
+        // describes from its login address
+        $config = $this->config();
+        $describe = self::apiUrl($config) !== '' && $this->apiKey() !== ''
+            ? fn () => self::keptDescription($data.'/'.basename(self::SITE_DESCRIPTION), fn () => $this->apiEngine()->siteDescription(), max(60, (int) ($config['cache'] ?? 3600)), time())
+            : null;
 
-        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'), $cache, $data.'/'.basename(self::ENGINE_SETTINGS));
+        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'), $cache, $data.'/'.basename(self::ENGINE_SETTINGS), $describe);
+    }
+
+    /**
+     * The description of the grid for the helpers of the site, kept in its file with the time the engine checked it: asked again
+     * once it is older than `maxAge` seconds; the one kept when the engine cannot tell; null when there is none.
+     *
+     * @param \Closure(): ?array<string,mixed> $ask the engine's description
+     * @return ?array<string,mixed>
+     */
+    public static function keptDescription(string $file, \Closure $ask, int $maxAge, int $now): ?array
+    {
+        $kept = is_file($file) ? json_decode((string) file_get_contents($file), true) : null;
+        $kept = is_array($kept) ? $kept : null;
+        $checked = $kept === null ? false : strtotime((string) ($kept['checkedAt'] ?? ''));
+        if ($kept !== null && $checked !== false && $now - $checked < $maxAge) {
+            return $kept;
+        }
+        try {
+            $given = $ask();
+        } catch (\Throwable) {
+            $given = null;
+        }
+        if (! is_array($given)) {
+            return $kept;
+        }
+        is_dir(dirname($file)) || mkdir(dirname($file), 0750, true);
+        $temporary = $file.'.'.bin2hex(random_bytes(4));
+        file_put_contents($temporary, json_encode($given, JSON_UNESCAPED_SLASHES));
+        chmod($temporary, 0640);
+        rename($temporary, $file);
+
+        return $given;
+    }
+
+    /** The API of the engine of the grid (its address and key), whatever engine the site asks. */
+    private function apiEngine(): Engine
+    {
+        $config = $this->config();
+
+        return new Engine(self::apiUrl($config), $this->apiKey(), trim((string) ($config['grid'] ?? '')), $this->send(...), assets: self::picturesUrl($config));
     }
 
     /** Whether the site serves the helpers of the grid itself (setting "serve_helpers", with the bundled engine). */
@@ -928,7 +977,7 @@ final class Site
         ['code' => '[web-search]', 'help' => 'block_search_help', 'block' => 'search', 'preview' => ['title' => ''], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[motd]', 'help' => 'block_motd_help', 'block' => 'motd', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[destination-guide]', 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
-        ['code' => '[new-avatars]', 'help' => 'block_new_users_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[new-avatars]', 'help' => 'block_new_avatars_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => []],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],

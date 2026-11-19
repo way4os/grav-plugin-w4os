@@ -16,7 +16,7 @@ final class Items
      * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden; the ones
      * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed. With
      * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable; a help of several points
-     * said in full with `translate`, a path on the address of the site (`base`).
+     * said in full with `translate`, a path on the address it is under (`base`: the one, or by name, `site` and `helpers`).
      *
      * @param ?\Closure(string): string $translate the text of a key of the catalog
      * @param array<string,list<array{file: ?string, text: string}>> $snippets the lines of the files of the grid a field shows, by field
@@ -24,7 +24,7 @@ final class Items
      *     and the line to add by hand in that file (meta.fixed of the engine)
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = '', array $snippets = [], array $fixed = []): array
+    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string|array $base = '', array $snippets = [], array $fixed = []): array
     {
         $changed = array_column($view->fields, 'name');
         $readOnly = $shown ? array_column($view->shown, 'name') : [];
@@ -92,19 +92,18 @@ final class Items
     }
 
     /**
-     * What lines of a file of the grid are, said as what they are: the lines to add to that file, or the example the engine names
-     * (`label`, a key of the catalog; else an example).
+     * What lines of a file of the grid are, as the engine names them (`label`, a key of the catalog: Lines to add to %s, the file):
+     * the lines to add to their file, else an example.
      *
      * @param array<string,mixed> $snippet
      */
     private static function snippetLabel(array $snippet, ?\Closure $translate): string
     {
         $translate ??= fn (string $key) => $key;
-        if (($snippet['file'] ?? null) === null) {
-            return $translate('w4os.'.(string) ($snippet['label'] ?? 'admin_snippet_example'));
-        }
+        $file = (string) ($snippet['file'] ?? '');
+        $text = $translate('w4os.'.(string) ($snippet['label'] ?? ($file === '' ? 'snippet_example' : 'snippet_ini')));
 
-        return sprintf($translate('w4os.admin_snippet_lines'), (string) $snippet['file']);
+        return str_contains($text, '%s') ? sprintf($text, $file) : $text;
     }
 
     /**
@@ -221,7 +220,7 @@ final class Items
      * @param string $base the address of the site, before the path of a field `path`
      * @return array<string,mixed>
      */
-    public static function input(array $field, ?\Closure $translate = null, string $base = ''): array
+    public static function input(array $field, ?\Closure $translate = null, string|array $base = ''): array
     {
         $help = self::help($field, $translate);
         // A note: its points as text, no input
@@ -242,7 +241,9 @@ final class Items
         }
         // A path on the address of the site, which is not changed here
         if ($field['type'] === 'path') {
-            return ['type' => 'w4os_path', 'base' => rtrim($base, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
+            $under = is_array($base) ? (string) ($base[$field['base'] ?? 'site'] ?? '') : $base;
+
+            return ['type' => 'w4os_path', 'base' => rtrim($under, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
         }
         // Several addresses the options of the grid set: one by line
         ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';
