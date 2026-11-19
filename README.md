@@ -109,7 +109,7 @@ For example, on a grid where Gudule is a god (200) and Suzi a liaison (150), Suz
 
 ## Standalone
 
-The plugin is self-contained: its release zip (the one Grav's GPM installs, about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):
+The plugin ships as a Grav plugin: its release zip (Grav's GPM installs it), and inside the light w4os site; it has no system package of its own. It is self-contained: its release zip (about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):
 
 | | **The API of the grid** (`engine: remote`, the default) | **The engine bundled with the plugin** (`engine: bundled`) |
 | --- | --- | --- |
@@ -121,7 +121,7 @@ The plugin is self-contained: its release zip (the one Grav's GPM installs, abou
 
 ### The helpers of the grid
 
-With the bundled engine, the site can also serve the helpers of the grid itself (setting **Serve the helpers**), the ones the plugin carries: what the viewers and the simulators ask (welcome page, search, profiles, destination guide, message of the day, economy, offline messages, grid status), on the address of the site, no other port nor server. The addresses are the ones the config of the grid gives its services: set its `WebURL` to the site (`[Const]` of `Robust.ini`, then restart Robust and the simulators), and the site answers `/helpers/...`, `/welcome`, `/search`, `/profile/...` as the grid says; every other address stays the site's.
+With the bundled engine, the site can also serve the helpers of the grid itself (setting **Serve the helpers**), the ones the plugin carries: what the viewers and the simulators ask (welcome page, search, profiles, destination guide, message of the day, economy, offline messages, grid status), on the address of the site, no other port nor server. They answer only under the prefix of the **Helpers address** of the settings (`/helpers` of `https://grid.example.org/helpers`), and only when the grid sets one of its helpers there (its config, or what its running grid says; the engine's default addresses do not count): set its `WebURL` to the site (`[Const]` of `Robust.ini`, then restart Robust and the simulators). Every other address stays the site's, its pages or its 404: the helpers never take a route that is not theirs. When the web server sends the helpers' addresses elsewhere (helpers installed apart), those requests never reach the site.
 
 Off (the default), the grid keeps the helpers it has, at the **Helpers address** of the settings, and the blocks come from there.
 

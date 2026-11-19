@@ -43,6 +43,23 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
+    test('answer only under the prefix of the helpers the site is set with, when the grid sets a helper there; never another route', function () {
+        $configured = ['http://site.example.org/helpers/currency.php', 'http://site.example.org/search'];
+
+        expect(Bundled::answers('/helpers/blocks/grid-info', '/helpers', $configured))->toBeTrue()
+            ->and(Bundled::answers('/helpers/currency.php', 'http://site.example.org/helpers/', $configured))->toBeTrue()
+            // Outside the prefix: the site's pages, even an address the grid sets for a helper (its search page here)
+            ->and(Bundled::answers('/search', '/helpers', $configured))->toBeFalse()
+            ->and(Bundled::answers('/helpers-faq', '/helpers', $configured))->toBeFalse()
+            // No helper set by the grid under the prefix (our default addresses are not settings): the route is the site's
+            ->and(Bundled::answers('/helpers/blocks/grid-info', '/helpers', ['http://site.example.org/search']))->toBeFalse()
+            ->and(Bundled::answers('/helpers/blocks/grid-info', '/helpers', ['http://site.example.org/w4os-helpers/currency.php']))->toBeFalse()
+            // No prefix set, or the engine API under it
+            ->and(Bundled::answers('/helpers/blocks/grid-info', '', $configured))->toBeFalse()
+            ->and(Bundled::answers('/', '/', $configured))->toBeFalse()
+            ->and(Bundled::answers('/helpers/api/grids', '/helpers', $configured))->toBeFalse();
+    });
+
     test('never gives the helpers an address of the engine API: the engine alone serves it', function () {
         expect(W4os\Grav\Bundled::isApi('/helpers/api', 'https://grid.example.org/helpers'))->toBeTrue()
             ->and(W4os\Grav\Bundled::isApi('/helpers/api/grids/demo/avatars', 'https://grid.example.org/helpers/'))->toBeTrue()

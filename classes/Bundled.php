@@ -95,21 +95,45 @@ final class Bundled
     }
 
     /**
-     * Whether an address of the site is the helpers': under their base (`/helpers` by default), as the engine decides it
-     * (Grid::servedByHelpers(), the path asked on the origin of the base). Every other address is the site's, the pages of the grid
-     * it serves included. Helpers at the root of the site are a site of their own: nothing is theirs here.
+     * Whether an address of the site is the helpers' (answers()): under the prefix of the helpers the site is set with, when the grid
+     * sets a helper there (an address it gives, its config or its running grid; never one of the defaults of the engine).
      */
-    public function serves(string $path): bool
+    public function serves(string $path, string $prefix): bool
     {
         $grid = $this->grid();
-        $base = $grid?->helpersUrl();
-        if ($base === null || trim((string) parse_url($base, PHP_URL_PATH), '/') === '' || self::isApi($path, $base)) {
+        if ($grid === null) {
             return false;
         }
-        $parts = parse_url($base) ?: [];
-        $origin = ($parts['scheme'] ?? 'http').'://'.($parts['host'] ?? '').(isset($parts['port']) ? ':'.$parts['port'] : '');
+        $configured = [];
+        foreach ($grid->addresses(true) as $key => $url) {
+            in_array($grid->service($key)?->source(), [null, 'default'], true) || $configured[] = $url;
+        }
 
-        return $grid->servedByHelpers($origin.$path);
+        return self::answers($path, $prefix, $configured);
+    }
+
+    /**
+     * Whether the helpers the plugin bundles answer an address of the site: under the prefix of the helpers it is set with (the path
+     * of `url`), when one of the addresses the grid sets for its helpers is under it; never the engine API under it. Any other
+     * address is the site's (its pages, or its 404): the helpers never take a route that is not theirs.
+     *
+     * @param string $prefix the address or the path of the helpers the site is set with
+     * @param list<string> $configured the addresses the grid sets for its services
+     */
+    public static function answers(string $path, string $prefix, array $configured): bool
+    {
+        $prefix = '/'.trim((string) parse_url($prefix, PHP_URL_PATH), '/');
+        $under = fn (string $path) => $path === $prefix || str_starts_with($path, "$prefix/");
+        if ($prefix === '/' || ! $under($path) || self::isApi($path, $prefix)) {
+            return false;
+        }
+        foreach ($configured as $url) {
+            if ($under('/'.ltrim((string) parse_url($url, PHP_URL_PATH), '/'))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

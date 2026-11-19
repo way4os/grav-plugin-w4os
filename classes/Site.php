@@ -122,10 +122,13 @@ final class Site
         return (bool) ($this->config()['serve_helpers'] ?? false) && $this->bundled() !== null;
     }
 
-    /** Answers a request for the helpers of the grid, when the site serves them and the address is one of theirs; false otherwise. */
+    /**
+     * Answers a request for the helpers of the grid, when the site serves them and the address is one of theirs (under the prefix of
+     * its setting `url`, Bundled::answers()); false otherwise.
+     */
     public function helpers(string $path): bool
     {
-        if (! $this->servesHelpers() || ! $this->bundled()->serves($path)) {
+        if (! $this->servesHelpers() || ! $this->bundled()->serves($path, trim((string) ($this->config()['url'] ?? '')))) {
             return false;
         }
         $this->bundled()->serveHelpers();
