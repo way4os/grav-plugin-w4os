@@ -1552,7 +1552,7 @@ final class Site
         try {
             [$status, $body, $headers] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
         } catch (\Throwable $e) {
-            throw new BlockUnavailable($e->getMessage(), previous: $e);
+            throw new BlockUnavailable(Blocks::reason($e->getMessage()), previous: $e);
         }
 
         return Blocks::answer($status, $body, $headers);

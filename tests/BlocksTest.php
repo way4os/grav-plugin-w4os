@@ -70,6 +70,9 @@ describe('blocks', function () {
             ->and(fn () => Blocks::remote('https://grid.example.org/helpers', fn () => throw new BlockUnavailable('Idle timeout reached'))->html('profile'))
             ->toThrow(BlockUnavailable::class, 'Idle timeout reached')
             ->and(fn () => Blocks::answer(502, '<p>x</p>', []))->toThrow(BlockUnavailable::class, 'HTTP 502')
+            ->and(Blocks::reason('Failed to connect to 127.0.0.1 port 28698 after 0 ms: Could not connect to server for "http://127.0.0.1:28698/helpers/blocks/motd?lang=en".'))
+            ->toBe('Failed to connect to 127.0.0.1 port 28698 after 0 ms: Could not connect to server')
+            ->and(Blocks::reason('Idle timeout reached for "https://grid.example.org/helpers/blocks/profile?name=Ada.Love".'))->toBe('Idle timeout reached')
             ->and(Blocks::answer(200, '<p>x</p>', ['x-helpers-notices' => ['[{"level":"info","text":"Hi"}]']]))->toBe(['html' => '<p>x</p>', 'notices' => [['level' => 'info', 'text' => 'Hi']]]);
     });
 });

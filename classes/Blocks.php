@@ -91,6 +91,12 @@ final class Blocks
         return $notices;
     }
 
+    /** The reason a block could not be read, without the address it was asked at: the same for every block it took. */
+    public static function reason(string $message): string
+    {
+        return trim(rtrim((string) preg_replace('~\s*(?:for|at)?\s*"https?://[^"]*"~', '', $message), '.'));
+    }
+
     /** The name of a block as the helpers have it (both spellings are taken). */
     public static function name(string $name): string
     {
