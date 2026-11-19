@@ -20,19 +20,31 @@ final class Items
      *
      * @param ?\Closure(string): string $translate the text of a key of the catalog
      * @param array<string,list<array{file: ?string, text: string}>> $snippets the lines of the files of the grid a field shows, by field
+     * @param array<string,array{reason: string, file: ?string, text: string}> $fixed the settings this site cannot write, by field: why,
+     *     and the line to add by hand in that file (meta.fixed of the engine)
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = '', array $snippets = []): array
+    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = '', array $snippets = [], array $fixed = []): array
     {
         $changed = array_column($view->fields, 'name');
-        $fixed = $shown ? array_column($view->shown, 'name') : [];
+        $readOnly = $shown ? array_column($view->shown, 'name') : [];
         $groups = [];
         foreach ((array) ($view->form['fields'] ?? []) as $field) {
+            if (isset($fixed[$field['name']]) && in_array($field['name'], $changed, true)) {
+                // Not changed here: why, and the line to add by hand
+                $line = $fixed[$field['name']];
+                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => (string) ($line['reason'] ?? '')] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1, 'help' => 1])
+                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+                $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => (string) ($line['file'] ?? ''),
+                    'content' => "```ini\n".rtrim((string) ($line['text'] ?? ''))."\n```", 'markdown' => true,
+                    'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
+                continue;
+            }
             if (in_array($field['name'], $changed, true)) {
                 $groups[$field['group']][$field['name']] = self::input($field, $translate, $base)
                     // A field the values of the form hide for now (its condition), shown by the script of the form as they change
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
-            } elseif (in_array($field['name'], $fixed, true)) {
+            } elseif (in_array($field['name'], $readOnly, true)) {
                 $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1]);
             } else {
                 continue;
@@ -56,6 +68,18 @@ final class Items
         }
 
         return $fields + ($groups[$shown[0]['name'] ?? ''] ?? []);
+    }
+
+    /**
+     * What a form changes without the settings this site cannot write (meta.fixed): their inputs are disabled, so never sent.
+     *
+     * @param array<string,mixed> $changes
+     * @param array<string,mixed> $fixed
+     * @return array<string,mixed>
+     */
+    public static function unfixed(array $changes, array $fixed): array
+    {
+        return array_diff_key($changes, $fixed);
     }
 
     /**

@@ -118,4 +118,16 @@ describe('the settings pages of the services of the grid', function () {
             ->and($html)->toContain('Index the regions', 'no simulator due', 'name="task" value="friendly_fowl&#x3A;search-parse"', '[w4os.admin_task_run]')
             ->and($render(['view' => $view, 'tasks' => $shown, 'run' => false]))->not->toContain('name="task"');
     });
+
+    test('a setting this site cannot write is shown unchangeable, with why and the line to add by hand, and never sent', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
+        $fixed = ['path' => ['reason' => 'this server cannot write Robust.HG.ini, where the grid reads it: set it there by hand', 'file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]];
+        $view = FormView::of($form, ['provide' => true, 'path' => '/guide', 'guideSource' => 'destinations.txt'], null, true, 250);
+        $fields = Items::fields($view, shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', fixed: $fixed);
+
+        expect($fields['path'])->toMatchArray(['disabled' => true, 'help' => 'this server cannot write Robust.HG.ini, where the grid reads it: set it there by hand'])
+            ->and($fields['path_fixed'])->toMatchArray(['type' => 'display', 'label' => 'Robust.HG.ini'])
+            ->and($fields['path_fixed']['content'])->toContain('DestinationGuide = http://grid.example.org/guide')
+            ->and(Items::unfixed(['path' => '', 'guideSource' => 'other.txt'], $fixed))->toBe(['guideSource' => 'other.txt']);
+    });
 });

@@ -539,7 +539,7 @@ class W4osPlugin extends Plugin
             // The settings of the service of the page as the engine describes them, what the options of the grid set shown, its button
             $service = $this->service();
             if ($service['view'] !== null) {
-                $this->viewForm($form, $service['view'], true, (array) ($service['meta']['snippets'] ?? []), (string) ($service['meta']['service']['base'] ?? ''));
+                $this->viewForm($form, $service['view'], true, (array) ($service['meta']['snippets'] ?? []), (string) ($service['meta']['service']['base'] ?? ''), (array) ($service['meta']['fixed'] ?? []));
                 $form->set('buttons', $service['changeable'] ? array_map(fn (array $button) => ['value' => 'w4os.'.$service['submit']] + $button, (array) $form->get('buttons')) : []);
             }
 
@@ -688,7 +688,7 @@ class W4osPlugin extends Plugin
                     // The settings of a service, the fields the visitor changes only (FormView), written by the engine
                     $service = $this->service();
                     $service['changeable'] || throw new FormError('w4os.error_forbidden');
-                    $changes = $service['view']->changes($data);
+                    $changes = Items::unfixed($service['view']->changes($data), (array) ($service['meta']['fixed'] ?? []));
                     if ($changes !== []) {
                         try {
                             $site->engine()->updateSettings((string) $service['group'], $changes);
@@ -1462,10 +1462,10 @@ class W4osPlugin extends Plugin
      * A form of the site from the form of the viewer (w4os-views FormView): its fields, filled with the values of the item, and the
      * conditions its script shows or hides them by as it is changed (js/conditions.js).
      */
-    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, array $snippets = [], string $base = ''): void
+    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, array $snippets = [], string $base = '', array $fixed = []): void
     {
         $base = $base !== '' ? $base : (string) $this->grav['uri']->rootUrl(true);
-        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim($base, '/'), $snippets));
+        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim($base, '/'), $snippets, $fixed));
         foreach ($view->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
