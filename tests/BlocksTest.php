@@ -1,5 +1,6 @@
 <?php
 
+use W4os\Grav\BlockUnavailable;
 use W4os\Grav\Blocks;
 
 describe('blocks', function () {
@@ -61,7 +62,33 @@ describe('blocks', function () {
         $blocks = Blocks::remote('https://grid.example.org/helpers', fn () => throw new LogicException('asked'));
 
         expect($blocks->html('health'))->toBe('')->and($blocks->html('../avatars'))->toBe('')
-            ->and(Blocks::remote('', fn () => 'x')->html('grid-info'))->toBe('')
             ->and((new Blocks(fn (string $name, array $args) => "<p>$name ".json_encode($args).'</p>'))->html('profile', ['name' => 'Ada.Love']))->toBe('<p>profile {"name":"Ada.Love"}</p>');
+    });
+
+    test('that cannot be read say why: no address of the helpers, an error of the helpers, no answer', function () {
+        expect(fn () => Blocks::remote('', fn () => 'x')->html('grid-info'))->toThrow(BlockUnavailable::class, 'no address of the helpers is set (setting url)')
+            ->and(fn () => Blocks::remote('https://grid.example.org/helpers', fn () => throw new BlockUnavailable('Idle timeout reached'))->html('profile'))
+            ->toThrow(BlockUnavailable::class, 'Idle timeout reached')
+            ->and(fn () => Blocks::answer(502, '<p>x</p>', []))->toThrow(BlockUnavailable::class, 'HTTP 502')
+            ->and(Blocks::answer(200, '<p>x</p>', ['x-helpers-notices' => ['[{"level":"info","text":"Hi"}]']]))->toBe(['html' => '<p>x</p>', 'notices' => [['level' => 'info', 'text' => 'Hi']]]);
+    });
+});
+
+describe('the blocks that cannot be read', function () {
+    $t = fn (string $key, array $vars = []) => "[$key".($vars ? ':'.implode('|', $vars) : '').']';
+
+    test('are said to a manager, once for each reason, with the blocks it took and a link to the health of the grid', function () use ($t) {
+        $notices = Blocks::notices(['profile' => 'Idle timeout reached', 'grid-info' => 'Idle timeout reached', 'motd' => 'HTTP 500 <b>'], true, 'profile', '/w4os/health', $t);
+
+        expect($notices)->toBe([
+            ['level' => 'error', 'text' => '[w4os.admin_blocks_unavailable:profile, grid-info|Idle timeout reached] <a href="/w4os/health">[w4os.admin_health_title]</a>'],
+            ['level' => 'error', 'text' => '[w4os.admin_blocks_unavailable:motd|HTTP 500 &lt;b&gt;] <a href="/w4os/health">[w4os.admin_health_title]</a>'],
+        ]);
+    });
+
+    test('are said to a visitor only when the block is the whole page, without a reason', function () use ($t) {
+        expect(Blocks::notices(['profile' => 'Idle timeout reached'], false, 'profile', null, $t))->toBe([['level' => 'warning', 'text' => '[w4os.error_channel_unavailable]']])
+            ->and(Blocks::notices(['grid-info' => 'Idle timeout reached'], false, null, null, $t))->toBe([])
+            ->and(Blocks::notices([], true, 'profile', '/w4os/health', $t))->toBe([]);
     });
 });

@@ -46,6 +46,9 @@ class W4osPlugin extends Plugin
     /** The avatar of the profile page shown, once found. */
     private ?array $profiled = null;
 
+    /** @var array<string,string> the blocks of the helpers the page could not read, and why */
+    private array $blockFailures = [];
+
     /** The page of an earlier version laid out by the splash template of the plugin (now the theme's default page, onPageInitialized). */
     private $splash = null;
 
@@ -139,6 +142,8 @@ class W4osPlugin extends Plugin
                 && $output = Site::withLoginLinks($output, $this->grav['twig']->processTemplate('w4os/login-links.html.twig'));
             $this->grav->output = $output;
         }
+        // The blocks of the helpers the page could not show, said with the other messages
+        $this->blockFailures === [] || $this->blockNotices();
         // The admin pages: the plugin's alerts; the others: the theme's messages, else the plugin's own
         $twig = $this->grav['twig'];
         foreach (['<!-- w4os:admin-messages -->' => 'w4os/admin-messages.html.twig', '<!-- w4os:messages -->' => null] as $marker => $template) {
@@ -1036,10 +1041,51 @@ class W4osPlugin extends Plugin
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }
 
-        $html = $this->site()->blocks()->html($name, $args);
+        try {
+            $html = $this->site()->blocks()->html($name, $args);
+        } catch (\W4os\Grav\BlockUnavailable $e) {
+            $this->blockUnavailable($name, $e->getMessage());
+
+            return '';
+        }
+        // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
+        $html === '' && $this->pageBlock() === \W4os\Grav\Blocks::name($name) && $this->blockUnavailable($name, 'empty answer');
         $html === '' || $this->blockFiles($name);
 
         return $html;
+    }
+
+    /** The block of the helpers that is the whole page (its header w4os_block: profile, guide, search), null for another page. */
+    private function pageBlock(): ?string
+    {
+        $block = (string) ($this->grav['page']->header()->w4os_block ?? '');
+
+        return $block === '' ? null : \W4os\Grav\Blocks::name($block);
+    }
+
+    /** A block of the helpers that could not be read: logged, and said on the page once it is rendered (blockNotices()). */
+    private function blockUnavailable(string $name, string $reason): void
+    {
+        $name = \W4os\Grav\Blocks::name($name);
+        if (! isset($this->blockFailures[$name])) {
+            $this->grav['log']->warning("w4os: the block $name of the helpers cannot be read: $reason");
+            $this->blockFailures[$name] = $reason;
+        }
+    }
+
+    /**
+     * What the page says of its blocks that could not be read, in the zone of messages: to a manager the reason and a link to the
+     * health of the grid, to a visitor that the page is unavailable for now when the block is the whole page (Blocks::notices()).
+     */
+    private function blockNotices(): void
+    {
+        $site = $this->site();
+        $manager = $site->isManager();
+        $health = $manager && isset($site->routes()['health']) && $site->canOperation('health') ? $site->path('health', true) : null;
+        foreach (\W4os\Grav\Blocks::notices($this->blockFailures, $manager, $this->pageBlock(), $health, fn (string $key, array $vars) => $site->translate($key, $vars)) as $notice) {
+            $this->grav['messages']->add($notice['text'], $notice['level']);
+        }
+        $this->blockFailures = [];
     }
 
     /** The styles and the script a block of the helpers needs, from the helpers the plugin bundles (View::blockFiles()). */
