@@ -882,47 +882,38 @@ final class Site
     ];
 
     /**
+     * The shortcodes of the blocks of the helpers, by the names of w4os-wp (its blocks/*.php) and its older ones, each to the block it
+     * shows: one shortcode by block, its options as attributes ([popular-places max=5]), the closing slash left free ([grid-info]).
+     */
+    public const BLOCK_SHORTCODES = [
+        'grid-info' => 'grid_info', 'gridinfo' => 'grid_info', 'grid-status' => 'grid_status', 'gridstatus' => 'grid_status',
+        'avatar-profile' => 'profile', 'w4os_profile' => 'profile', 'gridprofile' => 'profile', 'popular-places' => 'popular_places',
+        'web-search' => 'search', 'destination-guide' => 'destination_guide', 'new-users' => 'new_users', 'directory-info' => 'directory_info',
+        'motd' => 'motd',
+    ];
+
+    /**
      * The shortcodes of the site and the blocks of the helpers they show, for the page of the shortcodes (as the page Shortcodes of
-     * w4os-wp): the blocks first, in its order, then the shortcodes of the site; each its code, the catalog key of what it shows,
-     * the block it previews, its options (each its catalog key).
+     * w4os-wp): the blocks first, in its order, then the shortcodes of the site; each its code, its older names, the catalog key of
+     * what it shows, the block it previews with the arguments of a short preview, its options (each its catalog key).
      */
     public const SHORTCODES = [
-        ['code' => '[w4os block="grid-info" /]', 'help' => 'block_grid_info_help', 'block' => 'grid-info', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="grid-status" /]', 'help' => 'block_grid_status_help', 'block' => 'grid-status', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="profile" /]', 'help' => 'block_profile_help', 'block' => 'profile', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-            ['option' => 'name', 'help' => 'shortcode_option_name'],
-        ]],
-        ['code' => '[w4os block="popular-places" /]', 'help' => 'block_popular_places_help', 'block' => 'popular-places', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-            ['option' => 'count=5', 'help' => 'shortcode_option_count'], ['option' => 'include_hypergrid=1', 'help' => 'shortcode_option_include_hypergrid'],
-            ['option' => 'include_landsales=1', 'help' => 'shortcode_option_include_landsales'],
-        ]],
-        ['code' => '[w4os block="motd" /]', 'help' => 'block_motd_help', 'block' => 'motd', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="destination-guide" /]', 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="search" /]', 'help' => 'block_search_help', 'block' => 'search', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="new-users" /]', 'help' => 'block_new_users_help', 'block' => 'new-users', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os block="directory-info" /]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'options' => [
-            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
-        ]],
-        ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
-        ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],
-        ['code' => '[w4os-register]…[/w4os-register]', 'help' => 'admin_shortcode_register_help', 'options' => []],
-        ['code' => '[w4os text="welcome_title" /]', 'help' => 'admin_shortcode_text_help', 'options' => []],
-        ['code' => '[w4os info="uri" /]', 'help' => 'admin_shortcode_uri_help', 'options' => []],
-        ['code' => '[w4os slogan /]', 'help' => 'admin_shortcode_slogan_help', 'options' => []],
+        ['code' => '[grid-info]', 'aliases' => ['[gridinfo]'], 'help' => 'block_grid_info_help', 'block' => 'grid-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[grid-status]', 'aliases' => ['[gridstatus]'], 'help' => 'block_grid_status_help', 'block' => 'grid-status', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[avatar-profile]', 'aliases' => ['[w4os_profile]', '[gridprofile]'], 'help' => 'block_profile_help', 'block' => 'profile', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'], ['option' => 'name', 'help' => 'shortcode_option_name']]],
+        ['code' => '[popular-places]', 'aliases' => [], 'help' => 'block_popular_places_help', 'block' => 'popular-places', 'preview' => ['title' => '', 'level' => 'h3', 'count' => 3], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'], ['option' => 'max=5', 'help' => 'shortcode_option_count'], ['option' => 'include-hypergrid', 'help' => 'shortcode_option_include_hypergrid'], ['option' => 'include-landsales', 'help' => 'shortcode_option_include_landsales']]],
+        ['code' => '[web-search]', 'aliases' => [], 'help' => 'block_search_help', 'block' => 'search', 'preview' => ['title' => ''], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[motd]', 'aliases' => [], 'help' => 'block_motd_help', 'block' => 'motd', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[destination-guide]', 'aliases' => [], 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[new-users]', 'aliases' => [], 'help' => 'block_new_users_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[directory-info]', 'aliases' => [], 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[login-uri]', 'aliases' => [], 'help' => 'admin_shortcode_uri_help', 'options' => []],
+        ['code' => '[base_url]', 'aliases' => [], 'help' => 'admin_shortcode_base_url_help', 'options' => []],
+        ['code' => '[w4os-home]…[/w4os-home]', 'aliases' => [], 'help' => 'admin_shortcode_home_help', 'options' => []],
+        ['code' => '[w4os-guest]…[/w4os-guest]', 'aliases' => [], 'help' => 'admin_shortcode_guest_help', 'options' => []],
+        ['code' => '[w4os-register]…[/w4os-register]', 'aliases' => [], 'help' => 'admin_shortcode_register_help', 'options' => []],
+        ['code' => '[w4os text="welcome_title"]', 'aliases' => [], 'help' => 'admin_shortcode_text_help', 'options' => []],
+        ['code' => '[w4os slogan]', 'aliases' => [], 'help' => 'admin_shortcode_slogan_help', 'options' => []],
     ];
 
     /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */

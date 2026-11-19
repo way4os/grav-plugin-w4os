@@ -32,9 +32,14 @@ describe('blocks', function () {
             ->toBe(['count' => '3', 'include_hypergrid' => '1', 'include_landsales' => '0']);
     });
 
+    test('takes the options of a shortcode as w4os-wp writes them: max, and include-hypergrid alone as a flag', function () {
+        expect(Blocks::shortcodeArgs(['max' => '5', 'include-hypergrid' => null, 'include-landsales' => '0', 'title' => 'Places']))
+            ->toBe(['title' => 'Places', 'count' => '5', 'include_hypergrid' => '1', 'include_landsales' => '0']);
+    });
+
     test('takes of a shortcode the options of its block, nothing else', function () {
         expect(Blocks::shortcodeArgs(['block' => 'popular-places', 'count' => '3', 'include_hypergrid' => '1', 'title' => 'Places', 'onclick' => 'x', 'name' => null]))
-            ->toBe(['count' => '3', 'include_hypergrid' => '1', 'title' => 'Places']);
+            ->toBe(['title' => 'Places', 'count' => '3', 'include_hypergrid' => '1']);
     });
 
     test('asks the guide for the category the page shows', function () {

@@ -361,6 +361,9 @@ class W4osPlugin extends Plugin
     }
 
     /**
+     * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
+     * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search]...; [login-uri], [base_url]. The closing slash is
+     * free ([grid-info] or [grid-info /]). The forms of before, kept for the pages that have them:
      * [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /]
      * [w4os text="welcome_title" /]: a text of the language files, the name of the grid in its %s ("Welcome to %s")
      * [w4os info="uri" /]: the login URI of the grid (host:port), as text to copy
@@ -381,6 +384,12 @@ class W4osPlugin extends Plugin
                 Blocks::shortcodeArgs((array) $shortcode->getParameters()),
             ),
         });
+        // One shortcode by block, by the names of w4os-wp ([grid-info], [popular-places max=5]); the login URI, the address of the site
+        foreach (Site::BLOCK_SHORTCODES as $name => $block) {
+            $handlers->add($name, fn ($shortcode) => $this->block($block, Blocks::shortcodeArgs((array) $shortcode->getParameters())));
+        }
+        $handlers->add('login-uri', fn () => '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>');
+        $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
         $handlers->add('w4os-register', fn ($shortcode) => isset($this->site()->routes()['register']) ? (string) $shortcode->getContent() : '');
         // [w4os-home]...[/w4os-home]: the home page of a grid around its text (templates/w4os/home.html.twig)

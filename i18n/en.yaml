@@ -71,6 +71,7 @@ w4os:
   admin_shortcode_register_help: 'Its text only when the site has its registration page'
   admin_shortcode_text_help: 'A text of the catalog, in the language of the page, the name of the grid in it'
   admin_shortcode_uri_help: 'The login address of the grid'
+  admin_shortcode_base_url_help: 'The address of the site'
   admin_shortcode_slogan_help: 'The slogan of the site'
   admin_health_title: 'Health'
   admin_health_ok: 'All that is checked answers as it should.'

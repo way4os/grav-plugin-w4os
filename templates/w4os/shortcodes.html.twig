@@ -1,5 +1,5 @@
 {# The shortcodes of the site and the blocks of the helpers they show, as the page Shortcodes of w4os-wp: each its code and what it
-   shows, its live preview (a block of the helpers, as a page shows it), the table of its options #}
+   shows and its older names, a short live preview (a block of the helpers, as a page shows it), the table of its options #}
 <p class="text-secondary">{{ 'w4os.shortcodes_help'|t }}</p>
 <div class="card">
     <div class="table-responsive">
@@ -7,8 +7,8 @@
             <tbody>
             {% for shortcode in w4os_shortcodes() %}
                 <tr>
-                    <th class="fw-normal w4os-shortcode-code"><code>{{ shortcode.code }}</code><p class="text-secondary small mt-2 mb-0">{{ ('w4os.' ~ shortcode.help)|t }}</p></th>
-                    <td class="w4os-shortcode-preview">{% if shortcode.block is defined %}{{ w4os_block(shortcode.block, {title: '', level: 'h3'}) }}{% endif %}</td>
+                    <th class="fw-normal w4os-shortcode-code"><code>{{ shortcode.code }}</code>{% for alias in shortcode.aliases ?? [] %} <code class="text-secondary">{{ alias }}</code>{% endfor %}<p class="text-secondary small mt-2 mb-0">{{ ('w4os.' ~ shortcode.help)|t }}</p></th>
+                    <td class="w4os-shortcode-preview">{% if shortcode.block is defined %}{{ w4os_block(shortcode.block, shortcode.preview ?? {title: '', level: 'h3'}) }}{% endif %}</td>
                     <td class="w4os-shortcode-options">
                         {% if shortcode.options %}
                         <p class="mb-1">{{ 'w4os.shortcode_options'|t }}</p>

@@ -105,18 +105,30 @@ final class Blocks
         return in_array(str_replace('-', '_', $name), self::NAMES, true) ? str_replace('-', '_', $name) : $name;
     }
 
-    /** What a shortcode of a block may give it: its name (profile), its title and level, the options of the popular places. */
-    private const SHORTCODE_ARGS = ['name', 'level', 'title', 'count', 'include_hypergrid', 'include_landsales'];
-
     /**
-     * The arguments of a block from the parameters of its shortcode: the ones it takes (SHORTCODE_ARGS), those given only.
+     * The arguments of a block from the parameters of its shortcode, as w4os-wp writes them: its name (a profile), its title and
+     * level, how many places (`max`, `count`), include-hypergrid and include-landsales (alone, a flag; or with a value), in this
+     * order, those given only.
      *
      * @param array<string,mixed> $parameters
      * @return array<string,mixed>
      */
     public static function shortcodeArgs(array $parameters): array
     {
-        return array_filter(array_intersect_key($parameters, array_flip(self::SHORTCODE_ARGS)), fn ($value) => $value !== null && $value !== '');
+        $args = [];
+        foreach ($parameters as $name => $value) {
+            $name = str_replace('-', '_', strtolower((string) $name));
+            $name === 'max' && $name = 'count';
+            $flag = in_array($name, ['include_hypergrid', 'include_landsales'], true);
+            if (! in_array($name, ['name', 'level', 'title', 'count', 'include_hypergrid', 'include_landsales'], true) || (! $flag && ($value === null || $value === ''))) {
+                continue;
+            }
+            $args[$name] = $flag && ($value === null || $value === '') ? '1' : $value;
+        }
+        $order = array_flip(['name', 'level', 'title', 'count', 'include_hypergrid', 'include_landsales']);
+        uksort($args, fn ($a, $b) => $order[$a] <=> $order[$b]);
+
+        return $args;
     }
 
     /**
