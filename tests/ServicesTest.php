@@ -153,4 +153,12 @@ describe('the settings pages of the services of the grid', function () {
             ->and(Items::fields(FormView::of($form, ['provide' => true, 'searchDatabase' => ['host' => 'db']], null, true, 250), shown: true)['searchDatabase']['fields']['searchDatabase.host']['outerclasses'])
             ->not->toContain('w4os-unmet');
     });
+
+    test('a database this site cannot write has every part unchangeable', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $fixed = ['gloebitDatabase' => ['reason' => 'r', 'file' => 'OpenSim.ini', 'text' => '[Gloebit]']];
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'gloebitDatabase' => null], null, true, 250), shown: true, fixed: $fixed);
+
+        expect(array_filter($fields['gloebitDatabase']['fields'], fn (array $part) => empty($part['disabled'])))->toBe([]);
+    });
 });

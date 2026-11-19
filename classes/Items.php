@@ -35,7 +35,12 @@ final class Items
                 $line = $fixed[$field['name']];
                 // Why, in the language of the page: a notice of the engine (its code and params), or its text
                 $reason = Site::noticeText(is_array($line['reason'] ?? null) ? $line['reason'] : (string) ($line['reason'] ?? ''), $translate ?? fn (string $key) => $key);
-                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => $reason] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1, 'help' => 1])
+                $input = array_diff_key(self::input($field, $translate, $base), ['validate' => 1, 'help' => 1]);
+                // Its parts too (a database)
+                foreach ($input['fields'] ?? [] as $name => $part) {
+                    $input['fields'][$name] = ['disabled' => true] + array_diff_key($part, ['validate' => 1]);
+                }
+                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => $reason] + $input
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
                 $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => (string) ($line['file'] ?? ''),
                     'content' => "```ini\n".rtrim((string) ($line['text'] ?? ''))."\n```", 'markdown' => true,
