@@ -1,0 +1,7 @@
+{# A field of a form of the admin (layout: w4os-admin): the Form plugin's own, its help said under its label #}
+{% extends 'forms/layouts/field/default-field.html.twig' %}
+{% block label -%}
+    {{ form_field_label|raw }}
+    {%- if form_field_required %} <span class="required">*</span>{% endif -%}
+    {%- if field.help %}<small class="form-hint">{{ field.help|t }}</small>{% endif -%}
+{%- endblock %}

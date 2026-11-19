@@ -12,6 +12,6 @@
 {% set form_field_radio_classes = 'form-check-input' %}
 {% set form_button_outer_classes = 'btn-list justify-content-end' %}
 {% set form_button_classes = 'btn' %}
-{% include 'forms/form.html.twig' with {form: form} %}
+{% include 'forms/form.html.twig' with {form: form, layout: 'w4os-admin'} %}
 {# The fields shown by the values of the others, as they are changed #}
 {% if form.attributes['data-w4os-conditions'] ?? false %}{% do assets.addJs('plugin://w4os/js/conditions.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}

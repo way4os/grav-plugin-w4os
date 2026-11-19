@@ -171,4 +171,17 @@ describe('the forms of the admin', function () {
             expect((string) file_get_contents(dirname(__DIR__)."/templates/w4os/$page.html.twig"))->toContain("'w4os/admin-form.html.twig'");
         }
     });
+
+    test('say the help of a field under its label, as written (Grav\'s tooltip escapes it twice)', function () {
+        $field = '{% block field %}<label>{% block label %}{{ form_field_help }}{% endblock %}</label>{% endblock %}';
+        $twig = new Environment(new Twig\Loader\ChainLoader([
+            new Twig\Loader\ArrayLoader(['forms/layouts/field/default-field.html.twig' => $field]),
+            new FilesystemLoader(dirname(__DIR__).'/templates'),
+        ]));
+        $twig->addFilter(new TwigFilter('t', fn ($text) => $text));
+        $html = $twig->render('forms/layouts/field/w4os-admin-field.html.twig', ['field' => ['help' => "Réglez l'URL"], 'form_field_label' => 'URI', 'form_field_help' => 'Réglez l&#039;URL', 'form_field_required' => true]);
+
+        expect($html)->toBe('<label>URI <span class="required">*</span><small class="form-hint">Réglez l&#039;URL</small></label>')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig'))->toContain("layout: 'w4os-admin'");
+    });
 });
