@@ -423,6 +423,9 @@ class W4osPlugin extends Plugin
             // The page goes back there once signed in (Site::landing())
             $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
+        } elseif ($type === 'register' && $this->site()->avatar() !== null && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET') {
+            // The registration is a visitor's: an avatar signed in has its profile (and a visitor's profile is the registration)
+            $this->grav->redirectLangSafe($routes['profile'] ?? $routes['account']);
         } elseif (isset(Site::ADMIN_OPERATIONS[$type]) && $this->site()->avatar() === null) {
             $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
