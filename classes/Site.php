@@ -818,18 +818,18 @@ final class Site
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 
-        return self::menuTree(array_values((array) $event['items']));
+        return self::menuTree(array_values((array) $event['items']), $this->translate('w4os.admin_menu_list'));
     }
 
     /**
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
-     * first, then theirs; the parent open (active) when one of them is the page shown. An entry whose parent is not in the menu
-     * stays where it is.
+     * first, named as a list ($list, not the name of the parent), then theirs; the parent open (active) when one of them is the page
+     * shown. An entry whose parent is not in the menu stays where it is.
      *
      * @param list<array<string,mixed>> $items
      * @return list<array<string,mixed>>
      */
-    public static function menuTree(array $items): array
+    public static function menuTree(array $items, ?string $list = null): array
     {
         $types = array_column($items, 'type');
         $children = [];
@@ -842,7 +842,7 @@ final class Site
                 continue;
             }
             if (isset($children[$item['type'] ?? null])) {
-                $item['children'] = [$item, ...$children[$item['type']]];
+                $item['children'] = [['label' => $list ?? $item['label']] + $item, ...$children[$item['type']]];
                 $item['active'] = in_array(true, array_column($item['children'], 'active'), true);
             }
             $menu[] = $item;

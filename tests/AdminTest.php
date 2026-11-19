@@ -60,17 +60,18 @@ describe('admin', function () {
 });
 
 describe('the menu of the admin', function () {
-    test('nests a page under the one it belongs to, the page of the list first, open on the page shown', function () {
+    test('nests a page under the one it belongs to, its list first named List (not the name of the parent), open on the page shown', function () {
         $items = [
             ['type' => 'regions', 'label' => 'Regions', 'url' => '/w4os/regions', 'active' => false],
             ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
             ['type' => 'models', 'label' => 'Avatar Models', 'url' => '/w4os/models', 'active' => true, 'parent' => 'manage'],
         ];
-        $menu = Site::menuTree($items);
+        $menu = Site::menuTree($items, 'List');
 
         expect(array_column($menu, 'type'))->toBe(['regions', 'manage'])
             ->and($menu[1]['active'])->toBeTrue()
-            ->and(array_column($menu[1]['children'], 'label'))->toBe(['Avatars', 'Avatar Models'])
+            ->and($menu[1]['label'])->toBe('Avatars')
+            ->and(array_column($menu[1]['children'], 'label'))->toBe(['List', 'Avatar Models'])
             ->and(array_column($menu[1]['children'], 'active'))->toBe([false, true])
             ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
     });
@@ -80,7 +81,7 @@ describe('the menu of the admin', function () {
         $twig->addFunction(new TwigFunction('w4os_brand', fn () => ['title' => 'Friendly Fowl', 'home' => '/']));
         $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => [
             ['label' => 'Avatars', 'url' => '/w4os/manage', 'icon' => 'ti ti-users', 'active' => true, 'children' => [
-                ['label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
+                ['label' => 'List', 'url' => '/w4os/manage', 'active' => false],
                 ['label' => 'Avatar Models', 'url' => '/w4os/models', 'active' => true],
             ]],
         ]));
@@ -94,8 +95,10 @@ describe('the menu of the admin', function () {
             public function js(string $group = ''): string { return ''; }
         }, 'grav' => ['user' => []]]);
 
-        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle"[^>]*aria-expanded="true"~')
-            ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">Avatars</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
+        // The parent opens its list, its pages shown under it on the page of one of them
+        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" aria-expanded="true">~')
+            ->and($html)->not->toContain('data-bs-toggle="dropdown"')
+            ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
     });
 });
 

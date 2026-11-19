@@ -571,6 +571,7 @@ w4os:
   admin_site_favicon_unsupported: 'Le thème actuel n’affiche pas de favicon du site ; il est gardé pour le prochain thème qui en affiche un'
   admin_route: 'Pages d’administration'
   admin_route_help: 'La route des pages d’administration de la grille et du site, jamais sous celle de l’admin de Grav'
+  admin_menu_list: 'Liste'
   admin_health_title: 'Santé'
   admin_health_ok: 'Tout ce qui est vérifié répond comme il faut.'
   admin_health_error: 'Certaines adresses ne répondent pas comme il faut : voir les lignes en rouge.'
