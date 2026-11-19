@@ -456,7 +456,7 @@ class W4osPlugin extends Plugin
             ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'], $_POST['post']) && $this->postAction((array) $_POST);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
-        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
+        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'flux', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'edit') {
             // The name of the avatar in the title; the title of the list when there is no such avatar

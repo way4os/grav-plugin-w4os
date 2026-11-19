@@ -317,7 +317,7 @@ final class Site
     public const ADMIN_ROUTES = [
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'new' => '/avatars/new', 'regions' => '/regions',
         'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health',
-        'shortcodes' => '/shortcodes', 'settings' => '/settings',
+        'shortcodes' => '/shortcodes', 'settings' => '/settings', 'flux' => '/flux',
         'settings_economy' => '/economy', 'settings_search' => '/search', 'settings_guide' => '/guide', 'settings_offline' => '/offline',
         'settings_assets' => '/assets',
     ];
@@ -798,6 +798,7 @@ final class Site
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
+        'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle'],
         // The settings of the services of the grid, as w4os-wp has them in its menu
         'settings_economy' => ['label' => 'w4os.settings_economy', 'icon' => 'ti ti-coin'],
         'settings_search' => ['label' => 'w4os.settings_search', 'icon' => 'ti ti-search'],
@@ -867,7 +868,7 @@ final class Site
     public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage', 'new' => 'manage'];
 
     /** The items an admin page lists: the page shows to whom the contract lets read them. */
-    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators'];
+    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators', 'flux' => 'posts'];
 
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its

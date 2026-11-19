@@ -1,0 +1,7 @@
+{# The posts of every avatar of the grid (Flux), for the managers the contract lets read them, as w4os-wp lists them: the engine's list
+   (w4os_list in the front matter of the page) and its actions (delete) as the visitor's level allows them #}
+{% set data = w4os_list(page.header.w4os_list ?? {type: 'posts'}) %}
+{% include 'w4os/list.html.twig' with {
+    list: data.list, items: data.items, meta: data.meta, query: data.query, fixed: data.fixed ?? {}, error: data.error, links: [],
+    texts: {search: 'w4os.search_flux_posts', empty: 'w4os.no_flux_posts', count: 'w4os.flux_posts_count', title: 'w4os.flux_title'}
+} %}

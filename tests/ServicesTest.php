@@ -6,7 +6,7 @@ use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
 describe('the settings pages of the services of the grid', function () {
-    test('live under the admin route, in the admin menu after the avatars as w4os-wp has them, for whom the contract lets read them', function () {
+    test('live under the admin route, in the admin menu after the avatars and the Flux as w4os-wp has them, for whom the contract lets read them', function () {
         $routes = Site::adminRoutes(['admin' => '/w4os'], []);
         $services = ['settings_economy' => 'economy', 'settings_search' => 'search', 'settings_guide' => 'guide', 'settings_offline' => 'offline', 'settings_assets' => 'assets'];
         foreach ($services as $type => $group) {
@@ -18,7 +18,7 @@ describe('the settings pages of the services of the grid', function () {
         }
         $pages = array_keys(Site::ADMIN_PAGES);
 
-        expect(array_slice($pages, array_search('models', $pages, true) + 1, 5))->toBe(array_keys($services))
+        expect(array_slice($pages, array_search('flux', $pages, true) + 1, 5))->toBe(array_keys($services))
             ->and(Site::serviceGroup('models'))->toBeNull();
     });
 
