@@ -40,7 +40,7 @@ final class Blocks
         $url = rtrim($url, '/');
 
         return new self(fn (string $name, array $args) => $url === ''
-            ? throw new BlockUnavailable('no address of the helpers is set (setting url)')
+            ? throw new BlockUnavailable('no address of the helpers is set (setting url)', 'admin_blocks_no_url')
             : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
     }
 
@@ -53,7 +53,7 @@ final class Blocks
      */
     public static function answer(int $status, string $body, array $headers): array
     {
-        $status === 200 || throw new BlockUnavailable("HTTP $status");
+        $status === 200 || throw new BlockUnavailable("HTTP $status", 'admin_blocks_http', [(string) $status]);
         $notices = json_decode((string) ($headers['x-helpers-notices'][0] ?? ''), true);
 
         return ['html' => $body, 'notices' => is_array($notices) ? $notices : []];

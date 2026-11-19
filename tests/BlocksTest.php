@@ -114,6 +114,23 @@ describe('the blocks that cannot be read', function () {
         ]);
     });
 
+    test('say their reason in the language of the page, from a key of the catalog', function () use ($t) {
+        $reason = function (Closure $failing) use ($t) {
+            try {
+                $failing();
+            } catch (W4os\Grav\BlockUnavailable $e) {
+                return $e->reason($t);
+            }
+        };
+
+        expect($reason(fn () => (Blocks::remote('', fn () => ''))->html('grid-info', [])))->toBe('[w4os.admin_blocks_no_url]')
+            ->and($reason(fn () => Blocks::answer(500, '', [])))->toBe('[w4os.admin_blocks_http:500]')
+            ->and($reason(fn () => throw new W4os\Grav\BlockUnavailable('Idle timeout reached', 'admin_blocks_no_answer', ['Idle timeout reached'])))
+            ->toBe('[w4os.admin_blocks_no_answer:Idle timeout reached]')
+            // A reason the helpers said themselves (in the language they were asked): as it is
+            ->and($reason(fn () => throw new W4os\Grav\BlockUnavailable('La base de données est injoignable.')))->toBe('La base de données est injoignable.');
+    });
+
     test('are said to a visitor only when the block is the whole page, without a reason', function () use ($t) {
         expect(Blocks::notices(['profile' => 'Idle timeout reached'], false, 'profile', null, $t))->toBe([['level' => 'warning', 'text' => '[w4os.error_channel_unavailable]']])
             ->and(Blocks::notices(['grid-info' => 'Idle timeout reached'], false, null, null, $t))->toBe([])

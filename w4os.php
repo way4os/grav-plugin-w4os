@@ -1240,12 +1240,12 @@ class W4osPlugin extends Plugin
         try {
             $html = $this->site()->blocks()->html($name, $args);
         } catch (\W4os\Grav\BlockUnavailable $e) {
-            $this->blockUnavailable($name, $e->getMessage());
+            $this->blockUnavailable($name, $e->reason(fn (string $key, array $vars) => $this->site()->translate($key, $vars)), $e->getMessage());
 
             return '';
         }
         // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
-        $html === '' && $this->pageBlock() === \W4os\Grav\Blocks::name($name) && $this->blockUnavailable($name, 'empty answer');
+        $html === '' && $this->pageBlock() === \W4os\Grav\Blocks::name($name) && $this->blockUnavailable($name, $this->site()->translate('w4os.admin_blocks_nothing', []), 'empty answer');
         $html === '' || $this->blockFiles($name);
 
         return $html;
@@ -1272,14 +1272,15 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * A block of the helpers that could not be read: logged, and said on the page (blockNotices()): before the theme shows its
-     * messages for the blocks of the text of the page, once the page is rendered for the ones of its template.
+     * A block of the helpers that could not be read: logged (`logged`), and said on the page in its language (`reason`,
+     * blockNotices()): before the theme shows its messages for the blocks of the text of the page, once the page is rendered for
+     * the ones of its template.
      */
-    private function blockUnavailable(string $name, string $reason): void
+    private function blockUnavailable(string $name, string $reason, string $logged): void
     {
         $name = \W4os\Grav\Blocks::name($name);
         if (! isset($this->blockFailures[$name])) {
-            $this->grav['log']->warning("w4os: the block $name of the helpers cannot be read: $reason");
+            $this->grav['log']->warning("w4os: the block $name of the helpers cannot be read: $logged");
             $this->blockFailures[$name] = $reason;
         }
     }

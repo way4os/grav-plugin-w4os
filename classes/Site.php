@@ -381,7 +381,7 @@ final class Site
         // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
         $bundled = $this->bundled();
         if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
-            $rendered = fn (string $name, array $args) => $bundled->rendered($name, $args) ?? throw new BlockUnavailable('the bundled helpers gave nothing');
+            $rendered = fn (string $name, array $args) => $bundled->rendered($name, $args) ?? throw new BlockUnavailable('the bundled helpers gave nothing', 'admin_blocks_nothing');
 
             return new Blocks(fn (string $name, array $args) => $this->noticed(Blocks::kept($name)
                 ? $this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $rendered($name, $args))
@@ -1869,7 +1869,7 @@ final class Site
         try {
             [$status, $body, $headers] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
         } catch (\Throwable $e) {
-            throw new BlockUnavailable(Blocks::reason($e->getMessage()), previous: $e);
+            throw new BlockUnavailable(Blocks::reason($e->getMessage()), 'admin_blocks_no_answer', [Blocks::reason($e->getMessage())], $e);
         }
 
         return Blocks::answer($status, $body, $headers);
