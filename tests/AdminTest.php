@@ -59,6 +59,16 @@ describe('admin', function () {
     });
 });
 
+describe('the dashboard of the admin', function () {
+    test('has the widgets of w4os-wp: the grid info and status, the recent users, and the counts of its status page (the models, the service accounts)', function () {
+        $page = (string) file_get_contents(dirname(__DIR__).'/pages/dashboard.md');
+        $header = Symfony\Component\Yaml\Yaml::parse(explode('---', $page)[1]);
+
+        expect($header['w4os_cards'])->toContain(['page' => 'manage', 'filter' => ['type' => 'model']], ['page' => 'manage', 'filter' => ['type' => 'service']], ['page' => 'manage', 'rows' => 5, 'item' => 'edit'])
+            ->and($header['w4os_blocks'])->toBe(['grid-info', 'grid-status']);
+    });
+});
+
 describe('the menu of the admin', function () {
     test('nests a page under the one it belongs to, its list first named List (not the name of the parent), open on the page shown', function () {
         $items = [
