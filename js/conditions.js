@@ -11,6 +11,10 @@ document.querySelectorAll('form[data-w4os-conditions]').forEach((form) => {
     }
     const inputs = (name) => form.querySelectorAll(`[name="data[${name}]"], [name="data[${name}][]"]`);
     const values = (name) => [...inputs(name)].flatMap((input) => {
+        // A box alone is a yes or a no (a condition on it is true or false); a box of a list, its value
+        if (input.type === 'checkbox' && !input.name.endsWith('[]')) {
+            return [String(input.checked)];
+        }
         if (input.type === 'radio' || input.type === 'checkbox') {
             return input.checked ? [input.value] : [];
         }

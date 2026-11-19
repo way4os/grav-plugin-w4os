@@ -1407,7 +1407,7 @@ class W4osPlugin extends Plugin
      */
     private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false): void
     {
-        $form->setFields(Items::fields($view, $shown));
+        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         foreach ($view->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }

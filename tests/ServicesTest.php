@@ -27,7 +27,8 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields(FormView::of($form, ['offlineModule' => 'OfflineMessageModule', 'offlineMessageUrl' => 'https://play.example.org/offline', 'mailSender' => ''], null, true, 250), shown: true);
 
         expect($fields['offlineModule'])->toMatchArray(['type' => 'select', 'disabled' => true, 'label' => 'w4os.setting_offline_module'])
-            ->and($fields['offlineMessageUrl'])->toMatchArray(['type' => 'url', 'disabled' => true])
+            // The address of a service the site does not provide is changed here (Provide off)
+            ->and($fields['offlineMessageUrl'])->toMatchArray(['type' => 'url'])
             ->and($fields['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org'])
             ->and($fields['mailSender'])->not->toHaveKey('disabled');
     });
@@ -60,5 +61,20 @@ describe('the settings pages of the services of the grid', function () {
 
         expect($render(['view' => $view]))->toContain('<div class="col-12">', '<form id="w4os-service"></form>')
             ->and($render(['error' => 'The grid cannot be reached']))->toContain('alert-danger', 'The grid cannot be reached')->not->toContain('<form');
+    });
+
+    test('every page of the engine makes a form: its help of several points said in full, its notes shown, its path on the address of the site', function () {
+        $t = fn (string $key) => "[".substr($key, 5)."]";
+        foreach (['models', 'economy', 'search', 'guide', 'offline', 'assets'] as $group) {
+            $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf($group);
+            $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org');
+            array_walk_recursive($fields, fn ($value) => expect(is_scalar($value) || $value === null)->toBeTrue());
+        }
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'path' => '/helpers'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org');
+
+        expect($fields['path'])->toMatchArray(['type' => 'text', 'prepend' => 'http://grid.example.org', 'help' => '[economy_helper_uri_help]'])
+            ->and($fields['gloebitConfiguration'])->toMatchArray(['type' => 'display', 'label' => 'w4os.gloebit_configuration'])
+            ->and($fields['gloebitConfiguration']['content'])->toContain('[gloebit_help_crash] [gloebit_help_linux]');
     });
 });

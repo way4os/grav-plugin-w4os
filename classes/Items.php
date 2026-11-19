@@ -15,22 +15,24 @@ final class Items
      * The fields of the form of an item for Grav's Form plugin, from its form for the viewer (w4os-views FormView): the fields it
      * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden; the ones
      * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed. With
-     * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable.
+     * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable; a help of several points
+     * said in full with `translate`, a path on the address of the site (`base`).
      *
+     * @param ?\Closure(string): string $translate the text of a key of the catalog
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view, bool $shown = false): array
+    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = ''): array
     {
         $changed = array_column($view->fields, 'name');
         $fixed = $shown ? array_column($view->shown, 'name') : [];
         $groups = [];
         foreach ((array) ($view->form['fields'] ?? []) as $field) {
             if (in_array($field['name'], $changed, true)) {
-                $groups[$field['group']][$field['name']] = self::input($field)
+                $groups[$field['group']][$field['name']] = self::input($field, $translate, $base)
                     // A field the values of the form hide for now (its condition), shown by the script of the form as they change
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
             } elseif (in_array($field['name'], $fixed, true)) {
-                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field), ['validate' => 1]);
+                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1]);
             }
         }
         $fields = ['id' => ['type' => 'hidden']];
@@ -144,18 +146,29 @@ final class Items
      * (`maxLength`) is checked so.
      *
      * @param array<string,mixed> $field
+     * @param ?\Closure(string): string $translate the text of a key of the catalog (a help of several points, a note)
+     * @param string $base the address of the site, before the path of a field `path`
      * @return array<string,mixed>
      */
-    public static function input(array $field): array
+    public static function input(array $field, ?\Closure $translate = null, string $base = ''): array
     {
+        $help = self::help($field, $translate);
+        // A note: its points as text, no input
+        if ($field['type'] === 'note') {
+            return ['type' => 'display', 'label' => 'w4os.'.$field['label'], 'content' => $help ?? '', 'markdown' => true];
+        }
         // A database: its parts, each its input (data[<name>][<part>])
         if ($field['type'] === 'connection-string') {
             $parts = [];
             foreach ((array) ($field['fields'] ?? []) as $part) {
-                $parts[$field['name'].'.'.$part['name']] = self::input($part + ['type' => 'string']);
+                $parts[$field['name'].'.'.$part['name']] = self::input($part + ['type' => 'string'], $translate, $base);
             }
 
-            return ['type' => 'fieldset', 'title' => 'w4os.'.$field['label'], 'fields' => $parts] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []);
+            return ['type' => 'fieldset', 'title' => 'w4os.'.$field['label'], 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
+        }
+        // A path on the address of the site, which is not changed here
+        if ($field['type'] === 'path') {
+            return ['type' => 'text', 'prepend' => rtrim($base, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
         }
         // Several addresses the options of the grid set: one by line
         ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';
@@ -189,6 +202,26 @@ final class Items
         isset($field['placeholder']) && $input['placeholder'] = preg_match('/^[a-z][a-z0-9_]*$/', (string) $field['placeholder']) === 1 ? 'w4os.'.$field['placeholder'] : (string) $field['placeholder'];
 
         // The pictures of the models say their help themselves
-        return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) && $input['type'] !== 'w4os_models' ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
+        return $input + ['label' => 'w4os.'.$field['label']] + ($help !== null && $input['type'] !== 'w4os_models' ? ['help' => $help] : []) + ($validate === [] ? [] : ['validate' => $validate]);
+    }
+
+    /**
+     * The help of a field: the key of its text, or its points said in full when it has several (`translate`; the key of the first
+     * one without it); null for none.
+     *
+     * @param array<string,mixed> $field
+     * @param ?\Closure(string): string $translate
+     */
+    private static function help(array $field, ?\Closure $translate): ?string
+    {
+        $keys = array_values(array_filter(array_map('strval', (array) ($field['description'] ?? [])), fn (string $key) => $key !== ''));
+        if ($keys === []) {
+            return null;
+        }
+        if (count($keys) === 1 && ! is_array($field['description'])) {
+            return 'w4os.'.$keys[0];
+        }
+
+        return $translate === null ? 'w4os.'.$keys[0] : implode(' ', array_map(fn (string $key) => $translate('w4os.'.$key), $keys));
     }
 }
