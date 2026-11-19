@@ -12,8 +12,8 @@ describe('assets', function () {
         expect(array_keys($packages))->toEqualCanonicalizing(array_keys(Assets::KEEP))
             ->and($packages['npm-asset/tabler-core'])->toMatchArray(['version' => '1.7.5'])
             ->and($packages['npm-asset/tabler-core']['dist'])->toBe(['type' => 'tar', 'url' => 'https://registry.npmjs.org/@tabler/core/-/core-1.7.5.tgz', 'shasum' => '1f9aea2f37d8048ac6df9217be6ce6c80b2f3081'])
-            ->and($packages['npm-asset/tabler-icons-webfont']['dist']['shasum'])->toBe('5580c8af3cfde6ed42b03bd6e33b9e73397ff79d')
-            ->and($packages['npm-asset/tom-select']['dist']['shasum'])->toBe('07693442309eefa5b57c6beee6005195f3f956a4');
+            ->and($packages['npm-asset/tabler-icons-webfont']['dist']['shasum'])->toBe('29a3484cbc7ef9347fc68b9f30a883be120538e7')
+            ->and($packages['npm-asset/tom-select']['dist']['shasum'])->toBe('87325ad8f308c1bdba3d1b8941171c3a485e4a94');
     });
 
     test('of a release, only what the plugin serves is kept, and its license', function () {

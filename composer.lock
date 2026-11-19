@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "609c2d51192d507c585241c14e27d4ab",
+    "content-hash": "0e7d113eab30af0bc79f701d2c299401",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -712,7 +712,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "4fb165ee193d2cc70dec635f7416cb4257ebb8de"
+                "reference": "c392cdcdc0b570e411b94b1fe4079ef61483430e"
             },
             "require": {
                 "ext-curl": "*",
@@ -930,7 +930,7 @@
             "dist": {
                 "type": "path",
                 "url": "../w4os-views",
-                "reference": "1ce72aa58de41085d1c11c40ea04f8435df0303a"
+                "reference": "7cadaee557e780db0b028fe819fd788ef5dbf72f"
             },
             "require": {
                 "ext-intl": "*",
@@ -1141,21 +1141,21 @@
         },
         {
             "name": "npm-asset/tabler-icons-webfont",
-            "version": "3.50.0",
+            "version": "3.52.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.50.0.tgz",
-                "shasum": "5580c8af3cfde6ed42b03bd6e33b9e73397ff79d"
+                "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.52.0.tgz",
+                "shasum": "29a3484cbc7ef9347fc68b9f30a883be120538e7"
             },
             "type": "library"
         },
         {
             "name": "npm-asset/tom-select",
-            "version": "2.6.2",
+            "version": "2.7.0",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.6.2.tgz",
-                "shasum": "07693442309eefa5b57c6beee6005195f3f956a4"
+                "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.7.0.tgz",
+                "shasum": "87325ad8f308c1bdba3d1b8941171c3a485e4a94"
             },
             "type": "library"
         },

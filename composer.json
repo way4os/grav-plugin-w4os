@@ -60,11 +60,11 @@
             "type": "package",
             "package": {
                 "name": "npm-asset/tabler-icons-webfont",
-                "version": "3.50.0",
+                "version": "3.52.0",
                 "dist": {
                     "type": "tar",
-                    "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.50.0.tgz",
-                    "shasum": "5580c8af3cfde6ed42b03bd6e33b9e73397ff79d"
+                    "url": "https://registry.npmjs.org/@tabler/icons-webfont/-/icons-webfont-3.52.0.tgz",
+                    "shasum": "29a3484cbc7ef9347fc68b9f30a883be120538e7"
                 }
             }
         },
@@ -72,11 +72,11 @@
             "type": "package",
             "package": {
                 "name": "npm-asset/tom-select",
-                "version": "2.6.2",
+                "version": "2.7.0",
                 "dist": {
                     "type": "tar",
-                    "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.6.2.tgz",
-                    "shasum": "07693442309eefa5b57c6beee6005195f3f956a4"
+                    "url": "https://registry.npmjs.org/tom-select/-/tom-select-2.7.0.tgz",
+                    "shasum": "87325ad8f308c1bdba3d1b8941171c3a485e4a94"
                 }
             }
         }
@@ -87,8 +87,8 @@
         "magicoli/opensim-helpers": "@dev",
         "magicoli/opensim-rest-php": "@dev",
         "npm-asset/tabler-core": "1.7.5",
-        "npm-asset/tabler-icons-webfont": "3.50.0",
-        "npm-asset/tom-select": "2.6.2",
+        "npm-asset/tabler-icons-webfont": "3.52.0",
+        "npm-asset/tom-select": "2.7.0",
         "magicoli/w4os-views": "@dev"
     },
     "require-dev": {
