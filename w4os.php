@@ -457,6 +457,8 @@ class W4osPlugin extends Plugin
             ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'], $_POST['post']) && $this->postAction((array) $_POST);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
+        } elseif (Site::serviceGroup((string) $type) !== null && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'run_task') {
+            $this->runTask((string) ($_POST['task'] ?? ''), (string) ($_POST['nonce'] ?? ''));
         } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'flux', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'edit') {
@@ -880,9 +882,19 @@ class W4osPlugin extends Plugin
         $type = (string) $this->site()->pageAt($this->grav['uri']->path())[0];
         $group = Site::serviceGroup($type);
 
-        return ['group' => $group] + ($group === null
-            ? ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save']
-            : $this->settingsOf($group, $type));
+        if ($group === null) {
+            return ['group' => null, 'view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save', 'tasks' => [], 'run' => false];
+        }
+        $tasks = [];
+        if (isset(Site::SERVICE_TASKS[$group])) {
+            try {
+                $tasks = Site::serviceTasks($this->site()->engine()->tasks(), $this->site()->engine()->grid(), $group);
+            } catch (\Throwable) {
+                $tasks = [];
+            }
+        }
+
+        return ['group' => $group, 'tasks' => $tasks, 'run' => $tasks !== [] && $this->site()->canRunTask()] + $this->settingsOf($group, $type);
     }
 
     /**
@@ -912,6 +924,24 @@ class W4osPlugin extends Plugin
         } catch (\Throwable $e) {
             return $read[$group] = ['error' => $e->getMessage()] + $none;
         }
+    }
+
+    /** Runs a task of the service of the page now (its button), for whom the contract lets; says what it said, back to the page. */
+    private function runTask(string $id, string $nonce): void
+    {
+        $path = $this->grav['uri']->path();
+        $tasks = array_column($this->service()['tasks'], null, 'id');
+        if (! Utils::verifyNonce($nonce, 'w4os-task') || ! isset($tasks[$id]) || ! $this->site()->canRunTask()) {
+            $this->grav['messages']->add($this->site()->translate('w4os.error_invalid_request'), 'error');
+            $this->grav->redirectLangSafe($path, 303);
+        }
+        try {
+            $task = $this->site()->engine()->runTask($id);
+            $this->grav['messages']->add($this->site()->translate('w4os.admin_task_ran', [(string) ($tasks[$id]['label'] ?? $id), (string) ($task['message'] ?? '')]), ($task['status'] ?? '') === 'failed' ? 'error' : 'info');
+        } catch (EngineException $e) {
+            $this->grav['messages']->add($e->getMessage(), 'error');
+        }
+        $this->grav->redirectLangSafe($path, 303);
     }
 
     /**

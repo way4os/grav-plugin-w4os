@@ -6,22 +6,44 @@
     <div class="alert alert-danger" role="alert">{{ service.error }}</div>
 {% elseif service.view %}
     <div class="row row-cards">
-        <div class="{{ service.help ? 'col-lg-8' : 'col-12' }}">
+        <div class="{{ service.help or service.tasks ? 'col-lg-8' : 'col-12' }}">
             <div class="card">
                 <div class="card-body">
                     {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-service') } %}
                 </div>
             </div>
         </div>
-        {% if service.help %}
+        {% if service.help or service.tasks %}
             <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-body">
-                        <ul class="text-secondary mb-0">
-                            {% for key in service.help %}<li>{{ ('w4os.' ~ key)|t }}</li>{% endfor %}
-                        </ul>
+                {% if service.tasks %}
+                    {# The tasks of the service, as w4os-wp shows its parser: when each last ran, what it said, a button to run it now #}
+                    <div class="card mb-3">
+                        <div class="list-group list-group-flush">
+                            {% for task in service.tasks %}
+                                <div class="list-group-item">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="flex-fill">
+                                            <div>{{ task.label ?? task.name }}</div>
+                                            <div class="small text-secondary">{{ task.lastRun ? 'w4os.admin_task_last'|t(task.lastRun|w4os_date('list')) : 'w4os.admin_task_never'|t }}{% if task.message %} · {{ task.message }}{% endif %}</div>
+                                        </div>
+                                        {% if service.run %}
+                                            <form method="post">{{ nonce_field('w4os-task')|raw }}<input type="hidden" name="task" value="{{ task.id|e('html_attr') }}"><button class="btn btn-sm" name="action" value="run_task">{{ 'w4os.admin_task_run'|t }}</button></form>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
+                {% if service.help %}
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="text-secondary mb-0">
+                                {% for key in service.help %}<li>{{ ('w4os.' ~ key)|t }}</li>{% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         {% endif %}
     </div>

@@ -51,7 +51,9 @@ describe('the settings pages of the services of the grid', function () {
         $twig = new Twig\Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/admin-form.html.twig' => '<form id="{{ form.name }}"></form>']), new Twig\Loader\FilesystemLoader(dirname(__DIR__).'/templates')]));
         $twig->addFunction(new Twig\TwigFunction('w4os_service', fn () => $service + ['view' => null, 'error' => null, 'help' => []]));
         $twig->addFunction(new Twig\TwigFunction('forms', fn (string $name) => ['name' => $name]));
+        $twig->addFunction(new Twig\TwigFunction('nonce_field', fn () => '<input type="hidden" name="nonce" value="n">', ['is_safe' => ['html']]));
         $twig->addFilter(new Twig\TwigFilter('t', fn ($key) => "[$key]"));
+        $twig->addFilter(new Twig\TwigFilter('w4os_date', fn ($value) => (string) $value));
 
         return $twig->render('w4os/service.html.twig', []);
     };
@@ -98,5 +100,22 @@ describe('the settings pages of the services of the grid', function () {
             ->and(Site::blockOfPage('guide'))->toBe('destination_guide')
             ->and(Site::blockOfPage('search'))->toBe('search')
             ->and(Site::blockOfPage('account'))->toBeNull();
+    });
+
+    test('the search shows its tasks beside its settings, as w4os-wp its parser: when they last ran, what they said, a button to run them now', function () use ($render) {
+        $tasks = [
+            ['id' => 'friendly_fowl:search-parse', 'name' => 'search-parse', 'scope' => 'friendly_fowl', 'label' => 'Index the regions', 'lastRun' => 1795093084, 'status' => 'ran', 'message' => 'no simulator due'],
+            ['id' => 'other:search-parse', 'name' => 'search-parse', 'scope' => 'other', 'label' => 'Index the regions'],
+            ['id' => 'friendly_fowl:events-parse', 'name' => 'events-parse', 'scope' => 'friendly_fowl', 'label' => 'Read the events', 'lastRun' => null, 'status' => null, 'message' => ''],
+            ['id' => 'friendly_fowl:backup', 'name' => 'backup', 'scope' => 'friendly_fowl', 'label' => 'Back up'],
+        ];
+        $shown = Site::serviceTasks($tasks, 'friendly_fowl', 'search');
+        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
+        $html = $render(['view' => $view, 'tasks' => $shown, 'run' => true]);
+
+        expect(array_column($shown, 'id'))->toBe(['friendly_fowl:search-parse', 'friendly_fowl:events-parse'])
+            ->and(Site::serviceTasks($tasks, 'friendly_fowl', 'economy'))->toBe([])
+            ->and($html)->toContain('Index the regions', 'no simulator due', 'name="task" value="friendly_fowl&#x3A;search-parse"', '[w4os.admin_task_run]')
+            ->and($render(['view' => $view, 'tasks' => $shown, 'run' => false]))->not->toContain('name="task"');
     });
 });

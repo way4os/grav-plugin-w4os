@@ -163,6 +163,18 @@ final class Engine
         return $this->resource($this->call('PATCH', '/settings/'.rawurlencode($group), ['type' => 'settings', 'id' => $group, 'attributes' => $values]));
     }
 
+    /** @return list<array<string,mixed>> the tasks the engine runs now and then, each its id, name, scope (its grid), last run */
+    public function tasks(): array
+    {
+        return array_map(fn (array $task) => self::attributes($task), array_values((array) ($this->call('GET', '/tasks', grid: false)['data'] ?? [])));
+    }
+
+    /** @return array<string,mixed> the task once it ran, as the engine says it */
+    public function runTask(string $id): array
+    {
+        return $this->resource($this->call('POST', '/tasks/'.rawurlencode($id).'/runs', [], grid: false));
+    }
+
     /** @return array<string,mixed> the health of the grid: checked now (refresh), else as the engine last checked it; its level, its time (checkedAt), its groups of rows */
     public function health(bool $refresh = false): array
     {

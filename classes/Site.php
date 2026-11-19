@@ -88,6 +88,28 @@ final class Site
         }
     }
 
+    /** The tasks of the engine a settings page of a service shows beside its form, by their name: the search's parsers. */
+    public const SERVICE_TASKS = ['search' => ['search-parse', 'events-parse']];
+
+    /**
+     * The tasks a settings page of a service shows (SERVICE_TASKS), of the grid of the site, from the engine's tasks.
+     *
+     * @param list<array<string,mixed>> $tasks
+     * @return list<array<string,mixed>>
+     */
+    public static function serviceTasks(array $tasks, string $grid, string $group): array
+    {
+        $names = self::SERVICE_TASKS[$group] ?? [];
+
+        return array_values(array_filter($tasks, fn (array $task) => ($task['scope'] ?? '') === $grid && in_array($task['name'] ?? '', $names, true)));
+    }
+
+    /** Whether the visitor may run a task of the engine now, as the contract says (runTask). */
+    public function canRunTask(): bool
+    {
+        return $this->isManager() && Access::allows($this->openApi()->access('post', '/tasks/{id}/runs'), $this->level());
+    }
+
     /** The block of the helpers a page of the plugin shows (`w4os_block` of pages/<type>.md: guide, destination_guide), null for none. */
     public static function blockOfPage(string $type): ?string
     {
