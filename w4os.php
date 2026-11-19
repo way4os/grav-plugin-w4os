@@ -303,6 +303,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_shortcodes', fn () => Site::SHORTCODES));
         $twig->addFunction(new \Twig\TwigFunction('w4os_creation', fn () => $this->creation()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
@@ -439,7 +440,7 @@ class W4osPlugin extends Plugin
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
         } elseif (isset(Site::ADMIN_OPERATIONS[$type]) && ! $this->site()->canOperation($type)) {
             $this->grav->redirectLangSafe($this->site()->isManager() && isset($routes['dashboard']) ? $routes['dashboard'] : $routes['account']);
-        } elseif (in_array($type, ['dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
+        } elseif (in_array($type, ['dashboard', 'shortcodes', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif ($type === 'settings' && ! $this->site()->canSettings()) {
             $this->grav->redirectLangSafe(isset($routes['dashboard']) && $this->site()->isManager() ? $routes['dashboard'] : $routes['account']);

@@ -138,3 +138,7 @@
 .w4os-admin .w4os-model input:focus-visible + figure { outline: 2px dashed var(--tblr-primary); }
 .w4os-admin .w4os-model img { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: var(--tblr-border-radius); background: var(--tblr-bg-surface-secondary); }
 .w4os-admin .w4os-model figcaption { text-align: center; padding: .3rem 0; }
+/* The page of the shortcodes: the code and what it shows, its preview as wide as it takes, its options */
+.w4os-admin .w4os-shortcode-code { width: 22rem; vertical-align: top; }
+.w4os-admin .w4os-shortcode-preview { vertical-align: top; }
+.w4os-admin .w4os-shortcode-options { width: 22rem; vertical-align: top; }

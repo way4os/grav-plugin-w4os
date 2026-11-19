@@ -316,7 +316,8 @@ final class Site
 
     public const ADMIN_ROUTES = [
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'new' => '/avatars/new', 'regions' => '/regions',
-        'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health', 'settings' => '/settings',
+        'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health',
+        'shortcodes' => '/shortcodes', 'settings' => '/settings',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -554,6 +555,7 @@ final class Site
             'health' => 'w4os.admin_health_title',
             'models' => 'w4os.settings_models',
             'new' => 'w4os.action_new_avatar',
+            'shortcodes' => 'w4os.shortcodes_title',
             default => 'w4os.'.$type.'_title',
         };
     }
@@ -795,7 +797,50 @@ final class Site
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
+        'shortcodes' => ['label' => 'w4os.shortcodes_title', 'icon' => 'ti ti-code'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
+    ];
+
+    /**
+     * The shortcodes of the site and the blocks of the helpers they show, for the page of the shortcodes (as the page Shortcodes of
+     * w4os-wp): the blocks first, in its order, then the shortcodes of the site; each its code, the catalog key of what it shows,
+     * the block it previews, its options (each its catalog key).
+     */
+    public const SHORTCODES = [
+        ['code' => '[w4os block="grid-info" /]', 'help' => 'block_grid_info_help', 'block' => 'grid-info', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="grid-status" /]', 'help' => 'block_grid_status_help', 'block' => 'grid-status', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="profile" /]', 'help' => 'block_profile_help', 'block' => 'profile', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+            ['option' => 'name', 'help' => 'shortcode_option_name'],
+        ]],
+        ['code' => '[w4os block="popular-places" /]', 'help' => 'block_popular_places_help', 'block' => 'popular-places', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="motd" /]', 'help' => 'block_motd_help', 'block' => 'motd', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="destination-guide" /]', 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="search" /]', 'help' => 'block_search_help', 'block' => 'search', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="new-users" /]', 'help' => 'block_new_users_help', 'block' => 'new-users', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os block="directory-info" /]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'options' => [
+            ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+        ]],
+        ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
+        ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],
+        ['code' => '[w4os-register]…[/w4os-register]', 'help' => 'admin_shortcode_register_help', 'options' => []],
+        ['code' => '[w4os text="welcome_title" /]', 'help' => 'admin_shortcode_text_help', 'options' => []],
+        ['code' => '[w4os info="uri" /]', 'help' => 'admin_shortcode_uri_help', 'options' => []],
+        ['code' => '[w4os slogan /]', 'help' => 'admin_shortcode_slogan_help', 'options' => []],
     ];
 
     /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */
