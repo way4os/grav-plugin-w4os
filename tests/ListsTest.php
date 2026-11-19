@@ -81,10 +81,10 @@ describe('a list of the engine', function () {
             ->and($flags['values'][0])->toHaveKey('description');
     });
 
-    test('a page shows the filters it names, in its order', function () use ($document) {
-        $list = Lists::showing((new OpenApi($document))->listOf('avatars'), ['role', 'status', 'nothing']);
+    test('a page shows the filters it names, in its order, then the ones the engine shows as views', function () use ($document) {
+        $list = Lists::showing((new OpenApi($document))->listOf('avatars'), ['role', 'online', 'status', 'nothing']);
 
-        expect(array_column($list['filters'], 'name'))->toBe(['role', 'status']);
+        expect(array_column($list['filters'], 'name'))->toBe(['role', 'online', 'status', 'type', 'active']);
     });
 
     test('builds the query of the engine from the address, what the list allows only', function () use ($document) {
