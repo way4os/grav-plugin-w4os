@@ -34,7 +34,9 @@
     {% set firsts = {requirement: 'w4os.admin_health_extension', folder: 'w4os.admin_health_path', file: 'w4os.admin_health_path', option: 'w4os.admin_health_instance'} %}
     {% for group in data.health.groups ?? [] %}
         <div class="card mb-3 w4os-health-group">
-            <div class="card-header"><h3 class="card-title"><code>{{ group.file }}</code>{% if group.title %} <span class="text-secondary">{{ group.title }}</span>{% endif %}</h3></div>
+            {# The instance the file is of (Robust, a simulator, the money server: the context of its lines), the file, the section #}
+            {% set instance = (group.rows|first).context.instance ?? null %}
+            <div class="card-header"><h3 class="card-title">{% if instance %}<span class="badge bg-secondary-lt">{{ instance }}</span> {% endif %}<code>{{ group.file }}</code>{% if group.title %} <span class="text-secondary">{{ group.title }}</span>{% endif %}</h3></div>
             {# One table for each kind of line of the group, in the order they come #}
             {% set kinds = [] %}
             {% for row in group.rows %}{% set kind = row.kind ?? (row.text is defined ? 'value' : 'address') %}{% if kind not in kinds %}{% set kinds = kinds|merge([kind]) %}{% endif %}{% endfor %}

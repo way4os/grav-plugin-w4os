@@ -124,6 +124,29 @@ describe('the health page of the admin', function () {
             ->and($html)->not->toContain('—');
     });
 
+    test('says each setting in its full context, what to write where it is not set, how to repair an instance', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_health', fn () => ['health' => ['level' => 'error', 'checkedAt' => 1000, 'groups' => [
+            ['file' => 'Robust.HG.ini', 'title' => '[LoginService]', 'rows' => [
+                ['id' => 'g1', 'kind' => 'address', 'label' => 'DestinationGuide', 'level' => 'unset', 'reason' => 'health_unset', 'context' => ['instance' => 'robust', 'file' => 'Robust.HG.ini', 'section' => 'LoginService', 'key' => 'DestinationGuide'], 'expected' => '${Const|WebURL}/guide', 'snippet' => "[LoginService]\n    DestinationGuide = \"\${Const|WebURL}/guide\"", 'checkedAt' => 1000],
+            ]],
+            ['file' => 'options', 'title' => '', 'rows' => [
+                ['id' => 'o1', 'kind' => 'option', 'label' => 'alpha', 'missing' => ['bakes'], 'level' => 'error', 'status' => 'missing: bakes', 'fix' => 'POST /grids/{grid}/options/repair', 'checkedAt' => 1000],
+            ]],
+        ]], 'addresses' => null, 'error' => null, 'refreshError' => null]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => 'now'));
+        $html = $twig->render('w4os/health.html.twig', ['page' => [], 'assets' => new class {
+            public function addJs(string $url, array $options = []): void {}
+        }]);
+
+        // The instance of the file of a group, the full context of each setting as its tip
+        expect($html)->toContain('<span class="badge bg-secondary-lt">robust</span> <code>Robust.HG.ini</code>')
+            ->and($html)->toContain('${Const|WebURL}/guide', '<pre class="mb-0 small"><code>[LoginService]')
+            ->and($html)->toContain('POST /grids/{grid}/options/repair');
+    });
+
     test('says why when the engine does not answer', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_health', fn () => ['health' => null, 'addresses' => null, 'error' => 'The engine API cannot be reached']));

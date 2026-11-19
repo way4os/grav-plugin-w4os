@@ -9,7 +9,9 @@
 {% set no = 'w4os.no'|t %}
 <tr data-check="{{ row.id ?? '' }}" class="w4os-health-{{ row.level|e('html_attr') }}">
     <td class="w-1"><i class="{{ icons[row.level] ?? icons.none }}" title="{{ row.level|e('html_attr') }}" aria-label="{{ row.level|e('html_attr') }}"></i></td>
-    <td{% if row.description ?? false %} title="{{ ('w4os.' ~ row.description)|t|e('html_attr') }}"{% endif %}>
+    {# Its full context as its tip: the instance, the file, the section and the key; then what it is for #}
+    {% set where = row.context ?? null ? [row.context.instance ?? '', row.context.file ?? '', (row.context.section ?? false) ? '[' ~ row.context.section ~ ']' : '', row.context.key ?? '']|filter(p => p)|join(' · ') : '' %}
+    <td{% if where or (row.description ?? false) %} title="{{ ([where, (row.description ?? false) ? ('w4os.' ~ row.description)|t : '']|filter(p => p)|join(' — '))|e('html_attr') }}"{% endif %}>
         <code>{{ row.label }}</code>{% if row.tag ?? false %} <span class="badge bg-secondary-lt">{{ row.tag }}</span>{% endif %}
         {% if row.name ?? false %}<div class="small text-secondary">{{ ('w4os.' ~ row.name)|t }}</div>{% endif %}
         {% if kind in ['folder', 'file'] and row.path ?? false %}<div class="small text-secondary text-break"><code>{{ row.path }}</code></div>{% endif %}
@@ -18,7 +20,11 @@
         <td class="text-break">
             {%- if row.url ?? false %}<a href="{{ row.url|e('html_attr') }}" target="_blank" rel="noopener">{{ row.display ?? row.url }}</a>{% elseif row.reason ?? false %}<span class="text-secondary">{{ ('w4os.' ~ row.reason)|t }}</span>{% endif -%}
         </td>
-        <td>{{ row.expectedStatus ?? '' }}{% if row.expectedLocation ?? false %}<div class="small text-secondary text-break">{{ row.expectedLocation }}</div>{% endif %}</td>
+        <td class="text-break">{{ row.expectedStatus ?? '' }}
+            {%- if row.expectedLocation ?? false %}<div class="small text-secondary">{{ row.expectedLocation }}</div>{% endif -%}
+            {%- if row.expected ?? false %}<div class="small">{{ row.expected }}</div>{% endif -%}
+            {%- if row.snippet ?? false %}<pre class="mb-0 small"><code>{{ row.snippet }}</code></pre>{% endif -%}
+        </td>
         <td>{{ row.status ?? '' }}
             {%- if row.location ?? false %}<div class="small text-secondary text-break">{{ row.location }}</div>{% endif -%}
             {%- if row.detail ?? false %}<div class="small text-secondary">{{ row.detail }}</div>{% endif -%}
@@ -26,7 +32,7 @@
         </td>
     {% elseif kind == 'value' %}
         <td class="text-break">{% if row.text ?? '' %}{{ row.text }}{% elseif row.reason ?? false %}<span class="text-secondary">{{ ('w4os.' ~ row.reason)|t }}</span>{% endif %}</td>
-        <td class="text-break">{{ row.expected ?? '' }}{% if row.snippet ?? false %}<div><code>{{ row.snippet }}</code></div>{% endif %}</td>
+        <td class="text-break">{{ row.expected ?? '' }}{% if row.snippet ?? false %}<pre class="mb-0 small"><code>{{ row.snippet }}</code></pre>{% endif %}</td>
     {% elseif kind == 'secret' %}
         <td>{{ row.set ? yes : no }}{% if not row.set and row.reason ?? false %}<div class="small text-secondary">{{ ('w4os.' ~ row.reason)|t }}</div>{% endif %}</td>
     {% elseif kind == 'requirement' %}
@@ -38,7 +44,7 @@
     {% elseif kind == 'file' %}
         <td>{{ row.readable ? yes : no }}</td>
     {% else %}
-        <td>{{ row.status ?? '' }}{% if row.missing ?? [] %}<div class="small text-secondary">{{ row.missing|join(', ') }}</div>{% endif %}</td>
+        <td>{{ row.status ?? '' }}{% if row.fix ?? false %}<div class="small text-secondary"><code>{{ row.fix }}</code></div>{% endif %}</td>
     {% endif %}
     <td class="w-1 text-end text-secondary text-nowrap w4os-health-when">
         {{- row.ms is defined and row.ms is not null ? row.ms ~ ' ms' : '' -}}
