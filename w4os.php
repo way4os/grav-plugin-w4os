@@ -33,7 +33,7 @@ is_file(__DIR__.'/vendor/autoload.php') && require_once __DIR__.'/vendor/autoloa
  * email), sign in with the Login plugin, manage their account, find a new password; the managers of the grid manage the avatars;
  * the pages show the blocks of the helpers.
  *
- *   Markdown (shortcode-core)   [w4os block="grid-status" /]   [w4os block="profile" name="First.Last" /]
+ *   Markdown (shortcode-core)   [grid-status]   [avatar-profile name="First.Last"]
  *   Twig                        w4os_block('grid-status')      w4os_block('profile', {name: 'First.Last'})
  */
 class W4osPlugin extends Plugin
@@ -362,12 +362,8 @@ class W4osPlugin extends Plugin
 
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
-     * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search]...; [login-uri], [base_url]. The closing slash is
-     * free ([grid-info] or [grid-info /]). The forms of before, kept for the pages that have them:
-     * [w4os block="grid-status" /], [w4os block="profile" name="First.Last" /], [w4os block="search" /]
-     * [w4os text="welcome_title" /]: a text of the language files, the name of the grid in its %s ("Welcome to %s")
-     * [w4os info="uri" /]: the login URI of the grid (host:port), as text to copy
-     * [w4os slogan /]: the slogan of the site (the theme's setting `slogan`), in the language of the page
+     * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri], [base_url],
+     * [grid-name], [site-slogan]. The closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
      * [w4os-home]...[/w4os-home]: the home page of a grid around the text, its blocks beside it where there is room
@@ -375,21 +371,14 @@ class W4osPlugin extends Plugin
     public function onShortcodeHandlers(): void
     {
         $handlers = $this->grav['shortcode']->getHandlers();
-        $handlers->add('w4os', fn ($shortcode) => match (true) {
-            ($text = (string) $shortcode->getParameter('text', '')) !== '' => htmlspecialchars($this->site()->translate('w4os.'.preg_replace('/[^a-z0-9_]/', '', $text), [$this->site()->gridName()])),
-            $shortcode->getParameter('info') === 'uri' => '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>',
-            $shortcode->hasParameter('slogan') => htmlspecialchars($this->site()->slogan()),
-            default => $this->block(
-                (string) $shortcode->getParameter('block', ''),
-                Blocks::shortcodeArgs((array) $shortcode->getParameters()),
-            ),
-        });
         // One shortcode by block, by the names of w4os-wp ([grid-info], [popular-places max=5]); the login URI, the address of the site
         foreach (Site::BLOCK_SHORTCODES as $name => $block) {
             $handlers->add($name, fn ($shortcode) => $this->block($block, Blocks::shortcodeArgs((array) $shortcode->getParameters())));
         }
         $handlers->add('login-uri', fn () => '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>');
         $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
+        $handlers->add('grid-name', fn () => htmlspecialchars($this->site()->gridName()));
+        $handlers->add('site-slogan', fn () => htmlspecialchars($this->site()->slogan()));
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
         $handlers->add('w4os-register', fn ($shortcode) => isset($this->site()->routes()['register']) ? (string) $shortcode->getContent() : '');
         // [w4os-home]...[/w4os-home]: the home page of a grid around its text (templates/w4os/home.html.twig)

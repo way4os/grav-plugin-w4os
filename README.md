@@ -29,11 +29,15 @@ It is one piece of the w4os family:
 The presentation and help pages are plain Markdown files of the site (`user/pages`), with the blocks in them:
 
 ```markdown
-[w4os block="grid-info" /]
-[w4os block="grid-status" /]
-[w4os block="search" /]
-[w4os block="profile" name="First.Last" /]
+[grid-info]
+[grid-status]
+[web-search]
+[avatar-profile name="First.Last"]
+[popular-places max=5]
+[login-uri]
 ```
+
+One shortcode by block, named as in w4os-wp; the closing slash is optional (`[grid-info]` or `[grid-info /]`). The page Shortcodes of the admin lists them all with their options.
 
 In a template: `{{ w4os_block('grid-status') }}`.
 

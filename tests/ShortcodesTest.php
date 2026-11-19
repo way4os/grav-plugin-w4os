@@ -13,24 +13,24 @@ describe('the page of the shortcodes', function () {
             ->and(Site::titleKey('shortcodes'))->toBe('w4os.shortcodes_title');
     });
 
-    test('has one shortcode by block, by the names of w4os-wp and its old ones, and the login URI as [login-uri]', function () {
-        expect(Site::BLOCK_SHORTCODES)->toMatchArray([
-            'grid-info' => 'grid_info', 'gridinfo' => 'grid_info', 'grid-status' => 'grid_status', 'gridstatus' => 'grid_status',
-            'avatar-profile' => 'profile', 'w4os_profile' => 'profile', 'gridprofile' => 'profile', 'popular-places' => 'popular_places',
-            'web-search' => 'search',
-        ])->and(array_keys(Site::BLOCK_SHORTCODES))->not->toContain('profile', 'search');
+    test('has one shortcode by block, by the names of w4os-wp, no other name, and plain shortcodes for the grid and the site', function () {
+        expect(Site::BLOCK_SHORTCODES)->toBe([
+            'grid-info' => 'grid_info', 'grid-status' => 'grid_status', 'avatar-profile' => 'profile', 'popular-places' => 'popular_places',
+            'web-search' => 'search', 'destination-guide' => 'destination_guide', 'new-avatars' => 'new_users', 'directory-info' => 'directory_info',
+            'motd' => 'motd',
+        ]);
     });
 
     test('lists the blocks first, in the order of w4os-wp, each its shortcode without a slash, then the shortcodes of the site', function () {
         $codes = array_column(Site::SHORTCODES, 'code');
 
         expect(array_slice($codes, 0, 5))->toBe(['[grid-info]', '[grid-status]', '[avatar-profile]', '[popular-places]', '[web-search]'])
-            ->and($codes)->toContain('[login-uri]', '[w4os-home]…[/w4os-home]', '[w4os-guest]…[/w4os-guest]', '[w4os-register]…[/w4os-register]')
-            ->and(implode(' ', $codes))->not->toContain('[w4os block=', 'info="uri"', ' /]')
+            ->and($codes)->toContain('[new-avatars]', '[login-uri]', '[grid-name]', '[site-slogan]', '[base_url]', '[w4os-home]…[/w4os-home]', '[w4os-guest]…[/w4os-guest]', '[w4os-register]…[/w4os-register]')
+            ->and(implode(' ', $codes))->not->toContain('[w4os ', '[new-users]', ' /]')
+            ->and(array_merge(...array_column(Site::SHORTCODES, 'aliases')))->toBe([])
             ->and(array_column(Site::SHORTCODES[0]['options'], 'option'))->toBe(['title', 'level=h3'])
             ->and(array_column(Site::SHORTCODES[2]['options'], 'option'))->toContain('name')
-            ->and(array_column(Site::SHORTCODES[3]['options'], 'option'))->toBe(['title', 'level=h3', 'max=5', 'include-hypergrid', 'include-landsales'])
-            ->and(Site::SHORTCODES[0]['aliases'])->toBe(['[gridinfo]']);
+            ->and(array_column(Site::SHORTCODES[3]['options'], 'option'))->toBe(['title', 'level=h3', 'max=5', 'include-hypergrid', 'include-landsales']);
     });
 
     test('shows each one with a short preview and the table of its options', function () {
@@ -46,7 +46,7 @@ describe('the page of the shortcodes', function () {
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/shortcodes.html.twig', []);
 
-        expect($html)->toContain('[w4os.shortcodes_help]', '<code>[grid-info]</code>', '<code class="text-secondary">[gridinfo]</code>', '[w4os.block_grid_info_help]', '<section class="block block-grid-info">grid-info</section>')
+        expect($html)->toContain('[w4os.shortcodes_help]', '<code>[grid-info]</code>', '[w4os.block_grid_info_help]', '<section class="block block-grid-info">grid-info</section>')
             ->and($html)->toContain('[w4os.shortcode_options]', '<code>level=h3</code>', '[w4os.shortcode_option_level]')
             // The search as a page shows it embedded (its form alone), the popular places a few
             ->and($asked['search'])->not->toHaveKey('level')

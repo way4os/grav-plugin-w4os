@@ -144,7 +144,8 @@ describe('the home page of a grid', function () {
 
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
         expect(W4os\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
-            ->and(W4os\Grav\Site::shortcodeBlocks('[w4os block="grid-status" /] and [w4os block="profile" name="A.B" /]'))->toBe(['grid_status', 'profile'])
+            ->and(W4os\Grav\Site::shortcodeBlocks('[grid-status] and [avatar-profile name="A.B" /], [new-avatars]'))->toBe(['grid_status', 'profile', 'new_users'])
+            ->and(W4os\Grav\Site::shortcodeBlocks('[grid-statusbar] [/grid-info]'))->toBe([])
             ->and(W4os\Grav\Site::shortcodeBlocks('No block'))->toBe([]);
     });
 });

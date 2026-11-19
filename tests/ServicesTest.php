@@ -94,9 +94,9 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a service the site handles needs a page of the site that shows its block', function () {
-        expect(Site::holdsBlock('Text [w4os block="destination-guide" /] more', 'destination_guide'))->toBeTrue()
-            ->and(Site::holdsBlock('[w4os block="destination_guide" title="Guide"]', 'destination_guide'))->toBeTrue()
-            ->and(Site::holdsBlock('[w4os block="search" /]', 'destination_guide'))->toBeFalse()
+        expect(Site::holdsBlock('Text [destination-guide] more', 'destination_guide'))->toBeTrue()
+            ->and(Site::holdsBlock('[destination-guide title="Guide" /]', 'destination-guide'))->toBeTrue()
+            ->and(Site::holdsBlock('[web-search]', 'destination_guide'))->toBeFalse()
             ->and(Site::blockOfPage('guide'))->toBe('destination_guide')
             ->and(Site::blockOfPage('search'))->toBe('search')
             ->and(Site::blockOfPage('account'))->toBeNull();
