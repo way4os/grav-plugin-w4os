@@ -15,7 +15,7 @@ function item_twig(array $page = []): Environment
     $api = new OpenApi(Contract::document());
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $twig->addFunction(new TwigFunction('w4os_item', fn () => $page));
-    $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links)));
+    $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links, fixed: $fixed)));
     $twig->addFunction(new TwigFunction('w4os_item_view', fn (array $page) => W4OS\Views\ItemView::of($api->listOf($page['type']) ?? ['columns' => []], $page['item'], $page['groups'] ?? [], W4OS\Views\Rows::actions($page['form'], $page['item']))));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
@@ -74,6 +74,8 @@ describe('the page of an item in the admin', function () {
             ->and($html)->toContain('class="nav-link active" href="&#x3F;id&#x3D;r1&amp;tab&#x3D;parcels" aria-current="page">[w4os.parcels]', 'Plaza', 'href="hop&#x3A;&#x2F;&#x2F;grid.example.org&#x3A;8002&#x2F;Test&#x25;20East&#x2F;128&#x2F;128&#x2F;25"', '1 [w4os.admin_parcels_count]')
             // Its sorts, pages and filters keep the item and the tab
             ->and($html)->toContain('id=r1&amp;tab=parcels')
+            // Not the column of the region, the same in every row (mirrors)
+            ->and($html)->not->toContain('[w4os.column_region]')
             ->and($html)->not->toContain('<div class="datagrid">');
     });
 
