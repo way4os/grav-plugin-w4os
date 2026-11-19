@@ -937,17 +937,8 @@ final class Site
     public function applyThemeFixes(): void
     {
         $theme = (string) $this->grav['config']->get('system.pages.theme');
-        $file = (string) $this->grav['locator']->findResource("config://themes/$theme.yaml");
-        $own = $file === '' ? [] : array_keys(\Grav\Common\Utils::arrayFlattenDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($file)->content()));
-        // A setting the site sets as a whole (a list, a section) counts for what it holds
-        foreach ($own as $key) {
-            for ($dot = strrpos($key, '.'); $dot !== false; $dot = strrpos($key, '.')) {
-                $key = substr($key, 0, $dot);
-                $own[] = $key;
-            }
-        }
         $config = (array) $this->grav['config']->get("themes.$theme", []);
-        foreach (self::themeFixes($theme, $config, array_values(array_unique($own)), fn (string $path) => is_file(GRAV_ROOT.'/'.$path)) as $key => $value) {
+        foreach (self::themeFixes($theme, $config, $this->ownThemeSettings($theme), fn (string $path) => is_file(GRAV_ROOT.'/'.$path)) as $key => $value) {
             $this->grav['config']->set("themes.$theme.$key", $value);
             $this->grav['config']->set("theme.$key", $value);
         }
@@ -1162,8 +1153,32 @@ final class Site
             }
             $files = (array) ($brand[$setting] ?? []);
             $source = $files === [] ? null : GRAV_ROOT.'/'.ltrim((string) (reset($files)['path'] ?? ''), '/');
-            self::brandOver($source !== null && is_file($source) ? $source : null, "$folder/$file", $this->keptFiles($theme)."/$file");
+            // A file of a stream of the site (Hypertext's image://favicon/favicon.png, the site's images), else of the theme
+            $target = str_contains($file, '://') ? (string) $this->grav['locator']->findResource($file, true, true) : "$folder/$file";
+            $kept = $this->keptFiles($theme).'/'.str_replace('://', '/', $file);
+            $target === '' || self::brandOver($source !== null && is_file($source) ? $source : null, $target, $kept);
         }
+        // The options that show it (Hypertext's structure.use_favicon), for what the site has
+        $given = array_keys(array_filter($brand, fn ($files) => is_array($files) && $files !== []));
+        foreach (self::brandSettings($theme, $given, $this->ownThemeSettings($theme)) as $key => $value) {
+            $this->grav['config']->set("themes.$theme.$key", $value);
+            $this->grav['config']->set("theme.$key", $value);
+        }
+    }
+
+    /** The settings (dotted) the site's own configuration of a theme has, and the sections that hold them. */
+    private function ownThemeSettings(string $theme): array
+    {
+        $file = (string) $this->grav['locator']->findResource("config://themes/$theme.yaml");
+        $own = $file === '' ? [] : array_keys(\Grav\Common\Utils::arrayFlattenDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($file)->content()));
+        foreach ($own as $key) {
+            for ($dot = strrpos($key, '.'); $dot !== false; $dot = strrpos($key, '.')) {
+                $key = substr($key, 0, $dot);
+                $own[] = $key;
+            }
+        }
+
+        return array_values(array_unique($own));
     }
 
     /**
@@ -1204,8 +1219,29 @@ final class Site
     /** The files a theme takes its logo or its favicon from by a fixed name (no field for them): the place the brand goes. */
     public const FIXED_BRAND_FILES = [
         'logo' => ['images/logo.png', 'images/logo.svg', 'img/logo.png'],
-        'favicon' => ['images/favicon.png', 'images/favicon.ico', 'img/favicon.png', 'img/favicon.ico'],
+        'favicon' => ['images/favicon.png', 'images/favicon.ico', 'img/favicon.png', 'img/favicon.ico', 'image://favicon/favicon.png'],
     ];
+
+    /** The options of a theme that show what the brand of the site gives it (Hypertext shows its fixed favicon when told to). */
+    public const BRAND_SETTINGS = ['hypertext' => ['favicon' => ['structure.use_favicon' => true]]];
+
+    /**
+     * The options of a theme to turn on with the brand of the site (BRAND_SETTINGS), for what the site has (logo, favicon), unless
+     * the site set them itself.
+     *
+     * @param list<string> $has what of the brand the site has: logo, favicon
+     * @param list<string> $own the settings (dotted) the site's own configuration of the theme has
+     * @return array<string,mixed>
+     */
+    public static function brandSettings(string $theme, array $has, array $own): array
+    {
+        $settings = [];
+        foreach (self::BRAND_SETTINGS[$theme] ?? [] as $setting => $values) {
+            in_array($setting, $has, true) && $settings += $values;
+        }
+
+        return array_diff_key($settings, array_flip($own));
+    }
 
     /**
      * The files a theme takes its logo and its favicon from by a fixed name: the first of FIXED_BRAND_FILES its templates name.

@@ -28,4 +28,18 @@ describe('the settings the plugin gives a theme', function () {
 
         expect($fixes)->not->toHaveKey('custommenus.enabled')->not->toHaveKey('custom_logo')->toHaveKey('favicon');
     });
+
+    test('give Hypertext the favicon of the site where it takes it (the site\'s images, image://favicon/favicon.png), its option on', function () {
+        $root = sys_get_temp_dir().'/w4os-hypertext-'.bin2hex(random_bytes(4));
+        mkdir("$root/templates/partials", 0777, true);
+        file_put_contents("$root/templates/partials/base.html.twig", '<link rel="icon" href="{{ url(\'image://favicon/favicon.png\') }}">');
+
+        expect(Site::fixedBrandFiles($root))->toBe(['favicon' => 'image://favicon/favicon.png'])
+            ->and(Site::brandSettings('hypertext', ['favicon'], []))->toBe(['structure.use_favicon' => true])
+            ->and(Site::brandSettings('hypertext', ['favicon'], ['structure.use_favicon']))->toBe([])
+            ->and(Site::brandSettings('hypertext', [], []))->toBe([])
+            ->and(Site::brandSettings('quark2', ['favicon'], []))->toBe([]);
+        exec('rm -rf '.escapeshellarg($root));
+    });
 });
+

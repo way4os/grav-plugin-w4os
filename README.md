@@ -83,8 +83,8 @@ avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 
   entries under my avatar in its menu: a visitor signs in from the link of the registration page, a resident signs out from the
   account page.
 - **Apple Notes** has no menu: its column lists the pages beside the one shown, by their titles, without their children.
-- **Hypertext** is plain HTML, no styles of its own; its favicon has a fixed name (the settings page says it shows none of the
-  site's).
+- **Hypertext** is plain HTML, no styles of its own; it takes its favicon from the site's images (`user/images/favicon/favicon.png`,
+  its option `structure.use_favicon`): the site's is put there and the option turned on, unless the site set it itself.
 - **Quark Photofolio** lists the sections of the page shown, not the pages of the site: it has no menu of the site.
 - **Saturn**, unmaintained since 2021, has no logo field and its search bar needs a plugin of its own.
 
