@@ -348,8 +348,10 @@ w4os:
   column_region_name: 'Nom de la région'
   column_presence: Présence
   column_prims: Prims
+  column_usage: Usage
   column_scripts: Scripts
   column_internal_port: 'Port Interne'
+  internal_port_help: "Ce n'est pas un port public : il doit seulement être unique sur la machine de son simulateur."
   last_activity: 'Dernière activité'
   column_size: Taille
   column_owner: Propriétaire
@@ -667,7 +669,7 @@ w4os:
   kind_backup: Sauvegarde
   column_area: Surface
   unit_km2: '%s km²'
-  unit_dimensions: '%1$s × %2$s m'
+  unit_dimensions: '%1$s x %2$s'
   unit_mb: '%s Mo'
   unit_percent: '%s %%'
   usage_of: '%1$s sur %2$s'

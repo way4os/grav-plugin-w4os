@@ -348,8 +348,10 @@ w4os:
   column_region_name: "Enw'r Rhanbarth"
   column_presence: Presenoldeb
   column_prims: Prims
+  column_usage: Defnydd
   column_scripts: Sgriptiau
   column_internal_port: 'Porth Mewnol'
+  internal_port_help: 'Nid porth cyhoeddus: dim ond ar beiriant ei efelychydd y mae angen iddo fod yn unigryw.'
   last_activity: 'Diweddaraeth Ola'
   column_size: Maint
   column_owner: Perchennog
@@ -667,7 +669,7 @@ w4os:
   kind_backup: 'Copi wrth gefn'
   column_area: Arwynebedd
   unit_km2: '%s km²'
-  unit_dimensions: '%1$s × %2$s m'
+  unit_dimensions: '%1$s x %2$s'
   unit_mb: '%s MB'
   unit_percent: '%s %%'
   usage_of: '%1$s o %2$s'
