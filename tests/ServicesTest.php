@@ -34,7 +34,7 @@ describe('the settings pages of the services of the grid', function () {
 
     test('a database as its parts, its password never filled in', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
-        $item = ['searchUrl' => 'https://play.example.org/query.php', 'dataServices' => ['https://a.example.org/register.php'], 'eventsUrl' => '',
+        $item = ['provide' => true, 'searchUrl' => 'https://play.example.org/query.php', 'dataServices' => ['https://a.example.org/register.php'], 'eventsUrl' => '',
             'searchDatabase' => ['host' => 'db.example.org', 'port' => 3306, 'database' => 'search', 'user' => 'os', 'password' => '********']];
         $fields = Items::fields(FormView::of($form, $item, null, true, 250), shown: true);
         $database = $fields['searchDatabase'];
@@ -43,6 +43,15 @@ describe('the settings pages of the services of the grid', function () {
             ->and(array_keys($database['fields']))->toBe(['searchDatabase.useDefault', 'searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
             ->and($database['fields']['searchDatabase.port'])->toMatchArray(['type' => 'number', 'placeholder' => '3306', 'label' => 'w4os.db_port'])
             ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password']);
+    });
+
+    test('a database its values hide is hidden whole, its legend with its parts, and found by the script of the form', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $fields = Items::fields(FormView::of($form, ['provide' => false, 'economyModule' => 'BetaGridLikeMoneyModule'], null, true, 250), shown: true);
+
+        expect($fields['gloebitDatabase'])->toMatchArray(['type' => 'fieldset', 'id' => 'w4os-field-gloebitDatabase', 'classes' => 'form-fieldset w4os-unmet'])
+            ->and($fields['gloebitDatabase'])->not->toHaveKey('outerclasses')
+            ->and((string) file_get_contents(dirname(__DIR__).'/js/conditions.js'))->toContain('w4os-field-${name}');
     });
 
     $render = function (array $service) {

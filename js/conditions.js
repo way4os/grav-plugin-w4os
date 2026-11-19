@@ -24,6 +24,8 @@ document.querySelectorAll('form[data-w4os-conditions]').forEach((form) => {
         Object.entries(conditions).forEach(([name, condition]) => {
             const met = Object.entries(condition).every(([on, expected]) => values(on).some((value) => expected.map(String).includes(value)));
             inputs(name).forEach((input) => input.closest('.form-field')?.classList.toggle('w4os-unmet', !met));
+            // A database: its fieldset, whole
+            form.querySelectorAll(`[id="w4os-field-${name}"]`).forEach((fieldset) => fieldset.classList.toggle('w4os-unmet', !met));
             // The lines of the files of the grid a field takes, shown with it
             form.querySelectorAll(`.w4os-snippet-for-${name}`).forEach((snippet) => snippet.classList.toggle('w4os-unmet', !met));
         });

@@ -40,8 +40,8 @@ final class Items
                 foreach ($input['fields'] ?? [] as $name => $part) {
                     $input['fields'][$name] = ['disabled' => true] + array_diff_key($part, ['validate' => 1]);
                 }
-                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => $reason] + $input
-                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+                $input = ['disabled' => true, 'help' => $reason] + $input;
+                $groups[$field['group']][$field['name']] = FormView::met($field, $view->item) ? $input : self::hidden($input);
                 $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => self::snippetLabel(['file' => (string) ($line['file'] ?? '')], $translate),
                     'content' => "```ini\n".rtrim((string) ($line['text'] ?? ''))."\n```", 'markdown' => true,
                     'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
@@ -62,12 +62,12 @@ final class Items
                     if (($input['validate'] ?? null) === []) {
                         unset($input['validate']);
                     }
-                    $input['outerclasses'] = 'w4os-unmet';
+                    $input = self::hidden($input);
                 }
                 $groups[$field['group']][$field['name']] = $input;
             } elseif (in_array($field['name'], $readOnly, true)) {
-                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1])
-                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+                $input = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1]);
+                $groups[$field['group']][$field['name']] = FormView::met($field, $view->item) ? $input : self::hidden($input);
             } else {
                 continue;
             }
@@ -96,6 +96,24 @@ final class Items
         }
 
         return $fields + ($groups[$shown[0]['name'] ?? ''] ?? []);
+    }
+
+    /**
+     * An input hidden for now (shown by the script of the form as the values change): a field, its line; a fieldset (a database),
+     * whole.
+     *
+     * @param array<string,mixed> $input
+     * @return array<string,mixed>
+     */
+    private static function hidden(array $input): array
+    {
+        if (($input['type'] ?? '') === 'fieldset') {
+            $input['classes'] = trim(($input['classes'] ?? '').' w4os-unmet');
+
+            return $input;
+        }
+
+        return ['outerclasses' => 'w4os-unmet'] + $input;
     }
 
     /**
@@ -244,7 +262,7 @@ final class Items
                     + (isset($field['fallback']) ? ['outerclasses' => 'w4os-fallback-of-'.$field['name']] : []);
             }
 
-            return ['type' => 'fieldset', 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
+            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
         }
         // A path on the address of the site, which is not changed here
         if ($field['type'] === 'path') {
