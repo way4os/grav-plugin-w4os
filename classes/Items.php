@@ -15,16 +15,16 @@ final class Items
      * The fields of the form of an item for Grav's Form plugin, from its form for the viewer (w4os-views FormView): the fields it
      * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden; the ones
      * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed. With
-     * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable; a help of several points
-     * said in full with `translate`, a path on the address it is under (`base`: the one, or by name, `site` and `helpers`).
+     * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable; the tip of a field under its
+     * label, its details (several points said in full with `translate`) under it, a path on the address it is under (`base`: the
+     * one, meta.service.prefix, or by name, `site` and `helpers`).
      *
      * @param ?\Closure(string): string $translate the text of a key of the catalog
-     * @param array<string,list<array{file: ?string, text: string}>> $snippets the lines of the files of the grid a field shows, by field
      * @param array<string,array{reason: string|array<string,mixed>, file: ?string, text: string}> $fixed the settings this site cannot write, by field: why (a notice of the engine),
      *     and the line to add by hand in that file (meta.fixed of the engine)
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string|array $base = '', array $snippets = [], array $fixed = []): array
+    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string|array $base = '', array $fixed = []): array
     {
         $changed = array_column($view->fields, 'name');
         $readOnly = $shown ? array_column($view->shown, 'name') : [];
@@ -71,18 +71,6 @@ final class Items
             } else {
                 continue;
             }
-            // The lines of the files of the grid it takes, under it, as w4os-wp shows them; an example (no file) after the settings
-            foreach (array_values((array) ($snippets[$field['name']] ?? [])) as $i => $snippet) {
-                $example = ($snippet['file'] ?? null) === null;
-                $show = ['type' => 'display', 'label' => self::snippetLabel($snippet, $translate),
-                    'content' => "```".($example ? '' : 'ini')."\n".rtrim((string) ($snippet['text'] ?? ''))."\n```", 'markdown' => true,
-                    'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
-                $name = $field['name'].'_snippets'.($i ? "_$i" : '');
-                $example ? $examples[$field['group']][$name] = $show : $groups[$field['group']][$name] = $show;
-            }
-        }
-        foreach ($examples ?? [] as $group => $shown) {
-            $groups[$group] = ($groups[$group] ?? []) + $shown;
         }
         $fields = ['id' => ['type' => 'hidden']];
         $shown = array_values(array_filter((array) ($view->form['groups'] ?? []), fn ($group) => isset($groups[$group['name']])));
@@ -248,6 +236,8 @@ final class Items
     public static function input(array $field, ?\Closure $translate = null, string|array $base = ''): array
     {
         $help = self::help($field, $translate);
+        // A few words under the label where it is not enough, its details (its help) under the field
+        $words = (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []) + ($help === null ? [] : ['description' => $help]);
         // A note: its points as text, no input
         if ($field['type'] === 'note') {
             return ['type' => 'display', 'label' => 'w4os.'.$field['label'], 'content' => $help ?? '', 'markdown' => true];
@@ -262,13 +252,19 @@ final class Items
                     + (isset($field['fallback']) ? ['outerclasses' => 'w4os-fallback-of-'.$field['name']] : []);
             }
 
-            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
+            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts]
+                + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []);
         }
-        // A path on the address of the site, which is not changed here
+        // A path on the address it is under, which is not changed here, ending with the slash the path never starts with
         if ($field['type'] === 'path') {
             $under = is_array($base) ? (string) ($base[$field['base'] ?? 'site'] ?? '') : $base;
 
-            return ['type' => 'w4os_path', 'base' => rtrim($under, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
+            return ['type' => 'w4os_path', 'base' => rtrim($under, '/').'/', 'label' => 'w4os.'.$field['label']] + $words;
+        }
+        // Several addresses (the registers of other search engines): a list, one by line of its own
+        if (! empty($field['multiple']) && $field['type'] === 'url' && empty($field['readOnly'])) {
+            return ['type' => 'array', 'value_only' => true, 'label' => 'w4os.'.$field['label']]
+                + (isset($field['placeholder']) ? ['placeholder_value' => self::placeholder((string) $field['placeholder'])] : []) + $words;
         }
         // Several addresses the options of the grid set: one by line
         ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';
@@ -300,10 +296,16 @@ final class Items
         $validate = ($input['validate'] ?? []) + $validate;
 
         // A placeholder is a text of the catalog, or an example as it is (an address, a file, a port)
-        isset($field['placeholder']) && $input['placeholder'] = preg_match('/^[a-z][a-z0-9_]*$/', (string) $field['placeholder']) === 1 ? 'w4os.'.$field['placeholder'] : (string) $field['placeholder'];
+        isset($field['placeholder']) && $input['placeholder'] = self::placeholder((string) $field['placeholder']);
 
         // The pictures of the models say their help themselves
-        return $input + ['label' => 'w4os.'.$field['label']] + ($help !== null && $input['type'] !== 'w4os_models' ? ['help' => $help] : []) + ($validate === [] ? [] : ['validate' => $validate]);
+        return $input + ['label' => 'w4os.'.$field['label']] + ($input['type'] !== 'w4os_models' ? $words : []) + ($validate === [] ? [] : ['validate' => $validate]);
+    }
+
+    /** A placeholder: a text of the catalog (its key), or an example as it is (an address, a file, a port). */
+    private static function placeholder(string $placeholder): string
+    {
+        return preg_match('/^[a-z][a-z0-9_]*$/', $placeholder) === 1 ? 'w4os.'.$placeholder : $placeholder;
     }
 
     /**

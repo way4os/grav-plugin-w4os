@@ -54,4 +54,13 @@
             <div class="card-body"><pre class="mb-0">{{ example.text }}</pre></div>
         </div>
     {% endfor %}
+    {# The lines of the files of the grid the page needs, for the values saved: one block for each file, its name before it #}
+    {% for snippet in service.meta.snippets ?? [] %}
+        <div class="card mt-3 w4os-snippet">
+            <div class="card-body">
+                <div class="small text-secondary mb-2"><i class="ti ti-file-text" aria-hidden="true"></i> {{ snippet.file }}</div>
+                <pre class="mb-0">{{ snippet.text }}</pre>
+            </div>
+        </div>
+    {% endfor %}
 {% endif %}

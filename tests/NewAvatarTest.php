@@ -22,7 +22,7 @@ describe('the page that makes an avatar', function () {
         $fields = Items::fields(FormView::of($form, [], null, true, 200));
 
         expect(array_keys($fields))->toBe(['id', 'firstName', 'lastName', 'email', 'password', 'model'])
-            ->and($fields['firstName'])->toMatchArray(['type' => 'text', 'label' => 'w4os.first_name', 'help' => 'w4os.first_name_help', 'maxlength' => 32])
+            ->and($fields['firstName'])->toMatchArray(['type' => 'text', 'label' => 'w4os.first_name', 'description' => 'w4os.first_name_help', 'maxlength' => 32])
             ->and($fields['firstName']['validate'])->toMatchArray(['required' => true, 'pattern' => '[A-Za-z][A-Za-z0-9]*'])
             ->and($fields['email'])->toMatchArray(['type' => 'email'])
             ->and($fields['email'])->not->toHaveKey('validate')

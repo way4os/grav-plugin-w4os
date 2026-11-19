@@ -80,24 +80,33 @@ describe('the settings pages of the services of the grid', function () {
             array_walk_recursive($fields, fn ($value) => expect(is_scalar($value) || $value === null)->toBeTrue());
         }
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
-        $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'path' => '/helpers'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org');
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'path' => 'helpers'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org/');
 
-        expect($fields['path'])->toMatchArray(['type' => 'w4os_path', 'base' => 'http://grid.example.org', 'help' => '[economy_helper_uri_help]'])
+        expect($fields['path'])->toMatchArray(['type' => 'w4os_path', 'base' => 'http://grid.example.org/', 'help' => 'w4os.tip_economy_url', 'description' => '[economy_helper_uri_help]'])
             ->and($fields['gloebitConfiguration'])->toMatchArray(['type' => 'display', 'label' => 'w4os.gloebit_configuration'])
             ->and($fields['gloebitConfiguration']['content'])->toContain('[gloebit_help_crash] [gloebit_help_linux]');
     });
 
-    test('shows Provide as a switch, and under a field the lines of the files of the grid it takes', function () {
+    test('shows Provide as a switch', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
-        $snippets = ['path' => [['file' => 'Robust.HG.ini', 'text' => "[GridInfoService]\n    economy = http://grid.example.org/helpers"]]];
-        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/helpers'], null, true, 250), shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', snippets: $snippets);
-        $names = array_keys($fields);
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => 'helpers'], null, true, 250), shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org/');
 
         expect($fields['provide'])->toMatchArray(['type' => 'checkbox'])
             ->and($fields['provide']['wrapper_classes'] ?? '')->toContain('form-switch')
-            ->and($names[array_search('path', $names, true) + 1])->toBe('path_snippets')
-            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'w4os.snippet_ini', 'markdown' => true])
-            ->and($fields['path_snippets']['content'])->toContain("```ini\n[GridInfoService]\n    economy = http://grid.example.org/helpers\n```");
+            ->and(array_filter(array_keys($fields), fn ($name) => str_contains($name, 'snippets')))->toBe([]);
+    });
+
+    test('shows the lines of the files of the grid at the end of the page, one block for each file, preceded by its name alone', function () use ($render) {
+        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('search'), [], null, true, 250);
+        $html = $render(['view' => $view, 'meta' => ['snippets' => [
+            ['file' => 'OpenSim.ini', 'text' => "[Search]\n    SearchURL = http://grid.example.org/helpers/query.php"],
+            ['file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    SearchURL = http://grid.example.org/search/"],
+        ]]]);
+
+        expect($html)->toContain('OpenSim.ini</div>', "<pre class=\"mb-0\">[Search]\n    SearchURL = http://grid.example.org/helpers/query.php</pre>", 'Robust.HG.ini</div>')
+            ->and(strpos($html, 'OpenSim.ini'))->toBeGreaterThan(strpos($html, '<form id="w4os-service">'))
+            ->and(strpos($html, 'Robust.HG.ini'))->toBeGreaterThan(strpos($html, 'OpenSim.ini'))
+            ->and($html)->not->toContain('snippet_ini');
     });
 
     test('a service the site handles needs a page of the site that shows its block', function () {
@@ -176,15 +185,31 @@ describe('the settings pages of the services of the grid', function () {
             ->and($template)->toContain('forms/fields/text/text.html.twig');
     });
 
-    test('names the lines of a file as the engine names them, and a path on the base the engine says (the site, or its helpers)', function () {
+    test('a path is under the address the engine says (meta.service.prefix), ending with the slash its value never starts with', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
-        $snippets = ['path' => [['label' => 'snippet_ini', 'file' => 'OpenSim.ini', 'text' => "[Search]\n    SearchURL = http://grid.example.org/helpers/query.php"]]];
-        $texts = ['w4os.snippet_ini' => 'Lines to add to %s'];
-        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/query.php'], null, true, 250), shown: true, translate: fn ($key) => $texts[$key] ?? $key,
-            base: ['site' => 'http://grid.example.org', 'helpers' => 'http://grid.example.org/helpers'], snippets: $snippets);
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => 'query.php'], null, true, 250), shown: true, base: 'http://grid.example.org/helpers/');
 
-        expect($fields['path_snippets']['label'])->toBe('Lines to add to OpenSim.ini')
-            ->and($fields['path']['base'])->toBe('http://grid.example.org/helpers');
+        expect($fields['path']['base'])->toBe('http://grid.example.org/helpers/')
+            ->and(Items::fields(FormView::of($form, ['provide' => true], null, true, 250), shown: true, base: ['site' => 'http://grid.example.org', 'helpers' => 'http://grid.example.org/helpers'])['path']['base'])
+            ->toBe('http://grid.example.org/helpers/');
+    });
+
+    test('a database says its tip under its legend', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $fields = Items::fields(FormView::of($form, ['provide' => true], null, true, 250), shown: true);
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/fieldset/w4os-admin-fieldset.html.twig');
+
+        expect($fields['searchDatabase'])->toMatchArray(['type' => 'fieldset', 'help' => 'w4os.tip_search_database'])
+            ->and($template)->toContain('<legend>', 'field.help', 'form-hint');
+    });
+
+    test('the registers of other search engines as a list of addresses, one by line of their own', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'registers' => ['https://2do.directory/register.php']], null, true, 250), shown: true);
+
+        expect($fields['registers'])->toMatchArray(['type' => 'array', 'value_only' => true, 'label' => 'w4os.search_registers', 'help' => 'w4os.tip_search_registers'])
+            ->and(FormView::of($form, ['provide' => true, 'registers' => []], null, true, 250)->changes(['registers' => ['https://2do.directory/register.php', ' ']]))
+            ->toMatchArray(['registers' => ['https://2do.directory/register.php']]);
     });
 
     test('shows the examples of a page at its bottom, apart from its settings', function () use ($render) {

@@ -87,8 +87,9 @@
    their content fits them, never past the card */
 .w4os-settings-main, .w4os-admin .form-field.row > [class*="col-"] { min-width: 0; }
 .w4os-settings fieldset { border: 0; margin: 0; padding: 0; }
-/* The help of a field, in small under its label */
+/* The tip of a field, in small under its label; its details under the field */
 .w4os-admin .form-label .form-hint { display: block; margin-top: .15rem; font-size: .85em; font-weight: 400; }
+.w4os-admin .form-description { display: block; margin-top: .25rem; font-size: .85em; color: var(--tblr-secondary); }
 /* A theme without a picture in the gallery of the settings: a neutral card of the same size */
 /* The gallery of the themes: as many cards a row as the width of the field holds */
 .w4os-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: .5rem; }
