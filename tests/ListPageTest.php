@@ -55,12 +55,17 @@ describe('the list of a page of the admin', function () {
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
     });
 
-    test('folds the values of a group one by one under the name, each with its label, until its column shows', function () {
+    test('folds the values of a group one by one under the name, until its column shows', function () {
+        $counts = ['columns' => [['name' => 'name', 'type' => 'text', 'priority' => 1], ['name' => 'usage', 'label' => 'column_usage', 'type' => 'group', 'priority' => 2, 'parts' => [
+            ['name' => 'avatars', 'label' => 'column_presence', 'type' => 'number', 'count' => 'count_avatars_short', 'bare' => true],
+            ['name' => 'prims', 'label' => 'column_prims', 'type' => 'number', 'count' => 'count_prims', 'bare' => true],
+        ]]]];
+        $html = render_list($counts, [['uuid' => 's1', 'name' => 'Plaza', 'avatars' => 1, 'prims' => 2150]], ['total' => 1]);
         $regions = (new OpenApi(Contract::document()))->listOf('regions');
-        $html = render_list($regions, [['uuid' => 'r1', 'name' => 'Plaza', 'avatars' => 1, 'prims' => 2150, 'location' => '8015, 8012', 'size' => 256]], ['total' => 1]);
+        $place = render_list($regions, [['uuid' => 'r1', 'name' => 'Plaza', 'location' => '8015, 8012', 'size' => 256]], ['total' => 1]);
 
         expect($html)->toContain('<span class="d-md-none">1 items</span><span class="d-md-none">2150 items</span>')
-            ->and($html)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xl-none">[w4os.unit_dimensions:256|256]</span>')
+            ->and($place)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xl-none">[w4os.unit_dimensions:256|256]</span>')
             ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 

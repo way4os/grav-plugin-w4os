@@ -110,12 +110,18 @@ describe('templates', function () {
 
         // Several values in one column (a group): each alone, one under the other, a count said as its text (3 prims), an empty one left out
         $regions = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name');
-        $usage = $cell->render(['column' => $regions['usage'], 'item' => ['avatars' => 0, 'prims' => 2150]]);
+        $counts = ['name' => 'usage', 'type' => 'group', 'bare' => true, 'parts' => [
+            ['name' => 'avatars', 'label' => 'column_presence', 'type' => 'number', 'count' => 'count_avatars_short', 'bare' => true],
+            ['name' => 'prims', 'label' => 'column_prims', 'type' => 'number', 'count' => 'count_prims', 'bare' => true],
+        ]];
+        $usage = $cell->render(['column' => $counts, 'item' => ['avatars' => 0, 'prims' => 2150]]);
         expect($usage)->toContain('<div class="w4os-group"><div>count:w4os.count_avatars_short:0</div><div>count:w4os.count_prims:2150</div></div>')
-            ->and($usage)->not->toContain('count_scripts')
+            ->and($cell->render(['column' => $counts, 'item' => ['avatars' => 1]]))->not->toContain('count_prims')
             ->and($cell->render(['column' => $regions['place'], 'item' => ['location' => '8015, 8012', 'size' => 256]]))
             ->toContain('<div class="w4os-group"><div>8015, 8012</div><div>[w4os.unit_dimensions:256|256]</div></div>')
-            ->and($cell->render(['column' => $regions['usage'], 'item' => []]))->not->toContain('w4os-group');
+            ->and($cell->render(['column' => $counts, 'item' => []]))->not->toContain('w4os-group')
+            // A count in a column of its own (the prims of a region)
+            ->and($cell->render(['column' => $regions['prims'], 'item' => ['prims' => 2150]]))->toContain('count:w4os.count_prims:2150');
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
