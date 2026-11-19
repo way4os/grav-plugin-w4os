@@ -781,8 +781,5 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: Flux
-  admin_flux_title: 'Flux Posts'
-  admin_flux_search: 'Search Flux Posts'
-  admin_flux_none: 'No Flux Posts found'
-  admin_flux_count: '%d Flux Posts'
+  admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
+  admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'

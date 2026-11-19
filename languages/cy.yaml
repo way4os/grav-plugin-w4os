@@ -107,14 +107,14 @@ w4os:
   economy_helper_uri_help: 'Rhaid gosod yr URL yng nghyfluniad Robust.'
   economy_help_helpers: "Mae cynorthwywyr economi yn sgriptiau ychwanegol sydd eu hangen os ydych chi'n gweithredu economi ar eich grid (gydag arian cyfred go iawn neu ffug)."
   economy_help_scripts: "Mae sgriptiau cynorthwywyr yn caniatáu cyfathrebu rhwng y gweinydd arian a'r grid: diweddariad balans cyfredol, amcangyfrif cost arian cyfred, gwerthu tir a gwrthrychau, taliadau ..."
-  economy_help_module: 'This plugin only provides the web helpers required by the money server module. A third-party module must be installed and configured on the simulator, for example:'
+  economy_help_module: 'Dim ond yr helpers gwe sydd eu hangen ar fodiwl y gweinydd arian y mae’r ategyn hwn yn eu darparu. Rhaid gosod a chyflunio modiwl trydydd parti ar yr efelychydd, er enghraifft:'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: "Gellir lawrlwytho deuaidd parod i'w defnyddio a ffeiliau ffurfweddu enghreifftiol yma: github.com/magicoli/opensim-helpers"
   gloebit_configuration: 'Ffurfweddiad Gloebit'
   gloebit_help_crash: "Rhaid cyflunio modiwl Gloebit cyn ailgychwyn y rhanbarth, neu fe allai chwalu'r efelychydd."
   gloebit_help_linux: "Ar gyfer Linux, gweler README-Gloebit.md (github.com/magicoli/opensim-helpers) i osgoi gwallau sy'n ymwneud â thystysgrifau."
   gloebit_help_register: 'Cofrestrwch gyfrif neu cysylltwch ar gloebit.com a dilynwch y cyfarwyddiadau ar dev.gloebit.com i sefydlu ap ar gyfer eich grid/efelychydd.'
-  gloebit_help_config: "Add Gloebit configuration in OpenSim.ini.\n\n在OpenSim.ini中添加Gloebit"
+  gloebit_help_config: 'Ychwanegwch gyfluniad Gloebit yn OpenSim.ini.'
   gloebit_help_dll: "Lawrlwythwch y dll diweddaraf i'ch plygell bin/ OpenSimulator (ailenwch ef yn Gloebit.dll), o github.com/GuduleLapointe/opensim-debian neu dev.gloebit.com"
   money_script_access_key: 'Allwedd Mynediad Sgript Arian'
   money_script_access_key_help: "Dewiswch allwedd mynediad unigryw a'i osod yn MoneyServer.ini"
@@ -417,14 +417,14 @@ w4os:
   setting_currency_rate_per: 'Unedau arian fesul cyfradd'
   setting_gloebit_threshold: 'Trothwy trosi Gloebit'
   setting_podex_message: 'Neges ailgyfeirio Podex'
-  setting_podex_url: 交换传送URL
+  setting_podex_url: 'URL teleportio i’r gyfnewidfa'
   podex_message_placeholder: 'Defnyddiwch ein terfynellau yn y byd i fwrw ymlaen. Cliciwch OK i deleportio i ardal Cyfnewid Podex.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: "Gweinydd asedau gwe'r grid pan nad yw'n un yr helpers: mae'n trosi lluniau'r byd (JPEG 2000) ar gyfer y we."
   offline_module_v1: 'Gan yr helpers (V1)'
   offline_module_v2: 'Gan Robust (V2)'
   db_host: 'Enw gwesteiwr'
-  db_port: 港口
+  db_port: Porth
   db_name: "Enw'r gronfa ddata"
   db_user: Defnyddiwr
   db_password: Cyfrinair
@@ -597,7 +597,7 @@ w4os:
   asset_material: Defnydd
   error_required: 'Llenwch bob maes os gwelwch yn dda.'
   error_password_match: 'Nid yw’r ddau gyfrinair yr un fath.'
-  error_terms: 'You must agree to the terms on page %s.'
+  error_terms: 'Rhaid i chi gytuno i’r telerau ar dudalen %s.'
   error_current_password: 'Mae’r cyfrinair presennol yn anghywir.'
   error_forbidden: 'Nid yw hyn wedi’i ganiatáu.'
   error_nonce: 'Mae’r dudalen hon wedi dod i ben, rhowch gynnig arall arni.'
@@ -781,8 +781,5 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: Flux
-  admin_flux_title: 'Flux Posts'
-  admin_flux_search: 'Search Flux Posts'
-  admin_flux_none: 'No Flux Posts found'
-  admin_flux_count: '%d Flux Posts'
+  admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
+  admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
