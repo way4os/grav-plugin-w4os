@@ -917,3 +917,4 @@ w4os:
   admin_task_last: 'Dernier passage %s'
   admin_task_never: 'Jamais lancée'
   admin_task_ran: '%s : %s'
+  admin_sidebar_pin: 'Épingler la barre latérale'

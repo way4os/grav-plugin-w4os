@@ -1143,10 +1143,13 @@ final class Site
         $logo = (string) self::adminLogo((string) ($admin['logo'] ?? ''), (array) ($this->config()['brand'] ?? []), fn (string $path) => is_file(GRAV_ROOT.'/'.$path));
         $logo !== '' && ! str_contains($logo, '://') && ! str_starts_with($logo, '/') && $logo = $this->grav['base_url_relative'].'/'.$logo;
         $logo === '' && $logo = (string) ($this->engine()->gridLogo() ?? '');
+        // The icon of the site, in the folded sidebar
+        $icon = (string) self::adminLogo('', (array) ($this->config()['brand'] ?? []), fn (string $path) => is_file(GRAV_ROOT.'/'.$path), 'favicon');
 
         return [
             'title' => (string) $this->grav['config']->get('site.title', ''),
             'logo' => $logo === '' ? null : $logo,
+            'icon' => $icon === '' ? null : $this->grav['base_url_relative'].'/'.$icon,
             'home' => $this->grav['base_url_relative'] ?: '/',
         ] + (self::brandColor((string) ($admin['color'] ?? '') ?: (string) ($theme['accent-color'] ?? '')) ?? []);
     }
@@ -1162,16 +1165,17 @@ final class Site
 
     /**
      * The logo of the admin, whatever the theme of the site: the admin's own setting (an address), else the logo of the brand of the
-     * site (its file, a path of the site); null without one (the logo of the grid then).
+     * site (its file, a path of the site); null without one (the logo of the grid then). Its icon (`kind` favicon): the favicon of
+     * the brand of the site.
      *
      * @param array<string,mixed> $brand the brand of the site (plugins.w4os.brand)
      */
-    public static function adminLogo(string $setting, array $brand, \Closure $exists): ?string
+    public static function adminLogo(string $setting, array $brand, \Closure $exists, string $kind = 'logo'): ?string
     {
         if (trim($setting) !== '') {
             return trim($setting);
         }
-        $files = (array) ($brand['logo'] ?? []);
+        $files = (array) ($brand[$kind] ?? []);
         $path = ltrim((string) (($files === [] ? [] : (array) reset($files))['path'] ?? ''), '/');
 
         return $path !== '' && ! str_contains($path, '..') && $exists($path) ? $path : null;

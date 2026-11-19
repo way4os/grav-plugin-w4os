@@ -111,9 +111,8 @@ describe('the menu of the admin', function () {
             public function js(string $group = ''): string { return ''; }
         }, 'grav' => ['user' => []]]);
 
-        // The parent opens its list, its pages shown under it on the page of one of them
-        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" aria-expanded="true">~')
-            ->and($html)->not->toContain('data-bs-toggle="dropdown"')
+        // The parent opens its pages (a flyout in the folded rail), shown under it on the page of one of them
+        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="true">~')
             ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
     });
 });
@@ -127,7 +126,10 @@ describe('the brand of the admin', function () {
             ->and(Site::adminLogo('/my-logo.png', $brand, $exists))->toBe('/my-logo.png')
             ->and(Site::adminLogo('', [], $exists))->toBeNull()
             ->and(Site::adminLogo('', $brand, fn () => false))->toBeNull()
-            ->and(Site::adminLogo('', ['logo' => ['../x.png' => ['path' => '../../x.png']]], fn () => true))->toBeNull();
+            ->and(Site::adminLogo('', ['logo' => ['../x.png' => ['path' => '../../x.png']]], fn () => true))->toBeNull()
+            // The icon of the site in the folded sidebar: the favicon of its brand
+            ->and(Site::adminLogo('', ['favicon' => ['f' => ['path' => 'user/data/theme/images/favicon/fowl.png']]], fn () => true, 'favicon'))->toBe('user/data/theme/images/favicon/fowl.png')
+            ->and(Site::adminLogo('', $brand, $exists, 'favicon'))->toBeNull();
     });
 });
 
@@ -197,3 +199,52 @@ describe('the forms of the admin', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig'))->toContain("field_layout: 'w4os-admin'");
     });
 });
+
+/** The layout of the admin rendered with a brand and a menu, as the plugin gives them. */
+function render_admin(array $brand, array $menu): string
+{
+    $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+    $assets = new class {
+        public function addCss(string $url): void {}
+        public function addJs(string $url): void {}
+        public function css(): string { return ''; }
+        public function js(string $group = ''): string { return ''; }
+    };
+    $twig->addFunction(new TwigFunction('w4os_brand', fn () => $brand));
+    $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => $menu));
+    $twig->addFunction(new TwigFunction('url', fn (?string $stream) => '/'.str_replace('plugin://', 'user/plugins/', (string) $stream)));
+    $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+    $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+
+    return $twig->render('w4os-admin.html.twig', ['page' => new class {
+        public array $header = ['w4os' => 'admin-messages'];
+        public function title(): string { return 'Regions'; }
+    }, 'assets' => $assets, 'grav' => ['user' => ['w4os' => ['name' => 'Eli Mail']]]]);
+}
+
+describe('the sidebar of the admin', function () {
+    test('folds with Tabler: its pin button by the brand, its state restored before the page renders, the icon of the site in the rail', function () {
+        $html = render_admin(['title' => 'Friendly Fowl', 'logo' => '/logo.png', 'icon' => '/favicon.png', 'home' => '/'], [
+            ['label' => 'Regions', 'url' => '/w4os/regions', 'icon' => 'ti ti-map', 'active' => true],
+            ['label' => 'Avatars', 'url' => '/w4os/avatars', 'icon' => 'ti ti-users', 'active' => false, 'children' => [['label' => 'List', 'url' => '/w4os/avatars']]],
+        ]);
+        $head = substr($html, 0, (int) strpos($html, '</head>'));
+
+        // Tabler's theme script (the color mode, the saved sidebar), then the fold below xl, in the head, not deferred, after the styles
+        expect($head)->toMatch('~tabler\.min\.css.*<script src="[^"]*tabler-theme\.min\.js"></script>\s*<script src="[^"]*js&#x2F;sidebar\.js"></script>~s')
+            ->and($head)->not->toContain('prefers-color-scheme')
+            // The icon of the site in the folded rail, its logo or its name unfolded, the pin button beside them
+            ->and($html)->toContain('<img class="navbar-brand-image w4os-admin-icon" src="&#x2F;favicon.png" alt=""', '<span class="w4os-admin-brand-full">', 'data-bs-toggle="sidebar-folded" aria-pressed="false" aria-label="&#x5B;w4os.admin_sidebar_pin&#x5D;"')
+            // A page with pages under it opens them as a flyout in the rail, closed by a click elsewhere
+            ->and($html)->toContain('data-bs-toggle="dropdown" data-bs-auto-close="outside"')
+            // The title of each entry as the tooltip of its icon
+            ->and($html)->toContain('<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="Regions">');
+    });
+
+    test('folds to its icons below xl while the manager has saved no choice, a saved choice always winning (node --test tests/js)', function () {
+        exec('node --test '.escapeshellarg(dirname(__DIR__).'/tests/js/sidebar.test.js').' 2>&1', $output, $status);
+
+        expect($status)->toBe(0, implode("\n", $output));
+    })->skip(fn () => trim((string) shell_exec('command -v node')) === '', 'node is not installed');
+});
+

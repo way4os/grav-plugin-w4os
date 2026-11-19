@@ -17,23 +17,18 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url(icons ~ '32x32.png')|e('html_attr') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url(icons ~ '192x192.png')|e('html_attr') }}">
     <link rel="apple-touch-icon" href="{{ url(icons ~ '180x180.png')|e('html_attr') }}">
-    {# The light or dark mode of the visitor's system, followed when it changes; the scripts on #}
-    <script>
-        (function () {
-            // The scripts of the forms run: the fields their values hide stay hidden from the start (js/conditions.js)
-            document.documentElement.classList.add('w4os-js');
-            var dark = window.matchMedia('(prefers-color-scheme: dark)');
-            var apply = function () { document.documentElement.setAttribute('data-bs-theme', dark.matches ? 'dark' : 'light'); };
-            apply();
-            dark.addEventListener('change', apply);
-        })();
-    </script>
+    {# The scripts of the forms run: the fields their values hide stay hidden from the start (js/conditions.js) #}
+    <script>document.documentElement.classList.add('w4os-js');</script>
     {# Tabler, its icons and the admin's own styles, served by the plugin (vendor/npm-asset, pinned) #}
     <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/css/tabler.min.css')|e('html_attr') }}">
     <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css')|e('html_attr') }}">
     <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/css/tabler-vendors.min.css')|e('html_attr') }}">
     <link rel="stylesheet" href="{{ url('plugin://w4os/vendor/npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css')|e('html_attr') }}">
     <link rel="stylesheet" href="{{ url('plugin://w4os/css/admin.css')|e('html_attr') }}">
+    {# Before the page renders: Tabler's theme script (the light or dark mode of the visitor's system, followed when it changes; the
+       sidebar as the manager pinned or folded it), then the sidebar folded below xl while they have not chosen #}
+    <script src="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/js/tabler-theme.min.js')|e('html_attr') }}"></script>
+    <script src="{{ url('plugin://w4os/js/sidebar.js')|e('html_attr') }}"></script>
     {% if brand.color is defined %}
     {# The accent color of the site as the primary color of Tabler, its variants derived by Tabler from it #}
     <style>
@@ -52,10 +47,15 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#w4os-sidebar" aria-controls="w4os-sidebar" aria-expanded="false" aria-label="{{ 'w4os.menu_admin'|t|e('html_attr') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a class="navbar-brand" href="{{ brand.home|e('html_attr') }}" title="{{ brand.title|e('html_attr') }}">
-                {# The logo of the site alone, its title as its text; the title without a logo #}
-                {% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="{{ brand.title|e('html_attr') }}">{% else %}<span class="w4os-admin-title">{{ brand.title }}</span>{% endif %}
-            </a>
+            <div class="navbar-brand">
+                <a class="w4os-admin-brand" href="{{ brand.home|e('html_attr') }}" title="{{ brand.title|e('html_attr') }}">
+                    {# The icon of the site in the folded rail; unfolded, its logo alone (its title as its text), else its title #}
+                    <img class="navbar-brand-image w4os-admin-icon" src="{{ (brand.icon ?? url('plugin://w4os/vendor/magicoli/opensim-engine/share/images/logos/cropped-w4os-logo-v1-square-32x32.png'))|e('html_attr') }}" alt="" width="32" height="32">
+                    <span class="w4os-admin-brand-full">{% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="{{ brand.title|e('html_attr') }}">{% else %}<span class="w4os-admin-title">{{ brand.title }}</span>{% endif %}</span>
+                </a>
+                {# Tabler's pin button: the sidebar kept unfolded, or folded to its icons (unfolded on hover), saved in the browser #}
+                <button type="button" class="btn btn-action btn-sm d-none d-lg-inline-flex" data-bs-toggle="sidebar-folded" aria-pressed="false" aria-label="{{ 'w4os.admin_sidebar_pin'|t|e('html_attr') }}" title="{{ 'w4os.admin_sidebar_pin'|t|e('html_attr') }}"><i class="ti ti-pin" aria-hidden="true"></i></button>
+            </div>
             <div class="collapse navbar-collapse" id="w4os-sidebar">
                 <ul class="navbar-nav pt-lg-3">
                     {% for item in menu %}
@@ -63,8 +63,8 @@
                     {# A page with the ones under it (Avatars: its list, the avatar models): it opens its list, its pages shown under it
                        (Tabler's dropdown menu) on the page of one of them #}
                     <li class="nav-item dropdown{{ item.active ? ' active' }}">
-                        <a class="nav-link dropdown-toggle" href="{{ item.url|e('html_attr') }}" aria-expanded="{{ item.active ? 'true' : 'false' }}">
-                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                        <a class="nav-link dropdown-toggle" href="{{ item.url|e('html_attr') }}" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="{{ item.active ? 'true' : 'false' }}">
+                            {% if item.icon is defined %}<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ item.label|e('html_attr') }}"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                         <div class="dropdown-menu{{ item.active ? ' show' }}">
@@ -76,7 +76,7 @@
                     {% else %}
                     <li class="nav-item{{ item.active ?? false ? ' active' }}">
                         <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
-                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                            {% if item.icon is defined %}<span class="nav-link-icon" data-bs-toggle="tooltip" data-bs-placement="right" title="{{ item.label|e('html_attr') }}"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                     </li>
