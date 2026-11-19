@@ -9,7 +9,7 @@ use W4os\Grav\Site;
 describe('the page of the shortcodes', function () {
     test('is a page of the admin, as the page Shortcodes of w4os-wp', function () {
         expect(Site::adminRoutes(['admin' => '/w4os'], [])['shortcodes'])->toBe('/w4os/shortcodes')
-            ->and(Site::ADMIN_PAGES['shortcodes']['label'])->toBe('w4os.shortcodes_title')
+            ->and(Site::ADMIN_PAGES['shortcodes']['label'])->toBe('w4os.admin_shortcodes_menu')
             ->and(Site::titleKey('shortcodes'))->toBe('w4os.shortcodes_title');
     });
 

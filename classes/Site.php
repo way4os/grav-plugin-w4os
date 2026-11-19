@@ -1018,7 +1018,7 @@ final class Site
         'settings_offline' => ['label' => 'w4os.settings_menu_offline', 'icon' => 'ti ti-mail'],
         'settings_assets' => ['label' => 'w4os.settings_menu_assets', 'icon' => 'ti ti-photo'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
-        'shortcodes' => ['label' => 'w4os.shortcodes_title', 'icon' => 'ti ti-code'],
+        'shortcodes' => ['label' => 'w4os.admin_shortcodes_menu', 'icon' => 'ti ti-code'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
 
