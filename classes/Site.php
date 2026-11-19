@@ -1131,10 +1131,12 @@ final class Site
         $has = fn (string $field) => $this->themeField($field) !== null;
         $fields = self::brandFields($has);
         $copies = [];
+        $folders = [];
         foreach ($fields as $setting => $field) {
             $files = (array) ($brand[$setting] ?? []);
             $file = $files === [] ? null : reset($files);
             $folder = (string) ($this->grav['locator']->findResource(self::brandDestination((string) ($this->themeField($field)['destination'] ?? '')), false, true) ?: '');
+            $folders[$setting] = $folder;
             if (is_array($file) && $folder !== '' && ($copy = self::brandCopy(GRAV_ROOT, (string) ($file['path'] ?? ''), $folder)) !== null) {
                 $copies[$setting] = $copy;
             }
@@ -1148,13 +1150,15 @@ final class Site
         // put back without it
         $folder = (string) $this->grav['locator']->findResource("themes://$theme", true);
         foreach ($folder === '' ? [] : $this->fixedFilesOf($folder) as $setting => $file) {
-            if (isset($fields[$setting])) {
-                continue;
-            }
             $files = (array) ($brand[$setting] ?? []);
             $source = $files === [] ? null : GRAV_ROOT.'/'.ltrim((string) (reset($files)['path'] ?? ''), '/');
             // A file of a stream of the site (Hypertext's image://favicon/favicon.png, the site's images), else of the theme
             $target = str_contains($file, '://') ? (string) $this->grav['locator']->findResource($file, true, true) : "$folder/$file";
+            // A theme with a field for it takes the file of the field, unless its templates read a fixed name in the folder of the
+            // field (Hypertext: its favicon field, its favicon.png)
+            if (isset($fields[$setting]) && dirname($target) !== rtrim(GRAV_ROOT.'/'.ltrim($folders[$setting] ?? '', '/'), '/')) {
+                continue;
+            }
             $kept = $this->keptFiles($theme).'/'.str_replace('://', '/', $file);
             $target === '' || self::brandOver($source !== null && is_file($source) ? $source : null, $target, $kept);
         }
