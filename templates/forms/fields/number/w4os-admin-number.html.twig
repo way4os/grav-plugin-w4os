@@ -1,0 +1,3 @@
+{# A number of a form of the admin (field_layout: w4os-admin): the class of the inputs of the form, the Form plugin's number takes its own alone #}
+{% extends 'forms/fields/number/number.html.twig' %}
+{% set field = field|merge({classes: field.classes ?? form_field_input_classes}) %}

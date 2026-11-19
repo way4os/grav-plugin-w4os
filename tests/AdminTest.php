@@ -184,4 +184,16 @@ describe('the forms of the admin', function () {
         expect($html)->toBe('<label>URI <span class="required">*</span><small class="form-hint">Réglez l&#039;URL</small></label>')
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig'))->toContain("layout: 'w4os-admin'");
     });
+
+    test('give a number the class of their inputs, as the others (the number of the Form plugin takes its own alone)', function () {
+        $twig = new Environment(new Twig\Loader\ChainLoader([
+            new Twig\Loader\ArrayLoader(['forms/fields/number/number.html.twig' => '<input type="number" class="{{ field.classes }}">']),
+            new FilesystemLoader(dirname(__DIR__).'/templates'),
+        ]));
+        $render = fn (array $field) => $twig->render('forms/fields/number/w4os-admin-number.html.twig', ['field' => $field, 'form_field_input_classes' => 'form-control']);
+
+        expect($render(['name' => 'port']))->toBe('<input type="number" class="form-control">')
+            ->and($render(['name' => 'port', 'classes' => 'own']))->toBe('<input type="number" class="own">')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig'))->toContain("field_layout: 'w4os-admin'");
+    });
 });
