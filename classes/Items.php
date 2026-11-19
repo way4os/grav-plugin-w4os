@@ -13,7 +13,8 @@ final class Items
 {
     /**
      * The fields of the form of an item for Grav's Form plugin, from its form for the viewer (w4os-views FormView): the fields it
-     * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden.
+     * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden; the ones
+     * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed.
      *
      * @return array<string,array<string,mixed>>
      */
@@ -21,7 +22,9 @@ final class Items
     {
         $groups = [];
         foreach ($view->fields as $field) {
-            $groups[$field['group']][$field['name']] = self::input($field);
+            $groups[$field['group']][$field['name']] = self::input($field)
+                // A field the values of the form hide for now (its condition), shown by the script of the form as they change
+                + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
         }
         $fields = ['id' => ['type' => 'hidden']];
         $shown = array_values(array_filter((array) ($view->form['groups'] ?? []), fn ($group) => isset($groups[$group['name']])));
@@ -102,6 +105,23 @@ final class Items
     }
 
     /**
+     * The conditions of the fields of a form that the fields of the form meet (FormView::live()), by field: what the script of the
+     * form (js/conditions.js) shows or hides them by as the form is changed.
+     *
+     * @return array<string,array<string,list<mixed>>>
+     */
+    public static function conditions(FormView $view): array
+    {
+        $names = array_column($view->fields, 'name');
+        $conditions = [];
+        foreach ($view->fields as $field) {
+            FormView::live($field, $names) && $conditions[$field['name']] = array_map(fn ($values) => array_values((array) $values), (array) $field['condition']);
+        }
+
+        return $conditions;
+    }
+
+    /**
      * The options of a field (value => catalog key) for Grav (value => `w4os.` key).
      *
      * @param array<string,mixed> $field
@@ -125,7 +145,10 @@ final class Items
             'text' => ['type' => 'textarea', 'classes' => 'w4os-autogrow', 'rows' => 3],
             'integer', 'number' => ['type' => 'number'],
             'boolean' => ['type' => 'checkbox'],
-            'select', 'status', 'role' => ['type' => 'select', 'options' => self::options($field)],
+            // The choices of a short list side by side (its widget radio), else a list
+            'select', 'status', 'role' => ($field['widget'] ?? '') === 'radio'
+                ? ['type' => 'radio', 'options' => self::options($field), 'wrapper_classes' => 'form-check form-check-inline']
+                : ['type' => 'select', 'options' => self::options($field)],
             'checkboxes' => ['type' => 'checkboxes', 'options' => self::options($field)],
             'secret' => ['type' => 'password', 'autocomplete' => 'new-password'],
             'url' => ['type' => 'url'],
@@ -138,6 +161,8 @@ final class Items
         ! empty($field['multiple']) && $field['type'] === 'avatar' && $input += ['multiple' => true];
         $validate = array_filter(['required' => ! empty($field['required']) ?: null, 'max' => isset($field['maxLength']) ? (int) $field['maxLength'] : null,
             'type' => ! empty($field['multiple']) ? 'array' : null], fn ($rule) => $rule !== null);
+
+        isset($field['placeholder']) && $input['placeholder'] = 'w4os.'.$field['placeholder'];
 
         return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
     }

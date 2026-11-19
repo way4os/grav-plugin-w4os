@@ -88,14 +88,20 @@ final class Engine
     }
 
     /**
-     * The avatar models of the grid.
+     * The avatar models of the grid, or the ones another rule picks (its filters: `match`, `pattern`, `list`, what is not given being
+     * the grid's).
      *
+     * @param array<string,string> $rule
      * @return list<array<string,mixed>> their attributes
      */
-    public function models(): array
+    public function models(array $rule = []): array
     {
+        $query = [];
+        foreach ($rule as $name => $value) {
+            $query["filter[$name]"] = $value;
+        }
         try {
-            $document = $this->call('GET', '/avatar-models');
+            $document = $this->call('GET', '/avatar-models', query: $query);
         } catch (EngineException $e) {
             // A grid without models
             if ($e->status === 404) {

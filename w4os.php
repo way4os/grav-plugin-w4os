@@ -454,6 +454,8 @@ class W4osPlugin extends Plugin
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && $this->grav['uri']->query('format') === 'avatars') {
             $this->avatarsFound((string) $this->grav['uri']->query('search'));
+        } elseif ($type === 'models' && $this->grav['uri']->query('format') === 'preview') {
+            $this->modelsPreview((array) ($_GET['filter'] ?? []));
         } elseif ($type === 'region') {
             // The name of the item in the title
             $name = (string) ($this->item()['item']['name'] ?? '');
@@ -498,13 +500,12 @@ class W4osPlugin extends Plugin
             return;
         }
         if ($form->getName() === 'w4os-models') {
-            // The fields of the rule as the engine describes them (x-form of the settings `models`), its values as the grid has them
+            // The fields of the rule as the engine describes them (x-form of the settings `models`), its values as the grid has them,
+            // its button
             $rule = $this->modelsRule();
             if ($rule['view'] !== null) {
-                $form->setFields(Items::fields($rule['view']));
-                foreach ($rule['view']->values as $key => $value) {
-                    $form->getData()->get($key) === null && $form->setData($key, $value);
-                }
+                $this->viewForm($form, $rule['view']);
+                $form->set('buttons', array_map(fn (array $button) => ['value' => 'w4os.'.$rule['submit']] + $button, (array) $form->get('buttons')));
             }
 
             return;
@@ -799,16 +800,18 @@ class W4osPlugin extends Plugin
             return $rule;
         }
         $described = $this->site()->openApi()->settingsOf('models');
+        $none = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save'];
         if ($described === null || ! $this->site()->canOperation('models')) {
-            return $rule = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null];
+            return $rule = $none;
         }
+        $none = ['help' => $described['description'], 'preview' => $described['preview'], 'submit' => $described['submit']] + $none;
         try {
             $values = $this->site()->engine()->settings('models');
             $view = \W4OS\Views\FormView::of($described, $values, null, $this->site()->isManager(), $this->site()->level());
 
-            return $rule = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values, 'error' => null];
+            return $rule = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values] + $none;
         } catch (\Throwable $e) {
-            return $rule = ['view' => null, 'changeable' => false, 'values' => [], 'error' => $e->getMessage()];
+            return $rule = ['error' => $e->getMessage()] + $none;
         }
     }
 
@@ -1213,6 +1216,20 @@ class W4osPlugin extends Plugin
         return $page;
     }
 
+    /**
+     * A form of the site from the form of the viewer (w4os-views FormView): its fields, filled with the values of the item, and the
+     * conditions its script shows or hides them by as it is changed (js/conditions.js).
+     */
+    private function viewForm($form, \W4OS\Views\FormView $view): void
+    {
+        $form->setFields(Items::fields($view));
+        foreach ($view->values as $key => $value) {
+            $form->getData()->get($key) === null && $form->setData($key, $value);
+        }
+        $conditions = Items::conditions($view);
+        $conditions === [] || $form->set('attributes', ['data-w4os-conditions' => json_encode($conditions, JSON_UNESCAPED_SLASHES)] + (array) $form->get('attributes'));
+    }
+
     /** The form of the page of an item: the engine's fields (x-form) as the visitor sees and changes them, filled with the item. */
     private function itemForm($form): void
     {
@@ -1220,10 +1237,7 @@ class W4osPlugin extends Plugin
         if ($page['form'] === null || $page['item'] === null) {
             return;
         }
-        $form->setFields(Items::fields($page['view']));
-        foreach ($page['view']->values as $key => $value) {
-            $form->getData()->get($key) === null && $form->setData($key, $value);
-        }
+        $this->viewForm($form, $page['view']);
         // The button next to Save leads back to the page of the item
         $buttons = (array) $form->get('buttons');
         foreach ($buttons as $i => $button) {
@@ -1236,6 +1250,29 @@ class W4osPlugin extends Plugin
      * The avatars whose name has what a manager types (the avatar picker of the forms), as JSON: their UUID, name and picture; the
      * accounts of the services left out.
      */
+    /**
+     * The models a rule picks as it is changed, before it is saved (the preview of the form of the models, js/models-preview.js):
+     * the filters the engine gives the preview (`match`, `pattern`, `list`), the others left out; its HTML, for whom reads the rule.
+     *
+     * @param array<string,mixed> $filters
+     */
+    private function modelsPreview(array $filters): never
+    {
+        $rule = $this->modelsRule();
+        if ($rule['preview'] === null) {
+            http_response_code(403);
+            exit;
+        }
+        $asked = [];
+        foreach ((array) $rule['preview']['filters'] as $name) {
+            isset($filters[$name]) && is_scalar($filters[$name]) && $asked[$name] = mb_substr(trim((string) $filters[$name]), 0, 2000);
+        }
+        header('Content-Type: text/html; charset=utf-8');
+        header('Cache-Control: no-store');
+        echo $this->grav['twig']->processTemplate('w4os/models-preview.html.twig', ['models' => $this->site()->models($asked), 'rule' => $rule]);
+        exit;
+    }
+
     private function avatarsFound(string $search): never
     {
         $found = [];

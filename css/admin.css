@@ -114,3 +114,14 @@
 .w4os-admin .form-field.row > .col-form-label .form-label { margin-bottom: 0; }
 /* The drop zone of a file (the Form plugin's Dropzone, Tabler's look): its message as text, not a button of the browser */
 .w4os-admin .dropzone .dz-button { background: none; border: 0; padding: 0; color: inherit; font: inherit; cursor: pointer; }
+/* The fields of a form as wide as what they take: a line of text about 20rem, a list or a picker of avatars as wide as its choices
+   (the picker at least as wide as a line), a text the whole width */
+.w4os-admin .form-field input.form-control { max-width: 20rem; }
+.w4os-admin .form-field select.form-select { width: auto; max-width: 100%; }
+.w4os-admin .form-field .ts-wrapper { display: inline-block; width: auto; min-width: min(20rem, 100%); max-width: 100%; }
+/* A field the values of the others hide for now (js/conditions.js), shown again as they are changed */
+.w4os-js .w4os-unmet { display: none; }
+/* The help of a form beside it (the avatar models), its points apart; the models it picks dimmed while they are asked again */
+.w4os-admin .w4os-models-help { padding-left: 1.25rem; }
+.w4os-admin .w4os-models-help li + li { margin-top: .5rem; }
+.w4os-admin .w4os-models-preview[aria-busy] { opacity: .6; transition: opacity .2s; }

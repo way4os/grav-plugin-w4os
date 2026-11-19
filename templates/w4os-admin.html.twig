@@ -17,9 +17,11 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url(icons ~ '32x32.png')|e('html_attr') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url(icons ~ '192x192.png')|e('html_attr') }}">
     <link rel="apple-touch-icon" href="{{ url(icons ~ '180x180.png')|e('html_attr') }}">
-    {# The light or dark mode of the visitor's system, followed when it changes #}
+    {# The light or dark mode of the visitor's system, followed when it changes; the scripts on #}
     <script>
         (function () {
+            // The scripts of the forms run: the fields their values hide stay hidden from the start (js/conditions.js)
+            document.documentElement.classList.add('w4os-js');
             var dark = window.matchMedia('(prefers-color-scheme: dark)');
             var apply = function () { document.documentElement.setAttribute('data-bs-theme', dark.matches ? 'dark' : 'light'); };
             apply();
@@ -57,12 +59,27 @@
             <div class="collapse navbar-collapse" id="w4os-sidebar">
                 <ul class="navbar-nav pt-lg-3">
                     {% for item in menu %}
+                    {% if item.children ?? false %}
+                    {# A page with the ones under it (Avatars: its list, the avatar models): Tabler's dropdown, open on one of them #}
+                    <li class="nav-item dropdown{{ item.active ? ' active' }}">
+                        <a class="nav-link dropdown-toggle" href="#w4os-menu-{{ loop.index }}" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="{{ item.active ? 'true' : 'false' }}">
+                            {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
+                            <span class="nav-link-title">{{ item.label }}</span>
+                        </a>
+                        <div class="dropdown-menu{{ item.active ? ' show' }}">
+                            {% for child in item.children %}
+                            <a class="dropdown-item{{ child.active ?? false ? ' active' }}" href="{{ child.url|e('html_attr') }}"{% if child.active ?? false %} aria-current="page"{% endif %}>{{ child.label }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    {% else %}
                     <li class="nav-item{{ item.active ?? false ? ' active' }}">
                         <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
                             {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                     </li>
+                    {% endif %}
                     {% endfor %}
                 </ul>
                 {# The visitor: the site, its profile, sign out; at the bottom of the sidebar (Tabler's navbar-footer) #}

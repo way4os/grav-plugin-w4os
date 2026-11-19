@@ -59,6 +59,46 @@ describe('admin', function () {
     });
 });
 
+describe('the menu of the admin', function () {
+    test('nests a page under the one it belongs to, the page of the list first, open on the page shown', function () {
+        $items = [
+            ['type' => 'regions', 'label' => 'Regions', 'url' => '/w4os/regions', 'active' => false],
+            ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
+            ['type' => 'models', 'label' => 'Avatar Models', 'url' => '/w4os/models', 'active' => true, 'parent' => 'manage'],
+        ];
+        $menu = Site::menuTree($items);
+
+        expect(array_column($menu, 'type'))->toBe(['regions', 'manage'])
+            ->and($menu[1]['active'])->toBeTrue()
+            ->and(array_column($menu[1]['children'], 'label'))->toBe(['Avatars', 'Avatar Models'])
+            ->and(array_column($menu[1]['children'], 'active'))->toBe([false, true])
+            ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
+    });
+
+    test('shows the pages nested under their parent', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_brand', fn () => ['title' => 'Friendly Fowl', 'home' => '/']));
+        $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => [
+            ['label' => 'Avatars', 'url' => '/w4os/manage', 'icon' => 'ti ti-users', 'active' => true, 'children' => [
+                ['label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
+                ['label' => 'Avatar Models', 'url' => '/w4os/models', 'active' => true],
+            ]],
+        ]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
+        $html = $twig->render('w4os-admin.html.twig', ['page' => new class {
+            public array $header = ['w4os' => 'admin-messages'];
+            public function title(): string { return 'Avatar Models'; }
+        }, 'assets' => new class {
+            public function css(): string { return ''; }
+            public function js(string $group = ''): string { return ''; }
+        }, 'grav' => ['user' => []]]);
+
+        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle"[^>]*aria-expanded="true"~')
+            ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">Avatars</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
+    });
+});
+
 describe('the brand of the admin', function () {
     test('is the site\'s own logo (the admin setting, else the brand of the site), never the one of the theme of the site', function () {
         $brand = ['logo' => ['user/data/theme/images/logo/fowl.png' => ['name' => 'fowl.png', 'path' => 'user/data/theme/images/logo/fowl.png']]];

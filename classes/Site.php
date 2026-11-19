@@ -209,21 +209,24 @@ final class Site
     }
 
     /**
-     * The avatar models, with the address of their picture, kept for the time of the setting "cache".
+     * The avatar models, with the address of their picture, kept for the time of the setting "cache"; the ones another rule picks
+     * (Engine::models(), the preview of the rule as it is changed) asked each time.
      *
+     * @param array<string,string> $rule
      * @return list<array<string,mixed>>
      */
-    public function models(): array
+    public function models(array $rule = []): array
     {
-        $models = $this->cached('models', function () {
+        $read = function () use ($rule) {
             try {
-                return array_map(fn (array $m) => $m + ['image' => $this->engine()->assetUrl((string) $m['picture'])], $this->engine()->models());
+                return array_map(fn (array $m) => $m + ['image' => $this->engine()->assetUrl((string) $m['picture'])], $this->engine()->models($rule));
             } catch (EngineException $e) {
                 $this->grav['log']->warning('w4os: avatar models: '.$e->getMessage());
 
                 return null;
             }
-        });
+        };
+        $models = $rule === [] ? $this->cached('models', $read) : $read();
 
         return is_array($models) ? $models : [];
     }
@@ -751,7 +754,7 @@ final class Site
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
-        'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt'],
+        'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
@@ -781,13 +784,45 @@ final class Site
         $items = [];
         foreach (self::ADMIN_PAGES as $type => $page) {
             isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read'))
+                && (! isset(self::ADMIN_OPERATIONS[$type]) || $this->canOperation($type))
                 && ($type !== 'settings' || $this->canSettings())
-                && $items[] = ['label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section];
+                && $items[] = ['type' => $type, 'label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section]
+                    + (isset($page['parent']) ? ['parent' => $page['parent']] : []);
         }
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 
-        return array_values((array) $event['items']);
+        return self::menuTree(array_values((array) $event['items']));
+    }
+
+    /**
+     * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
+     * first, then theirs; the parent open (active) when one of them is the page shown. An entry whose parent is not in the menu
+     * stays where it is.
+     *
+     * @param list<array<string,mixed>> $items
+     * @return list<array<string,mixed>>
+     */
+    public static function menuTree(array $items): array
+    {
+        $types = array_column($items, 'type');
+        $children = [];
+        foreach ($items as $item) {
+            isset($item['parent']) && in_array($item['parent'], $types, true) && $children[$item['parent']][] = $item;
+        }
+        $menu = [];
+        foreach ($items as $item) {
+            if (isset($item['parent']) && in_array($item['parent'], $types, true)) {
+                continue;
+            }
+            if (isset($children[$item['type'] ?? null])) {
+                $item['children'] = [$item, ...$children[$item['type']]];
+                $item['active'] = in_array(true, array_column($item['children'], 'active'), true);
+            }
+            $menu[] = $item;
+        }
+
+        return $menu;
     }
 
     /**

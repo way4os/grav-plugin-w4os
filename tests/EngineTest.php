@@ -62,6 +62,13 @@ describe('engine', function () {
         expect(fakeEngine([[404, problem(404, 'none')]])->models())->toBe([]);
     });
 
+    test('asks the models another rule picks by its filters (the preview of the rule)', function () {
+        $engine = fakeEngine([[200, ['data' => [['type' => 'avatar-models', 'id' => 'm1', 'attributes' => ['name' => 'Default Ruth']]]]]], $log, grid: 'demo');
+
+        expect($engine->models(['match' => 'uuid', 'list' => 'm1,m2'])[0]['name'])->toBe('Default Ruth')
+            ->and(urldecode($log[0]['url']))->toBe('https://grid.example.org/api/grids/demo/avatar-models?filter[match]=uuid&filter[list]=m1,m2');
+    });
+
     test('a transport failure is a 503', function () {
         $engine = new W4os\Grav\Engine('https://x', 'k', '', fn () => throw new RuntimeException('timeout'));
 

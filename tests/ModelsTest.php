@@ -17,16 +17,50 @@ describe('the avatar models page of the admin', function () {
             ->and(Site::titleKey('models'))->toBe('w4os.settings_models');
     });
 
-    test('shows the models with their pictures and names, then the form of the rule', function () {
+    $render = function (array $models, array $rule) {
         $twig = new Environment(new ChainLoader([new ArrayLoader(['w4os/admin-form.html.twig' => '<form id="{{ form.name }}"></form>']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
-        $twig->addFunction(new TwigFunction('w4os_models', fn () => [['uuid' => 'm1', 'name' => 'Default Ruth', 'label' => 'Ruth', 'image' => '/assets/p1.jpg']]));
-        $twig->addFunction(new TwigFunction('w4os_models_rule', fn () => ['changeable' => true, 'values' => ['match' => 'any', 'pattern' => 'Default'], 'error' => null]));
+        $twig->addFunction(new TwigFunction('w4os_models', fn () => $models));
+        $twig->addFunction(new TwigFunction('w4os_models_rule', fn () => $rule + ['changeable' => true, 'values' => ['match' => 'any', 'pattern' => 'Default'], 'error' => null, 'help' => [], 'preview' => null]));
         $twig->addFunction(new TwigFunction('forms', fn (string $name) => ['name' => $name]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
-        $html = $twig->render('w4os/models.html.twig', ['page' => []]);
+        $assets = new class {
+            public array $js = [];
+            public function addJs(string $url): void { $this->js[] = $url; }
+        };
 
-        expect($html)->toContain('src="&#x2F;assets&#x2F;p1.jpg"', 'Ruth', 'Default Ruth', '<form id="w4os-models"></form>');
+        return [$twig->render('w4os/models.html.twig', ['page' => [], 'assets' => $assets]), $assets->js];
+    };
+
+    test('shows the form of the rule, its help beside it, then the models it picks with their pictures and names, updated as it is changed', function () use ($render) {
+        $preview = ['label' => 'models_preview', 'empty' => 'models_none', 'path' => '/grids/{grid}/avatar-models', 'filters' => ['match', 'pattern', 'list']];
+        [$html, $js] = $render([['uuid' => 'm1', 'name' => 'Default Ruth', 'label' => 'Ruth', 'image' => '/assets/p1.jpg']], ['help' => ['models_help_choice', 'models_help_create'], 'preview' => $preview]);
+
+        expect($html)->toContain('src="&#x2F;assets&#x2F;p1.jpg"', 'Ruth', 'Default Ruth', '<form id="w4os-models"></form>', '[w4os.models_preview]')
+            ->and($html)->toMatch('~<form id="w4os-models"></form>.*<li>\[w4os.models_help_choice\]</li><li>\[w4os.models_help_create\]</li>.*data-w4os-models-preview="&#x3F;format&#x3D;preview" data-form="w4os-models" data-filters="&#x5B;&quot;match&quot;,&quot;pattern&quot;,&quot;list&quot;&#x5D;".*Default Ruth~s')
+            ->and($js)->toBe(['plugin://w4os/js/models-preview.js']);
+    });
+
+    test('says what the engine says when the rule picks no model', function () use ($render) {
+        [$html] = $render([], ['preview' => ['label' => 'models_preview', 'empty' => 'models_none', 'filters' => []]]);
+
+        expect($html)->toContain('[w4os.models_none]')->not->toContain('w4os-model-picture');
+    });
+
+    test('shows the rule as the engine describes it: Match as radios (its widget), the list shown by the choice of a custom list', function () {
+        $form = (new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->settingsOf('models');
+        $view = W4OS\Views\FormView::of($form, ['match' => 'any', 'pattern' => 'Default', 'list' => []], null, true, 200);
+        $fields = Items::fields($view);
+
+        expect($fields['match'])->toMatchArray(['type' => 'radio', 'label' => 'w4os.models_match'])
+            ->and($fields['match']['options'])->toBe(['first' => 'w4os.models_match_first', 'any' => 'w4os.models_match_any', 'last' => 'w4os.models_match_last', 'uuid' => 'w4os.models_match_uuid'])
+            ->and($fields['pattern'])->not->toHaveKey('outerclasses')
+            ->and($fields['list'])->toMatchArray(['type' => 'w4os_avatar', 'placeholder' => 'w4os.models_list_placeholder', 'outerclasses' => 'w4os-unmet'])
+            ->and(Items::conditions($view))->toBe(['pattern' => ['match' => ['first', 'any', 'last']], 'list' => ['match' => ['uuid']]]);
+    });
+
+    test('is under Avatars in the menu of the admin', function () {
+        expect(Site::ADMIN_PAGES['models']['parent'])->toBe('manage');
     });
 
     test('picks several avatars in a field of several (the models of the list)', function () {

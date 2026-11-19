@@ -1,6 +1,6 @@
 {# A form of the plugin in the admin (form): the Form plugin's form in Tabler's classes, by the variables the Form plugin reads;
    Tabler's horizontal form, the label and its help in a column on the left, the field on the right, one under the other on a
-   narrow screen #}
+   narrow screen; the choices of a short list side by side (Tabler's inline checks) #}
 {% set form_field_outer_classes = 'mb-3 row' %}
 {% set form_field_outer_label_classes = 'col-12 col-md-3 col-form-label' %}
 {% set form_field_outer_data_classes = 'col-12 col-md-9' %}
@@ -9,6 +9,9 @@
 {% set form_field_select_classes = 'form-select' %}
 {% set form_field_textarea_classes = 'form-control' %}
 {% set form_field_checkbox_classes = 'form-check-input' %}
+{% set form_field_radio_classes = 'form-check-input' %}
 {% set form_button_outer_classes = 'btn-list justify-content-end' %}
 {% set form_button_classes = 'btn' %}
 {% include 'forms/form.html.twig' with {form: form} %}
+{# The fields shown by the values of the others, as they are changed #}
+{% if form.attributes['data-w4os-conditions'] ?? false %}{% do assets.addJs('plugin://w4os/js/conditions.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}
