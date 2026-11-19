@@ -8,6 +8,7 @@ describe('the posts of the grid in the admin (Flux)', function () {
 
         expect(Site::adminRoutes(['admin' => '/w4os'], [])['flux'])->toBe('/w4os/flux')
             ->and(Site::ADMIN_PAGES['flux']['label'])->toBe('w4os.flux_menu')
+            ->and(Site::ADMIN_PAGES['flux']['parent'] ?? null)->toBe('manage')
             ->and(Site::ADMIN_TYPES['flux'])->toBe('posts')
             ->and(Site::titleKey('flux'))->toBe('w4os.flux_title')
             ->and($pages[array_search('models', $pages, true) + 1])->toBe('flux');

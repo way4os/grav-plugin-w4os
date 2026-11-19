@@ -1010,7 +1010,7 @@ final class Site
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
-        'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle'],
+        'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle', 'parent' => 'manage'],
         // The settings of the services of the grid, as w4os-wp has them in its menu
         'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin'],
         'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search'],
