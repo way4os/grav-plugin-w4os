@@ -675,6 +675,13 @@ w4os:
   notice_registered: "L'avatar {name} è pronto: accedi con il suo nome e la sua password."
   notice_registered_confirm: "È stata inviata una mail a {email}: l'account viene creato non appena si segue il link che contiene."
   notice_registered_mail_failed: 'La registrazione è conservata, ma la mail a {email} non è stata inviata: richiedila più tardi.'
+  notice_setting_file_unwritable: 'Questo server non può scrivere {file}, dove la griglia lo legge: impostalo lì a mano.'
+  notice_setting_file_unwritable_unkept: "Questo server non può scrivere {file}, e l'applicazione non conserva impostazioni per la griglia: impostalo lì a mano."
+  notice_setting_no_files: 'La griglia non ha file su questa macchina: legge questa impostazione nei suoi file, impostala lì a mano.'
+  notice_setting_no_files_unkept: "La griglia non ha file su questa macchina, e l'applicazione non conserva impostazioni per essa."
+  notice_options_no_files: 'La griglia non ha file su questa macchina: le sue opzioni si riparano dove è conservata la sua configurazione.'
+  notice_database_unsaid: 'La configurazione della griglia non dice dove si trova questo database.'
+  notice_database_unreachable: 'Il database non è raggiungibile.'
   admin_engine: Engine
   admin_engine_help: 'Dove il sito chiede tutto sulla griglia'
   admin_engine_remote: 'L’API della griglia'

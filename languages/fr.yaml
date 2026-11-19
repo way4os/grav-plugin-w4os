@@ -675,6 +675,13 @@ w4os:
   notice_registered: "L'avatar {name} est prêt : connectez-vous avec son nom et son mot de passe."
   notice_registered_confirm: 'Un message a été envoyé à {email} : le compte est créé dès que son lien est suivi.'
   notice_registered_mail_failed: "L'inscription est gardée, mais le message à {email} n'a pas pu être envoyé : redemandez-le plus tard."
+  notice_setting_file_unwritable: 'Ce serveur ne peut pas écrire {file}, où la grille le lit : réglez-le là à la main.'
+  notice_setting_file_unwritable_unkept: "Ce serveur ne peut pas écrire {file}, et l'application ne garde pas de réglages pour la grille : réglez-le là à la main."
+  notice_setting_no_files: "La grille n'a pas de fichiers sur cette machine : elle lit ce réglage dans ses fichiers, réglez-le là à la main."
+  notice_setting_no_files_unkept: "La grille n'a pas de fichiers sur cette machine, et l'application ne garde pas de réglages pour elle."
+  notice_options_no_files: "La grille n'a pas de fichiers sur cette machine : ses options se réparent là où sa configuration est gardée."
+  notice_database_unsaid: 'La configuration de la grille ne dit pas où est cette base de données.'
+  notice_database_unreachable: 'La base de données est injoignable.'
   admin_engine: Engine
   admin_engine_help: 'Là où le site demande tout sur la grille'
   admin_engine_remote: 'L’API de la grille'

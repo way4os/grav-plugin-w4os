@@ -675,6 +675,13 @@ w4os:
   notice_registered: 'Der Avatar {name} ist bereit: melde dich mit seinem Namen und seinem Passwort an.'
   notice_registered_confirm: 'Eine Mail wurde an {email} geschickt: das Konto entsteht, sobald dem Link darin gefolgt wird.'
   notice_registered_mail_failed: 'Die Registrierung bleibt bestehen, aber die Mail an {email} konnte nicht gesendet werden: fordere sie später erneut an.'
+  notice_setting_file_unwritable: 'Dieser Server kann {file} nicht schreiben, wo das Grid es liest: Stellen Sie es dort von Hand ein.'
+  notice_setting_file_unwritable_unkept: 'Dieser Server kann {file} nicht schreiben, und die Anwendung speichert keine Einstellungen für das Grid: Stellen Sie es dort von Hand ein.'
+  notice_setting_no_files: 'Das Grid hat keine Dateien auf diesem Rechner: Es liest diese Einstellung in seinen Dateien, stellen Sie sie dort von Hand ein.'
+  notice_setting_no_files_unkept: 'Das Grid hat keine Dateien auf diesem Rechner, und die Anwendung speichert keine Einstellungen dafür.'
+  notice_options_no_files: 'Das Grid hat keine Dateien auf diesem Rechner: Seine Optionen werden dort repariert, wo seine Konfiguration liegt.'
+  notice_database_unsaid: 'Die Konfiguration des Grids sagt nicht, wo diese Datenbank ist.'
+  notice_database_unreachable: 'Die Datenbank ist nicht erreichbar.'
   admin_engine: Engine
   admin_engine_help: 'Wo die Seite alles über das Grid erfragt'
   admin_engine_remote: 'Die API des Grids'

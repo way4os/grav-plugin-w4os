@@ -675,6 +675,13 @@ w4os:
   notice_registered: 'De avatar {name} is klaar: log in met zijn naam en zijn wachtwoord.'
   notice_registered_confirm: 'Er is een mail naar {email} gestuurd: het account wordt aangemaakt zodra de link erin wordt gevolgd.'
   notice_registered_mail_failed: 'De registratie blijft bewaard, maar de mail naar {email} kon niet worden verzonden: vraag hem later opnieuw aan.'
+  notice_setting_file_unwritable: 'Deze server kan {file} niet schrijven, waar het grid het leest: stel het daar met de hand in.'
+  notice_setting_file_unwritable_unkept: 'Deze server kan {file} niet schrijven, en de toepassing bewaart geen instellingen voor het grid: stel het daar met de hand in.'
+  notice_setting_no_files: 'Het grid heeft geen bestanden op deze machine: het leest deze instelling in zijn bestanden, stel het daar met de hand in.'
+  notice_setting_no_files_unkept: 'Het grid heeft geen bestanden op deze machine, en de toepassing bewaart er geen instellingen voor.'
+  notice_options_no_files: 'Het grid heeft geen bestanden op deze machine: zijn opties worden hersteld waar zijn configuratie wordt bewaard.'
+  notice_database_unsaid: 'De configuratie van het grid zegt niet waar deze database is.'
+  notice_database_unreachable: 'De database is niet bereikbaar.'
   admin_engine: Engine
   admin_engine_help: 'Waar de site alles over de grid vraagt'
   admin_engine_remote: 'De API van de grid'

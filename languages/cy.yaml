@@ -675,6 +675,13 @@ w4os:
   notice_registered: "Mae'r afatar {name} yn barod: mewngofnodwch gyda'i enw a'i gyfrinair."
   notice_registered_confirm: 'Anfonwyd neges at {email}: caiff y cyfrif ei wneud unwaith y dilynir y ddolen sydd ynddi.'
   notice_registered_mail_failed: "Mae'r cofrestriad wedi'i gadw, ond ni ellid anfon y neges at {email}: gofynnwch amdani eto yn nes ymlaen."
+  notice_setting_file_unwritable: "Ni all y gweinydd hwn ysgrifennu {file}, lle mae'r grid yn ei ddarllen: gosodwch ef yno â llaw."
+  notice_setting_file_unwritable_unkept: "Ni all y gweinydd hwn ysgrifennu {file}, ac nid yw'r rhaglen yn cadw gosodiadau ar gyfer y grid: gosodwch ef yno â llaw."
+  notice_setting_no_files: "Nid oes gan y grid ffeiliau ar y peiriant hwn: mae'n darllen y gosodiad hwn yn ei ffeiliau, gosodwch ef yno â llaw."
+  notice_setting_no_files_unkept: "Nid oes gan y grid ffeiliau ar y peiriant hwn, ac nid yw'r rhaglen yn cadw gosodiadau ar ei gyfer."
+  notice_options_no_files: 'Nid oes gan y grid ffeiliau ar y peiriant hwn: caiff ei opsiynau eu trwsio lle cedwir ei ffurfweddiad.'
+  notice_database_unsaid: "Nid yw ffurfweddiad y grid yn dweud ble mae'r gronfa ddata hon."
+  notice_database_unreachable: 'Ni ellir cyrraedd y gronfa ddata.'
   admin_engine: Engine
   admin_engine_help: 'Lle mae’r safle’n gofyn popeth am y grid'
   admin_engine_remote: 'API y grid'
