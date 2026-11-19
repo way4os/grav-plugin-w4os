@@ -22,6 +22,9 @@ final class Site
     /** Where the password of the database of a described grid is kept, out of the configuration. */
     public const DATABASE_SECRET = 'user-data://w4os/database.json';
 
+    /** The settings the site keeps for its bundled engine (SettingsFile): the key of the money, what its settings pages change. */
+    public const ENGINE_SETTINGS = 'user-data://w4os/engine-settings.json';
+
     /** Where the description of a grid the bundled engine works with is written. */
     public const GRID_FOLDER = 'user-data://w4os/opensim';
 
@@ -184,7 +187,9 @@ final class Site
 
         $cache = (string) $this->grav['locator']->findResource('cache://w4os/opensim', true, true);
 
-        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'), $cache);
+        $data = (string) $this->grav['locator']->findResource('user-data://w4os', true, true);
+
+        return $this->bundled = new Bundled($settings, $root, fn (string $url) => $this->get($url, 'text/xml'), $cache, $data.'/'.basename(self::ENGINE_SETTINGS));
     }
 
     /** Whether the site serves the helpers of the grid itself (setting "serve_helpers", with the bundled engine). */

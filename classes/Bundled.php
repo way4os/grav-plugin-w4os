@@ -40,8 +40,9 @@ final class Bundled
      * @param string $root the folder of the site where a described grid is written (etc/grids/<nick>)
      * @param \Closure(string $url): ?string $fetch the body at an address (get_grid_info of a described grid)
      * @param string $cache the folder of the caches of the engine for this site (the pictures it converts...), one the site writes to
+     * @param string $store the file of the settings the site keeps for the engine (SettingsFile), read before the files of the grid
      */
-    public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '') {}
+    public function __construct(private array $settings, private string $root, private \Closure $fetch, private string $cache = '', private string $store = '') {}
 
     /** The libraries the plugin bundles (its vendor folder: the engine, the helpers), loaded once; whether the engine is there. */
     public static function library(): bool
@@ -235,15 +236,21 @@ final class Bundled
             $config = rtrim(trim((string) ($this->settings['config'] ?? '')), '/');
             $conf = trim((string) ($this->settings['opensim_conf'] ?? ''));
             $config !== '' || $config = $conf !== '' ? dirname($conf) : '/etc/opensim';
-            $this->environment = Environment::system(new Layout(['EtcRoot' => $config] + $own), databases: $this->databaseAccess());
+            $this->environment = Environment::system(new Layout(['EtcRoot' => $config] + $own), databases: $this->databaseAccess(), settings: $this->kept());
             $this->nick = trim((string) ($this->settings['grid'] ?? '')) ?: $this->onlyGrid();
 
             return $this->environment;
         }
-        $environment = Environment::system(new Layout(['EtcRoot' => "$this->root/etc"] + $own), databases: $this->databaseAccess());
+        $environment = Environment::system(new Layout(['EtcRoot' => "$this->root/etc"] + $own), databases: $this->databaseAccess(), settings: $this->kept());
         $this->nick = $this->describe($login, $environment);
 
         return $this->environment = $environment;
+    }
+
+    /** The settings the site keeps for the engine (`store`, SettingsFile), read before the files of the grid; null without a file. */
+    private function kept(): ?SettingsFile
+    {
+        return $this->store === '' ? null : new SettingsFile($this->store);
     }
 
     /**
