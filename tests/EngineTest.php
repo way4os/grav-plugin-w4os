@@ -78,6 +78,13 @@ describe('engine', function () {
             ->and($log[1]['url'])->toBe('https://grid.example.org/api/grids/demo/health');
     });
 
+    test('checks one line of the health now', function () {
+        $engine = fakeEngine([[200, ['data' => ['type' => 'health-checks', 'id' => 'l1', 'attributes' => ['label' => 'login', 'kind' => 'address', 'level' => 'ok', 'checkedAt' => 1795059606]]]]], $log, grid: 'demo');
+
+        expect($engine->healthCheck('l1'))->toMatchArray(['id' => 'l1', 'label' => 'login', 'checkedAt' => 1795059606])
+            ->and($log[0]['url'])->toBe('https://grid.example.org/api/grids/demo/health/l1');
+    });
+
     test('a transport failure is a 503', function () {
         $engine = new W4os\Grav\Engine('https://x', 'k', '', fn () => throw new RuntimeException('timeout'));
 

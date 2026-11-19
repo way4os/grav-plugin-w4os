@@ -62,10 +62,44 @@ describe('the health page of the admin', function () {
         ]]]];
         $html = $render(['health' => $health]);
 
-        expect($html)->toMatch('~<span title="[^"]+">\[w4os.admin_health_checked:2 minutes ago\]</span>~')
+        expect($html)->toMatch('~<span class="w4os-health-checked" title="[^"]+">\[w4os.admin_health_checked:2 minutes ago\]</span>~')
             ->and($html)->toContain('href="/w4os/health?refresh=1"')
             ->and(substr_count($html, '2 hours ago'))->toBe(1)
             ->and($render(['health' => $health, 'refreshError' => 'Idle timeout reached']))->toContain('[w4os.admin_health_refresh_failed:Idle timeout reached|2 minutes ago]');
+    });
+
+    test('shows each kind of line with its own columns, nothing where a value means nothing, the reason of what is not set', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_health', fn () => ['health' => ['level' => 'error', 'checkedAt' => time(), 'groups' => [
+            ['file' => 'Robust.HG.ini', 'title' => '[GridInfoService]', 'rows' => [
+                ['id' => 'a1', 'kind' => 'address', 'label' => 'welcome', 'name' => 'setting_welcome', 'description' => 'setting_welcome_help', 'url' => 'http://grid.example.org/helpers/welcome', 'level' => 'error', 'status' => '404', 'expectedStatus' => '2xx', 'ms' => 3, 'checkedAt' => time()],
+                ['id' => 'a2', 'kind' => 'address', 'label' => 'economy', 'name' => 'setting_economy', 'level' => 'unset', 'reason' => 'health_unset', 'checkedAt' => time()],
+                ['id' => 'v1', 'kind' => 'value', 'label' => 'gridname', 'text' => 'Friendly Fowl', 'level' => 'none', 'checkedAt' => time()],
+            ]],
+            ['file' => 'PHP', 'title' => '', 'rows' => [['id' => 'r1', 'kind' => 'requirement', 'label' => 'xmlrpc', 'installed' => false, 'version' => null, 'level' => 'error', 'status' => 'missing', 'checkedAt' => time()]]],
+            ['file' => 'cache', 'title' => '', 'rows' => [['id' => 'f1', 'kind' => 'folder', 'label' => 'assets', 'path' => '/var/cache/opensim/demo/assets', 'exists' => false, 'writable' => true, 'level' => 'ok', 'status' => 'can be made', 'checkedAt' => time()]]],
+        ]], 'addresses' => null, 'error' => null, 'refreshError' => null]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key".($args ? ':'.implode('|', $args) : '').']'));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => 'now'));
+        $html = $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health'], 'assets' => new class {
+            public function addJs(string $url, array $options = []): void {}
+        }]);
+
+        expect($html)->toContain('<tr data-check="a1" class="w4os-health-error">', '[w4os.admin_health_expected]', '2xx', '404', '[w4os.setting_welcome]')
+            ->and($html)->toContain('[w4os.health_unset]')
+            ->and($html)->toContain('[w4os.admin_health_extension]', '[w4os.admin_health_missing]')
+            ->and($html)->toContain('[w4os.admin_health_path]', '/var/cache/opensim/demo/assets', '[w4os.admin_health_writable]')
+            ->and($html)->not->toContain('—');
+    });
+
+    test('gives one line checked again, as the page shows it', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => "at $value"));
+        $html = $twig->render('w4os/health-row.html.twig', ['row' => ['id' => 'a1', 'kind' => 'address', 'label' => 'login', 'url' => 'http://grid.example.org:8002', 'level' => 'ok', 'status' => '200', 'ms' => 12, 'checkedAt' => 1795059606]]);
+
+        expect($html)->toContain('<tr data-check="a1" class="w4os-health-ok">', 'at 1795059606', '12 ms');
     });
 
     test('says why when the engine does not answer', function () {

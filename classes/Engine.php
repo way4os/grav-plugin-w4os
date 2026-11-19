@@ -156,6 +156,12 @@ final class Engine
         return $this->resource($this->call('GET', '/health', query: $refresh ? ['refresh' => 1] : []));
     }
 
+    /** @return array<string,mixed> one line of the health of the grid, checked now (its id), as the report gives it */
+    public function healthCheck(string $id): array
+    {
+        return $this->resource($this->call('GET', '/health/'.rawurlencode($id)));
+    }
+
     /** @return array<string,mixed> the addresses of the grid, where each comes from and who serves the pages */
     public function addresses(): array
     {

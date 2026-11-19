@@ -5,7 +5,6 @@
    tip; a row its own where it differs); checked again by its button (?refresh=1), a check that could not run said with the time of
    the report shown. #}
 {% set data = w4os_health() %}
-{% set icons = {ok: 'ti ti-circle-check text-green', error: 'ti ti-circle-x text-red', none: 'ti ti-minus text-secondary'} %}
 {% if data.error %}
     <div class="alert alert-danger" role="alert">{{ data.error }}</div>
 {% endif %}
@@ -14,46 +13,51 @@
     {% if data.refreshError %}
         <div class="alert alert-warning" role="alert">{{ 'w4os.admin_health_refresh_failed'|t(data.refreshError, checked ? checked|w4os_date('list') : '?') }}</div>
     {% endif %}
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-        {% if data.health.level == 'error' %}
-            <div class="alert alert-danger mb-0 flex-fill" role="status">{{ 'w4os.admin_health_error'|t }}{% if checked %} <span class="text-secondary">· <span title="{{ checked|w4os_date('long')|e('html_attr') }}">{{ 'w4os.admin_health_checked'|t(checked|w4os_date('list')) }}</span></span>{% endif %}</div>
-        {% else %}
-            <div class="alert alert-success mb-0 flex-fill" role="status">{{ 'w4os.admin_health_ok'|t }}{% if checked %} <span class="text-secondary">· <span title="{{ checked|w4os_date('long')|e('html_attr') }}">{{ 'w4os.admin_health_checked'|t(checked|w4os_date('list')) }}</span></span>{% endif %}</div>
-        {% endif %}
-        <a class="btn" href="{{ (page.route ?? '') ~ '?refresh=1' }}"><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
+    {# The level of the report and its time; the script checks the lines again one by one and says it here (js/health.js) #}
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3 w4os-health-banner" data-checked="{{ 'w4os.admin_health_checked'|t('%s')|e('html_attr') }}" data-ok="{{ 'w4os.admin_health_ok'|t|e('html_attr') }}" data-error="{{ 'w4os.admin_health_error'|t|e('html_attr') }}" data-failed="{{ 'w4os.admin_health_not_checked'|t('%s')|e('html_attr') }}">
+        <div class="alert {{ data.health.level == 'error' ? 'alert-danger' : 'alert-success' }} mb-0 flex-fill" role="status">
+            <span class="w4os-health-level">{{ data.health.level == 'error' ? 'w4os.admin_health_error'|t : 'w4os.admin_health_ok'|t }}</span>
+            {%- if checked %} <span class="text-secondary">· <span class="w4os-health-checked" title="{{ checked|w4os_date('long')|e('html_attr') }}">{{ 'w4os.admin_health_checked'|t(checked|w4os_date('list')) }}</span></span>{% endif %}
+        </div>
+        <a class="btn" href="{{ (page.route ?? '') ~ '?refresh=1' }}" data-w4os-health-check><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
     </div>
+    {# The heads of the columns of each kind of line (health-row.html.twig) #}
+    {% set heads = {
+        address: ['w4os.admin_health_address', 'w4os.admin_health_expected', 'w4os.admin_health_answer'],
+        value: ['w4os.admin_health_value', 'w4os.admin_health_expected'],
+        secret: ['w4os.admin_health_set'],
+        requirement: ['w4os.admin_health_state', 'w4os.admin_health_version'],
+        folder: ['w4os.admin_health_exists', 'w4os.admin_health_writable'],
+        file: ['w4os.admin_health_readable'],
+        option: ['w4os.admin_health_state'],
+    } %}
+    {% set firsts = {requirement: 'w4os.admin_health_extension', folder: 'w4os.admin_health_path', file: 'w4os.admin_health_path', option: 'w4os.admin_health_instance'} %}
     {% for group in data.health.groups ?? [] %}
         <div class="card mb-3 w4os-health-group">
             <div class="card-header"><h3 class="card-title"><code>{{ group.file }}</code>{% if group.title %} <span class="text-secondary">{{ group.title }}</span>{% endif %}</h3></div>
+            {# One table for each kind of line of the group, in the order they come #}
+            {% set kinds = [] %}
+            {% for row in group.rows %}{% set kind = row.kind ?? (row.text is defined ? 'value' : 'address') %}{% if kind not in kinds %}{% set kinds = kinds|merge([kind]) %}{% endif %}{% endfor %}
+            {% for kind in kinds %}
             <div class="table-responsive">
-                <table class="table table-vcenter card-table">
+                <table class="table table-vcenter card-table w4os-health-{{ kind|e('html_attr') }}">
                     <thead><tr>
                         <th class="w-1"><span class="visually-hidden">{{ 'w4os.column_status'|t }}</span></th>
-                        <th>{{ 'w4os.admin_health_setting'|t }}</th>
-                        <th>{{ 'w4os.admin_health_address'|t }}</th>
-                        <th>{{ 'w4os.admin_health_answer'|t }}</th>
+                        <th>{{ (firsts[kind] ?? 'w4os.admin_health_setting')|t }}</th>
+                        {% for head in heads[kind] ?? heads.option %}<th>{{ head|t }}</th>{% endfor %}
                         <th class="w-1 text-end text-nowrap">{{ 'w4os.admin_health_time'|t }}</th>
                     </tr></thead>
                     <tbody>
-                    {% for row in group.rows %}
-                        <tr class="w4os-health-{{ row.level|e('html_attr') }}">
-                            <td><i class="{{ icons[row.level] ?? icons.none }}" title="{{ row.level|e('html_attr') }}" aria-label="{{ row.level|e('html_attr') }}"></i></td>
-                            <td><code>{{ row.label }}</code>{% if row.tag %} <span class="badge bg-secondary-lt">{{ row.tag }}</span>{% endif %}</td>
-                            <td class="text-break">
-                                {%- if row.url %}<a href="{{ row.url|e('html_attr') }}" target="_blank" rel="noopener">{{ row.display ?? row.url }}</a>{% elseif row.text %}{{ row.text }}{% else %}<span class="text-secondary">—</span>{% endif -%}
-                                {% if row.detail %}<div class="small text-secondary">{{ row.detail }}</div>{% endif %}
-                            </td>
-                            <td>{{ row.status }}</td>
-                            <td class="text-end text-secondary text-nowrap">{{ row.ms is not null ? row.ms ~ ' ms' }}
-                                {%- if row.checkedAt ?? false and row.checkedAt != checked %}<div class="small" title="{{ row.checkedAt|w4os_date('long')|e('html_attr') }}">{{ row.checkedAt|w4os_date('list') }}</div>{% endif -%}
-                            </td>
-                        </tr>
+                    {% for row in group.rows|filter(row => (row.kind ?? (row.text is defined ? 'value' : 'address')) == kind) %}
+                        {% include 'w4os/health-row.html.twig' with {row: row, checked: checked} %}
                     {% endfor %}
                     </tbody>
                 </table>
             </div>
+            {% endfor %}
         </div>
     {% endfor %}
+    {% do assets.addJs('plugin://w4os/js/health.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}
 {% if data.addresses %}
     <div class="card mb-3 w4os-health-addresses">
@@ -69,7 +73,7 @@
                 {% for name, url in data.addresses.addresses ?? {} %}
                     <tr>
                         <td><code>{{ name }}</code>{% if data.addresses.servedBy[name] is defined %} <span class="badge bg-secondary-lt">{{ data.addresses.servedBy[name] }}</span>{% endif %}</td>
-                        <td class="text-break">{% if url %}<a href="{{ url|e('html_attr') }}" target="_blank" rel="noopener">{{ url }}</a>{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+                        <td class="text-break">{% if url %}<a href="{{ url|e('html_attr') }}" target="_blank" rel="noopener">{{ url }}</a>{% else %}<span class="text-secondary">{{ 'w4os.health_unset'|t }}</span>{% endif %}</td>
                         <td class="text-secondary">{{ data.addresses.sources[name] ?? '' }}</td>
                     </tr>
                 {% endfor %}

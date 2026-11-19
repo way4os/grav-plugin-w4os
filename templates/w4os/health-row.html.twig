@@ -1,0 +1,47 @@
+{# A line of the health of the grid (row), in the columns of its kind (address, value, secret, requirement, folder, file, option):
+   its level, its key with what it is for, then what the kind says; nothing where a value means nothing, the reason of what is not
+   set. Its id for the script that checks it again (js/health.js), its own time where it is not the report's (checked), the full
+   date as its tip. The page and the line
+   checked again (?check=<id>) draw it the same. #}
+{% set kind = row.kind ?? (row.text is defined ? 'value' : 'address') %}
+{% set icons = {ok: 'ti ti-circle-check text-green', error: 'ti ti-circle-x text-red', warning: 'ti ti-alert-triangle text-yellow', slow: 'ti ti-clock text-yellow', unset: 'ti ti-circle-dashed text-secondary', none: 'ti ti-point text-secondary'} %}
+{% set yes = 'w4os.yes'|t %}
+{% set no = 'w4os.no'|t %}
+<tr data-check="{{ row.id ?? '' }}" class="w4os-health-{{ row.level|e('html_attr') }}">
+    <td class="w-1"><i class="{{ icons[row.level] ?? icons.none }}" title="{{ row.level|e('html_attr') }}" aria-label="{{ row.level|e('html_attr') }}"></i></td>
+    <td{% if row.description ?? false %} title="{{ ('w4os.' ~ row.description)|t|e('html_attr') }}"{% endif %}>
+        <code>{{ row.label }}</code>{% if row.tag ?? false %} <span class="badge bg-secondary-lt">{{ row.tag }}</span>{% endif %}
+        {% if row.name ?? false %}<div class="small text-secondary">{{ ('w4os.' ~ row.name)|t }}</div>{% endif %}
+        {% if kind in ['folder', 'file'] and row.path ?? false %}<div class="small text-secondary text-break"><code>{{ row.path }}</code></div>{% endif %}
+    </td>
+    {% if kind == 'address' %}
+        <td class="text-break">
+            {%- if row.url ?? false %}<a href="{{ row.url|e('html_attr') }}" target="_blank" rel="noopener">{{ row.display ?? row.url }}</a>{% elseif row.reason ?? false %}<span class="text-secondary">{{ ('w4os.' ~ row.reason)|t }}</span>{% endif -%}
+        </td>
+        <td>{{ row.expectedStatus ?? '' }}{% if row.expectedLocation ?? false %}<div class="small text-secondary text-break">{{ row.expectedLocation }}</div>{% endif %}</td>
+        <td>{{ row.status ?? '' }}
+            {%- if row.location ?? false %}<div class="small text-secondary text-break">{{ row.location }}</div>{% endif -%}
+            {%- if row.detail ?? false %}<div class="small text-secondary">{{ row.detail }}</div>{% endif -%}
+            {%- if row.thirdParty ?? false %}<div class="small text-secondary">{{ 'w4os.health_third_party'|t }}</div>{% endif -%}
+        </td>
+    {% elseif kind == 'value' %}
+        <td class="text-break">{% if row.text ?? '' %}{{ row.text }}{% elseif row.reason ?? false %}<span class="text-secondary">{{ ('w4os.' ~ row.reason)|t }}</span>{% endif %}</td>
+        <td class="text-break">{{ row.expected ?? '' }}{% if row.snippet ?? false %}<div><code>{{ row.snippet }}</code></div>{% endif %}</td>
+    {% elseif kind == 'secret' %}
+        <td>{{ row.set ? yes : no }}{% if not row.set and row.reason ?? false %}<div class="small text-secondary">{{ ('w4os.' ~ row.reason)|t }}</div>{% endif %}</td>
+    {% elseif kind == 'requirement' %}
+        <td>{{ row.installed ? 'w4os.admin_health_installed'|t : 'w4os.admin_health_missing'|t }}{% if row.detail ?? false %}<div class="small text-secondary">{{ row.detail }}</div>{% endif %}</td>
+        <td>{{ row.version ?? '' }}</td>
+    {% elseif kind == 'folder' %}
+        <td>{{ row.exists ? yes : no }}</td>
+        <td>{{ row.writable ? yes : no }}{% if row.status ?? false %}<div class="small text-secondary">{{ row.status }}</div>{% endif %}</td>
+    {% elseif kind == 'file' %}
+        <td>{{ row.readable ? yes : no }}</td>
+    {% else %}
+        <td>{{ row.status ?? '' }}{% if row.missing ?? [] %}<div class="small text-secondary">{{ row.missing|join(', ') }}</div>{% endif %}</td>
+    {% endif %}
+    <td class="w-1 text-end text-secondary text-nowrap w4os-health-when">
+        {{- row.ms is defined and row.ms is not null ? row.ms ~ ' ms' : '' -}}
+        {%- if (row.checkedAt ?? false) and row.checkedAt != (checked ?? null) %}<div class="small" title="{{ row.checkedAt|w4os_date('long')|e('html_attr') }}">{{ row.checkedAt|w4os_date('list') }}</div>{% endif -%}
+    </td>
+</tr>

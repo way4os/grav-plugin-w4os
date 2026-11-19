@@ -460,6 +460,8 @@ class W4osPlugin extends Plugin
             $this->grav['page']->title($edited === null ? $this->site()->translate('w4os.manage_title') : $this->site()->translate('w4os.edit_title', [(string) $edited['name']]));
         } elseif ($type === 'manage' && $this->grav['uri']->query('format') === 'avatars') {
             $this->avatarsFound((string) $this->grav['uri']->query('search'));
+        } elseif ($type === 'health' && (string) $this->grav['uri']->query('check') !== '') {
+            $this->healthLine((string) $this->grav['uri']->query('check'));
         } elseif ($type === 'models' && $this->grav['uri']->query('format') === 'preview') {
             $this->modelsPreview((array) ($_GET['filter'] ?? []));
         } elseif ($type === 'region') {
@@ -1336,6 +1338,27 @@ class W4osPlugin extends Plugin
         header('Content-Type: text/html; charset=utf-8');
         header('Cache-Control: no-store');
         echo $this->grav['twig']->processTemplate('w4os/models-preview.html.twig', ['models' => $this->site()->models($asked), 'rule' => $rule]);
+        exit;
+    }
+
+    /**
+     * One line of the health checked again now (the engine's check of that line), as the page draws it, for whom reads the health
+     * (js/health.js); why it could not be checked, as text, with a 502.
+     */
+    private function healthLine(string $id): never
+    {
+        $this->site()->canOperation('health') || (http_response_code(403) && exit);
+        header('Cache-Control: no-store');
+        try {
+            $row = ['id' => $id] + $this->site()->engine()->healthCheck($id);
+        } catch (\Throwable $e) {
+            http_response_code(502);
+            header('Content-Type: text/plain; charset=utf-8');
+            echo $e->getMessage();
+            exit;
+        }
+        header('Content-Type: text/html; charset=utf-8');
+        echo $this->grav['twig']->processTemplate('w4os/health-row.html.twig', ['row' => $row]);
         exit;
     }
 
