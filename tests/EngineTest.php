@@ -69,6 +69,15 @@ describe('engine', function () {
             ->and(urldecode($log[0]['url']))->toBe('https://grid.example.org/api/grids/demo/avatar-models?filter[match]=uuid&filter[list]=m1,m2');
     });
 
+    test('asks the health of the grid checked now, or as it was last checked', function () {
+        $engine = fakeEngine([[200, ['data' => ['type' => 'health', 'id' => 'demo', 'attributes' => ['level' => 'ok', 'checkedAt' => 1795058484]]]], [200, ['data' => ['type' => 'health', 'id' => 'demo', 'attributes' => ['level' => 'ok', 'checkedAt' => 1795058400]]]]], $log, grid: 'demo');
+
+        expect($engine->health(true)['checkedAt'])->toBe(1795058484)
+            ->and($log[0]['url'])->toBe('https://grid.example.org/api/grids/demo/health?refresh=1')
+            ->and($engine->health()['checkedAt'])->toBe(1795058400)
+            ->and($log[1]['url'])->toBe('https://grid.example.org/api/grids/demo/health');
+    });
+
     test('a transport failure is a 503', function () {
         $engine = new W4os\Grav\Engine('https://x', 'k', '', fn () => throw new RuntimeException('timeout'));
 

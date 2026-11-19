@@ -150,10 +150,10 @@ final class Engine
         return $this->resource($this->call('PATCH', '/settings/'.rawurlencode($group), ['type' => 'settings', 'id' => $group, 'attributes' => $values]));
     }
 
-    /** @return array<string,mixed> the health of the grid as the engine checks it now: its level, its groups of rows */
-    public function health(): array
+    /** @return array<string,mixed> the health of the grid: checked now (refresh), else as the engine last checked it; its level, its time (checkedAt), its groups of rows */
+    public function health(bool $refresh = false): array
     {
-        return $this->resource($this->call('GET', '/health'));
+        return $this->resource($this->call('GET', '/health', query: $refresh ? ['refresh' => 1] : []));
     }
 
     /** @return array<string,mixed> the addresses of the grid, where each comes from and who serves the pages */

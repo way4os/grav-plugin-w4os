@@ -822,22 +822,26 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The health of the grid and its addresses, as the engine checks them now (a call each), or why it could not tell.
+     * The health of the grid and its addresses: checked again when the page asks it (`?refresh=1`), else the engine's last report;
+     * why it could not tell, or could not check again (Site::healthReport()).
      *
-     * @return array{health: ?array<string,mixed>, addresses: ?array<string,mixed>, error: ?string}
+     * @return array{health: ?array<string,mixed>, addresses: ?array<string,mixed>, error: ?string, refreshError: ?string}
      */
     private function health(): array
     {
         if (! $this->site()->canOperation('health')) {
-            return ['health' => null, 'addresses' => null, 'error' => null];
+            return ['health' => null, 'addresses' => null, 'error' => null, 'refreshError' => null];
         }
+        $engine = $this->site()->engine();
+        // Checked again when the page is asked so (its button), else the last report
+        $report = Site::healthReport(fn (bool $refresh) => $engine->health($refresh), $this->grav['uri']->query('refresh') === '1');
         try {
-            $engine = $this->site()->engine();
-
-            return ['health' => $engine->health(), 'addresses' => $engine->addresses(), 'error' => null];
-        } catch (\Throwable $e) {
-            return ['health' => null, 'addresses' => null, 'error' => $e->getMessage()];
+            $addresses = $report['error'] === null ? $engine->addresses() : null;
+        } catch (\Throwable) {
+            $addresses = null;
         }
+
+        return $report + ['addresses' => $addresses];
     }
 
     /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */

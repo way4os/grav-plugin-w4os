@@ -64,6 +64,30 @@ final class Site
         return $helpers === '' ? '' : "$helpers/pictures";
     }
 
+    /**
+     * The health of the grid for its page: checked again when asked (`refresh`), else the last report the engine kept; a check that
+     * could not run again says why (`refreshError`) beside the last report, whose time tells how old it is.
+     *
+     * @param \Closure(bool $refresh): array<string,mixed> $read the health as the engine gives it
+     * @return array{health: ?array<string,mixed>, error: ?string, refreshError: ?string}
+     */
+    public static function healthReport(\Closure $read, bool $refresh): array
+    {
+        $refreshError = null;
+        if ($refresh) {
+            try {
+                return ['health' => $read(true), 'error' => null, 'refreshError' => null];
+            } catch (\Throwable $e) {
+                $refreshError = $e->getMessage();
+            }
+        }
+        try {
+            return ['health' => $read(false), 'error' => null, 'refreshError' => $refreshError];
+        } catch (\Throwable $e) {
+            return ['health' => null, 'error' => $e->getMessage(), 'refreshError' => $refreshError];
+        }
+    }
+
     /** The address of the engine API of a remote engine: its setting `api_url`, never guessed from the helpers'; empty without it. */
     public static function apiUrl(array $config): string
     {

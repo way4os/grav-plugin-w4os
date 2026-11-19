@@ -1,20 +1,26 @@
 {# The health of the grid, for the managers the contract lets read it (getHealth): what the engine checks now, group by group (a
    file of the grid and its section, what the grid says at get_grid_info, the pages, PHP, the folders and files the engine uses),
    each row its level, its address or its value, its answer and its time; then the addresses of the grid (getAddresses), where
-   each comes from and who serves the pages. Checked again on each visit. #}
+   each comes from and who serves the pages. The engine's last report, with its time (checkedAt, relative, its full date as its
+   tip; a row its own where it differs); checked again by its button (?refresh=1), a check that could not run said with the time of
+   the report shown. #}
 {% set data = w4os_health() %}
 {% set icons = {ok: 'ti ti-circle-check text-green', error: 'ti ti-circle-x text-red', none: 'ti ti-minus text-secondary'} %}
 {% if data.error %}
     <div class="alert alert-danger" role="alert">{{ data.error }}</div>
 {% endif %}
 {% if data.health %}
+    {% set checked = data.health.checkedAt ?? null %}
+    {% if data.refreshError %}
+        <div class="alert alert-warning" role="alert">{{ 'w4os.admin_health_refresh_failed'|t(data.refreshError, checked ? checked|w4os_date('list') : '?') }}</div>
+    {% endif %}
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
         {% if data.health.level == 'error' %}
-            <div class="alert alert-danger mb-0 flex-fill" role="status">{{ 'w4os.admin_health_error'|t }}</div>
+            <div class="alert alert-danger mb-0 flex-fill" role="status">{{ 'w4os.admin_health_error'|t }}{% if checked %} <span class="text-secondary">· <span title="{{ checked|w4os_date('long')|e('html_attr') }}">{{ 'w4os.admin_health_checked'|t(checked|w4os_date('list')) }}</span></span>{% endif %}</div>
         {% else %}
-            <div class="alert alert-success mb-0 flex-fill" role="status">{{ 'w4os.admin_health_ok'|t }}</div>
+            <div class="alert alert-success mb-0 flex-fill" role="status">{{ 'w4os.admin_health_ok'|t }}{% if checked %} <span class="text-secondary">· <span title="{{ checked|w4os_date('long')|e('html_attr') }}">{{ 'w4os.admin_health_checked'|t(checked|w4os_date('list')) }}</span></span>{% endif %}</div>
         {% endif %}
-        <a class="btn" href="{{ page.route ?? '' }}"><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
+        <a class="btn" href="{{ (page.route ?? '') ~ '?refresh=1' }}"><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
     </div>
     {% for group in data.health.groups ?? [] %}
         <div class="card mb-3 w4os-health-group">
@@ -38,7 +44,9 @@
                                 {% if row.detail %}<div class="small text-secondary">{{ row.detail }}</div>{% endif %}
                             </td>
                             <td>{{ row.status }}</td>
-                            <td class="text-end text-secondary text-nowrap">{{ row.ms is not null ? row.ms ~ ' ms' }}</td>
+                            <td class="text-end text-secondary text-nowrap">{{ row.ms is not null ? row.ms ~ ' ms' }}
+                                {%- if row.checkedAt ?? false and row.checkedAt != checked %}<div class="small" title="{{ row.checkedAt|w4os_date('long')|e('html_attr') }}">{{ row.checkedAt|w4os_date('list') }}</div>{% endif -%}
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

@@ -65,6 +65,8 @@ w4os:
   admin_health_ok: 'Tout ce qui est vérifié répond comme il faut.'
   admin_health_error: 'Certaines adresses ne répondent pas comme il faut : voir les lignes en rouge.'
   admin_health_check: 'Vérifier à nouveau'
+  admin_health_checked: 'vérifié %s'
+  admin_health_refresh_failed: 'La vérification n''a pas pu être refaite (%s) : ce rapport date de %s.'
   admin_blocks_unavailable: 'Les helpers de la grille n''ont pas donné %s : %s.'
   admin_health_setting: 'Réglage'
   admin_health_address: 'Adresse'
