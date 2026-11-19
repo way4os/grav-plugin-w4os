@@ -136,9 +136,11 @@ final class Site
         // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
         $bundled = $this->bundled();
         if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
+            $rendered = fn (string $name, array $args) => $bundled->rendered($name, $args) ?? throw new BlockUnavailable('the bundled helpers gave nothing');
+
             return new Blocks(fn (string $name, array $args) => $this->noticed(Blocks::kept($name)
-                ? $this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $bundled->rendered($name, $args))
-                : $bundled->rendered($name, $args)));
+                ? $this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $rendered($name, $args))
+                : $rendered($name, $args)));
         }
 
         return Blocks::remote((string) ($this->config()['url'] ?? ''), function (string $url) {
@@ -1542,20 +1544,18 @@ final class Site
     /**
      * A block of the helpers of the grid, and its notices to the visitor (their header X-Helpers-Notices).
      *
-     * @return ?array{html: string, notices: list<array{level: string, text: string}>}
+     * @return array{html: string, notices: list<array{level: string, text: string}>}
+     * @throws BlockUnavailable when the helpers do not give it (no answer, an error)
      */
-    private function block(string $url): ?array
+    private function block(string $url): array
     {
         try {
             [$status, $body, $headers] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
         } catch (\Throwable $e) {
-            $this->grav['log']->warning("w4os: $url: ".$e->getMessage());
-
-            return null;
+            throw new BlockUnavailable(Blocks::reason($e->getMessage()), previous: $e);
         }
-        $notices = json_decode((string) ($headers['x-helpers-notices'][0] ?? ''), true);
 
-        return $status === 200 ? ['html' => $body, 'notices' => is_array($notices) ? $notices : []] : null;
+        return Blocks::answer($status, $body, $headers);
     }
 
     /** The HTML of a block, its notices to the visitor added to the messages of the site (shown at the start of the page). */

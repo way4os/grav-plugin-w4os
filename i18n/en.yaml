@@ -65,6 +65,7 @@ w4os:
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
+  admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
   admin_health_setting: 'Setting'
   admin_health_address: 'Address'
   admin_health_answer: 'Answer'

@@ -10,7 +10,8 @@ namespace W4os\Grav;
 final class Lists
 {
     /**
-     * The list with only the filters a page shows, in its order (all of them without a choice).
+     * The list with only the filters a page shows, in its order (all of them without a choice), and the ones it shows as views
+     * (`views`, the links above it).
      *
      * @param array<string,mixed> $list
      * @param ?list<string> $names
@@ -19,6 +20,7 @@ final class Lists
     public static function showing(array $list, ?array $names): array
     {
         if ($names !== null) {
+            $names = [...$names, ...array_diff((array) ($list['views'] ?? []), $names)];
             $filters = array_column($list['filters'], null, 'name');
             $list['filters'] = array_values(array_filter(array_map(fn ($name) => $filters[$name] ?? null, $names)));
         }

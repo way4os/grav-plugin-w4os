@@ -125,3 +125,5 @@
 .w4os-admin .w4os-models-help { padding-left: 1.25rem; }
 .w4os-admin .w4os-models-help li + li { margin-top: .5rem; }
 .w4os-admin .w4os-models-preview[aria-busy] { opacity: .6; transition: opacity .2s; }
+/* The views of a list above it (All, the values of its views), apart by a bar as w4os-wp has them */
+.w4os-admin .w4os-views .list-inline-item:not(:last-child)::after { content: "|"; margin-left: .5rem; color: var(--tblr-border-color); }

@@ -78,10 +78,24 @@ describe('the list of a page of the admin', function () {
 
     test('shows each value of a filter with the number of rows it gives, when the engine counts them', function () {
         $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
-        $html = render_list($avatars, [], ['total' => 5, 'counts' => ['online' => ['online' => 2, 'offline' => 3]]]);
+        $html = render_list($avatars, [], ['total' => 5, 'counts' => ['status' => ['active' => 4, 'banned' => 1]]]);
 
-        expect($html)->toContain('<option value="online">[w4os.online] (2)</option>', '<option value="offline">[w4os.offline] (3)</option>')
-            ->and($html)->toContain('<option value="active">[w4os.status_active]</option>');
+        expect($html)->toContain('<option value="active" data-label="&#x5B;w4os.status_active&#x5D;">[w4os.status_active] (4)</option>')
+            ->and($html)->toContain('<option value="disabled" data-label="&#x5B;w4os.status_disabled&#x5D;">[w4os.status_disabled] (0)</option>')
+            ->and($html)->toContain('<option value="resident">[w4os.role_resident]</option>');
+    });
+
+    test('shows its views above it, as w4os-wp does: All, then the values of the filters the engine shows as views, with their counts, not in the toolbar', function () use ($simulators, $solo) {
+        $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
+        $html = render_list($avatars, [], ['total' => 7, 'counts' => ['type' => ['user' => 5, 'model' => 2, 'service' => 0], 'active' => ['yes' => 4, 'no' => 1], 'online' => ['online' => 1, 'offline' => 4]]], query: ['type' => 'model', 'search' => 'de']);
+
+        expect($html)->toMatch('~<ul class="list-inline w4os-views mb-2">\s*<li class="list-inline-item"><a href="\?search=de">\[w4os.all\] <span class="text-secondary">\(7\)</span></a></li>~')
+            ->and($html)->toContain('<a href="?search=de&amp;type=user">[w4os.avatar_type_user] <span class="text-secondary">(5)</span></a>')
+            ->and($html)->toContain('<a href="?search=de&amp;type=model" class="fw-bold text-reset" aria-current="page">[w4os.avatar_type_model] <span class="text-secondary">(2)</span></a>')
+            ->and($html)->toContain('<a href="?search=de&amp;active=yes">[w4os.view_active] <span class="text-secondary">(4)</span></a>')
+            ->and($html)->not->toContain('type=service')
+            ->and($html)->not->toContain('name="online"', 'name="type"')
+            ->and(render_list($simulators, [$solo], ['total' => 1]))->not->toContain('w4os-views');
     });
 
     test('leaves out the column of a filter the page fixes (the grid of the site)', function () use ($simulators, $solo) {

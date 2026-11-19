@@ -10,6 +10,8 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
     const clear = select.dataset.clear || '';
     const chosen = select.dataset.chosen || '%s';
     const tips = Object.fromEntries([...select.options].map((option) => [option.value, option.title]));
+    // A value chosen without the number of rows it gives (data-label), which only the list of the choices shows
+    const names = Object.fromEntries([...select.options].map((option) => [option.value, option.dataset.label || option.text]));
     // The text size the theme gives its fields, whatever the theme
     const size = getComputedStyle(select).fontSize;
     const tip = (data, escape) => (tips[data.value] ? ` title="${escape(tips[data.value])}"` : '');
@@ -26,7 +28,7 @@ document.querySelectorAll('select[data-w4os-filter]').forEach((select) => {
             option: (data, escape) => `<div${tip(data, escape)}>${escape(data.text)}</div>`,
             item: (data, escape) => (data.value === ''
                 ? `<div class="w4os-filter-all">${escape(label)}</div>`
-                : `<div${tip(data, escape)}>${select.multiple ? escape(data.text) : escape(chosen).replace('%s', escape(data.text)) + remove(escape)}</div>`),
+                : `<div${tip(data, escape)}>${select.multiple ? escape(names[data.value] ?? data.text) : escape(chosen).replace('%s', escape(names[data.value] ?? data.text)) + remove(escape)}</div>`),
         },
     });
     // The × of one value removes it, without opening the list

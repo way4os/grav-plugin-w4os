@@ -19,7 +19,8 @@ final class Blocks
     private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client'];
 
     /**
-     * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block, null when it cannot be read
+     * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block (BlockUnavailable when it cannot
+     *     be read)
      */
     public function __construct(private \Closure $fetch) {}
 
@@ -38,20 +39,82 @@ final class Blocks
     {
         $url = rtrim($url, '/');
 
-        return new self(fn (string $name, array $args) => $url === '' ? null : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
+        return new self(fn (string $name, array $args) => $url === ''
+            ? throw new BlockUnavailable('no address of the helpers is set (setting url)')
+            : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
     }
 
     /**
-     * The HTML of a block, empty when it is not one or cannot be read.
+     * A block as the helpers answered it: its HTML and its notices to the visitor (their header X-Helpers-Notices).
+     *
+     * @param array<string,list<string>> $headers
+     * @return array{html: string, notices: list<array{level: string, text: string}>}
+     * @throws BlockUnavailable when they did not give it
+     */
+    public static function answer(int $status, string $body, array $headers): array
+    {
+        $status === 200 || throw new BlockUnavailable("HTTP $status");
+        $notices = json_decode((string) ($headers['x-helpers-notices'][0] ?? ''), true);
+
+        return ['html' => $body, 'notices' => is_array($notices) ? $notices : []];
+    }
+
+    /**
+     * What the site says of the blocks of a page that could not be read: to a manager, once for each reason, the blocks it took
+     * and a link to the health of the grid; to a visitor, that the page is unavailable for now, only when the block is the whole
+     * page (profile, guide, search), without a reason. Each the level of a message of Grav and its HTML.
+     *
+     * @param array<string,string> $failures the reason of each block that could not be read
+     * @param ?string $page the block that is the whole page
+     * @param ?string $health the address of the page of the health of the grid, for whom may open it
+     * @param \Closure(string $key, array<int,string> $vars): string $t the text of a key of the catalog
+     * @return list<array{level: string, text: string}>
+     */
+    public static function notices(array $failures, bool $manager, ?string $page, ?string $health, \Closure $t): array
+    {
+        if ($failures === []) {
+            return [];
+        }
+        if (! $manager) {
+            return $page !== null && isset($failures[self::name($page)]) ? [['level' => 'warning', 'text' => htmlspecialchars($t('w4os.error_channel_unavailable', []))]] : [];
+        }
+        $byReason = [];
+        foreach ($failures as $name => $reason) {
+            $byReason[$reason][] = $name;
+        }
+        $link = $health === null ? '' : ' <a href="'.htmlspecialchars($health).'">'.htmlspecialchars($t('w4os.admin_health_title', [])).'</a>';
+        $notices = [];
+        foreach ($byReason as $reason => $names) {
+            $notices[] = ['level' => 'error', 'text' => htmlspecialchars($t('w4os.admin_blocks_unavailable', [implode(', ', $names), (string) $reason])).$link];
+        }
+
+        return $notices;
+    }
+
+    /** The reason a block could not be read, without the address it was asked at: the same for every block it took. */
+    public static function reason(string $message): string
+    {
+        return trim(rtrim((string) preg_replace('~\s*(?:for|at)?\s*"https?://[^"]*"~', '', $message), '.'));
+    }
+
+    /** The name of a block as the helpers have it (both spellings are taken). */
+    public static function name(string $name): string
+    {
+        $name = strtolower(trim($name));
+
+        return in_array(str_replace('-', '_', $name), self::NAMES, true) ? str_replace('-', '_', $name) : $name;
+    }
+
+    /**
+     * The HTML of a block, empty when it is not one.
      *
      * @param array<string,scalar> $args name and feed_only (profile: its stream alone), q and topic (search), category (destination_guide), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
      *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME])
+     * @throws BlockUnavailable when it cannot be read
      */
     public function html(string $name, array $args = []): string
     {
-        $name = strtolower(trim($name));
-        // The helpers take both spellings
-        $name = in_array(str_replace('-', '_', $name), self::NAMES, true) ? str_replace('-', '_', $name) : $name;
+        $name = self::name($name);
         if (! in_array($name, self::NAMES, true)) {
             return '';
         }
