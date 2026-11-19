@@ -55,9 +55,16 @@ final class Items
                         isset($part['outerclasses']) && $input['fields'][$name]['outerclasses'] .= ' w4os-unmet';
                     }
                 }
-                $groups[$field['group']][$field['name']] = $input
-                    // A field the values of the form hide for now (its condition), shown by the script of the form as they change
-                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+                // A field the values of the form hide for now (its condition), shown by the script of the form as they change: not
+                // required while hidden (the engine checks what it is sent)
+                if (! FormView::met($field, $view->item)) {
+                    unset($input['validate']['required']);
+                    if (($input['validate'] ?? null) === []) {
+                        unset($input['validate']);
+                    }
+                    $input['outerclasses'] = 'w4os-unmet';
+                }
+                $groups[$field['group']][$field['name']] = $input;
             } elseif (in_array($field['name'], $readOnly, true)) {
                 $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1])
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);

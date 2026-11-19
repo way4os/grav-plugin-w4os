@@ -185,4 +185,13 @@ describe('the settings pages of the services of the grid', function () {
         expect($html)->toContain('[w4os.guide_example]', "Section 1\nName|grid.example.org:8002")
             ->and(strpos($html, '[w4os.guide_example]'))->toBeGreaterThan(strpos($html, '<form id="w4os-service">'));
     });
+
+    test('a field the form hides now asks nothing: its condition unmet, it is not required', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $off = Items::fields(FormView::of($form, ['provide' => false, 'economyModule' => 'Podex'], null, true, 250), shown: true);
+        $on = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Podex'], null, true, 250), shown: true);
+
+        expect($off['podexUrl']['validate']['required'] ?? false)->toBeFalse()
+            ->and($on['podexUrl']['validate']['required'] ?? false)->toBeTrue();
+    });
 });
