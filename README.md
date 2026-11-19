@@ -67,9 +67,12 @@ avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 
 - **Quark 2** and its children (**Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron**) show the content of a page
   alone (no title on the pages of the plugin), Grav's sign-in status beside the menu, and no language switcher; Quark takes its
   favicon from `images/favicon.png` (the site's is put there).
-- **Hadron** ships the logos, the favicon and a menu link of its demo site, and untranslated labels for its language switcher:
-  the plugin clears them for each request (its logo fields naming missing files, its `menu`, its `langswitcher.format` to the
-  codes of the languages), unless the site set them itself; its row of languages takes two lines when someone is signed in.
+- **Hadron** draws its own language switcher (`partials/langauge-switcher.html.twig`, not the standard
+  `partials/langswitcher.html.twig`, so the site's switcher is not involved), labelled from its own language files, which have
+  English and German only (`LANGUAGE.ICON` elsewhere); it ships the logos, the favicon and a menu link of its demo site. The plugin
+  clears them for each request (its logo fields naming missing files, its `menu`) and sets its switcher to the codes of the
+  languages (`langswitcher.format`), unless the site set them itself; its row of languages still takes two lines when someone is
+  signed in (its own style).
 - **Mundana** dates every page as a post (its date not translated), titles it in its own header above the content, lists every
   language in words in its menu bar and draws large serif headings: a structure to start a theme of one's own from, not a theme to
   use as it is.
@@ -88,12 +91,13 @@ avatar. Seen in an audit of 15 themes (a visitor, a resident and a god, at 1280 
 ### Recommended themes
 
 Free themes that run on Grav 2 and look as they should with the plugin alone, on a new site as on an existing one (the plugin
-fixes what a theme does only through its settings and what it shows, never its styles): **Quark 2** (the base of the site's own
-theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Hadron**, **Future2021**, **Editorial**, **Learn2** (its
-menu in a sidebar), **Woo**, **Apple Notes** and **Hypertext** (plain HTML).
+adapts what it gives a theme, its fields and what it shows, never the theme's style, which is the site's choice): **Quark 2**
+(the base of the site's own theme) and **Quark 2 Open Publishing**, **Quark**, **Quark-A11y**, **Future2021**, **Editorial**,
+**Learn2** (its menu in a sidebar), **Woo**, **Apple Notes** and **Hypertext** (plain HTML).
 
-Not recommended: **Mundana** (a base for a theme of one's own, see above), **Quark Photofolio**, which has no menu of the site,
-and **Saturn**, unmaintained since 2021.
+Not recommended: **Hadron** and **Mundana** (they work, their own styles get in the way, see above), **Quark Photofolio**, whose
+menu lists the children of the page shown (`partials/navigation.html.twig`, `page.children`), not the pages of the site, and
+**Saturn** (1.7.1, made for Grav 1.5, unmaintained since 2021, no field for a logo).
 
 ## Who manages the grid on the site
 
