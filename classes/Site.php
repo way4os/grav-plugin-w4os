@@ -41,14 +41,28 @@ final class Site
     }
 
     /**
-     * The engine: the API of the grid (setting "engine: remote", its address and key), or the engine the plugin bundles ("bundled").
+     * Which engine the site asks: the API of the engine whenever it has its address and key (only the engine touches the configs of
+     * the grid; the engine the plugin bundles then serves the helpers alone), else the bundled one (a site that describes its grid).
+     *
+     * @param array<string,mixed> $config the settings of the plugin
+     * @return 'api'|'bundled'
+     */
+    public static function engineChannel(array $config, bool $hasKey): string
+    {
+        $bundled = ($config['engine'] ?? 'remote') === 'bundled';
+
+        return ! $bundled || (self::apiUrl($config) !== '' && $hasKey) ? 'api' : 'bundled';
+    }
+
+    /**
+     * The engine: the API of the grid (its address and key, engineChannel()), or the engine the plugin bundles.
      */
     public function engine(): Engine
     {
         if ($this->engine !== null) {
             return $this->engine;
         }
-        if ($bundled = $this->bundled()) {
+        if (self::engineChannel($this->config(), $this->apiKey() !== '') === 'bundled' && ($bundled = $this->bundled())) {
             return $this->engine = new Engine('', '', $bundled->nick(), fn ($method, $url, $headers, $body) => array_slice($bundled->route($method, $url, $body), 0, 2), true, $this->path('assets'));
         }
         $config = $this->config();
