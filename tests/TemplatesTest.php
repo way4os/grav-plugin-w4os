@@ -86,6 +86,7 @@ describe('templates', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4os\Grav\Site::areaText((float) $m2))));
         $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));
+        $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "count:$key:$n"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
@@ -103,18 +104,14 @@ describe('templates', function () {
         expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('[w4os.unit_dimensions:512|1,024]')->not->toContain('text-nowrap')
             ->and($cell->render(['column' => $size, 'item' => ['size' => 256]]))->toContain('[w4os.unit_dimensions:256|256]');
 
-        // Several values in one column (a group): each its label and its value, one under the other, an empty one left out
+        // Several values in one column (a group): each alone, one under the other, a count said as its text (3 prims), an empty one left out
         $regions = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name');
-        $usage = $cell->render(['column' => $regions['usage'], 'item' => ['avatars' => 1, 'prims' => 2150]]);
-        expect($usage)->toContain('<div class="w4os-group">', '<div><span class="text-secondary">[w4os.column_presence]</span> 1</div>', '<div><span class="text-secondary">[w4os.column_prims]</span> 2150</div>')
-            ->and($usage)->not->toContain('column_scripts')
+        $usage = $cell->render(['column' => $regions['usage'], 'item' => ['avatars' => 0, 'prims' => 2150]]);
+        expect($usage)->toContain('<div class="w4os-group"><div>count:w4os.count_avatars_short:0</div><div>count:w4os.count_prims:2150</div></div>')
+            ->and($usage)->not->toContain('count_scripts')
             ->and($cell->render(['column' => $regions['place'], 'item' => ['location' => '8015, 8012', 'size' => 256]]))
-            ->toContain('[w4os.profile_location]</span> 8015, 8012</div>', '[w4os.column_size]</span> [w4os.unit_dimensions:256|256]</div>')
+            ->toContain('<div class="w4os-group"><div>8015, 8012</div><div>[w4os.unit_dimensions:256|256]</div></div>')
             ->and($cell->render(['column' => $regions['usage'], 'item' => []]))->not->toContain('w4os-group');
-        // A part that says what it is (bare): its value alone
-        $place = ['name' => 'place', 'type' => 'group', 'parts' => [['name' => 'location', 'label' => 'profile_location', 'type' => 'text', 'bare' => true], ['name' => 'owner', 'label' => 'column_owner', 'type' => 'text']]];
-        expect($cell->render(['column' => $place, 'item' => ['location' => '8015, 8012', 'owner' => 'Ada']]))
-            ->toContain('<div class="w4os-group"><div>8015, 8012</div><div><span class="text-secondary">[w4os.column_owner]</span> Ada</div></div>');
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {

@@ -22,10 +22,11 @@
         {% if known.description is defined %}{% set tips = tips|merge({(known.value): known.description}) %}{% endif %}
     {% endfor %}
     {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32"><span>{% endif %}
-    {%- if type == 'date' -%}{{ value|w4os_date }}
+    {%- if column.count is defined and value is not null -%}{{ w4os_count('w4os.' ~ column.count, value) }}
+    {%- elseif type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'datetime' -%}{% if value %}<time title="{{ value|w4os_date('full')|e('html_attr') }}">{{ value|w4os_date(dates) }}</time>{% endif %}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
-    {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates)|trim %}{% if text is not empty %}{% set shown = shown|merge([(part.bare ?? false) ? '<div>' ~ text ~ '</div>' : '<div><span class="text-secondary">' ~ ('w4os.' ~ part.label)|t|e ~ '</span> ' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}
+    {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates)|trim %}{% if text is not empty %}{% set shown = shown|merge(['<div>' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}
     {%- elseif type == 'dimensions' -%}{% set width = item.width ?? value %}{% if width is not null %}{{ 'w4os.unit_dimensions'|t(w4os_number(width, 0), w4os_number(item.height ?? width, 0)) }}{% endif %}
     {%- elseif type == 'area' -%}{% if value is not null %}{{ w4os_area(value) }}{% endif %}
     {%- elseif type == 'usage' -%}{% if value is not null %}

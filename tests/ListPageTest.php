@@ -59,8 +59,8 @@ describe('the list of a page of the admin', function () {
         $regions = (new OpenApi(Contract::document()))->listOf('regions');
         $html = render_list($regions, [['uuid' => 'r1', 'name' => 'Plaza', 'avatars' => 1, 'prims' => 2150, 'location' => '8015, 8012', 'size' => 256]], ['total' => 1]);
 
-        expect($html)->toContain('<span class="d-md-none">[w4os.label_value:[w4os.column_presence]|1]</span><span class="d-md-none">[w4os.label_value:[w4os.column_prims]|2150]</span>')
-            ->and($html)->toContain('<span class="d-xl-none">[w4os.label_value:[w4os.profile_location]|8015, 8012]</span><span class="d-xl-none">[w4os.label_value:[w4os.column_size]|[w4os.unit_dimensions:256|256]]</span>')
+        expect($html)->toContain('<span class="d-md-none">1 items</span><span class="d-md-none">2150 items</span>')
+            ->and($html)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xl-none">[w4os.unit_dimensions:256|256]</span>')
             ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 
