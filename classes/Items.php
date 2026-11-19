@@ -20,7 +20,7 @@ final class Items
      *
      * @param ?\Closure(string): string $translate the text of a key of the catalog
      * @param array<string,list<array{file: ?string, text: string}>> $snippets the lines of the files of the grid a field shows, by field
-     * @param array<string,array{reason: string, file: ?string, text: string}> $fixed the settings this site cannot write, by field: why,
+     * @param array<string,array{reason: string|array<string,mixed>, file: ?string, text: string}> $fixed the settings this site cannot write, by field: why (a notice of the engine),
      *     and the line to add by hand in that file (meta.fixed of the engine)
      * @return array<string,array<string,mixed>>
      */
@@ -33,7 +33,9 @@ final class Items
             if (isset($fixed[$field['name']]) && in_array($field['name'], $changed, true)) {
                 // Not changed here: why, and the line to add by hand
                 $line = $fixed[$field['name']];
-                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => (string) ($line['reason'] ?? '')] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1, 'help' => 1])
+                // Why, in the language of the page: a notice of the engine (its code and params), or its text
+                $reason = Site::noticeText(is_array($line['reason'] ?? null) ? $line['reason'] : (string) ($line['reason'] ?? ''), $translate ?? fn (string $key) => $key);
+                $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => $reason] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1, 'help' => 1])
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
                 $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => (string) ($line['file'] ?? ''),
                     'content' => "```ini\n".rtrim((string) ($line['text'] ?? ''))."\n```", 'markdown' => true,

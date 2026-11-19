@@ -130,4 +130,15 @@ describe('the settings pages of the services of the grid', function () {
             ->and($fields['path_fixed']['content'])->toContain('DestinationGuide = http://grid.example.org/guide')
             ->and(Items::unfixed(['path' => '', 'guideSource' => 'other.txt'], $fixed))->toBe(['guideSource' => 'other.txt']);
     });
+
+    test('says why a setting cannot be changed in the language of the page, from the notice the engine gives', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
+        $fixed = ['path' => ['reason' => ['code' => 'setting-file-unwritable', 'params' => ['file' => 'Robust.HG.ini']], 'file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]];
+        $french = OpenSim\I18n\Catalog::messages('fr_FR');
+        $translate = fn (string $key) => $french[substr($key, 5)] ?? $key;
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/guide'], null, true, 250), shown: true, translate: $translate, fixed: $fixed);
+
+        expect($fields['path']['help'])->toBe(strtr($french['notice_setting_file_unwritable'], ['{file}' => 'Robust.HG.ini']))
+            ->and($fields['path']['help'])->not->toContain('This server');
+    });
 });
