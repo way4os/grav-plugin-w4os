@@ -52,3 +52,24 @@ describe('the page that makes an avatar', function () {
         expect($html)->toContain('Avatars', 'href="&#x2F;w4os&#x2F;avatars&#x2F;new"', '[w4os.action_new_avatar]');
     });
 });
+
+describe('the registration', function () {
+    test('takes the names as the viewers do, as w4os-wp checks them: a letter, then letters and numbers, made plain as they are typed', function () {
+        $page = (string) file_get_contents(dirname(__DIR__).'/pages/register.md');
+        $fields = Symfony\Component\Yaml\Yaml::parse(explode('---', $page)[1])['form']['fields'];
+        $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['forms/form.html.twig' => '<form></form>']), new FilesystemLoader(dirname(__DIR__).'/templates')]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $assets = new class {
+            public array $js = [];
+            public function addJs(string $url, array $options = []): void { $this->js[] = $url; }
+        };
+        $twig->render('w4os/register.html.twig', ['assets' => $assets, 'config' => ['plugins' => ['login' => []]], 'base_url_relative' => '']);
+
+        foreach (['first_name', 'last_name'] as $name) {
+            expect($fields[$name])->toMatchArray(['maxlength' => 32, 'help' => "w4os.{$name}_help"])
+                ->and($fields[$name]['validate'])->toMatchArray(['required' => true, 'pattern' => '[A-Za-z][A-Za-z0-9]*']);
+        }
+        expect($assets->js)->toContain('plugin://w4os/js/avatar-name.js');
+    });
+});

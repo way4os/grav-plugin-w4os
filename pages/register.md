@@ -13,15 +13,19 @@ form:
     first_name:
       type: text
       label: w4os.first_name
+      help: w4os.first_name_help
       autocomplete: given-name
-      maxlength: 63
-      validate: { required: true }
+      # A letter, then letters and numbers, as the viewers take a name (made plain as typed: js/avatar-name.js)
+      maxlength: 32
+      validate: { required: true, pattern: '[A-Za-z][A-Za-z0-9]*' }
     last_name:
       type: text
       label: w4os.last_name
+      help: w4os.last_name_help
       autocomplete: family-name
-      maxlength: 63
-      validate: { required: true }
+      # A letter, then letters and numbers, as the viewers take a name (made plain as typed: js/avatar-name.js)
+      maxlength: 32
+      validate: { required: true, pattern: '[A-Za-z][A-Za-z0-9]*' }
     email:
       type: email
       label: w4os.email

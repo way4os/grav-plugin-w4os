@@ -3,3 +3,5 @@
 <p class="w4os-links">
     {{ 'w4os.have_avatar'|t }} <a href="{{ base_url_relative ~ config.plugins.login.route|default('/login') }}">{{ 'w4os.log_in'|t }}</a>
 </p>
+{# The names made plain as they are typed, as w4os-wp does it #}
+{% do assets.addJs('plugin://w4os/js/avatar-name.js', {group: 'bottom', loading: 'defer'}) %}
