@@ -92,7 +92,7 @@ w4os:
   admin_health_installed: 'Installée'
   admin_health_missing: 'Manquante'
   admin_blocks_unavailable: 'Les helpers de la grille n''ont pas donné %s : %s.'
-  admin_blocks_no_url: 'aucune Adresse des helpers n''est réglée dans les réglages du site'
+  admin_blocks_no_url: 'le réglage « Adresse des helpers » du site est vide'
   admin_blocks_http: 'ils ont répondu par l''erreur HTTP %s'
   admin_blocks_no_answer: 'ils n''ont pas répondu (%s)'
   admin_blocks_nothing: 'ils n''ont rien donné'
