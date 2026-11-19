@@ -6,14 +6,14 @@ w4os:
   register_title: 'Mijn Avatar aanmaken'
   register_text: 'Kies hieronder een naam. Zo zullen mensen je in de virtuele wereld zien.'
   register_button: 'Mijn Avatar aanmaken'
-  register: 'Registreren'
+  register: Registreren
   have_avatar: 'Heb je al een avatar?'
-  first_name: 'Voornaam'
-  last_name: 'Achternaam'
+  first_name: Voornaam
+  last_name: Achternaam
   first_name_help: 'De voornaam moet met een letter beginnen en mag alleen letters en cijfers bevatten'
   last_name_help: 'De achternaam moet met een letter beginnen en mag alleen letters en cijfers bevatten'
-  email: 'E-mail'
-  password: 'Wachtwoord'
+  email: E-mail
+  password: Wachtwoord
   password_confirm: 'Bevestig wachtwoord'
   password_help: '6 tot 16 tekens, zonder dubbele aanhalingstekens. Met hetzelfde wachtwoord log je hier en in de virtuele wereld in.'
   model: 'Kies de eerste outfit voor je avatar.'
@@ -31,9 +31,9 @@ w4os:
   confirm_resent: 'Er is een nieuwe link onderweg.'
   confirm_resent_test: 'Testsite, geen mail: bevestig met deze link: %s'
   avatar_name: 'Avatar naam'
-  login_title: 'Inloggen'
+  login_title: Inloggen
   log_in: 'Log in'
-  logout: 'Uitloggen'
+  logout: Uitloggen
   login: 'Avatarnaam of e-mail'
   sign_in_failed: 'Inloggen mislukt'
   forgot_title: 'Wachtwoord vergeten'
@@ -48,58 +48,110 @@ w4os:
   reset_done: 'Je wachtwoord is gewijzigd. Je kunt er nu mee inloggen.'
   new_password: 'Nieuw wachtwoord'
   current_password: 'Huidig wachtwoord'
-  account_title: 'Avatarprofiel'
-  born: 'Geboren'
-  profile_title: 'Profiel'
+  account_title: Avatarprofiel
+  born: Geboren
+  profile_title: Profiel
   profile_text: 'Wat anderen in de virtuele wereld van je zien (de foto en de interesses stel je in de viewer in).'
-  about: 'Over'
+  about: Over
   wants: 'Wil graag'
-  skills: 'Vaardigheden'
-  want_build: 'Bouw'
-  want_explore: 'Verken'
-  want_meet: 'Ontmoet'
-  want_group: 'Groep'
-  want_buy: 'Kopen'
-  want_sell: 'Verkopen'
+  skills: Vaardigheden
+  want_build: Bouw
+  want_explore: Verken
+  want_meet: Ontmoet
+  want_group: Groep
+  want_buy: Kopen
+  want_sell: Verkopen
   want_be_hired: 'Word aangenomen'
-  want_hire: 'Huur'
-  skill_textures: 'Texturen'
-  skill_architecture: 'Architectuur'
+  want_hire: Huur
+  skill_textures: Texturen
+  skill_architecture: Architectuur
   skill_event_planning: 'Evenement planning'
-  skill_modeling: 'Modelleren'
-  skill_scripting: 'Scripting'
+  skill_modeling: Modelleren
+  skill_scripting: Scripting
   skill_custom_characters: 'Aangepaste personages'
-  languages: 'Talen'
+  languages: Talen
   real_life: 'Het echte leven'
-  profile_url: 'Webpagina'
+  profile_url: Webpagina
   edit_profile: 'Profiel bewerken'
-  profile_other: 'Overig'
+  profile_other: Overig
   profile_sections: 'Onderdelen van het profiel'
-  profile_tab_inworld: 'In-world'
-  profile_tab_about: 'Over'
-  profile_tab_web: 'Web'
-  profile_tab_feed: 'Feed'
+  profile_tab_inworld: In-world
+  profile_tab_about: Over
+  profile_tab_web: Web
+  profile_tab_feed: Feed
   post_label: 'New post'
   post_help: 'Plain text, 1000 characters at most.'
-  action_save: 'Save'
+  action_save: Save
   settings_models: 'Avatar Modellen'
-  settings_economy: 'Economie-instellingen'
+  settings_economy: Economie-instellingen
   settings_search: 'Zoekmachine instellingen'
   settings_guide: 'Instellingen voor de Gids van Bestemmingen'
   settings_offline: 'Offline berichten instellingen'
   settings_assets: 'Web assets-server'
-  settings_menu_economy: 'Economie'
-  settings_menu_search: 'Zoekmachine'
-  settings_menu_guide: 'Gids voor bestemmingen'
+  settings_menu_economy: Economie
+  settings_menu_search: Zoekmachine
+  settings_menu_guide: Bestemmingengids
   settings_menu_offline: 'Offline berichten'
-  settings_menu_assets: 'Assets Server'
+  settings_menu_assets: Webassets
   settings_saved: 'Instellingen opgeslagen.'
-  models_match: 'Wedstrijd'
-  models_match_first: 'Voornaam'
-  models_match_any: 'Elke'
-  models_match_last: 'Achternaam'
+  provide_economy: 'Bied Economie Helper'
+  provide_search: 'Bied zoekservice'
+  provide_guide: 'Bied Destinatie Gids Service aan'
+  provide_offline: 'Bied offline berichtenservice'
+  provide_offline_help: 'Eer "Stuur mij e-mails wanneer ik offline ben" kijker optie.'
+  provide_assets: 'Bied een webassets-server aan'
+  provide_assets_help: "Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto's)."
+  provide_path: Pad
+  provide_offline_help_core: 'De OpenSimulator-kernmodule voor offline berichten ondersteunt de e-mail doorstuur-optie niet die beschikbaar is in de viewer-instellingen.'
+  economy_helper_uri: 'Economie Helper URI'
+  economy_helper_uri_help: 'De URL moet worden ingesteld in de configuratie van Robust.'
+  economy_help_helpers: 'Economie helpers zijn extra scripts die nodig zijn als je economie op je grid implementeert (met echte of valse valuta).'
+  economy_help_scripts: 'Helperscripts maken communicatie mogelijk tussen de geldserver en het raster: bijwerken van de huidige balans, schatting van de muntkosten, verkoop van land en objecten, betalingen...'
+  economy_help_module: 'Deze plugin biedt alleen de webhelpers die nodig zijn voor de geldservermodule. Er moet een externe module worden geïnstalleerd en geconfigureerd op de simulator, bijvoorbeeld:'
+  economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
+  economy_help_binaries: 'Gebruiksklare binaries en voorbeeldconfiguratiebestanden kunnen hier worden gedownload: github.com/magicoli/opensim-helpers'
+  gloebit_configuration: 'Gloebit Configuratie'
+  gloebit_help_crash: 'De Gloebit-module moet worden geconfigureerd voordat de regio opnieuw wordt gestart, anders kan dit de simulator laten crashen.'
+  gloebit_help_linux: 'Zie voor Linux README-Gloebit.md (github.com/magicoli/opensim-helpers) om certificaatgerelateerde fouten te voorkomen.'
+  gloebit_help_register: 'Registreer een account of log in op gloebit.com en volg de instructies op dev.gloebit.com om een app in te stellen voor je grid/simulator.'
+  gloebit_help_config: 'Voeg Gloebit-configuratie toe in OpenSim.ini.'
+  gloebit_help_dll: 'Download de nieuwste dll naar de map bin/ van je OpenSimulator (hernoem deze naar Gloebit.dll), vanaf github.com/GuduleLapointe/opensim-debian of dev.gloebit.com'
+  money_script_access_key: 'Geld Script Toegangssleutel'
+  money_script_access_key_help: 'Kies een unieke toegangssleutel en stel deze in in MoneyServer.ini'
+  search_engine_url: 'Zoekmachine URL'
+  search_url_help_viewer: 'URL van de zoekmachine die intern door de viewer wordt gebruikt (zonder argumenten).'
+  search_url_help_one: 'Slechts één kan worden ingesteld, andere regels zijn alternatieve voorbeelden.'
+  search_url_help_web: 'Merk op dat Zoek URL verschillend is van Web-zoek URL, welke momenteel niet door W4OS wordt behandeld. Zoeken op het web is relevant als je een zoekpagina op het web hebt die gewijd is aan raster-inhoud en die resultaten geeft met in-wereld URLs (hop:// of secondlife://). Het is optioneel en wordt hier alleen genoemd om instellingen uit elkaar te houden die helaas vergelijkbare namen hebben.'
+  search_register_url: 'Registratie-URL van de zoekmachine'
+  search_register_help_data: "Gegevensdienst, gebruikt om regio's, objecten of grond te koop aan te melden."
+  search_register_help_several: 'Je kunt je registreren bij verschillende zoekmachines.'
+  search_register_help_prefix: 'Elke regel moet een unieke identificatie hebben die begint met "DATA_SRV_".'
+  events_help_fetch: 'HYPEvents Server URL, gebruikt om aankomende evenementen op te halen en beschikbaar te maken in de zoekfunctie.'
+  events_help_blank: 'Laat leeg om gebeurtenissen te negeren of als u een andere gebeurtenissen implementatie hebt.'
+  search_help_local: 'Schakel het gebruik van een lokale zoekmachine in, waarmee alleen lokale resultaten worden weergegeven (aanbevolen voor privégrids).'
+  search_help_external: 'Schakel het gebruik van een externe zoekmachine zoals 2do Directory uit, waardoor resultaten worden weergegeven van zowel jouw grid als andere openbare grids.'
+  search_help_module: 'Zoekfuncties vereisen de installatie van de OpenSimSearch-module op OpenSimulator.'
+  search_help_binary: 'Het gebruiksklare binaire bestand OpenSimSearch.Modules.dll is hier te vinden: github.com/magicoli/opensim-helpers'
+  guide_url: 'URL van de Destinations Guide'
+  guide_source_help_file: 'Een tekstbestand met een opgemaakte lijst van bestemmingen.'
+  guide_source_help_where: 'De bron kan een URL zijn of het volledige pad van een lokaal bestand dat toegankelijk is voor jouw webserver.'
+  guide_source_help_pipe: 'De bestemmingsnaam en teleport URL worden gescheiden door een pijp (|) teken.'
+  guide_source_help_categories: 'Regels die alleen tekst bevatten, worden geïnterpreteerd als categorieën.'
+  guide_source_help_comments: 'Regels die beginnen met "#" of "//" worden genegeerd.'
+  guide_source_help_board: 'Het formaat is identiek aan het formaat van het in-world object Gudz Teleport Board, dus dezelfde bron-URL kan voor beide worden gebruikt.'
+  guide_help_feature: 'De Destinations-gids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
+  guide_help_places: 'Hoewel het niet verplicht is en niet elke gebruiker er baat bij zal hebben, is het een handige manier om hen een lijst te bieden van must-see plaatsen, zowel binnen als buiten jouw grid.'
+  offline_helper: 'Offline berichten helper'
+  offline_helper_help: 'Stel de URL in in de OpenSimulator-configuraties.'
+  assets_url: 'Web Assets Server URL'
+  assets_external_help: "Als 'Bied Web Assets Server' is uitgeschakeld, is het noodzakelijk om een externe service te installeren en de URL hiervan hier in te voeren om ervoor te zorgen dat de plugin naar behoren werkt."
+  provide_path_help: 'Onder het adres van de site: onder de basis van de helpers antwoorden de helpers; elders de site, op een pagina met zijn blok.'
+  models_match: Wedstrijd
+  models_match_first: Voornaam
+  models_match_any: Elke
+  models_match_last: Achternaam
   models_match_uuid: 'Aangepaste lijst'
-  models_pattern: 'Naam'
+  models_pattern: Naam
   models_list: 'Selecteer modellen'
   models_list_placeholder: 'Selecteer één of meerdere bestaande avatars'
   action_save_changes: 'Wijzigingen opslaan'
@@ -110,122 +162,122 @@ w4os:
   models_help_not_users: 'De avatars die worden gebruikt voor de modellen mogen nooit echte gebruikersaccounts zijn.'
   models_help_outfit: 'De nieuwe avatar zal dezelfde outfit dragen als het model op het moment van registratie.'
   models_help_rule: 'Als de regel voor het toewijzen van modellen gebaseerd is op de naam, wordt elke nieuw aangemaakte avatar die aan die regel voldoet automatisch aan de lijst toegevoegd.'
-  action_post: 'Post'
+  action_post: Post
   action_new_avatar: 'Nieuwe Avatar'
   action_create_avatar: 'Maak Avatar'
-  action_delete_post: 'Delete'
+  action_delete_post: Delete
   ask_delete_post: 'Delete this post?'
   manage_post: 'Your post is published.'
   manage_delete_post: 'Your post is deleted.'
-  profile_tab_interests: 'Interesses'
-  profile_tab_picks: 'Favorieten'
-  profile_tab_classifieds: 'Advertenties'
+  profile_tab_interests: Interesses
+  profile_tab_picks: Favorieten
+  profile_tab_classifieds: Advertenties
   profile_tab_real_life: 'Het echte leven'
   profile_tab_notes: 'Mijn notities'
-  profile_tab_account: 'Account'
-  profile_key: 'Sleutel'
-  profile_picture: 'Afbeelding'
-  partner: 'Partner'
+  profile_tab_account: Account
+  profile_key: Sleutel
+  profile_picture: Afbeelding
+  partner: Partner
   show_in_search: 'Tonen in zoekresultaten'
   interests_removed: 'Viewers tonen deze sectie sinds 2023 niet meer.'
   profile_viewer_only: 'Gemaakt en bewerkt in de viewer.'
-  profile_none: 'Geen.'
-  profile_name: 'Naam'
+  profile_none: Geen.
+  profile_name: Naam
   profile_age_today: 'Vandaag lid geworden'
   profile_age_days: '%d dagen'
-  profile_groups: 'Groepen'
+  profile_groups: Groepen
   profile_no_description: 'Geen beschrijving.'
-  profile_location: 'Locatie'
-  profile_teleport: 'Teleporteren'
-  profile_until: 'Tot'
-  save_button: 'Opslaan'
+  profile_location: Locatie
+  profile_teleport: Teleporteren
+  profile_until: Tot
+  save_button: Opslaan
   profile_saved: 'Je profiel is opgeslagen.'
-  password_title: 'Wachtwoord'
+  password_title: Wachtwoord
   password_button: 'Wachtwoord wijzigen'
   password_saved: 'Je wachtwoord is gewijzigd.'
   email_pending: 'Je profiel is opgeslagen. Er is een link onderweg naar %s: klik erop om het je e-mail te maken.'
   email_pending_test: 'Je profiel is opgeslagen. Testsite, geen mail: bevestig %1$s met deze link: %2$s'
   email_changed: 'Je e-mail is nu %s.'
-  regions_title: 'Regio''s'
+  regions_title: "Regio's"
   search_regions: 'Naam van de regio'
-  regions_count: '%d regio''s'
+  regions_count: "%d regio's"
   no_regions: 'Geen regio'
   regions_online: '%1$s van %2$s online'
-  simulators_title: 'Simulators'
+  simulators_title: Simulators
   search_simulators: 'Naam van de simulator'
   simulators_count: '%d simulators'
   no_simulators: 'Geen simulator'
-  filters: 'Filters'
+  filters: Filters
   filters_active: '%d actieve filters'
   label_value: '%1$s: %2$s'
-  tab_overview: 'Overzicht'
-  column_status: 'Status'
-  state_enabled: 'Ingeschakeld'
-  state_disabled: 'Uitgeschakeld'
-  state_running: 'Actief'
-  state_stopped: 'Gestopt'
+  tab_overview: Overzicht
+  column_status: Status
+  state_enabled: Ingeschakeld
+  state_disabled: Uitgeschakeld
+  state_running: Actief
+  state_stopped: Gestopt
   state_unresponsive: 'Reageert niet'
-  state_crashed: 'Gecrasht'
-  connection_console: 'Console'
+  state_crashed: Gecrasht
+  connection_console: Console
   connection_console_failed: 'Console onbereikbaar'
-  connection_screen: 'Screen'
+  connection_screen: Screen
   connection_screen_failed: 'Screen niet gevonden'
-  connection_config: 'OpenSim.ini'
+  connection_config: OpenSim.ini
   connection_config_failed: 'OpenSim.ini onleesbaar'
   connection_regions: 'Regions .ini'
   connection_regions_failed: 'Regions .ini onleesbaar'
-  connection_mysql: 'MySQL'
+  connection_mysql: MySQL
   connection_mysql_failed: 'MySQL onbereikbaar'
-  connection_sqlite: 'SQLite'
+  connection_sqlite: SQLite
   connection_sqlite_failed: 'SQLite onleesbaar'
-  menu_admin: 'Beheer'
+  menu_admin: Beheer
   menu_account: 'Mijn avatar'
-  dashboard_title: 'Dashboard'
-  manage_title: 'Avatars'
+  dashboard_title: Dashboard
+  manage_title: Avatars
   search_avatars: 'Naam of e-mail'
-  search: 'Zoeken'
+  search: Zoeken
   no_avatars: 'Geen resultaat'
   avatars_count: '%d avatars'
-  status: 'Status'
+  status: Status
   last_seen: 'Laatst gezien'
-  created: 'Aangemaakt'
-  actions: 'Acties'
-  god: 'God'
-  online: 'Online'
-  status_active: 'Actief'
-  status_disabled: 'Uitgeschakeld'
+  created: Aangemaakt
+  actions: Acties
+  god: God
+  online: Online
+  status_active: Actief
+  status_disabled: Uitgeschakeld
   status_pending: 'In afwachting'
-  status_banned: 'Verbannen'
-  avatar_type_user: 'Gebruikersavatar'
-  avatar_type_model: 'Standaardmodel'
+  status_banned: Verbannen
+  avatar_type_user: Gebruikersavatar
+  avatar_type_model: Standaardmodel
   avatar_type_service: 'Service Account'
   state_grid_banned: 'Verbannen uit de grid'
   state_estate_banned: 'Verbannen uit landgoederen'
-  filter_estate_banned: 'Landgoedbans'
-  action_ban: 'Verbannen'
+  filter_estate_banned: Landgoedbans
+  action_ban: Verbannen
   action_unban: 'Ban opheffen'
   action_estate_ban: 'Uit landgoederen verbannen'
   action_estate_unban: 'Landgoedban opheffen'
   ask_ban: 'Dit avatar verbannen? Het kan niet meer inloggen tot de ban is opgeheven.'
   ask_estate_ban: 'Dit avatar uit elk landgoed van de grid verbannen?'
-  role: 'Rol'
-  role_resident: 'Bewoner'
-  role_god_like: 'Goddelijk'
-  role_customer_service: 'Klantenservice'
-  role_liaison: 'Contactpersoon'
-  role_god: 'God'
-  role_maintenance: 'Onderhoud'
-  action_enable: 'Activeren'
-  action_disable: 'Uitschakelen'
-  action_start: 'Starten'
-  action_stop: 'Stoppen'
-  action_restart: 'Herstarten'
-  ask_stop_instance: 'Deze simulator stoppen? De avatars in zijn regio''s worden weggestuurd.'
-  ask_restart_instance: 'Deze simulator herstarten? De avatars in zijn regio''s worden weggestuurd tijdens het herstarten.'
+  role: Rol
+  role_resident: Bewoner
+  role_god_like: Goddelijk
+  role_customer_service: Klantenservice
+  role_liaison: Contactpersoon
+  role_god: God
+  role_maintenance: Onderhoud
+  action_enable: Activeren
+  action_disable: Uitschakelen
+  action_start: Starten
+  action_stop: Stoppen
+  action_restart: Herstarten
+  ask_stop_instance: "Deze simulator stoppen? De avatars in zijn regio's worden weggestuurd."
+  ask_restart_instance: "Deze simulator herstarten? De avatars in zijn regio's worden weggestuurd tijdens het herstarten."
   action_reset: 'Een link sturen om het wachtwoord opnieuw in te stellen'
   action_view: 'Bekijk profiel'
-  action_view_item: 'Bekijken'
-  action_edit: 'Bewerken'
+  action_view_item: Bekijken
+  action_edit: Bewerken
   edit_title: '%s bewerken'
   manage_enable: '%s is geactiveerd.'
   manage_disable: '%s is gedeactiveerd.'
@@ -239,33 +291,33 @@ w4os:
   manage_estate_unban: '%s is niet meer verbannen uit de landgoederen.'
   manage_reset: 'Er is een link om een nieuw wachtwoord te kiezen onderweg naar %s.'
   manage_saved: '%s is opgeslagen.'
-  yes: 'Ja'
-  no: 'Nee'
-  filter_any: 'Alle'
+  yes: Ja
+  no: Nee
+  filter_any: Alle
   filter_clear: 'Filter verwijderen'
   filter_email: 'Met een e-mail'
-  filter_model: 'Avatarmodel'
-  filter_technical: 'Serviceaccount'
+  filter_model: Avatarmodel
+  filter_technical: Serviceaccount
   filter_active: 'Kan inloggen'
-  column_map: 'Kaart'
-  column_region: 'Regio'
+  column_map: Kaart
+  column_region: Regio
   column_region_name: 'Regio Naam'
-  column_presence: 'Aanwezigheid'
+  column_presence: Aanwezigheid
   column_internal_port: 'Interne poort'
   last_activity: 'Laatste Activiteit'
-  column_size: 'Grootte'
-  column_owner: 'Eigenaar'
-  column_roles: 'Rollen'
-  column_flags: 'Vlaggen'
-  offline: 'Offline'
-  all: 'Alles'
-  view_active: 'Actief'
-  view_inactive: 'Inactive'
-  degraded: 'Verstoord'
-  parcels: 'Perceel'
+  column_size: Grootte
+  column_owner: Eigenaar
+  column_roles: Rollen
+  column_flags: Vlaggen
+  offline: Offline
+  all: Alles
+  view_active: Actief
+  view_inactive: Inactive
+  degraded: Verstoord
+  parcels: Perceel
   shortcodes_title: 'Beschikbare shortcodes'
   shortcodes_help: 'Korte codes kunnen worden opgenomen in elke pagina of artikel.'
-  shortcode_options: 'Opties'
+  shortcode_options: Opties
   shortcode_option_title: 'Titel van het blok'
   shortcode_option_level: 'Titelniveau (h1 tot h6)'
   shortcode_option_name: 'The name of the avatar (First.Last)'
@@ -273,8 +325,8 @@ w4os:
   shortcode_option_include_hypergrid: 'Inclusief Hypergrid'
   shortcode_option_include_landsales: 'Inclusief Land te Koop'
   block_grid_info_help: 'Algemene informatie (gridnaam en login-uri)'
-  block_grid_status_help: 'Online gebruikers, regio''s, enz.'
-  block_popular_places_help: 'Meest bezochte regio''s in jouw grid.'
+  block_grid_status_help: "Online gebruikers, regio's, enz."
+  block_popular_places_help: "Meest bezochte regio's in jouw grid."
   block_motd_help: 'The message of the day the viewers show at login.'
   block_destination_guide_help: 'The destinations of the guide of the grid, as the viewers show them.'
   block_directory_info_help: 'The grids whose regions are in the search of this one.'
@@ -283,25 +335,25 @@ w4os:
   block_new_users_help: 'The avatars that joined the grid last.'
   setting_login: 'Inloggen URI'
   setting_login_help: 'Het adres waar de viewers inloggen en waar ze vragen wat het grid over zichzelf zegt (get_grid_info).'
-  setting_gatekeeper: 'Gatekeeper'
+  setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'Het adres waarmee andere grids dit grid bereiken (hypergrid).'
   setting_uas: 'User agent-service'
   setting_uas_help: 'Waar de avatars van dit grid bekend zijn wanneer ze andere grids bezoeken (hypergrid).'
-  setting_welcome: 'Splash'
+  setting_welcome: Splash
   setting_welcome_help: 'De welkomstpagina die in de viewer wordt getoond met het inlogformulier. Een korte, niet scrollende pagina, met alleen essentiële info. Het is verplicht, of op zijn minst sterk aanbevolen.'
-  setting_economy: 'Economie'
-  setting_economy_help: 'Valuta''s en enkele andere diensten die door de kijker worden opgevraagd. Zij zijn niet rechtstreeks toegankelijk voor de gebruiker.'
+  setting_economy: Economie
+  setting_economy_help: "Valuta's en enkele andere diensten die door de kijker worden opgevraagd. Zij zijn niet rechtstreeks toegankelijk voor de gebruiker."
   setting_about: 'Over dit rooster'
   setting_about_help: 'Gedetailleerde informatiepagina op uw website, via een link op de inlogpagina van de kijker.'
   setting_register: 'Registratie pagina'
   setting_register_help: 'Link naar de gebruikersregistratie.'
-  setting_help: 'Help'
+  setting_help: Help
   setting_help_help: 'Link naar een hulppagina op uw website.'
-  setting_password: 'Wachtwoordherstel'
+  setting_password: Wachtwoordherstel
   setting_password_help: 'Link naar de verloren wachtwoord pagina.'
-  setting_grid_status: 'Gridstatus'
+  setting_grid_status: Gridstatus
   setting_grid_status_help: 'De pagina met de status van het grid.'
-  setting_grid_status_rss: 'Gridstatus-feed'
+  setting_grid_status_rss: Gridstatus-feed
   setting_grid_status_rss_help: 'De feed met de status van het grid die de viewers lezen (RSS).'
   setting_web_profile: 'Avatar profiel'
   setting_web_profile_help: 'De basis URL voor avatar web profielen.'
@@ -311,10 +363,10 @@ w4os:
   setting_destination_guide_help: 'De Destinations-gids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
   setting_message_url: 'Bericht van de dag'
   setting_message_url_help: 'Het bericht dat de viewers bij het inloggen tonen.'
-  setting_search_service: 'Zoekdienst'
+  setting_search_service: Zoekdienst
   setting_search_service_help: 'Zoekdienst gebruikt door de viewer. Zoeken kan worden geleverd door de simulator kern (beperkt), of door een externe service voor extra functionaliteiten (zoals gebeurtenissen). Vereist OpenSimSearch.Modules.dll.'
-  setting_data_service: 'Gegevensdienst'
-  setting_data_service_help: 'Waar de simulators hun regio''s aanmelden, zodat de zoekfunctie ze vindt. Geen pagina.'
+  setting_data_service: Gegevensdienst
+  setting_data_service_help: "Waar de simulators hun regio's aanmelden, zodat de zoekfunctie ze vindt. Geen pagina."
   setting_offline_messages: 'Offline berichten'
   setting_offline_messages_help: 'Nodig voor viewers om berichten te bewaren terwijl de gebruiker offline is en ze af te leveren wanneer hij weer online komt. Interne dienst, niet rechtstreeks toegankelijk voor de gebruiker.'
   setting_offline_module: 'Module voor offline berichten'
@@ -322,59 +374,60 @@ w4os:
   setting_money_script_key: 'Sleutel van de geldscripts'
   setting_money_script_key_help: 'De sleutel die de valutadiensten en de geldserver delen: nooit getoond, alleen of hij is ingesteld.'
   setting_helpers: 'basis van helpers'
-  setting_helpers_help: 'De basis van de pagina''s en services van de helpers.'
-  setting_directory: 'Gids'
-  setting_directory_help: 'De pagina van het grid in de gedeelde gids van de regio''s.'
+  setting_helpers_help: "De basis van de pagina's en services van de helpers."
+  setting_directory: Gids
+  setting_directory_help: "De pagina van het grid in de gedeelde gids van de regio's."
   setting_cache_assets: 'Picture cache'
   setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
   setting_cache_tasks: 'Task state'
   setting_cache_tasks_help: 'The folder of the state of the tasks: without it, no task runs and the search index never fills.'
-  setting_base_url: 'Basis-URL'
-  setting_base_hostname: 'Basishostnaam'
+  setting_base_url: Basis-URL
+  setting_base_hostname: Basishostnaam
   setting_public_port: 'Openbare poort'
-  setting_private_port: 'Privépoort'
-  setting_storage_provider: 'Opslagprovider'
-  setting_database: 'Databaseverbindingsstring'
+  setting_private_port: Privépoort
+  setting_storage_provider: Opslagprovider
+  setting_database: Databaseverbindingsstring
   setting_grid_name: 'Grid Naam'
   setting_grid_nick: 'Gridnaam (kort)'
-  setting_welcome_message: 'Welkomstbericht'
+  setting_welcome_message: Welkomstbericht
   setting_currency_symbol: 'Naam van de valuta'
-  setting_search_module: 'Zoekmodule'
-  setting_index_sims: 'Regio''s indexeren'
-  setting_economy_module: 'Economiemodule'
+  setting_search_module: Zoekmodule
+  setting_index_sims: "Regio's indexeren"
+  setting_economy_module: Economiemodule
   setting_economy_module_help: 'Wordt gewijzigd met de opties van het grid, die de module instellen en wat die nodig heeft.'
   economy_module_free: 'Alleen gratis transacties'
-  economy_module_gloebit: 'Gloebit'
+  economy_module_gloebit: Gloebit
   economy_module_moneyserver: 'Podex en andere valutaproviders'
   setting_sell_enabled: 'Verkoop inschakelen'
-  setting_price_upload: 'Uploadprijs'
+  setting_price_upload: Uploadprijs
   setting_price_group_create: 'Prijs voor groep aanmaken'
   setting_gloebit_enabled: 'Gloebit inschakelen'
-  setting_gloebit_environment: 'Gloebit-omgeving'
-  gloebit_sandbox: 'Sandbox'
-  gloebit_production: 'Productie'
-  setting_guide_source: 'Bron'
+  setting_gloebit_environment: Gloebit-omgeving
+  gloebit_sandbox: Sandbox
+  gloebit_production: Productie
+  setting_guide_source: Bron
   setting_guide_source_help: 'Een tekstbestand met een opgemaakte lijst van bestemmingen.'
   setting_search_database: 'OS Search database'
   setting_events_url: 'Evenementen Server URL'
   setting_logo_url: 'URL van het gridlogo'
   setting_mail_sender: 'Afzender e-mailadres'
   setting_mail_sender_help: 'Een e-mailadres zonder antwoord dat wordt gebruikt om berichten door te sturen voor gebruikers die de optie "E-mail mij IM''s wanneer ik offline ben" inschakelen.'
-  setting_currency_rate: 'Valutawisselkoers'
-  setting_currency_rate_help: 'Bedrag in US$ voor 1000 in-world geldeenheden. Gebruikt voor de kostenschatting.'
+  setting_currency_rate: Valutawisselkoers
+  setting_currency_rate_help: 'Bedrag te betalen in US$ voor 1000 inwereldse geldeenheden. Wordt gebruikt om de kosten te schatten. Indien niet ingesteld, zal de koers 10/1000 zijn (1 cent per geldeenheid)'
   setting_currency_rate_per: 'Geldeenheden per koers'
-  setting_gloebit_threshold: 'Gloebit-omrekendrempel'
+  setting_gloebit_threshold: Gloebit-omrekendrempel
   setting_podex_message: 'Podex omleiding bericht'
   setting_podex_url: 'Uitwisselen van Teleport URL'
+  podex_message_placeholder: 'Gebruik alstublieft onze terminals in de wereld om verder te gaan. Klik op OK om naar het Podex Exchange-gebied te teleporteren.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: 'De webassetserver van het grid wanneer het niet die van de helpers is: hij zet de afbeeldingen van de wereld (JPEG 2000) om voor het web.'
   offline_module_v1: 'Door de helpers (V1)'
   offline_module_v2: 'Door Robust (V2)'
-  db_host: 'Hostnaam'
-  db_port: 'Poort'
+  db_host: Hostnaam
+  db_port: Poort
   db_name: 'Database naam'
-  db_user: 'Gebruiker'
-  db_password: 'Wachtwoord'
+  db_user: Gebruiker
+  db_password: Wachtwoord
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'
@@ -385,35 +438,35 @@ w4os:
   usage_web_assets: 'Web assets, for the web sites'
   service_asset: 'Assets Service'
   service_asset_help: 'De assets van het grid (texturen, geluiden, objecten...): de simulators lezen en bewaren ze.'
-  service_inventory: 'Inventarisservice'
+  service_inventory: Inventarisservice
   service_inventory_help: 'De inventarissen van de avatars.'
-  service_grid: 'Gridservice'
-  service_grid_help: 'De regio''s van het grid: waar elke ligt en welke simulator haar draait.'
-  service_estate: 'Estate-service'
-  service_estate_help: 'De estates van de regio''s, hun eigenaars en hun beheerders.'
-  service_authentication: 'Authenticatieservice'
+  service_grid: Gridservice
+  service_grid_help: "De regio's van het grid: waar elke ligt en welke simulator haar draait."
+  service_estate: Estate-service
+  service_estate_help: "De estates van de regio's, hun eigenaars en hun beheerders."
+  service_authentication: Authenticatieservice
   service_authentication_help: 'De wachtwoorden van de accounts en hun sessies.'
-  service_avatar: 'Avatarservice'
+  service_avatar: Avatarservice
   service_avatar_help: 'Het uiterlijk van de avatars: wat ze dragen.'
-  service_agent_preferences: 'Agentvoorkeurenservice'
+  service_agent_preferences: Agentvoorkeurenservice
   service_agent_preferences_help: 'De voorkeuren van de avatars die het grid bewaart (taal, maturiteit).'
-  service_presence: 'Aanwezigheidsservice'
+  service_presence: Aanwezigheidsservice
   service_presence_help: 'Wie er nu in de wereld is, en waar.'
-  service_user_account: 'Gebruikersaccountservice'
+  service_user_account: Gebruikersaccountservice
   service_user_account_help: 'De accounts van de avatars: hun namen, e-mailadressen en niveaus.'
-  service_grid_user: 'Gridgebruikersservice'
+  service_grid_user: Gridgebruikersservice
   service_grid_user_help: 'De laatste positie en de thuislocatie van elke avatar.'
-  service_friends: 'Vriendenservice'
+  service_friends: Vriendenservice
   service_friends_help: 'De vriendschappen van de avatars.'
-  service_map_image: 'Kaarttegelservice'
+  service_map_image: Kaarttegelservice
   service_map_image_help: 'De tegels van de wereldkaart: de simulators voegen ze toe.'
-  service_mute_list: 'Blokkeerlijstservice'
+  service_mute_list: Blokkeerlijstservice
   service_mute_list_help: 'Wat elke avatar blokkeert.'
-  service_bakes: 'Baked-texturenservice'
+  service_bakes: Baked-texturenservice
   service_bakes_help: 'De baked-texturen van de avatars, gedeeld tussen de simulators.'
-  service_groups: 'Groepenservice'
+  service_groups: Groepenservice
   service_groups_help: 'De groepen van de avatars, hun leden, rollen en mededelingen.'
-  service_profile: 'Profielenservice'
+  service_profile: Profielenservice
   service_profile_help: 'De profielen van de avatars, hun picks en hun advertenties.'
   service_get_grid_info: 'Grid info'
   service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
@@ -427,9 +480,9 @@ w4os:
   service_hg_groups_help: 'The groups the avatars of other grids reach (hypergrid).'
   service_map: 'Map service'
   service_map_help: 'The tiles of the map the viewers and the other grids read.'
-  service_currency: 'Valuta-helper'
+  service_currency: Valuta-helper
   service_currency_help: 'The currency of the grid, called by the viewer (currency.php): the balance, the cost of currency.'
-  service_landtool: 'Landtool-helper'
+  service_landtool: Landtool-helper
   service_landtool_help: 'The land sales the viewer calls (landtool.php).'
   service_parser: 'Search parser'
   service_parser_help: 'Reads the regions registered with the search: a task of the grid.'
@@ -438,23 +491,23 @@ w4os:
   service_text_images: 'Text to image'
   service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
   service_assets: 'Web assets-server'
-  service_assets_help: 'Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto''s).'
+  service_assets_help: "Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto's)."
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
   health_unset: 'Not set: neither served nor tested.'
   health_third_party: 'Deze service vereist een aparte webtoepassing.'
-  presence: 'Aanwezigheid'
-  region_flag_default_region: 'Standaard'
+  presence: Aanwezigheid
+  region_flag_default_region: Standaard
   region_flag_default_hg_region: 'Standaard HG'
-  region_flag_fallback_region: 'Uitwijk'
+  region_flag_fallback_region: Uitwijk
   region_flag_no_direct_login: 'Geen directe login'
-  region_flag_persistent: 'Blijvend'
-  region_flag_locked_out: 'Buitengesloten'
-  region_flag_reservation: 'Reservering'
+  region_flag_persistent: Blijvend
+  region_flag_locked_out: Buitengesloten
+  region_flag_reservation: Reservering
   region_flag_no_move: 'Niet verplaatsbaar'
-  region_flag_authenticate: 'Authenticatie'
-  region_flag_region_online: 'Online'
-  region_flag_hyperlink: 'Hyperlink'
+  region_flag_authenticate: Authenticatie
+  region_flag_region_online: Online
+  region_flag_hyperlink: Hyperlink
   region_flag_default_region_help: 'Waar avatars aankomen als ze geen regio vragen; een willekeurige als er meerdere zijn.'
   region_flag_fallback_region_help: 'Waar avatars heen gaan als de gevraagde regio niet draait.'
   region_flag_region_online_help: 'De regio draait: gezet als ze online komt, weggehaald als ze het grid verlaat.'
@@ -466,71 +519,82 @@ w4os:
   region_flag_authenticate_help: 'Bezoekers moeten geauthenticeerd zijn.'
   region_flag_hyperlink_help: 'Een link naar een regio van een ander grid.'
   region_flag_default_hg_region_help: 'Waar bezoekers van andere grids aankomen, alleen voor hypergrid-teleports.'
-  filter_simulator: 'Simulator'
-  column_name: 'Naam'
+  filter_simulator: Simulator
+  column_name: Naam
   column_nick: 'Korte naam'
-  column_slug: 'Slug'
-  column_uri: 'URI'
-  column_url: 'URL'
-  column_server: 'Server'
-  column_enabled: 'Ingeschakeld'
+  column_slug: Slug
+  column_uri: URI
+  column_url: URL
+  column_server: Server
+  column_enabled: Ingeschakeld
   filter_remote: 'Op een andere machine'
-  filter_hypergrid: 'Hypergrid'
-  column_grid: 'Grid'
-  column_port: 'Poort'
-  column_running: 'Actief'
-  column_service: 'Dienst'
+  filter_hypergrid: Hypergrid
+  column_grid: Grid
+  column_port: Poort
+  column_running: Actief
+  column_service: Dienst
   column_provider: 'Geleverd door'
-  filter_served: 'Geleverd'
-  port_private: 'Privé'
-  port_public: 'Openbaar'
-  port_web: 'Web'
-  column_file: 'Bestand'
-  column_kind: 'Soort'
-  column_date: 'Datum'
-  column_author: 'Auteur'
+  filter_served: Geleverd
+  port_private: Privé
+  port_public: Openbaar
+  port_web: Web
+  column_file: Bestand
+  column_kind: Soort
+  column_date: Datum
+  column_author: Auteur
+  avatars_title: Avatars
+  avatars_menu: Avatars
+  avatars_search: 'Zoek Avatars'
+  regions_menu: "Regio's"
+  regions_search: "Zoek regio's"
+  flux_title: 'Flux Berichten'
+  flux_menu: Flux
+  flux_search: 'Zoek Flux Berichten'
+  flux_empty: 'Geen Flux Berichten gevonden'
+  list_empty: 'Geen items gevonden.'
+  posts_count: '%d berichten'
   flux_post: 'Flux Post'
   kind_iar: 'Inventaris (IAR)'
   kind_oar: 'Regio (OAR)'
-  kind_backup: 'Back-up'
-  column_area: 'Oppervlakte'
-  column_cpu: 'CPU'
-  column_avatars: 'Avatars'
-  column_memory: 'Geheugen'
-  column_traffic: 'Verkeer'
+  kind_backup: Back-up
+  column_area: Oppervlakte
+  column_cpu: CPU
+  column_avatars: Avatars
+  column_memory: Geheugen
+  column_traffic: Verkeer
   column_for_sale: 'Te koop'
   column_in_search: 'In het zoeken'
-  parcel_scripts: 'Scripts'
-  parcel_build: 'Bouw'
+  parcel_scripts: Scripts
+  parcel_build: Bouw
   parcel_public: 'Openbare toegang'
-  column_regions: 'Regio''s'
-  parcel: 'Perceel'
-  column_type: 'Type'
-  filter_local: 'Lokaal'
-  filter_temporary: 'Tijdelijk'
-  asset_texture: 'Textuur'
-  asset_sound: 'Geluid'
-  asset_calling_card: 'Visitekaartje'
-  asset_landmark: 'Landmark'
-  asset_clothing: 'Kleding'
-  asset_object: 'Object'
-  asset_notecard: 'Notitie'
-  asset_folder: 'Map'
-  asset_script: 'Script'
+  column_regions: "Regio's"
+  parcel: Perceel
+  column_type: Type
+  filter_local: Lokaal
+  filter_temporary: Tijdelijk
+  asset_texture: Textuur
+  asset_sound: Geluid
+  asset_calling_card: Visitekaartje
+  asset_landmark: Landmark
+  asset_clothing: Kleding
+  asset_object: Object
+  asset_notecard: Notitie
+  asset_folder: Map
+  asset_script: Script
   asset_script_bytecode: 'Gecompileerd script'
   asset_texture_tga: 'Textuur (TGA)'
-  asset_body_part: 'Lichaamsdeel'
+  asset_body_part: Lichaamsdeel
   asset_sound_wav: 'Geluid (WAV)'
   asset_image_tga: 'Afbeelding (TGA)'
   asset_image_jpeg: 'Afbeelding (JPEG)'
-  asset_animation: 'Animatie'
-  asset_gesture: 'Gebaar'
-  asset_simstate: 'Regiotoestand'
-  asset_link: 'Link'
-  asset_link_folder: 'Maplink'
-  asset_mesh: 'Mesh'
-  asset_settings: 'Omgevingsinstellingen'
-  asset_material: 'Materiaal'
+  asset_animation: Animatie
+  asset_gesture: Gebaar
+  asset_simstate: Regiotoestand
+  asset_link: Link
+  asset_link_folder: Maplink
+  asset_mesh: Mesh
+  asset_settings: Omgevingsinstellingen
+  asset_material: Materiaal
   error_required: 'Vul alle velden in.'
   error_password_match: 'De twee wachtwoorden zijn niet gelijk.'
   error_terms: 'Je moet akkoord gaan met de voorwaarden op pagina %s.'
@@ -579,7 +643,7 @@ w4os:
   error_instance_user_required: 'Dit kan hier niet: de simulators worden op hun server gestart en gestopt.'
   error_restore_conflict: 'Deze back-up bevat wat deze server al heeft: er is niets vervangen.'
   error_source_not_readable: 'Sommige bestanden van de oude installatie kan de server niet lezen: geef hem eerst leestoegang.'
-  error_estate_shared: 'De eigenaar van deze regio is die van haar landgoed, dat andere regio''s heeft: wijzig de eigenaar van het landgoed.'
+  error_estate_shared: "De eigenaar van deze regio is die van haar landgoed, dat andere regio's heeft: wijzig de eigenaar van het landgoed."
   error_filter_unknown: 'Deze lijst kan niet zo gefilterd worden.'
   error_filter_value_unknown: 'Deze lijst kan niet zo gefilterd worden.'
   error_sort_unknown: 'Deze lijst kan niet zo gesorteerd worden.'
@@ -593,43 +657,43 @@ w4os:
   notice_robust_config_remove: '{file} kan niet door dit proces worden geschreven: verwijder {key} uit [{section}] en herstart dan Robust ({restart}).'
   notice_robust_config_elsewhere: 'De configuratie van Robust staat niet op deze machine: zet {line} in [{section}], zodat de regio haar rollen houdt wanneer ze zich opnieuw aanmeldt.'
   notice_start_simulator: 'Start de simulator {slug}: {command}'
-  notice_start_simulator_regions: 'De simulator {slug} laadt zijn nieuwe regio''s bij het starten: {command}'
+  notice_start_simulator_regions: "De simulator {slug} laadt zijn nieuwe regio's bij het starten: {command}"
   notice_region_roles_later: 'Robust geeft {region} haar rollen ({roles}) uit zijn configuratie, gelezen bij het starten: herstart Robust ({restart}) voordat je {slug} start, of zodra de regio draait: {command}'
-  notice_plan_reserves_nothing: 'Een plan reserveert niets: de plaatsen en poorten die het voorstelt zijn de nu vrije, opnieuw gekozen wanneer het wordt toegepast. Pas een plan toe voordat je het volgende plant, of geef de regio''s in één bestand.'
+  notice_plan_reserves_nothing: "Een plan reserveert niets: de plaatsen en poorten die het voorstelt zijn de nu vrije, opnieuw gekozen wanneer het wordt toegepast. Pas een plan toe voordat je het volgende plant, of geef de regio's in één bestand."
   notice_import_read_access: 'De gebruiker die de import uitvoert kan {paths} niet lezen: geef hem leestoegang (setfacl -R -m u:<user>:rX op etc, var/data en var/cache van de oude installatie) voordat je toepast, tot dan wordt niets geschreven.'
   notice_import_stop_source: 'De simulator die nu {regions} draait, blijft draaien tot hij wordt gestopt: stop hem en voorkom dat hij opnieuw start (cron, screen) voordat deze start, de database is dezelfde.'
-  notice_import_no_region: 'Er is geen regio gevonden voor {simulator} in {folder}, de map die zijn configuratie noemt: controleer vóór het toepassen dat hij die leest, anders wordt geen van zijn regio''s gekopieerd.'
+  notice_import_no_region: "Er is geen regio gevonden voor {simulator} in {folder}, de map die zijn configuratie noemt: controleer vóór het toepassen dat hij die leest, anders wordt geen van zijn regio's gekopieerd."
   notice_import_module_package: 'De module {module} ({key} van [{section}]) is niet geïnstalleerd voor deze core: de simulator zou hem niet laden. Installeer zijn pakket (apt install {package}) en voeg {name} toe aan EnabledModules in opensim.conf, of laat de instelling weg.'
   notice_import_module_missing: 'De module {module} ({key} van [{section}]) staat niet in de core en niet in de modules van deze installatie: de simulator zou hem niet laden. Zet een build ervan voor deze core in {folder} en voeg {name} toe aan EnabledModules in opensim.conf, of laat de instelling weg.'
   notice_import_module_found: 'De module {module} ({key} van [{section}]) staat niet in de core en niet in de modules van deze installatie, de oudere installatie heeft hem in {file}: de simulator zou hem niet laden. Zet een build ervan voor deze core in {folder} (een module wordt gebouwd voor een versie van OpenSimulator: dat bestand alleen als beide cores dezelfde versie hebben) en voeg {name} toe aan EnabledModules in opensim.conf, of laat de instelling weg.'
   notice_import_enable_start: 'Daarna: {enable}, {start}.'
-  notice_restore_estate_missing: 'De regio''s {regions} hebben geen landgoed in {database}, de database van het grid hier, die blijft zoals ze is: ze zouden zonder starten. Herstel daar hun landgoed, of koppel ze aan een (estate link region) voordat je start.'
-  notice_restore_estate_unchecked: 'De landgoederen van de regio''s konden niet worden gecontroleerd in {database}, de database van het grid hier, die blijft zoals ze is: controleer vóór het starten dat ze er zijn.'
+  notice_restore_estate_missing: "De regio's {regions} hebben geen landgoed in {database}, de database van het grid hier, die blijft zoals ze is: ze zouden zonder starten. Herstel daar hun landgoed, of koppel ze aan een (estate link region) voordat je start."
+  notice_restore_estate_unchecked: "De landgoederen van de regio's konden niet worden gecontroleerd in {database}, de database van het grid hier, die blijft zoals ze is: controleer vóór het starten dat ze er zijn."
   notice_restore_start: 'Start {instance} zodra het is hersteld: {command}'
   notice_mail_sent_if_known: 'Als een avatar deze naam of dit e-mailadres heeft, is er een mail naar gestuurd.'
   notice_mail_sent: 'Er is een mail naar de avatar gestuurd.'
   notice_registered: 'De avatar {name} is klaar: log in met zijn naam en zijn wachtwoord.'
   notice_registered_confirm: 'Er is een mail naar {email} gestuurd: het account wordt aangemaakt zodra de link erin wordt gevolgd.'
   notice_registered_mail_failed: 'De registratie blijft bewaard, maar de mail naar {email} kon niet worden verzonden: vraag hem later opnieuw aan.'
-  admin_engine: 'Engine'
+  admin_engine: Engine
   admin_engine_help: 'Waar de site alles over de grid vraagt'
   admin_engine_remote: 'De API van de grid'
   admin_engine_bundled: 'De engine die in de plugin zit'
   admin_bundled_login: 'Inlogadres van de grid'
   admin_bundled_login_help: 'Naam en adressen komen daarvandaan. Leeg: de grid van de OpenSim-installatie van deze server'
-  admin_db_host: 'Databasehost'
-  admin_db_port: 'Databasepoort'
-  admin_db_name: 'Databasenaam'
-  admin_db_user: 'Databasegebruiker'
-  admin_db_password: 'Databasewachtwoord'
+  admin_db_host: Databasehost
+  admin_db_port: Databasepoort
+  admin_db_name: Databasenaam
+  admin_db_user: Databasegebruiker
+  admin_db_password: Databasewachtwoord
   admin_db_password_help: 'Buiten de configuratie en git gehouden'
   admin_serve_helpers: 'De helpers aanbieden'
   admin_serve_helpers_help: 'Wat viewers en simulators vragen (welkom, zoeken, profielen, economie, offline berichten) op de adressen van de grid, die die van deze site moeten zijn. Uit: de grid houdt zijn eigen helpers'
   admin_grids_config: 'Config of the grids'
   admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
-  admin_tab_connection: 'Verbinding'
-  admin_tab_accounts: 'Accounts'
-  admin_tab_pages: 'Pagina''s'
+  admin_tab_connection: Verbinding
+  admin_tab_accounts: Accounts
+  admin_tab_pages: "Pagina's"
   admin_url: 'Adres van de helpers'
   admin_url_help: 'Het adres van de helpers van de grid, waar de blokken staan'
   admin_api_url: 'Adres van de engine-API'
@@ -637,7 +701,7 @@ w4os:
   admin_api_url_missing: 'De engine is extern maar heeft geen API-adres: vul het adres van de engine-API in, zonder dat bereikt de site de grid niet'
   admin_grid: 'Nick van de grid'
   admin_grid_help: 'Alleen als de API meerdere grids bedient'
-  admin_api_key: 'API-sleutel'
+  admin_api_key: API-sleutel
   admin_api_key_help: 'Gemaakt op de machine van de grid: opensim api-key create <naam>. Buiten de configuratie en git gehouden.'
   admin_api_key_saved: 'Opgeslagen (typ een nieuwe om hem te vervangen)'
   admin_send_mail: 'Mails versturen'
@@ -645,33 +709,33 @@ w4os:
   admin_cache: 'Cache (seconden)'
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
-  admin_register: 'Registreren'
+  admin_register: Registreren
   admin_confirm_email: 'De e-mail bevestigen'
   admin_confirm_email_help: 'Een nieuwe avatar blijft inactief tot hij op de link klikt die de engine hem stuurt'
   admin_terms: 'Pagina met voorwaarden'
   admin_terms_help: 'Het pad van een pagina om mee akkoord te gaan voor de registratie; leeg voor geen'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
-  admin_admin_level: 'Beheerpagina''s vanaf niveau'
-  admin_admin_level_help: 'De avatars vanaf dit gebruikersniveau komen in de beheerpagina''s; elke pagina, actie en elk veld vraagt dan zijn eigen niveau, dat van de engine'
+  admin_admin_level: "Beheerpagina's vanaf niveau"
+  admin_admin_level_help: "De avatars vanaf dit gebruikersniveau komen in de beheerpagina's; elke pagina, actie en elk veld vraagt dan zijn eigen niveau, dat van de engine"
   admin_save_accounts: 'Grav-accounts bewaren'
   admin_save_accounts_help: 'Een Grav-account (user/accounts) bewaren voor elke avatar die inlogt; altijd aan met de API-plugin'
   admin_menu: 'Entry in the menu'
   admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
   admin_site_settings: 'Site settings'
-  admin_site_appearance: 'Appearance'
-  admin_site_theme: 'Theme'
+  admin_site_appearance: Appearance
+  admin_site_theme: Theme
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
-  admin_site_logo: 'Logo'
+  admin_site_logo: Logo
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
-  admin_site_favicon: 'Favicon'
+  admin_site_favicon: Favicon
   admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
   admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
   admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
   admin_route: 'Admin pages'
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
-  admin_menu_list: 'List'
+  admin_menu_list: List
   admin_avatar_created: 'The avatar %s is created.'
   admin_search_parcels: 'Parcel name'
   admin_no_parcels: 'No parcel'
@@ -682,34 +746,34 @@ w4os:
   admin_shortcode_text_help: 'A text of the catalog, in the language of the page, the name of the grid in it'
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: 'Health'
+  admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
   admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
   admin_health_not_checked: 'Not checked again: %s'
-  admin_health_expected: 'Expected'
-  admin_health_value: 'Value'
-  admin_health_set: 'Set'
-  admin_health_state: 'State'
-  admin_health_version: 'Version'
-  admin_health_exists: 'Exists'
-  admin_health_writable: 'Writable'
-  admin_health_readable: 'Readable'
-  admin_health_extension: 'Extension'
-  admin_health_path: 'Path'
-  admin_health_instance: 'Instance'
-  admin_health_installed: 'Installed'
-  admin_health_missing: 'Missing'
+  admin_health_expected: Expected
+  admin_health_value: Value
+  admin_health_set: Set
+  admin_health_state: State
+  admin_health_version: Version
+  admin_health_exists: Exists
+  admin_health_writable: Writable
+  admin_health_readable: Readable
+  admin_health_extension: Extension
+  admin_health_path: Path
+  admin_health_instance: Instance
+  admin_health_installed: Installed
+  admin_health_missing: Missing
   admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_health_setting: 'Setting'
-  admin_health_address: 'Address'
-  admin_health_answer: 'Answer'
-  admin_health_time: 'Time'
+  admin_health_setting: Setting
+  admin_health_address: Address
+  admin_health_answer: Answer
+  admin_health_time: Time
   admin_health_addresses: 'Addresses of the grid'
-  admin_health_service: 'Service'
-  admin_health_source: 'Source'
+  admin_health_service: Service
+  admin_health_source: Source
   admin_health_source_provider: 'the service itself'
   admin_health_source_config: 'its config'
   admin_health_source_live: 'the running grid'
@@ -717,7 +781,7 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: 'Flux'
+  admin_flux_menu: Flux
   admin_flux_title: 'Flux Posts'
   admin_flux_search: 'Search Flux Posts'
   admin_flux_none: 'No Flux Posts found'

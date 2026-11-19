@@ -6,19 +6,19 @@ w4os:
   register_title: 'Creu Fy Avatar'
   register_text: 'Dewiswch enw isod. Dyma sut bydd pobl yn eich gweld yn y byd rhithwir.'
   register_button: 'Creu Fy Avatar'
-  register: 'Cofrestru'
+  register: Cofrestru
   have_avatar: 'Oes gennych chi avatar yn barod?'
   first_name: 'Enw cyntaf'
-  last_name: 'Cyfareddol'
-  first_name_help: 'Rhaid i''r enw cyntaf ddechrau gyda llythyren a chynnwys llythrennau a rhifau yn unig'
-  last_name_help: 'Rhaid i''r cyfenw ddechrau gyda llythyren a chynnwys llythrennau a rhifau yn unig'
-  email: 'Ebost'
-  password: 'Cyfrinair'
+  last_name: Cyfareddol
+  first_name_help: "Rhaid i'r enw cyntaf ddechrau gyda llythyren a chynnwys llythrennau a rhifau yn unig"
+  last_name_help: "Rhaid i'r cyfenw ddechrau gyda llythyren a chynnwys llythrennau a rhifau yn unig"
+  email: Ebost
+  password: Cyfrinair
   password_confirm: 'Cadarnhau cyfrinair'
   password_help: '6 i 16 nod, heb ddyfynnod dwbl. Mae’r un cyfrinair yn eich mewngofnodi yma ac yn y byd rhithwir.'
   model: 'Dewiswch y gwisg gyntaf ar gyfer eich avatar.'
   model_help: 'Gallwch bob amser newid eich ymddangosiad yn y byd rhithwir.'
-  terms_agree: 'Rwy''n cytuno i''r telerau ar dudalen %s.'
+  terms_agree: "Rwy'n cytuno i'r telerau ar dudalen %s."
   registered: 'Avatar %s wedi’i greu. Mewngofnodwch gyda’i enw neu eich ebost.'
   registered_confirm: 'Bron yno: cliciwch y ddolen yn yr ebost a anfonwyd i’ch cyfeiriad i greu %s.'
   registered_not_sent: 'Bron yno, ond doedd dim modd anfon yr ebost cadarnhau. Gofynnwch am un newydd isod i greu %s, neu cysylltwch â rheolwyr y grid.'
@@ -31,12 +31,12 @@ w4os:
   confirm_resent: 'Mae dolen newydd ar ei ffordd.'
   confirm_resent_test: 'Safle prawf, dim ebost: cadarnhewch gyda’r ddolen hon: %s'
   avatar_name: 'Enw Avatar'
-  login_title: 'Mewngofnodi'
-  log_in: 'Mewngofnodi'
-  logout: 'Allgofnodi'
+  login_title: Mewngofnodi
+  log_in: Mewngofnodi
+  logout: Allgofnodi
   login: 'Enw avatar neu ebost'
   sign_in_failed: 'Methodd y mewngofnodi'
-  forgot_title: 'Wedi anghofio''r cyfrinair'
+  forgot_title: "Wedi anghofio'r cyfrinair"
   forgot_text: 'Teipiwch enw eich avatar neu eich ebost: byddwch yn cael dolen i ddewis cyfrinair newydd.'
   forgot_button: 'Anfonwch ddolen ataf'
   forgot_sent: 'Os oes gan avatar yr enw neu’r ebost hwn, mae dolen ar ei ffordd i’w gyfeiriad.'
@@ -49,223 +49,275 @@ w4os:
   new_password: 'Cyfrinair newydd'
   current_password: 'Cyfrinair presennol'
   account_title: 'Proffil Avatar'
-  born: 'Eni'
-  profile_title: 'Proffil'
+  born: Eni
+  profile_title: Proffil
   profile_text: 'Yr hyn y mae eraill yn ei weld ohonoch yn y byd rhithwir (mae’r llun a’r diddordebau’n cael eu gosod yn y gwyliwr).'
-  about: 'Ynghylch'
-  wants: 'Eisiau'
-  skills: 'Sgiliau'
-  want_build: 'Adeiladu'
-  want_explore: 'Archwiliwch'
-  want_meet: 'Cyfarfod'
-  want_group: 'Grwp'
-  want_buy: 'Prynwch'
-  want_sell: 'Gwerthu'
+  about: Ynghylch
+  wants: Eisiau
+  skills: Sgiliau
+  want_build: Adeiladu
+  want_explore: Archwiliwch
+  want_meet: Cyfarfod
+  want_group: Grwp
+  want_buy: Prynwch
+  want_sell: Gwerthu
   want_be_hired: 'Cael fy nghyflogi'
-  want_hire: 'Llogi'
-  skill_textures: 'Gweadau'
-  skill_architecture: 'Pensaernïaeth'
+  want_hire: Llogi
+  skill_textures: Gweadau
+  skill_architecture: Pensaernïaeth
   skill_event_planning: 'Cynllunio Digwyddiadau'
-  skill_modeling: 'Modelu'
-  skill_scripting: 'Sgriptio'
+  skill_modeling: Modelu
+  skill_scripting: Sgriptio
   skill_custom_characters: 'Cymeriadau Personol'
-  languages: 'Ieithoedd'
+  languages: Ieithoedd
   real_life: 'Bywyd go iawn'
   profile_url: 'Tudalen we'
   edit_profile: 'Golygu’r proffil'
-  profile_other: 'Arall'
+  profile_other: Arall
   profile_sections: 'Adrannau’r proffil'
   profile_tab_inworld: 'Yn y byd'
-  profile_tab_about: 'Amdanaf'
-  profile_tab_web: 'Gwe'
-  profile_tab_feed: 'Ffrwd'
+  profile_tab_about: Amdanaf
+  profile_tab_web: Gwe
+  profile_tab_feed: Ffrwd
   post_label: 'New post'
   post_help: 'Plain text, 1000 characters at most.'
-  action_save: 'Save'
+  action_save: Save
   settings_models: 'Modelau Afatar'
-  settings_economy: 'Gosodiadau'
-  settings_search: 'Gosodiadau''r peiriant chwilio'
-  settings_guide: 'Gosodiadau''r Ganllawiau o Destyniadau'
+  settings_economy: Gosodiadau
+  settings_search: "Gosodiadau'r peiriant chwilio"
+  settings_guide: "Gosodiadau'r Ganllawiau o Destyniadau"
   settings_offline: 'Gosodiadau Negeseuon All-lein'
   settings_assets: 'Gweinydd Asedau Gwe'
-  settings_menu_economy: 'Economi'
+  settings_menu_economy: Economi
   settings_menu_search: 'Peiriant chwilio'
-  settings_menu_guide: 'Teithlyddau Cyfeiriadau'
+  settings_menu_guide: 'Canllaw Cyrchfannau'
   settings_menu_offline: 'Negeseuon All-lein'
-  settings_menu_assets: 'Gweinydd Asedau'
+  settings_menu_assets: 'Asedau Gwe'
   settings_saved: 'Gosodiadau wedi’u cadw.'
-  models_match: 'Cyfateb'
+  provide_economy: 'Darparu cynorthwywyr economi'
+  provide_search: 'Darparu chwilio'
+  provide_guide: 'Darparu Gwasanaeth Tywysfa Cyfeiriannau'
+  provide_offline: 'Darparu Gwasanaeth Negeseuon All-lein'
+  provide_offline_help: 'Parchu dewis y gwyliwr “E-bostio IMs ataf pan fyddaf all-lein”.'
+  provide_assets: 'Darparu Gweinydd Asedau Gwe'
+  provide_assets_help: "Mae angen gweinydd asedau gwe i arddangos asedau yn y byd (o'r grid) ar y wefan (e.e. lluniau proffil)."
+  provide_path: Llwybr
+  provide_offline_help_core: "Modiwl negeseuon core OpenSimulator ddim yn delio â'r opsiwn fforio e-bost sydd ar gael yn gosodiadau'r gwyliwr."
+  economy_helper_uri: 'Sylfaen economi URI'
+  economy_helper_uri_help: 'Rhaid gosod yr URL yng nghyfluniad Robust.'
+  economy_help_helpers: "Mae cynorthwywyr economi yn sgriptiau ychwanegol sydd eu hangen os ydych chi'n gweithredu economi ar eich grid (gydag arian cyfred go iawn neu ffug)."
+  economy_help_scripts: "Mae sgriptiau cynorthwywyr yn caniatáu cyfathrebu rhwng y gweinydd arian a'r grid: diweddariad balans cyfredol, amcangyfrif cost arian cyfred, gwerthu tir a gwrthrychau, taliadau ..."
+  economy_help_module: 'This plugin only provides the web helpers required by the money server module. A third-party module must be installed and configured on the simulator, for example:'
+  economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
+  economy_help_binaries: "Gellir lawrlwytho deuaidd parod i'w defnyddio a ffeiliau ffurfweddu enghreifftiol yma: github.com/magicoli/opensim-helpers"
+  gloebit_configuration: 'Ffurfweddiad Gloebit'
+  gloebit_help_crash: "Rhaid cyflunio modiwl Gloebit cyn ailgychwyn y rhanbarth, neu fe allai chwalu'r efelychydd."
+  gloebit_help_linux: "Ar gyfer Linux, gweler README-Gloebit.md (github.com/magicoli/opensim-helpers) i osgoi gwallau sy'n ymwneud â thystysgrifau."
+  gloebit_help_register: 'Cofrestrwch gyfrif neu cysylltwch ar gloebit.com a dilynwch y cyfarwyddiadau ar dev.gloebit.com i sefydlu ap ar gyfer eich grid/efelychydd.'
+  gloebit_help_config: "Add Gloebit configuration in OpenSim.ini.\n\n在OpenSim.ini中添加Gloebit"
+  gloebit_help_dll: "Lawrlwythwch y dll diweddaraf i'ch plygell bin/ OpenSimulator (ailenwch ef yn Gloebit.dll), o github.com/GuduleLapointe/opensim-debian neu dev.gloebit.com"
+  money_script_access_key: 'Allwedd Mynediad Sgript Arian'
+  money_script_access_key_help: "Dewiswch allwedd mynediad unigryw a'i osod yn MoneyServer.ini"
+  search_engine_url: 'Search Engine URL'
+  search_url_help_viewer: 'URL y peiriant chwilio a ddefnyddir gan y gwyliwr i ddarparu canlyniadau chwilio (heb ddadleuon).'
+  search_url_help_one: "Dim ond un y gellir ei osod, mae'r llinellau eraill yn enghreifftiau amgen."
+  search_url_help_web: "Sylwch fod URL Chwilio yn wahanol i URL chwilio Gwe, nad yw W4OS yn ei drin ar hyn o bryd. Mae chwiliad gwe yn berthnasol os oes gennych chi dudalen chwilio gwe sy'n ymroddedig i gynnwys grid, sy'n darparu canlyniadau gydag URLs yn y byd (hop: / neu secondlife://). Mae'n ddewisol a chyfeirir ato yma dim ond i ddadamwys gosodiadau sydd yn anffodus ag enwau tebyg."
+  search_register_url: 'URL Cofrestru Chwilio'
+  search_register_help_data: 'Gwasanaeth data, a ddefnyddir i gofrestru rhanbarthau, gwrthrychau neu dir ar werth.'
+  search_register_help_several: 'Gallwch gofrestru gyda sawl injan chwilio.'
+  search_register_help_prefix: 'Rhaid i bob llinell fod ag enw unigryw yn dechrau gyda "DATA_SRV_"'
+  events_help_fetch: "HYPEvents Server URL, a'gus airson tachartasan ri teachd agus a dhèanamh ri fhaotainn ann an cuairt."
+  events_help_blank: 'Gadewch yn wag i anwybyddu digwyddiadau neu os oes gennych weithrediad digwyddiadau eraill.'
+  search_help_local: "Enable i'r defnyddio peiriant chwilio lleol, gan ganiatáu dim ond canlyniadau lleol (argymhellir ar gyfer gridiau preifat)."
+  search_help_external: "Disable i'r defnydd o injan chwilio allanol fel 2do Directory, gan ganiatáu canlyniadau o'ch grid chi ac o gridiau cyhoeddus eraill."
+  search_help_module: 'Search features require the installation of the OpenSimSearch Module on OpenSimulator.'
+  search_help_binary: "Gellir dod o hyd i'r deuaidd OpenSimSearch.Modules.dll parod i'w ddefnyddio yma: github.com/magicoli/opensim-helpers"
+  guide_url: 'URL Canllawau Cyfeiriadau'
+  guide_source_help_file: "Ffeil destyniadau wedi'u rhestru'n fformatio."
+  guide_source_help_where: "Gall fod y ffynhonnell yn URL neu'r llwybr llawn i ffeil leol y gall eich gweinydd gwe ei chyrraedd."
+  guide_source_help_pipe: "Enw'r cyrchfan a'r URL teithio ar wahân gan farc pibell (|)."
+  guide_source_help_categories: "Llinellau sy'n cynnwys testun yn unig yn cael eu dehongli fel categorïau."
+  guide_source_help_comments: 'Llinellau sy''n dechrau gyda "#" neu "//" yn cael eu hanwybyddu.'
+  guide_source_help_board: "Mae'r fformat yn union yr un fath â'r fformat a ddefnyddir gan wrthrych mewn-byd Gudz Teleport Board, felly gellir defnyddio'r un URL ffynhonnell ar gyfer y ddau."
+  guide_help_feature: 'Mae canllawau cyrchfan yn nodwedd Viewer 3, gan ddarparu ffenestr gyda awgrymiadau lleoedd.'
+  guide_help_places: "Er nad yw'n orfodol, ac ni fydd pob defnyddiwr yn elwa arno, mae'n ffordd ddefnyddiol o ddarparu rhestr o leoedd rhaid eu gweld, o'ch grid eich hun neu o'r tu allan."
+  offline_helper: 'Cynorthwyydd Negeseuon All-lein'
+  offline_helper_help: 'Gosodwch yr URL yng ngffurfweddiadau OpenSimulator.'
+  assets_url: 'Web Assets Server URL'
+  assets_external_help: "Os yw 'Darparu Gweinydd Asedau Gwe' wedi'i analluogi, mae angen gosod gwasanaeth trydydd parti a rhoi ei URL yma er mwyn i'r ategyn weithio'n iawn."
+  provide_path_help: "O dan gyfeiriad y wefan: o dan sylfaen yr helpers, yr helpers sy'n ateb; mewn man arall, y wefan, ar dudalen gyda'i bloc."
+  models_match: Cyfateb
   models_match_first: 'Enw Cyntaf'
-  models_match_any: 'Unrhyw'
+  models_match_any: Unrhyw
   models_match_last: 'Enw Olaf'
   models_match_uuid: 'Rhestr Benodol'
-  models_pattern: 'Enw'
+  models_pattern: Enw
   models_list: 'Dewis Modelau'
   models_list_placeholder: 'Dewiswch un neu fwy o afatars presennol'
   action_save_changes: 'Cadw Newidiadau'
   models_preview: 'Rhagolwg Modelau'
   models_none: 'Ni chafwyd darganfod modelau.'
-  models_help_choice: 'Os yw modelau afatar wedi''u diffinio, bydd defnyddwyr newydd yn cael dewis ar ffurf creu afatar, a fydd yn pennu''r dillad cychwynnol i''r afatar a grëwyd.'
-  models_help_create: 'Mae angen i weinyddwr y grid greu pob model o gonsôl ROBUST, mewngofnodi gyda''r golygydd, cyfaddasu''r dillad, a thynnu llun proffil.'
-  models_help_not_users: 'Dylai''r afatars a ddefnyddir ar gyfer y modelau beidio â bod yn gyfrifon defnyddwyr go iawn.'
-  models_help_outfit: 'Bydd yr afatar newydd yn gwisgo''r un dillad â''r model ar adeg y cofrestru.'
-  models_help_rule: 'Os yw''r rheol cyfrif model yn seiliedig ar yr enw, bydd unrhyw afatar newydd a grëwyd sy''n cyd-fynd â''r rheol hwnnw yn cael ei ychwanegu''n awtomatig i''r rhestr.'
-  action_post: 'Post'
+  models_help_choice: "Os yw modelau afatar wedi'u diffinio, bydd defnyddwyr newydd yn cael dewis ar ffurf creu afatar, a fydd yn pennu'r dillad cychwynnol i'r afatar a grëwyd."
+  models_help_create: "Mae angen i weinyddwr y grid greu pob model o gonsôl ROBUST, mewngofnodi gyda'r golygydd, cyfaddasu'r dillad, a thynnu llun proffil."
+  models_help_not_users: "Dylai'r afatars a ddefnyddir ar gyfer y modelau beidio â bod yn gyfrifon defnyddwyr go iawn."
+  models_help_outfit: "Bydd yr afatar newydd yn gwisgo'r un dillad â'r model ar adeg y cofrestru."
+  models_help_rule: "Os yw'r rheol cyfrif model yn seiliedig ar yr enw, bydd unrhyw afatar newydd a grëwyd sy'n cyd-fynd â'r rheol hwnnw yn cael ei ychwanegu'n awtomatig i'r rhestr."
+  action_post: Post
   action_new_avatar: 'Avatar Newydd'
   action_create_avatar: 'Creu Avatar'
-  action_delete_post: 'Delete'
+  action_delete_post: Delete
   ask_delete_post: 'Delete this post?'
   manage_post: 'Your post is published.'
   manage_delete_post: 'Your post is deleted.'
-  profile_tab_interests: 'Diddordebau'
-  profile_tab_picks: 'Dewisiadau'
-  profile_tab_classifieds: 'Hysbysebion'
+  profile_tab_interests: Diddordebau
+  profile_tab_picks: Dewisiadau
+  profile_tab_classifieds: Hysbysebion
   profile_tab_real_life: 'Bywyd go iawn'
   profile_tab_notes: 'Fy nodiadau'
-  profile_tab_account: 'Cyfrif'
-  profile_key: 'Allwedd'
-  profile_picture: 'Llun'
-  partner: 'Partner'
+  profile_tab_account: Cyfrif
+  profile_key: Allwedd
+  profile_picture: Llun
+  partner: Partner
   show_in_search: 'Dangos yn y chwiliad'
   interests_removed: 'Nid yw’r gwylwyr yn dangos yr adran hon ers 2023.'
   profile_viewer_only: 'Wedi’u creu a’u golygu yn y gwyliwr.'
-  profile_none: 'Dim.'
-  profile_name: 'Enw'
+  profile_none: Dim.
+  profile_name: Enw
   profile_age_today: 'Ymunodd heddiw'
   profile_age_days: '%d diwrnod'
-  profile_groups: 'Grwpiau'
+  profile_groups: Grwpiau
   profile_no_description: 'Dim disgrifiad.'
-  profile_location: 'Lleoliad'
-  profile_teleport: 'Teleportio'
-  profile_until: 'Tan'
-  save_button: 'Cadw'
+  profile_location: Lleoliad
+  profile_teleport: Teleportio
+  profile_until: Tan
+  save_button: Cadw
   profile_saved: 'Mae eich proffil wedi’i gadw.'
-  password_title: 'Cyfrinair'
+  password_title: Cyfrinair
   password_button: 'Newid y cyfrinair'
   password_saved: 'Mae eich cyfrinair wedi newid.'
   email_pending: 'Mae eich proffil wedi’i gadw. Mae dolen ar ei ffordd i %s: cliciwch hi i’w wneud yn ebost i chi.'
   email_pending_test: 'Mae eich proffil wedi’i gadw. Safle prawf, dim ebost: cadarnhewch %1$s gyda’r ddolen hon: %2$s'
   email_changed: 'Eich ebost yw %s nawr.'
-  regions_title: 'Rhanbarthau'
-  search_regions: 'Enw''r rhanbarth'
+  regions_title: Rhanbarthau
+  search_regions: "Enw'r rhanbarth"
   regions_count: '%d rhanbarth'
   no_regions: 'Dim rhanbarth'
   regions_online: '%1$s ar-lein o %2$s'
-  simulators_title: 'Efelychwyr'
-  search_simulators: 'Enw''r efelychydd'
+  simulators_title: Efelychwyr
+  search_simulators: "Enw'r efelychydd"
   simulators_count: '%d efelychydd'
   no_simulators: 'Dim efelychydd'
-  filters: 'Hidlyddion'
+  filters: Hidlyddion
   filters_active: '%d hidlydd gweithredol'
   label_value: '%1$s: %2$s'
-  tab_overview: 'Trosolwg'
-  column_status: 'Statws'
-  state_enabled: 'Wedi''i alluogi'
-  state_disabled: 'Wedi''i analluogi'
+  tab_overview: Trosolwg
+  column_status: Statws
+  state_enabled: "Wedi'i alluogi"
+  state_disabled: "Wedi'i analluogi"
   state_running: 'Yn rhedeg'
   state_stopped: 'Wedi stopio'
   state_unresponsive: 'Dim ateb'
   state_crashed: 'Wedi chwalu'
-  connection_console: 'Console'
+  connection_console: Console
   connection_console_failed: 'Console yn anghyraeddadwy'
-  connection_screen: 'Screen'
+  connection_screen: Screen
   connection_screen_failed: 'Screen heb ei ganfod'
-  connection_config: 'OpenSim.ini'
+  connection_config: OpenSim.ini
   connection_config_failed: 'OpenSim.ini yn annarllenadwy'
   connection_regions: 'Regions .ini'
   connection_regions_failed: 'Regions .ini yn annarllenadwy'
-  connection_mysql: 'MySQL'
+  connection_mysql: MySQL
   connection_mysql_failed: 'MySQL yn anghyraeddadwy'
-  connection_sqlite: 'SQLite'
+  connection_sqlite: SQLite
   connection_sqlite_failed: 'SQLite yn annarllenadwy'
-  menu_admin: 'Gweinyddu'
+  menu_admin: Gweinyddu
   menu_account: 'Fy afatar'
   dashboard_title: 'Bwrdd rheoli'
-  manage_title: 'Avatars'
+  manage_title: Avatars
   search_avatars: 'Enw neu ebost'
-  search: 'Chwilio'
+  search: Chwilio
   no_avatars: 'Dim canlyniad'
   avatars_count: '%d afatar'
-  status: 'Statws'
+  status: Statws
   last_seen: 'Gwelwyd Diwethaf'
-  created: 'Creuwyd'
-  actions: 'Gweithredoedd'
-  god: 'Duw'
-  online: 'Ar-lein'
-  status_active: 'Gweithgar'
-  status_disabled: 'Analluogwyd'
+  created: Creuwyd
+  actions: Gweithredoedd
+  god: Duw
+  online: Ar-lein
+  status_active: Gweithgar
+  status_disabled: Analluogwyd
   status_pending: 'Yn aros'
-  status_banned: 'Wedi''i wahardd'
+  status_banned: "Wedi'i wahardd"
   avatar_type_user: 'Defnyddiwr Avatar'
   avatar_type_model: 'Model Rhagosodiad'
   avatar_type_service: 'Cyfrif Gwasanaeth'
-  state_grid_banned: 'Wedi''i wahardd o''r grid'
-  state_estate_banned: 'Wedi''i wahardd o ystadau'
+  state_grid_banned: "Wedi'i wahardd o'r grid"
+  state_estate_banned: "Wedi'i wahardd o ystadau"
   filter_estate_banned: 'Gwaharddiadau ystadau'
-  action_ban: 'Gwahardd'
-  action_unban: 'Dad-wahardd'
+  action_ban: Gwahardd
+  action_unban: Dad-wahardd
   action_estate_ban: 'Gwahardd o ystadau'
   action_estate_unban: 'Dad-wahardd o ystadau'
   ask_ban: 'Gwahardd yr afatar hwn? Ni all fewngofnodi mwyach, nes iddo gael ei ddad-wahardd.'
   ask_estate_ban: 'Gwahardd yr afatar hwn o bob ystâd yn y grid?'
-  role: 'Rôl'
-  role_resident: 'Preswylydd'
+  role: Rôl
+  role_resident: Preswylydd
   role_god_like: 'Fel y duw'
   role_customer_service: 'Gwasanaeth Cwsmeriaid'
   role_liaison: 'Swyddog cyswllt'
-  role_god: 'Duw'
+  role_god: Duw
   role_maintenance: 'Cynnal a chadw'
-  action_enable: 'Galluogi'
-  action_disable: 'Analluogi'
-  action_start: 'Cychwyn'
-  action_stop: 'Atal'
-  action_restart: 'Ailgychwyn'
+  action_enable: Galluogi
+  action_disable: Analluogi
+  action_start: Cychwyn
+  action_stop: Atal
+  action_restart: Ailgychwyn
   ask_stop_instance: 'Atal yr efelychydd hwn? Anfonir yr afatarau yn ei ranbarthau i ffwrdd.'
   ask_restart_instance: 'Ailgychwyn yr efelychydd hwn? Anfonir yr afatarau yn ei ranbarthau i ffwrdd tra bydd yn ailgychwyn.'
   action_reset: 'Anfon dolen i ailosod y cyfrinair'
   action_view: 'Gweld proffil'
-  action_view_item: 'Gweld'
-  action_edit: 'Golygu'
+  action_view_item: Gweld
+  action_edit: Golygu
   edit_title: 'Golygu %s'
   manage_enable: 'Mae %s wedi’i alluogi.'
   manage_disable: 'Mae %s wedi’i analluogi.'
   manage_start: 'Mae %s wedi cychwyn.'
   manage_stop: 'Mae %s wedi stopio.'
   manage_restart: 'Mae %s wedi ailgychwyn.'
-  manage_ban: 'Mae %s wedi''i wahardd.'
-  manage_unban: 'Nid yw %s wedi''i wahardd mwyach.'
+  manage_ban: "Mae %s wedi'i wahardd."
+  manage_unban: "Nid yw %s wedi'i wahardd mwyach."
   manage_delete: 'Mae %s wedi’i ddileu.'
-  manage_estate_ban: 'Mae %s wedi''i wahardd o''r ystadau.'
-  manage_estate_unban: 'Nid yw %s wedi''i wahardd o''r ystadau mwyach.'
+  manage_estate_ban: "Mae %s wedi'i wahardd o'r ystadau."
+  manage_estate_unban: "Nid yw %s wedi'i wahardd o'r ystadau mwyach."
   manage_reset: 'Mae dolen i ddewis cyfrinair newydd ar ei ffordd at %s.'
   manage_saved: 'Mae %s wedi’i gadw.'
-  yes: 'Ie'
-  no: 'Na'
-  filter_any: 'Unrhyw'
-  filter_clear: 'Tynnu''r hidlydd'
+  yes: Ie
+  no: Na
+  filter_any: Unrhyw
+  filter_clear: "Tynnu'r hidlydd"
   filter_email: 'Gydag e-bost'
   filter_model: 'Model afatar'
   filter_technical: 'Cyfrif gwasanaeth'
   filter_active: 'Gall fewngofnodi'
-  column_map: 'Map'
-  column_region: 'Rhanbarth'
-  column_region_name: 'Enw''r Rhanbarth'
-  column_presence: 'Presenoldeb'
+  column_map: Map
+  column_region: Rhanbarth
+  column_region_name: "Enw'r Rhanbarth"
+  column_presence: Presenoldeb
   column_internal_port: 'Porth Mewnol'
   last_activity: 'Diweddaraeth Ola'
-  column_size: 'Maint'
-  column_owner: 'Perchennog'
-  column_roles: 'Rolau'
-  column_flags: 'Baneri'
-  offline: 'All-lein'
-  all: 'Cy_GB'
-  view_active: 'Gweithgar'
-  view_inactive: 'Inactive'
-  degraded: 'Diraddiedig'
-  parcels: 'Tirionau'
+  column_size: Maint
+  column_owner: Perchennog
+  column_roles: Rolau
+  column_flags: Baneri
+  offline: All-lein
+  all: Cy_GB
+  view_active: Gweithgar
+  view_inactive: Inactive
+  degraded: Diraddiedig
+  parcels: Tirionau
   shortcodes_title: 'Codau Byr Sydd Ar Gael'
   shortcodes_help: 'Gellir cynnwys codau byr yn unrhyw dudalen neu erthygl.'
-  shortcode_options: 'Opsiynau'
+  shortcode_options: Opsiynau
   shortcode_option_title: 'Teitl y Bloc'
   shortcode_option_level: 'Lefel y Teitl (h1 i h6)'
   shortcode_option_name: 'The name of the avatar (First.Last)'
@@ -282,48 +334,48 @@ w4os:
   block_profile_help: 'The profile of an avatar, as its page shows it.'
   block_new_users_help: 'The avatars that joined the grid last.'
   setting_login: 'Mewngofnodi URI'
-  setting_login_help: 'Y cyfeiriad y mae''r gwylwyr yn mewngofnodi iddo ac yn gofyn iddo beth mae''r grid yn ei ddweud amdano''i hun (get_grid_info).'
-  setting_gatekeeper: 'Gatekeeper'
+  setting_login_help: "Y cyfeiriad y mae'r gwylwyr yn mewngofnodi iddo ac yn gofyn iddo beth mae'r grid yn ei ddweud amdano'i hun (get_grid_info)."
+  setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'
   setting_uas: 'Gwasanaeth asiant defnyddiwr'
-  setting_uas_help: 'Ble mae avatarau''r grid hwn yn hysbys pan fyddant yn ymweld â gridiau eraill (hypergrid).'
-  setting_welcome: 'Sblash'
-  setting_welcome_help: 'Y dudalen groeso a ddangosir yn y gwyliwr gyda''r ffurflen mewngofnodi. Tudalen fer, heb sgrolio, gyda dim ond gwybodaeth hanfodol. Mae''n ofynnol, neu o leiaf yn cael ei argymell yn fawr.'
-  setting_economy: 'Economi'
-  setting_economy_help: 'Arian cyfred a rhai gwasanaethau eraill yn cael eu holi gan y gwyliwr. Nid yw''r defnyddiwr yn mynd atynt yn uniongyrchol.'
+  setting_uas_help: "Ble mae avatarau'r grid hwn yn hysbys pan fyddant yn ymweld â gridiau eraill (hypergrid)."
+  setting_welcome: Sblash
+  setting_welcome_help: "Y dudalen groeso a ddangosir yn y gwyliwr gyda'r ffurflen mewngofnodi. Tudalen fer, heb sgrolio, gyda dim ond gwybodaeth hanfodol. Mae'n ofynnol, neu o leiaf yn cael ei argymell yn fawr."
+  setting_economy: Economi
+  setting_economy_help: "Arian cyfred a rhai gwasanaethau eraill yn cael eu holi gan y gwyliwr. Nid yw'r defnyddiwr yn mynd atynt yn uniongyrchol."
   setting_about: 'Am y grid hwn'
-  setting_about_help: 'Tudalen wybodaeth fanwl ar eich gwefan, trwy ddolen a ddangosir ar dudalen mewngofnodi''r gwyliwr.'
+  setting_about_help: "Tudalen wybodaeth fanwl ar eich gwefan, trwy ddolen a ddangosir ar dudalen mewngofnodi'r gwyliwr."
   setting_register: 'Tudalen gofrestru'
-  setting_register_help: 'Dolen i''r cofrestriad defnyddiwr.'
-  setting_help: 'Help'
+  setting_register_help: "Dolen i'r cofrestriad defnyddiwr."
+  setting_help: Help
   setting_help_help: 'Dolen i dudalen gymorth ar eich gwefan.'
   setting_password: 'Adferiad cyfrinair'
   setting_password_help: 'Dolen i dudalen cyfrinair coll.'
   setting_grid_status: 'Statws grid'
   setting_grid_status_help: 'Tudalen statws y grid.'
   setting_grid_status_rss: 'Ffrwd statws y grid'
-  setting_grid_status_rss_help: 'Ffrwd statws y grid y mae''r gwylwyr yn ei darllen (RSS).'
+  setting_grid_status_rss_help: "Ffrwd statws y grid y mae'r gwylwyr yn ei darllen (RSS)."
   setting_web_profile: 'Proffil avatar'
   setting_web_profile_help: 'Yr URL sylfaenol ar gyfer proffiliau gwe avatar.'
   setting_web_search: 'Chwiliad Gwe'
-  setting_web_search_help: 'Tab gwe o ffenestri chwilio gwyliwr. Yn berthnasol os oes gennych dudalen chwilio sy''n darparu cynnwys o''r grid.'
+  setting_web_search_help: "Tab gwe o ffenestri chwilio gwyliwr. Yn berthnasol os oes gennych dudalen chwilio sy'n darparu cynnwys o'r grid."
   setting_destination_guide: 'Teithlyddau Cyfeiriadau'
   setting_destination_guide_help: 'Mae canllawau cyrchfan yn nodwedd Viewer 3, gan ddarparu ffenestr gyda awgrymiadau lleoedd.'
   setting_message_url: 'Neges y dydd'
-  setting_message_url_help: 'Y neges y mae''r gwylwyr yn ei dangos wrth fewngofnodi.'
+  setting_message_url_help: "Y neges y mae'r gwylwyr yn ei dangos wrth fewngofnodi."
   setting_search_service: 'Gwasanaeth Chwilio'
   setting_search_service_help: 'Gwasanaeth chwilio a ddefnyddir gan y gwyliwr. Gellir darparu chwiliad gan graidd yr efelychydd (cyfyngedig), neu gan wasanaeth allanol ar gyfer swyddogaethau ychwanegol (fel digwyddiadau). Angen OpenSimSearch.Modules.dll.'
   setting_data_service: 'Gwasanaeth data'
-  setting_data_service_help: 'Lle mae''r efelychwyr yn cofrestru eu rhanbarthau, fel bod y chwilio yn dod o hyd iddynt. Nid tudalen mohono.'
+  setting_data_service_help: "Lle mae'r efelychwyr yn cofrestru eu rhanbarthau, fel bod y chwilio yn dod o hyd iddynt. Nid tudalen mohono."
   setting_offline_messages: 'Negeseuon all-lein'
-  setting_offline_messages_help: 'Mae ei angen ar wylwyr i gadw negeseuon tra bod y defnyddiwr all-lein a''u cyflwyno pan fyddant yn dod yn ôl ar-lein. Gwasanaeth mewnol, na chaiff ei gyrchu''n uniongyrchol gan y defnyddiwr.'
+  setting_offline_messages_help: "Mae ei angen ar wylwyr i gadw negeseuon tra bod y defnyddiwr all-lein a'u cyflwyno pan fyddant yn dod yn ôl ar-lein. Gwasanaeth mewnol, na chaiff ei gyrchu'n uniongyrchol gan y defnyddiwr."
   setting_offline_module: 'Modiwl negeseuon all-lein'
-  setting_offline_module_help: 'Modiwl yr efelychwyr sy''n cadw negeseuon yr afatarau sydd i ffwrdd: V2 gan Robust, V1 gan yr helpers.'
+  setting_offline_module_help: "Modiwl yr efelychwyr sy'n cadw negeseuon yr afatarau sydd i ffwrdd: V2 gan Robust, V1 gan yr helpers."
   setting_money_script_key: 'Allwedd sgriptiau arian'
-  setting_money_script_key_help: 'Yr allwedd y mae''r gwasanaethau arian a''r gweinydd arian yn ei rhannu: ni chaiff ei dangos byth, dim ond a yw wedi''i gosod.'
+  setting_money_script_key_help: "Yr allwedd y mae'r gwasanaethau arian a'r gweinydd arian yn ei rhannu: ni chaiff ei dangos byth, dim ond a yw wedi'i gosod."
   setting_helpers: 'sylfaenyddion sail'
-  setting_helpers_help: 'Sail tudalennau a gwasanaethau''r helpers.'
-  setting_directory: 'Cyfeiriadur'
+  setting_helpers_help: "Sail tudalennau a gwasanaethau'r helpers."
+  setting_directory: Cyfeiriadur
   setting_directory_help: 'Tudalen y grid yng nghyfeiriadur a rennir y rhanbarthau.'
   setting_cache_assets: 'Picture cache'
   setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
@@ -334,17 +386,17 @@ w4os:
   setting_public_port: 'Porth cyhoeddus'
   setting_private_port: 'Porth preifat'
   setting_storage_provider: 'Darparwr storio'
-  setting_database: 'Llinyn cysylltu''r gronfa ddata'
-  setting_grid_name: 'Enw''r Grid'
+  setting_database: "Llinyn cysylltu'r gronfa ddata"
+  setting_grid_name: "Enw'r Grid"
   setting_grid_nick: 'Llysenw y grid'
   setting_welcome_message: 'Neges croeso'
-  setting_currency_symbol: 'Enw''r arian cyfred'
+  setting_currency_symbol: "Enw'r arian cyfred"
   setting_search_module: 'Modiwl chwilio'
   setting_index_sims: 'Mynegeio rhanbarthau'
   setting_economy_module: 'Modiwl economi'
-  setting_economy_module_help: 'Yn cael ei newid gydag opsiynau''r grid, sy''n gosod y modiwl a''r hyn sydd ei angen arno.'
+  setting_economy_module_help: "Yn cael ei newid gydag opsiynau'r grid, sy'n gosod y modiwl a'r hyn sydd ei angen arno."
   economy_module_free: 'Trafodion am ddim yn unig'
-  economy_module_gloebit: 'Gloebit'
+  economy_module_gloebit: Gloebit
   economy_module_moneyserver: 'Podex a darparwyr arian eraill'
   setting_sell_enabled: 'Galluogi gwerthu'
   setting_price_upload: 'Pris uwchlwytho'
@@ -352,29 +404,30 @@ w4os:
   setting_gloebit_enabled: 'Galluogi Gloebit'
   setting_gloebit_environment: 'Amgylchedd Gloebit'
   gloebit_sandbox: 'Blwch tywod'
-  gloebit_production: 'Cynhyrchu'
-  setting_guide_source: 'Ffynhonnell'
-  setting_guide_source_help: 'Ffeil destyniadau wedi''u rhestru''n fformatio.'
-  setting_search_database: 'Cronfa ddata''r peiriant chwilio'
+  gloebit_production: Cynhyrchu
+  setting_guide_source: Ffynhonnell
+  setting_guide_source_help: "Ffeil destyniadau wedi'u rhestru'n fformatio."
+  setting_search_database: "Cronfa ddata'r peiriant chwilio"
   setting_events_url: 'Events Server URL'
-  setting_logo_url: 'URL logo''r grid'
+  setting_logo_url: "URL logo'r grid"
   setting_mail_sender: 'Cyfeiriad e-bost yr anfonwr'
   setting_mail_sender_help: 'Cyfeiriad e-bost dim ateb a ddefnyddir i anfon negeseuon ymlaen ar gyfer defnyddwyr sy''n galluogi opsiwn "E-bostiwch IMs ataf pan fyddaf all-lein".'
   setting_currency_rate: 'Conversion Rate for Currency'
-  setting_currency_rate_help: 'Y swm i''w dalu mewn US$ am 1000 o unedau arian yn y byd. Fe''i defnyddir i amcangyfrif costau.'
+  setting_currency_rate_help: "Y swm i'w dalu yn US$ am 1000 uned arian yn y byd ffuglenol. Defnyddir ar gyfer amcangyfrif costau. Os nad yw'n cael ei osod, bydd y gyfradd yn 10/1000 (1 sent am bob uned arian)."
   setting_currency_rate_per: 'Unedau arian fesul cyfradd'
   setting_gloebit_threshold: 'Trothwy trosi Gloebit'
   setting_podex_message: 'Neges ailgyfeirio Podex'
-  setting_podex_url: '交换传送URL'
+  setting_podex_url: 交换传送URL
+  podex_message_placeholder: 'Defnyddiwch ein terfynellau yn y byd i fwrw ymlaen. Cliciwch OK i deleportio i ardal Cyfnewid Podex.'
   setting_assets_url: 'Web Assets Server URL'
-  setting_assets_url_help: 'Gweinydd asedau gwe''r grid pan nad yw''n un yr helpers: mae''n trosi lluniau''r byd (JPEG 2000) ar gyfer y we.'
+  setting_assets_url_help: "Gweinydd asedau gwe'r grid pan nad yw'n un yr helpers: mae'n trosi lluniau'r byd (JPEG 2000) ar gyfer y we."
   offline_module_v1: 'Gan yr helpers (V1)'
   offline_module_v2: 'Gan Robust (V2)'
   db_host: 'Enw gwesteiwr'
-  db_port: '港口'
-  db_name: 'Enw''r gronfa ddata'
-  db_user: 'Defnyddiwr'
-  db_password: 'Cyfrinair'
+  db_port: 港口
+  db_name: "Enw'r gronfa ddata"
+  db_user: Defnyddiwr
+  db_password: Cyfrinair
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'
@@ -384,37 +437,37 @@ w4os:
   usage_task: 'Task of the grid, run in the background'
   usage_web_assets: 'Web assets, for the web sites'
   service_asset: 'Gwasanaeth Asedau'
-  service_asset_help: 'Asedau''r grid (gweadau, synau, gwrthrychau...): mae''r efelychwyr yn eu darllen a''u storio.'
+  service_asset_help: "Asedau'r grid (gweadau, synau, gwrthrychau...): mae'r efelychwyr yn eu darllen a'u storio."
   service_inventory: 'Gwasanaeth rhestr eiddo'
-  service_inventory_help: 'Rhestrau eiddo''r avatarau.'
+  service_inventory_help: "Rhestrau eiddo'r avatarau."
   service_grid: 'Gwasanaeth grid'
-  service_grid_help: 'Rhanbarthau''r grid: ble mae pob un, a pha efelychydd sy''n ei redeg.'
+  service_grid_help: "Rhanbarthau'r grid: ble mae pob un, a pha efelychydd sy'n ei redeg."
   service_estate: 'Gwasanaeth ystadau'
-  service_estate_help: 'Ystadau''r rhanbarthau, eu perchnogion a''u rheolwyr.'
+  service_estate_help: "Ystadau'r rhanbarthau, eu perchnogion a'u rheolwyr."
   service_authentication: 'Gwasanaeth dilysu'
-  service_authentication_help: 'Cyfrineiriau''r cyfrifon, a''u sesiynau.'
+  service_authentication_help: "Cyfrineiriau'r cyfrifon, a'u sesiynau."
   service_avatar: 'Gwasanaeth avatarau'
   service_avatar_help: 'Ymddangosiad yr avatarau: yr hyn y maent yn ei wisgo.'
   service_agent_preferences: 'Gwasanaeth dewisiadau asiant'
-  service_agent_preferences_help: 'Dewisiadau''r avatarau y mae''r grid yn eu cadw (iaith, aeddfedrwydd).'
+  service_agent_preferences_help: "Dewisiadau'r avatarau y mae'r grid yn eu cadw (iaith, aeddfedrwydd)."
   service_presence: 'Gwasanaeth presenoldeb'
   service_presence_help: 'Pwy sydd yn y byd nawr, a ble.'
   service_user_account: 'Gwasanaeth cyfrifon defnyddwyr'
-  service_user_account_help: 'Cyfrifon''r avatarau: eu henwau, eu e-byst a''u lefelau.'
+  service_user_account_help: "Cyfrifon'r avatarau: eu henwau, eu e-byst a'u lefelau."
   service_grid_user: 'Gwasanaeth defnyddwyr y grid'
   service_grid_user_help: 'Safle olaf a chartref pob avatar.'
   service_friends: 'Gwasanaeth ffrindiau'
   service_friends_help: 'Cyfeillgarwch yr avatarau.'
   service_map_image: 'Gwasanaeth teils map'
-  service_map_image_help: 'Teils map y byd: mae''r efelychwyr yn eu hychwanegu.'
+  service_map_image_help: "Teils map y byd: mae'r efelychwyr yn eu hychwanegu."
   service_mute_list: 'Gwasanaeth rhestr mudo'
   service_mute_list_help: 'Yr hyn y mae pob avatar yn ei flocio.'
-  service_bakes: 'Gwasanaeth gweadau wedi''u pobi'
-  service_bakes_help: 'Gweadau wedi''u pobi''r avatarau, wedi''u rhannu rhwng yr efelychwyr.'
+  service_bakes: "Gwasanaeth gweadau wedi'u pobi"
+  service_bakes_help: "Gweadau wedi'u pobi'r avatarau, wedi'u rhannu rhwng yr efelychwyr."
   service_groups: 'Gwasanaeth grwpiau'
-  service_groups_help: 'Grwpiau''r avatarau, eu haelodau, rolau a hysbysiadau.'
+  service_groups_help: "Grwpiau'r avatarau, eu haelodau, rolau a hysbysiadau."
   service_profile: 'Gwasanaeth proffiliau'
-  service_profile_help: 'Proffiliau''r avatarau, eu dewisiadau a''u hysbysebion.'
+  service_profile_help: "Proffiliau'r avatarau, eu dewisiadau a'u hysbysebion."
   service_get_grid_info: 'Gwybodaeth grid'
   service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
   service_hg_friends: 'Hypergrid friends service'
@@ -438,99 +491,110 @@ w4os:
   service_text_images: 'Text to image'
   service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
   service_assets: 'Gweinydd Asedau Gwe'
-  service_assets_help: 'Mae angen gweinydd asedau gwe i arddangos asedau yn y byd (o''r grid) ar y wefan (e.e. lluniau proffil).'
+  service_assets_help: "Mae angen gweinydd asedau gwe i arddangos asedau yn y byd (o'r grid) ar y wefan (e.e. lluniau proffil)."
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
   health_unset: 'Not set: neither served nor tested.'
   health_third_party: 'Mae angen rhaglen we ar wahân ar gyfer y gwasanaeth hwn.'
-  presence: 'Presenoldeb'
-  region_flag_default_region: 'Diofyn'
+  presence: Presenoldeb
+  region_flag_default_region: Diofyn
   region_flag_default_hg_region: 'Diofyn HG'
   region_flag_fallback_region: 'Wrth gefn'
   region_flag_no_direct_login: 'Dim mewngofnodi uniongyrchol'
-  region_flag_persistent: 'Parhaol'
-  region_flag_locked_out: 'Wedi''i chloi allan'
-  region_flag_reservation: 'Neilltuad'
+  region_flag_persistent: Parhaol
+  region_flag_locked_out: "Wedi'i chloi allan"
+  region_flag_reservation: Neilltuad
   region_flag_no_move: 'Dim symud'
-  region_flag_authenticate: 'Dilysu'
-  region_flag_region_online: 'Ar-lein'
-  region_flag_hyperlink: 'Hypergyswllt'
-  region_flag_default_region_help: 'Lle mae afatarau''n cyrraedd pan nad ydynt yn gofyn am ranbarth; un ar hap pan fo sawl un.'
-  region_flag_fallback_region_help: 'Lle anfonir afatarau pan fo''r rhanbarth y maent yn gofyn amdano i lawr.'
-  region_flag_region_online_help: 'Mae''r rhanbarth yn rhedeg: wedi''i osod pan ddaw ar-lein, wedi''i ddileu pan fydd yn gadael y grid.'
-  region_flag_no_direct_login_help: 'Ni all afatarau fewngofnodi iddo''n uniongyrchol wrth ei enw.'
+  region_flag_authenticate: Dilysu
+  region_flag_region_online: Ar-lein
+  region_flag_hyperlink: Hypergyswllt
+  region_flag_default_region_help: "Lle mae afatarau'n cyrraedd pan nad ydynt yn gofyn am ranbarth; un ar hap pan fo sawl un."
+  region_flag_fallback_region_help: "Lle anfonir afatarau pan fo'r rhanbarth y maent yn gofyn amdano i lawr."
+  region_flag_region_online_help: "Mae'r rhanbarth yn rhedeg: wedi'i osod pan ddaw ar-lein, wedi'i ddileu pan fydd yn gadael y grid."
+  region_flag_no_direct_login_help: "Ni all afatarau fewngofnodi iddo'n uniongyrchol wrth ei enw."
   region_flag_persistent_help: 'Yn cael ei gadw yn rhestr y grid pan fydd yn gadael.'
-  region_flag_locked_out_help: 'Ni chaniateir i''r rhanbarth gofrestru.'
+  region_flag_locked_out_help: "Ni chaniateir i'r rhanbarth gofrestru."
   region_flag_no_move_help: 'Ni ellir symud y rhanbarth ar y map.'
   region_flag_reservation_help: 'Neilltuad anweithredol o le ar y map.'
   region_flag_authenticate_help: 'Rhaid i ymwelwyr gael eu dilysu.'
   region_flag_hyperlink_help: 'Dolen i ranbarth grid arall.'
   region_flag_default_hg_region_help: 'Lle mae ymwelwyr o gridiau eraill yn cyrraedd, ar gyfer teleportio hypergrid yn unig.'
-  filter_simulator: 'Efelychydd'
-  column_name: 'Enw'
-  column_nick: 'Llysenw'
-  column_slug: 'Slug'
-  column_uri: 'URI'
-  column_url: 'URL'
-  column_server: 'Gweinydd'
-  column_enabled: 'Galluogwyd'
+  filter_simulator: Efelychydd
+  column_name: Enw
+  column_nick: Llysenw
+  column_slug: Slug
+  column_uri: URI
+  column_url: URL
+  column_server: Gweinydd
+  column_enabled: Galluogwyd
   filter_remote: 'Ar beiriant arall'
-  filter_hypergrid: 'Hypergrid'
-  column_grid: 'Grid'
-  column_port: 'Porth'
+  filter_hypergrid: Hypergrid
+  column_grid: Grid
+  column_port: Porth
   column_running: 'Yn rhedeg'
-  column_service: 'Gwasanaeth'
-  column_provider: 'Wedi''i weini gan'
-  filter_served: 'Wedi''i weini'
-  port_private: 'Preifat'
-  port_public: 'Cyhoeddus'
-  port_web: 'Gwe'
-  column_file: 'Ffeil'
-  column_kind: 'Math'
-  column_date: 'Dyddiad'
-  column_author: 'Awdur'
+  column_service: Gwasanaeth
+  column_provider: "Wedi'i weini gan"
+  filter_served: "Wedi'i weini"
+  port_private: Preifat
+  port_public: Cyhoeddus
+  port_web: Gwe
+  column_file: Ffeil
+  column_kind: Math
+  column_date: Dyddiad
+  column_author: Awdur
+  avatars_title: Avatars
+  avatars_menu: Avatars
+  avatars_search: 'Chwilio am Avatars'
+  regions_menu: Rhanbarthau
+  regions_search: 'Chwilio am ranbarthau'
+  flux_title: 'Negeseuon Flux'
+  flux_menu: Flux
+  flux_search: 'Chwilio am Erthyglau Flux'
+  flux_empty: 'Dim negeseuon Flux wedi’u canfod.'
+  list_empty: 'Dim eitemau wedi’u canfod.'
+  posts_count: '%d neges'
   flux_post: 'Flux Post'
   kind_iar: 'Rhestr eiddo (IAR)'
   kind_oar: 'Rhanbarth (OAR)'
   kind_backup: 'Copi wrth gefn'
-  column_area: 'Arwynebedd'
-  column_cpu: 'CPU'
-  column_avatars: 'Afatarau'
-  column_memory: 'Cof'
-  column_traffic: 'Traffig'
+  column_area: Arwynebedd
+  column_cpu: CPU
+  column_avatars: Afatarau
+  column_memory: Cof
+  column_traffic: Traffig
   column_for_sale: 'Ar werth'
   column_in_search: 'Yn y chwiliad'
-  parcel_scripts: 'Sgriptiau'
-  parcel_build: 'Adeiladu'
+  parcel_scripts: Sgriptiau
+  parcel_build: Adeiladu
   parcel_public: 'Mynediad cyhoeddus'
-  column_regions: 'Rhanbarthau'
-  parcel: 'Parsel'
-  column_type: 'Math'
-  filter_local: 'Lleol'
+  column_regions: Rhanbarthau
+  parcel: Parsel
+  column_type: Math
+  filter_local: Lleol
   filter_temporary: 'Dros dro'
-  asset_texture: 'Gwead'
-  asset_sound: 'Sain'
+  asset_texture: Gwead
+  asset_sound: Sain
   asset_calling_card: 'Cerdyn galw'
-  asset_landmark: 'Tirnod'
-  asset_clothing: 'Dillad'
-  asset_object: 'Gwrthrych'
+  asset_landmark: Tirnod
+  asset_clothing: Dillad
+  asset_object: Gwrthrych
   asset_notecard: 'Cerdyn nodiadau'
-  asset_folder: 'Ffolder'
-  asset_script: 'Sgript'
-  asset_script_bytecode: 'Sgript wedi''i grynhoi'
+  asset_folder: Ffolder
+  asset_script: Sgript
+  asset_script_bytecode: "Sgript wedi'i grynhoi"
   asset_texture_tga: 'Gwead (TGA)'
-  asset_body_part: 'Rhan o''r corff'
+  asset_body_part: "Rhan o'r corff"
   asset_sound_wav: 'Sain (WAV)'
   asset_image_tga: 'Delwedd (TGA)'
   asset_image_jpeg: 'Delwedd (JPEG)'
-  asset_animation: 'Animeiddiad'
-  asset_gesture: 'Ystum'
+  asset_animation: Animeiddiad
+  asset_gesture: Ystum
   asset_simstate: 'Cyflwr y rhanbarth'
-  asset_link: 'Dolen'
+  asset_link: Dolen
   asset_link_folder: 'Dolen ffolder'
-  asset_mesh: 'Rhwyll'
+  asset_mesh: Rhwyll
   asset_settings: 'Gosodiadau amgylchedd'
-  asset_material: 'Defnydd'
+  asset_material: Defnydd
   error_required: 'Llenwch bob maes os gwelwch yn dda.'
   error_password_match: 'Nid yw’r ddau gyfrinair yr un fath.'
   error_terms: 'You must agree to the terms on page %s.'
@@ -559,7 +623,7 @@ w4os:
   error_internal_error: 'Does dim modd cyrraedd y grid ar hyn o bryd. Rhowch gynnig arall arni nes ymlaen.'
   error_sign_in_refused: 'Mae’r enw neu’r cyfrinair yn anghywir.'
   error_account_disabled: 'Mae’r avatar hwn wedi’i analluogi. Cysylltwch â rheolwyr y grid.'
-  error_account_banned: 'Mae''r afatar hwn wedi''i wahardd.'
+  error_account_banned: "Mae'r afatar hwn wedi'i wahardd."
   error_post_invalid: 'Mae gan bostiad 1 i 1000 nod.'
   error_email_unconfirmed: 'Nid yw’r avatar hwn yn weithredol eto: cadarnhewch eich ebost gyda’r ddolen a anfonwyd atoch.'
   error_name_invalid: 'Mae’r enw cyntaf a’r cyfenw wedi’u gwneud o lythrennau, digidau a chysylltnodau, heb acenion.'
@@ -573,45 +637,45 @@ w4os:
   error_link_invalid: 'Nid yw hyn yn bosibl.'
   error_field_unknown: 'Nid yw hyn yn bosibl.'
   error_field_read_only: 'Mae enw, lle a maint rhanbarth yn cael eu newid yn ei ffeil, gan ei weithredwr.'
-  error_flag_unknown: 'Nid yw''r faner hon yn bodoli.'
-  error_owner_unknown: 'Nid yw''r afatar hwn yn bodoli.'
-  error_config_not_writable: 'Ni ellir newid hyn o''r fan hon: mae ffeiliau''r grid yn perthyn i''w weinydd.'
-  error_instance_user_required: 'Ni ellir gwneud hyn o''r fan hon: mae''r efelychwyr yn cael eu cychwyn a''u hatal ar eu gweinydd.'
-  error_restore_conflict: 'Mae''r copi wrth gefn hwn yn dal yr hyn sydd gan y gweinydd hwn eisoes: ni ddisodlwyd dim.'
-  error_source_not_readable: 'Ni all y gweinydd ddarllen rhai o ffeiliau''r hen osodiad: rhowch fynediad darllen iddo atynt yn gyntaf.'
+  error_flag_unknown: "Nid yw'r faner hon yn bodoli."
+  error_owner_unknown: "Nid yw'r afatar hwn yn bodoli."
+  error_config_not_writable: "Ni ellir newid hyn o'r fan hon: mae ffeiliau'r grid yn perthyn i'w weinydd."
+  error_instance_user_required: "Ni ellir gwneud hyn o'r fan hon: mae'r efelychwyr yn cael eu cychwyn a'u hatal ar eu gweinydd."
+  error_restore_conflict: "Mae'r copi wrth gefn hwn yn dal yr hyn sydd gan y gweinydd hwn eisoes: ni ddisodlwyd dim."
+  error_source_not_readable: "Ni all y gweinydd ddarllen rhai o ffeiliau'r hen osodiad: rhowch fynediad darllen iddo atynt yn gyntaf."
   error_estate_shared: 'Perchennog y rhanbarth hwn yw perchennog ei ystâd, sydd â rhanbarthau eraill: newidiwch berchennog yr ystâd.'
-  error_filter_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'
-  error_filter_value_unknown: 'Ni ellir hidlo''r rhestr hon fel hyn.'
-  error_sort_unknown: 'Ni ellir trefnu''r rhestr hon fel hyn.'
+  error_filter_unknown: "Ni ellir hidlo'r rhestr hon fel hyn."
+  error_filter_value_unknown: "Ni ellir hidlo'r rhestr hon fel hyn."
+  error_sort_unknown: "Ni ellir trefnu'r rhestr hon fel hyn."
   error_role_unknown: 'Nid yw’r rôl hon yn bodoli.'
   error_role_level_conflict: 'Nid yw’r lefel yn cyfateb i’r rôl.'
   error_token_refused: 'Nid yw’r ddolen hon yn gweithio: mae wedi dod i ben neu wedi’i defnyddio eisoes. Gofynnwch am un newydd.'
   error_no_confirmation_pending: 'Nid yw’r avatar hwn yn aros am gadarnhad ei ebost.'
   error_mail_failed: 'Doedd dim modd anfon yr ebost. Rhowch gynnig arall arni nes ymlaen.'
-  notice_robust_restart_roles: 'Mae Robust yn darllen {key} pan fydd yn cychwyn: ailgychwynnwch Robust ({restart}) fel ei fod yn rhoi''r rolau hyn i''r rhanbarth pan fydd yn cofrestru eto.'
+  notice_robust_restart_roles: "Mae Robust yn darllen {key} pan fydd yn cychwyn: ailgychwynnwch Robust ({restart}) fel ei fod yn rhoi'r rolau hyn i'r rhanbarth pan fydd yn cofrestru eto."
   notice_robust_config_line: 'Ni all y broses hon ysgrifennu {file}: gosodwch {line} yn ei [{section}], yna ailgychwynnwch Robust ({restart}).'
-  notice_robust_config_remove: 'Ni all y broses hon ysgrifennu {file}: tynnwch {key} o''i [{section}], yna ailgychwynnwch Robust ({restart}).'
+  notice_robust_config_remove: "Ni all y broses hon ysgrifennu {file}: tynnwch {key} o'i [{section}], yna ailgychwynnwch Robust ({restart})."
   notice_robust_config_elsewhere: 'Nid yw ffurfweddiad Robust ar y peiriant hwn: gosodwch {line} yn ei [{section}], fel bod y rhanbarth yn cadw ei rolau pan fydd yn cofrestru eto.'
   notice_start_simulator: 'Cychwynnwch yr efelychydd {slug}: {command}'
-  notice_start_simulator_regions: 'Mae''r efelychydd {slug} yn llwytho ei ranbarthau newydd pan fydd yn cychwyn: {command}'
-  notice_region_roles_later: 'Mae Robust yn rhoi ei rolau ({roles}) i {region} o''i ffurfweddiad, a ddarllenir pan fydd yn cychwyn: ailgychwynnwch Robust ({restart}) cyn cychwyn {slug}, neu unwaith y bydd y rhanbarth yn rhedeg: {command}'
-  notice_plan_reserves_nothing: 'Nid yw cynllun yn cadw dim: y lleoedd a''r pyrth y mae''n eu cynnig yw''r rhai rhydd nawr, wedi''u dewis eto pan gaiff ei gymhwyso. Cymhwyswch gynllun cyn cynllunio''r nesaf, neu rhowch y rhanbarthau mewn un ffeil.'
-  notice_import_read_access: 'Ni all y defnyddiwr sy''n rhedeg y mewnforio ddarllen {paths}: rhowch fynediad darllen iddo atynt (setfacl -R -m u:<user>:rX ar etc, var/data a var/cache yr hen osodiad) cyn cymhwyso, ni ysgrifennir dim tan hynny.'
-  notice_import_stop_source: 'Mae''r efelychydd sy''n rhedeg {regions} nawr yn dal i redeg nes iddo gael ei atal: ataliwch ef a''i gadw rhag cychwyn eto (ei cron, ei sgrin) cyn i''r un hwn gychwyn, yr un gronfa ddata ydyw.'
-  notice_import_no_region: 'Ni chafwyd hyd i ranbarth ar gyfer {simulator} yn {folder}, y ffolder y mae ei ffurfweddiad yn ei enwi: gwiriwch mai dyna''r un y mae''n ei ddarllen cyn cymhwyso, ni fyddai dim o''i ranbarthau yn cael ei gopïo.'
-  notice_import_module_package: 'Nid yw''r modiwl {module} ({key} o [{section}]) wedi''i osod ar gyfer y craidd hwn: ni fyddai''r efelychydd yn ei lwytho. Gosodwch ei becyn (apt install {package}) ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan.'
-  notice_import_module_missing: 'Nid yw''r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau''r gosodiad hwn: ni fyddai''r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi''i hadeiladu ar gyfer y craidd hwn yn {folder} ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan.'
-  notice_import_module_found: 'Nid yw''r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau''r gosodiad hwn, mae gan yr hen osodiad ef yn {file}: ni fyddai''r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi''i hadeiladu ar gyfer y craidd hwn yn {folder} (mae modiwl wedi''i adeiladu ar gyfer fersiwn o OpenSimulator: y ffeil honno dim ond os yw''r ddau graidd yr un fersiwn) ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan.'
+  notice_start_simulator_regions: "Mae'r efelychydd {slug} yn llwytho ei ranbarthau newydd pan fydd yn cychwyn: {command}"
+  notice_region_roles_later: "Mae Robust yn rhoi ei rolau ({roles}) i {region} o'i ffurfweddiad, a ddarllenir pan fydd yn cychwyn: ailgychwynnwch Robust ({restart}) cyn cychwyn {slug}, neu unwaith y bydd y rhanbarth yn rhedeg: {command}"
+  notice_plan_reserves_nothing: "Nid yw cynllun yn cadw dim: y lleoedd a'r pyrth y mae'n eu cynnig yw'r rhai rhydd nawr, wedi'u dewis eto pan gaiff ei gymhwyso. Cymhwyswch gynllun cyn cynllunio'r nesaf, neu rhowch y rhanbarthau mewn un ffeil."
+  notice_import_read_access: "Ni all y defnyddiwr sy'n rhedeg y mewnforio ddarllen {paths}: rhowch fynediad darllen iddo atynt (setfacl -R -m u:<user>:rX ar etc, var/data a var/cache yr hen osodiad) cyn cymhwyso, ni ysgrifennir dim tan hynny."
+  notice_import_stop_source: "Mae'r efelychydd sy'n rhedeg {regions} nawr yn dal i redeg nes iddo gael ei atal: ataliwch ef a'i gadw rhag cychwyn eto (ei cron, ei sgrin) cyn i'r un hwn gychwyn, yr un gronfa ddata ydyw."
+  notice_import_no_region: "Ni chafwyd hyd i ranbarth ar gyfer {simulator} yn {folder}, y ffolder y mae ei ffurfweddiad yn ei enwi: gwiriwch mai dyna'r un y mae'n ei ddarllen cyn cymhwyso, ni fyddai dim o'i ranbarthau yn cael ei gopïo."
+  notice_import_module_package: "Nid yw'r modiwl {module} ({key} o [{section}]) wedi'i osod ar gyfer y craidd hwn: ni fyddai'r efelychydd yn ei lwytho. Gosodwch ei becyn (apt install {package}) ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan."
+  notice_import_module_missing: "Nid yw'r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau'r gosodiad hwn: ni fyddai'r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi'i hadeiladu ar gyfer y craidd hwn yn {folder} ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan."
+  notice_import_module_found: "Nid yw'r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau'r gosodiad hwn, mae gan yr hen osodiad ef yn {file}: ni fyddai'r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi'i hadeiladu ar gyfer y craidd hwn yn {folder} (mae modiwl wedi'i adeiladu ar gyfer fersiwn o OpenSimulator: y ffeil honno dim ond os yw'r ddau graidd yr un fersiwn) ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan."
   notice_import_enable_start: 'Yna: {enable}, {start}.'
-  notice_restore_estate_missing: 'Nid oes gan y rhanbarthau {regions} ystâd yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: byddent yn cychwyn heb un. Adferwch eu hystâd yno, neu cysylltwch nhw ag un (estate link region) cyn cychwyn.'
-  notice_restore_estate_unchecked: 'Ni ellid gwirio ystadau''r rhanbarthau yn {database}, cronfa ddata''r grid yma, a gedwir fel y mae: gwiriwch eu bod yno cyn cychwyn.'
+  notice_restore_estate_missing: "Nid oes gan y rhanbarthau {regions} ystâd yn {database}, cronfa ddata'r grid yma, a gedwir fel y mae: byddent yn cychwyn heb un. Adferwch eu hystâd yno, neu cysylltwch nhw ag un (estate link region) cyn cychwyn."
+  notice_restore_estate_unchecked: "Ni ellid gwirio ystadau'r rhanbarthau yn {database}, cronfa ddata'r grid yma, a gedwir fel y mae: gwiriwch eu bod yno cyn cychwyn."
   notice_restore_start: 'Cychwynnwch {instance} unwaith y caiff ei adfer: {command}'
-  notice_mail_sent_if_known: 'Pan fydd gan afatar yr enw hwn neu''r e-bost hwn, anfonwyd neges ato.'
+  notice_mail_sent_if_known: "Pan fydd gan afatar yr enw hwn neu'r e-bost hwn, anfonwyd neges ato."
   notice_mail_sent: 'Anfonwyd neges at yr afatar.'
-  notice_registered: 'Mae''r afatar {name} yn barod: mewngofnodwch gyda''i enw a''i gyfrinair.'
+  notice_registered: "Mae'r afatar {name} yn barod: mewngofnodwch gyda'i enw a'i gyfrinair."
   notice_registered_confirm: 'Anfonwyd neges at {email}: caiff y cyfrif ei wneud unwaith y dilynir y ddolen sydd ynddi.'
-  notice_registered_mail_failed: 'Mae''r cofrestriad wedi''i gadw, ond ni ellid anfon y neges at {email}: gofynnwch amdani eto yn nes ymlaen.'
-  admin_engine: 'Engine'
+  notice_registered_mail_failed: "Mae'r cofrestriad wedi'i gadw, ond ni ellid anfon y neges at {email}: gofynnwch amdani eto yn nes ymlaen."
+  admin_engine: Engine
   admin_engine_help: 'Lle mae’r safle’n gofyn popeth am y grid'
   admin_engine_remote: 'API y grid'
   admin_engine_bundled: 'Yr engine sydd wedi’i gynnwys yn yr ategyn'
@@ -627,9 +691,9 @@ w4os:
   admin_serve_helpers_help: 'Yr hyn y mae’r gwylwyr a’r efelychwyr yn ei ofyn (croeso, chwilio, proffiliau, economi, negeseuon all-lein) ar gyfeiriadau’r grid, sy’n gorfod bod yn rhai’r safle hwn. I ffwrdd: mae’r grid yn cadw ei helpers ei hun'
   admin_grids_config: 'Config of the grids'
   admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
-  admin_tab_connection: 'Cysylltiad'
-  admin_tab_accounts: 'Cyfrifon'
-  admin_tab_pages: 'Tudalennau'
+  admin_tab_connection: Cysylltiad
+  admin_tab_accounts: Cyfrifon
+  admin_tab_pages: Tudalennau
   admin_url: 'Cyfeiriad y helpers'
   admin_url_help: 'Cyfeiriad helpers y grid, lle mae ei flociau'
   admin_api_url: 'Cyfeiriad API yr engine'
@@ -645,33 +709,33 @@ w4os:
   admin_cache: 'Storfa (eiliadau)'
   admin_built_in_css: 'CSS adeiledig'
   admin_built_in_css_help: 'Taflen arddull yr ategyn (ei dudalennau, y modelau, y blociau); i ffwrdd pan fydd y thema’n eu steilio'
-  admin_register: 'Cofrestru'
+  admin_register: Cofrestru
   admin_confirm_email: 'Cadarnhau’r ebost'
   admin_confirm_email_help: 'Mae avatar newydd yn anweithredol nes iddo glicio’r ddolen y mae’r engine yn ei hanfon ato'
   admin_terms: 'Tudalen y telerau'
   admin_terms_help: 'Llwybr tudalen i gytuno â hi cyn cofrestru; gwag am ddim'
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
-  admin_admin_level: 'Tudalennau gweinyddu o''r lefel'
-  admin_admin_level_help: 'Mae avatarau''r lefel defnyddiwr hon neu uwch yn mynd i mewn i''r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine'
+  admin_admin_level: "Tudalennau gweinyddu o'r lefel"
+  admin_admin_level_help: "Mae avatarau'r lefel defnyddiwr hon neu uwch yn mynd i mewn i'r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine"
   admin_save_accounts: 'Cadw cyfrifon Grav'
   admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
   admin_menu: 'Entry in the menu'
   admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
   admin_site_settings: 'Site settings'
-  admin_site_appearance: 'Appearance'
-  admin_site_theme: 'Theme'
+  admin_site_appearance: Appearance
+  admin_site_theme: Theme
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
-  admin_site_logo: 'Logo'
+  admin_site_logo: Logo
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
-  admin_site_favicon: 'Favicon'
+  admin_site_favicon: Favicon
   admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
   admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
   admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
   admin_route: 'Admin pages'
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
-  admin_menu_list: 'List'
+  admin_menu_list: List
   admin_avatar_created: 'The avatar %s is created.'
   admin_search_parcels: 'Parcel name'
   admin_no_parcels: 'No parcel'
@@ -682,34 +746,34 @@ w4os:
   admin_shortcode_text_help: 'A text of the catalog, in the language of the page, the name of the grid in it'
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: 'Health'
+  admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
   admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
   admin_health_not_checked: 'Not checked again: %s'
-  admin_health_expected: 'Expected'
-  admin_health_value: 'Value'
-  admin_health_set: 'Set'
-  admin_health_state: 'State'
-  admin_health_version: 'Version'
-  admin_health_exists: 'Exists'
-  admin_health_writable: 'Writable'
-  admin_health_readable: 'Readable'
-  admin_health_extension: 'Extension'
-  admin_health_path: 'Path'
-  admin_health_instance: 'Instance'
-  admin_health_installed: 'Installed'
-  admin_health_missing: 'Missing'
+  admin_health_expected: Expected
+  admin_health_value: Value
+  admin_health_set: Set
+  admin_health_state: State
+  admin_health_version: Version
+  admin_health_exists: Exists
+  admin_health_writable: Writable
+  admin_health_readable: Readable
+  admin_health_extension: Extension
+  admin_health_path: Path
+  admin_health_instance: Instance
+  admin_health_installed: Installed
+  admin_health_missing: Missing
   admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_health_setting: 'Setting'
-  admin_health_address: 'Address'
-  admin_health_answer: 'Answer'
-  admin_health_time: 'Time'
+  admin_health_setting: Setting
+  admin_health_address: Address
+  admin_health_answer: Answer
+  admin_health_time: Time
   admin_health_addresses: 'Addresses of the grid'
-  admin_health_service: 'Service'
-  admin_health_source: 'Source'
+  admin_health_service: Service
+  admin_health_source: Source
   admin_health_source_provider: 'the service itself'
   admin_health_source_config: 'its config'
   admin_health_source_live: 'the running grid'
@@ -717,7 +781,7 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: 'Flux'
+  admin_flux_menu: Flux
   admin_flux_title: 'Flux Posts'
   admin_flux_search: 'Search Flux Posts'
   admin_flux_none: 'No Flux Posts found'

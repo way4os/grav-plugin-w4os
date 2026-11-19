@@ -6,14 +6,14 @@ w4os:
   register_title: 'Criar meu avatar'
   register_text: 'Escolha um nome abaixo. É assim que as pessoas vão te ver no mundo virtual.'
   register_button: 'Criar meu avatar'
-  register: 'Cadastrar-se'
+  register: Cadastrar-se
   have_avatar: 'Já tem um avatar?'
   first_name: 'Primeiro nome'
-  last_name: 'Sobrenome'
+  last_name: Sobrenome
   first_name_help: 'O nome deve começar com uma letra e conter apenas letras e números'
   last_name_help: 'O sobrenome deve começar com uma letra e conter apenas letras e números'
-  email: 'Email'
-  password: 'Senha'
+  email: Email
+  password: Senha
   password_confirm: 'Confirmar senha'
   password_help: 'De 6 a 16 caracteres, sem aspas duplas. A mesma senha te conecta aqui e no mundo virtual.'
   model: 'Escolha o primeiro traje para o seu avatar.'
@@ -31,9 +31,9 @@ w4os:
   confirm_resent: 'Um novo link está a caminho.'
   confirm_resent_test: 'Site de teste, sem email: confirme com este link: %s'
   avatar_name: 'Nome do Avatar'
-  login_title: 'Entrar'
-  log_in: 'Entrar'
-  logout: 'Sair'
+  login_title: Entrar
+  log_in: Entrar
+  logout: Sair
   login: 'Nome do avatar ou email'
   sign_in_failed: 'Falha no login'
   forgot_title: 'Esqueci minha senha'
@@ -49,57 +49,109 @@ w4os:
   new_password: 'Nova senha'
   current_password: 'Senha atual'
   account_title: 'Perfil do avatar'
-  born: 'Nascido'
-  profile_title: 'Perfil'
+  born: Nascido
+  profile_title: Perfil
   profile_text: 'O que os outros veem de você no mundo virtual (a foto e os interesses se definem no viewer).'
-  about: 'Sobre'
-  wants: 'Quer'
-  skills: 'Habilidades'
-  want_build: 'Construir'
-  want_explore: 'Explorar'
-  want_meet: 'Conhecer'
-  want_group: 'Grupo'
-  want_buy: 'Comprar'
-  want_sell: 'Vender'
+  about: Sobre
+  wants: Quer
+  skills: Habilidades
+  want_build: Construir
+  want_explore: Explorar
+  want_meet: Conhecer
+  want_group: Grupo
+  want_buy: Comprar
+  want_sell: Vender
   want_be_hired: 'Ser contratado'
-  want_hire: 'Contratar'
-  skill_textures: 'Texturas'
-  skill_architecture: 'Arquitetura'
+  want_hire: Contratar
+  skill_textures: Texturas
+  skill_architecture: Arquitetura
   skill_event_planning: 'Planejamento de Eventos'
-  skill_modeling: 'Modelagem'
-  skill_scripting: 'Scripting'
+  skill_modeling: Modelagem
+  skill_scripting: Scripting
   skill_custom_characters: 'Personagens Personalizados'
-  languages: 'Idiomas'
+  languages: Idiomas
   real_life: 'Vida real'
   profile_url: 'Página web'
   edit_profile: 'Editar perfil'
-  profile_other: 'Outro'
+  profile_other: Outro
   profile_sections: 'Seções do perfil'
   profile_tab_inworld: 'No mundo'
-  profile_tab_about: 'Sobre'
-  profile_tab_web: 'Web'
-  profile_tab_feed: 'Feed'
+  profile_tab_about: Sobre
+  profile_tab_web: Web
+  profile_tab_feed: Feed
   post_label: 'New post'
   post_help: 'Plain text, 1000 characters at most.'
-  action_save: 'Save'
+  action_save: Save
   settings_models: 'Modelos de Avatar'
   settings_economy: 'Configurações Econômicas'
   settings_search: 'Configurações do mecanismo de busca'
   settings_guide: 'Configurações do Guia de Destinos'
   settings_offline: 'Configurações de Mensagens Offline'
   settings_assets: 'Servidor de Ativos Web'
-  settings_menu_economy: 'Economia'
+  settings_menu_economy: Economia
   settings_menu_search: 'Motor de busca'
   settings_menu_guide: 'Guia de Destinos'
   settings_menu_offline: 'Mensagens Offline'
-  settings_menu_assets: 'Servidor de Ativos'
+  settings_menu_assets: 'Ativos Web'
   settings_saved: 'Configurações salvas.'
-  models_match: 'Correspondência'
+  provide_economy: 'Fornecer Assistente de Economia'
+  provide_search: 'Fornecer pesquisa'
+  provide_guide: 'Fornecer Serviço de Guia de Destinos'
+  provide_offline: 'Fornecer serviço de mensagens offline'
+  provide_offline_help: 'Honrar a opção do visualizador "Enviar-me e-mails quando estiver offline".'
+  provide_assets: 'Fornecer Servidor de Ativos Web'
+  provide_assets_help: 'É necessário um servidor de ativos da web para exibir ativos do mundo virtual (da grade) no site (por exemplo, fotos de perfil).'
+  provide_path: Caminho
+  provide_offline_help_core: 'O módulo de mensagens offline do núcleo do OpenSimulator não lida com a opção de encaminhamento de e-mails disponível nas configurações do visualizador.'
+  economy_helper_uri: 'Economia Auxiliar URI'
+  economy_helper_uri_help: 'A URL deve ser configurada no Robust.'
+  economy_help_helpers: 'Os ajudantes de economia são scripts adicionais necessários se você implementar uma economia em sua grid (com moeda real ou fictícia).'
+  economy_help_scripts: 'Os scripts auxiliares permitem a comunicação entre o servidor de dinheiro e a grid: atualização do saldo atual, estimativa de custo da moeda, vendas de terrenos e objetos, pagamentos...'
+  economy_help_module: 'Este plugin apenas fornece os auxiliares web necessários pelo módulo do servidor de dinheiro. Um módulo de terceiros deve ser instalado e configurado no simulador, por exemplo:'
+  economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
+  economy_help_binaries: 'Binários prontos para uso e arquivos de configuração de exemplo podem ser baixados aqui: github.com/magicoli/opensim-helpers'
+  gloebit_configuration: 'Configuração do Gloebit'
+  gloebit_help_crash: 'O módulo Gloebit precisa ser configurado antes de reiniciar a região, caso contrário, pode causar uma falha no simulador.'
+  gloebit_help_linux: 'Para Linux, consulte README-Gloebit.md (github.com/magicoli/opensim-helpers) para evitar erros relacionados a certificados.'
+  gloebit_help_register: 'Registre uma conta ou conecte-se em gloebit.com e siga as instruções em dev.gloebit.com para configurar um app para o seu grid/simulador.'
+  gloebit_help_config: 'Adicione a configuração do Gloebit no OpenSim.ini.'
+  gloebit_help_dll: 'Baixe a dll mais recente para a pasta bin/ do seu OpenSimulator (renomeie-a para Gloebit.dll), de github.com/GuduleLapointe/opensim-debian ou dev.gloebit.com'
+  money_script_access_key: 'Chave de Acesso ao Money Script'
+  money_script_access_key_help: 'Escolha uma chave de acesso única e defina-a no arquivo MoneyServer.ini'
+  search_engine_url: 'URL do mecanismo de busca'
+  search_url_help_viewer: 'URL do mecanismo de busca usado pelo visualizador para fornecer resultados de pesquisa (sem argumentos).'
+  search_url_help_one: 'Apenas um pode ser definido, as outras linhas são exemplos alternativos.'
+  search_url_help_web: 'Por favor, observe que a URL de pesquisa é diferente da URL de pesquisa na web, que atualmente não é suportada pelo W4OS. A pesquisa na web é relevante se você tiver uma página de pesquisa na web dedicada ao conteúdo do grid, fornecendo resultados com URLs dentro do mundo virtual (hop:// ou secondlife://). Essa configuração é opcional e é mencionada aqui apenas para diferenciar as configurações que, infelizmente, possuem nomes semelhantes.'
+  search_register_url: 'URL de registro da busca'
+  search_register_help_data: 'Serviço de dados, usado para registrar regiões, objetos ou terrenos para venda.'
+  search_register_help_several: 'Você pode se registrar em vários mecanismos de busca.'
+  search_register_help_prefix: 'Cada linha deve ter um identificador único começando com "DATA_SRV_"'
+  events_help_fetch: 'URL do servidor HYPEvents, usado para buscar eventos futuros e torná-los disponíveis na pesquisa.'
+  events_help_blank: 'Deixe em branco para ignorar eventos ou se você tiver outra implementação de eventos.'
+  search_help_local: 'Ativar o uso de um mecanismo de busca local, permitindo apenas resultados locais (recomendado para grids privados).'
+  search_help_external: 'Desativar o uso de um mecanismo de busca externo, como o 2do Directory, permitindo resultados tanto do seu grid quanto de outros grids públicos.'
+  search_help_module: 'As funcionalidades de pesquisa requerem a instalação do módulo OpenSimSearch no OpenSimulator.'
+  search_help_binary: 'O binário OpenSimSearch.Modules.dll pronto para uso pode ser encontrado aqui: github.com/magicoli/opensim-helpers'
+  guide_url: 'URL do Guia de Destinos'
+  guide_source_help_file: 'Um arquivo de texto com uma lista formatada de destinos.'
+  guide_source_help_where: 'A origem pode ser um URL ou o caminho completo de um arquivo local que o seu servidor web possa acessar.'
+  guide_source_help_pipe: 'O nome do destino e a URL de teletransporte são separados por um caractere de barra vertical (|).'
+  guide_source_help_categories: 'Linhas contendo apenas texto são interpretadas como categorias.'
+  guide_source_help_comments: 'Linhas começando com "#" ou "//" são ignoradas.'
+  guide_source_help_board: 'O formato é idêntico ao usado pelo objeto in-world Gudz Teleport Board, então a mesma URL de origem pode ser usada para ambos.'
+  guide_help_feature: 'O guia de destinos é uma funcionalidade do Viewer 3, que oferece uma janela com sugestões de lugares.'
+  guide_help_places: 'Embora não seja obrigatório e nem todos os usuários se beneficiarão disso, é uma maneira útil de fornecer a eles uma lista de lugares imperdíveis, tanto dentro do seu próprio grid quanto externos.'
+  offline_helper: 'Assistente de Mensagens Offline'
+  offline_helper_help: 'Defina a URL nas configurações do OpenSimulator.'
+  assets_url: 'URL do Servidor de Ativos Web'
+  assets_external_help: "Se a opção 'Fornecer Servidor de Ativos Web' estiver desativada, é necessário instalar um serviço de terceiros e inserir sua URL aqui para garantir o funcionamento adequado do plugin."
+  provide_path_help: 'Sob o endereço do site: sob a base dos helpers, os helpers respondem; em outro lugar, o site, numa página com o seu bloco.'
+  models_match: Correspondência
   models_match_first: 'Primeiro Nome'
-  models_match_any: 'Qualquer'
-  models_match_last: 'Sobrenome'
+  models_match_any: Qualquer
+  models_match_last: Sobrenome
   models_match_uuid: 'Lista personalizada'
-  models_pattern: 'Nome'
+  models_pattern: Nome
   models_list: 'Selecionar Modelos'
   models_list_placeholder: 'Selecione um ou mais avatares existentes'
   action_save_changes: 'Salvar alterações'
@@ -110,122 +162,122 @@ w4os:
   models_help_not_users: 'Os avatares usados para os modelos nunca devem ser contas de usuários reais.'
   models_help_outfit: 'O novo avatar usará a mesma roupa que o modelo no momento do registro.'
   models_help_rule: 'Se a regra de atribuição do modelo for baseada no nome, cada novo avatar criado que corresponder a essa regra será automaticamente adicionado à lista.'
-  action_post: 'Post'
+  action_post: Post
   action_new_avatar: 'Novo Avatar'
   action_create_avatar: 'Criar Avatar'
-  action_delete_post: 'Delete'
+  action_delete_post: Delete
   ask_delete_post: 'Delete this post?'
   manage_post: 'Your post is published.'
   manage_delete_post: 'Your post is deleted.'
-  profile_tab_interests: 'Interesses'
-  profile_tab_picks: 'Favoritos'
-  profile_tab_classifieds: 'Classificados'
+  profile_tab_interests: Interesses
+  profile_tab_picks: Favoritos
+  profile_tab_classifieds: Classificados
   profile_tab_real_life: 'Vida real'
   profile_tab_notes: 'Minhas observações'
-  profile_tab_account: 'Conta'
-  profile_key: 'Chave'
-  profile_picture: 'Imagem'
-  partner: 'Parceiro'
+  profile_tab_account: Conta
+  profile_key: Chave
+  profile_picture: Imagem
+  partner: Parceiro
   show_in_search: 'Mostrar nos resultados de busca'
   interests_removed: 'Os visualizadores não mostram mais esta seção desde 2023.'
   profile_viewer_only: 'Criados e editados no visualizador.'
-  profile_none: 'Nenhum.'
-  profile_name: 'Nome'
+  profile_none: Nenhum.
+  profile_name: Nome
   profile_age_today: 'Cadastrado hoje'
   profile_age_days: '%d dias'
-  profile_groups: 'Grupos'
+  profile_groups: Grupos
   profile_no_description: 'Nenhuma descrição.'
-  profile_location: 'Localização'
-  profile_teleport: 'Teletransportar'
-  profile_until: 'Até'
-  save_button: 'Salvar'
+  profile_location: Localização
+  profile_teleport: Teletransportar
+  profile_until: Até
+  save_button: Salvar
   profile_saved: 'Seu perfil foi salvo.'
-  password_title: 'Senha'
+  password_title: Senha
   password_button: 'Alterar a senha'
   password_saved: 'Sua senha foi alterada.'
   email_pending: 'Seu perfil foi salvo. Um link está a caminho de %s: clique nele para que seja o seu email.'
   email_pending_test: 'Seu perfil foi salvo. Site de teste, sem email: confirme %1$s com este link: %2$s'
   email_changed: 'Seu email agora é %s.'
-  regions_title: 'Regiões'
+  regions_title: Regiões
   search_regions: 'Nome da região'
   regions_count: '%d regiões'
   no_regions: 'Nenhuma região'
   regions_online: '%1$s online de %2$s'
-  simulators_title: 'Simuladores'
+  simulators_title: Simuladores
   search_simulators: 'Nome do simulador'
   simulators_count: '%d simuladores'
   no_simulators: 'Nenhum simulador'
-  filters: 'Filtros'
+  filters: Filtros
   filters_active: '%d filtros ativos'
   label_value: '%1$s: %2$s'
   tab_overview: 'Visão geral'
-  column_status: 'Status'
-  state_enabled: 'Ativado'
-  state_disabled: 'Desativado'
+  column_status: Status
+  state_enabled: Ativado
+  state_disabled: Desativado
   state_running: 'Em execução'
-  state_stopped: 'Parado'
+  state_stopped: Parado
   state_unresponsive: 'Não responde'
-  state_crashed: 'Caiu'
-  connection_console: 'Console'
+  state_crashed: Caiu
+  connection_console: Console
   connection_console_failed: 'Console inacessível'
-  connection_screen: 'Screen'
+  connection_screen: Screen
   connection_screen_failed: 'Screen não encontrado'
-  connection_config: 'OpenSim.ini'
+  connection_config: OpenSim.ini
   connection_config_failed: 'OpenSim.ini ilegível'
   connection_regions: 'Regions .ini'
   connection_regions_failed: 'Regions .ini ilegíveis'
-  connection_mysql: 'MySQL'
+  connection_mysql: MySQL
   connection_mysql_failed: 'MySQL inacessível'
-  connection_sqlite: 'SQLite'
+  connection_sqlite: SQLite
   connection_sqlite_failed: 'SQLite ilegível'
-  menu_admin: 'Admin'
+  menu_admin: Admin
   menu_account: 'Meu avatar'
-  dashboard_title: 'Painel'
-  manage_title: 'Avatares'
+  dashboard_title: Painel
+  manage_title: Avatares
   search_avatars: 'Nome ou email'
-  search: 'Buscar'
+  search: Buscar
   no_avatars: 'Nenhum resultado'
   avatars_count: '%d avatares'
-  status: 'Status'
+  status: Status
   last_seen: 'Visto pela última vez'
-  created: 'Criado'
-  actions: 'Ações'
-  god: 'Deus'
-  online: 'Online'
-  status_active: 'Ativo'
-  status_disabled: 'Desativado'
-  status_pending: 'Pendente'
-  status_banned: 'Banido'
+  created: Criado
+  actions: Ações
+  god: Deus
+  online: Online
+  status_active: Ativo
+  status_disabled: Desativado
+  status_pending: Pendente
+  status_banned: Banido
   avatar_type_user: 'Avatar do Usuário'
   avatar_type_model: 'Modelo Padrão'
   avatar_type_service: 'Conta de Serviço'
   state_grid_banned: 'Banido do grid'
   state_estate_banned: 'Banido de propriedades'
   filter_estate_banned: 'Banimentos de propriedades'
-  action_ban: 'Banir'
-  action_unban: 'Desbanir'
+  action_ban: Banir
+  action_unban: Desbanir
   action_estate_ban: 'Banir das propriedades'
   action_estate_unban: 'Desbanir das propriedades'
   ask_ban: 'Banir este avatar? Ele não poderá mais entrar até ser desbanido.'
   ask_estate_ban: 'Banir este avatar de todas as propriedades do grid?'
-  role: 'Função'
-  role_resident: 'Residente'
-  role_god_like: 'Divino'
+  role: Função
+  role_resident: Residente
+  role_god_like: Divino
   role_customer_service: 'Atendimento ao Cliente'
-  role_liaison: 'Contato'
-  role_god: 'Deus'
-  role_maintenance: 'Manutenção'
-  action_enable: 'Ativar'
-  action_disable: 'Desativar'
-  action_start: 'Iniciar'
-  action_stop: 'Parar'
-  action_restart: 'Reiniciar'
+  role_liaison: Contato
+  role_god: Deus
+  role_maintenance: Manutenção
+  action_enable: Ativar
+  action_disable: Desativar
+  action_start: Iniciar
+  action_stop: Parar
+  action_restart: Reiniciar
   ask_stop_instance: 'Parar este simulador? Os avatares em suas regiões são enviados embora.'
   ask_restart_instance: 'Reiniciar este simulador? Os avatares em suas regiões são enviados embora durante a reinicialização.'
   action_reset: 'Enviar um link de redefinição de senha'
   action_view: 'Ver perfil'
-  action_view_item: 'Ver'
-  action_edit: 'Editar'
+  action_view_item: Ver
+  action_edit: Editar
   edit_title: 'Editar %s'
   manage_enable: '%s foi ativado.'
   manage_disable: '%s foi desativado.'
@@ -239,33 +291,33 @@ w4os:
   manage_estate_unban: '%s não está mais banido das propriedades.'
   manage_reset: 'Um link para escolher uma nova senha está a caminho de %s.'
   manage_saved: '%s foi salvo.'
-  yes: 'Sim'
-  no: 'Não'
-  filter_any: 'Todos'
+  yes: Sim
+  no: Não
+  filter_any: Todos
   filter_clear: 'Remover o filtro'
   filter_email: 'Com e-mail'
   filter_model: 'Modelo de avatar'
   filter_technical: 'Conta de serviço'
   filter_active: 'Pode entrar'
-  column_map: 'Mapa'
-  column_region: 'Região'
+  column_map: Mapa
+  column_region: Região
   column_region_name: 'Nome da Região'
-  column_presence: 'Presença'
+  column_presence: Presença
   column_internal_port: 'Porta Interna'
   last_activity: 'Última Atividade'
-  column_size: 'Tamanho'
-  column_owner: 'Proprietário'
-  column_roles: 'Funções'
-  column_flags: 'Sinalizadores'
-  offline: 'Offline'
-  all: 'Tudo'
-  view_active: 'Ativo'
-  view_inactive: 'Inactive'
-  degraded: 'Degradado'
-  parcels: 'Terrenos'
+  column_size: Tamanho
+  column_owner: Proprietário
+  column_roles: Funções
+  column_flags: Sinalizadores
+  offline: Offline
+  all: Tudo
+  view_active: Ativo
+  view_inactive: Inactive
+  degraded: Degradado
+  parcels: Terrenos
   shortcodes_title: 'Shortcodes Disponíveis'
   shortcodes_help: 'Os shortcodes podem ser incluídos em qualquer página ou artigo.'
-  shortcode_options: 'Opções'
+  shortcode_options: Opções
   shortcode_option_title: 'Título do Bloco'
   shortcode_option_level: 'Nível do título (h1 a h6)'
   shortcode_option_name: 'The name of the avatar (First.Last)'
@@ -283,19 +335,19 @@ w4os:
   block_new_users_help: 'The avatars that joined the grid last.'
   setting_login: 'URI de login'
   setting_login_help: 'O endereço em que os viewers fazem login e perguntam o que o grid diz sobre si mesmo (get_grid_info).'
-  setting_gatekeeper: 'Gatekeeper'
+  setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'O endereço pelo qual os outros grids alcançam este (hypergrid).'
   setting_uas: 'Serviço de user agent'
   setting_uas_help: 'Onde os avatares deste grid são conhecidos quando visitam outros grids (hypergrid).'
-  setting_welcome: 'Splash'
+  setting_welcome: Splash
   setting_welcome_help: 'A página de boas-vindas exibida no visualizador com o formulário de login. Uma página curta, sem rolagem, com apenas informações essenciais. É obrigatória, ou pelo menos altamente recomendada.'
-  setting_economy: 'Economia'
+  setting_economy: Economia
   setting_economy_help: 'Moedas e alguns outros serviços consultados pelo visualizador. Eles não são acessados diretamente pelo usuário.'
   setting_about: 'Sobre esta grade'
   setting_about_help: 'Página de informações detalhadas em seu site, por meio de um link exibido na página de login do visualizador.'
   setting_register: 'Página de registro'
   setting_register_help: 'Link para o registro de usuário.'
-  setting_help: 'Ajuda'
+  setting_help: Ajuda
   setting_help_help: 'Link para uma página de ajuda em seu site.'
   setting_password: 'Recuperação de senha'
   setting_password_help: 'Link para página de recuperação de senha.'
@@ -323,7 +375,7 @@ w4os:
   setting_money_script_key_help: 'A chave que os serviços de moeda e o servidor de dinheiro compartilham: nunca mostrada, apenas se está definida.'
   setting_helpers: 'Base de ajudantes'
   setting_helpers_help: 'A base das páginas e dos serviços dos helpers.'
-  setting_directory: 'Diretório'
+  setting_directory: Diretório
   setting_directory_help: 'A página do grid no diretório compartilhado das regiões.'
   setting_cache_assets: 'Picture cache'
   setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
@@ -344,16 +396,16 @@ w4os:
   setting_economy_module: 'Módulo de economia'
   setting_economy_module_help: 'Alterado com as opções do grid, que definem o módulo e o que ele precisa.'
   economy_module_free: 'Somente transações gratuitas'
-  economy_module_gloebit: 'Gloebit'
+  economy_module_gloebit: Gloebit
   economy_module_moneyserver: 'Podex e outros provedores de moeda'
   setting_sell_enabled: 'Ativar vendas'
   setting_price_upload: 'Preço de upload'
   setting_price_group_create: 'Preço de criação de grupo'
   setting_gloebit_enabled: 'Ativar Gloebit'
   setting_gloebit_environment: 'Ambiente Gloebit'
-  gloebit_sandbox: 'Sandbox'
-  gloebit_production: 'Produção'
-  setting_guide_source: 'Origem'
+  gloebit_sandbox: Sandbox
+  gloebit_production: Produção
+  setting_guide_source: Origem
   setting_guide_source_help: 'Um arquivo de texto com uma lista formatada de destinos.'
   setting_search_database: 'Banco de Dados de Pesquisa do OS'
   setting_events_url: 'URL do Servidor de Eventos'
@@ -361,20 +413,21 @@ w4os:
   setting_mail_sender: 'Endereço de e-mail do remetente'
   setting_mail_sender_help: 'Um endereço de e-mail sem resposta usado para encaminhar mensagens para usuários que ativaram a opção "Enviar-me e-mails quando estiver offline".'
   setting_currency_rate: 'Taxa de conversão de moeda'
-  setting_currency_rate_help: 'Valor a pagar em US$ por 1000 unidades de moeda in-world. Usado para estimar custos.'
+  setting_currency_rate_help: 'Valor a ser pago em US$ por 1000 unidades de dinheiro virtual. Usado para estimativa de custo. Se não definido, a taxa será de 10/1000 (1 centavo por unidade de dinheiro).'
   setting_currency_rate_per: 'Unidades de dinheiro por taxa'
   setting_gloebit_threshold: 'Limite de conversão Gloebit'
   setting_podex_message: 'Mensagem de Redirecionamento do Podex'
   setting_podex_url: 'Trocar URL de Teleporte'
+  podex_message_placeholder: 'Por favor, use nossos terminais no mundo virtual para prosseguir. Clique em OK para teleportar para a área de troca da Podex.'
   setting_assets_url: 'URL do Servidor de Ativos Web'
   setting_assets_url_help: 'O servidor de recursos web do grid quando não é o dos helpers: ele converte as imagens do mundo (JPEG 2000) para a web.'
   offline_module_v1: 'Pelos helpers (V1)'
   offline_module_v2: 'Pelo Robust (V2)'
   db_host: 'Nome do host'
-  db_port: 'Porta'
+  db_port: Porta
   db_name: 'Nome do banco de dados'
-  db_user: 'Usuário'
-  db_password: 'Senha'
+  db_user: Usuário
+  db_password: Senha
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'
@@ -443,18 +496,18 @@ w4os:
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
   health_unset: 'Not set: neither served nor tested.'
   health_third_party: 'Este serviço requer um aplicativo web separado.'
-  presence: 'Presença'
-  region_flag_default_region: 'Padrão'
+  presence: Presença
+  region_flag_default_region: Padrão
   region_flag_default_hg_region: 'Padrão HG'
-  region_flag_fallback_region: 'Reserva'
+  region_flag_fallback_region: Reserva
   region_flag_no_direct_login: 'Sem login direto'
-  region_flag_persistent: 'Persistente'
-  region_flag_locked_out: 'Bloqueada'
-  region_flag_reservation: 'Reserva'
-  region_flag_no_move: 'Imóvel'
-  region_flag_authenticate: 'Autenticação'
-  region_flag_region_online: 'Online'
-  region_flag_hyperlink: 'Hiperlink'
+  region_flag_persistent: Persistente
+  region_flag_locked_out: Bloqueada
+  region_flag_reservation: Reserva
+  region_flag_no_move: Imóvel
+  region_flag_authenticate: Autenticação
+  region_flag_region_online: Online
+  region_flag_hyperlink: Hiperlink
   region_flag_default_region_help: 'Onde chegam os avatares que não pedem uma região; uma ao acaso se houver várias.'
   region_flag_fallback_region_help: 'Para onde vão os avatares quando a região pedida está parada.'
   region_flag_region_online_help: 'A região está rodando: definido quando fica online, removido quando sai do grid.'
@@ -466,71 +519,82 @@ w4os:
   region_flag_authenticate_help: 'Os visitantes precisam estar autenticados.'
   region_flag_hyperlink_help: 'Um link para uma região de outro grid.'
   region_flag_default_hg_region_help: 'Onde chegam os visitantes de outros grids, só para teleportes hypergrid.'
-  filter_simulator: 'Simulador'
-  column_name: 'Nome'
-  column_nick: 'Apelido'
-  column_slug: 'Slug'
-  column_uri: 'URI'
-  column_url: 'URL'
-  column_server: 'Servidor'
-  column_enabled: 'Ativado'
+  filter_simulator: Simulador
+  column_name: Nome
+  column_nick: Apelido
+  column_slug: Slug
+  column_uri: URI
+  column_url: URL
+  column_server: Servidor
+  column_enabled: Ativado
   filter_remote: 'Em outra máquina'
-  filter_hypergrid: 'Hypergrid'
-  column_grid: 'Grid'
-  column_port: 'Porta'
+  filter_hypergrid: Hypergrid
+  column_grid: Grid
+  column_port: Porta
   column_running: 'Em execução'
-  column_service: 'Serviço'
+  column_service: Serviço
   column_provider: 'Servido por'
-  filter_served: 'Servido'
-  port_private: 'Privada'
-  port_public: 'Pública'
-  port_web: 'Web'
-  column_file: 'Arquivo'
-  column_kind: 'Tipo'
-  column_date: 'Data'
-  column_author: 'Autor'
+  filter_served: Servido
+  port_private: Privada
+  port_public: Pública
+  port_web: Web
+  column_file: Arquivo
+  column_kind: Tipo
+  column_date: Data
+  column_author: Autor
+  avatars_title: Avatares
+  avatars_menu: Avatares
+  avatars_search: 'Pesquisar Avatares'
+  regions_menu: Regiões
+  regions_search: 'Pesquisar regiões'
+  flux_title: 'Postagens do Flux'
+  flux_menu: Flux
+  flux_search: 'Pesquisar Postagens do Flux'
+  flux_empty: 'Nenhum post de Flux encontrado'
+  list_empty: 'Nenhum item encontrado.'
+  posts_count: '%d postagens'
   flux_post: 'Flux Post'
   kind_iar: 'Inventário (IAR)'
   kind_oar: 'Região (OAR)'
-  kind_backup: 'Backup'
-  column_area: 'Área'
-  column_cpu: 'CPU'
-  column_avatars: 'Avatares'
-  column_memory: 'Memória'
-  column_traffic: 'Tráfego'
+  kind_backup: Backup
+  column_area: Área
+  column_cpu: CPU
+  column_avatars: Avatares
+  column_memory: Memória
+  column_traffic: Tráfego
   column_for_sale: 'À venda'
   column_in_search: 'Na busca'
-  parcel_scripts: 'Scripts'
-  parcel_build: 'Construir'
+  parcel_scripts: Scripts
+  parcel_build: Construir
   parcel_public: 'Acesso público'
-  column_regions: 'Regiões'
-  parcel: 'Lote'
-  column_type: 'Tipo'
-  filter_local: 'Local'
-  filter_temporary: 'Temporário'
-  asset_texture: 'Textura'
-  asset_sound: 'Som'
+  column_regions: Regiões
+  parcel: Lote
+  column_type: Tipo
+  filter_local: Local
+  filter_temporary: Temporário
+  asset_texture: Textura
+  asset_sound: Som
   asset_calling_card: 'Cartão de visita'
-  asset_landmark: 'Marco'
-  asset_clothing: 'Roupa'
-  asset_object: 'Objeto'
-  asset_notecard: 'Nota'
-  asset_folder: 'Pasta'
-  asset_script: 'Script'
+  asset_landmark: Marco
+  asset_clothing: Roupa
+  asset_object: Objeto
+  asset_notecard: Nota
+  asset_folder: Pasta
+  asset_script: Script
   asset_script_bytecode: 'Script compilado'
   asset_texture_tga: 'Textura (TGA)'
   asset_body_part: 'Parte do corpo'
   asset_sound_wav: 'Som (WAV)'
   asset_image_tga: 'Imagem (TGA)'
   asset_image_jpeg: 'Imagem (JPEG)'
-  asset_animation: 'Animação'
-  asset_gesture: 'Gesto'
+  asset_animation: Animação
+  asset_gesture: Gesto
   asset_simstate: 'Estado da região'
-  asset_link: 'Link'
+  asset_link: Link
   asset_link_folder: 'Link de pasta'
-  asset_mesh: 'Mesh'
+  asset_mesh: Mesh
   asset_settings: 'Configurações de ambiente'
-  asset_material: 'Material'
+  asset_material: Material
   error_required: 'Preencha todos os campos.'
   error_password_match: 'As duas senhas não são iguais.'
   error_terms: 'Você precisa concordar com os termos na página %s.'
@@ -611,7 +675,7 @@ w4os:
   notice_registered: 'O avatar {name} está pronto: entre com seu nome e sua senha.'
   notice_registered_confirm: 'Uma mensagem foi enviada para {email}: a conta é criada assim que o link dela for seguido.'
   notice_registered_mail_failed: 'O cadastro foi mantido, mas a mensagem para {email} não pôde ser enviada: peça de novo mais tarde.'
-  admin_engine: 'Engine'
+  admin_engine: Engine
   admin_engine_help: 'Onde o site pergunta tudo sobre o grid'
   admin_engine_remote: 'A API do grid'
   admin_engine_bundled: 'O engine embutido no plugin'
@@ -627,9 +691,9 @@ w4os:
   admin_serve_helpers_help: 'O que os viewers e os simuladores pedem (boas-vindas, busca, perfis, economia, mensagens offline) nos endereços do grid, que devem ser os deste site. Desligado: o grid mantém seus próprios helpers'
   admin_grids_config: 'Config of the grids'
   admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
-  admin_tab_connection: 'Conexão'
-  admin_tab_accounts: 'Contas'
-  admin_tab_pages: 'Páginas'
+  admin_tab_connection: Conexão
+  admin_tab_accounts: Contas
+  admin_tab_pages: Páginas
   admin_url: 'Endereço dos helpers'
   admin_url_help: 'O endereço dos helpers do grid, onde estão os seus blocos'
   admin_api_url: 'Endereço da API do engine'
@@ -645,7 +709,7 @@ w4os:
   admin_cache: 'Cache (segundos)'
   admin_built_in_css: 'CSS embutido'
   admin_built_in_css_help: 'A folha de estilo do plugin (suas páginas, os modelos, os blocos); desligada quando o tema os estiliza'
-  admin_register: 'Registrar'
+  admin_register: Registrar
   admin_confirm_email: 'Confirmar o email'
   admin_confirm_email_help: 'Um novo avatar fica inativo até clicar no link que o engine envia'
   admin_terms: 'Página dos termos'
@@ -659,19 +723,19 @@ w4os:
   admin_menu: 'Entry in the menu'
   admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
   admin_site_settings: 'Site settings'
-  admin_site_appearance: 'Appearance'
-  admin_site_theme: 'Theme'
+  admin_site_appearance: Appearance
+  admin_site_theme: Theme
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
-  admin_site_logo: 'Logo'
+  admin_site_logo: Logo
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
-  admin_site_favicon: 'Favicon'
+  admin_site_favicon: Favicon
   admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
   admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
   admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
   admin_route: 'Admin pages'
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
-  admin_menu_list: 'List'
+  admin_menu_list: List
   admin_avatar_created: 'The avatar %s is created.'
   admin_search_parcels: 'Parcel name'
   admin_no_parcels: 'No parcel'
@@ -682,34 +746,34 @@ w4os:
   admin_shortcode_text_help: 'A text of the catalog, in the language of the page, the name of the grid in it'
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: 'Health'
+  admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
   admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
   admin_health_not_checked: 'Not checked again: %s'
-  admin_health_expected: 'Expected'
-  admin_health_value: 'Value'
-  admin_health_set: 'Set'
-  admin_health_state: 'State'
-  admin_health_version: 'Version'
-  admin_health_exists: 'Exists'
-  admin_health_writable: 'Writable'
-  admin_health_readable: 'Readable'
-  admin_health_extension: 'Extension'
-  admin_health_path: 'Path'
-  admin_health_instance: 'Instance'
-  admin_health_installed: 'Installed'
-  admin_health_missing: 'Missing'
+  admin_health_expected: Expected
+  admin_health_value: Value
+  admin_health_set: Set
+  admin_health_state: State
+  admin_health_version: Version
+  admin_health_exists: Exists
+  admin_health_writable: Writable
+  admin_health_readable: Readable
+  admin_health_extension: Extension
+  admin_health_path: Path
+  admin_health_instance: Instance
+  admin_health_installed: Installed
+  admin_health_missing: Missing
   admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_health_setting: 'Setting'
-  admin_health_address: 'Address'
-  admin_health_answer: 'Answer'
-  admin_health_time: 'Time'
+  admin_health_setting: Setting
+  admin_health_address: Address
+  admin_health_answer: Answer
+  admin_health_time: Time
   admin_health_addresses: 'Addresses of the grid'
-  admin_health_service: 'Service'
-  admin_health_source: 'Source'
+  admin_health_service: Service
+  admin_health_source: Source
   admin_health_source_provider: 'the service itself'
   admin_health_source_config: 'its config'
   admin_health_source_live: 'the running grid'
@@ -717,7 +781,7 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: 'Flux'
+  admin_flux_menu: Flux
   admin_flux_title: 'Flux Posts'
   admin_flux_search: 'Search Flux Posts'
   admin_flux_none: 'No Flux Posts found'

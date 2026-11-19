@@ -6,14 +6,14 @@ w4os:
   register_title: 'Create My Avatar'
   register_text: 'Choose a name below. This is how people will see you in-world.'
   register_button: 'Create My Avatar'
-  register: 'Register'
+  register: Register
   have_avatar: 'Already have an avatar?'
   first_name: 'First name'
   last_name: 'Last name'
   first_name_help: 'First name must start with a letter and contain only letters and numbers'
   last_name_help: 'Last name must start with a letter and contain only letters and numbers'
-  email: 'Email'
-  password: 'Password'
+  email: Email
+  password: Password
   password_confirm: 'Confirm password'
   password_help: '6 to 16 characters, without double quote. The same password logs you in here and in-world.'
   model: 'Choose the first outfit for your avatar.'
@@ -31,9 +31,9 @@ w4os:
   confirm_resent: 'A new link is on its way.'
   confirm_resent_test: 'Test site, no mail: confirm with this link: %s'
   avatar_name: 'Avatar Name'
-  login_title: 'Login'
+  login_title: Login
   log_in: 'Log in'
-  logout: 'Logout'
+  logout: Logout
   login: 'Avatar name or email'
   sign_in_failed: 'Login failed'
   forgot_title: 'Forgotten password'
@@ -49,57 +49,109 @@ w4os:
   new_password: 'New password'
   current_password: 'Current password'
   account_title: 'Avatar Profile'
-  born: 'Born'
-  profile_title: 'Profile'
+  born: Born
+  profile_title: Profile
   profile_text: 'What other people see of you in-world (the picture and the interests are set in the viewer).'
-  about: 'About'
+  about: About
   wants: 'Wants to'
-  skills: 'Skills'
-  want_build: 'Build'
-  want_explore: 'Explore'
-  want_meet: 'Meet'
-  want_group: 'Group'
-  want_buy: 'Buy'
-  want_sell: 'Sell'
+  skills: Skills
+  want_build: Build
+  want_explore: Explore
+  want_meet: Meet
+  want_group: Group
+  want_buy: Buy
+  want_sell: Sell
   want_be_hired: 'Be Hired'
-  want_hire: 'Hire'
-  skill_textures: 'Textures'
-  skill_architecture: 'Architecture'
+  want_hire: Hire
+  skill_textures: Textures
+  skill_architecture: Architecture
   skill_event_planning: 'Event Planning'
-  skill_modeling: 'Modeling'
-  skill_scripting: 'Scripting'
+  skill_modeling: Modeling
+  skill_scripting: Scripting
   skill_custom_characters: 'Custom Characters'
-  languages: 'Languages'
+  languages: Languages
   real_life: 'Real life'
   profile_url: 'Web page'
   edit_profile: 'Edit profile'
-  profile_other: 'Other'
+  profile_other: Other
   profile_sections: 'Profile sections'
-  profile_tab_inworld: 'In-world'
-  profile_tab_about: 'About'
-  profile_tab_web: 'Web'
-  profile_tab_feed: 'Feed'
+  profile_tab_inworld: In-world
+  profile_tab_about: About
+  profile_tab_web: Web
+  profile_tab_feed: Feed
   post_label: 'New post'
   post_help: 'Plain text, 1000 characters at most.'
-  action_save: 'Save'
+  action_save: Save
   settings_models: 'Avatar Models'
   settings_economy: 'Economy Settings'
   settings_search: 'Search Engine Settings'
   settings_guide: 'Destinations Guide Settings'
   settings_offline: 'Offline Messages Settings'
   settings_assets: 'Web Assets Server'
-  settings_menu_economy: 'Economy'
+  settings_menu_economy: Economy
   settings_menu_search: 'Search Engine'
-  settings_menu_guide: 'Destinations Guide'
+  settings_menu_guide: 'Destination Guide'
   settings_menu_offline: 'Offline Messages'
-  settings_menu_assets: 'Assets Server'
+  settings_menu_assets: 'Web Assets'
   settings_saved: 'Settings saved.'
-  models_match: 'Match'
+  provide_economy: 'Provide Economy Helper'
+  provide_search: 'Provide Search'
+  provide_guide: 'Provide Destinations Guide Service'
+  provide_offline: 'Provide Offline Messages Service'
+  provide_offline_help: 'Honor "Email me IMs when I''m offline" viewer option.'
+  provide_assets: 'Provide Web Assets Server'
+  provide_assets_help: 'A web assets server is required to display in-world assets (from the grid) on the website (e.g. profile pictures).'
+  provide_path: Path
+  provide_offline_help_core: "OpenSimulator core offline messages module doesn't handle e-mail forwarding option available in the viewer settings."
+  economy_helper_uri: 'Economy Helper URI'
+  economy_helper_uri_help: 'The URL must be set in Robust configuration.'
+  economy_help_helpers: 'Economy helpers are additional scripts needed if you implement economy on your grid (with real or fake currency).'
+  economy_help_scripts: 'Helper scripts allow communication between the money server and the grid: current balance update, currency cost estimation, land and object sales, payments...'
+  economy_help_module: 'This plugin only provides the web helpers required by the money server module. A third-party module must be installed and configured on the simulator, for example:'
+  economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
+  economy_help_binaries: 'Ready to use binaries and example config files can be downloaded here: github.com/magicoli/opensim-helpers'
+  gloebit_configuration: 'Gloebit Configuration'
+  gloebit_help_crash: 'Gloebit module needs to be configured before restarting the region, otherwise it could crash the simulator.'
+  gloebit_help_linux: 'For Linux, see README-Gloebit.md (github.com/magicoli/opensim-helpers) to avoid certificate-related errors.'
+  gloebit_help_register: 'Register an account or connect on gloebit.com and Follow instructions on dev.gloebit.com to setup an app for your grid/simulator.'
+  gloebit_help_config: 'Add Gloebit configuration in OpenSim.ini.'
+  gloebit_help_dll: 'Download the latest dll in your OpenSimulator bin/ folder (rename it Gloebit.dll), from github.com/GuduleLapointe/opensim-debian or dev.gloebit.com'
+  money_script_access_key: 'Money Script Access Key'
+  money_script_access_key_help: 'Choose a unique access key and set it in MoneyServer.ini'
+  search_engine_url: 'Search Engine URL'
+  search_url_help_viewer: 'URL of the search engine used by the viewer to provide search results (without arguments).'
+  search_url_help_one: 'Only one can be set, other lines are alternative examples.'
+  search_url_help_web: 'Please note that Search URL is different from Web search URL, which is not handled by W4OS currently. Web search is relevant if you have a web search page dedicated to grid content, providing results with in-world URLs (hop:// or secondlife://). It is optional and is referenced here only to disambiguate settings which unfortunately have similar names.'
+  search_register_url: 'Search Register URL'
+  search_register_help_data: 'Data service, used to register regions, objects or land for sale.'
+  search_register_help_several: 'You can register to several search engines.'
+  search_register_help_prefix: 'Each line must have a unique identifier beginning with "DATA_SRV_"'
+  events_help_fetch: 'HYPEvents Server URL, used to fetch upcoming events and make them available in search.'
+  events_help_blank: 'Leave blank to ignore events or if you have an other events implementation.'
+  search_help_local: 'Enable to use a local search engine, allowing only local results (recommended for private grids).'
+  search_help_external: 'Disable to use an external search engine like 2do Directory, allowing results from both your grid and other public grids.'
+  search_help_module: 'Search features require the installation of OpenSimSearch Module on OpenSimulator.'
+  search_help_binary: 'Ready to use OpenSimSearch.Modules.dll binary can be found here: github.com/magicoli/opensim-helpers'
+  guide_url: 'Destinations Guide URL'
+  guide_source_help_file: 'A text file with a formatted list of destinations.'
+  guide_source_help_where: 'The source can be an URL or the full path of a local file your web server can access.'
+  guide_source_help_pipe: 'Destination name and teleport URL are separated by a pipe (|) character.'
+  guide_source_help_categories: 'Lines containing only text are interpreted as categories.'
+  guide_source_help_comments: 'Lines beginning with "#" or "//" are ignored.'
+  guide_source_help_board: 'The format is identical to the format used by the in-world object Gudz Teleport Board so the same source URL can be used for both.'
+  guide_help_feature: 'Destinations guide is a Viewer 3 feature, providing a window with places suggestions.'
+  guide_help_places: 'While it is not mandatory, and not every user will benefit from it, it is a useful way to provide them a list of must-see places, from your own grid or outside.'
+  offline_helper: 'Offline Messages Helper'
+  offline_helper_help: 'Set the URL in OpenSimulator configurations.'
+  assets_url: 'Web Assets Server URL'
+  assets_external_help: "If 'Provide Web Assets Server' is disabled, it is necessary to install a third-party service and enter its URL here to ensure the proper functioning of the plugin."
+  provide_path_help: 'Under the address of the site: under the base of the helpers, the helpers answer; elsewhere, the site, on a page with its block.'
+  models_match: Match
   models_match_first: 'First Name'
-  models_match_any: 'Any'
+  models_match_any: Any
   models_match_last: 'Last Name'
   models_match_uuid: 'Custom list'
-  models_pattern: 'Name'
+  models_pattern: Name
   models_list: 'Select Models'
   models_list_placeholder: 'Select one or more existing avatars'
   action_save_changes: 'Save Changes'
@@ -110,122 +162,122 @@ w4os:
   models_help_not_users: 'The avatars used for the models should never be real user accounts.'
   models_help_outfit: 'The new avatar will wear the same outfit as the model at the time of registration.'
   models_help_rule: 'If the model assignment rule is based on the name, each newly created avatar matching that rule will be automatically added to the list.'
-  action_post: 'Post'
+  action_post: Post
   action_new_avatar: 'New Avatar'
   action_create_avatar: 'Create Avatar'
-  action_delete_post: 'Delete'
+  action_delete_post: Delete
   ask_delete_post: 'Delete this post?'
   manage_post: 'Your post is published.'
   manage_delete_post: 'Your post is deleted.'
-  profile_tab_interests: 'Interests'
-  profile_tab_picks: 'Picks'
-  profile_tab_classifieds: 'Classifieds'
+  profile_tab_interests: Interests
+  profile_tab_picks: Picks
+  profile_tab_classifieds: Classifieds
   profile_tab_real_life: 'Real life'
   profile_tab_notes: 'My Notes'
-  profile_tab_account: 'Account'
-  profile_key: 'Key'
-  profile_picture: 'Picture'
-  partner: 'Partner'
+  profile_tab_account: Account
+  profile_key: Key
+  profile_picture: Picture
+  partner: Partner
   show_in_search: 'Show in search'
   interests_removed: 'Viewers no longer show this section since 2023.'
   profile_viewer_only: 'Created and edited in the viewer.'
-  profile_none: 'None.'
-  profile_name: 'Name'
+  profile_none: None.
+  profile_name: Name
   profile_age_today: 'Joined today'
   profile_age_days: '%d days'
-  profile_groups: 'Groups'
+  profile_groups: Groups
   profile_no_description: 'No description given.'
-  profile_location: 'Location'
-  profile_teleport: 'Teleport'
-  profile_until: 'Until'
-  save_button: 'Save'
+  profile_location: Location
+  profile_teleport: Teleport
+  profile_until: Until
+  save_button: Save
   profile_saved: 'Your profile is saved.'
-  password_title: 'Password'
+  password_title: Password
   password_button: 'Change the password'
   password_saved: 'Your password is changed.'
   email_pending: 'Your profile is saved. A link is on its way to %s: click it to make it your email.'
   email_pending_test: 'Your profile is saved. Test site, no mail: confirm %1$s with this link: %2$s'
   email_changed: 'Your email is now %s.'
-  regions_title: 'Regions'
+  regions_title: Regions
   search_regions: 'Region name'
   regions_count: '%d regions'
   no_regions: 'No region'
   regions_online: '%1$s online of %2$s'
-  simulators_title: 'Simulators'
+  simulators_title: Simulators
   search_simulators: 'Simulator name'
   simulators_count: '%d simulators'
   no_simulators: 'No simulator'
-  filters: 'Filters'
+  filters: Filters
   filters_active: '%d active filters'
   label_value: '%1$s: %2$s'
-  tab_overview: 'Overview'
-  column_status: 'Status'
-  state_enabled: 'Enabled'
-  state_disabled: 'Disabled'
-  state_running: 'Running'
-  state_stopped: 'Stopped'
+  tab_overview: Overview
+  column_status: Status
+  state_enabled: Enabled
+  state_disabled: Disabled
+  state_running: Running
+  state_stopped: Stopped
   state_unresponsive: 'Not answering'
-  state_crashed: 'Crashed'
-  connection_console: 'Console'
+  state_crashed: Crashed
+  connection_console: Console
   connection_console_failed: 'Console unreachable'
-  connection_screen: 'Screen'
+  connection_screen: Screen
   connection_screen_failed: 'Screen not found'
-  connection_config: 'OpenSim.ini'
+  connection_config: OpenSim.ini
   connection_config_failed: 'OpenSim.ini unreadable'
   connection_regions: 'Regions .ini'
   connection_regions_failed: 'Regions .ini unreadable'
-  connection_mysql: 'MySQL'
+  connection_mysql: MySQL
   connection_mysql_failed: 'MySQL unreachable'
-  connection_sqlite: 'SQLite'
+  connection_sqlite: SQLite
   connection_sqlite_failed: 'SQLite unreadable'
-  menu_admin: 'Admin'
+  menu_admin: Admin
   menu_account: 'My avatar'
-  dashboard_title: 'Dashboard'
-  manage_title: 'Avatars'
+  dashboard_title: Dashboard
+  manage_title: Avatars
   search_avatars: 'Name or email'
-  search: 'Search'
+  search: Search
   no_avatars: 'No result'
   avatars_count: '%d avatars'
-  status: 'Status'
+  status: Status
   last_seen: 'Last Seen'
-  created: 'Created'
-  actions: 'Actions'
-  god: 'God'
-  online: 'Online'
-  status_active: 'Active'
-  status_disabled: 'Disabled'
-  status_pending: 'Pending'
-  status_banned: 'Banned'
+  created: Created
+  actions: Actions
+  god: God
+  online: Online
+  status_active: Active
+  status_disabled: Disabled
+  status_pending: Pending
+  status_banned: Banned
   avatar_type_user: 'User Avatar'
   avatar_type_model: 'Default Model'
   avatar_type_service: 'Service Account'
   state_grid_banned: 'Banned from the grid'
   state_estate_banned: 'Banned from estates'
   filter_estate_banned: 'Estate bans'
-  action_ban: 'Ban'
-  action_unban: 'Unban'
+  action_ban: Ban
+  action_unban: Unban
   action_estate_ban: 'Ban from estates'
   action_estate_unban: 'Unban from estates'
   ask_ban: 'Ban this avatar? It can no longer log in, until it is unbanned.'
   ask_estate_ban: 'Ban this avatar from every estate of the grid?'
-  role: 'Role'
-  role_resident: 'Resident'
-  role_god_like: 'God-like'
+  role: Role
+  role_resident: Resident
+  role_god_like: God-like
   role_customer_service: 'Customer Service'
-  role_liaison: 'Liaison'
-  role_god: 'God'
-  role_maintenance: 'Maintenance'
-  action_enable: 'Enable'
-  action_disable: 'Disable'
-  action_start: 'Start'
-  action_stop: 'Stop'
-  action_restart: 'Restart'
+  role_liaison: Liaison
+  role_god: God
+  role_maintenance: Maintenance
+  action_enable: Enable
+  action_disable: Disable
+  action_start: Start
+  action_stop: Stop
+  action_restart: Restart
   ask_stop_instance: 'Stop this simulator? The avatars in its regions are sent away.'
   ask_restart_instance: 'Restart this simulator? The avatars in its regions are sent away while it restarts.'
   action_reset: 'Send a password reset link'
   action_view: 'View profile'
-  action_view_item: 'View'
-  action_edit: 'Edit'
+  action_view_item: View
+  action_edit: Edit
   edit_title: 'Edit %s'
   manage_enable: '%s is enabled.'
   manage_disable: '%s is disabled.'
@@ -241,31 +293,31 @@ w4os:
   manage_saved: '%s is saved.'
   yes: 'Yes'
   no: 'No'
-  filter_any: 'Any'
+  filter_any: Any
   filter_clear: 'Remove the filter'
   filter_email: 'With an email'
   filter_model: 'Avatar model'
   filter_technical: 'Service account'
   filter_active: 'Can log in'
-  column_map: 'Map'
-  column_region: 'Region'
+  column_map: Map
+  column_region: Region
   column_region_name: 'Region Name'
-  column_presence: 'Presence'
+  column_presence: Presence
   column_internal_port: 'Internal Port'
   last_activity: 'Last Activity'
-  column_size: 'Size'
-  column_owner: 'Owner'
-  column_roles: 'Roles'
-  column_flags: 'Flags'
-  offline: 'Offline'
-  all: 'All'
-  view_active: 'Active'
-  view_inactive: 'Inactive'
-  degraded: 'Degraded'
-  parcels: 'Parcels'
+  column_size: Size
+  column_owner: Owner
+  column_roles: Roles
+  column_flags: Flags
+  offline: Offline
+  all: All
+  view_active: Active
+  view_inactive: Inactive
+  degraded: Degraded
+  parcels: Parcels
   shortcodes_title: 'Available Shortcodes'
   shortcodes_help: 'Shortcodes can be included in any page or articles.'
-  shortcode_options: 'Options'
+  shortcode_options: Options
   shortcode_option_title: 'Bloc title'
   shortcode_option_level: 'Title level (h1 to h6)'
   shortcode_option_name: 'The name of the avatar (First.Last)'
@@ -283,19 +335,19 @@ w4os:
   block_new_users_help: 'The avatars that joined the grid last.'
   setting_login: 'Login URI'
   setting_login_help: 'The address the viewers log in at, and ask what the grid says of itself (get_grid_info).'
-  setting_gatekeeper: 'Gatekeeper'
+  setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'The address other grids reach this one by (hypergrid).'
   setting_uas: 'User agent service'
   setting_uas_help: 'Where the avatars of this grid are known when they visit other grids (hypergrid).'
-  setting_welcome: 'Splash'
+  setting_welcome: Splash
   setting_welcome_help: 'The welcome page displayed in the viewer with the login form. A short, no-scroll page, with only essential info. It is required, or at least highly recommended.'
-  setting_economy: 'Economy'
+  setting_economy: Economy
   setting_economy_help: 'Currencies and some other services queried by the viewer. They are not accessed directly by the user.'
   setting_about: 'About this grid'
   setting_about_help: 'Detailed info page on your website, via a link displayed on the viewer login page.'
   setting_register: 'Registration page'
   setting_register_help: 'Link to the user registration.'
-  setting_help: 'Help'
+  setting_help: Help
   setting_help_help: 'Link to a help page on your website.'
   setting_password: 'Password recovery'
   setting_password_help: 'Link to lost password page.'
@@ -323,7 +375,7 @@ w4os:
   setting_money_script_key_help: 'The key the currency services and the money server share: never shown, only whether it is set.'
   setting_helpers: 'Helpers base'
   setting_helpers_help: 'The base of the pages and services of the helpers.'
-  setting_directory: 'Directory'
+  setting_directory: Directory
   setting_directory_help: 'The page of the grid in the shared directory of the regions.'
   setting_cache_assets: 'Picture cache'
   setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
@@ -344,16 +396,16 @@ w4os:
   setting_economy_module: 'Economy Module'
   setting_economy_module_help: 'Changed with the options of the grid, which set the module and what it needs.'
   economy_module_free: 'Free transactions only'
-  economy_module_gloebit: 'Gloebit'
+  economy_module_gloebit: Gloebit
   economy_module_moneyserver: 'Podex and other currency providers'
   setting_sell_enabled: 'Enable Selling'
   setting_price_upload: 'Price Upload'
   setting_price_group_create: 'Price Group Create'
   setting_gloebit_enabled: 'Enable Gloebit'
   setting_gloebit_environment: 'Gloebit Environment'
-  gloebit_sandbox: 'Sandbox'
-  gloebit_production: 'Production'
-  setting_guide_source: 'Source'
+  gloebit_sandbox: Sandbox
+  gloebit_production: Production
+  setting_guide_source: Source
   setting_guide_source_help: 'A text file with a formatted list of destinations.'
   setting_search_database: 'OS Search Database'
   setting_events_url: 'Events Server URL'
@@ -361,20 +413,21 @@ w4os:
   setting_mail_sender: 'Sender e-mail address'
   setting_mail_sender_help: 'A no-reply e-mail address used to forward messages for users enabling "Email me IMs when I''m offline" option.'
   setting_currency_rate: 'Currency Conversion Rate'
-  setting_currency_rate_help: 'Amount to pay in US$ for 1000 in-world money units. Used for cost estimation.'
+  setting_currency_rate_help: 'Amount to pay in US$ for 1000 in-world money units. Used for cost estimation. If not set, the rate will be 10/1000 (1 cent per money unit).'
   setting_currency_rate_per: 'Money Units per Rate'
   setting_gloebit_threshold: 'Gloebit Conversion Threshold'
   setting_podex_message: 'Podex Redirect Message'
   setting_podex_url: 'Exchange Teleport URL'
+  podex_message_placeholder: 'Please use our terminals in-world to proceed. Click OK to teleport to Podex Exchange area.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: 'The web assets server of the grid when it is not the one of the helpers: it converts the pictures of the world (JPEG 2000) for the web.'
   offline_module_v1: 'By the helpers (V1)'
   offline_module_v2: 'By Robust (V2)'
-  db_host: 'Hostname'
-  db_port: 'Port'
+  db_host: Hostname
+  db_port: Port
   db_name: 'Database name'
-  db_user: 'User'
-  db_password: 'Password'
+  db_user: User
+  db_password: Password
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
   usage_helper_simulators: 'Helper called by the simulators'
@@ -443,18 +496,18 @@ w4os:
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
   health_unset: 'Not set: neither served nor tested.'
   health_third_party: 'This service requires a separate web application.'
-  presence: 'Presence'
-  region_flag_default_region: 'Default'
+  presence: Presence
+  region_flag_default_region: Default
   region_flag_default_hg_region: 'Default HG'
-  region_flag_fallback_region: 'Fallback'
+  region_flag_fallback_region: Fallback
   region_flag_no_direct_login: 'No direct login'
-  region_flag_persistent: 'Persistent'
+  region_flag_persistent: Persistent
   region_flag_locked_out: 'Locked out'
-  region_flag_reservation: 'Reservation'
+  region_flag_reservation: Reservation
   region_flag_no_move: 'No move'
-  region_flag_authenticate: 'Authenticate'
-  region_flag_region_online: 'Online'
-  region_flag_hyperlink: 'Hyperlink'
+  region_flag_authenticate: Authenticate
+  region_flag_region_online: Online
+  region_flag_hyperlink: Hyperlink
   region_flag_default_region_help: 'Where avatars arrive when they do not ask for a region; one at random when there are several.'
   region_flag_fallback_region_help: 'Where avatars are sent when the region they ask for is down.'
   region_flag_region_online_help: 'The region is running: set when it comes online, unset when it leaves the grid.'
@@ -466,71 +519,82 @@ w4os:
   region_flag_authenticate_help: 'Visitors must be authenticated.'
   region_flag_hyperlink_help: 'A link to a region of another grid.'
   region_flag_default_hg_region_help: 'Where visitors from other grids arrive, for hypergrid teleports only.'
-  filter_simulator: 'Simulator'
-  column_name: 'Name'
-  column_nick: 'Nick'
-  column_slug: 'Slug'
-  column_uri: 'URI'
-  column_url: 'URL'
-  column_server: 'Server'
-  column_enabled: 'Enabled'
+  filter_simulator: Simulator
+  column_name: Name
+  column_nick: Nick
+  column_slug: Slug
+  column_uri: URI
+  column_url: URL
+  column_server: Server
+  column_enabled: Enabled
   filter_remote: 'On another machine'
-  filter_hypergrid: 'Hypergrid'
-  column_grid: 'Grid'
-  column_port: 'Port'
-  column_running: 'Running'
-  column_service: 'Service'
+  filter_hypergrid: Hypergrid
+  column_grid: Grid
+  column_port: Port
+  column_running: Running
+  column_service: Service
   column_provider: 'Served by'
-  filter_served: 'Served'
-  port_private: 'Private'
-  port_public: 'Public'
-  port_web: 'Web'
-  column_file: 'File'
-  column_kind: 'Kind'
-  column_date: 'Date'
-  column_author: 'Author'
+  filter_served: Served
+  port_private: Private
+  port_public: Public
+  port_web: Web
+  column_file: File
+  column_kind: Kind
+  column_date: Date
+  column_author: Author
+  avatars_title: Avatars
+  avatars_menu: Avatars
+  avatars_search: 'Search Avatars'
+  regions_menu: Regions
+  regions_search: 'Search Regions'
+  flux_title: 'Flux Posts'
+  flux_menu: Flux
+  flux_search: 'Search Flux Posts'
+  flux_empty: 'No Flux Posts found'
+  list_empty: 'No items found.'
+  posts_count: '%d posts'
   flux_post: 'Flux Post'
   kind_iar: 'Inventory (IAR)'
   kind_oar: 'Region (OAR)'
-  kind_backup: 'Backup'
-  column_area: 'Area'
-  column_cpu: 'CPU'
-  column_avatars: 'Avatars'
-  column_memory: 'Memory'
-  column_traffic: 'Traffic'
+  kind_backup: Backup
+  column_area: Area
+  column_cpu: CPU
+  column_avatars: Avatars
+  column_memory: Memory
+  column_traffic: Traffic
   column_for_sale: 'For sale'
   column_in_search: 'In search'
-  parcel_scripts: 'Scripts'
-  parcel_build: 'Build'
+  parcel_scripts: Scripts
+  parcel_build: Build
   parcel_public: 'Public access'
-  column_regions: 'Regions'
-  parcel: 'Parcel'
-  column_type: 'Type'
-  filter_local: 'Local'
-  filter_temporary: 'Temporary'
-  asset_texture: 'Texture'
-  asset_sound: 'Sound'
+  column_regions: Regions
+  parcel: Parcel
+  column_type: Type
+  filter_local: Local
+  filter_temporary: Temporary
+  asset_texture: Texture
+  asset_sound: Sound
   asset_calling_card: 'Calling card'
-  asset_landmark: 'Landmark'
-  asset_clothing: 'Clothing'
-  asset_object: 'Object'
-  asset_notecard: 'Notecard'
-  asset_folder: 'Folder'
-  asset_script: 'Script'
+  asset_landmark: Landmark
+  asset_clothing: Clothing
+  asset_object: Object
+  asset_notecard: Notecard
+  asset_folder: Folder
+  asset_script: Script
   asset_script_bytecode: 'Compiled script'
   asset_texture_tga: 'Texture (TGA)'
   asset_body_part: 'Body part'
   asset_sound_wav: 'Sound (WAV)'
   asset_image_tga: 'Image (TGA)'
   asset_image_jpeg: 'Image (JPEG)'
-  asset_animation: 'Animation'
-  asset_gesture: 'Gesture'
+  asset_animation: Animation
+  asset_gesture: Gesture
   asset_simstate: 'Region state'
-  asset_link: 'Link'
+  asset_link: Link
   asset_link_folder: 'Folder link'
-  asset_mesh: 'Mesh'
+  asset_mesh: Mesh
   asset_settings: 'Environment settings'
-  asset_material: 'Material'
+  asset_material: Material
   error_required: 'Please fill in every field.'
   error_password_match: 'The two passwords are not the same.'
   error_terms: 'You must agree to the terms on page %s.'
@@ -611,7 +675,7 @@ w4os:
   notice_registered: 'The avatar {name} is ready: sign in with its name and its password.'
   notice_registered_confirm: 'A mail was sent to {email}: the account is made once the link it holds is followed.'
   notice_registered_mail_failed: 'The registration is kept, but the mail to {email} could not be sent: ask for it again later.'
-  admin_engine: 'Engine'
+  admin_engine: Engine
   admin_engine_help: 'Where the site asks everything about the grid'
   admin_engine_remote: 'The API of the grid'
   admin_engine_bundled: 'The engine bundled with the plugin'
@@ -627,9 +691,9 @@ w4os:
   admin_serve_helpers_help: 'What the viewers and the simulators ask (welcome, search, profiles, economy, offline messages) at the addresses of the grid, which must be the ones of this site. Off: the grid keeps its own helpers'
   admin_grids_config: 'Config of the grids'
   admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
-  admin_tab_connection: 'Connection'
-  admin_tab_accounts: 'Accounts'
-  admin_tab_pages: 'Pages'
+  admin_tab_connection: Connection
+  admin_tab_accounts: Accounts
+  admin_tab_pages: Pages
   admin_url: 'Helpers address'
   admin_url_help: 'The address of the helpers of the grid, where its blocks are'
   admin_api_url: 'Engine API address'
@@ -645,7 +709,7 @@ w4os:
   admin_cache: 'Cache (seconds)'
   admin_built_in_css: 'Built-in CSS'
   admin_built_in_css_help: 'The style sheet of the plugin (its pages, the models, the blocks); off when the theme styles them'
-  admin_register: 'Register'
+  admin_register: Register
   admin_confirm_email: 'Confirm the email'
   admin_confirm_email_help: 'A new avatar is inactive until it clicks the link the engine mails it'
   admin_terms: 'Terms page'
@@ -653,25 +717,25 @@ w4os:
   admin_per_page: 'Avatars per page'
   admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
   admin_admin_level: 'Admin pages from level'
-  admin_admin_level_help: 'The avatars of this user level or more enter the admin pages; each page, action and field then asks its own level, the engine''s'
+  admin_admin_level_help: "The avatars of this user level or more enter the admin pages; each page, action and field then asks its own level, the engine's"
   admin_save_accounts: 'Keep Grav accounts'
   admin_save_accounts_help: 'Keep a Grav account (user/accounts) for each avatar that logs in; always on with the API plugin'
   admin_menu: 'Entry in the menu'
   admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
   admin_site_settings: 'Site settings'
-  admin_site_appearance: 'Appearance'
-  admin_site_theme: 'Theme'
+  admin_site_appearance: Appearance
+  admin_site_theme: Theme
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
-  admin_site_logo: 'Logo'
+  admin_site_logo: Logo
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
-  admin_site_favicon: 'Favicon'
+  admin_site_favicon: Favicon
   admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
   admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
   admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
   admin_route: 'Admin pages'
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
-  admin_menu_list: 'List'
+  admin_menu_list: List
   admin_avatar_created: 'The avatar %s is created.'
   admin_search_parcels: 'Parcel name'
   admin_no_parcels: 'No parcel'
@@ -682,34 +746,34 @@ w4os:
   admin_shortcode_text_help: 'A text of the catalog, in the language of the page, the name of the grid in it'
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: 'Health'
+  admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
   admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
   admin_health_not_checked: 'Not checked again: %s'
-  admin_health_expected: 'Expected'
-  admin_health_value: 'Value'
-  admin_health_set: 'Set'
-  admin_health_state: 'State'
-  admin_health_version: 'Version'
-  admin_health_exists: 'Exists'
-  admin_health_writable: 'Writable'
-  admin_health_readable: 'Readable'
-  admin_health_extension: 'Extension'
-  admin_health_path: 'Path'
-  admin_health_instance: 'Instance'
-  admin_health_installed: 'Installed'
-  admin_health_missing: 'Missing'
+  admin_health_expected: Expected
+  admin_health_value: Value
+  admin_health_set: Set
+  admin_health_state: State
+  admin_health_version: Version
+  admin_health_exists: Exists
+  admin_health_writable: Writable
+  admin_health_readable: Readable
+  admin_health_extension: Extension
+  admin_health_path: Path
+  admin_health_instance: Instance
+  admin_health_installed: Installed
+  admin_health_missing: Missing
   admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_health_setting: 'Setting'
-  admin_health_address: 'Address'
-  admin_health_answer: 'Answer'
-  admin_health_time: 'Time'
+  admin_health_setting: Setting
+  admin_health_address: Address
+  admin_health_answer: Answer
+  admin_health_time: Time
   admin_health_addresses: 'Addresses of the grid'
-  admin_health_service: 'Service'
-  admin_health_source: 'Source'
+  admin_health_service: Service
+  admin_health_source: Source
   admin_health_source_provider: 'the service itself'
   admin_health_source_config: 'its config'
   admin_health_source_live: 'the running grid'
@@ -717,7 +781,7 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_flux_menu: 'Flux'
+  admin_flux_menu: Flux
   admin_flux_title: 'Flux Posts'
   admin_flux_search: 'Search Flux Posts'
   admin_flux_none: 'No Flux Posts found'
