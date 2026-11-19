@@ -26,7 +26,7 @@
                         <th>{{ 'w4os.admin_health_setting'|t }}</th>
                         <th>{{ 'w4os.admin_health_address'|t }}</th>
                         <th>{{ 'w4os.admin_health_answer'|t }}</th>
-                        <th class="w-1 text-end">{{ 'w4os.admin_health_time'|t }}</th>
+                        <th class="w-1 text-end text-nowrap">{{ 'w4os.admin_health_time'|t }}</th>
                     </tr></thead>
                     <tbody>
                     {% for row in group.rows %}
@@ -38,7 +38,7 @@
                                 {% if row.detail %}<div class="small text-secondary">{{ row.detail }}</div>{% endif %}
                             </td>
                             <td>{{ row.status }}</td>
-                            <td class="text-end text-secondary">{{ row.ms is not null ? row.ms ~ ' ms' }}</td>
+                            <td class="text-end text-secondary text-nowrap">{{ row.ms is not null ? row.ms ~ ' ms' }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
