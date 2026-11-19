@@ -797,3 +797,6 @@ w4os:
   admin_task_last: 'Dernier passage %s'
   admin_task_never: 'Jamais lancée'
   admin_task_ran: '%s : %s'
+  admin_dashboard_running: '%1$s en marche sur %2$s'
+  admin_dashboard_recent_users: 'Utilisateurs récents'
+  admin_dashboard_all: 'Tout voir'
