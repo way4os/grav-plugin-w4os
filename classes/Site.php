@@ -828,6 +828,8 @@ final class Site
         ]],
         ['code' => '[w4os block="popular-places" /]', 'help' => 'block_popular_places_help', 'block' => 'popular-places', 'options' => [
             ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],
+            ['option' => 'count=5', 'help' => 'shortcode_option_count'], ['option' => 'include_hypergrid=1', 'help' => 'shortcode_option_include_hypergrid'],
+            ['option' => 'include_landsales=1', 'help' => 'shortcode_option_include_landsales'],
         ]],
         ['code' => '[w4os block="motd" /]', 'help' => 'block_motd_help', 'block' => 'motd', 'options' => [
             ['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'],

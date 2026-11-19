@@ -19,7 +19,8 @@ describe('the page of the shortcodes', function () {
         expect(array_slice($codes, 0, 4))->toBe(['[w4os block="grid-info" /]', '[w4os block="grid-status" /]', '[w4os block="profile" /]', '[w4os block="popular-places" /]'])
             ->and($codes)->toContain('[w4os-home]…[/w4os-home]', '[w4os-guest]…[/w4os-guest]', '[w4os-register]…[/w4os-register]', '[w4os info="uri" /]')
             ->and(array_column(Site::SHORTCODES[0]['options'], 'option'))->toBe(['title', 'level=h3'])
-            ->and(array_column(Site::SHORTCODES[2]['options'], 'option'))->toContain('name');
+            ->and(array_column(Site::SHORTCODES[2]['options'], 'option'))->toContain('name')
+            ->and(array_column(Site::SHORTCODES[3]['options'], 'help'))->toContain('shortcode_option_count', 'shortcode_option_include_hypergrid', 'shortcode_option_include_landsales');
     });
 
     test('shows each one with its live preview and the table of its options', function () {

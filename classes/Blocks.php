@@ -16,7 +16,7 @@ final class Blocks
     private const LIVE = ['search'];
 
     /** The arguments a block takes from the page or the shortcode. */
-    private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client'];
+    private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client', 'count', 'include_hypergrid', 'include_landsales'];
 
     /**
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block (BlockUnavailable when it cannot
@@ -105,10 +105,24 @@ final class Blocks
         return in_array(str_replace('-', '_', $name), self::NAMES, true) ? str_replace('-', '_', $name) : $name;
     }
 
+    /** What a shortcode of a block may give it: its name (profile), its title and level, the options of the popular places. */
+    private const SHORTCODE_ARGS = ['name', 'level', 'title', 'count', 'include_hypergrid', 'include_landsales'];
+
+    /**
+     * The arguments of a block from the parameters of its shortcode: the ones it takes (SHORTCODE_ARGS), those given only.
+     *
+     * @param array<string,mixed> $parameters
+     * @return array<string,mixed>
+     */
+    public static function shortcodeArgs(array $parameters): array
+    {
+        return array_filter(array_intersect_key($parameters, array_flip(self::SHORTCODE_ARGS)), fn ($value) => $value !== null && $value !== '');
+    }
+
     /**
      * The HTML of a block, empty when it is not one.
      *
-     * @param array<string,scalar> $args name and feed_only (profile: its stream alone), q and topic (search), category (destination_guide), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
+     * @param array<string,scalar> $args name and feed_only (profile: its stream alone), q and topic (search), category (destination_guide), count, include_hypergrid and include_landsales (popular_places), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
      *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME])
      * @throws BlockUnavailable when it cannot be read
      */

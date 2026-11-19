@@ -377,7 +377,7 @@ class W4osPlugin extends Plugin
             $shortcode->hasParameter('slogan') => htmlspecialchars($this->site()->slogan()),
             default => $this->block(
                 (string) $shortcode->getParameter('block', ''),
-                array_filter(['name' => $shortcode->getParameter('name'), 'level' => $shortcode->getParameter('level'), 'title' => $shortcode->getParameter('title')]),
+                Blocks::shortcodeArgs((array) $shortcode->getParameters()),
             ),
         });
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');

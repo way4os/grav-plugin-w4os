@@ -25,6 +25,18 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('search', ['q' => 'Ada'] + $site), true))->toBe(['q' => 'Ada'] + $site);
     });
 
+    test('asks the popular places for the options the page gives them, as w4os-wp has them', function () {
+        $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
+
+        expect(json_decode($blocks->html('popular_places', ['count' => '3', 'include_hypergrid' => '1', 'include_landsales' => '0']), true))
+            ->toBe(['count' => '3', 'include_hypergrid' => '1', 'include_landsales' => '0']);
+    });
+
+    test('takes of a shortcode the options of its block, nothing else', function () {
+        expect(Blocks::shortcodeArgs(['block' => 'popular-places', 'count' => '3', 'include_hypergrid' => '1', 'title' => 'Places', 'onclick' => 'x', 'name' => null]))
+            ->toBe(['count' => '3', 'include_hypergrid' => '1', 'title' => 'Places']);
+    });
+
     test('asks the guide for the category the page shows', function () {
         $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
 
