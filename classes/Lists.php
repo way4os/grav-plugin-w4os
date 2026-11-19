@@ -111,12 +111,13 @@ final class Lists
         if ($value === '') {
             return false;
         }
-        // The values of a dynamic filter the engine does not list are the ones of the rows (a simulator...)
-        if (! empty($filter['dynamic']) && $filter['values'] === []) {
-            return mb_strlen($value) <= 200;
+        // A free value of its format (an owner: a UUID, also when the rows give its values)
+        if (($filter['format'] ?? null) === 'uuid') {
+            return Bundled::library() && \OpenSim\Text\Uuid::isValid($value);
         }
-        if (isset($filter['format'])) {
-            return $filter['format'] === 'uuid' ? Bundled::library() && \OpenSim\Text\Uuid::isValid($value) : mb_strlen($value) <= 200;
+        // The values of a dynamic filter the engine does not list are the ones of the rows (a simulator...)
+        if (isset($filter['format']) || (! empty($filter['dynamic']) && $filter['values'] === [])) {
+            return mb_strlen($value) <= 200;
         }
 
         return in_array($value, array_column($filter['values'], 'value'), true);
