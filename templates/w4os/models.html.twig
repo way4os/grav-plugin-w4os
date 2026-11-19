@@ -1,12 +1,22 @@
 {# The avatar models of the grid, for the managers the contract lets read their rule, laid out as w4os-wp has them: the form of the
-   rule (the settings `models` of the grid: which avatars are models) for whom the contract lets change it, its help beside it (the
-   points of its description), then the models it picks (its preview: each its picture and name, a new avatar wears a copy of its
+   rule (the settings `models` of the grid: which avatars are models) for whom the contract lets change it, beside it its help (the
+   points of its description) then the models it picks (its preview: each its picture and name, a new avatar wears a copy of its
    outfit), updated as the form is changed (js/models-preview.js) #}
 {% set rule = w4os_models_rule() %}
 {% if rule.error %}
     <div class="alert alert-danger" role="alert">{{ rule.error }}</div>
-{% elseif rule.changeable %}
-    <div class="row row-cards mb-3">
+{% endif %}
+{% set preview %}
+    <div class="card">
+        <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ (rule.preview.label ?? 'models_list'))|t }}</h3></div>
+        <div class="card-body w4os-models-preview"{% if rule.preview and rule.changeable %} data-w4os-models-preview="{{ ('?format=preview')|e('html_attr') }}" data-form="w4os-models" data-filters="{{ rule.preview.filters|json_encode|e('html_attr') }}" aria-live="polite"{% endif %}>
+            {% include 'w4os/models-preview.html.twig' with { models: w4os_models() ?? [] } %}
+        </div>
+    </div>
+{% endset %}
+{% if not rule.error and rule.changeable %}
+    {# The form as wide as the page leaves it, its help then the models it picks beside it #}
+    <div class="row row-cards">
         <div class="col-lg-8">
             <div class="card">
                 <div class="card-body">
@@ -14,25 +24,22 @@
                 </div>
             </div>
         </div>
-        {% if rule.help %}
-            <div class="col-lg-4">
-                <div class="card">
+        <div class="col-lg-4">
+            {% if rule.help %}
+                <div class="card mb-3">
                     <div class="card-body">
                         <ul class="w4os-models-help text-secondary mb-0">
                             {% for key in rule.help %}<li>{{ ('w4os.' ~ key)|t }}</li>{% endfor %}
                         </ul>
                     </div>
                 </div>
-            </div>
-        {% endif %}
+            {% endif %}
+            {{ preview }}
+        </div>
     </div>
+{% else %}
+    {{ preview }}
 {% endif %}
-<div class="card">
-    <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ (rule.preview.label ?? 'models_list'))|t }}</h3></div>
-    <div class="card-body w4os-models-preview"{% if rule.preview and rule.changeable %} data-w4os-models-preview="{{ ('?format=preview')|e('html_attr') }}" data-form="w4os-models" data-filters="{{ rule.preview.filters|json_encode|e('html_attr') }}" aria-live="polite"{% endif %}>
-        {% include 'w4os/models-preview.html.twig' with { models: w4os_models() ?? [] } %}
-    </div>
-</div>
 {% if rule.preview and rule.changeable %}
     {% do assets.addJs('plugin://w4os/js/models-preview.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}

@@ -128,8 +128,8 @@
 /* The views of a list above it (All, the values of its views), apart by a bar as w4os-wp has them */
 .w4os-admin .w4os-views .list-inline-item:not(:last-child)::after { content: "|"; margin-left: .5rem; color: var(--tblr-border-color); }
 /* The avatar models to choose from as pictures (a new avatar), as the site shows them on its registration */
-.w4os-admin .w4os-models { list-style: none; padding: 0; margin: .5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1rem; }
-.w4os-admin .w4os-models > li { list-style: none; margin: 0; padding: 0; }
+.w4os-admin ul.w4os-models { list-style: none; padding: 0; margin: .5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1rem; }
+.w4os-admin ul.w4os-models > li { list-style: none; margin: 0; padding: 0; }
 .w4os-admin .w4os-model { display: block; width: 100%; cursor: pointer; position: relative; }
 .w4os-admin .w4os-model input { position: absolute; opacity: 0; }
 .w4os-admin .w4os-model figure { display: block; width: 100%; margin: 0; opacity: .55; transition: opacity .2s; border-radius: var(--tblr-border-radius); outline-offset: 2px; }

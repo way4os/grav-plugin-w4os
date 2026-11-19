@@ -13,9 +13,9 @@
 .w4os-links .button { margin-right: .5rem; }
 
 /* The avatar models, as w4os shows them: pictures to pick, the chosen one outlined */
-.w4os-models { list-style: none; padding: 0; margin: .5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1rem; }
-.w4os-models > li { list-style: none; margin: 0; padding: 0; }
-.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; position: relative; }
+ul.w4os-models { list-style: none; padding: 0; margin: .5rem 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: 1rem; }
+ul.w4os-models > li { list-style: none; margin: 0; padding: 0; }
+ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; position: relative; }
 .w4os-model input { position: absolute; opacity: 0; }
 .w4os-model figure { display: block; width: 100%; margin: 0; opacity: .55; transition: opacity .2s; border-radius: .4rem; outline-offset: 2px; }
 .w4os-model:hover figure { opacity: .8; }

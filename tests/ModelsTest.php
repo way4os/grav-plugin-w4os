@@ -68,4 +68,13 @@ describe('the avatar models page of the admin', function () {
             ->toMatchArray(['type' => 'w4os_avatar', 'multiple' => true, 'validate' => ['type' => 'array']])
             ->and(Items::input(['name' => 'owner', 'label' => 'owner', 'type' => 'avatar']))->not->toHaveKey('multiple');
     });
+
+    test('its page is laid out by the page, the grid of the pictures applies to their list alone (the page is w4os-models too)', function () {
+        foreach (['css/admin.css', 'css/w4os.css'] as $file) {
+            preg_match_all('/^([^{}]*\.w4os-models[^-\w][^{]*)\{/m', (string) file_get_contents(dirname(__DIR__)."/$file"), $rules);
+            foreach ($rules[1] as $selector) {
+                expect($selector)->toContain('ul.w4os-models');
+            }
+        }
+    });
 });
