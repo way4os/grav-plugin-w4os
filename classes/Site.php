@@ -22,6 +22,23 @@ final class Site
     /** Where the password of the database of a described grid is kept, out of the configuration. */
     public const DATABASE_SECRET = 'user-data://w4os/database.json';
 
+    /**
+     * An area (m²) in the unit it reads in: m² under a hectare, hectares under a square kilometre, km² above; the key of its unit in
+     * the catalog and its number.
+     *
+     * @return array{0: string, 1: string}
+     */
+    public static function areaText(float $m2): array
+    {
+        $short = fn (float $value) => rtrim(rtrim(number_format($value, 2), '0'), '.');
+
+        return match (true) {
+            $m2 < 10000 => ['unit_m2', number_format($m2)],
+            $m2 < 1000000 => ['unit_ha', $short($m2 / 10000)],
+            default => ['unit_km2', $short($m2 / 1000000)],
+        };
+    }
+
     /** What the engine of the grid's machine says of it for the helpers of the site, kept with its time (keptDescription()). */
     public const SITE_DESCRIPTION = 'user-data://w4os/site-description.json';
 

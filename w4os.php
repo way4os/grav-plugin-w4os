@@ -304,6 +304,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_health_problems', fn () => $this->healthProblems()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_service', fn () => $this->service()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_area', fn ($m2) => $this->site()->translate('w4os.'.Site::areaText((float) $m2)[0], [Site::areaText((float) $m2)[1]])));
         $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_shortcodes', fn () => Site::SHORTCODES));
         $twig->addFunction(new \Twig\TwigFunction('w4os_creation', fn () => $this->creation()));

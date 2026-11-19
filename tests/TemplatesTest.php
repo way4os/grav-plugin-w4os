@@ -74,6 +74,26 @@ describe('templates', function () {
             ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love']]))->toContain('class="w4os-thumb w4os-thumb-person"', 'none-person');
     });
 
+    test('an area reads in its unit (m², ha, km²), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
+        expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_ha', '6.55'])
+            ->and(W4os\Grav\Site::areaText(5000))->toBe(['unit_m2', '5,000'])
+            ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19']);
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4os\Grav\Site::areaText((float) $m2))));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
+        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
+        $columns = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators')['columns'], null, 'name');
+
+        expect($cell->render(['column' => $columns['area'], 'item' => ['area' => 65536]]))->toContain('unit_ha:6.55')
+            ->and($cell->render(['column' => $columns['cpu'], 'item' => ['cpu' => 75]]))->toContain('progress-bar bg-warning', 'width: 75%', '75 %')
+            ->and($cell->render(['column' => $columns['cpu'], 'item' => ['cpu' => 12.5]]))->toContain('bg-success', 'width: 12.5%')
+            ->and($cell->render(['column' => $columns['memory'], 'item' => ['memory' => 95, 'memoryUsed' => 15565, 'memoryTotal' => 16384]]))
+            ->toContain('bg-danger', '[w4os.usage_of:[w4os.unit_mb:15,565]|[w4os.unit_mb:16,384]]')
+            ->and($cell->render(['column' => $columns['cpu'], 'item' => []]))->not->toContain('progress');
+    });
+
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
         $list = (new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators');
         $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'state' => 'running', 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'mysql' => 'none', 'sqlite' => 'none']];
