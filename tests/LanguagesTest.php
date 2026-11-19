@@ -15,6 +15,19 @@ describe('languages', function () {
         exec('rm -rf '.escapeshellarg($folder));
     });
 
+    test('each file reads back every text as the catalog has it, on several lines and with quotes included', function () {
+        $folder = sys_get_temp_dir().'/w4os-languages-'.bin2hex(random_bytes(4));
+        exec('php '.escapeshellarg(dirname(__DIR__).'/dev/languages.php').' '.escapeshellarg($folder));
+        $texts = ['en' => Catalog::messages('en'), 'cy' => array_merge(Catalog::messages('en'), Catalog::messages('cy_GB'))];
+        foreach ($texts as $lang => $catalog) {
+            $read = (array) Symfony\Component\Yaml\Yaml::parseFile("$folder/$lang.yaml")['w4os'];
+            foreach ($catalog as $key => $text) {
+                expect($read[$key] ?? null)->toBe($text, "$lang $key");
+            }
+        }
+        exec('rm -rf '.escapeshellarg($folder));
+    });
+
     test('every problem code of the engine has its text, under the key the catalog gives it', function () {
         expect(Catalog::missingCodes())->toBe([])
             ->and(Forms::CODES)->toEqualCanonicalizing(array_keys(OpenSim\Api\Problem::CODES));
