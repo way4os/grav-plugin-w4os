@@ -1366,7 +1366,8 @@ class W4osPlugin extends Plugin
         foreach ((array) ($this->grav['page']->header()->w4os_cards ?? []) as $card) {
             $card = (array) $card;
             if (isset($card['block'])) {
-                $cards[] = ['kind' => 'block', 'block' => (string) $card['block'], 'args' => array_diff_key($card, ['block' => 1])];
+                $cards[] = ['kind' => 'block', 'block' => (string) $card['block'], 'title' => 'w4os.'.(string) ($card['title'] ?? 'admin_dashboard_'.str_replace('-', '_', (string) $card['block'])),
+                    'args' => array_diff_key($card, ['block' => 1, 'title' => 1])];
                 continue;
             }
             $key = (string) ($card['page'] ?? '');
@@ -1384,7 +1385,8 @@ class W4osPlugin extends Plugin
             };
             if (isset($card['counts'])) {
                 $counts = array_map(fn ($filter) => $count((array) $filter), array_values((array) $card['counts']));
-                $cards[] = ['kind' => 'counts', 'page' => $key, 'list' => $counts[0]['list'] ?? null, 'url' => $url([]), 'counts' => $counts,
+                $all = $count([]);
+                $cards[] = ['kind' => 'counts', 'page' => $key, 'list' => $counts[0]['list'] ?? null, 'url' => $url([]), 'total' => $all['total'], 'counts' => $counts,
                     'error' => array_values(array_filter(array_column($counts, 'error')))[0] ?? null];
                 continue;
             }

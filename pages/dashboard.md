@@ -9,8 +9,8 @@ visible: false
 # (`rows`, its `title`), each leading to its page (`item`)
 w4os_cards:
   # The widgets of w4os-wp: the grid info and status, the recent users
-  - { block: grid-info }
-  - { block: grid-status }
+  - { block: grid-info, title: admin_dashboard_grid_info }
+  - { block: grid-status, title: admin_dashboard_grid_status }
   - { page: regions, part: { status: online }, text: regions_online }
   - { page: simulators, part: { running: 'yes' }, text: simulators_running }
   # The avatars online and pending, the avatar models and the service accounts, as the status page of w4os-wp counts them

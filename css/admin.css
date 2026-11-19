@@ -152,3 +152,10 @@
     break-inside: avoid;
     margin-bottom: var(--tblr-page-padding, 1.5rem);
 }
+
+/* A block of the helpers in a card of the dashboard: its table from edge to edge, as Tabler's tables of cards */
+.w4os-dashboard-block { padding: 0; }
+.w4os-dashboard-block .block-table { width: 100%; border-collapse: collapse; margin: 0; }
+.w4os-dashboard-block .block-table th, .w4os-dashboard-block .block-table td { padding: .5rem 1rem; border-bottom: var(--tblr-border-width, 1px) solid var(--tblr-border-color, #e6e7e9); vertical-align: top; }
+.w4os-dashboard-block .block-table tr:last-child th, .w4os-dashboard-block .block-table tr:last-child td { border-bottom: 0; }
+.w4os-dashboard-block .block-table th { font-weight: var(--tblr-font-weight-medium, 500); color: var(--tblr-secondary, #6c7a91); text-align: left; }

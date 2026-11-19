@@ -22,30 +22,34 @@ describe('the dashboard', function () {
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
 
-    test('shows its cards in their order, in columns that leave a small card small: the blocks of the grid first, each one column', function () use ($api, $render) {
+    test('shows its cards in their order, in columns that leave a small card small, each the same: its title in its header, its link to its list in its footer', function () use ($api, $render) {
         $html = $render([
-            ['kind' => 'block', 'block' => 'grid-info', 'args' => []],
-            ['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'text' => 'w4os.regions_online', 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null],
+            ['kind' => 'block', 'block' => 'grid-info', 'title' => 'w4os.admin_dashboard_grid_info', 'args' => []],
+            ['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null],
         ]);
 
         expect($html)->toContain('class="w4os-dashboard"', '<div class="w4os-dashboard-card">')
+            ->and(substr_count($html, '<div class="card-header"><h3 class="card-title">'))->toBe(2)
+            ->and($html)->toContain('<h3 class="card-title">[w4os.admin_dashboard_grid_info]</h3>', 'block:grid-info')
             ->and(strpos($html, 'block:grid-info'))->toBeLessThan(strpos($html, '[w4os.regions_title]'))
             ->and($html)->not->toContain('col-lg-6', 'row-deck');
     });
 
-    test('says how many of a list are online of all it knows, leading to the list and to the ones online', function () use ($api, $render) {
-        $html = $render([['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'text' => 'w4os.regions_online', 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null]]);
+    test('says how many of a list are online of all it knows as n/n, its link to the list apart in its footer', function () use ($api, $render) {
+        $html = $render([['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null]]);
 
-        expect($html)->toContain('[w4os.regions_title]', '[w4os.regions_online:5|7]', 'href="&#x2F;regions"', 'href="&#x2F;regions&#x3F;status&#x3D;online"');
+        expect($html)->toContain('[w4os.regions_title]', '>5/7<', '<div class="card-footer text-end"><a href="&#x2F;regions">[w4os.see_all]</a></div>')
+            ->and($html)->not->toContain('regions_online');
     });
 
-    test('puts the counts of a list in one card, each by the plain name of what it counts, leading to the list so filtered', function () use ($api, $render) {
+    test('puts the counts of a list in one card, its total first, each by the plain name of what it counts, leading to the list so filtered', function () use ($api, $render) {
         $counts = [['filter' => ['online' => 'online'], 'total' => 0, 'url' => '/avatars?online=online'], ['filter' => ['status' => 'pending'], 'total' => 1, 'url' => '/avatars?status=pending'],
             ['filter' => ['type' => 'model'], 'total' => 0, 'url' => '/avatars?type=model'], ['filter' => ['type' => 'service'], 'total' => 2, 'url' => '/avatars?type=service']];
-        $html = $render([['kind' => 'counts', 'page' => 'manage', 'list' => $api->listOf('avatars'), 'counts' => $counts, 'url' => '/avatars', 'error' => null]]);
+        $html = $render([['kind' => 'counts', 'page' => 'manage', 'list' => $api->listOf('avatars'), 'total' => 16, 'counts' => $counts, 'url' => '/avatars', 'error' => null]]);
 
         expect(substr_count($html, 'class="card w4os-stat"'))->toBe(1)
-            ->and($html)->toContain('[w4os.manage_title]', 'href="&#x2F;avatars&#x3F;status&#x3D;pending"', '[w4os.status_pending]', '[w4os.avatar_type_service]', '>2<')
+            ->and($html)->toContain('[w4os.manage_title]', '[w4os.admin_dashboard_total]', '>16<', 'href="&#x2F;avatars&#x3F;status&#x3D;pending"', '[w4os.status_pending]', '[w4os.avatar_type_service]', '>2<', '[w4os.see_all]')
+            ->and(strpos($html, '[w4os.admin_dashboard_total]'))->toBeLessThan(strpos($html, '[w4os.online]'))
             ->and($html)->not->toContain('[w4os.label_value');
     });
 
@@ -54,7 +58,7 @@ describe('the dashboard', function () {
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
         $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('[w4os.recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.see_all]', 'href="&#x2F;avatars"')
+        expect($html)->toContain('[w4os.recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a href="&#x2F;avatars">[w4os.see_all]</a></div>')
             ->not->toContain(date('Y-m-d', $created));
     });
 

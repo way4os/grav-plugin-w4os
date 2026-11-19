@@ -65,8 +65,8 @@ describe('the dashboard of the admin', function () {
         $header = Symfony\Component\Yaml\Yaml::parse(explode('---', $page)[1]);
 
         expect($header['w4os_cards'])->toBe([
-            ['block' => 'grid-info'],
-            ['block' => 'grid-status'],
+            ['block' => 'grid-info', 'title' => 'admin_dashboard_grid_info'],
+            ['block' => 'grid-status', 'title' => 'admin_dashboard_grid_status'],
             ['page' => 'regions', 'part' => ['status' => 'online'], 'text' => 'regions_online'],
             ['page' => 'simulators', 'part' => ['running' => 'yes'], 'text' => 'simulators_running'],
             ['page' => 'manage', 'counts' => [['online' => 'online'], ['status' => 'pending'], ['type' => 'model'], ['type' => 'service']]],
