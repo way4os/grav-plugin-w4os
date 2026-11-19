@@ -164,3 +164,5 @@
 .w4os-dashboard-block .block-table th, .w4os-dashboard-block .block-table td { padding: .5rem 1rem; border-bottom: var(--tblr-border-width, 1px) solid var(--tblr-border-color, #e6e7e9); vertical-align: top; }
 .w4os-dashboard-block .block-table tr:last-child th, .w4os-dashboard-block .block-table tr:last-child td { border-bottom: 0; }
 .w4os-dashboard-block .block-table th { font-weight: var(--tblr-font-weight-medium, 500); color: var(--tblr-secondary, #6c7a91); text-align: left; }
+/* The values of the hidden columns under the name, one after the other */
+.w4os-folded > span:not(:last-child)::after { content: " · "; }

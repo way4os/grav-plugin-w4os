@@ -45,10 +45,11 @@ describe('the list of a page of the admin', function () {
         // The name is the link of the row
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
             // A value that does not say what it is after the label of its column
-            ->and($html)->toContain('<div class="w4os-subtitle text-secondary d-xl-none">[w4os.label_value:[w4os.column_grid]|demo] · [w4os.label_value:[w4os.column_port]|9040]</div>')
+            // Each in it until its column shows: 2 from md, 3 from xl, 4 from xxl (Tabler's breakpoints)
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary w4os-folded d-xxl-none"><span class="d-xl-none">[w4os.label_value:[w4os.column_grid]|demo]</span><span class="d-xxl-none">[w4os.label_value:[w4os.column_port]|9040]</span></div>')
             // Its address under its name, at every width (the first of its subtitle attributes that has one)
             ->and($html)->toContain('<div class="w4os-subtitle text-secondary">h:9040</div>')
-            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">')
+            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">', '<th class="w4os-cell-number d-none d-md-table-cell">', '<th class="w4os-cell-number d-none d-xxl-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
     });
@@ -71,7 +72,7 @@ describe('the list of a page of the admin', function () {
             ->and(W4OS\Views\Dates::format($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
             ->and(W4OS\Views\Dates::format($old, 'en'))->toBe('Nov 16, 2026')
             ->and(W4OS\Views\Dates::format(null, 'fr'))->toBe('')
-            ->and($html)->toContain('>bart@example.org · [w4os.role_resident] · [w4os.label_value:[w4os.born]|'.$short.'] · [w4os.label_value:[w4os.last_seen]|il y a 3 jours]</div>')
+            ->and($html)->toContain('<span class="d-md-none">[w4os.role_resident]</span><span class="d-md-none">[w4os.label_value:[w4os.last_seen]|il y a 3 jours]</span><span class="d-xl-none">bart@example.org</span><span class="d-xl-none">[w4os.label_value:[w4os.born]|'.$short.']</span></div>')
             ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
             ->and($html)->not->toContain(date('Y-m-d', $older));
     });

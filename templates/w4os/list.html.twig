@@ -74,11 +74,14 @@
         </div>
     {% else %}
         {% set menu = links or list.actions %}
+        {# The breakpoint of Tabler from which a column shows, by its priority (1: at every width); below it, its value in the grey
+           line under the name #}
+        {% set tiers = {2: 'md', 3: 'xl'} %}
         <div class="table-responsive">
         <table class="table table-vcenter card-table w4os-list w4os-{{ list.type|e('html_attr') }}">
             <thead><tr>
                 {% for column in view.columns %}
-                    {% set wide = column.primary ? '' : ' d-none d-xl-table-cell' %}
+                    {% set wide = column.primary ? '' : ' d-none d-' ~ (tiers[column.priority] ?? 'xxl') ~ '-table-cell' %}
                     {% if column.sort %}{{ cells.sorted(column, view.query, wide) }}{% else %}<th class="w4os-cell-{{ column.type|e('html_attr') }}{{ wide }}">{{ ('w4os.' ~ column.label)|t }}</th>{% endif %}
                 {% endfor %}
                 {% if menu %}<th class="w-1"><span class="visually-hidden">{{ 'w4os.actions'|t }}</span></th>{% endif %}
@@ -88,19 +91,20 @@
                 <tr{% if row.status %} class="w4os-{{ row.status|e('html_attr') }}"{% endif %}>
                 {% for column in view.columns %}
                     {% if column.type == 'indicators' %}
-                    <td class="w4os-cell-indicators{{ column.primary ? '' : ' d-none d-xl-table-cell' }}">{{ cells.indicators(row.indicators[column.name] ?? [], row) }}</td>
+                    <td class="w4os-cell-indicators{{ column.primary ? '' : ' d-none d-' ~ (tiers[column.priority] ?? 'xxl') ~ '-table-cell' }}">{{ cells.indicators(row.indicators[column.name] ?? [], row) }}</td>
                     {% elseif loop.first %}
                     <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}">
                         {% if row.link %}<a class="text-reset w4os-row-link" href="{{ row.link|e('html_attr') }}">{{ cells.cell(column.definition, row.item) }}</a>{% else %}{{ cells.cell(column.definition, row.item) }}{% endif %}
                         {% if row.subtitle %}<div class="w4os-subtitle text-secondary">{% if row.subtitleLink %}<a class="text-secondary" href="{{ row.subtitleLink|e('html_attr') }}">{{ row.subtitle }}</a>{% else %}{{ row.subtitle }}{% endif %}</div>{% endif %}
-                        {# The secondary columns, in a grey line, on a narrow screen; a value that does not say what it is (a date, a
-                           number, a name) after the label of its column #}
+                        {# The columns hidden at this width, in a grey line, each until its column shows (the ones shown first first,
+                           so that the ones left are its end); a value that does not say what it is (a date, a number, a name) after the
+                           label of its column #}
                         {% set parts = [] %}
-                        {% for other in view.secondary %}{% set part = cells.cell(other.definition, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([other.bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part)]) %}{% endif %}{% endfor %}
-                        {% if parts %}<div class="w4os-subtitle text-secondary d-xl-none">{{ parts|join(' · ') }}</div>{% endif %}
+                        {% for other in view.secondary %}{% set part = cells.cell(other.definition, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: other.bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
+                        {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded d-{{ (parts|last).tier }}-none">{% for part in parts %}<span class="d-{{ part.tier }}-none">{{ part.text }}</span>{% endfor %}</div>{% endif %}
                     </td>
                     {% else %}
-                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' d-none d-xl-table-cell' }}">{{ cells.cell(column.definition, row.item) }}</td>
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' d-none d-' ~ (tiers[column.priority] ?? 'xxl') ~ '-table-cell' }}">{{ cells.cell(column.definition, row.item) }}</td>
                     {% endif %}
                 {% endfor %}
                 {% if menu %}<td class="w4os-actions">{{ cells.menu(row) }}</td>{% endif %}
