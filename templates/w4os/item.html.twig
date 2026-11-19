@@ -9,10 +9,21 @@
 {% else %}
     {% set id = page_item.item.uuid ?? page_item.item.id ?? '' %}
     <div class="card w4os-item">
-        {{ parts.tabs([{url: '?' ~ {id: id}|url_encode, label: 'w4os.tab_overview'|t, active: not page_item.edit}]
-            |merge(page_item.changeable ? [{url: '?' ~ {id: id, edit: 1}|url_encode, label: 'w4os.action_edit'|t, active: page_item.edit}] : [])) }}
+        {% set lists = page_item.lists ?? [] %}
+        {% set tab = page_item.tab ?? null %}
+        {{ parts.tabs([{url: '?' ~ {id: id}|url_encode, label: 'w4os.tab_overview'|t, active: not page_item.edit and not tab}]
+            |merge(page_item.changeable ? [{url: '?' ~ {id: id, edit: 1}|url_encode, label: 'w4os.action_edit'|t, active: page_item.edit and not tab}] : [])
+            |merge(lists|map(list => {url: '?' ~ {id: id, tab: list.type}|url_encode, label: ('w4os.' ~ list.label)|t, active: tab == list.type}))) }}
         <div class="card-body">
-        {% if page_item.edit %}
+        {% if tab %}
+            {# A list of its own (the parcels of a region): the engine's list kept to the item, its links keeping the item and the tab #}
+            {% set own = lists|filter(list => list.type == tab)|first %}
+            {% set data = w4os_list({type: own.type, fixed: {(own.filter): id}}) %}
+            {% include 'w4os/list.html.twig' with {
+                list: data.list, items: data.items, meta: data.meta, query: (data.query ?? {})|merge({id: id, tab: tab}), fixed: data.fixed ?? {}, error: data.error,
+                links: [], texts: {search: 'w4os.' ~ own.search, empty: 'w4os.' ~ own.empty, count: 'w4os.' ~ own.count, title: 'w4os.' ~ own.label}
+            } %}
+        {% elseif page_item.edit %}
             {% include 'w4os/admin-form.html.twig' with {form: forms('w4os-item')} %}
             {% do assets.add('jquery', 101) %}
             {% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}

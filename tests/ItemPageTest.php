@@ -59,6 +59,24 @@ describe('the page of an item in the admin', function () {
             ->and($html)->not->toContain('[w4os.column_region]', '[w4os.column_map]', '[w4os.column_enabled]');
     });
 
+    test('has the lists of its own as tabs (the parcels of a region, as w4os-wp shows them on its page): the list of the engine kept to the item', function () use ($page, $api) {
+        $twig = item_twig(['lists' => [['type' => 'parcels', 'filter' => 'region', 'label' => 'admin_tab_parcels', 'search' => 'admin_search_parcels', 'empty' => 'admin_no_parcels', 'count' => 'admin_parcels_count']], 'tab' => 'parcels'] + $page);
+        $asked = [];
+        $twig->addFunction(new TwigFunction('w4os_list', function (array $options) use (&$asked, $api) {
+            $asked[] = $options;
+
+            return ['list' => $api->listOf('parcels'), 'items' => [['uuid' => 'p1', 'name' => 'Plaza', 'uri' => 'grid.example.org:8002/Test East/128/128/25', 'teleport' => 'hop://grid.example.org:8002/Test%20East/128/128/25', 'area' => 65536]], 'meta' => ['total' => 1], 'query' => ['search' => 'pl'], 'fixed' => ['region' => 'r1'], 'error' => null];
+        }));
+        $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n [$key]"));
+        $html = $twig->render('w4os/item.html.twig', []);
+
+        expect($asked)->toBe([['type' => 'parcels', 'fixed' => ['region' => 'r1']]])
+            ->and($html)->toContain('class="nav-link active" href="&#x3F;id&#x3D;r1&amp;tab&#x3D;parcels" aria-current="page">[w4os.admin_tab_parcels]', 'Plaza', 'href="hop&#x3A;&#x2F;&#x2F;grid.example.org&#x3A;8002&#x2F;Test&#x25;20East&#x2F;128&#x2F;128&#x2F;25"', '1 [w4os.admin_parcels_count]')
+            // Its sorts, pages and filters keep the item and the tab
+            ->and($html)->toContain('id=r1&amp;tab=parcels')
+            ->and($html)->not->toContain('<div class="datagrid">');
+    });
+
     test('has no tab to change it when the visitor may not', function () use ($page) {
         expect(item_twig(['changeable' => false] + $page)->render('w4os/item.html.twig', []))->not->toContain('nav-tabs', 'edit=1');
     });

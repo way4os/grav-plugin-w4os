@@ -7,6 +7,9 @@ visible: false
 w4os_item:
   type: regions
   list: regions
+  # Its lists of its own as tabs, as w4os-wp shows them on its page: its parcels (the engine's list, kept to the region)
+  lists:
+    - { type: parcels, filter: region, label: admin_tab_parcels, search: admin_search_parcels, empty: admin_no_parcels, count: admin_parcels_count }
 form:
   name: w4os-item
   classes: 'w4os-form w4os-form-item'

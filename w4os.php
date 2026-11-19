@@ -1288,7 +1288,7 @@ class W4osPlugin extends Plugin
      * The item of the page of an item (?id=, or the id its form posts; w4os_item in its front matter): its description by the
      * engine (Contract::itemOf()), the item, the roles of the visitor for it.
      *
-     * @return array{type: string, list: ?string, form: ?array<string,mixed>, item: ?array<string,mixed>, roles: list<string>, error: ?string}
+     * @return array{type: string, list: ?string, form: ?array<string,mixed>, item: ?array<string,mixed>, roles: list<string>, error: ?string, lists: list<array<string,string>>, tab: ?string}
      */
     private function item(): array
     {
@@ -1298,6 +1298,11 @@ class W4osPlugin extends Plugin
             $type = (string) ($options['type'] ?? '');
             $page = ['type' => $type, 'list' => isset($options['list']) ? (string) $options['list'] : null, 'form' => $this->site()->openApi()->itemOf($type), 'item' => null, 'view' => null, 'roles' => [], 'error' => null, 'groups' => [], 'changeable' => false, 'edit' => false];
             $uri = $this->grav['uri'];
+            // The lists of its own its page shows as tabs (the parcels of a region: lists, each its type, the filter that keeps it to
+            // the item, its label), the one asked (?tab=)
+            $lists = array_values(array_filter((array) ($options['lists'] ?? []), fn ($list) => is_array($list) && isset($list['type'], $list['filter'])));
+            $tab = (string) $uri->query('tab');
+            $page += ['lists' => $lists, 'tab' => in_array($tab, array_column($lists, 'type'), true) ? $tab : null];
             // Its UUID: in the address (?id=, or the parameter of the page: ?avatar=), posted by its form or by an action
             $param = (string) ($options['param'] ?? 'id');
             $id = trim((string) ($uri->post("data.$param") ?: $uri->post('id') ?: $uri->query($param)));
