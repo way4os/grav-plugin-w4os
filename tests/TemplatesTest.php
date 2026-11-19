@@ -82,7 +82,11 @@ describe('templates', function () {
             ->and(W4os\Grav\Site::areaText(524288, 'fr'))->toBe(['unit_km2', '0,52'])
             ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::number(15565, 'fr')))->toBe('15 565')
             ->and(W4os\Grav\Site::number(15565, 'de'))->toBe('15.565')
-            ->and(W4os\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5');
+            ->and(W4os\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5')
+            // A counted text (2 150 prims) says its number as the others
+            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::counted('%d prims', 2150, 'fr')))->toBe('2 150 prims')
+            ->and(W4os\Grav\Site::counted('%d prims', 2150, 'en'))->toBe('2,150 prims')
+            ->and(W4os\Grav\Site::counted('%d av.', 0, 'fr'))->toBe('0 av.');
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4os\Grav\Site::areaText((float) $m2))));
         $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));

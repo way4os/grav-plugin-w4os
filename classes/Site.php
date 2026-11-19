@@ -1815,12 +1815,18 @@ final class Site
     {
         Bundled::library();
         $name = (string) preg_replace('/^w4os\./', '', $key);
-        if (! class_exists(\OpenSim\I18n\Catalog::class) || ! isset(\OpenSim\I18n\Catalog::SINGULARS[$name])) {
-            return $this->translate($key, [$n]);
-        }
         $language = (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en');
+        if (! class_exists(\OpenSim\I18n\Catalog::class) || ! isset(\OpenSim\I18n\Catalog::SINGULARS[$name])) {
+            return self::counted($this->translate($key), $n, $language);
+        }
 
-        return sprintf(\OpenSim\I18n\Catalog::plural($language, $name, $n), $n);
+        return self::counted(\OpenSim\I18n\Catalog::plural($language, $name, $n), $n, $language);
+    }
+
+    /** A text that counts (%d prims) with its number said in the language of the page, as the others (2 150 prims). */
+    public static function counted(string $text, int $n, string $language = 'en'): string
+    {
+        return sprintf(str_replace('%d', '%s', $text), self::number($n, $language, 0));
     }
 
     /**
