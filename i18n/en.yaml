@@ -63,7 +63,6 @@ w4os:
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
   admin_menu_list: 'List'
   admin_avatar_created: 'The avatar %s is created.'
-  admin_tab_parcels: 'Parcels'
   admin_search_parcels: 'Parcel name'
   admin_no_parcels: 'No parcel'
   admin_parcels_count: '%d parcels'

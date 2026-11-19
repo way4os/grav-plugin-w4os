@@ -63,7 +63,6 @@ w4os:
   admin_route_help: 'La route des pages d’administration de la grille et du site, jamais sous celle de l’admin de Grav'
   admin_menu_list: 'Liste'
   admin_avatar_created: 'L''avatar %s est créé.'
-  admin_tab_parcels: 'Parcelles'
   admin_search_parcels: 'Nom de la parcelle'
   admin_no_parcels: 'Aucune parcelle'
   admin_parcels_count: '%d parcelles'

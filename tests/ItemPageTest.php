@@ -60,7 +60,7 @@ describe('the page of an item in the admin', function () {
     });
 
     test('has the lists of its own as tabs (the parcels of a region, as w4os-wp shows them on its page): the list of the engine kept to the item', function () use ($page, $api) {
-        $twig = item_twig(['lists' => [['type' => 'parcels', 'filter' => 'region', 'label' => 'admin_tab_parcels', 'search' => 'admin_search_parcels', 'empty' => 'admin_no_parcels', 'count' => 'admin_parcels_count']], 'tab' => 'parcels'] + $page);
+        $twig = item_twig(['lists' => [['type' => 'parcels', 'filter' => 'region', 'label' => 'parcels', 'search' => 'admin_search_parcels', 'empty' => 'admin_no_parcels', 'count' => 'admin_parcels_count']], 'tab' => 'parcels'] + $page);
         $asked = [];
         $twig->addFunction(new TwigFunction('w4os_list', function (array $options) use (&$asked, $api) {
             $asked[] = $options;
@@ -71,7 +71,7 @@ describe('the page of an item in the admin', function () {
         $html = $twig->render('w4os/item.html.twig', []);
 
         expect($asked)->toBe([['type' => 'parcels', 'fixed' => ['region' => 'r1']]])
-            ->and($html)->toContain('class="nav-link active" href="&#x3F;id&#x3D;r1&amp;tab&#x3D;parcels" aria-current="page">[w4os.admin_tab_parcels]', 'Plaza', 'href="hop&#x3A;&#x2F;&#x2F;grid.example.org&#x3A;8002&#x2F;Test&#x25;20East&#x2F;128&#x2F;128&#x2F;25"', '1 [w4os.admin_parcels_count]')
+            ->and($html)->toContain('class="nav-link active" href="&#x3F;id&#x3D;r1&amp;tab&#x3D;parcels" aria-current="page">[w4os.parcels]', 'Plaza', 'href="hop&#x3A;&#x2F;&#x2F;grid.example.org&#x3A;8002&#x2F;Test&#x25;20East&#x2F;128&#x2F;128&#x2F;25"', '1 [w4os.admin_parcels_count]')
             // Its sorts, pages and filters keep the item and the tab
             ->and($html)->toContain('id=r1&amp;tab=parcels')
             ->and($html)->not->toContain('<div class="datagrid">');
