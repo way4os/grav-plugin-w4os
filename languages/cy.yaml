@@ -350,6 +350,9 @@ w4os:
   column_prims: Prims
   column_usage: Defnydd
   column_scripts: Sgriptiau
+  count_avatars_short: '%d af.'
+  count_prims: '%d prim'
+  count_scripts: '%d sgript'
   column_internal_port: 'Porth Mewnol'
   internal_port_help: 'Nid porth cyhoeddus: dim ond ar beiriant ei efelychydd y mae angen iddo fod yn unigryw.'
   last_activity: 'Diweddaraeth Ola'

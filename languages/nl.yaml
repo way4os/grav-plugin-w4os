@@ -350,6 +350,9 @@ w4os:
   column_prims: Prims
   column_usage: Gebruik
   column_scripts: Scripts
+  count_avatars_short: '%d av.'
+  count_prims: '%d prims'
+  count_scripts: '%d scripts'
   column_internal_port: 'Interne poort'
   internal_port_help: 'Geen publieke poort: hij hoeft alleen uniek te zijn op de machine van zijn simulator.'
   last_activity: 'Laatste Activiteit'
