@@ -302,6 +302,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_creation', fn () => $this->creation()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
@@ -507,7 +509,17 @@ class W4osPlugin extends Plugin
 
             return;
         }
-        if ($form->getName() === 'w4os-models') {
+        if ($form->getName() === 'w4os-new') {
+            // The fields of a new avatar as the engine describes them (x-form of its creation), its button
+            $creation = $this->creation();
+            if ($creation['view'] !== null) {
+                $this->viewForm($form, $creation['view']);
+                $form->set('buttons', array_map(fn (array $button) => ['value' => 'w4os.'.$creation['form']['submit']] + $button, (array) $form->get('buttons')));
+            }
+
+            return;
+        }
+                if ($form->getName() === 'w4os-models') {
             // The fields of the rule as the engine describes them (x-form of the settings `models`), its values as the grid has them,
             // its button
             $rule = $this->modelsRule();
@@ -634,6 +646,13 @@ class W4osPlugin extends Plugin
                     $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(\W4OS\Views\FormView::locked($described, ['manager'], $site->level()))));
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
+                    // no break
+                case 'create':
+                    // A new avatar a manager makes: what the form was given, active at once; its page next
+                    $creation = $this->creation();
+                    $creation['view'] !== null && $site->canOperation('new') || throw new FormError('w4os.error_forbidden');
+                    $avatar = $site->forms()->create(array_diff_key($creation['view']->changes($data), ['id' => 1]));
+                    $this->done('w4os.admin_avatar_created', isset($routes['edit']) ? $routes['edit'].'?'.http_build_query(['avatar' => (string) ($avatar['uuid'] ?? '')]) : $routes['manage'], [(string) ($avatar['name'] ?? '')]);
                     // no break
                 case 'models':
                     // The rule of the avatar models, its fields the visitor changes only (FormView), written by the engine
@@ -793,6 +812,23 @@ class W4osPlugin extends Plugin
             }
             $form->setData($setting, $files);
         }
+    }
+
+    /**
+     * The form that makes an avatar, as the engine describes it (Contract::creationOf()), for the manager who may: its description
+     * and its view (w4os-views FormView, an item that is not there yet).
+     *
+     * @return array{form: ?array<string,mixed>, view: ?\W4OS\Views\FormView}
+     */
+    private function creation(): array
+    {
+        static $creation = null;
+        if ($creation !== null) {
+            return $creation;
+        }
+        $form = $this->site()->canOperation('new') ? $this->site()->openApi()->creationOf('avatars') : null;
+
+        return $creation = ['form' => $form, 'view' => $form === null ? null : \W4OS\Views\FormView::of($form, [], null, $this->site()->isManager(), $this->site()->level())];
     }
 
     /**

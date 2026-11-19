@@ -72,6 +72,22 @@ final class Forms
         ];
     }
 
+    /**
+     * An avatar a manager makes (the form of its creation, Contract::creationOf()): what the form was given only, active at once, as
+     * w4os-wp makes it from its admin; no mail to confirm.
+     *
+     * @param array<string,mixed> $attributes firstName, lastName, email, password, model
+     * @return array<string,mixed> the avatar made
+     */
+    public function create(array $attributes): array
+    {
+        $given = array_filter(array_map(fn ($value) => is_string($value) ? trim($value) : $value, $attributes), fn ($value) => $value !== null && $value !== '');
+        isset($attributes['password']) && $given['password'] = (string) $attributes['password'];
+        [$avatar] = $this->ask(fn () => $this->engine->createAvatar($given + ['active' => true]));
+
+        return $avatar;
+    }
+
     /** @return array<string,mixed> the avatar, now active, or with its new email */
     public function confirm(string $token): array
     {

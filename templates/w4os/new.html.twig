@@ -1,0 +1,12 @@
+{# A new avatar, as w4os-wp makes it: its help first (the points of the engine's description), then its form (the fields of the
+   creation of w4os-wp: the names, the email, the password, the model among the pictures of the models) #}
+{% set creation = w4os_creation() %}
+{% if creation.form %}
+    <div class="card">
+        <div class="card-body">
+            {% for key in creation.form.description %}<p class="text-secondary">{{ ('w4os.' ~ key)|t }}</p>{% endfor %}
+            {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-new') } %}
+        </div>
+    </div>
+    {% do assets.addJs('plugin://w4os/js/avatar-name.js', {group: 'bottom', loading: 'defer'}) %}
+{% endif %}

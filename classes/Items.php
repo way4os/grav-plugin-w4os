@@ -156,11 +156,16 @@ final class Items
             'avatar' => ['type' => 'w4os_avatar'],
             default => ['type' => 'text'],
         };
+        // The avatar models to choose from, as pictures (the choice of a new avatar), none for the default outfit
+        str_ends_with((string) ($field['source']['path'] ?? ''), '/avatar-models') && $input = ['type' => 'w4os_models', 'validate' => ['type' => 'radio']];
+        // What a value must be: its length, its form (the names the viewers take)
+        isset($field['maxLength']) && in_array($input['type'], ['text', 'email', 'password', 'url'], true) && $input['maxlength'] = (int) $field['maxLength'];
 
         // A field of several values (the avatars of a list): an array
         ! empty($field['multiple']) && $field['type'] === 'avatar' && $input += ['multiple' => true];
         $validate = array_filter(['required' => ! empty($field['required']) ?: null, 'max' => isset($field['maxLength']) ? (int) $field['maxLength'] : null,
-            'type' => ! empty($field['multiple']) ? 'array' : null], fn ($rule) => $rule !== null);
+            'type' => ! empty($field['multiple']) ? 'array' : null, 'pattern' => isset($field['pattern']) ? (string) $field['pattern'] : null], fn ($rule) => $rule !== null);
+        $validate = ($input['validate'] ?? []) + $validate;
 
         isset($field['placeholder']) && $input['placeholder'] = 'w4os.'.$field['placeholder'];
 

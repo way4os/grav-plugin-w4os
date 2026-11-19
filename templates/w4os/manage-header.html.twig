@@ -1,0 +1,14 @@
+{# The header of the list of the avatars: its title, the button that makes one for whom may (the engine's create, w4os_create()) #}
+{% set create = w4os_create('avatars') %}
+<div class="page-header d-print-none">
+    <div class="container-fluid">
+        <div class="row g-2 align-items-center">
+            <div class="col"><h2 class="page-title">{{ page.title }}</h2></div>
+            {% if create %}
+            <div class="col-auto ms-auto">
+                <a class="btn btn-primary" href="{{ create.url|e('html_attr') }}"><i class="ti ti-plus me-1" aria-hidden="true"></i>{{ ('w4os.' ~ create.label)|t }}</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

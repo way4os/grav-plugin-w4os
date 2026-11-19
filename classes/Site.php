@@ -315,8 +315,8 @@ final class Site
     public const ADMIN_ROUTE = '/w4os';
 
     public const ADMIN_ROUTES = [
-        'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'regions' => '/regions', 'region' => '/regions/region',
-        'simulators' => '/simulators', 'models' => '/models', 'health' => '/health', 'settings' => '/settings',
+        'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'new' => '/avatars/new', 'regions' => '/regions',
+        'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health', 'settings' => '/settings',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -553,6 +553,7 @@ final class Site
             'settings' => 'w4os.admin_site_settings',
             'health' => 'w4os.admin_health_title',
             'models' => 'w4os.settings_models',
+            'new' => 'w4os.action_new_avatar',
             default => 'w4os.'.$type.'_title',
         };
     }
@@ -798,10 +799,10 @@ final class Site
     ];
 
     /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */
-    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models']];
+    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models'], 'new' => ['post', '/grids/{grid}/avatars']];
 
     /** The section of the admin a page is in: its list for the page of one item. */
-    public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage'];
+    public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage', 'new' => 'manage'];
 
     /** The items an admin page lists: the page shows to whom the contract lets read them. */
     public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators'];
@@ -957,6 +958,19 @@ final class Site
         [$method, $path] = self::ADMIN_OPERATIONS[$page] ?? [null, null];
 
         return $method !== null && $this->isManager() && Access::allows($this->openApi()->access($method, $path), $this->level());
+    }
+
+    /**
+     * The button above a list that makes an item (the engine's create) for whom may, at the page of its form: its address and the
+     * catalog key of its label; null otherwise.
+     *
+     * @return ?array{url: string, label: string}
+     */
+    public function createLink(string $type): ?array
+    {
+        $form = $type === 'avatars' && isset($this->routes()['new']) && $this->canOperation('new') ? $this->openApi()->creationOf($type) : null;
+
+        return $form === null ? null : ['url' => $this->path('new', true), 'label' => $form['title']];
     }
 
     public function can(string $type, string $what = 'change'): bool

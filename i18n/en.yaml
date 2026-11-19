@@ -62,6 +62,7 @@ w4os:
   admin_route: 'Admin pages'
   admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
   admin_menu_list: 'List'
+  admin_avatar_created: 'The avatar %s is created.'
   admin_health_title: 'Health'
   admin_health_ok: 'All that is checked answers as it should.'
   admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
