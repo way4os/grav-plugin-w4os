@@ -59,7 +59,55 @@
     {% endfor %}
     {% do assets.addJs('plugin://w4os/js/health.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}
-{% if data.addresses %}
+{% if data.addresses.services ?? false %}
+    {# The addresses of the grid by their use (the Robust services, the helpers the simulators and the viewers call, the pages, the
+       web tools, the web assets, the tasks), then their file and section, each its exact key, its name (its description as its tip),
+       its address and where it comes from; what is not set says so #}
+    {% set usages = {
+        'robust-viewers': 'w4os.usage_robust_viewers', 'robust-simulators': 'w4os.usage_robust_simulators',
+        'helper-viewers': 'w4os.usage_helper_viewers', 'helper-simulators': 'w4os.usage_helper_simulators', 'page': 'w4os.usage_page',
+        'web-tool': 'w4os.usage_web_tool', 'web-assets': 'w4os.usage_web_assets', 'task': 'w4os.usage_task',
+    } %}
+    {% set sources = {
+        provider: 'w4os.admin_health_source_provider', config: 'w4os.admin_health_source_config', live: 'w4os.admin_health_source_live',
+        default: 'w4os.admin_health_source_default', simulator: 'w4os.admin_health_source_simulator',
+    } %}
+    {% set services = data.addresses.services %}
+    {% for usage in usages|keys|merge(services|map(s => (s.usage ?? ''))|filter(u => (u and usages[u] is not defined))) %}
+        {% set rows = services|filter(s => (s.usage ?? '') == usage)|sort((a, b) => (((a.file ?? '~') ~ (a.section ?? '') ~ (a.setting ?? a.key)) <=> ((b.file ?? '~') ~ (b.section ?? '') ~ (b.setting ?? b.key)))) %}
+        {% if rows %}
+        <div class="card mb-3 w4os-health-addresses">
+            <div class="card-header"><h3 class="card-title">{{ usages[usage] is defined ? usages[usage]|t : usage }}</h3></div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead><tr>
+                        <th>{{ 'w4os.admin_health_setting'|t }}</th>
+                        <th>{{ 'w4os.admin_health_service'|t }}</th>
+                        <th>{{ 'w4os.admin_health_address'|t }}</th>
+                        <th>{{ 'w4os.admin_health_source'|t }}</th>
+                    </tr></thead>
+                    <tbody>
+                    {% set place = null %}
+                    {% for row in rows %}
+                        {% set here = (row.file ?? '') ~ '|' ~ (row.section ?? '') %}
+                        {% if here != place and (row.file or row.section) %}
+                            <tr class="bg-transparent"><th colspan="4" class="fw-normal">{% if row.file %}<code>{{ row.file }}</code>{% endif %}{% if row.section %} <span class="text-secondary">[{{ row.section }}]</span>{% endif %}</th></tr>
+                        {% endif %}
+                        {% set place = here %}
+                        <tr>
+                            <td>{% if row.setting %}<code>{{ row.setting }}</code>{% endif %}</td>
+                            <td{% if row.description %} title="{{ ('w4os.' ~ row.description)|t|e('html_attr') }}"{% endif %}>{{ row.label ? ('w4os.' ~ row.label)|t : row.key }}</td>
+                            <td class="text-break">{% if row.url %}<a href="{{ row.url|e('html_attr') }}" target="_blank" rel="noopener">{{ row.url }}</a>{% else %}<span class="text-secondary">{{ 'w4os.health_unset'|t }}</span>{% endif %}</td>
+                            <td class="text-secondary">{% if row.source %}{{ sources[row.source] is defined ? sources[row.source]|t : row.source }}{% endif %}{% if data.addresses.servedBy[row.key] is defined %} <span class="badge bg-secondary-lt">{{ data.addresses.servedBy[row.key] }}</span>{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% elseif data.addresses %}
     <div class="card mb-3 w4os-health-addresses">
         <div class="card-header"><h3 class="card-title">{{ 'w4os.admin_health_addresses'|t }}</h3></div>
         <div class="table-responsive">

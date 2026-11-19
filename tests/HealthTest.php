@@ -102,6 +102,28 @@ describe('the health page of the admin', function () {
         expect($html)->toContain('<tr data-check="a1" class="w4os-health-ok">', 'at 1795059606', '12 ms');
     });
 
+    test('lists the addresses of the grid by their use, then their file and section, each its key, its name, its address and where it comes from', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_health', fn () => ['health' => null, 'error' => null, 'refreshError' => null, 'addresses' => ['services' => [
+            ['key' => 'motd', 'url' => 'http://grid.example.org/helpers/motd.php', 'source' => 'config', 'usage' => 'page', 'file' => 'Robust.HG.ini', 'section' => 'LoginService', 'setting' => 'MessageUrl', 'label' => 'service_motd', 'description' => 'service_motd_help'],
+            ['key' => 'asset', 'url' => 'http://grid.example.org:8003', 'source' => 'provider', 'usage' => 'robust-simulators', 'file' => 'OpenSim.ini', 'section' => 'AssetService', 'setting' => 'AssetServerURI', 'label' => 'service_asset', 'description' => 'service_asset_help'],
+            ['key' => 'parser', 'url' => 'http://grid.example.org/helpers/parser.php', 'source' => 'default', 'usage' => 'task', 'file' => null, 'section' => null, 'setting' => null, 'label' => 'service_parser', 'description' => 'service_parser_help'],
+            ['key' => 'guide', 'url' => null, 'source' => null, 'usage' => 'page', 'file' => 'Robust.HG.ini', 'section' => 'LoginService', 'setting' => 'DestinationGuide', 'label' => 'service_guide', 'description' => 'service_guide_help'],
+        ]]]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
+        $html = $twig->render('w4os/health.html.twig', ['page' => []]);
+
+        // The Robust services first, then the pages, then the tasks
+        expect($html)->toMatch('~\[w4os.usage_robust_simulators\].*\[w4os.usage_page\].*\[w4os.usage_task\]~s')
+            ->and($html)->toContain('<code>OpenSim.ini</code> <span class="text-secondary">[AssetService]</span>', '<code>AssetServerURI</code>', '[w4os.service_asset]', 'title="&#x5B;w4os.service_asset_help&#x5D;"', '[w4os.admin_health_source_provider]')
+            ->and($html)->toContain('<code>MessageUrl</code>', '>http://grid.example.org/helpers/motd.php</a>', '[w4os.admin_health_source_config]')
+            ->and($html)->toContain('[w4os.admin_health_source_default]', '[w4os.health_unset]')
+            ->and(substr_count($html, '[LoginService]'))->toBe(1)
+            ->and($html)->not->toContain('—');
+    });
+
     test('says why when the engine does not answer', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_health', fn () => ['health' => null, 'addresses' => null, 'error' => 'The engine API cannot be reached']));
