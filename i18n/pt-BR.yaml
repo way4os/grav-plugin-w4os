@@ -17,8 +17,6 @@ w4os:
   admin_admin_level_help: 'Os avatares deste nível ou mais entram nas páginas de administração; cada página, ação e campo pede então o seu próprio nível, o do engine'
   admin_serve_helpers: 'Servir os helpers'
   admin_serve_helpers_help: 'O que os viewers e os simuladores pedem (boas-vindas, busca, perfis, economia, mensagens offline) nos endereços do grid, que devem ser os deste site. Desligado: o grid mantém seus próprios helpers'
-  admin_opensim_conf: 'Instalação OpenSim deste servidor'
-  admin_opensim_conf_help: 'O opensim.conf dela, quando não está num dos lugares de costume'
   admin_tab_connection: 'Conexão'
   admin_tab_accounts: 'Contas'
   admin_tab_pages: 'Páginas'

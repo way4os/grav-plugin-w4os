@@ -96,11 +96,11 @@ form:
               help: w4os.admin_serve_helpers_help
               options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
               validate: { type: bool }
-            bundled.opensim_conf:
+            bundled.config:
               type: text
-              label: w4os.admin_opensim_conf
-              help: w4os.admin_opensim_conf_help
-              placeholder: '/etc/opensim/opensim.conf'
+              label: w4os.admin_grids_config
+              help: w4os.admin_grids_config_help
+              placeholder: '/etc/opensim'
             built_in_css:
               type: toggle
               label: w4os.admin_built_in_css

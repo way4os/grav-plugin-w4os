@@ -43,6 +43,26 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
+    test('reads the grid from the config folder the site gives, its databases with the access the site gives, never the install of the server', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        mkdir("$root/etc/grids/demo", 0700, true);
+        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
+        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n    PrivatePort = 8003\n[DatabaseService]\n    StorageProvider = \"OpenSim.Data.MySQL.dll\"\n    ConnectionString = \"Data Source=localhost;Database=demo_robust;User ID=opensim;Password=grid;Old Guids=true;\"\n");
+        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo', 'database' => ['host' => 'db.example.org:3307', 'user' => 'site', 'password' => 'secret']], "$root/site", fn () => null, "$root/site/cache");
+        $grid = $bundled->grid();
+        $connection = (string) $grid?->config()?->find('DatabaseService', 'ConnectionString');
+
+        expect($bundled->nick())->toBe('demo')
+            ->and($connection)->toContain('Data Source=db.example.org:3307;', 'Database=demo_robust;', 'User ID=site;', 'Old Guids=true;')
+            ->and($connection)->not->toContain('localhost')
+            // What it writes is the site's
+            ->and($grid->environment()->layout->etcRoot())->toBe("$root/etc")
+            ->and($grid->environment()->layout->stateRoot())->toStartWith("$root/site")
+            ->and($grid->environment()->layout->cacheRoot())->toBe("$root/site/cache");
+
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
     test('answer only under the prefix of the helpers the site is set with, when the grid sets a helper there; never another route', function () {
         $configured = ['http://site.example.org/helpers/currency.php', 'http://site.example.org/search'];
 

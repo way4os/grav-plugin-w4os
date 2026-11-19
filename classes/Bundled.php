@@ -5,7 +5,6 @@ namespace W4os\Grav;
 use OpenSim\Api\Api;
 use OpenSim\Api\Router;
 use OpenSim\Config\ConnectionString;
-use OpenSim\Config\DirectoryLayout;
 use OpenSim\Config\Layout;
 use OpenSim\Helpers\View\View;
 use OpenSim\Models\Grid;
@@ -16,9 +15,11 @@ use OpenSim\Runtime\Environment;
 
 /**
  * The engine and the helpers the plugin bundles (its vendor folder), used as libraries: no API to reach, no key, no package of
- * the system. The grid is either the one of an OpenSim install of this server (its opensim.conf), or a grid described by its
- * login address and the database of its Robust: the plugin writes its description in a folder of the site, the way a web host
- * without OpenSimulator gives the helpers what they need (a remote grid `<nick>.conf` and a `Helpers.ini`).
+ * the system, nothing read from the install of the server. The grid is either one of the config folder the site gives (its
+ * setting `config`: /etc/opensim on a machine of the grid, or a copy of it), or a grid described by its login address and the
+ * database of its Robust: the plugin writes its description in a folder of the site, the way a web host without OpenSimulator
+ * gives the helpers what they need (a remote grid `<nick>.conf` and a `Helpers.ini`). Its databases are reached with the access
+ * the site gives (`database`), each with its own name; what it writes is in the site's folders.
  */
 final class Bundled
 {
@@ -31,7 +32,8 @@ final class Bundled
     private ?string $nick = null;
 
     /**
-     * @param array<string,mixed> $settings login, database (host, port, name, user, password), opensim_conf, grid
+     * @param array<string,mixed> $settings login, database (host, port, name, user, password), config (the folder of the config of
+     *     the grids; opensim_conf, its opensim.conf), grid
      * @param string $root the folder of the site where a described grid is written (etc/grids/<nick>)
      * @param \Closure(string $url): ?string $fetch the body at an address (get_grid_info of a described grid)
      * @param string $cache the folder of the caches of the engine for this site (the pictures it converts...), one the site writes to
@@ -162,7 +164,7 @@ final class Bundled
     }
 
     /** The grid, as the engine finds it. */
-    private function grid(): ?Grid
+    public function grid(): ?Grid
     {
         return Grid::find($this->environment(), $this->nick());
     }
@@ -197,35 +199,58 @@ final class Bundled
         return $html === null ? null : ['html' => $html, 'notices' => $notices];
     }
 
-    /** The engine of the grid: the layout of this server's install, or the folder of the described grid. */
+    /**
+     * The engine of the grid, from the site's own settings, never the install of the server: the config of the grids in the folder
+     * the site gives (`config`, else the folder of `opensim_conf`, else /etc/opensim), or the folder of the described grid (`login`);
+     * what it writes in the site's folders; its databases with the access the site gives (`database`, DatabaseAccess).
+     */
     private function environment(): Environment
     {
         if ($this->environment !== null) {
             return $this->environment;
         }
         $login = rtrim(trim((string) ($this->settings['login'] ?? '')), '/');
+        $own = [
+            'VarRoot' => "$this->root/var",
+            'DataRoot' => "$this->root/var/data",
+            'TasksRoot' => "$this->root/var/cron",
+            'CacheRoot' => $this->cache !== '' ? $this->cache : "$this->root/cache",
+            'LogsRoot' => "$this->root/logs",
+            'BackupRoot' => "$this->root/backups",
+        ];
         if ($login === '') {
+            $config = rtrim(trim((string) ($this->settings['config'] ?? '')), '/');
             $conf = trim((string) ($this->settings['opensim_conf'] ?? ''));
-            $layout = Layout::load($conf !== '' ? $conf : null, DirectoryLayout::roots());
-            // The caches and the state of the tasks of the site's own (the ones of the described grids' place): the ones of the
-            // install belong to its system user
-            $own = ['TasksRoot' => "$this->root/var/cron"] + ($this->cache === '' ? [] : ['CacheRoot' => $this->cache]);
-            $this->environment = Environment::system(new Layout($own + $layout->all(), $layout->file(), $layout->profile()));
+            $config !== '' || $config = $conf !== '' ? dirname($conf) : '/etc/opensim';
+            $this->environment = Environment::system(new Layout(['EtcRoot' => $config] + $own), databases: $this->databaseAccess());
             $this->nick = trim((string) ($this->settings['grid'] ?? '')) ?: $this->onlyGrid();
 
             return $this->environment;
         }
-        $environment = Environment::system(new Layout([
-            'EtcRoot' => "$this->root/etc",
-            'VarRoot' => "$this->root/var",
-            'DataRoot' => "$this->root/var/data",
-            'CacheRoot' => $this->cache !== '' ? $this->cache : "$this->root/cache",
-            'LogsRoot' => "$this->root/logs",
-            'BackupRoot' => "$this->root/backups",
-        ]));
+        $environment = Environment::system(new Layout(['EtcRoot' => "$this->root/etc"] + $own), databases: $this->databaseAccess());
         $this->nick = $this->describe($login, $environment);
 
         return $this->environment = $environment;
+    }
+
+    /**
+     * The access to the databases of the grid the site gives (its setting `database`: host, with its port or not, port, user,
+     * password), applied to every database of the grid, each its own name; null when it gives none.
+     */
+    private function databaseAccess(): ?\OpenSim\Data\DatabaseAccess
+    {
+        $db = (array) ($this->settings['database'] ?? []);
+        $host = trim((string) ($db['host'] ?? ''));
+        $port = isset($db['port']) && (string) $db['port'] !== '' ? (int) $db['port'] : null;
+        if (preg_match('/^(.+):(\d+)$/', $host, $m) === 1) {
+            [$host, $port] = [$m[1], (int) $m[2]];
+        }
+        $user = trim((string) ($db['user'] ?? ''));
+        if ($host === '' && $user === '') {
+            return null;
+        }
+
+        return new \OpenSim\Data\DatabaseAccess($host, $port, $user, (string) ($db['password'] ?? ''));
     }
 
     /** The nick of the only grid of this server's install. */
