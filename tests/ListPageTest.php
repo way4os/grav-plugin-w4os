@@ -69,6 +69,15 @@ describe('the list of a page of the admin', function () {
             ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 
+    test('shows a count alone in its column (its header says what it counts), as its text under the name', function () {
+        $list = ['columns' => [['name' => 'name', 'type' => 'text', 'priority' => 1],
+            ['name' => 'prims', 'label' => 'column_prims_short', 'type' => 'number', 'count' => 'count_prims', 'bare' => true, 'priority' => 4]]];
+        $html = render_list($list, [['uuid' => 'r1', 'name' => 'Plaza', 'prims' => 2150]], ['total' => 1]);
+
+        expect($html)->toMatch('~<td class="w4os-cell-number d-none d-xxl-table-cell">\s*2,150\s*</td>~')
+            ->and($html)->toContain('<span class="d-xxl-none">2150 items</span>');
+    });
+
     test('folds a bare part of a group, and a bare column, without its label', function () {
         $list = ['columns' => [['name' => 'name', 'type' => 'text', 'priority' => 1],
             ['name' => 'place', 'label' => 'profile_location', 'type' => 'group', 'priority' => 3, 'parts' => [['name' => 'location', 'label' => 'profile_location', 'type' => 'text', 'bare' => true]]],

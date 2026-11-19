@@ -180,3 +180,5 @@
 /* The values of a column of several values, one per line, at the start */
 .w4os-group { text-align: start; }
 .w4os-group > div { white-space: normal; }
+/* A number in its column at the end, as numbers are read */
+.w4os-list .w4os-cell-number { text-align: end; }

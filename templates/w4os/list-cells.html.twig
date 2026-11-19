@@ -12,7 +12,7 @@
    label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place);
    a day as a date; a time (datetime) in the style `dates` (W4OS\Views\Dates: `list` relative while recent, `long` with its time), its
    full date as its tip #}
-{% macro cell(column, item, dates = 'list') %}
+{% macro cell(column, item, dates = 'list', counted = true) %}
     {% set value = attribute(item, column.name) ?? null %}
     {% set type = column.type %}
     {% set labels = {} %}
@@ -22,7 +22,7 @@
         {% if known.description is defined %}{% set tips = tips|merge({(known.value): known.description}) %}{% endif %}
     {% endfor %}
     {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32"><span>{% endif %}
-    {%- if column.count is defined and value is not null -%}{{ w4os_count('w4os.' ~ column.count, value) }}
+    {%- if column.count is defined and value is not null -%}{{ counted ? w4os_count('w4os.' ~ column.count, value) : w4os_number(value, 0) }}
     {%- elseif type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'datetime' -%}{% if value %}<time title="{{ value|w4os_date('full')|e('html_attr') }}">{{ value|w4os_date(dates) }}</time>{% endif %}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}

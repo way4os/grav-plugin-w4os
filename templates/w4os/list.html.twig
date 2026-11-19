@@ -107,7 +107,7 @@
                         {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded d-{{ (parts|last).tier }}-none">{% for part in parts %}<span class="d-{{ part.tier }}-none">{{ part.text }}</span>{% endfor %}</div>{% endif %}
                     </td>
                     {% else %}
-                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' d-none d-' ~ (tiers[column.priority] ?? 'xxl') ~ '-table-cell' }}">{{ cells.cell(column.definition, row.item) }}</td>
+                    <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' d-none d-' ~ (tiers[column.priority] ?? 'xxl') ~ '-table-cell' }}">{{ cells.cell(column.definition, row.item, 'list', false) }}</td>
                     {% endif %}
                 {% endfor %}
                 {% if menu %}<td class="w4os-actions">{{ cells.menu(row) }}</td>{% endif %}
