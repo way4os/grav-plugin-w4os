@@ -23,18 +23,16 @@ final class Site
     public const DATABASE_SECRET = 'user-data://w4os/database.json';
 
     /**
-     * An area (m²) in the unit it reads in: m² under a hectare, hectares under a square kilometre, km² above; the key of its unit in
-     * the catalog and its number, in the language of the page.
+     * An area (m²) in the unit the engine says it in (km², two decimals under 10, none above): the key of its unit in the catalog
+     * and its number, in the language of the page.
      *
      * @return array{0: string, 1: string}
      */
     public static function areaText(float $m2, string $language = 'en'): array
     {
-        return match (true) {
-            $m2 < 10000 => ['unit_m2', self::number($m2, $language, 0)],
-            $m2 < 1000000 => ['unit_ha', self::number($m2 / 10000, $language)],
-            default => ['unit_km2', self::number($m2 / 1000000, $language)],
-        };
+        [$value, $unit, $decimals] = \OpenSim\Text\Units::area($m2);
+
+        return [$unit, self::number($value, $language, $decimals)];
     }
 
     /** A number in the language of the page (fr: 15 565, 6,55), at most `decimals` decimals, by the formatter of PHP (Intl). */

@@ -74,12 +74,12 @@ describe('templates', function () {
             ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love']]))->toContain('class="w4os-thumb w4os-thumb-person"', 'none-person');
     });
 
-    test('an area reads in its unit (m², ha, km²), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
-        expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_ha', '6.55'])
-            ->and(W4os\Grav\Site::areaText(5000))->toBe(['unit_m2', '5,000'])
+    test('an area reads in km² as the engine says it (two decimals under 10, none above), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
+        expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_km2', '0.07'])
             ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19'])
+            ->and(W4os\Grav\Site::areaText(26214400))->toBe(['unit_km2', '26'])
             // In the language of the page, by the formatter of PHP (Intl)
-            ->and(W4os\Grav\Site::areaText(65536, 'fr'))->toBe(['unit_ha', '6,55'])
+            ->and(W4os\Grav\Site::areaText(524288, 'fr'))->toBe(['unit_km2', '0,52'])
             ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::number(15565, 'fr')))->toBe('15 565')
             ->and(W4os\Grav\Site::number(15565, 'de'))->toBe('15.565')
             ->and(W4os\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5');
@@ -92,7 +92,7 @@ describe('templates', function () {
         $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
         $columns = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators')['columns'], null, 'name');
 
-        expect($cell->render(['column' => $columns['area'], 'item' => ['area' => 65536]]))->toContain('unit_ha:6.55')
+        expect($cell->render(['column' => $columns['area'], 'item' => ['area' => 65536]]))->toContain('unit_km2:0.07')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => ['cpu' => 75]]))->toContain('progress-bar bg-warning', 'width: 75%', '75 %')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => ['cpu' => 12.5]]))->toContain('bg-success', 'width: 12.5%')
             ->and($cell->render(['column' => $columns['memory'], 'item' => ['memory' => 95, 'memoryUsed' => 15565, 'memoryTotal' => 16384]]))
