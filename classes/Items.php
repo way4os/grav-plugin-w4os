@@ -134,7 +134,10 @@ final class Items
             default => ['type' => 'text'],
         };
 
-        $validate = array_filter(['required' => ! empty($field['required']) ?: null, 'max' => isset($field['maxLength']) ? (int) $field['maxLength'] : null], fn ($rule) => $rule !== null);
+        // A field of several values (the avatars of a list): an array
+        ! empty($field['multiple']) && $field['type'] === 'avatar' && $input += ['multiple' => true];
+        $validate = array_filter(['required' => ! empty($field['required']) ?: null, 'max' => isset($field['maxLength']) ? (int) $field['maxLength'] : null,
+            'type' => ! empty($field['multiple']) ? 'array' : null], fn ($rule) => $rule !== null);
 
         return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
     }

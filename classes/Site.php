@@ -275,7 +275,7 @@ final class Site
 
     public const ADMIN_ROUTES = [
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'regions' => '/regions', 'region' => '/regions/region',
-        'simulators' => '/simulators', 'health' => '/health', 'settings' => '/settings',
+        'simulators' => '/simulators', 'models' => '/models', 'health' => '/health', 'settings' => '/settings',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -511,6 +511,7 @@ final class Site
             'search' => 'w4os.search',
             'settings' => 'w4os.admin_site_settings',
             'health' => 'w4os.admin_health_title',
+            'models' => 'w4os.settings_models',
             default => 'w4os.'.$type.'_title',
         };
     }
@@ -750,12 +751,13 @@ final class Site
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
+        'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
 
     /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */
-    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health']];
+    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models']];
 
     /** The section of the admin a page is in: its list for the page of one item. */
     public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage'];
@@ -1527,6 +1529,14 @@ final class Site
                 return null;
             }
         }, 3600) ?? []));
+    }
+
+    /** The avatar models kept in the cache, forgotten in every language (their rule changed). */
+    public function forgetModels(): void
+    {
+        foreach (['', ...(array) $this->grav['config']->get('system.languages.supported', [])] as $language) {
+            $this->grav['cache']->delete('w4os-'.md5('models|'.$language));
+        }
     }
 
     /** A value kept in the cache of Grav for the time of the setting "cache" (or the one given, in seconds); null is not kept. */

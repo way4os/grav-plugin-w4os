@@ -129,6 +129,21 @@ final class Engine
         return $this->resource($document) + (isset($document['meta']) ? ['meta' => (array) $document['meta']] : []);
     }
 
+    /** @return array<string,mixed> the settings of the grid of a group (models...), as the grid says them, else their defaults */
+    public function settings(string $group): array
+    {
+        return $this->resource($this->call('GET', '/settings/'.rawurlencode($group)));
+    }
+
+    /**
+     * @param array<string,mixed> $values the settings changed
+     * @return array<string,mixed> the settings of the group now
+     */
+    public function updateSettings(string $group, array $values): array
+    {
+        return $this->resource($this->call('PATCH', '/settings/'.rawurlencode($group), ['type' => 'settings', 'id' => $group, 'attributes' => $values]));
+    }
+
     /** @return array<string,mixed> the health of the grid as the engine checks it now: its level, its groups of rows */
     public function health(): array
     {

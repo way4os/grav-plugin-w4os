@@ -457,3 +457,4 @@ w4os:
   admin_health_addresses: 'Adresses de la grille'
   admin_health_service: 'Service'
   admin_health_source: 'Origine'
+  admin_models_saved: 'La règle des modèles d’avatars est enregistrée.'

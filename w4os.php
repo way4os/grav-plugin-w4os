@@ -295,6 +295,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
@@ -493,6 +494,18 @@ class W4osPlugin extends Plugin
 
             return;
         }
+        if ($form->getName() === 'w4os-models') {
+            // The fields of the rule as the engine describes them (x-form of the settings `models`), its values as the grid has them
+            $rule = $this->modelsRule();
+            if ($rule['view'] !== null) {
+                $form->setFields(Items::fields($rule['view']));
+                foreach ($rule['view']->values as $key => $value) {
+                    $form->getData()->get($key) === null && $form->setData($key, $value);
+                }
+            }
+
+            return;
+        }
         if ($form->getName() === 'w4os-post') {
             // The field the engine describes, its button
             if (($posts = $this->ownPosts()) !== null) {
@@ -609,6 +622,21 @@ class W4osPlugin extends Plugin
                     $forms->edit($edited, $described === null ? $data : array_diff_key($data, array_flip(\W4OS\Views\FormView::locked($described, ['manager'], $site->level()))));
                     $site->forgetProfile((string) $edited['name']);
                     $this->done('w4os.manage_saved', $routes['manage'], [(string) $edited['name']]);
+                    // no break
+                case 'models':
+                    // The rule of the avatar models, its fields the visitor changes only (FormView), written by the engine
+                    $rule = $this->modelsRule();
+                    $rule['changeable'] || throw new FormError('w4os.error_forbidden');
+                    $changes = $rule['view']->changes($data);
+                    if ($changes !== []) {
+                        try {
+                            $site->engine()->updateSettings('models', $changes);
+                        } catch (EngineException $e) {
+                            throw $forms->error($e);
+                        }
+                        $site->forgetModels();
+                    }
+                    $this->done('w4os.admin_models_saved', $routes['models']);
                     // no break
                 case 'settings':
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
@@ -752,6 +780,32 @@ class W4osPlugin extends Plugin
                 $files = Site::isDefault($own, $this->site()->themeDefault($active, $fields[$setting])) ? [] : $own;
             }
             $form->setData($setting, $files);
+        }
+    }
+
+    /**
+     * The rule of the avatar models of the grid (its settings `models`): its form as the engine describes it, for the visitor (what
+     * the contract lets them change), its values, or why it could not be read.
+     *
+     * @return array{view: ?\W4OS\Views\FormView, changeable: bool, values: array<string,mixed>, error: ?string}
+     */
+    private function modelsRule(): array
+    {
+        static $rule = null;
+        if ($rule !== null) {
+            return $rule;
+        }
+        $described = $this->site()->openApi()->settingsOf('models');
+        if ($described === null || ! $this->site()->canOperation('models')) {
+            return $rule = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null];
+        }
+        try {
+            $values = $this->site()->engine()->settings('models');
+            $view = \W4OS\Views\FormView::of($described, $values, null, $this->site()->isManager(), $this->site()->level());
+
+            return $rule = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values, 'error' => null];
+        } catch (\Throwable $e) {
+            return $rule = ['view' => null, 'changeable' => false, 'values' => [], 'error' => $e->getMessage()];
         }
     }
 

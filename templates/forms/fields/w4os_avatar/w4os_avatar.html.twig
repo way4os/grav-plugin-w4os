@@ -1,15 +1,19 @@
-{# An avatar of the grid, picked by its name (Tom Select, js/avatar-picker.js, searching the avatars of the managers' list): its
-   picture and its name shown, its UUID sent. Without the script, the avatar it has. #}
+{# An avatar of the grid, or several (field.multiple: the models of a list), picked by their names (Tom Select, js/avatar-picker.js,
+   searching the avatars of the managers' list): their pictures and names shown, their UUIDs sent. Without the script, the ones it
+   has. #}
 {% extends "forms/field.html.twig" %}
 
 {% block input %}
-    {% set chosen = value ? w4os_avatar_of(value) : null %}
+    {% set values = value is iterable ? value : (value ? [value] : []) %}
     {% set source = w4os_route('manage') ? base_url_relative ~ w4os_route('manage') ~ '?format=avatars' : '' %}
     <div class="{{ form_field_wrapper_classes ?: 'form-select-wrapper' }} {{ field.size }}">
-        <select name="{{ (scope ~ field.name)|fieldName }}" class="{{ form_field_select_classes }} {{ field.classes }}"
+        <select name="{{ (scope ~ field.name)|fieldName }}{{ field.multiple ? '[]' }}" class="{{ form_field_select_classes }} {{ field.classes }}"
                 data-w4os-avatar data-source="{{ source|e('html_attr') }}" aria-label="{{ field.label|t|e('html_attr') }}"
-                {% if required %}required="required"{% endif %}>
-            {% if value %}<option value="{{ value|e('html_attr') }}" data-picture="{{ w4os_picture(chosen.profileImage ?? null, 'person')|e('html_attr') }}" selected>{{ chosen.name ?? value }}</option>{% endif %}
+                {% if field.multiple %}multiple{% endif %} {% if required %}required="required"{% endif %}>
+            {% for uuid in values|filter(uuid => uuid) %}
+                {% set chosen = w4os_avatar_of(uuid) %}
+                <option value="{{ uuid|e('html_attr') }}" data-picture="{{ w4os_picture(chosen.profileImage ?? null, 'person')|e('html_attr') }}" selected>{{ chosen.name ?? uuid }}</option>
+            {% endfor %}
         </select>
     </div>
     {# In the admin pages, the styles of Tabler (tabler-vendors) #}
