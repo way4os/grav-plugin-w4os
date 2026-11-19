@@ -166,3 +166,6 @@
 .w4os-dashboard-block .block-table th { font-weight: var(--tblr-font-weight-medium, 500); color: var(--tblr-secondary, #6c7a91); text-align: left; }
 /* The values of the hidden columns under the name, one after the other */
 .w4os-folded > span:not(:last-child)::after { content: " · "; }
+/* The values of a column of several values, one per line, at the start */
+.w4os-group { text-align: start; }
+.w4os-group > div { white-space: normal; }

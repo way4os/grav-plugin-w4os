@@ -64,6 +64,16 @@ describe('the list of a page of the admin', function () {
             ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 
+    test('folds a bare part of a group, and a bare column, without its label', function () {
+        $list = ['columns' => [['name' => 'name', 'type' => 'text', 'priority' => 1],
+            ['name' => 'place', 'label' => 'profile_location', 'type' => 'group', 'priority' => 3, 'parts' => [['name' => 'location', 'label' => 'profile_location', 'type' => 'text', 'bare' => true]]],
+            ['name' => 'flagNames', 'label' => 'column_flags', 'type' => 'list', 'priority' => 4, 'bare' => true]]];
+        $html = render_list($list, [['uuid' => 'r1', 'name' => 'Plaza', 'location' => '8015, 8012', 'flagNames' => ['Persistent']]], ['total' => 1]);
+
+        expect($html)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xxl-none">Persistent</span>')
+            ->and($html)->not->toContain('[w4os.column_flags]|');
+    });
+
     test('shows a time relatively while it is recent, else as a short date with its time, its full date as its tip; an email or a role bare', function () {
         $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
         $recent = time() - 3 * 86400;

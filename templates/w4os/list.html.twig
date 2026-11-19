@@ -102,7 +102,7 @@
                         {% set parts = [] %}
                         {% for other in view.secondary %}
                             {# A group: each of its values with its own label #}
-                            {% for shown in other.type == 'group' ? other.definition.parts : [other.definition] %}{% set part = cells.cell(shown, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: (other.type != 'group' and other.bare) ? part : 'w4os.label_value'|t(('w4os.' ~ shown.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
+                            {% for shown in other.type == 'group' ? other.definition.parts : [other.definition] %}{% set part = cells.cell(shown, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: (other.type == 'group' ? (shown.bare ?? false) : other.bare) ? part : 'w4os.label_value'|t(('w4os.' ~ shown.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
                         {% endfor %}
                         {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded d-{{ (parts|last).tier }}-none">{% for part in parts %}<span class="d-{{ part.tier }}-none">{{ part.text }}</span>{% endfor %}</div>{% endif %}
                     </td>

@@ -111,6 +111,10 @@ describe('templates', function () {
             ->and($cell->render(['column' => $regions['place'], 'item' => ['location' => '8015, 8012', 'size' => 256]]))
             ->toContain('[w4os.profile_location]</span> 8015, 8012</div>', '[w4os.column_size]</span> [w4os.unit_dimensions:256|256]</div>')
             ->and($cell->render(['column' => $regions['usage'], 'item' => []]))->not->toContain('w4os-group');
+        // A part that says what it is (bare): its value alone
+        $place = ['name' => 'place', 'type' => 'group', 'parts' => [['name' => 'location', 'label' => 'profile_location', 'type' => 'text', 'bare' => true], ['name' => 'owner', 'label' => 'column_owner', 'type' => 'text']]];
+        expect($cell->render(['column' => $place, 'item' => ['location' => '8015, 8012', 'owner' => 'Ada']]))
+            ->toContain('<div class="w4os-group"><div>8015, 8012</div><div><span class="text-secondary">[w4os.column_owner]</span> Ada</div></div>');
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
