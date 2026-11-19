@@ -783,3 +783,7 @@ w4os:
   admin_health_problems: 'La santé de la grille a trouvé %d problèmes :'
   admin_service_no_page: 'Le site n’a pas de page à l’adresse %s : le service en demande une qui affiche le bloc %s.'
   admin_service_no_block: 'La page %s du site n’affiche pas le bloc %s dont le service a besoin.'
+  admin_task_run: 'Lancer maintenant'
+  admin_task_last: 'Dernier passage %s'
+  admin_task_never: 'Jamais lancée'
+  admin_task_ran: '%s : %s'
