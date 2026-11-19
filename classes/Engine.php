@@ -75,6 +75,12 @@ final class Engine
         return (string) ($this->info()['elements']['gridname'] ?? ($this->info()['name'] ?? ''));
     }
 
+    /** The nick of the grid: the one the site asks, else the one the engine of one grid says it has (its gridnick). */
+    public function gridNick(): string
+    {
+        return $this->grid !== '' ? $this->grid : (string) ($this->info()['elements']['gridnick'] ?? '');
+    }
+
     /** The login URI of the grid as a viewer takes it (host:port), as the engine writes it. */
     public function loginUri(): string
     {

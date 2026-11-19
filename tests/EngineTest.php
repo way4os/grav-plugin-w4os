@@ -93,6 +93,12 @@ describe('engine', function () {
 });
 
 describe('grid info', function () {
+    test('the nick of the grid is the one the site asks, else its gridnick', function () {
+        $engine = fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['elements' => ['gridnick' => 'demo']]]]]], $log);
+
+        expect($engine->gridNick())->toBe('demo');
+    });
+
     test('the name of the grid is its gridname', function () {
         $engine = fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['elements' => ['gridname' => 'Demo World']]]]]], $log);
 

@@ -888,7 +888,7 @@ class W4osPlugin extends Plugin
         $tasks = [];
         if (isset(Site::SERVICE_TASKS[$group])) {
             try {
-                $tasks = Site::serviceTasks($this->site()->engine()->tasks(), $this->site()->engine()->grid(), $group);
+                $tasks = Site::serviceTasks($this->site()->engine()->tasks(), $this->site()->engine()->gridNick(), $group);
             } catch (\Throwable) {
                 $tasks = [];
             }
