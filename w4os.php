@@ -428,7 +428,7 @@ class W4osPlugin extends Plugin
         $type = array_search($path, $routes, true);
         if ($type === 'confirm' && ($token = (string) $this->grav['uri']->query('token')) !== '') {
             $this->confirm($token);
-        } elseif (in_array($type, ['account', 'dashboard', 'settings', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
+        } elseif (in_array($type, ['account', 'dashboard', 'shortcodes', 'settings', ...array_keys(Site::ADMIN_TYPES)], true) && $this->site()->avatar() === null) {
             // The page goes back there once signed in (Site::landing())
             $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
