@@ -169,6 +169,7 @@ final class Items
 
         isset($field['placeholder']) && $input['placeholder'] = 'w4os.'.$field['placeholder'];
 
-        return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
+        // The pictures of the models say their help themselves
+        return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) && $input['type'] !== 'w4os_models' ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);
     }
 }

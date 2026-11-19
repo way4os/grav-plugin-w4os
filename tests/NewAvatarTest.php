@@ -27,7 +27,9 @@ describe('the page that makes an avatar', function () {
             ->and($fields['email'])->toMatchArray(['type' => 'email'])
             ->and($fields['email'])->not->toHaveKey('validate')
             ->and($fields['password'])->toMatchArray(['type' => 'password', 'validate' => ['required' => true]])
-            ->and($fields['model'])->toMatchArray(['type' => 'w4os_models', 'label' => 'w4os.model']);
+            ->and($fields['model'])->toMatchArray(['type' => 'w4os_models', 'label' => 'w4os.model'])
+            // Its help is the field's own, under its title
+            ->and($fields['model'])->not->toHaveKey('help');
     });
 
     test('makes an avatar that can sign in at once, with what the form was given only', function () {
