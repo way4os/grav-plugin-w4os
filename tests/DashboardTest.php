@@ -78,7 +78,7 @@ describe('the dashboard', function () {
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => (string) $value));
         $html = $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
 
-        expect($problems)->toMatchArray(['count' => 2, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000']])
+        expect($problems)->toMatchArray(['count' => 2, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000'], 'statuses' => ['', '']])
             ->and(Site::healthProblems(['level' => 'ok', 'groups' => []]))->toMatchArray(['count' => 0])
             ->and($html)->toContain('alert-danger', '[w4os.admin_health_problems:2]', 'SRV_ProfileServerURI', 'href="&#x2F;w4os&#x2F;health"');
     });

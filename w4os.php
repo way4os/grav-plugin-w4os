@@ -304,7 +304,13 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_health_problems', fn () => $this->healthProblems()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_service', fn () => $this->service()));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_area', fn ($m2) => $this->site()->translate('w4os.'.Site::areaText((float) $m2)[0], [Site::areaText((float) $m2)[1]])));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_area', function ($m2) {
+            [$unit, $number] = Site::areaText((float) $m2, $this->language());
+
+            return $this->site()->translate('w4os.'.$unit, [$number]);
+        }));
+        // A number in the language of the page (Intl)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_number', fn ($value, int $decimals = 2) => Site::number((float) $value, $this->language(), $decimals)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_shortcodes', fn () => Site::SHORTCODES));
         $twig->addFunction(new \Twig\TwigFunction('w4os_creation', fn () => $this->creation()));
@@ -945,6 +951,20 @@ class W4osPlugin extends Plugin
         $this->grav->redirectLangSafe($path, 303);
     }
 
+    /** The language of the page (fr, pt-BR), for what is said or written in it. */
+    private function language(): string
+    {
+        $language = $this->grav['language'];
+
+        return (string) ($language->getLanguage() ?: ($language->getDefault() ?: 'en'));
+    }
+
+    /** A text of the language files with the values of its placeholders, as the health of the grid gives them. */
+    private function said(string $key, array $params): string
+    {
+        return $this->site()->translate($key, $params);
+    }
+
     /**
      * What a saved service says of the page of the site that handles it (the engine's meta.service: handledBy `site`, its block):
      * a warning when the site has no page at its path, or one without the block.
@@ -985,7 +1005,7 @@ class W4osPlugin extends Plugin
             return $none;
         }
         try {
-            return Site::healthProblems($this->site()->engine()->health()) + ['url' => $this->site()->url('health')];
+            return Site::healthProblems(Site::healthSaid($this->site()->engine()->health(), $this->said(...))) + ['url' => $this->site()->url('health')];
         } catch (\Throwable) {
             return $none;
         }
@@ -1004,7 +1024,8 @@ class W4osPlugin extends Plugin
         }
         $engine = $this->site()->engine();
         // Checked again when the page is asked so (its button), else the last report
-        $report = Site::healthReport(fn (bool $refresh) => $engine->health($refresh), $this->grav['uri']->query('refresh') === '1');
+        // Said in the language of the page (the texts of its lines)
+        $report = Site::healthReport(fn (bool $refresh) => Site::healthSaid($engine->health($refresh), $this->said(...)), $this->grav['uri']->query('refresh') === '1');
         try {
             $addresses = $report['error'] === null ? $engine->addresses() : null;
         } catch (\Throwable) {
@@ -1554,7 +1575,7 @@ class W4osPlugin extends Plugin
         $this->site()->canOperation('health') || (http_response_code(403) && exit);
         header('Cache-Control: no-store');
         try {
-            $row = ['id' => $id] + $this->site()->engine()->healthCheck($id);
+            $row = ['id' => $id] + Site::rowSaid($this->site()->engine()->healthCheck($id), $this->said(...));
         } catch (\Throwable $e) {
             http_response_code(502);
             header('Content-Type: text/plain; charset=utf-8');

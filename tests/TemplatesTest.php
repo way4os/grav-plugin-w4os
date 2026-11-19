@@ -77,9 +77,15 @@ describe('templates', function () {
     test('an area reads in its unit (m², ha, km²), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
         expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_ha', '6.55'])
             ->and(W4os\Grav\Site::areaText(5000))->toBe(['unit_m2', '5,000'])
-            ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19']);
+            ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19'])
+            // In the language of the page, by the formatter of PHP (Intl)
+            ->and(W4os\Grav\Site::areaText(65536, 'fr'))->toBe(['unit_ha', '6,55'])
+            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::number(15565, 'fr')))->toBe('15 565')
+            ->and(W4os\Grav\Site::number(15565, 'de'))->toBe('15.565')
+            ->and(W4os\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5');
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4os\Grav\Site::areaText((float) $m2))));
+        $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));

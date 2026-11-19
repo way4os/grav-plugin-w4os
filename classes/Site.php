@@ -24,19 +24,66 @@ final class Site
 
     /**
      * An area (m²) in the unit it reads in: m² under a hectare, hectares under a square kilometre, km² above; the key of its unit in
-     * the catalog and its number.
+     * the catalog and its number, in the language of the page.
      *
      * @return array{0: string, 1: string}
      */
-    public static function areaText(float $m2): array
+    public static function areaText(float $m2, string $language = 'en'): array
     {
-        $short = fn (float $value) => rtrim(rtrim(number_format($value, 2), '0'), '.');
-
         return match (true) {
-            $m2 < 10000 => ['unit_m2', number_format($m2)],
-            $m2 < 1000000 => ['unit_ha', $short($m2 / 10000)],
-            default => ['unit_km2', $short($m2 / 1000000)],
+            $m2 < 10000 => ['unit_m2', self::number($m2, $language, 0)],
+            $m2 < 1000000 => ['unit_ha', self::number($m2 / 10000, $language)],
+            default => ['unit_km2', self::number($m2 / 1000000, $language)],
         };
+    }
+
+    /** A number in the language of the page (fr: 15 565, 6,55), at most `decimals` decimals, by the formatter of PHP (Intl). */
+    public static function number(float $value, string $language = 'en', int $decimals = 2): string
+    {
+        if (! class_exists(\NumberFormatter::class)) {
+            return rtrim(rtrim(number_format($value, $decimals), '0'), '.');
+        }
+        $formatter = new \NumberFormatter(str_replace('-', '_', $language), \NumberFormatter::DECIMAL);
+        $formatter->setAttribute(\NumberFormatter::MAX_FRACTION_DIGITS, $decimals);
+
+        return (string) $formatter->format($value);
+    }
+
+    /**
+     * What the health of the grid says, in the language of the page: each text of a line the engine gives as a sentence of its
+     * catalog (`texts`: by field, its key and the values of its placeholders) said by `translate`, the others as they are.
+     *
+     * @param array<string,mixed> $health
+     * @param \Closure(string $key, array $params): string $translate
+     * @return array<string,mixed>
+     */
+    public static function healthSaid(array $health, \Closure $translate): array
+    {
+        foreach ((array) ($health['groups'] ?? []) as $g => $group) {
+            foreach ((array) ($group['rows'] ?? []) as $r => $row) {
+                $health['groups'][$g]['rows'][$r] = self::rowSaid((array) $row, $translate);
+            }
+        }
+
+        return $health;
+    }
+
+    /**
+     * One line of the health in the language of the page (healthSaid()).
+     *
+     * @param array<string,mixed> $row
+     * @param \Closure(string $key, array $params): string $translate
+     * @return array<string,mixed>
+     */
+    public static function rowSaid(array $row, \Closure $translate): array
+    {
+        foreach ((array) ($row['texts'] ?? []) as $field => $text) {
+            $key = 'w4os.'.(string) ($text['key'] ?? '');
+            $said = $translate($key, array_values((array) ($text['params'] ?? [])));
+            $said !== '' && $said !== $key && $row[$field] = $said;
+        }
+
+        return $row;
     }
 
     /** What the engine of the grid's machine says of it for the helpers of the site, kept with its time (keptDescription()). */
@@ -184,18 +231,22 @@ final class Site
      * of the first ones.
      *
      * @param array<string,mixed> $health the health as the engine gives it
-     * @return array{count: int, labels: list<string>}
+     * @return array{count: int, labels: list<string>, statuses: list<string>}
      */
     public static function healthProblems(array $health, int $shown = 5): array
     {
         $labels = [];
+        $statuses = [];
         foreach ((array) ($health['groups'] ?? []) as $group) {
             foreach ((array) ($group['rows'] ?? []) as $row) {
-                ($row['level'] ?? '') === 'error' && $labels[] = (string) ($row['label'] ?? '');
+                if (($row['level'] ?? '') === 'error') {
+                    $labels[] = (string) ($row['label'] ?? '');
+                    $statuses[] = (string) ($row['status'] ?? '');
+                }
             }
         }
 
-        return ['count' => count($labels), 'labels' => array_slice($labels, 0, $shown)];
+        return ['count' => count($labels), 'labels' => array_slice($labels, 0, $shown), 'statuses' => array_slice($statuses, 0, $shown)];
     }
 
     /**

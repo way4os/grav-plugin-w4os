@@ -32,8 +32,8 @@
         {%- set tone = value >= (usage.critical ?? 90) ? 'danger' : (value >= (usage.warning ?? 70) ? 'warning' : 'success') -%}
         {%- set used = usage.used is defined ? attribute(item, usage.used) ?? null : null -%}
         {%- set total = usage.total is defined ? attribute(item, usage.total) ?? null : null -%}
-        <div class="w4os-usage" title="{{ value }} %"><div class="progress progress-sm"><div class="progress-bar bg-{{ tone }}" style="width: {{ value }}%" role="progressbar" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100"></div></div>
-        <div class="small text-secondary">{% if used is not null and total is not null %}{{ 'w4os.usage_of'|t(('w4os.' ~ (usage.unit ?? 'unit_mb'))|t(used|number_format), ('w4os.' ~ (usage.unit ?? 'unit_mb'))|t(total|number_format)) }}{% else %}{{ value }} %{% endif %}</div></div>
+        <div class="w4os-usage" title="{{ w4os_number(value, 1) }} %"><div class="progress progress-sm"><div class="progress-bar bg-{{ tone }}" style="width: {{ value }}%" role="progressbar" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100"></div></div>
+        <div class="small text-secondary">{% if used is not null and total is not null %}{{ 'w4os.usage_of'|t(('w4os.' ~ (usage.unit ?? 'unit_mb'))|t(w4os_number(used, 0)), ('w4os.' ~ (usage.unit ?? 'unit_mb'))|t(w4os_number(total, 0))) }}{% else %}{{ w4os_number(value, 1) }} %{% endif %}</div></div>
     {%- endif %}
     {%- elseif type == 'status' -%}{% if value is not empty %}<span class="w4os-status">{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.status_' ~ value)|t }}</span>{% endif %}
     {%- elseif type == 'role' -%}{% if value is not empty %}{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.role_' ~ value|replace({'-': '_'}))|t }}{% else %}{{ item.level ?? '' }}{% endif %}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}

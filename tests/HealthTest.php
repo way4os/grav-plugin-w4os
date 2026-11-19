@@ -156,4 +156,19 @@ describe('the health page of the admin', function () {
 
         expect($twig->render('w4os/health.html.twig', ['page' => []]))->toContain('alert alert-danger', 'The engine API cannot be reached');
     });
+
+    test('says each line in the language of the page, from the keys and the values the engine gives its texts', function () {
+        $health = ['level' => 'error', 'groups' => [['file' => 'Robust.HG.ini', 'rows' => [
+            ['label' => 'SRV_ProfileServerURI', 'status' => 'does not answer', 'detail' => 'HTTP 404', 'texts' => ['status' => ['key' => 'health_not_answering', 'params' => []], 'detail' => ['key' => 'health_http', 'params' => [404]]]],
+            ['label' => 'PHP', 'status' => '8.3', 'texts' => []],
+        ]]]];
+        $french = ['w4os.health_not_answering' => 'ne répond pas', 'w4os.health_http' => 'HTTP %s'];
+        $said = W4os\Grav\Site::healthSaid($health, fn (string $key, array $params) => isset($french[$key]) ? vsprintf($french[$key], $params) : $key);
+        $rows = $said['groups'][0]['rows'];
+
+        expect($rows[0]['status'])->toBe('ne répond pas')
+            ->and($rows[0]['detail'])->toBe('HTTP 404')
+            ->and($rows[1]['status'])->toBe('8.3')
+            ->and(W4os\Grav\Site::healthSaid(['groups' => []], fn () => ''))->toBe(['groups' => []]);
+    });
 });

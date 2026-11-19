@@ -9,7 +9,7 @@
 {% if problems.count ?? 0 %}
     <div class="alert alert-danger" role="alert">
         {{ 'w4os.admin_health_problems'|t(problems.count) }}
-        {% for label in problems.labels %}<code>{{ label }}</code>{{ loop.last ? '' : ', ' }}{% endfor %}{{ problems.count > problems.labels|length ? '…' : '' }}
+        {% for label in problems.labels %}<code>{{ label }}</code>{% if problems.statuses[loop.index0] ?? '' %} ({{ problems.statuses[loop.index0] }}){% endif %}{{ loop.last ? '' : ', ' }}{% endfor %}{{ problems.count > problems.labels|length ? '…' : '' }}
         <a class="alert-link" href="{{ problems.url|e('html_attr') }}">{{ 'w4os.admin_health_title'|t }}</a>
     </div>
 {% endif %}
