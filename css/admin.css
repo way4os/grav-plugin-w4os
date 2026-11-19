@@ -93,7 +93,7 @@
 /* A list of values (the Form plugin's array: the registers of the search): its inputs as the others, its buttons as signs (it names
    icons of Font Awesome, which Tabler does not have) */
 .w4os-admin [data-grav-field=array] .form-row { display: flex; gap: .25rem; align-items: center; margin-bottom: .5rem; }
-.w4os-admin [data-grav-field=array] input[data-grav-array-type=value] { flex: 1; min-width: 0; padding: .5625rem .75rem; font: inherit; line-height: 1.4285714286; color: inherit; background: var(--tblr-bg-forms); border: var(--tblr-border-width) solid var(--tblr-border-color); border-radius: var(--tblr-border-radius); }
+.w4os-admin [data-grav-field=array] input[data-grav-array-type=value] { flex: 1; min-width: 0; padding: .5625rem .75rem; font: inherit; font-size: .875rem; line-height: 1.4285714286; color: inherit; background: var(--tblr-bg-forms); border: var(--tblr-border-width) solid var(--tblr-border-color); border-radius: var(--tblr-border-radius); }
 .w4os-admin [data-grav-array-action]::before { font-weight: 600; font-size: 1.1em; }
 .w4os-admin [data-grav-array-action=sort]::before { content: "\2261"; }
 .w4os-admin [data-grav-array-action=rem]::before { content: "\2212"; }
