@@ -77,4 +77,10 @@ describe('the avatar models page of the admin', function () {
             }
         }
     });
+
+    test('shows its models two by row beside the form, as wide as the column they are in', function () use ($render) {
+        [$html] = $render([['uuid' => 'm1', 'name' => 'Default Ruth', 'image' => '/assets/p1.jpg']], ['preview' => ['label' => 'models_preview', 'filters' => []]]);
+
+        expect($html)->toContain('class="col-6 col-sm-4 col-lg-6"')->not->toContain('col-xl-2');
+    });
 });
