@@ -27,16 +27,16 @@
         {% if filter.field == 'multiple' %}
         {# The choices of a filter as the same field (Tom Select, js/filters.js): several values, any of them, its label as its
            placeholder; or one value, its label greyed while none is chosen, a × to remove it (without the script, its first option
-           asks for any). The meaning of each value as its tip #}
+           asks for any). The meaning of each value as its tip, the number of rows it gives after it when the engine counts them #}
         <select class="form-select" name="{{ filter.name|e('html_attr') }}[]" multiple data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}{% if value.count is not null %} ({{ value.count }}){% endif %}</option>{% endfor %}
         </select>
         {% elseif filter.field == 'text' %}
         <input type="text" class="form-control" name="{{ filter.name|e('html_attr') }}" value="{{ filter.chosen|first|default('') }}" placeholder="{{ label|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
         {% else %}
         <select class="form-select" name="{{ filter.name|e('html_attr') }}" data-w4os-filter data-clear="{{ 'w4os.filter_clear'|t|e('html_attr') }}" data-chosen="{{ 'w4os.label_value'|t(label, '%s')|e('html_attr') }}" aria-label="{{ label|e('html_attr') }}" onchange="this.form.requestSubmit()">
             <option value="">{{ 'w4os.filter_any'|t }}</option>
-            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}</option>{% endfor %}
+            {% for value in filter.values %}<option value="{{ value.value|e('html_attr') }}"{% if value.description %} title="{{ ('w4os.' ~ value.description)|t|e('html_attr') }}"{% endif %}{{ value.chosen ? ' selected' }}>{{ value.text ?? (value.label ? ('w4os.' ~ value.label)|t : value.value) }}{% if value.count is not null %} ({{ value.count }}){% endif %}</option>{% endfor %}
         </select>
         {% endif %}
     {% endfor %}
