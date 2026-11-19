@@ -135,6 +135,12 @@ w4os:
   guide_url: 'Destinations Guide URL'
   guide_source_help_file: 'A text file with a formatted list of destinations.'
   guide_source_help_where: 'The source can be an URL or the full path of a local file your web server can access.'
+  guide_source_help_name: 'A file name alone is read in the config folder of the grid.'
+  guide_example: 'Example of a destinations file'
+  snippet_ini: 'Lines to add to %s'
+  snippet_example: Example
+  motd_welcome: 'Welcome to %1$s, %2$s!'
+  motd_visitor: traveler
   guide_source_help_pipe: 'Destination name and teleport URL are separated by a pipe (|) character.'
   guide_source_help_categories: 'Lines containing only text are interpreted as categories.'
   guide_source_help_comments: 'Lines beginning with "#" or "//" are ignored.'
@@ -331,11 +337,17 @@ w4os:
   block_grid_status_help: 'Online users, regions, etc.'
   block_popular_places_help: 'Most visited regions in your grid.'
   block_motd_help: 'The message of the day the viewers show at login.'
-  block_destination_guide_help: 'The destinations of the guide of the grid, as the viewers show them.'
-  block_directory_info_help: 'The grids whose regions are in the search of this one.'
-  block_search_help: 'The search of the grid: places, events, classifieds, people.'
-  block_profile_help: 'The profile of an avatar, as its page shows it.'
-  block_new_users_help: 'The avatars that joined the grid last.'
+  block_destination_guide_help: 'Places to visit, the same list the viewers show in their destinations guide.'
+  block_directory_info_help: 'The other grids whose places can be found in the search of this grid.'
+  block_search_help: 'A search form for the places, events, classifieds and people of the grid.'
+  block_profile_help: 'The profile of an avatar.'
+  block_new_avatars_help: 'The last avatars who joined the grid.'
+  shortcode_home_help: 'Your text with the popular places, the guide, the grid status and the message of the day.'
+  shortcode_guest_help: 'Shows its text only to visitors who are not signed in.'
+  shortcode_register_help: 'Shows its text only when the site has a registration page.'
+  shortcode_text_help: 'Shows a text of the site in the language of the page.'
+  shortcode_uri_help: 'The login address of the grid, to copy in a viewer.'
+  shortcode_slogan_help: 'The slogan of the site.'
   setting_login: 'Login URI'
   setting_login_help: 'The address the viewers log in at, and ask what the grid says of itself (get_grid_info).'
   setting_gatekeeper: Gatekeeper
@@ -400,12 +412,18 @@ w4os:
   setting_economy_module_help: 'Changed with the options of the grid, which set the module and what it needs.'
   economy_module_free: 'Free transactions only'
   economy_module_gloebit: Gloebit
-  economy_module_moneyserver: 'Podex and other currency providers'
+  economy_module_moneyserver: 'Generic MoneyServer, for fake money or alternate providers.'
+  economy_module_podex: Podex
   setting_sell_enabled: 'Enable Selling'
   setting_price_upload: 'Price Upload'
   setting_price_group_create: 'Price Group Create'
   setting_gloebit_enabled: 'Enable Gloebit'
   setting_gloebit_environment: 'Gloebit Environment'
+  setting_gloebit_key: 'Gloebit App Key'
+  setting_gloebit_secret: 'Gloebit App Secret'
+  setting_gloebit_owner_name: 'Owner Name'
+  setting_gloebit_owner_email: 'Owner Email'
+  setting_currency_provider: 'Currency Provider'
   gloebit_sandbox: Sandbox
   gloebit_production: Production
   setting_guide_source: Source
@@ -426,6 +444,7 @@ w4os:
   setting_assets_url_help: 'The web assets server of the grid when it is not the one of the helpers: it converts the pictures of the world (JPEG 2000) for the web.'
   offline_module_v1: 'By the helpers (V1)'
   offline_module_v2: 'By Robust (V2)'
+  offline_database: 'Offline Messages Database'
   db_host: Hostname
   db_port: Port
   db_name: 'Database name'
@@ -564,6 +583,12 @@ w4os:
   kind_oar: 'Region (OAR)'
   kind_backup: Backup
   column_area: Area
+  unit_m2: '%s m²'
+  unit_ha: '%s ha'
+  unit_km2: '%s km²'
+  unit_mb: '%s MB'
+  unit_percent: '%s %%'
+  usage_of: '%1$s of %2$s'
   column_cpu: CPU
   column_avatars: Avatars
   column_memory: Memory
@@ -702,8 +727,6 @@ w4os:
   admin_db_password_help: 'Kept out of the configuration and of git'
   admin_serve_helpers: 'Serve the helpers'
   admin_serve_helpers_help: 'What the viewers and the simulators ask (welcome, search, profiles, economy, offline messages) at the addresses of the grid, which must be the ones of this site. Off: the grid keeps its own helpers'
-  admin_grids_config: 'Config of the grids'
-  admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
   admin_tab_connection: Connection
   admin_tab_accounts: Accounts
   admin_tab_pages: Pages
@@ -797,8 +820,6 @@ w4os:
   admin_health_problems: 'The health of the grid found %d problems:'
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
-  admin_snippet_lines: 'Lines to add to %s'
-  admin_snippet_example: Example
   admin_task_run: 'Run now'
   admin_task_last: 'Last run %s'
   admin_task_never: 'Never run'

@@ -135,6 +135,12 @@ w4os:
   guide_url: 'URL du guide des destinations'
   guide_source_help_file: 'Un fichier texte avec une liste formatée de destinations.'
   guide_source_help_where: "La source peut être une URL ou le chemin complet d'un fichier local accessible par votre serveur web."
+  guide_source_help_name: 'Un nom de fichier seul est lu dans le dossier de configuration de la grille.'
+  guide_example: 'Exemple de fichier de destinations'
+  snippet_ini: 'Lignes à ajouter à %s'
+  snippet_example: Exemple
+  motd_welcome: 'Bienvenue sur %1$s, %2$s !'
+  motd_visitor: voyageur
   guide_source_help_pipe: "Le nom de la destination et l'URL de téléportation sont séparés par le caractère pipe (|)."
   guide_source_help_categories: 'Les lignes contenant uniquement du texte sont interprétées comme des catégories.'
   guide_source_help_comments: 'Les lignes commençant par "#" ou "//" sont ignorées.'
@@ -330,12 +336,18 @@ w4os:
   block_grid_info_help: 'Informations générales (nom de la grille et URI de connexion)'
   block_grid_status_help: 'Utilisateurs en ligne, régions, etc.'
   block_popular_places_help: 'Régions les plus visitées dans votre grille.'
-  block_motd_help: 'The message of the day the viewers show at login.'
-  block_destination_guide_help: 'The destinations of the guide of the grid, as the viewers show them.'
-  block_directory_info_help: 'The grids whose regions are in the search of this one.'
-  block_search_help: 'The search of the grid: places, events, classifieds, people.'
-  block_profile_help: 'The profile of an avatar, as its page shows it.'
-  block_new_users_help: 'The avatars that joined the grid last.'
+  block_motd_help: 'Le message du jour que les viewers montrent à la connexion.'
+  block_destination_guide_help: 'Des lieux à visiter, la même liste que le guide des destinations des viewers.'
+  block_directory_info_help: 'Les autres grilles dont les lieux se trouvent dans la recherche de cette grille.'
+  block_search_help: 'Un formulaire de recherche des lieux, événements, petites annonces et personnes de la grille.'
+  block_profile_help: "Le profil d'un avatar."
+  block_new_avatars_help: 'Les derniers avatars arrivés sur la grille.'
+  shortcode_home_help: "Votre texte avec les lieux populaires, le guide, l'état de la grille et le message du jour."
+  shortcode_guest_help: 'Montre son texte seulement aux visiteurs non connectés.'
+  shortcode_register_help: "Montre son texte seulement si le site a une page d'inscription."
+  shortcode_text_help: 'Montre un texte du site dans la langue de la page.'
+  shortcode_uri_help: "L'adresse de connexion de la grille, à copier dans un viewer."
+  shortcode_slogan_help: 'Le slogan du site.'
   setting_login: 'URI de connexion'
   setting_login_help: 'L’adresse où les viewers se connectent, et demandent ce que la grille dit d’elle-même (get_grid_info).'
   setting_gatekeeper: Gatekeeper
@@ -400,12 +412,18 @@ w4os:
   setting_economy_module_help: 'Se change avec les options de la grille, qui règlent le module et ce dont il a besoin.'
   economy_module_free: 'Transactions gratuites uniquement'
   economy_module_gloebit: Gloebit
-  economy_module_moneyserver: 'Podex et autres fournisseurs de devises'
+  economy_module_moneyserver: 'MoneyServer générique, pour utilier une monnaie factice ou un fournisseur alternatif.'
+  economy_module_podex: Podex
   setting_sell_enabled: 'Activer la vente'
   setting_price_upload: 'Prix de téléversement'
   setting_price_group_create: 'Prix de création de groupe'
   setting_gloebit_enabled: 'Activer Gloebit'
   setting_gloebit_environment: 'Environnement Gloebit'
+  setting_gloebit_key: "Clé d'application Gloebit"
+  setting_gloebit_secret: "Secret d'application Gloebit"
+  setting_gloebit_owner_name: 'Nom du propriétaire'
+  setting_gloebit_owner_email: 'E-mail du propriétaire'
+  setting_currency_provider: 'Fournisseur de devises'
   gloebit_sandbox: 'Bac à sable'
   gloebit_production: Production
   setting_guide_source: Source
@@ -426,6 +444,7 @@ w4os:
   setting_assets_url_help: "Le serveur de ressources web de la grille quand ce n'est pas celui des helpers : il convertit les images du monde (JPEG 2000) pour le web."
   offline_module_v1: 'Par les helpers (V1)'
   offline_module_v2: 'Par Robust (V2)'
+  offline_database: 'Base de données des messages hors ligne'
   db_host: "Nom d'hôte"
   db_port: Port
   db_name: 'Nom de la base de données'
@@ -564,6 +583,12 @@ w4os:
   kind_oar: 'Région (OAR)'
   kind_backup: Sauvegarde
   column_area: Surface
+  unit_m2: '%s m²'
+  unit_ha: '%s ha'
+  unit_km2: '%s km²'
+  unit_mb: '%s Mo'
+  unit_percent: '%s %%'
+  usage_of: '%1$s sur %2$s'
   column_cpu: CPU
   column_avatars: Avatars
   column_memory: Mémoire
@@ -702,8 +727,6 @@ w4os:
   admin_db_password_help: 'Gardé hors de la configuration et de git'
   admin_serve_helpers: 'Servir les helpers'
   admin_serve_helpers_help: 'Ce que demandent les viewers et les simulateurs (accueil, recherche, profils, économie, messages hors ligne) aux adresses de la grille, qui doivent être celles de ce site. Désactivé : la grille garde ses propres helpers'
-  admin_grids_config: 'Config des grilles'
-  admin_grids_config_help: "Le dossier de la config des grilles (son grids/<nick>), quand l'adresse de connexion est vide : /etc/opensim sur une machine de la grille, ou une copie"
   admin_tab_connection: Connexion
   admin_tab_accounts: Comptes
   admin_tab_pages: Pages
@@ -797,8 +820,6 @@ w4os:
   admin_health_problems: 'La santé de la grille a trouvé %d problèmes :'
   admin_service_no_page: 'Le site n’a pas de page à l’adresse %s : le service en demande une qui affiche le bloc %s.'
   admin_service_no_block: 'La page %s du site n’affiche pas le bloc %s dont le service a besoin.'
-  admin_snippet_lines: 'Lignes à ajouter à %s'
-  admin_snippet_example: Exemple
   admin_task_run: 'Lancer maintenant'
   admin_task_last: 'Dernier passage %s'
   admin_task_never: 'Jamais lancée'

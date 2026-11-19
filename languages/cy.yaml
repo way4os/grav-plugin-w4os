@@ -135,6 +135,12 @@ w4os:
   guide_url: 'URL Canllawau Cyfeiriadau'
   guide_source_help_file: "Ffeil destyniadau wedi'u rhestru'n fformatio."
   guide_source_help_where: "Gall fod y ffynhonnell yn URL neu'r llwybr llawn i ffeil leol y gall eich gweinydd gwe ei chyrraedd."
+  guide_source_help_name: "Darllenir enw ffeil ar ei ben ei hun yn ffolder ffurfweddu'r grid."
+  guide_example: 'Enghraifft o ffeil cyrchfannau'
+  snippet_ini: "Llinellau i'w hychwanegu at %s"
+  snippet_example: Enghraifft
+  motd_welcome: 'Croeso i %1$s, %2$s!'
+  motd_visitor: teithiwr
   guide_source_help_pipe: "Enw'r cyrchfan a'r URL teithio ar wahân gan farc pibell (|)."
   guide_source_help_categories: "Llinellau sy'n cynnwys testun yn unig yn cael eu dehongli fel categorïau."
   guide_source_help_comments: 'Llinellau sy''n dechrau gyda "#" neu "//" yn cael eu hanwybyddu.'
@@ -330,12 +336,18 @@ w4os:
   block_grid_info_help: 'Gwybodaeth gyffredinol (enw grid a uri mewngofnodi)'
   block_grid_status_help: 'Defnyddwyr ar-lein, rhanbarthau, ac ati.'
   block_popular_places_help: 'Y rhanbarthau mwyaf poblogaidd yn eich grid.'
-  block_motd_help: 'The message of the day the viewers show at login.'
-  block_destination_guide_help: 'The destinations of the guide of the grid, as the viewers show them.'
-  block_directory_info_help: 'The grids whose regions are in the search of this one.'
-  block_search_help: 'The search of the grid: places, events, classifieds, people.'
-  block_profile_help: 'The profile of an avatar, as its page shows it.'
-  block_new_users_help: 'The avatars that joined the grid last.'
+  block_motd_help: "Neges y dydd y mae'r gwylwyr yn ei dangos wrth fewngofnodi."
+  block_destination_guide_help: "Lleoedd i ymweld â nhw, yr un rhestr â chanllaw cyrchfannau'r gwylwyr."
+  block_directory_info_help: "Y gridiau eraill y mae eu lleoedd i'w cael yn chwiliad y grid hwn."
+  block_search_help: 'Ffurflen chwilio ar gyfer lleoedd, digwyddiadau, hysbysebion a phobl y grid.'
+  block_profile_help: 'Proffil afatar.'
+  block_new_avatars_help: "Yr afatarau diweddaraf a ymunodd â'r grid."
+  shortcode_home_help: "Eich testun gyda'r lleoedd poblogaidd, y canllaw, statws y grid a neges y dydd."
+  shortcode_guest_help: 'Yn dangos ei destun i ymwelwyr nad ydynt wedi mewngofnodi yn unig.'
+  shortcode_register_help: 'Yn dangos ei destun dim ond pan fydd gan y wefan dudalen gofrestru.'
+  shortcode_text_help: 'Yn dangos testun y wefan yn iaith y dudalen.'
+  shortcode_uri_help: "Cyfeiriad mewngofnodi'r grid, i'w gopïo i wyliwr."
+  shortcode_slogan_help: 'Slogan y wefan.'
   setting_login: 'Mewngofnodi URI'
   setting_login_help: "Y cyfeiriad y mae'r gwylwyr yn mewngofnodi iddo ac yn gofyn iddo beth mae'r grid yn ei ddweud amdano'i hun (get_grid_info)."
   setting_gatekeeper: Gatekeeper
@@ -400,12 +412,18 @@ w4os:
   setting_economy_module_help: "Yn cael ei newid gydag opsiynau'r grid, sy'n gosod y modiwl a'r hyn sydd ei angen arno."
   economy_module_free: 'Trafodion am ddim yn unig'
   economy_module_gloebit: Gloebit
-  economy_module_moneyserver: 'Podex a darparwyr arian eraill'
+  economy_module_moneyserver: 'MoneyServer cyffredinol, ar gyfer arian ffug neu ddarparwyr amgen.'
+  economy_module_podex: Podex
   setting_sell_enabled: 'Galluogi gwerthu'
   setting_price_upload: 'Pris uwchlwytho'
   setting_price_group_create: 'Pris creu grŵp'
   setting_gloebit_enabled: 'Galluogi Gloebit'
   setting_gloebit_environment: 'Amgylchedd Gloebit'
+  setting_gloebit_key: 'Allwedd ap Gloebit'
+  setting_gloebit_secret: 'Cyfrinach ap Gloebit'
+  setting_gloebit_owner_name: "Enw'r perchennog"
+  setting_gloebit_owner_email: 'E-bost y perchennog'
+  setting_currency_provider: 'Darparwr Arian Parod'
   gloebit_sandbox: 'Blwch tywod'
   gloebit_production: Cynhyrchu
   setting_guide_source: Ffynhonnell
@@ -426,6 +444,7 @@ w4os:
   setting_assets_url_help: "Gweinydd asedau gwe'r grid pan nad yw'n un yr helpers: mae'n trosi lluniau'r byd (JPEG 2000) ar gyfer y we."
   offline_module_v1: 'Gan yr helpers (V1)'
   offline_module_v2: 'Gan Robust (V2)'
+  offline_database: "Cronfa ddata'r negeseuon all-lein"
   db_host: 'Enw gwesteiwr'
   db_port: Porth
   db_name: "Enw'r gronfa ddata"
@@ -564,6 +583,12 @@ w4os:
   kind_oar: 'Rhanbarth (OAR)'
   kind_backup: 'Copi wrth gefn'
   column_area: Arwynebedd
+  unit_m2: '%s m²'
+  unit_ha: '%s ha'
+  unit_km2: '%s km²'
+  unit_mb: '%s MB'
+  unit_percent: '%s %%'
+  usage_of: '%1$s o %2$s'
   column_cpu: CPU
   column_avatars: Afatarau
   column_memory: Cof
@@ -702,8 +727,6 @@ w4os:
   admin_db_password_help: 'Wedi’i gadw y tu allan i’r ffurfweddiad ac i git'
   admin_serve_helpers: 'Gwasanaethu’r helpers'
   admin_serve_helpers_help: 'Yr hyn y mae’r gwylwyr a’r efelychwyr yn ei ofyn (croeso, chwilio, proffiliau, economi, negeseuon all-lein) ar gyfeiriadau’r grid, sy’n gorfod bod yn rhai’r safle hwn. I ffwrdd: mae’r grid yn cadw ei helpers ei hun'
-  admin_grids_config: 'Config of the grids'
-  admin_grids_config_help: 'The folder of the config of the grids (its grids/<nick>), when the login address is empty: /etc/opensim on a machine of the grid, or a copy of it'
   admin_tab_connection: Cysylltiad
   admin_tab_accounts: Cyfrifon
   admin_tab_pages: Tudalennau
@@ -797,8 +820,6 @@ w4os:
   admin_health_problems: 'The health of the grid found %d problems:'
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
-  admin_snippet_lines: 'Lines to add to %s'
-  admin_snippet_example: Example
   admin_task_run: 'Run now'
   admin_task_last: 'Last run %s'
   admin_task_never: 'Never run'
