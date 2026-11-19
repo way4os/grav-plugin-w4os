@@ -123,6 +123,12 @@ w4os:
   search_url_help_one: 'Solo uno può essere impostato, le altre righe sono esempi alternativi.'
   search_url_help_web: "Si prega di notare che l'URL di ricerca è diverso dall'URL di ricerca web, che attualmente non è gestito da W4OS. La ricerca web è rilevante se si dispone di una pagina di ricerca web dedicata ai contenuti della griglia, che fornisce risultati con URL all'interno del mondo virtuale (hop:// o secondlife://). È opzionale e viene menzionata qui solo per chiarire le impostazioni che, sfortunatamente, hanno nomi simili."
   search_register_url: 'URL di registrazione della ricerca'
+  search_registers: 'Altre registrazioni di ricerca'
+  search_register_help_2do: 'La registrazione su 2do.directory è consigliata: le regioni della griglia si trovano allora anche nella ricerca delle altre griglie.'
+  web_search_url: 'URL della ricerca web'
+  web_search_help: "Una pagina web dove si cercano i luoghi, gli eventi e le persone della griglia; i viewer la aprono dalla loro finestra di ricerca. L'URL del motore di ricerca qui sopra è un'altra cosa: lo chiamano i simulatori, nessuno lo vede."
+  tip_search_registers: '2do.directory consigliato'
+  tip_web_search: 'Modulo di ricerca per il pubblico'
   search_register_help_data: 'Servizio dati, utilizzato per registrare regioni, oggetti o terreni in vendita.'
   search_register_help_several: 'Puoi registrarti su diversi motori di ricerca.'
   search_register_help_prefix: 'Ogni riga deve avere un identificatore univoco che inizia con "DATA_SRV_"'
@@ -139,6 +145,33 @@ w4os:
   guide_example: 'Esempio di file di destinazioni'
   snippet_ini: 'Righe da aggiungere a %s'
   snippet_example: Esempio
+  dashboard_grid_info: 'Informazioni sulla griglia'
+  dashboard_grid_status: 'Stato della griglia'
+  total: Totale
+  tip_models_match: 'Come si riconosce un modello'
+  tip_models_pattern: 'Parte del nome dei modelli'
+  tip_models_list: 'I modelli scelti uno a uno'
+  tip_economy_url: 'Dove sono currency.php e landtool.php'
+  tip_economy_module: 'La valuta della griglia'
+  tip_money_database: 'Il database del server della moneta'
+  tip_gloebit_database: 'Dove Gloebit tiene le sue transazioni'
+  tip_gloebit_environment: 'Sandbox per provare, produzione per vendere'
+  tip_gloebit_keys: 'Dal tuo account commerciante Gloebit'
+  tip_currency_rate: 'US$ per 1000 unità del mondo'
+  tip_money_script_key: 'La stessa in MoneyServer.ini'
+  tip_podex_message: 'Mostrato prima del teletrasporto'
+  tip_podex_url: 'Dove sono i terminali Podex'
+  tip_search_database: 'Dove gli helpers tengono la ricerca'
+  tip_search_url: 'Usato direttamente dai simulatori'
+  tip_search_register: 'Dove le regioni sono elencate per la ricerca'
+  tip_events_url: 'Il calendario degli eventi'
+  tip_guide_source: 'Un URL o un file di destinazioni'
+  tip_guide_url: 'La pagina che mostrano i viewer'
+  tip_mail_sender: 'Il mittente delle e-mail inoltrate'
+  tip_offline_database: 'Dove gli helpers tengono i messaggi'
+  tip_offline_module: 'V1 dagli helpers, V2 da Robust'
+  tip_offline_url: 'Chiamato dai simulatori'
+  tip_assets_url: 'Dove sono servite le immagini del mondo'
   motd_welcome: 'Benvenuto su %1$s, %2$s!'
   motd_visitor: viaggiatore
   guide_source_help_pipe: "Il nome della destinazione e l'URL del teletrasporto sono separati da un carattere pipe (|)."
@@ -146,7 +179,7 @@ w4os:
   guide_source_help_comments: 'Le righe che iniziano con "#" o "//" vengono ignorate.'
   guide_source_help_board: "Il formato è identico a quello usato dall'oggetto in-world Gudz Teleport Board, quindi lo stesso URL sorgente può essere usato per entrambi."
   guide_help_feature: 'La guida delle destinazioni è una funzionalità del Viewer 3, che fornisce una finestra con suggerimenti di luoghi.'
-  guide_help_places: "Anche se non è obbligatorio e non tutti gli utenti ne trarranno vantaggio, è un modo utile per fornire loro un elenco di luoghi da visitare assolutamente, sia all'interno della tua griglia che all'esterno."
+  guide_help_places: 'Anche se non è obbligatorio e non tutti gli avatar ne trarranno vantaggio, è un modo utile per offrire loro un elenco di luoghi da vedere, della tua griglia o di altre.'
   offline_helper: 'Assistente per i messaggi offline'
   offline_helper_help: "Imposta l'URL nelle configurazioni di OpenSimulator."
   assets_url: 'URL del server delle risorse web'
@@ -163,9 +196,9 @@ w4os:
   action_save_changes: 'Salva le modifiche'
   models_preview: 'Anteprima modelli'
   models_none: 'Nessun modello trovato.'
-  models_help_choice: "Se sono definiti modelli di avatar, ai nuovi utenti verrà presentata una scelta nel modulo di creazione dell'avatar, che determinerà l'abbigliamento iniziale dell'avatar creato."
+  models_help_choice: "Se sono definiti modelli di avatar, il modulo di creazione dell'avatar ne offre la scelta, che determina l'abbigliamento iniziale del nuovo avatar."
   models_help_create: "L'amministratore della griglia deve creare ogni modello dalla console ROBUST, accedere con il viewer, personalizzare l'abbigliamento e aggiungere una foto del profilo."
-  models_help_not_users: 'Gli avatar utilizzati per i modelli non dovrebbero mai essere account utente reali.'
+  models_help_not_users: 'Gli avatar usati come modelli non dovrebbero mai essere avatar usati da persone.'
   models_help_outfit: 'Il nuovo avatar indosserà lo stesso outfit del modello al momento della registrazione.'
   models_help_rule: 'Se la regola di assegnazione del modello è basata sul nome, ogni nuovo avatar creato che corrisponde a quella regola verrà automaticamente aggiunto alla lista.'
   action_post: Post
@@ -214,7 +247,7 @@ w4os:
   simulators_count: '%d simulatori'
   no_simulators: 'Nessun simulatore'
   simulators_running: '%1$s in esecuzione su %2$s'
-  recent_users: 'Utenti recenti'
+  recent_avatars: 'Avatar recenti'
   see_all: 'Vedi tutto'
   filters: Filtri
   filters_active: '%d filtri attivi'
@@ -257,7 +290,7 @@ w4os:
   status_disabled: Disattivato
   status_pending: 'In attesa'
   status_banned: Bannato
-  avatar_type_user: "Avatar dell'utente"
+  avatar_type_user: Residente
   avatar_type_model: 'Modello predefinito'
   avatar_type_service: 'Accounto di servizio'
   state_grid_banned: 'Bannato dalla griglia'
@@ -276,6 +309,8 @@ w4os:
   role_liaison: Referente
   role_god: Dio
   role_maintenance: Manutenzione
+  role_model: Modello
+  role_service_account: 'Account del servizio'
   action_enable: Attiva
   action_disable: Disabilita
   action_start: Avvia
@@ -312,6 +347,8 @@ w4os:
   column_region: Regione
   column_region_name: 'Nome Regione'
   column_presence: Presenza
+  column_prims: Prim
+  column_scripts: Script
   column_internal_port: 'Porta interna'
   last_activity: 'Ultima attività'
   column_size: Dimensione
@@ -334,7 +371,7 @@ w4os:
   shortcode_option_include_hypergrid: 'Includi Hypergrid'
   shortcode_option_include_landsales: 'Includi Terreni in Vendita'
   block_grid_info_help: 'Informazioni generali (nome della griglia e URI di accesso)'
-  block_grid_status_help: 'Utenti online, regioni, ecc.'
+  block_grid_status_help: 'Avatar online, regioni, ecc.'
   block_popular_places_help: 'Region più visitate nel tuo grid.'
   block_motd_help: "Il messaggio del giorno che i viewer mostrano all'accesso."
   block_destination_guide_help: 'Luoghi da visitare, la stessa lista della guida alle destinazioni dei viewer.'
@@ -357,11 +394,11 @@ w4os:
   setting_welcome: Splash
   setting_welcome_help: 'La pagina di benvenuto visualizzata nel viewer con il modulo di accesso. Una pagina breve, senza scorrimento, con solo le informazioni essenziali. È richiesta, o almeno altamente consigliata.'
   setting_economy: Economia
-  setting_economy_help: "Valute e alcuni altri servizi richiesti dal viewer. Non sono accessibili direttamente dall'utente."
+  setting_economy_help: 'Valute e alcuni altri servizi interrogati dal viewer. Gli avatar non li aprono direttamente.'
   setting_about: 'Riguardo a questa griglia'
   setting_about_help: 'Pagina dettagliata sul tuo sito web, tramite un link visualizzato sulla pagina di accesso del viewer.'
   setting_register: 'Pagina di registrazione'
-  setting_register_help: 'Collegamento alla registrazione utente.'
+  setting_register_help: 'Link alla registrazione di un avatar.'
   setting_help: Aiuto
   setting_help_help: 'Link a una pagina di aiuto sul tuo sito web.'
   setting_password: 'Recupero password'
@@ -383,7 +420,7 @@ w4os:
   setting_data_service: 'Servizio dati'
   setting_data_service_help: 'Dove i simulatori registrano le loro regioni, perché la ricerca le trovi. Non è una pagina.'
   setting_offline_messages: 'Messaggi offline'
-  setting_offline_messages_help: "Necessario per i viewer per conservare i messaggi mentre l'utente è offline e consegnarli quando torna online. Servizio interno, non accessibile direttamente dall'utente."
+  setting_offline_messages_help: 'Necessario ai viewer per conservare i messaggi mentre un avatar è offline e consegnarli quando torna online. Servizio interno, gli avatar non lo aprono direttamente.'
   setting_offline_module: 'Modulo dei messaggi offline'
   setting_offline_module_help: 'Il modulo dei simulatori che conserva i messaggi degli avatar assenti: V2 da Robust, V1 dagli helpers.'
   setting_money_script_key: 'Chiave degli script di valuta'
@@ -405,7 +442,7 @@ w4os:
   setting_grid_name: 'Nome della griglia'
   setting_grid_nick: 'Nickname della griglia'
   setting_welcome_message: 'Messaggio di benvenuto'
-  setting_currency_symbol: 'Nome della valuta'
+  setting_currency_symbol: 'Simbolo della valuta'
   setting_search_module: 'Modulo di ricerca'
   setting_index_sims: 'Indicizza le regioni'
   setting_economy_module: 'Modulo di economia'
@@ -421,8 +458,15 @@ w4os:
   setting_gloebit_environment: 'Ambiente Gloebit'
   setting_gloebit_key: 'Chiave app Gloebit'
   setting_gloebit_secret: 'Segreto app Gloebit'
-  setting_gloebit_owner_name: 'Nome del proprietario'
-  setting_gloebit_owner_email: 'Email del proprietario'
+  setting_gloebit_owner_name: 'Nome del banchiere'
+  setting_gloebit_owner_email: 'Email del banchiere'
+  gloebit_banker_help: 'Con Gloebit, il banchiere è la persona di riferimento per Gloebit: Gloebit stesso tiene e gestisce tutte le transazioni.'
+  setting_money_banker: 'Avatar banchiere'
+  money_banker_help: 'Con il server della moneta, il banchiere possiede davvero la zecca: questo avatar può creare denaro, comprandolo dal sistema senza costo. Zeri: ogni avatar può; vuoto: nessuno.'
+  money_banker_podex_help: "Con Podex, il banchiere è l'avatar concordato con Podex, quello del suo ufficio e dei suoi sportelli."
+  money_server_warning_title: Sicurezza
+  money_server_warning: 'Il server della moneta e Podex sono offerti per comodità, non come raccomandazione: il server della moneta può creare denaro, richiede un audit di sicurezza prima di gestire denaro reale.'
+  currency_symbol_help: 'G$ con Gloebit, una valuta globale; qualsiasi simbolo con gli altri moduli.'
   setting_currency_provider: 'Fornitore di valuta'
   gloebit_sandbox: Sandbox
   gloebit_production: Produzione
@@ -432,7 +476,7 @@ w4os:
   setting_events_url: 'URL del server degli eventi'
   setting_logo_url: 'URL del logo della griglia'
   setting_mail_sender: 'Indirizzo e-mail del mittente'
-  setting_mail_sender_help: 'Un indirizzo email di risposta automatica utilizzato per inoltrare messaggi agli utenti che hanno attivato l''opzione "Inviami email quando sono offline" per i messaggi istantanei.'
+  setting_mail_sender_help: 'Un indirizzo e-mail no-reply usato per inoltrare i messaggi degli avatar che hanno attivato l''opzione "Inviami gli IM via email quando sono offline".'
   setting_currency_rate: 'Tasso di conversione valuta'
   setting_currency_rate_help: 'Importo da pagare in US$ per 1000 unità di denaro in-world. Utilizzato per stime di costo. Se non impostato, il tasso sarà di 10/1000 (1 centesimo per unità di denaro).'
   setting_currency_rate_per: 'Unità di denaro per tasso'
@@ -622,8 +666,6 @@ w4os:
   kind_oar: 'Regione (OAR)'
   kind_backup: Backup
   column_area: Superficie
-  unit_m2: '%s m²'
-  unit_ha: '%s ha'
   unit_km2: '%s km²'
   unit_mb: '%s MB'
   unit_percent: '%s %%'
@@ -638,6 +680,7 @@ w4os:
   parcel_build: Costruisci
   parcel_public: 'Accesso pubblico'
   column_regions: Regioni
+  column_estates: Proprietà
   parcel: Lotto
   column_type: Tipo
   filter_local: Locale
@@ -862,9 +905,6 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_dashboard_grid_info: 'Grid Info'
-  admin_dashboard_grid_status: 'Grid Status'
-  admin_dashboard_total: Total
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
   admin_task_run: 'Run now'

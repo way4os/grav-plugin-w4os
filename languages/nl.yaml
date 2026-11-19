@@ -123,6 +123,12 @@ w4os:
   search_url_help_one: 'Slechts één kan worden ingesteld, andere regels zijn alternatieve voorbeelden.'
   search_url_help_web: 'Merk op dat Zoek URL verschillend is van Web-zoek URL, welke momenteel niet door W4OS wordt behandeld. Zoeken op het web is relevant als je een zoekpagina op het web hebt die gewijd is aan raster-inhoud en die resultaten geeft met in-wereld URLs (hop:// of secondlife://). Het is optioneel en wordt hier alleen genoemd om instellingen uit elkaar te houden die helaas vergelijkbare namen hebben.'
   search_register_url: 'Registratie-URL van de zoekmachine'
+  search_registers: 'Andere zoekregistraties'
+  search_register_help_2do: "Registratie op 2do.directory wordt aanbevolen: de regio's van het grid zijn dan ook te vinden in de zoekfunctie van de andere grids."
+  web_search_url: 'URL van de webzoekfunctie'
+  web_search_help: 'Een webpagina waar men de plaatsen, evenementen en personen van het grid zoekt; de viewers openen hem vanuit hun zoekvenster. De URL van de zoekmachine hierboven is iets anders: de simulators roepen hem aan, niemand ziet hem.'
+  tip_search_registers: '2do.directory aanbevolen'
+  tip_web_search: 'Zoekformulier voor het publiek'
   search_register_help_data: "Gegevensdienst, gebruikt om regio's, objecten of grond te koop aan te melden."
   search_register_help_several: 'Je kunt je registreren bij verschillende zoekmachines.'
   search_register_help_prefix: 'Elke regel moet een unieke identificatie hebben die begint met "DATA_SRV_".'
@@ -139,6 +145,33 @@ w4os:
   guide_example: 'Voorbeeld van een bestemmingenbestand'
   snippet_ini: 'Regels om toe te voegen aan %s'
   snippet_example: Voorbeeld
+  dashboard_grid_info: Gridgegevens
+  dashboard_grid_status: Gridstatus
+  total: Totaal
+  tip_models_match: 'Hoe een model wordt herkend'
+  tip_models_pattern: 'Deel van de naam van de modellen'
+  tip_models_list: 'De modellen één voor één gekozen'
+  tip_economy_url: 'Waar currency.php en landtool.php staan'
+  tip_economy_module: 'De munteenheid van het grid'
+  tip_money_database: 'De database van de geldserver'
+  tip_gloebit_database: 'Waar Gloebit zijn transacties bewaart'
+  tip_gloebit_environment: 'Sandbox om te testen, productie om te verkopen'
+  tip_gloebit_keys: 'Uit uw Gloebit-handelaarsaccount'
+  tip_currency_rate: 'US$ voor 1000 eenheden in de wereld'
+  tip_money_script_key: 'Dezelfde in MoneyServer.ini'
+  tip_podex_message: 'Getoond vóór de teleport'
+  tip_podex_url: 'Waar de Podex-terminals staan'
+  tip_search_database: 'Waar de helpers de zoekfunctie bewaren'
+  tip_search_url: 'Rechtstreeks gebruikt door de simulators'
+  tip_search_register: "Waar de regio's voor de zoekfunctie staan"
+  tip_events_url: 'De kalender van de evenementen'
+  tip_guide_source: 'Een URL of een bestand met bestemmingen'
+  tip_guide_url: 'De pagina die de viewers tonen'
+  tip_mail_sender: 'De afzender van de doorgestuurde e-mails'
+  tip_offline_database: 'Waar de helpers de berichten bewaren'
+  tip_offline_module: 'V1 door de helpers, V2 door Robust'
+  tip_offline_url: 'Aangeroepen door de simulators'
+  tip_assets_url: 'Waar de afbeeldingen van de wereld worden geleverd'
   motd_welcome: 'Welkom op %1$s, %2$s!'
   motd_visitor: reiziger
   guide_source_help_pipe: 'De bestemmingsnaam en teleport URL worden gescheiden door een pijp (|) teken.'
@@ -146,7 +179,7 @@ w4os:
   guide_source_help_comments: 'Regels die beginnen met "#" of "//" worden genegeerd.'
   guide_source_help_board: 'Het formaat is identiek aan het formaat van het in-world object Gudz Teleport Board, dus dezelfde bron-URL kan voor beide worden gebruikt.'
   guide_help_feature: 'De Destinations-gids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
-  guide_help_places: 'Hoewel het niet verplicht is en niet elke gebruiker er baat bij zal hebben, is het een handige manier om hen een lijst te bieden van must-see plaatsen, zowel binnen als buiten jouw grid.'
+  guide_help_places: 'Hoewel het niet verplicht is en niet elke avatar er baat bij heeft, is het een handige manier om hun een lijst van bezienswaardige plaatsen te bieden, uit uw eigen grid of daarbuiten.'
   offline_helper: 'Offline berichten helper'
   offline_helper_help: 'Stel de URL in in de OpenSimulator-configuraties.'
   assets_url: 'Web Assets Server URL'
@@ -163,9 +196,9 @@ w4os:
   action_save_changes: 'Wijzigingen opslaan'
   models_preview: 'Modellen Voorbeeld'
   models_none: 'Geen modellen gevonden.'
-  models_help_choice: 'Als avatar modellen zijn gedefinieerd, krijgen nieuwe gebruikers een keuze voorgeschoteld op het formulier voor het maken van een avatar. Deze keuze bepaalt de initiële outfit van de gecreëerde avatar.'
+  models_help_choice: 'Als er avatarmodellen zijn gedefinieerd, biedt het formulier voor het maken van een avatar er een keuze uit, die de eerste outfit van de nieuwe avatar bepaalt.'
   models_help_create: 'De gridbeheerder moet elk model aanmaken vanuit de ROBUST-console, inloggen met de viewer, de outfit aanpassen en een profielfoto toevoegen.'
-  models_help_not_users: 'De avatars die worden gebruikt voor de modellen mogen nooit echte gebruikersaccounts zijn.'
+  models_help_not_users: 'De avatars die als modellen worden gebruikt, mogen nooit avatars zijn die mensen gebruiken.'
   models_help_outfit: 'De nieuwe avatar zal dezelfde outfit dragen als het model op het moment van registratie.'
   models_help_rule: 'Als de regel voor het toewijzen van modellen gebaseerd is op de naam, wordt elke nieuw aangemaakte avatar die aan die regel voldoet automatisch aan de lijst toegevoegd.'
   action_post: Post
@@ -214,7 +247,7 @@ w4os:
   simulators_count: '%d simulators'
   no_simulators: 'Geen simulator'
   simulators_running: '%1$s van %2$s actief'
-  recent_users: 'Recente gebruikers'
+  recent_avatars: 'Recente avatars'
   see_all: 'Alles bekijken'
   filters: Filters
   filters_active: '%d actieve filters'
@@ -257,7 +290,7 @@ w4os:
   status_disabled: Uitgeschakeld
   status_pending: 'In afwachting'
   status_banned: Verbannen
-  avatar_type_user: Gebruikersavatar
+  avatar_type_user: Bewoner
   avatar_type_model: Standaardmodel
   avatar_type_service: 'Service Account'
   state_grid_banned: 'Verbannen uit de grid'
@@ -276,6 +309,8 @@ w4os:
   role_liaison: Contactpersoon
   role_god: God
   role_maintenance: Onderhoud
+  role_model: Model
+  role_service_account: 'Service Account'
   action_enable: Activeren
   action_disable: Uitschakelen
   action_start: Starten
@@ -312,6 +347,8 @@ w4os:
   column_region: Regio
   column_region_name: 'Regio Naam'
   column_presence: Aanwezigheid
+  column_prims: Prims
+  column_scripts: Scripts
   column_internal_port: 'Interne poort'
   last_activity: 'Laatste Activiteit'
   column_size: Grootte
@@ -334,7 +371,7 @@ w4os:
   shortcode_option_include_hypergrid: 'Inclusief Hypergrid'
   shortcode_option_include_landsales: 'Inclusief Land te Koop'
   block_grid_info_help: 'Algemene informatie (gridnaam en login-uri)'
-  block_grid_status_help: "Online gebruikers, regio's, enz."
+  block_grid_status_help: "Avatars online, regio's, enz."
   block_popular_places_help: "Meest bezochte regio's in jouw grid."
   block_motd_help: 'Het bericht van de dag dat de viewers bij het inloggen tonen.'
   block_destination_guide_help: 'Plaatsen om te bezoeken, dezelfde lijst als de bestemmingengids van de viewers.'
@@ -357,11 +394,11 @@ w4os:
   setting_welcome: Splash
   setting_welcome_help: 'De welkomstpagina die in de viewer wordt getoond met het inlogformulier. Een korte, niet scrollende pagina, met alleen essentiële info. Het is verplicht, of op zijn minst sterk aanbevolen.'
   setting_economy: Economie
-  setting_economy_help: "Valuta's en enkele andere diensten die door de kijker worden opgevraagd. Zij zijn niet rechtstreeks toegankelijk voor de gebruiker."
+  setting_economy_help: "Valuta's en enkele andere diensten die de viewer opvraagt. De avatars openen ze niet rechtstreeks."
   setting_about: 'Over dit rooster'
   setting_about_help: 'Gedetailleerde informatiepagina op uw website, via een link op de inlogpagina van de kijker.'
   setting_register: 'Registratie pagina'
-  setting_register_help: 'Link naar de gebruikersregistratie.'
+  setting_register_help: 'Link naar de registratie van een avatar.'
   setting_help: Help
   setting_help_help: 'Link naar een hulppagina op uw website.'
   setting_password: Wachtwoordherstel
@@ -383,7 +420,7 @@ w4os:
   setting_data_service: Gegevensdienst
   setting_data_service_help: "Waar de simulators hun regio's aanmelden, zodat de zoekfunctie ze vindt. Geen pagina."
   setting_offline_messages: 'Offline berichten'
-  setting_offline_messages_help: 'Nodig voor viewers om berichten te bewaren terwijl de gebruiker offline is en ze af te leveren wanneer hij weer online komt. Interne dienst, niet rechtstreeks toegankelijk voor de gebruiker.'
+  setting_offline_messages_help: 'Nodig voor viewers om berichten te bewaren terwijl een avatar offline is en ze af te leveren wanneer hij weer online komt. Interne dienst, de avatars openen hem niet rechtstreeks.'
   setting_offline_module: 'Module voor offline berichten'
   setting_offline_module_help: 'De module van de simulators die de berichten van afwezige avatars bewaart: V2 door Robust, V1 door de helpers.'
   setting_money_script_key: 'Sleutel van de geldscripts'
@@ -405,7 +442,7 @@ w4os:
   setting_grid_name: 'Grid Naam'
   setting_grid_nick: 'Gridnaam (kort)'
   setting_welcome_message: Welkomstbericht
-  setting_currency_symbol: 'Naam van de valuta'
+  setting_currency_symbol: Valutasymbool
   setting_search_module: Zoekmodule
   setting_index_sims: "Regio's indexeren"
   setting_economy_module: Economiemodule
@@ -421,8 +458,15 @@ w4os:
   setting_gloebit_environment: Gloebit-omgeving
   setting_gloebit_key: Gloebit-appsleutel
   setting_gloebit_secret: Gloebit-appgeheim
-  setting_gloebit_owner_name: 'Naam van de eigenaar'
-  setting_gloebit_owner_email: 'E-mail van de eigenaar'
+  setting_gloebit_owner_name: 'Naam van de bankier'
+  setting_gloebit_owner_email: 'E-mail van de bankier'
+  gloebit_banker_help: 'Bij Gloebit is de bankier het aanspreekpunt voor Gloebit: Gloebit zelf houdt en beheert alle transacties.'
+  setting_money_banker: Bankier-avatar
+  money_banker_help: 'Bij de geldserver bezit de bankier echt de geldpers: deze avatar kan geld scheppen door het kosteloos van het systeem te kopen. Nullen: elke avatar kan het; leeg: niemand.'
+  money_banker_podex_help: 'Bij Podex is de bankier de met Podex afgesproken avatar, die van zijn kantoor en zijn geldautomaten.'
+  money_server_warning_title: Beveiliging
+  money_server_warning: 'De geldserver en Podex worden aangeboden voor het gemak, niet als aanbeveling: de geldserver kan geld scheppen, hij vraagt een beveiligingsaudit voordat hij echt geld beheert.'
+  currency_symbol_help: 'G$ met Gloebit, een wereldwijde munt; elk symbool met de andere modules.'
   setting_currency_provider: 'Valuta Aanbieder'
   gloebit_sandbox: Sandbox
   gloebit_production: Productie
@@ -432,7 +476,7 @@ w4os:
   setting_events_url: 'Evenementen Server URL'
   setting_logo_url: 'URL van het gridlogo'
   setting_mail_sender: 'Afzender e-mailadres'
-  setting_mail_sender_help: 'Een e-mailadres zonder antwoord dat wordt gebruikt om berichten door te sturen voor gebruikers die de optie "E-mail mij IM''s wanneer ik offline ben" inschakelen.'
+  setting_mail_sender_help: 'Een no-reply e-mailadres om berichten door te sturen voor avatars die de optie "E-mail mij IM''s als ik offline ben" hebben ingeschakeld.'
   setting_currency_rate: Valutawisselkoers
   setting_currency_rate_help: 'Bedrag te betalen in US$ voor 1000 inwereldse geldeenheden. Wordt gebruikt om de kosten te schatten. Indien niet ingesteld, zal de koers 10/1000 zijn (1 cent per geldeenheid)'
   setting_currency_rate_per: 'Geldeenheden per koers'
@@ -622,8 +666,6 @@ w4os:
   kind_oar: 'Regio (OAR)'
   kind_backup: Back-up
   column_area: Oppervlakte
-  unit_m2: '%s m²'
-  unit_ha: '%s ha'
   unit_km2: '%s km²'
   unit_mb: '%s MB'
   unit_percent: '%s %%'
@@ -638,6 +680,7 @@ w4os:
   parcel_build: Bouw
   parcel_public: 'Openbare toegang'
   column_regions: "Regio's"
+  column_estates: Estates
   parcel: Perceel
   column_type: Type
   filter_local: Lokaal
@@ -862,9 +905,6 @@ w4os:
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
   admin_health_problems: 'The health of the grid found %d problems:'
-  admin_dashboard_grid_info: 'Grid Info'
-  admin_dashboard_grid_status: 'Grid Status'
-  admin_dashboard_total: Total
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
   admin_task_run: 'Run now'
