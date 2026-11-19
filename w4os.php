@@ -301,6 +301,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_health_problems', fn () => $this->healthProblems()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_service', fn () => $this->service()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
@@ -910,6 +911,25 @@ class W4osPlugin extends Plugin
             return $read[$group] = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values] + $none;
         } catch (\Throwable $e) {
             return $read[$group] = ['error' => $e->getMessage()] + $none;
+        }
+    }
+
+    /**
+     * The problems of the last health report of the grid, for the notice of the dashboard, with the address of the Health page;
+     * none for whom the contract does not let read it, or when the report cannot be read (the Health page says why).
+     *
+     * @return array{count: int, labels: list<string>, url: string}
+     */
+    private function healthProblems(): array
+    {
+        $none = ['count' => 0, 'labels' => [], 'url' => ''];
+        if (! $this->site()->canOperation('health')) {
+            return $none;
+        }
+        try {
+            return Site::healthProblems($this->site()->engine()->health()) + ['url' => $this->site()->url('health')];
+        } catch (\Throwable) {
+            return $none;
         }
     }
 

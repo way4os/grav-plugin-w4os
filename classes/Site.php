@@ -89,6 +89,25 @@ final class Site
     }
 
     /**
+     * The problems the health of the grid found (its rows of level error), for the notice of the dashboard: how many, the labels
+     * of the first ones.
+     *
+     * @param array<string,mixed> $health the health as the engine gives it
+     * @return array{count: int, labels: list<string>}
+     */
+    public static function healthProblems(array $health, int $shown = 5): array
+    {
+        $labels = [];
+        foreach ((array) ($health['groups'] ?? []) as $group) {
+            foreach ((array) ($group['rows'] ?? []) as $row) {
+                ($row['level'] ?? '') === 'error' && $labels[] = (string) ($row['label'] ?? '');
+            }
+        }
+
+        return ['count' => count($labels), 'labels' => array_slice($labels, 0, $shown)];
+    }
+
+    /**
      * The status of the page of a profile the engine did not give: unavailable for now when the grid cannot be reached (503), else
      * a profile that does not exist (404).
      */

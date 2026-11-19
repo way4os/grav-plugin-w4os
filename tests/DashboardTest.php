@@ -42,4 +42,23 @@ describe('the dashboard', function () {
 
         expect($html)->toContain('<p class="empty-title">[w4os.no_avatars]</p>');
     });
+
+    test('says the problems the health of the grid found, as w4os-wp says them in its notices, leading to the Health page', function () {
+        $health = ['level' => 'error', 'groups' => [
+            ['file' => 'Robust.HG.ini', 'rows' => [['label' => 'LoginURI', 'level' => 'ok'], ['label' => 'SRV_ProfileServerURI', 'level' => 'error']]],
+            ['file' => 'PHP', 'rows' => [['label' => 'imagick JPEG 2000', 'level' => 'error'], ['label' => 'intl', 'level' => 'slow']]],
+        ]];
+        $problems = Site::healthProblems($health);
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => []));
+        $twig->addFunction(new TwigFunction('w4os_health_problems', fn () => $problems + ['url' => '/w4os/health']));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
+        $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
+        $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => (string) $value));
+        $html = $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
+
+        expect($problems)->toMatchArray(['count' => 2, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000']])
+            ->and(Site::healthProblems(['level' => 'ok', 'groups' => []]))->toMatchArray(['count' => 0])
+            ->and($html)->toContain('alert-danger', '[w4os.admin_health_problems:2]', 'SRV_ProfileServerURI', 'href="&#x2F;w4os&#x2F;health"');
+    });
 });
