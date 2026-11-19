@@ -332,6 +332,8 @@ class W4osPlugin extends Plugin
 
     public function onTwigSiteVariables(): void
     {
+        // The blocks of the text of the page (its shortcodes) it could not read, said before the theme shows its messages
+        $this->blockFailures === [] || $this->blockNotices();
         $page = $this->grav['page'] ?? null;
         $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
@@ -1063,7 +1065,10 @@ class W4osPlugin extends Plugin
         return $block === '' ? null : \W4os\Grav\Blocks::name($block);
     }
 
-    /** A block of the helpers that could not be read: logged, and said on the page once it is rendered (blockNotices()). */
+    /**
+     * A block of the helpers that could not be read: logged, and said on the page (blockNotices()): before the theme shows its
+     * messages for the blocks of the text of the page, once the page is rendered for the ones of its template.
+     */
     private function blockUnavailable(string $name, string $reason): void
     {
         $name = \W4os\Grav\Blocks::name($name);
