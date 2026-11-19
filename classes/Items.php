@@ -42,7 +42,7 @@ final class Items
                 }
                 $groups[$field['group']][$field['name']] = ['disabled' => true, 'help' => $reason] + $input
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
-                $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => (string) ($line['file'] ?? ''),
+                $groups[$field['group']][$field['name'].'_fixed'] = ['type' => 'display', 'label' => self::snippetLabel(['file' => (string) ($line['file'] ?? '')], $translate),
                     'content' => "```ini\n".rtrim((string) ($line['text'] ?? ''))."\n```", 'markdown' => true,
                     'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
                 continue;
@@ -64,12 +64,18 @@ final class Items
             } else {
                 continue;
             }
-            // The lines of the files of the grid it takes, under it, as w4os-wp shows them
+            // The lines of the files of the grid it takes, under it, as w4os-wp shows them; an example (no file) after the settings
             foreach (array_values((array) ($snippets[$field['name']] ?? [])) as $i => $snippet) {
-                $groups[$field['group']][$field['name'].'_snippets'.($i ? "_$i" : '')] = ['type' => 'display', 'label' => (string) ($snippet['file'] ?? ''),
-                    'content' => "```ini\n".rtrim((string) ($snippet['text'] ?? ''))."\n```", 'markdown' => true,
+                $example = ($snippet['file'] ?? null) === null;
+                $show = ['type' => 'display', 'label' => self::snippetLabel($snippet, $translate),
+                    'content' => "```".($example ? '' : 'ini')."\n".rtrim((string) ($snippet['text'] ?? ''))."\n```", 'markdown' => true,
                     'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
+                $name = $field['name'].'_snippets'.($i ? "_$i" : '');
+                $example ? $examples[$field['group']][$name] = $show : $groups[$field['group']][$name] = $show;
             }
+        }
+        foreach ($examples ?? [] as $group => $shown) {
+            $groups[$group] = ($groups[$group] ?? []) + $shown;
         }
         $fields = ['id' => ['type' => 'hidden']];
         $shown = array_values(array_filter((array) ($view->form['groups'] ?? []), fn ($group) => isset($groups[$group['name']])));
@@ -83,6 +89,22 @@ final class Items
         }
 
         return $fields + ($groups[$shown[0]['name'] ?? ''] ?? []);
+    }
+
+    /**
+     * What lines of a file of the grid are, said as what they are: the lines to add to that file, or the example the engine names
+     * (`label`, a key of the catalog; else an example).
+     *
+     * @param array<string,mixed> $snippet
+     */
+    private static function snippetLabel(array $snippet, ?\Closure $translate): string
+    {
+        $translate ??= fn (string $key) => $key;
+        if (($snippet['file'] ?? null) === null) {
+            return $translate('w4os.'.(string) ($snippet['label'] ?? 'admin_snippet_example'));
+        }
+
+        return sprintf($translate('w4os.admin_snippet_lines'), (string) $snippet['file']);
     }
 
     /**
@@ -220,7 +242,7 @@ final class Items
         }
         // A path on the address of the site, which is not changed here
         if ($field['type'] === 'path') {
-            return ['type' => 'text', 'prepend' => rtrim($base, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
+            return ['type' => 'w4os_path', 'base' => rtrim($base, '/'), 'label' => 'w4os.'.$field['label']] + ($help === null ? [] : ['help' => $help]);
         }
         // Several addresses the options of the grid set: one by line
         ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';

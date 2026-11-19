@@ -1,0 +1,8 @@
+{# A path under a fixed address (the site of the grid): the field of a text, the address it is under before it, read only, on the
+   same line (Tabler's input group) #}
+{% set field = field|merge({wrapper_classes: ('input-group ' ~ (field.wrapper_classes ?? ''))|trim}) %}
+{% extends 'forms/fields/text/text.html.twig' %}
+
+{% block prepend %}
+    {% if field.base %}<span class="input-group-text">{{ field.base|e }}</span>{% endif %}
+{% endblock %}

@@ -75,7 +75,7 @@ describe('the settings pages of the services of the grid', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'path' => '/helpers'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org');
 
-        expect($fields['path'])->toMatchArray(['type' => 'text', 'prepend' => 'http://grid.example.org', 'help' => '[economy_helper_uri_help]'])
+        expect($fields['path'])->toMatchArray(['type' => 'w4os_path', 'base' => 'http://grid.example.org', 'help' => '[economy_helper_uri_help]'])
             ->and($fields['gloebitConfiguration'])->toMatchArray(['type' => 'display', 'label' => 'w4os.gloebit_configuration'])
             ->and($fields['gloebitConfiguration']['content'])->toContain('[gloebit_help_crash] [gloebit_help_linux]');
     });
@@ -89,7 +89,7 @@ describe('the settings pages of the services of the grid', function () {
         expect($fields['provide'])->toMatchArray(['type' => 'checkbox'])
             ->and($fields['provide']['wrapper_classes'] ?? '')->toContain('form-switch')
             ->and($names[array_search('path', $names, true) + 1])->toBe('path_snippets')
-            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'Robust.HG.ini', 'markdown' => true])
+            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'w4os.admin_snippet_lines', 'markdown' => true])
             ->and($fields['path_snippets']['content'])->toContain("```ini\n[GridInfoService]\n    economy = http://grid.example.org/helpers\n```");
     });
 
@@ -126,7 +126,7 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields($view, shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', fixed: $fixed);
 
         expect($fields['path'])->toMatchArray(['disabled' => true, 'help' => 'this server cannot write Robust.HG.ini, where the grid reads it: set it there by hand'])
-            ->and($fields['path_fixed'])->toMatchArray(['type' => 'display', 'label' => 'Robust.HG.ini'])
+            ->and($fields['path_fixed'])->toMatchArray(['type' => 'display', 'label' => 'w4os.admin_snippet_lines'])
             ->and($fields['path_fixed']['content'])->toContain('DestinationGuide = http://grid.example.org/guide')
             ->and(Items::unfixed(['path' => '', 'guideSource' => 'other.txt'], $fixed))->toBe(['guideSource' => 'other.txt']);
     });
@@ -160,5 +160,28 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'gloebitDatabase' => null], null, true, 250), shown: true, fixed: $fixed);
 
         expect(array_filter($fields['gloebitDatabase']['fields'], fn (array $part) => empty($part['disabled'])))->toBe([]);
+    });
+
+    test('a path shows the address it is under as the start of its field, in the same line', function () {
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/w4os_path/w4os_path.html.twig');
+
+        expect($template)->toContain('input-group', 'input-group-text', 'field.base')
+            ->and($template)->toContain('forms/fields/text/text.html.twig');
+    });
+
+    test('names the lines of a file as what they are, and puts an example after the settings, never between them', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
+        $snippets = [
+            'guideSource' => [['file' => null, 'label' => 'guide_example', 'text' => "Hypergrid examples\nhop://example.org:8002/Place"]],
+            'path' => [['file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]],
+        ];
+        $texts = ['w4os.admin_snippet_lines' => 'Lines to add to %s', 'w4os.guide_example' => 'Example of a destinations file'];
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/guide', 'guideSource' => 'destinations.txt'], null, true, 250), shown: true, translate: fn ($key) => $texts[$key] ?? $key, snippets: $snippets);
+        $names = array_keys($fields);
+
+        expect($fields['path_snippets']['label'])->toBe('Lines to add to Robust.HG.ini')
+            ->and($fields['guideSource_snippets']['label'])->toBe('Example of a destinations file')
+            ->and(end($names))->toBe('guideSource_snippets')
+            ->and($names[array_search('guideSource', $names, true) + 1])->not->toBe('guideSource_snippets');
     });
 });
