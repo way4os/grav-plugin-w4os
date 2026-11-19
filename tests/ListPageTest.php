@@ -16,6 +16,7 @@ function render_list(?array $list, array $items, array $meta, array $links = [],
     $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n ".($key === 'w4os.filters_active' ? 'filters' : 'items')));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
+    $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
@@ -46,12 +47,21 @@ describe('the list of a page of the admin', function () {
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
             // A value that does not say what it is after the label of its column
             // Each in it until its column shows: 2 from md, 3 from xl, 4 from xxl (Tabler's breakpoints)
-            ->and($html)->toContain('<div class="w4os-subtitle text-secondary w4os-folded d-xxl-none"><span class="d-xl-none">[w4os.label_value:[w4os.column_grid]|demo]</span><span class="d-xxl-none">[w4os.label_value:[w4os.column_port]|9040]</span></div>')
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary w4os-folded d-xl-none"><span class="d-xl-none">[w4os.label_value:[w4os.column_grid]|demo]</span></div>')
             // Its address under its name, at every width (the first of its subtitle attributes that has one)
             ->and($html)->toContain('<div class="w4os-subtitle text-secondary">h:9040</div>')
-            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">', '<th class="w4os-cell-number d-none d-md-table-cell">', '<th class="w4os-cell-number d-none d-xxl-table-cell">')
+            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">', '<th class="w4os-cell-number d-none d-md-table-cell">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
+    });
+
+    test('folds the values of a group one by one under the name, each with its label, until its column shows', function () {
+        $regions = (new OpenApi(Contract::document()))->listOf('regions');
+        $html = render_list($regions, [['uuid' => 'r1', 'name' => 'Plaza', 'avatars' => 1, 'prims' => 2150, 'location' => '8015, 8012', 'size' => 256]], ['total' => 1]);
+
+        expect($html)->toContain('<span class="d-md-none">[w4os.label_value:[w4os.column_presence]|1]</span><span class="d-md-none">[w4os.label_value:[w4os.column_prims]|2150]</span>')
+            ->and($html)->toContain('<span class="d-xl-none">[w4os.label_value:[w4os.profile_location]|8015, 8012]</span><span class="d-xl-none">[w4os.label_value:[w4os.column_size]|[w4os.unit_dimensions:256|256]]</span>')
+            ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 
     test('shows a time relatively while it is recent, else as a short date with its time, its full date as its tip; an email or a role bare', function () {

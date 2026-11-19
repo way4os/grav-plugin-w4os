@@ -99,9 +99,18 @@ describe('templates', function () {
             ->toContain('bg-danger', '[w4os.usage_of:[w4os.unit_mb:15,565]|[w4os.unit_mb:16,384]]')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => []]))->not->toContain('progress');
         // The size of a region: its width and its height in meters (the engine's unit_dimensions), in the language of the page
-        $size = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['size'];
+        $size = array_column(array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['place']['parts'], null, 'name')['size'];
         expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('[w4os.unit_dimensions:512|1,024]')->not->toContain('text-nowrap')
             ->and($cell->render(['column' => $size, 'item' => ['size' => 256]]))->toContain('[w4os.unit_dimensions:256|256]');
+
+        // Several values in one column (a group): each its label and its value, one under the other, an empty one left out
+        $regions = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name');
+        $usage = $cell->render(['column' => $regions['usage'], 'item' => ['avatars' => 1, 'prims' => 2150]]);
+        expect($usage)->toContain('<div class="w4os-group">', '<div><span class="text-secondary">[w4os.column_presence]</span> 1</div>', '<div><span class="text-secondary">[w4os.column_prims]</span> 2150</div>')
+            ->and($usage)->not->toContain('column_scripts')
+            ->and($cell->render(['column' => $regions['place'], 'item' => ['location' => '8015, 8012', 'size' => 256]]))
+            ->toContain('[w4os.profile_location]</span> 8015, 8012</div>', '[w4os.column_size]</span> [w4os.unit_dimensions:256|256]</div>')
+            ->and($cell->render(['column' => $regions['usage'], 'item' => []]))->not->toContain('w4os-group');
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {

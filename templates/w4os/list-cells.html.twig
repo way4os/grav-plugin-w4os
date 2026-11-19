@@ -25,6 +25,7 @@
     {%- if type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'datetime' -%}{% if value %}<time title="{{ value|w4os_date('full')|e('html_attr') }}">{{ value|w4os_date(dates) }}</time>{% endif %}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
+    {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates)|trim %}{% if text is not empty %}{% set shown = shown|merge(['<div><span class="text-secondary">' ~ ('w4os.' ~ part.label)|t|e ~ '</span> ' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}
     {%- elseif type == 'dimensions' -%}{% set width = item.width ?? value %}{% if width is not null %}{{ 'w4os.unit_dimensions'|t(w4os_number(width, 0), w4os_number(item.height ?? width, 0)) }}{% endif %}
     {%- elseif type == 'area' -%}{% if value is not null %}{{ w4os_area(value) }}{% endif %}
     {%- elseif type == 'usage' -%}{% if value is not null %}

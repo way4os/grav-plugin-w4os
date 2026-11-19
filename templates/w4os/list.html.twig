@@ -100,7 +100,10 @@
                            so that the ones left are its end); a value that does not say what it is (a date, a number, a name) after the
                            label of its column #}
                         {% set parts = [] %}
-                        {% for other in view.secondary %}{% set part = cells.cell(other.definition, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: other.bare ? part : 'w4os.label_value'|t(('w4os.' ~ other.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
+                        {% for other in view.secondary %}
+                            {# A group: each of its values with its own label #}
+                            {% for shown in other.type == 'group' ? other.definition.parts : [other.definition] %}{% set part = cells.cell(shown, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: (other.type != 'group' and other.bare) ? part : 'w4os.label_value'|t(('w4os.' ~ shown.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
+                        {% endfor %}
                         {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded d-{{ (parts|last).tier }}-none">{% for part in parts %}<span class="d-{{ part.tier }}-none">{{ part.text }}</span>{% endfor %}</div>{% endif %}
                     </td>
                     {% else %}
