@@ -519,7 +519,46 @@ w4os:
   service_assets_help: "Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto's)."
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
-  health_unset: 'Not set: neither served nor tested.'
+  health_unset: 'Niet ingesteld: niet geleverd en niet getest.'
+  health_options_all: 'alle opties van het grid'
+  health_options_missing: 'ontbreken: %s'
+  health_matches_grid_info: 'komt overeen met %s van get_grid_info'
+  health_differs_grid_info: 'wijkt af van %s van get_grid_info'
+  health_web_search: 'Zoeken op het web'
+  health_offline_robust: 'geleverd door Robust (module V2)'
+  health_set: ingesteld
+  health_missing: ontbreekt
+  health_signed_out: afgemeld
+  health_matches_search: 'komt overeen met search van [GridInfoService]'
+  health_with_xmlrpc: 'met een geldig XMLRPC-verzoek'
+  health_with_post: 'met geldige verzonden gegevens'
+  health_with_query: 'met een geldige zoekopdracht'
+  health_without_data: 'zonder gegevens'
+  health_slow: 'antwoordde in %d ms, na meer dan %s s de eerste keer'
+  health_block_missing: 'de pagina toont het blok %s niet'
+  health_sends_elsewhere: 'stuurt naar %s, niet naar %s'
+  health_curl_error: 'cURL-fout %d'
+  health_ok: OK
+  health_readable: leesbaar
+  health_not_readable: 'niet leesbaar'
+  health_helpers: helpers
+  health_site: site
+  health_helpers_signed_out: 'helpers, afgemeld'
+  health_site_signed_out: 'site, afgemeld'
+  health_writable: schrijfbaar
+  health_can_be_made: 'kan worden aangemaakt'
+  health_not_writable: 'niet schrijfbaar'
+  health_jp2_reads: 'leest JPEG 2000'
+  health_jp2_reads_detail: 'vereist door de webassets-dienst: de afbeeldingen van de wereld (JPEG 2000)'
+  health_jp2_external: 'externe webassets-dienst'
+  health_jp2_external_detail: 'de afbeeldingen van de wereld worden omgezet door de webassets-dienst van het grid (%s)'
+  health_jp2_missing: 'kan JPEG 2000 niet lezen'
+  health_jp2_missing_detail: 'vereist door de webassets-dienst voor de afbeeldingen van de wereld (imagick gebouwd met OpenJPEG): stel zonder dit een externe webassets-dienst in (%s)'
+  health_installed: 'geïnstalleerd %s'
+  health_installed_polyfill: 'geïnstalleerd (polyfill)'
+  health_for_xmlrpc: 'extensie of polyfill'
+  health_for_imagick: 'tekst naar afbeelding, webassets'
+  health_for_gettext: vertalingen
   health_third_party: 'Deze service vereist een aparte webtoepassing.'
   presence: Aanwezigheid
   region_flag_default_region: Standaard

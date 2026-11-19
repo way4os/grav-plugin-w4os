@@ -519,7 +519,46 @@ w4os:
   service_assets_help: 'Ein Web-Assets-Server wird benötigt, um In-World-Assets (aus dem Grid) auf der Website anzuzeigen (z. B. Profilbilder).'
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
-  health_unset: 'Not set: neither served nor tested.'
+  health_unset: 'Nicht gesetzt: weder bereitgestellt noch getestet.'
+  health_options_all: 'alle Optionen des Grids'
+  health_options_missing: 'fehlen: %s'
+  health_matches_grid_info: 'entspricht %s von get_grid_info'
+  health_differs_grid_info: 'weicht von %s von get_grid_info ab'
+  health_web_search: Web-Suche
+  health_offline_robust: 'von Robust bereitgestellt (Modul V2)'
+  health_set: gesetzt
+  health_missing: fehlt
+  health_signed_out: abgemeldet
+  health_matches_search: 'entspricht search von [GridInfoService]'
+  health_with_xmlrpc: 'mit gültiger XMLRPC-Anfrage'
+  health_with_post: 'mit gültigen gesendeten Daten'
+  health_with_query: 'mit gültiger Abfrage'
+  health_without_data: 'ohne Daten'
+  health_slow: 'antwortete in %d ms, nach mehr als %s s beim ersten Mal'
+  health_block_missing: 'die Seite zeigt den Block %s nicht'
+  health_sends_elsewhere: 'leitet zu %s weiter, nicht zu %s'
+  health_curl_error: 'cURL-Fehler %d'
+  health_ok: OK
+  health_readable: lesbar
+  health_not_readable: 'nicht lesbar'
+  health_helpers: Helpers
+  health_site: Website
+  health_helpers_signed_out: 'Helpers, abgemeldet'
+  health_site_signed_out: 'Website, abgemeldet'
+  health_writable: beschreibbar
+  health_can_be_made: 'kann angelegt werden'
+  health_not_writable: 'nicht beschreibbar'
+  health_jp2_reads: 'liest JPEG 2000'
+  health_jp2_reads_detail: 'vom Web-Assets-Dienst benötigt: die Bilder der Welt (JPEG 2000)'
+  health_jp2_external: 'externer Web-Assets-Dienst'
+  health_jp2_external_detail: 'die Bilder der Welt werden vom Web-Assets-Dienst des Grids umgewandelt (%s)'
+  health_jp2_missing: 'kann JPEG 2000 nicht lesen'
+  health_jp2_missing_detail: 'vom Web-Assets-Dienst für die Bilder der Welt benötigt (imagick mit OpenJPEG gebaut): ohne ihn einen externen Web-Assets-Dienst festlegen (%s)'
+  health_installed: 'installiert %s'
+  health_installed_polyfill: 'installiert (Polyfill)'
+  health_for_xmlrpc: 'Erweiterung oder Polyfill'
+  health_for_imagick: 'Text zu Bild, Web-Assets'
+  health_for_gettext: Übersetzungen
   health_third_party: 'Dieser Dienst erfordert eine separate Webanwendung.'
   presence: Anwesenheit
   region_flag_default_region: Standard

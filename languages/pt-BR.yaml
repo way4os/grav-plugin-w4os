@@ -519,7 +519,46 @@ w4os:
   service_assets_help: 'É necessário um servidor de ativos da web para exibir ativos do mundo virtual (da grade) no site (por exemplo, fotos de perfil).'
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
-  health_unset: 'Not set: neither served nor tested.'
+  health_unset: 'Não definido: nem servido nem testado.'
+  health_options_all: 'todas as opções do grid'
+  health_options_missing: 'faltando: %s'
+  health_matches_grid_info: 'corresponde a %s de get_grid_info'
+  health_differs_grid_info: 'difere de %s de get_grid_info'
+  health_web_search: 'Pesquisa na Web'
+  health_offline_robust: 'servido pelo Robust (módulo V2)'
+  health_set: definido
+  health_missing: ausente
+  health_signed_out: desconectado
+  health_matches_search: 'corresponde a search de [GridInfoService]'
+  health_with_xmlrpc: 'com uma requisição XMLRPC válida'
+  health_with_post: 'com dados enviados válidos'
+  health_with_query: 'com uma consulta válida'
+  health_without_data: 'sem dados'
+  health_slow: 'respondeu em %d ms, após mais de %s s na primeira vez'
+  health_block_missing: 'a página não mostra o bloco %s'
+  health_sends_elsewhere: 'envia para %s, não para %s'
+  health_curl_error: 'erro cURL %d'
+  health_ok: OK
+  health_readable: legível
+  health_not_readable: ilegível
+  health_helpers: helpers
+  health_site: site
+  health_helpers_signed_out: 'helpers, desconectado'
+  health_site_signed_out: 'site, desconectado'
+  health_writable: gravável
+  health_can_be_made: 'pode ser criado'
+  health_not_writable: 'não gravável'
+  health_jp2_reads: 'lê JPEG 2000'
+  health_jp2_reads_detail: 'exigido pelo serviço de recursos web: as imagens do mundo (JPEG 2000)'
+  health_jp2_external: 'serviço de recursos web externo'
+  health_jp2_external_detail: 'as imagens do mundo são convertidas pelo serviço de recursos web do grid (%s)'
+  health_jp2_missing: 'não lê JPEG 2000'
+  health_jp2_missing_detail: 'exigido pelo serviço de recursos web para as imagens do mundo (imagick compilado com OpenJPEG): sem ele, defina um serviço de recursos web externo (%s)'
+  health_installed: 'instalado %s'
+  health_installed_polyfill: 'instalado (polyfill)'
+  health_for_xmlrpc: 'extensão ou polyfill'
+  health_for_imagick: 'texto em imagem, recursos web'
+  health_for_gettext: traduções
   health_third_party: 'Este serviço requer um aplicativo web separado.'
   presence: Presença
   region_flag_default_region: Padrão

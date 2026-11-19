@@ -519,7 +519,46 @@ w4os:
   service_assets_help: "Mae angen gweinydd asedau gwe i arddangos asedau yn y byd (o'r grid) ar y wefan (e.e. lluniau proffil)."
   service_instant_message: 'Instant messages service'
   service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
-  health_unset: 'Not set: neither served nor tested.'
+  health_unset: "Heb ei osod: heb ei weini na'i brofi."
+  health_options_all: "holl opsiynau'r grid"
+  health_options_missing: 'ar goll: %s'
+  health_matches_grid_info: 'yn cyfateb i %s get_grid_info'
+  health_differs_grid_info: 'yn wahanol i %s get_grid_info'
+  health_web_search: 'Chwiliad Gwe'
+  health_offline_robust: 'yn cael ei weini gan Robust (modiwl V2)'
+  health_set: "wedi'i osod"
+  health_missing: 'ar goll'
+  health_signed_out: 'wedi allgofnodi'
+  health_matches_search: 'yn cyfateb i search [GridInfoService]'
+  health_with_xmlrpc: 'gyda chais XMLRPC dilys'
+  health_with_post: "gyda data dilys wedi'i bostio"
+  health_with_query: 'gydag ymholiad dilys'
+  health_without_data: 'heb ddata'
+  health_slow: 'wedi ateb mewn %d ms, ar ôl mwy na %s e y tro cyntaf'
+  health_block_missing: "nid yw'r dudalen yn dangos y bloc %s"
+  health_sends_elsewhere: 'yn anfon i %s, nid i %s'
+  health_curl_error: 'gwall cURL %d'
+  health_ok: Iawn
+  health_readable: darllenadwy
+  health_not_readable: 'ddim yn ddarllenadwy'
+  health_helpers: helpers
+  health_site: gwefan
+  health_helpers_signed_out: 'helpers, wedi allgofnodi'
+  health_site_signed_out: 'gwefan, wedi allgofnodi'
+  health_writable: ysgrifenadwy
+  health_can_be_made: 'gellir ei greu'
+  health_not_writable: 'ddim yn ysgrifenadwy'
+  health_jp2_reads: 'yn darllen JPEG 2000'
+  health_jp2_reads_detail: "yn ofynnol gan y gwasanaeth asedau gwe: lluniau'r byd (JPEG 2000)"
+  health_jp2_external: 'gwasanaeth asedau gwe allanol'
+  health_jp2_external_detail: "caiff lluniau'r byd eu trosi gan wasanaeth asedau gwe'r grid (%s)"
+  health_jp2_missing: 'ni all ddarllen JPEG 2000'
+  health_jp2_missing_detail: "yn ofynnol gan y gwasanaeth asedau gwe ar gyfer lluniau'r byd (imagick wedi'i adeiladu gydag OpenJPEG): hebddo, gosodwch wasanaeth asedau gwe allanol (%s)"
+  health_installed: "wedi'i osod %s"
+  health_installed_polyfill: "wedi'i osod (polyfill)"
+  health_for_xmlrpc: 'estyniad neu polyfill'
+  health_for_imagick: 'testun i lun, asedau gwe'
+  health_for_gettext: cyfieithiadau
   health_third_party: 'Mae angen rhaglen we ar wahân ar gyfer y gwasanaeth hwn.'
   presence: Presenoldeb
   region_flag_default_region: Diofyn

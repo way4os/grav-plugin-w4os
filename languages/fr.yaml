@@ -519,7 +519,46 @@ w4os:
   service_assets_help: 'Un serveur web de ressources (web assets server) est requis pour afficher les images du monde virtuel sur le site web (par exempe les images de profil).'
   service_instant_message: 'Service des messages instantanés'
   service_instant_message_help: 'Les messages entre les avatars de grilles différentes (hypergrid).'
-  health_unset: 'Not set: neither served nor tested.'
+  health_unset: 'Non défini : ni servi ni testé.'
+  health_options_all: 'toutes les options de la grille'
+  health_options_missing: 'manquantes : %s'
+  health_matches_grid_info: 'correspond à %s de get_grid_info'
+  health_differs_grid_info: 'diffère de %s de get_grid_info'
+  health_web_search: 'Recherche web'
+  health_offline_robust: 'servi par Robust (module V2)'
+  health_set: défini
+  health_missing: manquant
+  health_signed_out: déconnecté
+  health_matches_search: 'correspond à search de [GridInfoService]'
+  health_with_xmlrpc: 'avec une requête XMLRPC valide'
+  health_with_post: 'avec des données postées valides'
+  health_with_query: 'avec une requête valide'
+  health_without_data: 'sans données'
+  health_slow: 'a répondu en %d ms, après plus de %s s la première fois'
+  health_block_missing: 'la page ne montre pas le bloc %s'
+  health_sends_elsewhere: 'envoie vers %s, pas vers %s'
+  health_curl_error: 'erreur cURL %d'
+  health_ok: OK
+  health_readable: lisible
+  health_not_readable: illisible
+  health_helpers: helpers
+  health_site: site
+  health_helpers_signed_out: 'helpers, déconnecté'
+  health_site_signed_out: 'site, déconnecté'
+  health_writable: 'accessible en écriture'
+  health_can_be_made: 'peut être créé'
+  health_not_writable: 'non accessible en écriture'
+  health_jp2_reads: 'lit le JPEG 2000'
+  health_jp2_reads_detail: 'requis par le service de ressources web : les images du monde (JPEG 2000)'
+  health_jp2_external: 'service de ressources web externe'
+  health_jp2_external_detail: 'les images du monde sont converties par le service de ressources web de la grille (%s)'
+  health_jp2_missing: 'ne lit pas le JPEG 2000'
+  health_jp2_missing_detail: 'requis par le service de ressources web, pour les images du monde (imagick compilé avec OpenJPEG) : sans lui, définissez un service de ressources web externe (%s)'
+  health_installed: 'installé %s'
+  health_installed_polyfill: 'installé (polyfill)'
+  health_for_xmlrpc: 'extension ou polyfill'
+  health_for_imagick: 'texte en image, ressources web'
+  health_for_gettext: traductions
   health_third_party: 'Ce service requiert une application web distincte.'
   presence: Présence
   region_flag_default_region: 'Par défaut'
