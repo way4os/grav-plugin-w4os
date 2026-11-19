@@ -118,4 +118,18 @@ describe('bundled engine', function () {
 
         exec('rm -rf '.escapeshellarg($root));
     });
+
+    test('sends a picture to the external web assets service of the grid when nothing here reads JPEG 2000, as the engine says', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        mkdir("$root/etc/grids/demo", 0700, true);
+        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
+        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n    PrivatePort = 8003\n");
+        file_put_contents("$root/etc/grids/demo/Helpers.ini", "[Helpers]\n    HelpersURL = \"https://play.example.org/helpers\"\n    AssetsURL = \"https://assets.example.org/a\"\n");
+        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+        [$status, , $headers] = $bundled->publicRoute('GET', '/grids/demo/assets/cb2052ae-d161-43e9-b11b-c834217823cd.jpg');
+
+        expect([$status, $headers['Location'] ?? null])->toBe([302, 'https://assets.example.org/a/cb2052ae-d161-43e9-b11b-c834217823cd.jpg']);
+
+        exec('rm -rf '.escapeshellarg($root));
+    })->skip(fn () => OpenSim\Assets\ImagickConverter::available(), 'imagick reads JPEG 2000 here');
 });
