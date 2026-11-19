@@ -48,11 +48,11 @@
             "type": "package",
             "package": {
                 "name": "npm-asset/tabler-core",
-                "version": "1.7.3",
+                "version": "1.7.5",
                 "dist": {
                     "type": "tar",
-                    "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.3.tgz",
-                    "shasum": "79b23adb6bf8bc6c6f3fcec8949226a938bc1d5a"
+                    "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.5.tgz",
+                    "shasum": "1f9aea2f37d8048ac6df9217be6ce6c80b2f3081"
                 }
             }
         },
@@ -86,7 +86,7 @@
         "magicoli/opensim-engine": "@dev",
         "magicoli/opensim-helpers": "@dev",
         "magicoli/opensim-rest-php": "@dev",
-        "npm-asset/tabler-core": "1.7.3",
+        "npm-asset/tabler-core": "1.7.5",
         "npm-asset/tabler-icons-webfont": "3.50.0",
         "npm-asset/tom-select": "2.6.2",
         "magicoli/w4os-views": "@dev"

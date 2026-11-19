@@ -13,6 +13,8 @@ final class Assets
     public const KEEP = [
         'npm-asset/tabler-core' => [
             'package.json', 'dist/css/tabler.min.css', 'dist/css/tabler-vendors.min.css', 'dist/js/tabler.min.js',
+            // The theme and the saved state of the sidebar, before the page renders
+            'dist/js/tabler-theme.min.js',
             // Tom Select in the styles of Tabler (Bootstrap 5)
             'dist/libs/tom-select/LICENSE', 'dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
         ],

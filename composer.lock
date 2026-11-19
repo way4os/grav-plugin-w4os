@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfbbdefb281959d223dc67352a6c19aa",
+    "content-hash": "609c2d51192d507c585241c14e27d4ab",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -712,7 +712,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "53d63a95d920285a19a0c0e87f88f17dfd60c42f"
+                "reference": "4fb165ee193d2cc70dec635f7416cb4257ebb8de"
             },
             "require": {
                 "ext-curl": "*",
@@ -800,7 +800,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "d9f0d7bd519ec7555d65c86ce0ed2977bd72bb3b"
+                "reference": "181a6b8511c5ab89bef1b8037392d48beb8af25e"
             },
             "require": {
                 "ext-curl": "*",
@@ -814,6 +814,7 @@
                 "ext-simplexml": "*",
                 "magicoli/opensim-engine": "@dev",
                 "magicoli/opensim-rest-php": "@dev",
+                "nesbot/carbon": "3.15.1",
                 "php": ">=8.2",
                 "php-di/php-di": "^7",
                 "php-di/slim-bridge": "^3",
@@ -929,7 +930,7 @@
             "dist": {
                 "type": "path",
                 "url": "../w4os-views",
-                "reference": "11e15fa91889f1b7f0fa0f86cc5fab34d5b213f0"
+                "reference": "1ce72aa58de41085d1c11c40ea04f8435df0303a"
             },
             "require": {
                 "ext-intl": "*",
@@ -1130,11 +1131,11 @@
         },
         {
             "name": "npm-asset/tabler-core",
-            "version": "1.7.3",
+            "version": "1.7.5",
             "dist": {
                 "type": "tar",
-                "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.3.tgz",
-                "shasum": "79b23adb6bf8bc6c6f3fcec8949226a938bc1d5a"
+                "url": "https://registry.npmjs.org/@tabler/core/-/core-1.7.5.tgz",
+                "shasum": "1f9aea2f37d8048ac6df9217be6ce6c80b2f3081"
             },
             "type": "library"
         },

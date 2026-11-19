@@ -10,8 +10,8 @@ describe('assets', function () {
         }
 
         expect(array_keys($packages))->toEqualCanonicalizing(array_keys(Assets::KEEP))
-            ->and($packages['npm-asset/tabler-core'])->toMatchArray(['version' => '1.7.3'])
-            ->and($packages['npm-asset/tabler-core']['dist'])->toBe(['type' => 'tar', 'url' => 'https://registry.npmjs.org/@tabler/core/-/core-1.7.3.tgz', 'shasum' => '79b23adb6bf8bc6c6f3fcec8949226a938bc1d5a'])
+            ->and($packages['npm-asset/tabler-core'])->toMatchArray(['version' => '1.7.5'])
+            ->and($packages['npm-asset/tabler-core']['dist'])->toBe(['type' => 'tar', 'url' => 'https://registry.npmjs.org/@tabler/core/-/core-1.7.5.tgz', 'shasum' => '1f9aea2f37d8048ac6df9217be6ce6c80b2f3081'])
             ->and($packages['npm-asset/tabler-icons-webfont']['dist']['shasum'])->toBe('5580c8af3cfde6ed42b03bd6e33b9e73397ff79d')
             ->and($packages['npm-asset/tom-select']['dist']['shasum'])->toBe('07693442309eefa5b57c6beee6005195f3f956a4');
     });
@@ -20,7 +20,7 @@ describe('assets', function () {
         $vendor = sys_get_temp_dir().'/w4os-assets-'.bin2hex(random_bytes(4));
         $files = [
             'npm-asset/tabler-core/package.json', 'npm-asset/tabler-core/README.md', 'npm-asset/tabler-core/dist/css/tabler.min.css', 'npm-asset/tabler-core/dist/css/tabler-vendors.min.css',
-            'npm-asset/tabler-core/dist/js/tabler.min.js', 'npm-asset/tabler-core/dist/img/flags/fr.svg', 'npm-asset/tabler-core/scss/tabler.scss',
+            'npm-asset/tabler-core/dist/js/tabler.min.js', 'npm-asset/tabler-core/dist/js/tabler-theme.min.js', 'npm-asset/tabler-core/dist/js/tabler-theme.js', 'npm-asset/tabler-core/dist/img/flags/fr.svg', 'npm-asset/tabler-core/scss/tabler.scss',
             'npm-asset/tabler-core/dist/libs/tom-select/LICENSE', 'npm-asset/tabler-core/dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
             'npm-asset/tabler-core/dist/libs/tom-select/dist/js/tom-select.base.min.js',
             'npm-asset/tabler-icons-webfont/LICENSE', 'npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css',
@@ -41,7 +41,7 @@ describe('assets', function () {
 
         expect($left)->toEqualCanonicalizing([
             'npm-asset/tabler-core/package.json', 'npm-asset/tabler-core/dist/css/tabler.min.css', 'npm-asset/tabler-core/dist/css/tabler-vendors.min.css',
-            'npm-asset/tabler-core/dist/js/tabler.min.js',
+            'npm-asset/tabler-core/dist/js/tabler.min.js', 'npm-asset/tabler-core/dist/js/tabler-theme.min.js',
             'npm-asset/tabler-core/dist/libs/tom-select/LICENSE', 'npm-asset/tabler-core/dist/libs/tom-select/dist/css/tom-select.bootstrap5.min.css',
             'npm-asset/tabler-icons-webfont/LICENSE', 'npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.woff2',
