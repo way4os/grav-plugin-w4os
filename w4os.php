@@ -694,7 +694,7 @@ class W4osPlugin extends Plugin
                             throw $forms->error($e);
                         }
                     }
-                    $this->done('w4os.admin_service_saved', $this->grav['uri']->path());
+                    $this->done('w4os.'.$service['saved'], $this->grav['uri']->path());
                     // no break
                 case 'settings':
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
@@ -899,11 +899,11 @@ class W4osPlugin extends Plugin
             return $read[$group];
         }
         $described = $this->site()->openApi()->settingsOf($group);
-        $none = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save'];
+        $none = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save', 'saved' => 'settings_saved'];
         if ($described === null || ! $this->site()->canOperation($type)) {
             return $read[$group] = $none;
         }
-        $none = ['help' => $described['description'], 'preview' => $described['preview'], 'submit' => $described['submit']] + $none;
+        $none = ['help' => $described['description'], 'preview' => $described['preview'], 'submit' => $described['submit'], 'saved' => $described['saved'] ?? 'settings_saved'] + $none;
         try {
             $values = $this->site()->engine()->settings($group);
             $view = \W4OS\Views\FormView::of($described, $values, null, $this->site()->isManager(), $this->site()->level());

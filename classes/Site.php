@@ -513,11 +513,15 @@ final class Site
 
     /**
      * The title of the page of an entry of the menu: its label, for the themes that list the pages by their title (Apple Notes);
-     * the admin keeps the title of its dashboard.
+     * the admin keeps the title of its dashboard, a section of the admin the title of its page.
      */
     public static function menuTitleKey(array $entry): string
     {
-        return $entry['type'] === 'admin' ? self::titleKey('dashboard') : (string) $entry['label'];
+        return match (true) {
+            $entry['type'] === 'admin' => self::titleKey('dashboard'),
+            isset(self::ADMIN_PAGES[$entry['type']]) => self::titleKey((string) $entry['type']),
+            default => (string) $entry['label'],
+        };
     }
 
     /** An entry of the menu as a page of the tree, visible, under its parent; a page of the site at its route wins. */
@@ -577,6 +581,7 @@ final class Site
             'models' => 'w4os.settings_models',
             'new' => 'w4os.action_new_avatar',
             'shortcodes' => 'w4os.shortcodes_title',
+            'flux' => 'w4os.admin_flux_title',
             default => self::serviceGroup($type) !== null ? 'w4os.'.$type : 'w4os.'.$type.'_title',
         };
     }
@@ -817,13 +822,13 @@ final class Site
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
-        'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle'],
+        'flux' => ['label' => 'w4os.admin_flux_menu', 'icon' => 'ti ti-message-circle'],
         // The settings of the services of the grid, as w4os-wp has them in its menu
-        'settings_economy' => ['label' => 'w4os.settings_economy', 'icon' => 'ti ti-coin'],
-        'settings_search' => ['label' => 'w4os.settings_search', 'icon' => 'ti ti-search'],
-        'settings_guide' => ['label' => 'w4os.settings_guide', 'icon' => 'ti ti-map-pin'],
-        'settings_offline' => ['label' => 'w4os.settings_offline', 'icon' => 'ti ti-mail'],
-        'settings_assets' => ['label' => 'w4os.settings_assets', 'icon' => 'ti ti-photo'],
+        'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin'],
+        'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search'],
+        'settings_guide' => ['label' => 'w4os.settings_menu_guide', 'icon' => 'ti ti-map-pin'],
+        'settings_offline' => ['label' => 'w4os.settings_menu_offline', 'icon' => 'ti ti-mail'],
+        'settings_assets' => ['label' => 'w4os.settings_menu_assets', 'icon' => 'ti ti-photo'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
         'shortcodes' => ['label' => 'w4os.shortcodes_title', 'icon' => 'ti ti-code'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],

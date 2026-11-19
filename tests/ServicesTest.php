@@ -11,7 +11,7 @@ describe('the settings pages of the services of the grid', function () {
         $services = ['settings_economy' => 'economy', 'settings_search' => 'search', 'settings_guide' => 'guide', 'settings_offline' => 'offline', 'settings_assets' => 'assets'];
         foreach ($services as $type => $group) {
             expect($routes[$type])->toBe("/w4os/$group")
-                ->and(Site::ADMIN_PAGES[$type]['label'])->toBe("w4os.settings_$group")
+                ->and(Site::ADMIN_PAGES[$type]['label'])->toBe("w4os.settings_menu_$group")
                 ->and(Site::ADMIN_OPERATIONS[$type])->toBe(['get', "/grids/{grid}/settings/$group"])
                 ->and(Site::titleKey($type))->toBe("w4os.settings_$group")
                 ->and(Site::serviceGroup($type))->toBe($group);
