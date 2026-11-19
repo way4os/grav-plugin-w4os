@@ -14,17 +14,24 @@ final class Items
     /**
      * The fields of the form of an item for Grav's Form plugin, from its form for the viewer (w4os-views FormView): the fields it
      * changes, each as an input of its type, their groups as tabs (one group: its fields alone), the id of the item hidden; the ones
-     * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed.
+     * whose condition the item does not meet marked `w4os-unmet`, for the script of the form to show them as it is changed. With
+     * `shown` (a form of settings), what the options of the grid set too, in their place, unchangeable.
      *
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view): array
+    public static function fields(FormView $view, bool $shown = false): array
     {
+        $changed = array_column($view->fields, 'name');
+        $fixed = $shown ? array_column($view->shown, 'name') : [];
         $groups = [];
-        foreach ($view->fields as $field) {
-            $groups[$field['group']][$field['name']] = self::input($field)
-                // A field the values of the form hide for now (its condition), shown by the script of the form as they change
-                + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+        foreach ((array) ($view->form['fields'] ?? []) as $field) {
+            if (in_array($field['name'], $changed, true)) {
+                $groups[$field['group']][$field['name']] = self::input($field)
+                    // A field the values of the form hide for now (its condition), shown by the script of the form as they change
+                    + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
+            } elseif (in_array($field['name'], $fixed, true)) {
+                $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field), ['validate' => 1]);
+            }
         }
         $fields = ['id' => ['type' => 'hidden']];
         $shown = array_values(array_filter((array) ($view->form['groups'] ?? []), fn ($group) => isset($groups[$group['name']])));
@@ -141,6 +148,17 @@ final class Items
      */
     public static function input(array $field): array
     {
+        // A database: its parts, each its input (data[<name>][<part>])
+        if ($field['type'] === 'connection-string') {
+            $parts = [];
+            foreach ((array) ($field['fields'] ?? []) as $part) {
+                $parts[$field['name'].'.'.$part['name']] = self::input($part + ['type' => 'string']);
+            }
+
+            return ['type' => 'fieldset', 'title' => 'w4os.'.$field['label'], 'fields' => $parts] + (isset($field['description']) ? ['help' => 'w4os.'.$field['description']] : []);
+        }
+        // Several addresses the options of the grid set: one by line
+        ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';
         $input = match ($field['type']) {
             'text' => ['type' => 'textarea', 'classes' => 'w4os-autogrow', 'rows' => 3],
             'integer', 'number' => ['type' => 'number'],
@@ -167,7 +185,8 @@ final class Items
             'type' => ! empty($field['multiple']) ? 'array' : null, 'pattern' => isset($field['pattern']) ? (string) $field['pattern'] : null], fn ($rule) => $rule !== null);
         $validate = ($input['validate'] ?? []) + $validate;
 
-        isset($field['placeholder']) && $input['placeholder'] = 'w4os.'.$field['placeholder'];
+        // A placeholder is a text of the catalog, or an example as it is (an address, a file, a port)
+        isset($field['placeholder']) && $input['placeholder'] = preg_match('/^[a-z][a-z0-9_]*$/', (string) $field['placeholder']) === 1 ? 'w4os.'.$field['placeholder'] : (string) $field['placeholder'];
 
         // The pictures of the models say their help themselves
         return $input + ['label' => 'w4os.'.$field['label']] + (isset($field['description']) && $input['type'] !== 'w4os_models' ? ['help' => 'w4os.'.$field['description']] : []) + ($validate === [] ? [] : ['validate' => $validate]);

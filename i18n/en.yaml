@@ -106,3 +106,4 @@ w4os:
   admin_health_source_default: 'by default, not set'
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
+  admin_service_saved: 'The settings are saved.'

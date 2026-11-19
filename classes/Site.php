@@ -318,6 +318,8 @@ final class Site
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'new' => '/avatars/new', 'regions' => '/regions',
         'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health',
         'shortcodes' => '/shortcodes', 'settings' => '/settings',
+        'settings_economy' => '/economy', 'settings_search' => '/search', 'settings_guide' => '/guide', 'settings_offline' => '/offline',
+        'settings_assets' => '/assets',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -556,7 +558,7 @@ final class Site
             'models' => 'w4os.settings_models',
             'new' => 'w4os.action_new_avatar',
             'shortcodes' => 'w4os.shortcodes_title',
-            default => 'w4os.'.$type.'_title',
+            default => self::serviceGroup($type) !== null ? 'w4os.'.$type : 'w4os.'.$type.'_title',
         };
     }
 
@@ -796,6 +798,12 @@ final class Site
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
+        // The settings of the services of the grid, as w4os-wp has them in its menu
+        'settings_economy' => ['label' => 'w4os.settings_economy', 'icon' => 'ti ti-coin'],
+        'settings_search' => ['label' => 'w4os.settings_search', 'icon' => 'ti ti-search'],
+        'settings_guide' => ['label' => 'w4os.settings_guide', 'icon' => 'ti ti-map-pin'],
+        'settings_offline' => ['label' => 'w4os.settings_offline', 'icon' => 'ti ti-mail'],
+        'settings_assets' => ['label' => 'w4os.settings_assets', 'icon' => 'ti ti-photo'],
         'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
         'shortcodes' => ['label' => 'w4os.shortcodes_title', 'icon' => 'ti ti-code'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
@@ -844,7 +852,16 @@ final class Site
     ];
 
     /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */
-    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models'], 'new' => ['post', '/grids/{grid}/avatars']];
+    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models'], 'new' => ['post', '/grids/{grid}/avatars'],
+        'settings_economy' => ['get', '/grids/{grid}/settings/economy'], 'settings_search' => ['get', '/grids/{grid}/settings/search'],
+        'settings_guide' => ['get', '/grids/{grid}/settings/guide'], 'settings_offline' => ['get', '/grids/{grid}/settings/offline'],
+        'settings_assets' => ['get', '/grids/{grid}/settings/assets']];
+
+    /** The group of settings of the engine a settings page of a service shows (settings_economy: economy), null for another page. */
+    public static function serviceGroup(string $type): ?string
+    {
+        return str_starts_with($type, 'settings_') && isset(self::ADMIN_OPERATIONS[$type]) ? substr($type, strlen('settings_')) : null;
+    }
 
     /** The section of the admin a page is in: its list for the page of one item. */
     public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage', 'new' => 'manage'];

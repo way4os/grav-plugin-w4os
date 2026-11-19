@@ -302,6 +302,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_service', fn () => $this->service()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_create', fn (string $type) => $this->site()->createLink($type)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_shortcodes', fn () => Site::SHORTCODES));
         $twig->addFunction(new \Twig\TwigFunction('w4os_creation', fn () => $this->creation()));
@@ -531,6 +532,16 @@ class W4osPlugin extends Plugin
 
             return;
         }
+        if ($form->getName() === 'w4os-service') {
+            // The settings of the service of the page as the engine describes them, what the options of the grid set shown, its button
+            $service = $this->service();
+            if ($service['view'] !== null) {
+                $this->viewForm($form, $service['view'], true);
+                $form->set('buttons', $service['changeable'] ? array_map(fn (array $button) => ['value' => 'w4os.'.$service['submit']] + $button, (array) $form->get('buttons')) : []);
+            }
+
+            return;
+        }
         if ($form->getName() === 'w4os-post') {
             // The field the engine describes, its button
             if (($posts = $this->ownPosts()) !== null) {
@@ -669,6 +680,20 @@ class W4osPlugin extends Plugin
                         $site->forgetModels();
                     }
                     $this->done('w4os.admin_models_saved', $routes['models']);
+                    // no break
+                case 'service':
+                    // The settings of a service, the fields the visitor changes only (FormView), written by the engine
+                    $service = $this->service();
+                    $service['changeable'] || throw new FormError('w4os.error_forbidden');
+                    $changes = $service['view']->changes($data);
+                    if ($changes !== []) {
+                        try {
+                            $site->engine()->updateSettings((string) $service['group'], $changes);
+                        } catch (EngineException $e) {
+                            throw $forms->error($e);
+                        }
+                    }
+                    $this->done('w4os.admin_service_saved', $this->grav['uri']->path());
                     // no break
                 case 'settings':
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
@@ -840,23 +865,51 @@ class W4osPlugin extends Plugin
      */
     private function modelsRule(): array
     {
-        static $rule = null;
-        if ($rule !== null) {
-            return $rule;
+        return $this->settingsOf('models', 'models');
+    }
+
+    /**
+     * The settings of the service of the page (a settings page of the admin: settings_economy...), as settingsOf() gives them; none
+     * on another page.
+     *
+     * @return array{view: ?\W4OS\Views\FormView, changeable: bool, values: array<string,mixed>, error: ?string, group: ?string}
+     */
+    private function service(): array
+    {
+        $type = (string) $this->site()->pageAt($this->grav['uri']->path())[0];
+        $group = Site::serviceGroup($type);
+
+        return ['group' => $group] + ($group === null
+            ? ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save']
+            : $this->settingsOf($group, $type));
+    }
+
+    /**
+     * A group of settings of the grid (the engine's settings of `group`): its form as the engine describes it, for the visitor (what
+     * the contract lets them change), its values, or why it could not be read; none for whom the contract does not let read it (the
+     * operation of the admin page `type`).
+     *
+     * @return array{view: ?\W4OS\Views\FormView, changeable: bool, values: array<string,mixed>, error: ?string}
+     */
+    private function settingsOf(string $group, string $type): array
+    {
+        static $read = [];
+        if (isset($read[$group])) {
+            return $read[$group];
         }
-        $described = $this->site()->openApi()->settingsOf('models');
+        $described = $this->site()->openApi()->settingsOf($group);
         $none = ['view' => null, 'changeable' => false, 'values' => [], 'error' => null, 'help' => [], 'preview' => null, 'submit' => 'action_save'];
-        if ($described === null || ! $this->site()->canOperation('models')) {
-            return $rule = $none;
+        if ($described === null || ! $this->site()->canOperation($type)) {
+            return $read[$group] = $none;
         }
         $none = ['help' => $described['description'], 'preview' => $described['preview'], 'submit' => $described['submit']] + $none;
         try {
-            $values = $this->site()->engine()->settings('models');
+            $values = $this->site()->engine()->settings($group);
             $view = \W4OS\Views\FormView::of($described, $values, null, $this->site()->isManager(), $this->site()->level());
 
-            return $rule = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values] + $none;
+            return $read[$group] = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values] + $none;
         } catch (\Throwable $e) {
-            return $rule = ['error' => $e->getMessage()] + $none;
+            return $read[$group] = ['error' => $e->getMessage()] + $none;
         }
     }
 
@@ -1332,11 +1385,16 @@ class W4osPlugin extends Plugin
      * A form of the site from the form of the viewer (w4os-views FormView): its fields, filled with the values of the item, and the
      * conditions its script shows or hides them by as it is changed (js/conditions.js).
      */
-    private function viewForm($form, \W4OS\Views\FormView $view): void
+    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false): void
     {
-        $form->setFields(Items::fields($view));
+        $form->setFields(Items::fields($view, $shown));
         foreach ($view->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
+        }
+        // What the options of the grid set, as it is (several addresses one by line)
+        foreach ($shown ? $view->shown : [] as $field) {
+            $value = $view->item[$field['name']] ?? '';
+            $form->setData($field['name'], is_array($value) ? implode("\n", array_map('strval', $value)) : $value);
         }
         $conditions = Items::conditions($view);
         $conditions === [] || $form->set('attributes', ['data-w4os-conditions' => json_encode($conditions, JSON_UNESCAPED_SLASHES)] + (array) $form->get('attributes'));

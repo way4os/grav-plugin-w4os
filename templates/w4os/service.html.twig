@@ -1,0 +1,28 @@
+{# The settings of a service of the grid (economy, search, guide, offline messages, web assets), for the managers the contract lets
+   read them, as w4os-wp has them: the form as the engine describes it (x-form), as wide as the page, what the options of the grid set
+   shown and unchangeable, its help beside it when it has one #}
+{% set service = w4os_service() %}
+{% if service.error %}
+    <div class="alert alert-danger" role="alert">{{ service.error }}</div>
+{% elseif service.view %}
+    <div class="row row-cards">
+        <div class="{{ service.help ? 'col-lg-8' : 'col-12' }}">
+            <div class="card">
+                <div class="card-body">
+                    {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-service') } %}
+                </div>
+            </div>
+        </div>
+        {% if service.help %}
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="text-secondary mb-0">
+                            {% for key in service.help %}<li>{{ ('w4os.' ~ key)|t }}</li>{% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}

@@ -106,3 +106,4 @@ w4os:
   admin_health_source_default: 'par défaut, non réglé'
   admin_health_source_simulator: 'un simulateur'
   admin_models_saved: 'La règle des modèles d’avatars est enregistrée.'
+  admin_service_saved: 'Les réglages sont enregistrés.'

@@ -110,7 +110,7 @@
                 {# The messages given while the page renders, put here by the plugin #}
                 <!-- w4os:admin-messages -->
                 <div class="w4os w4os-page w4os-{{ page.header.w4os|e('html_attr') }}">
-                    {% include 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
+                    {% include page.header.w4os starts with 'settings_' ? 'w4os/service.html.twig' : 'w4os/' ~ page.header.w4os ~ '.html.twig' %}
                 </div>
             </div>
         </div>
