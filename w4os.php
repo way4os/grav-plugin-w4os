@@ -1367,7 +1367,7 @@ class W4osPlugin extends Plugin
         foreach ((array) ($this->grav['page']->header()->w4os_cards ?? []) as $card) {
             $card = (array) $card;
             if (isset($card['block'])) {
-                $cards[] = ['kind' => 'block', 'block' => (string) $card['block'], 'title' => 'w4os.'.(string) ($card['title'] ?? 'admin_dashboard_'.str_replace('-', '_', (string) $card['block'])),
+                $cards[] = ['kind' => 'block', 'block' => (string) $card['block'], 'title' => 'w4os.'.(string) ($card['title'] ?? 'dashboard_'.str_replace('-', '_', (string) $card['block'])),
                     'args' => array_diff_key($card, ['block' => 1, 'title' => 1])];
                 continue;
             }

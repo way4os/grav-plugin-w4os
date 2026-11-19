@@ -34,7 +34,7 @@
             {% elseif card.kind == 'counts' %}
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action d-flex align-items-center" href="{{ card.url|e('html_attr') }}">
-                        <span class="flex-fill">{{ 'w4os.admin_dashboard_total'|t }}</span><span class="h3 mb-0">{{ card.total ?? '—' }}</span>
+                        <span class="flex-fill">{{ 'w4os.total'|t }}</span><span class="h3 mb-0">{{ card.total ?? '—' }}</span>
                     </a>
                 {% for count in card.counts %}
                     {# The plain name of what it counts: the label of the value of its filter (Online, Pending, Default Model) #}

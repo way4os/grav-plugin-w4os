@@ -24,13 +24,13 @@ describe('the dashboard', function () {
 
     test('shows its cards in their order, in columns that leave a small card small, each the same: its title in its header, its link to its list in its footer', function () use ($api, $render) {
         $html = $render([
-            ['kind' => 'block', 'block' => 'grid-info', 'title' => 'w4os.admin_dashboard_grid_info', 'args' => []],
+            ['kind' => 'block', 'block' => 'grid-info', 'title' => 'w4os.dashboard_grid_info', 'args' => []],
             ['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null],
         ]);
 
         expect($html)->toContain('class="w4os-dashboard"', '<div class="w4os-dashboard-card">')
             ->and(substr_count($html, '<div class="card-header"><h3 class="card-title">'))->toBe(2)
-            ->and($html)->toContain('<h3 class="card-title">[w4os.admin_dashboard_grid_info]</h3>', 'block:grid-info')
+            ->and($html)->toContain('<h3 class="card-title">[w4os.dashboard_grid_info]</h3>', 'block:grid-info')
             ->and(strpos($html, 'block:grid-info'))->toBeLessThan(strpos($html, '[w4os.regions_title]'))
             ->and($html)->not->toContain('col-lg-6', 'row-deck');
     });
@@ -48,22 +48,22 @@ describe('the dashboard', function () {
         $html = $render([['kind' => 'counts', 'page' => 'manage', 'list' => $api->listOf('avatars'), 'total' => 16, 'counts' => $counts, 'url' => '/avatars', 'error' => null]]);
 
         expect(substr_count($html, 'class="card w4os-stat"'))->toBe(1)
-            ->and($html)->toContain('[w4os.manage_title]', '[w4os.admin_dashboard_total]', '>16<', 'href="&#x2F;avatars&#x3F;status&#x3D;pending"', '[w4os.status_pending]', '[w4os.avatar_type_service]', '>2<', '[w4os.see_all]')
-            ->and(strpos($html, '[w4os.admin_dashboard_total]'))->toBeLessThan(strpos($html, '[w4os.online]'))
+            ->and($html)->toContain('[w4os.manage_title]', '[w4os.total]', '>16<', 'href="&#x2F;avatars&#x3F;status&#x3D;pending"', '[w4os.status_pending]', '[w4os.avatar_type_service]', '>2<', '[w4os.see_all]')
+            ->and(strpos($html, '[w4os.total]'))->toBeLessThan(strpos($html, '[w4os.online]'))
             ->and($html)->not->toContain('[w4os.label_value');
     });
 
     test('lists the newest avatars as w4os-wp names them, each leading to its page, with the date in the format of the language, and a link to them all', function () use ($api, $render) {
         $created = time() - 60 * 86400;
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
-        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_avatars', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('[w4os.recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a href="&#x2F;avatars">[w4os.see_all]</a></div>')
+        expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a href="&#x2F;avatars">[w4os.see_all]</a></div>')
             ->not->toContain(date('Y-m-d', $created));
     });
 
     test('says so in one sentence when a list has no row', function () use ($api, $render) {
-        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [], 'item' => null, 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_avatars', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [], 'item' => null, 'error' => null]]);
 
         expect($html)->toContain('<p class="empty-title">[w4os.no_avatars]</p>');
     });
