@@ -77,4 +77,26 @@ describe('the settings pages of the services of the grid', function () {
             ->and($fields['gloebitConfiguration'])->toMatchArray(['type' => 'display', 'label' => 'w4os.gloebit_configuration'])
             ->and($fields['gloebitConfiguration']['content'])->toContain('[gloebit_help_crash] [gloebit_help_linux]');
     });
+
+    test('shows Provide as a switch, and under a field the lines of the files of the grid it takes', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $snippets = ['path' => [['file' => 'Robust.HG.ini', 'text' => "[GridInfoService]\n    economy = http://grid.example.org/helpers"]]];
+        $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/helpers'], null, true, 250), shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', snippets: $snippets);
+        $names = array_keys($fields);
+
+        expect($fields['provide'])->toMatchArray(['type' => 'checkbox'])
+            ->and($fields['provide']['wrapper_classes'] ?? '')->toContain('form-switch')
+            ->and($names[array_search('path', $names, true) + 1])->toBe('path_snippets')
+            ->and($fields['path_snippets'])->toMatchArray(['type' => 'display', 'label' => 'Robust.HG.ini', 'markdown' => true])
+            ->and($fields['path_snippets']['content'])->toContain("```ini\n[GridInfoService]\n    economy = http://grid.example.org/helpers\n```");
+    });
+
+    test('a service the site handles needs a page of the site that shows its block', function () {
+        expect(Site::holdsBlock('Text [w4os block="destination-guide" /] more', 'destination_guide'))->toBeTrue()
+            ->and(Site::holdsBlock('[w4os block="destination_guide" title="Guide"]', 'destination_guide'))->toBeTrue()
+            ->and(Site::holdsBlock('[w4os block="search" /]', 'destination_guide'))->toBeFalse()
+            ->and(Site::blockOfPage('guide'))->toBe('destination_guide')
+            ->and(Site::blockOfPage('search'))->toBe('search')
+            ->and(Site::blockOfPage('account'))->toBeNull();
+    });
 });

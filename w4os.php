@@ -537,7 +537,7 @@ class W4osPlugin extends Plugin
             // The settings of the service of the page as the engine describes them, what the options of the grid set shown, its button
             $service = $this->service();
             if ($service['view'] !== null) {
-                $this->viewForm($form, $service['view'], true);
+                $this->viewForm($form, $service['view'], true, (array) ($service['meta']['snippets'] ?? []), (string) ($service['meta']['service']['base'] ?? ''));
                 $form->set('buttons', $service['changeable'] ? array_map(fn (array $button) => ['value' => 'w4os.'.$service['submit']] + $button, (array) $form->get('buttons')) : []);
             }
 
@@ -694,7 +694,7 @@ class W4osPlugin extends Plugin
                             throw $forms->error($e);
                         }
                     }
-                    $this->done('w4os.'.$service['saved'], $this->grav['uri']->path());
+                    $this->done('w4os.'.$service['saved'], $this->grav['uri']->path(), notes: $this->servicePageNotes((string) $service['group']));
                     // no break
                 case 'settings':
                     $site->canSettings() || throw new FormError('w4os.error_forbidden');
@@ -905,13 +905,40 @@ class W4osPlugin extends Plugin
         }
         $none = ['help' => $described['description'], 'preview' => $described['preview'], 'submit' => $described['submit'], 'saved' => $described['saved'] ?? 'settings_saved'] + $none;
         try {
-            $values = $this->site()->engine()->settings($group);
+            ['values' => $values, 'meta' => $meta] = $this->site()->engine()->settingsPage($group);
             $view = \W4OS\Views\FormView::of($described, $values, null, $this->site()->isManager(), $this->site()->level());
 
-            return $read[$group] = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values] + $none;
+            return $read[$group] = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values, 'meta' => $meta] + $none;
         } catch (\Throwable $e) {
             return $read[$group] = ['error' => $e->getMessage()] + $none;
         }
+    }
+
+    /**
+     * What a saved service says of the page of the site that handles it (the engine's meta.service: handledBy `site`, its block):
+     * a warning when the site has no page at its path, or one without the block.
+     *
+     * @return list<string> the warnings, in the language of the visitor
+     */
+    private function servicePageNotes(string $group): array
+    {
+        try {
+            ['values' => $values, 'meta' => $meta] = $this->site()->engine()->settingsPage($group);
+        } catch (\Throwable) {
+            return [];
+        }
+        $service = (array) ($meta['service'] ?? []);
+        $block = (string) ($service['block'] ?? '');
+        if (($service['handledBy'] ?? null) !== 'site' || $block === '') {
+            return [];
+        }
+        $path = '/'.trim((string) ($values['path'] ?? ''), '/');
+        [$type] = $this->site()->pageAt($path);
+        $page = $this->grav['pages']->find($path);
+        $holds = ($type !== false && Site::blockOfPage((string) $type) === str_replace('-', '_', $block))
+            || ($page !== null && Site::holdsBlock((string) $page->rawMarkdown(), $block));
+
+        return $holds ? [] : [$this->site()->translate($page === null && $type === false ? 'w4os.admin_service_no_page' : 'w4os.admin_service_no_block', [$path, $block])];
     }
 
     /**
@@ -1405,9 +1432,10 @@ class W4osPlugin extends Plugin
      * A form of the site from the form of the viewer (w4os-views FormView): its fields, filled with the values of the item, and the
      * conditions its script shows or hides them by as it is changed (js/conditions.js).
      */
-    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false): void
+    private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, array $snippets = [], string $base = ''): void
     {
-        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
+        $base = $base !== '' ? $base : (string) $this->grav['uri']->rootUrl(true);
+        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), rtrim($base, '/'), $snippets));
         foreach ($view->values as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }

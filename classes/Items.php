@@ -19,9 +19,10 @@ final class Items
      * said in full with `translate`, a path on the address of the site (`base`).
      *
      * @param ?\Closure(string): string $translate the text of a key of the catalog
+     * @param array<string,list<array{file: ?string, text: string}>> $snippets the lines of the files of the grid a field shows, by field
      * @return array<string,array<string,mixed>>
      */
-    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = ''): array
+    public static function fields(FormView $view, bool $shown = false, ?\Closure $translate = null, string $base = '', array $snippets = []): array
     {
         $changed = array_column($view->fields, 'name');
         $fixed = $shown ? array_column($view->shown, 'name') : [];
@@ -33,6 +34,14 @@ final class Items
                     + (FormView::met($field, $view->item) ? [] : ['outerclasses' => 'w4os-unmet']);
             } elseif (in_array($field['name'], $fixed, true)) {
                 $groups[$field['group']][$field['name']] = ['disabled' => true] + array_diff_key(self::input($field, $translate, $base), ['validate' => 1]);
+            } else {
+                continue;
+            }
+            // The lines of the files of the grid it takes, under it, as w4os-wp shows them
+            foreach (array_values((array) ($snippets[$field['name']] ?? [])) as $i => $snippet) {
+                $groups[$field['group']][$field['name'].'_snippets'.($i ? "_$i" : '')] = ['type' => 'display', 'label' => (string) ($snippet['file'] ?? ''),
+                    'content' => "```ini\n".rtrim((string) ($snippet['text'] ?? ''))."\n```", 'markdown' => true,
+                    'outerclasses' => 'w4os-snippet w4os-snippet-for-'.$field['name'].(FormView::met($field, $view->item) ? '' : ' w4os-unmet')];
             }
         }
         $fields = ['id' => ['type' => 'hidden']];
@@ -175,7 +184,8 @@ final class Items
         $input = match ($field['type']) {
             'text' => ['type' => 'textarea', 'classes' => 'w4os-autogrow', 'rows' => 3],
             'integer', 'number' => ['type' => 'number'],
-            'boolean' => ['type' => 'checkbox'],
+            // A switch, as w4os-wp shows Provide
+            'boolean' => ['type' => 'checkbox'] + (($field['widget'] ?? '') === 'switch' ? ['wrapper_classes' => 'form-check form-switch'] : []),
             // The choices of a short list side by side (its widget radio), else a list
             'select', 'status', 'role' => ($field['widget'] ?? '') === 'radio'
                 ? ['type' => 'radio', 'options' => self::options($field), 'wrapper_classes' => 'form-check form-check-inline']

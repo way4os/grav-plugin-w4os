@@ -88,6 +88,27 @@ final class Site
         }
     }
 
+    /** The block of the helpers a page of the plugin shows (`w4os_block` of pages/<type>.md: guide, destination_guide), null for none. */
+    public static function blockOfPage(string $type): ?string
+    {
+        $file = dirname(__DIR__)."/pages/$type.md";
+        if (! preg_match('/^[a-z_]+$/', $type) || ! is_file($file) || ! preg_match('/^---\R(.*?)\R---/s', (string) file_get_contents($file), $matter)) {
+            return null;
+        }
+        $block = \Symfony\Component\Yaml\Yaml::parse($matter[1])['w4os_block'] ?? null;
+
+        return is_string($block) && $block !== '' ? $block : null;
+    }
+
+    /** Whether the text of a page shows a block of the helpers by its shortcode ([w4os block="destination-guide" /]). */
+    public static function holdsBlock(string $content, string $block): bool
+    {
+        $name = str_replace('-', '_', $block);
+        preg_match_all('/\[w4os\s[^\]]*block\s*=\s*["\']?([\w-]+)/', $content, $found);
+
+        return in_array($name, array_map(fn (string $one) => str_replace('-', '_', $one), $found[1]), true);
+    }
+
     /**
      * The problems the health of the grid found (its rows of level error), for the notice of the dashboard: how many, the labels
      * of the first ones.
@@ -581,7 +602,6 @@ final class Site
             'models' => 'w4os.settings_models',
             'new' => 'w4os.action_new_avatar',
             'shortcodes' => 'w4os.shortcodes_title',
-            'flux' => 'w4os.admin_flux_title',
             default => self::serviceGroup($type) !== null ? 'w4os.'.$type : 'w4os.'.$type.'_title',
         };
     }
@@ -822,7 +842,7 @@ final class Site
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
-        'flux' => ['label' => 'w4os.admin_flux_menu', 'icon' => 'ti ti-message-circle'],
+        'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle'],
         // The settings of the services of the grid, as w4os-wp has them in its menu
         'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin'],
         'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search'],

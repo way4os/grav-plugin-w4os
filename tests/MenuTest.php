@@ -43,7 +43,7 @@ describe('the menu of the site', function () {
             ->and(Site::menuTitleKey($entry($menu, 'admin')))->toBe('w4os.dashboard_title')
             ->and(Site::menuTitleKey($entry($menu, 'profile')['children'][0]))->toBe('w4os.edit_profile')
             // A section of the admin is titled as its page, whatever its entry in the menu says (w4os-wp: Flux, Flux Posts)
-            ->and(Site::menuTitleKey(['type' => 'flux', 'label' => 'w4os.admin_flux_menu']))->toBe('w4os.admin_flux_title')
+            ->and(Site::menuTitleKey(['type' => 'flux', 'label' => 'w4os.flux_menu']))->toBe('w4os.flux_title')
             ->and(Site::menuTitleKey(['type' => 'settings_economy', 'label' => 'w4os.settings_menu_economy']))->toBe('w4os.settings_economy');
     });
 });

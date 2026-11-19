@@ -138,7 +138,20 @@ final class Engine
     /** @return array<string,mixed> the settings of the grid of a group (models...), as the grid says them, else their defaults */
     public function settings(string $group): array
     {
-        return $this->resource($this->call('GET', '/settings/'.rawurlencode($group)));
+        return $this->settingsPage($group)['values'];
+    }
+
+    /**
+     * The settings of a group and what the engine says of them: the lines of the files of the grid each field shows (`snippets`),
+     * who handles the service (`service`: its base, handledBy, block).
+     *
+     * @return array{values: array<string,mixed>, meta: array<string,mixed>}
+     */
+    public function settingsPage(string $group): array
+    {
+        $document = $this->call('GET', '/settings/'.rawurlencode($group));
+
+        return ['values' => $this->resource($document), 'meta' => (array) ($document['meta'] ?? [])];
     }
 
     /**

@@ -3,5 +3,5 @@
 {% set data = w4os_list(page.header.w4os_list ?? {type: 'posts'}) %}
 {% include 'w4os/list.html.twig' with {
     list: data.list, items: data.items, meta: data.meta, query: data.query, fixed: data.fixed ?? {}, error: data.error, links: [],
-    texts: {search: 'w4os.admin_flux_search', empty: 'w4os.admin_flux_none', count: 'w4os.admin_flux_count', title: 'w4os.admin_flux_title'}
+    texts: {search: 'w4os.' ~ (data.list.texts.placeholder ?? 'flux_search'), empty: 'w4os.' ~ (data.list.texts.empty ?? 'flux_empty'), count: 'w4os.' ~ (data.list.texts.count ?? 'posts_count'), title: 'w4os.' ~ (data.list.texts.title ?? 'flux_title')}
 } %}
