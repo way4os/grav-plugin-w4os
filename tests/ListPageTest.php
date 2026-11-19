@@ -76,6 +76,14 @@ describe('the list of a page of the admin', function () {
             ->and($html)->not->toContain(date('Y-m-d', $older));
     });
 
+    test('shows each value of a filter with the number of rows it gives, when the engine counts them', function () {
+        $avatars = (new OpenApi(Contract::document()))->listOf('avatars');
+        $html = render_list($avatars, [], ['total' => 5, 'counts' => ['online' => ['online' => 2, 'offline' => 3]]]);
+
+        expect($html)->toContain('<option value="online">[w4os.online] (2)</option>', '<option value="offline">[w4os.offline] (3)</option>')
+            ->and($html)->toContain('<option value="active">[w4os.status_active]</option>');
+    });
+
     test('leaves out the column of a filter the page fixes (the grid of the site)', function () use ($simulators, $solo) {
         expect(render_list($simulators, [$solo], ['total' => 1]))->toContain('[w4os.column_grid]')
             ->and(render_list($simulators, [$solo], ['total' => 1], [], [], ['grid' => 'demo']))->not->toContain('[w4os.column_grid]');
