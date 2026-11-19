@@ -22,7 +22,7 @@ final class Posts
         foreach ($view->fields as $field) {
             $input = Items::input($field);
             $input['type'] === 'textarea' && $input = ['classes' => $input['classes'].' w4os-post-field', 'rows' => 1, 'placeholder' => $input['label'], 'display_label' => false] + $input;
-            unset($input['label'], $input['help']);
+            unset($input['label'], $input['help'], $input['description']);
             $fields[(string) $field['name']] = $input;
         }
 

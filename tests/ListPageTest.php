@@ -58,7 +58,7 @@ describe('the list of a page of the admin', function () {
         $recent = time() - 3 * 86400;
         $old = 1794787200;
         $older = time() - 60 * 86400;
-        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'role' => 'resident', 'created' => $older, 'lastSeen' => $recent, 'status' => 'active'];
+        $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'email' => 'bart@example.org', 'shownRole' => 'resident', 'created' => $older, 'lastSeen' => $recent, 'status' => 'active'];
         $html = render_list($avatars, [$bart], ['total' => 1]);
         $short = W4OS\Views\Dates::format($older, 'fr', 'list');
 
