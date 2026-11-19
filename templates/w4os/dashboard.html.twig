@@ -1,6 +1,7 @@
-{# The managers' dashboard (Tabler): its cards (w4os_cards of its page), the number of rows of a list its filters keep, leading to
-   the list so filtered; then the first rows of a list as it sorts them; then the blocks of the helpers it asks (w4os_blocks: the
-   name of a block, or {block: name, wide: true, ...} across the whole width, with its arguments). #}
+{# The managers' dashboard (Tabler): its cards in their order (w4os_cards of its page), in columns that leave a small card small:
+   a block of the helpers (the grid info and status, as the widgets of w4os-wp); how many of a list its filter keeps of all it knows
+   (the regions online of the known ones), leading to both; the counts of a list in one card, each by the plain name of its value,
+   leading to the list so filtered; the first rows of a list as it sorts them (the recent users), with a link to them all. #}
 {% import 'w4os/list-cells.html.twig' as cells %}
 {% set cards = w4os_dashboard() %}
 {# The problems the last health report of the grid found, as w4os-wp says them in its notices, leading to the Health page #}
@@ -12,35 +13,44 @@
         <a class="alert-link" href="{{ problems.url|e('html_attr') }}">{{ 'w4os.admin_health_title'|t }}</a>
     </div>
 {% endif %}
-<div class="row row-deck row-cards">
-    {% for card in cards|filter(card => not card.rows) %}
-    <div class="col-6 col-xl-3">
-        <a class="card card-link w4os-stat" href="{{ card.url|e('html_attr') }}">
+<div class="w4os-dashboard">
+    {% for card in cards %}
+    <div class="w4os-dashboard-card">
+    {% if card.kind == 'block' %}
+        <div class="card"><div class="card-body">{{ w4os_block(card.block, card.args ?? {}) }}</div></div>
+    {% elseif card.kind == 'count' %}
+        <div class="card w4os-stat">
             <div class="card-body">
-                <div class="subheader">{{ ('w4os.' ~ card.page ~ '_title')|t }}</div>
-                <div class="h1 mb-1 mt-2">{{ card.total ?? '—' }}</div>
-                {# What its filters keep, in the words of the list: "Status: online" #}
-                <div class="text-secondary">
-                {%- for filter in card.list.filters|filter(f => card.filter[f.name] is defined) -%}
-                    {% set value = card.filter[filter.name] %}
-                    {% set known = filter.values|filter(v => v.value == value)|first %}
-                    {{- loop.first ? '' : ' · ' }}{{ 'w4os.label_value'|t(('w4os.' ~ filter.label)|t, known ? (known.text ?? ('w4os.' ~ known.label)|t) : value) -}}
-                {%- endfor -%}
-                </div>
+                <a class="subheader text-reset" href="{{ card.url|e('html_attr') }}">{{ ('w4os.' ~ card.page ~ '_title')|t }}</a>
+                <a class="d-block h1 mb-0 mt-2 text-reset" href="{{ card.partUrl|e('html_attr') }}">{{ card.total is null ? '—' : card.text|t(card.part, card.total) }}</a>
                 {% if card.error %}<div class="text-danger small mt-1">{{ card.error }}</div>{% endif %}
             </div>
-        </a>
-    </div>
-    {% endfor %}
-    {% for card in cards|filter(card => card.rows) %}
-    {# The first rows of a list: its first column (the name, leading to the page of the row), and the column it is sorted by #}
-    {% set first = card.list.columns|first %}
-    {% set sort = card.list.sort.default ?? '' %}
-    {% set by = card.list.columns|filter(c => c.name == sort|trim('-', 'left'))|first %}
-    <div class="col-lg-6">
+        </div>
+    {% elseif card.kind == 'counts' %}
+        <div class="card w4os-stat">
+            <div class="card-header"><h3 class="card-title"><a class="text-reset" href="{{ card.url|e('html_attr') }}">{{ ('w4os.' ~ card.page ~ '_title')|t }}</a></h3></div>
+            <div class="list-group list-group-flush">
+            {% for count in card.counts %}
+                {# The plain name of what it counts: the label of the value of its filter (Online, Pending, Default Model) #}
+                {% set name = count.filter|keys|first %}
+                {% set filter = card.list.filters|filter(f => f.name == name)|first %}
+                {% set known = (filter.values ?? [])|filter(v => v.value == count.filter[name])|first %}
+                <a class="list-group-item list-group-item-action d-flex align-items-center" href="{{ count.url|e('html_attr') }}">
+                    <span class="flex-fill">{{ known ? (known.text ?? ('w4os.' ~ known.label)|t) : count.filter[name] }}</span>
+                    <span class="h3 mb-0">{{ count.total ?? '—' }}</span>
+                </a>
+            {% endfor %}
+            </div>
+            {% if card.error %}<div class="card-body text-danger small">{{ card.error }}</div>{% endif %}
+        </div>
+    {% elseif card.kind == 'rows' %}
+        {# The first rows of a list: its first column (the name, leading to the page of the row), and the column it is sorted by #}
+        {% set first = card.list.columns|first %}
+        {% set sort = card.list.sort.default ?? '' %}
+        {% set by = card.list.columns|filter(c => c.name == sort|trim('-', 'left'))|first %}
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title"><a class="text-reset" href="{{ card.url|e('html_attr') }}">{{ ('w4os.' ~ card.page ~ '_title')|t }}</a></h3>
+                <h3 class="card-title">{{ card.title|t }}</h3>
                 {% if by %}<div class="card-actions text-secondary">{{ ('w4os.' ~ by.label)|t }}</div>{% endif %}
             </div>
             <div class="list-group list-group-flush">
@@ -54,13 +64,9 @@
                 <div class="empty"><p class="empty-title">{{ ('w4os.no_' ~ card.list.type)|t }}</p></div>
             {% endfor %}
             </div>
+            <div class="card-footer"><a href="{{ card.url|e('html_attr') }}">{{ 'w4os.admin_dashboard_all'|t }}</a></div>
         </div>
+    {% endif %}
     </div>
-    {% endfor %}
-    {% for entry in page.header.w4os_blocks ?? [] %}
-        {% set entry = entry is iterable ? entry : {block: entry} %}
-        <div class="{{ entry.wide ?? false ? 'col-12' : 'col-lg-6' }}"><div class="card"><div class="card-body">
-            {{ w4os_block(entry.block ?? '', entry|filter((value, key) => key not in ['block', 'wide'])) }}
-        </div></div></div>
     {% endfor %}
 </div>

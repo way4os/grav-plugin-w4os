@@ -1331,10 +1331,10 @@ class W4osPlugin extends Plugin
     }
 
     /**
-     * The cards of the dashboard (w4os_cards of its page), the ones of the lists the visitor reads: each the rows of a list of the
-     * admin (`page`: its key in the routes) its filters keep (`filter`: name => value), counted, with the address of the list so
-     * filtered; or its first rows as it sorts them (`rows`: how many), each leading to its page (`item`: the key of the page of an
-     * item, its parameter its own).
+     * The cards of the dashboard, in the order of its page (w4os_cards): a block of the helpers (`block`, its arguments); how many of
+     * a list (`page`) its filter keeps (`part`) of all it knows, as a text of the catalog (`text`: the regions online of the known
+     * ones); the counts of a list in one card (`counts`: a filter each); the first rows of a list as it sorts them (`rows`, its
+     * `title`, each leading to `item`). A list the visitor may not read gives no card.
      *
      * @return list<array<string,mixed>>
      */
@@ -1343,24 +1343,47 @@ class W4osPlugin extends Plugin
         $cards = [];
         foreach ((array) ($this->grav['page']->header()->w4os_cards ?? []) as $card) {
             $card = (array) $card;
+            if (isset($card['block'])) {
+                $cards[] = ['kind' => 'block', 'block' => (string) $card['block'], 'args' => array_diff_key($card, ['block' => 1])];
+                continue;
+            }
             $key = (string) ($card['page'] ?? '');
             $options = (array) ($this->site()->pageHeader($key)['w4os_list'] ?? []);
             $type = Site::ADMIN_TYPES[$key] ?? null;
             if ($options === [] || $type === null || ! $this->site()->can($type, 'read')) {
                 continue;
             }
-            $filter = (array) ($card['filter'] ?? []);
-            $rows = max(0, (int) ($card['rows'] ?? 0));
-            $data = $this->listing(['per_page' => max(1, $rows)] + $options, $filter);
+            $url = fn (array $query) => $this->site()->url($key).($query === [] ? '' : '?'.http_build_query($query));
+            $count = function (array $filter) use ($options, $url): array {
+                $data = $this->listing(['per_page' => 1] + $options, $filter);
+
+                return ['list' => $data['list'], 'filter' => $data['query'], 'url' => $url($data['query']), 'error' => $data['error'],
+                    'total' => $data['error'] === null ? (int) ($data['meta']['total'] ?? count($data['items'])) : null];
+            };
+            if (isset($card['counts'])) {
+                $counts = array_map(fn ($filter) => $count((array) $filter), array_values((array) $card['counts']));
+                $cards[] = ['kind' => 'counts', 'page' => $key, 'list' => $counts[0]['list'] ?? null, 'url' => $url([]), 'counts' => $counts,
+                    'error' => array_values(array_filter(array_column($counts, 'error')))[0] ?? null];
+                continue;
+            }
+            if (isset($card['part'])) {
+                $all = $count([]);
+                $part = $count((array) $card['part']);
+                $cards[] = ['kind' => 'count', 'page' => $key, 'list' => $all['list'], 'text' => 'w4os.'.(string) ($card['text'] ?? 'label_value'),
+                    'part' => $part['total'], 'total' => $all['error'] === null && $part['error'] === null ? $all['total'] : null,
+                    'url' => $url([]), 'partUrl' => $part['url'], 'error' => $all['error'] ?? $part['error']];
+                continue;
+            }
+            $rows = max(1, (int) ($card['rows'] ?? 5));
+            $data = $this->listing(['per_page' => $rows] + $options, []);
             $item = isset($card['item']) ? (string) $card['item'] : null;
             $cards[] = [
+                'kind' => 'rows',
                 'page' => $key,
+                'title' => 'w4os.'.(string) ($card['title'] ?? $key.'_title'),
                 'list' => $data['list'],
-                'filter' => $data['query'],
-                'url' => $this->site()->url($key).($data['query'] === [] ? '' : '?'.http_build_query($data['query'])),
-                'total' => $data['error'] === null ? (int) ($data['meta']['total'] ?? count($data['items'])) : null,
-                'rows' => $rows,
-                'items' => $rows > 0 ? $data['items'] : [],
+                'url' => $url([]),
+                'items' => $data['items'],
                 'item' => $item === null ? null : ['url' => $this->site()->url($item), 'param' => (string) ($this->site()->pageHeader($item)['w4os_item']['param'] ?? 'id')],
                 'error' => $data['error'],
             ];

@@ -60,12 +60,18 @@ describe('admin', function () {
 });
 
 describe('the dashboard of the admin', function () {
-    test('has the widgets of w4os-wp: the grid info and status, the recent users, and the counts of its status page (the models, the service accounts)', function () {
+    test('has the widgets of w4os-wp first, the grid info and status, then the regions and the simulators online of all, the counts of the avatars in one card, the recent users', function () {
         $page = (string) file_get_contents(dirname(__DIR__).'/pages/dashboard.md');
         $header = Symfony\Component\Yaml\Yaml::parse(explode('---', $page)[1]);
 
-        expect($header['w4os_cards'])->toContain(['page' => 'manage', 'filter' => ['type' => 'model']], ['page' => 'manage', 'filter' => ['type' => 'service']], ['page' => 'manage', 'rows' => 5, 'item' => 'edit'])
-            ->and($header['w4os_blocks'])->toBe(['grid-info', 'grid-status']);
+        expect($header['w4os_cards'])->toBe([
+            ['block' => 'grid-info'],
+            ['block' => 'grid-status'],
+            ['page' => 'regions', 'part' => ['status' => 'online'], 'text' => 'regions_online'],
+            ['page' => 'simulators', 'part' => ['running' => 'yes'], 'text' => 'admin_dashboard_running'],
+            ['page' => 'manage', 'counts' => [['online' => 'online'], ['status' => 'pending'], ['type' => 'model'], ['type' => 'service']]],
+            ['page' => 'manage', 'rows' => 5, 'item' => 'edit', 'title' => 'admin_dashboard_recent_users'],
+        ])->and($header)->not->toHaveKey('w4os_blocks');
     });
 });
 

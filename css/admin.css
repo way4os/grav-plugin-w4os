@@ -142,3 +142,13 @@
 .w4os-admin .w4os-shortcode-code { width: 22rem; vertical-align: top; }
 .w4os-admin .w4os-shortcode-preview { vertical-align: top; }
 .w4os-admin .w4os-shortcode-options { width: 22rem; vertical-align: top; }
+
+/* The cards of the dashboard in columns, each as tall as what it shows (CSS columns: Bootstrap 5 and Tabler have no masonry) */
+.w4os-dashboard {
+    column-width: 20rem;
+    column-gap: var(--tblr-page-padding, 1.5rem);
+}
+.w4os-dashboard-card {
+    break-inside: avoid;
+    margin-bottom: var(--tblr-page-padding, 1.5rem);
+}

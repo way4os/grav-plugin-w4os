@@ -14,6 +14,7 @@ describe('the dashboard', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => $cards));
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
+        $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "block:$name", ['is_safe' => ['html']]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
@@ -21,24 +22,44 @@ describe('the dashboard', function () {
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
 
-    test('has a card by number, what its filters keep in the words of its list, leading to the list so filtered', function () use ($api, $render) {
-        $html = $render([['page' => 'regions', 'list' => $api->listOf('regions'), 'filter' => ['status' => 'online'], 'url' => '/regions?status=online', 'total' => 2, 'rows' => 0, 'items' => [], 'item' => null, 'error' => null]]);
+    test('shows its cards in their order, in columns that leave a small card small: the blocks of the grid first, each one column', function () use ($api, $render) {
+        $html = $render([
+            ['kind' => 'block', 'block' => 'grid-info', 'args' => []],
+            ['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'text' => 'w4os.regions_online', 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null],
+        ]);
 
-        expect($html)->toContain('<a class="card card-link w4os-stat" href="&#x2F;regions&#x3F;status&#x3D;online">', '[w4os.regions_title]', '<div class="h1 mb-1 mt-2">2</div>',
-            '[w4os.label_value:[w4os.status]|[w4os.online]]');
+        expect($html)->toContain('class="w4os-dashboard"', '<div class="w4os-dashboard-card">')
+            ->and(strpos($html, 'block:grid-info'))->toBeLessThan(strpos($html, '[w4os.regions_title]'))
+            ->and($html)->not->toContain('col-lg-6', 'row-deck');
     });
 
-    test('lists the first rows of a list, each leading to its page, with the date it is sorted by in the format of the language', function () use ($api, $render) {
+    test('says how many of a list are online of all it knows, leading to the list and to the ones online', function () use ($api, $render) {
+        $html = $render([['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'text' => 'w4os.regions_online', 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null]]);
+
+        expect($html)->toContain('[w4os.regions_title]', '[w4os.regions_online:5|7]', 'href="&#x2F;regions"', 'href="&#x2F;regions&#x3F;status&#x3D;online"');
+    });
+
+    test('puts the counts of a list in one card, each by the plain name of what it counts, leading to the list so filtered', function () use ($api, $render) {
+        $counts = [['filter' => ['online' => 'online'], 'total' => 0, 'url' => '/avatars?online=online'], ['filter' => ['status' => 'pending'], 'total' => 1, 'url' => '/avatars?status=pending'],
+            ['filter' => ['type' => 'model'], 'total' => 0, 'url' => '/avatars?type=model'], ['filter' => ['type' => 'service'], 'total' => 2, 'url' => '/avatars?type=service']];
+        $html = $render([['kind' => 'counts', 'page' => 'manage', 'list' => $api->listOf('avatars'), 'counts' => $counts, 'url' => '/avatars', 'error' => null]]);
+
+        expect(substr_count($html, 'class="card w4os-stat"'))->toBe(1)
+            ->and($html)->toContain('[w4os.manage_title]', 'href="&#x2F;avatars&#x3F;status&#x3D;pending"', '[w4os.status_pending]', '[w4os.avatar_type_service]', '>2<')
+            ->and($html)->not->toContain('[w4os.label_value');
+    });
+
+    test('lists the newest avatars as w4os-wp names them, each leading to its page, with the date in the format of the language, and a link to them all', function () use ($api, $render) {
         $created = time() - 60 * 86400;
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
-        $html = $render([['page' => 'manage', 'list' => $api->listOf('avatars'), 'filter' => [], 'url' => '/avatars', 'total' => 16, 'rows' => 5, 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.admin_dashboard_recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.born]')
-            ->not->toContain(date('Y-m-d', $created), 'w4os-stat');
+        expect($html)->toContain('[w4os.admin_dashboard_recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.admin_dashboard_all]', 'href="&#x2F;avatars"')
+            ->not->toContain(date('Y-m-d', $created));
     });
 
     test('says so in one sentence when a list has no row', function () use ($api, $render) {
-        $html = $render([['page' => 'manage', 'list' => $api->listOf('avatars'), 'filter' => [], 'url' => '/avatars', 'total' => 0, 'rows' => 5, 'items' => [], 'item' => null, 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.admin_dashboard_recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [], 'item' => null, 'error' => null]]);
 
         expect($html)->toContain('<p class="empty-title">[w4os.no_avatars]</p>');
     });
