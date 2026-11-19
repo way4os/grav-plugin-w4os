@@ -244,7 +244,7 @@ final class Items
                     + (isset($field['fallback']) ? ['outerclasses' => 'w4os-fallback-of-'.$field['name']] : []);
             }
 
-            return ['type' => 'fieldset', 'title' => 'w4os.'.$field['label'], 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
+            return ['type' => 'fieldset', 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts] + ($help === null ? [] : ['help' => $help]);
         }
         // A path on the address of the site, which is not changed here
         if ($field['type'] === 'path') {

@@ -39,7 +39,7 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields(FormView::of($form, $item, null, true, 250), shown: true);
         $database = $fields['searchDatabase'];
 
-        expect($database)->toMatchArray(['type' => 'fieldset', 'title' => 'w4os.setting_search_database'])
+        expect($database)->toMatchArray(['type' => 'fieldset', 'legend' => 'w4os.setting_search_database', 'classes' => 'form-fieldset'])
             ->and(array_keys($database['fields']))->toBe(['searchDatabase.useDefault', 'searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
             ->and($database['fields']['searchDatabase.port'])->toMatchArray(['type' => 'number', 'placeholder' => '3306', 'label' => 'w4os.db_port'])
             ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password']);
