@@ -207,6 +207,9 @@ w4os:
   search_simulators: 'Simulator name'
   simulators_count: '%d simulators'
   no_simulators: 'No simulator'
+  simulators_running: '%1$s running of %2$s'
+  recent_users: 'Recent users'
+  see_all: 'See all'
   filters: Filters
   filters_active: '%d active filters'
   label_value: '%1$s: %2$s'
@@ -797,6 +800,3 @@ w4os:
   admin_task_last: 'Last run %s'
   admin_task_never: 'Never run'
   admin_task_ran: '%s: %s'
-  admin_dashboard_running: '%1$s running of %2$s'
-  admin_dashboard_recent_users: 'Recent users'
-  admin_dashboard_all: 'See all'
