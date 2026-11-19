@@ -1,0 +1,72 @@
+{# The health of the grid, for the managers the contract lets read it (getHealth): what the engine checks now, group by group (a
+   file of the grid and its section, what the grid says at get_grid_info, the pages, PHP, the folders and files the engine uses),
+   each row its level, its address or its value, its answer and its time; then the addresses of the grid (getAddresses), where
+   each comes from and who serves the pages. Checked again on each visit. #}
+{% set data = w4os_health() %}
+{% set icons = {ok: 'ti ti-circle-check text-green', error: 'ti ti-circle-x text-red', none: 'ti ti-minus text-secondary'} %}
+{% if data.error %}
+    <div class="alert alert-danger" role="alert">{{ data.error }}</div>
+{% endif %}
+{% if data.health %}
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+        {% if data.health.level == 'error' %}
+            <div class="alert alert-danger mb-0 flex-fill" role="status">{{ 'w4os.admin_health_error'|t }}</div>
+        {% else %}
+            <div class="alert alert-success mb-0 flex-fill" role="status">{{ 'w4os.admin_health_ok'|t }}</div>
+        {% endif %}
+        <a class="btn" href="{{ page.route ?? '' }}"><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
+    </div>
+    {% for group in data.health.groups ?? [] %}
+        <div class="card mb-3 w4os-health-group">
+            <div class="card-header"><h3 class="card-title"><code>{{ group.file }}</code>{% if group.title %} <span class="text-secondary">{{ group.title }}</span>{% endif %}</h3></div>
+            <div class="table-responsive">
+                <table class="table table-vcenter card-table">
+                    <thead><tr>
+                        <th class="w-1"><span class="visually-hidden">{{ 'w4os.column_status'|t }}</span></th>
+                        <th>{{ 'w4os.admin_health_setting'|t }}</th>
+                        <th>{{ 'w4os.admin_health_address'|t }}</th>
+                        <th>{{ 'w4os.admin_health_answer'|t }}</th>
+                        <th class="w-1 text-end">{{ 'w4os.admin_health_time'|t }}</th>
+                    </tr></thead>
+                    <tbody>
+                    {% for row in group.rows %}
+                        <tr class="w4os-health-{{ row.level|e('html_attr') }}">
+                            <td><i class="{{ icons[row.level] ?? icons.none }}" title="{{ row.level|e('html_attr') }}" aria-label="{{ row.level|e('html_attr') }}"></i></td>
+                            <td><code>{{ row.label }}</code>{% if row.tag %} <span class="badge bg-secondary-lt">{{ row.tag }}</span>{% endif %}</td>
+                            <td class="text-break">
+                                {%- if row.url %}<a href="{{ row.url|e('html_attr') }}" target="_blank" rel="noopener">{{ row.display ?? row.url }}</a>{% elseif row.text %}{{ row.text }}{% else %}<span class="text-secondary">—</span>{% endif -%}
+                                {% if row.detail %}<div class="small text-secondary">{{ row.detail }}</div>{% endif %}
+                            </td>
+                            <td>{{ row.status }}</td>
+                            <td class="text-end text-secondary">{{ row.ms is not null ? row.ms ~ ' ms' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+{% if data.addresses %}
+    <div class="card mb-3 w4os-health-addresses">
+        <div class="card-header"><h3 class="card-title">{{ 'w4os.admin_health_addresses'|t }}</h3></div>
+        <div class="table-responsive">
+            <table class="table table-vcenter card-table">
+                <thead><tr>
+                    <th>{{ 'w4os.admin_health_service'|t }}</th>
+                    <th>{{ 'w4os.admin_health_address'|t }}</th>
+                    <th>{{ 'w4os.admin_health_source'|t }}</th>
+                </tr></thead>
+                <tbody>
+                {% for name, url in data.addresses.addresses ?? {} %}
+                    <tr>
+                        <td><code>{{ name }}</code>{% if data.addresses.servedBy[name] is defined %} <span class="badge bg-secondary-lt">{{ data.addresses.servedBy[name] }}</span>{% endif %}</td>
+                        <td class="text-break">{% if url %}<a href="{{ url|e('html_attr') }}" target="_blank" rel="noopener">{{ url }}</a>{% else %}<span class="text-secondary">—</span>{% endif %}</td>
+                        <td class="text-secondary">{{ data.addresses.sources[name] ?? '' }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}

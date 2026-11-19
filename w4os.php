@@ -294,6 +294,7 @@ class W4osPlugin extends Plugin
         // The identity of the site for its admin pages (their layout, w4os-admin.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_brand', fn () => $this->site()->brand()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_edited', fn () => $this->edited()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
@@ -421,6 +422,11 @@ class W4osPlugin extends Plugin
             // The page goes back there once signed in (Site::landing())
             $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
             $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
+        } elseif (isset(Site::ADMIN_OPERATIONS[$type]) && $this->site()->avatar() === null) {
+            $this->grav['session']->redirect_after_login = $this->grav['session']->w4os_after_login = $path;
+            $this->grav->redirectLangSafe($this->grav['config']->get('plugins.login.route', '/login'));
+        } elseif (isset(Site::ADMIN_OPERATIONS[$type]) && ! $this->site()->canOperation($type)) {
+            $this->grav->redirectLangSafe($this->site()->isManager() && isset($routes['dashboard']) ? $routes['dashboard'] : $routes['account']);
         } elseif (in_array($type, ['dashboard', ...array_keys(Site::ADMIN_TYPES)], true) && ! $this->site()->isManager()) {
             $this->grav->redirectLangSafe($routes['account']);
         } elseif ($type === 'settings' && ! $this->site()->canSettings()) {
@@ -746,6 +752,25 @@ class W4osPlugin extends Plugin
                 $files = Site::isDefault($own, $this->site()->themeDefault($active, $fields[$setting])) ? [] : $own;
             }
             $form->setData($setting, $files);
+        }
+    }
+
+    /**
+     * The health of the grid and its addresses, as the engine checks them now (a call each), or why it could not tell.
+     *
+     * @return array{health: ?array<string,mixed>, addresses: ?array<string,mixed>, error: ?string}
+     */
+    private function health(): array
+    {
+        if (! $this->site()->canOperation('health')) {
+            return ['health' => null, 'addresses' => null, 'error' => null];
+        }
+        try {
+            $engine = $this->site()->engine();
+
+            return ['health' => $engine->health(), 'addresses' => $engine->addresses(), 'error' => null];
+        } catch (\Throwable $e) {
+            return ['health' => null, 'addresses' => null, 'error' => $e->getMessage()];
         }
     }
 

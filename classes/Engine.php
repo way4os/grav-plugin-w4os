@@ -129,6 +129,18 @@ final class Engine
         return $this->resource($document) + (isset($document['meta']) ? ['meta' => (array) $document['meta']] : []);
     }
 
+    /** @return array<string,mixed> the health of the grid as the engine checks it now: its level, its groups of rows */
+    public function health(): array
+    {
+        return $this->resource($this->call('GET', '/health'));
+    }
+
+    /** @return array<string,mixed> the addresses of the grid, where each comes from and who serves the pages */
+    public function addresses(): array
+    {
+        return $this->resource($this->call('GET', '/addresses'));
+    }
+
     /**
      * The OpenAPI document of the engine (`/openapi.json`, at the root of the API): what it gives, its lists among them (W4OS\Views\Contract).
      *

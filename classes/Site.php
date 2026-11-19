@@ -275,7 +275,7 @@ final class Site
 
     public const ADMIN_ROUTES = [
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'regions' => '/regions', 'region' => '/regions/region',
-        'simulators' => '/simulators', 'settings' => '/settings',
+        'simulators' => '/simulators', 'health' => '/health', 'settings' => '/settings',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -427,6 +427,7 @@ final class Site
         $sections = [];
         foreach (self::ADMIN_PAGES as $type => $page) {
             $type !== 'dashboard' && isset($this->routes()[$type]) && (! isset(self::ADMIN_TYPES[$type]) || $this->can(self::ADMIN_TYPES[$type], 'read'))
+                && (! isset(self::ADMIN_OPERATIONS[$type]) || $this->canOperation($type))
                 && ($type !== 'settings' || $this->canSettings())
                 && $sections[] = ['type' => $type, 'route' => $this->routes()[$type], 'label' => $page['label']];
         }
@@ -509,6 +510,7 @@ final class Site
             'account' => 'w4os.edit_profile',
             'search' => 'w4os.search',
             'settings' => 'w4os.admin_site_settings',
+            'health' => 'w4os.admin_health_title',
             default => 'w4os.'.$type.'_title',
         };
     }
@@ -748,8 +750,12 @@ final class Site
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
+        'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
+
+    /** The admin pages that show an operation of the engine, not a list: they open to whom the contract lets do it (x-access). */
+    public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health']];
 
     /** The section of the admin a page is in: its list for the page of one item. */
     public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage'];
@@ -870,6 +876,14 @@ final class Site
      * Whether the visitor, in the admin pages, may read (`read`) or change (`change`) the items of a type, as the contract says for
      * their level (Access::allows()).
      */
+    /** Whether the visitor does an operation of the engine an admin page shows (ADMIN_OPERATIONS), as the contract says. */
+    public function canOperation(string $page): bool
+    {
+        [$method, $path] = self::ADMIN_OPERATIONS[$page] ?? [null, null];
+
+        return $method !== null && $this->isManager() && Access::allows($this->openApi()->access($method, $path), $this->level());
+    }
+
     public function can(string $type, string $what = 'change'): bool
     {
         $access = $this->isManager() ? ($this->openApi()->itemOf($type)[$what] ?? $this->openApi()->listOf($type)[$what] ?? null) : null;
