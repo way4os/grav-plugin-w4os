@@ -100,7 +100,7 @@ describe('templates', function () {
             ->and($cell->render(['column' => $columns['cpu'], 'item' => []]))->not->toContain('progress');
         // The size of a region: its width and its height in meters (the engine's unit_dimensions), in the language of the page
         $size = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['size'];
-        expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('[w4os.unit_dimensions:512|1,024]')
+        expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('<span class="text-nowrap">[w4os.unit_dimensions:512|1,024]</span>')
             ->and($cell->render(['column' => $size, 'item' => ['size' => 256]]))->toContain('[w4os.unit_dimensions:256|256]');
     });
 
