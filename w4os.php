@@ -1218,14 +1218,16 @@ class W4osPlugin extends Plugin
             }
             $name = str_replace(' ', '.', (string) $own['name']);
         }
+        $error = null;
         try {
             $avatar = $name === '' ? null : $this->site()->forms()->avatar(str_replace('.', ' ', $name));
-        } catch (FormError) {
-            $avatar = null;
+        } catch (FormError $e) {
+            [$avatar, $error] = [null, $e];
         }
         $this->profiled = $avatar;
+        // A grid that cannot be reached is no missing profile
         $avatar === null
-            ? $page->modifyHeader('http_response_code', 404)
+            ? $page->modifyHeader('http_response_code', Site::profileStatus($error))
             : $page->title((string) $avatar['name']);
     }
 

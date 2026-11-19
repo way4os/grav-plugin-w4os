@@ -88,6 +88,15 @@ final class Site
         }
     }
 
+    /**
+     * The status of the page of a profile the engine did not give: unavailable for now when the grid cannot be reached (503), else
+     * a profile that does not exist (404).
+     */
+    public static function profileStatus(?FormError $error): int
+    {
+        return $error?->key === 'w4os.error_channel_unavailable' ? 503 : 404;
+    }
+
     /** The address of the engine API of a remote engine: its setting `api_url`, never guessed from the helpers'; empty without it. */
     public static function apiUrl(array $config): string
     {

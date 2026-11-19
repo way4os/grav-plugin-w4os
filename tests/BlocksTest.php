@@ -77,6 +77,14 @@ describe('blocks', function () {
     });
 });
 
+describe('the page of a profile', function () {
+    test('is a page that does not exist for an avatar the grid does not have, unavailable for now when the grid cannot be reached', function () {
+        expect(W4os\Grav\Site::profileStatus(new W4os\Grav\FormError('w4os.error_not_found')))->toBe(404)
+            ->and(W4os\Grav\Site::profileStatus(new W4os\Grav\FormError('w4os.error_channel_unavailable')))->toBe(503)
+            ->and(W4os\Grav\Site::profileStatus(null))->toBe(404);
+    });
+});
+
 describe('the blocks that cannot be read', function () {
     $t = fn (string $key, array $vars = []) => "[$key".($vars ? ':'.implode('|', $vars) : '').']';
 
