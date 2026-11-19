@@ -13,7 +13,8 @@
 .w4os-admin-brand-full { display: block; min-width: 0; }
 .w4os-admin-icon { display: none; }
 @media (min-width: 992px) {
-    .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-icon { display: block; }
+    .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-brand { flex: none; }
+    .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-icon { display: block; flex: none; width: 2rem; height: 2rem; }
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-brand-full { display: none; }
 }
 /* The tones of the indicators in the colors of Tabler: green when good, grey when off as it should be, orange for a warning, red on an error */
