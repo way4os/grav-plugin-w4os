@@ -63,6 +63,20 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
+    test('says a block whose database cannot be reached is unavailable, with why, never an empty or missing answer', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        mkdir("$root/etc/grids/demo", 0700, true);
+        file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
+        file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n    PublicPort = 8002\n[DatabaseService]\n    ConnectionString = \"Data Source=db.example.org;Database=demo_robust;User ID=opensim;Password=grid;\"\n");
+        $bundled = new Bundled(['config' => "$root/etc", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+        OpenSim\Data\Connections::using(static fn () => null);
+
+        expect(fn () => $bundled->rendered('profile', ['name' => 'Ada.Love']))->toThrow(W4os\Grav\BlockUnavailable::class, 'cannot be reached');
+
+        OpenSim\Data\Connections::using(null);
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
     test('answer only under the prefix of the helpers the site is set with, when the grid sets a helper there; never another route', function () {
         $configured = ['http://site.example.org/helpers/currency.php', 'http://site.example.org/search'];
 

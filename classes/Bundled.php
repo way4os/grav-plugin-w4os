@@ -31,6 +31,9 @@ final class Bundled
 
     private ?string $nick = null;
 
+    /** Whether the last block made could not be made for now (View::unavailable()) */
+    private bool $unavailable = false;
+
     /**
      * @param array<string,mixed> $settings login, database (host, port, name, user, password), config (the folder of the config of
      *     the grids; opensim_conf, its opensim.conf), grid
@@ -181,20 +184,30 @@ final class Bundled
             return null;
         }
         $templates = \Composer\InstalledVersions::getInstallPath('magicoli/opensim-helpers').'/templates';
+        $view = new View($templates);
+        $html = $view->block((string) \OpenSim\Helpers\Block\Blocks::name($name), $grid, $args);
+        $this->unavailable = method_exists($view, 'unavailable') && $view->unavailable();
 
-        return (new View($templates))->block((string) \OpenSim\Helpers\Block\Blocks::name($name), $grid, $args);
+        return $html;
     }
 
     /**
-     * A block and the notices to the visitor its rendering gave (View::notify()), for the zone of messages of the site.
+     * A block and the notices to the visitor its rendering gave (View::notify()), for the zone of messages of the site; one the
+     * helpers could not make for now is a BlockUnavailable, with their reason.
      *
      * @param array<string,mixed> $args
      * @return ?array{html: string, notices: list<array{level: string, text: string}>}
+     * @throws BlockUnavailable when the helpers could not make it for now
      */
     public function rendered(string $name, array $args = []): ?array
     {
         $html = $this->block($name, $args);
         $notices = method_exists(View::class, 'notices') ? View::notices() : [];
+        // A block the helpers could not make for now (a database of the grid that cannot be reached): its reason, their error notice
+        if ($this->unavailable) {
+            $reasons = array_column(array_filter($notices, fn (array $notice) => ($notice['level'] ?? '') === 'error'), 'text');
+            throw new BlockUnavailable($reasons !== [] ? implode(' ', $reasons) : 'the helpers cannot make it for now');
+        }
 
         return $html === null ? null : ['html' => $html, 'notices' => $notices];
     }
