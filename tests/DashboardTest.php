@@ -52,14 +52,14 @@ describe('the dashboard', function () {
     test('lists the newest avatars as w4os-wp names them, each leading to its page, with the date in the format of the language, and a link to them all', function () use ($api, $render) {
         $created = time() - 60 * 86400;
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
-        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.admin_dashboard_recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('[w4os.admin_dashboard_recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.admin_dashboard_all]', 'href="&#x2F;avatars"')
+        expect($html)->toContain('[w4os.recent_users]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '[w4os.see_all]', 'href="&#x2F;avatars"')
             ->not->toContain(date('Y-m-d', $created));
     });
 
     test('says so in one sentence when a list has no row', function () use ($api, $render) {
-        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.admin_dashboard_recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [], 'item' => null, 'error' => null]]);
+        $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_users', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [], 'item' => null, 'error' => null]]);
 
         expect($html)->toContain('<p class="empty-title">[w4os.no_avatars]</p>');
     });

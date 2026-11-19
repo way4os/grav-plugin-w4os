@@ -68,9 +68,9 @@ describe('the dashboard of the admin', function () {
             ['block' => 'grid-info'],
             ['block' => 'grid-status'],
             ['page' => 'regions', 'part' => ['status' => 'online'], 'text' => 'regions_online'],
-            ['page' => 'simulators', 'part' => ['running' => 'yes'], 'text' => 'admin_dashboard_running'],
+            ['page' => 'simulators', 'part' => ['running' => 'yes'], 'text' => 'simulators_running'],
             ['page' => 'manage', 'counts' => [['online' => 'online'], ['status' => 'pending'], ['type' => 'model'], ['type' => 'service']]],
-            ['page' => 'manage', 'rows' => 5, 'item' => 'edit', 'title' => 'admin_dashboard_recent_users'],
+            ['page' => 'manage', 'rows' => 5, 'item' => 'edit', 'title' => 'recent_users'],
         ])->and($header)->not->toHaveKey('w4os_blocks');
     });
 });

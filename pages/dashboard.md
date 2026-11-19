@@ -12,8 +12,8 @@ w4os_cards:
   - { block: grid-info }
   - { block: grid-status }
   - { page: regions, part: { status: online }, text: regions_online }
-  - { page: simulators, part: { running: 'yes' }, text: admin_dashboard_running }
+  - { page: simulators, part: { running: 'yes' }, text: simulators_running }
   # The avatars online and pending, the avatar models and the service accounts, as the status page of w4os-wp counts them
   - { page: manage, counts: [{ online: online }, { status: pending }, { type: model }, { type: service }] }
-  - { page: manage, rows: 5, item: edit, title: admin_dashboard_recent_users }
+  - { page: manage, rows: 5, item: edit, title: recent_users }
 ---

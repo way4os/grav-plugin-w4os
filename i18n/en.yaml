@@ -113,6 +113,3 @@ w4os:
   admin_task_last: 'Last run %s'
   admin_task_never: 'Never run'
   admin_task_ran: '%s: %s'
-  admin_dashboard_running: '%1$s running of %2$s'
-  admin_dashboard_recent_users: 'Recent users'
-  admin_dashboard_all: 'See all'
