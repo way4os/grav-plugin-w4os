@@ -348,8 +348,10 @@ w4os:
   column_region_name: "Enw'r Rhanbarth"
   column_presence: Presenoldeb
   column_prims: Prims
-  column_usage: Defnydd
   column_scripts: Sgriptiau
+  column_presence_short: af.
+  column_prims_short: pr.
+  column_scripts_short: sgr.
   count_avatars_short: '%d af.'
   count_prims: '%d prim'
   count_scripts: '%d sgript'

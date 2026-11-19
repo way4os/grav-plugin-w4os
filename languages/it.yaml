@@ -348,8 +348,10 @@ w4os:
   column_region_name: 'Nome Regione'
   column_presence: Presenza
   column_prims: Prim
-  column_usage: Utilizzo
   column_scripts: Script
+  column_presence_short: av.
+  column_prims_short: pr.
+  column_scripts_short: scr.
   count_avatars_short: '%d av.'
   count_prims: '%d prim'
   count_scripts: '%d script'
