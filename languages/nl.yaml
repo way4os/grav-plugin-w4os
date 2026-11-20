@@ -21,7 +21,7 @@ w4os:
   terms_agree: 'Ik ga akkoord met de voorwaarden op pagina %s.'
   registered: 'Avatar %s aangemaakt. Log in met zijn naam of je e-mail.'
   registered_confirm: 'Bijna klaar: klik op de link in de mail naar je adres om %s aan te maken.'
-  registered_not_sent: 'Bijna klaar, maar de bevestigingsmail kon niet worden verstuurd. Vraag hieronder een nieuwe aan om %s aan te maken, of neem contact op met de beheerders van de grid.'
+  registered_not_sent: 'Bijna klaar, maar de bevestigingsmail kon niet worden verstuurd. Vraag hieronder een nieuwe aan om %s aan te maken, of neem contact op met de beheerders van het grid.'
   registered_test: 'Bijna klaar. Testsite, geen mail: maak %1$s aan met deze link: %2$s'
   confirm_title: 'Bevestig je e-mail'
   confirm_text: 'Je avatar wordt aangemaakt zodra je op de link klikt in de mail die we je stuurden. Na een paar minuten niets? Kijk in de spammap.'
@@ -30,9 +30,9 @@ w4os:
   resend_button: 'Stuur een nieuwe link'
   confirm_resent: 'Er is een nieuwe link onderweg.'
   confirm_resent_test: 'Testsite, geen mail: bevestig met deze link: %s'
-  avatar_name: 'Avatar naam'
+  avatar_name: Avatarnaam
   login_title: Inloggen
-  log_in: 'Log in'
+  log_in: Inloggen
   logout: Uitloggen
   login: 'Avatarnaam of e-mail'
   sign_in_failed: 'Inloggen mislukt'
@@ -41,7 +41,7 @@ w4os:
   forgot_button: 'Stuur me een link'
   forgot_sent: 'Als een avatar deze naam of dit e-mailadres heeft, is er een link onderweg naar zijn adres.'
   forgot_test: 'Testsite, geen mail: de link voor een nieuw wachtwoord wordt hier niet getoond, de engine-API geeft hem (send: false).'
-  reset_title: 'Reset Wachtwoord'
+  reset_title: 'Wachtwoord opnieuw instellen'
   reset_text: 'Kies het nieuwe wachtwoord van je avatar.'
   reset_no_token: 'Deze pagina opent via de link in de mail die je kreeg.'
   reset_button: 'Nieuw wachtwoord opslaan'
@@ -55,14 +55,14 @@ w4os:
   about: Over
   wants: 'Wil graag'
   skills: Vaardigheden
-  want_build: Bouw
-  want_explore: Verken
-  want_meet: Ontmoet
+  want_build: Bouwen
+  want_explore: Verkennen
+  want_meet: Ontmoeten
   want_group: Groep
   want_buy: Kopen
   want_sell: Verkopen
-  want_be_hired: 'Word aangenomen'
-  want_hire: Huur
+  want_be_hired: 'Ingehuurd worden'
+  want_hire: Inhuren
   skill_textures: Texturen
   skill_architecture: Architectuur
   skill_event_planning: 'Evenement planning'
@@ -82,7 +82,7 @@ w4os:
   post_label: 'Nieuw bericht'
   post_help: 'Platte tekst, maximaal 1000 tekens.'
   action_save: Opslaan
-  settings_models: 'Avatar Modellen'
+  settings_models: Avatarmodellen
   settings_avatars: Avatarinstellingen
   group_simulator: Simulator
   group_console: Console
@@ -99,7 +99,7 @@ w4os:
   group_avatars: Avatars
   setting_robust_uri: Robust-URI
   setting_robust_uri_help: 'Het privéadres van Robust, dat de simulators aanroepen voor de diensten van het grid.'
-  setting_robust_database: 'ROBUST database'
+  setting_robust_database: Robust-database
   setting_console_user: Consolegebruiker
   setting_console_pass: Consolewachtwoord
   setting_console_port: Consolepoort
@@ -129,19 +129,19 @@ w4os:
   settings_menu_offline: 'Offline berichten'
   settings_menu_assets: Webassets
   settings_saved: 'Instellingen opgeslagen.'
-  provide_economy: 'Bied Economie Helper'
-  provide_search: 'Bied zoekservice'
-  provide_guide: 'Bied Destinatie Gids Service aan'
-  provide_offline: 'Bied offline berichtenservice'
-  provide_offline_help: 'Eer "Stuur mij e-mails wanneer ik offline ben" kijker optie.'
+  provide_economy: 'Bied een economie-helper aan'
+  provide_search: 'Bied een zoekdienst aan'
+  provide_guide: 'Bied een dienst voor de bestemmingsgids aan'
+  provide_offline: 'Bied een dienst voor offline berichten aan'
+  provide_offline_help: 'Respecteer de viewer-optie "E-mail mij IM''s als ik offline ben".'
   provide_assets: 'Bied een webassets-server aan'
-  provide_assets_help: "Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto's)."
+  provide_assets_help: "Een webassets-server is nodig om in-world assets (uit het grid) op de website te tonen (bijv. profielfoto's)."
   provide_path: Pad
   provide_offline_help_core: 'De OpenSimulator-kernmodule voor offline berichten ondersteunt de e-mail doorstuur-optie niet die beschikbaar is in de viewer-instellingen.'
-  economy_helper_uri: 'Economie Helper URI'
+  economy_helper_uri: 'URI van de economie-helper'
   economy_helper_uri_help: 'De URL moet worden ingesteld in de configuratie van Robust.'
-  economy_help_helpers: 'Economie helpers zijn extra scripts die nodig zijn als je economie op je grid implementeert (met echte of valse valuta).'
-  economy_help_scripts: 'Helperscripts maken communicatie mogelijk tussen de geldserver en het raster: bijwerken van de huidige balans, schatting van de muntkosten, verkoop van land en objecten, betalingen...'
+  economy_help_helpers: 'Economie-helpers zijn extra scripts die nodig zijn als je economie op je grid implementeert (met echte of nepvaluta).'
+  economy_help_scripts: 'Helperscripts maken communicatie mogelijk tussen de geldserver en het grid: bijwerken van het huidige saldo, schatting van de valutakosten, verkoop van land en objecten, betalingen...'
   economy_help_module: 'Deze plugin biedt alleen de webhelpers die nodig zijn voor de geldservermodule. Er moet een externe module worden geïnstalleerd en geconfigureerd op de simulator, bijvoorbeeld:'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: 'Gebruiksklare binaries en voorbeeldconfiguratiebestanden kunnen hier worden gedownload: github.com/magicoli/opensim-helpers'
@@ -153,10 +153,10 @@ w4os:
   gloebit_help_dll: 'Download de nieuwste dll naar de map bin/ van je OpenSimulator (hernoem deze naar Gloebit.dll), vanaf github.com/GuduleLapointe/opensim-debian of dev.gloebit.com'
   money_script_access_key: 'Geld Script Toegangssleutel'
   money_script_access_key_help: 'Kies een unieke toegangssleutel en stel deze in in MoneyServer.ini'
-  search_engine_url: 'Zoekmachine URL'
+  search_engine_url: 'URL van de zoekmachine'
   search_url_help_viewer: 'URL van de zoekmachine die intern door de viewer wordt gebruikt (zonder argumenten).'
   search_url_help_one: 'Slechts één kan worden ingesteld, andere regels zijn alternatieve voorbeelden.'
-  search_url_help_web: 'Merk op dat Zoek URL verschillend is van Web-zoek URL, welke momenteel niet door W4OS wordt behandeld. Zoeken op het web is relevant als je een zoekpagina op het web hebt die gewijd is aan raster-inhoud en die resultaten geeft met in-wereld URLs (hop:// of secondlife://). Het is optioneel en wordt hier alleen genoemd om instellingen uit elkaar te houden die helaas vergelijkbare namen hebben.'
+  search_url_help_web: "Merk op dat de zoek-URL verschilt van de webzoek-URL, die momenteel niet door W4OS wordt behandeld. Zoeken op het web is relevant als je een zoekpagina op het web hebt die gewijd is aan grid-inhoud en die resultaten geeft met in-world URL's (hop:// of secondlife://). Het is optioneel en wordt hier alleen genoemd om instellingen uit elkaar te houden die helaas vergelijkbare namen hebben."
   search_register_url: 'Registratie-URL van de zoekmachine'
   search_include_2do: '2do.directory opnemen'
   search_registers: 'Andere zoekregistraties'
@@ -167,12 +167,12 @@ w4os:
   search_register_help_data: "Gegevensdienst, gebruikt om regio's, objecten of grond te koop aan te melden."
   search_register_help_several: 'Je kunt je registreren bij verschillende zoekmachines.'
   search_register_help_prefix: 'Elke regel moet een unieke identificatie hebben die begint met "DATA_SRV_".'
-  events_help_fetch: 'HYPEvents Server URL, gebruikt om aankomende evenementen op te halen en beschikbaar te maken in de zoekfunctie.'
+  events_help_fetch: 'URL van de HYPEvents-server, gebruikt om aankomende evenementen op te halen en beschikbaar te maken in de zoekfunctie.'
   search_help_local: 'Schakel het gebruik van een lokale zoekmachine in, waarmee alleen lokale resultaten worden weergegeven (aanbevolen voor privégrids).'
-  search_help_external: 'Schakel het gebruik van een externe zoekmachine zoals 2do Directory uit, waardoor resultaten worden weergegeven van zowel jouw grid als andere openbare grids.'
+  search_help_external: 'Schakel dit uit om een externe zoekmachine zoals 2do Directory te gebruiken, met resultaten van zowel jouw grid als andere openbare grids.'
   search_help_module: 'Zoekfuncties vereisen de installatie van de OpenSimSearch-module op OpenSimulator.'
   search_help_binary: 'Het gebruiksklare binaire bestand OpenSimSearch.Modules.dll is hier te vinden: github.com/magicoli/opensim-helpers'
-  guide_url: 'URL van de Destinations Guide'
+  guide_url: 'URL van de bestemmingsgids'
   guide_source_help_file: 'Een tekstbestand met een opgemaakte lijst van bestemmingen.'
   guide_source_help_where: 'De bron kan een URL zijn of het volledige pad van een lokaal bestand dat toegankelijk is voor jouw webserver.'
   guide_source_help_name: 'Een bestandsnaam alleen wordt gelezen in de configuratiemap van het grid.'
@@ -186,7 +186,7 @@ w4os:
   tip_models_pattern: 'Deel van de naam van de modellen'
   tip_economy_url: 'Waar currency.php en landtool.php staan'
   tip_gloebit_environment: 'Sandbox om te testen, productie om te verkopen'
-  tip_gloebit_keys: 'Uit uw Gloebit-handelaarsaccount'
+  tip_gloebit_keys: 'Uit je Gloebit-handelaarsaccount'
   tip_currency_rate: 'US$ voor 1000 eenheden in de wereld'
   tip_money_script_key: 'Dezelfde in MoneyServer.ini'
   tip_podex_message: 'Getoond vóór de teleport'
@@ -203,14 +203,14 @@ w4os:
   guide_source_help_categories: 'Regels die alleen tekst bevatten, worden geïnterpreteerd als categorieën.'
   guide_source_help_comments: 'Regels die beginnen met "#" of "//" worden genegeerd.'
   guide_source_help_board: 'Het formaat is identiek aan het formaat van het in-world object Gudz Teleport Board, dus dezelfde bron-URL kan voor beide worden gebruikt.'
-  guide_help_feature: 'De Destinations-gids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
-  guide_help_places: 'Hoewel het niet verplicht is en niet elke avatar er baat bij heeft, is het een handige manier om hun een lijst van bezienswaardige plaatsen te bieden, uit uw eigen grid of daarbuiten.'
-  offline_helper: 'Offline berichten helper'
+  guide_help_feature: 'De bestemmingsgids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
+  guide_help_places: 'Hoewel het niet verplicht is en niet elke avatar er baat bij heeft, is het een handige manier om hun een lijst van bezienswaardige plaatsen te bieden, uit je eigen grid of daarbuiten.'
+  offline_helper: 'Helper voor offline berichten'
   offline_helper_help: 'Stel de URL in in de OpenSimulator-configuraties.'
-  assets_url: 'Web Assets Server URL'
-  assets_external_help: "Als 'Bied Web Assets Server' is uitgeschakeld, is het noodzakelijk om een externe service te installeren en de URL hiervan hier in te voeren om ervoor te zorgen dat de plugin naar behoren werkt."
+  assets_url: 'URL van de webassets-server'
+  assets_external_help: "Als 'Bied een webassets-server aan' is uitgeschakeld, is het noodzakelijk om een externe service te installeren en de URL hiervan hier in te voeren om ervoor te zorgen dat de plugin naar behoren werkt."
   assets_path_help: 'Elk pad onder de site: de engine levert daar de afbeeldingen, los van de helpers.'
-  models_match: Wedstrijd
+  models_match: Overeenkomst
   models_match_first: Voornaam
   models_match_any: Elke
   models_match_last: Achternaam
@@ -318,16 +318,16 @@ w4os:
   status_banned: Verbannen
   avatar_type_user: Bewoner
   avatar_type_model: Standaardmodel
-  avatar_type_service: 'Service Account'
-  state_grid_banned: 'Verbannen uit de grid'
+  avatar_type_service: Serviceaccount
+  state_grid_banned: 'Verbannen uit het grid'
   state_estate_banned: 'Verbannen uit landgoederen'
   filter_estate_banned: Landgoedbans
   action_ban: Verbannen
   action_unban: 'Ban opheffen'
   action_estate_ban: 'Uit landgoederen verbannen'
   action_estate_unban: 'Landgoedban opheffen'
-  ask_ban: 'Dit avatar verbannen? Het kan niet meer inloggen tot de ban is opgeheven.'
-  ask_estate_ban: 'Dit avatar uit elk landgoed van de grid verbannen?'
+  ask_ban: 'Deze avatar verbannen? Hij kan niet meer inloggen tot de ban is opgeheven.'
+  ask_estate_ban: 'Deze avatar uit elk landgoed van het grid verbannen?'
   role: Rol
   role_resident: Bewoner
   role_god_like: Goddelijk
@@ -336,7 +336,7 @@ w4os:
   role_god: God
   role_maintenance: Onderhoud
   role_model: Model
-  role_service_account: 'Service Account'
+  role_service_account: Serviceaccount
   action_enable: Activeren
   action_disable: Uitschakelen
   action_start: Starten
@@ -371,7 +371,7 @@ w4os:
   filter_active: 'Kan inloggen'
   column_map: Kaart
   column_region: Regio
-  column_region_name: 'Regio Naam'
+  column_region_name: Regionaam
   column_presence: Aanwezigheid
   column_prims: Prims
   column_scripts: Scripts
@@ -393,9 +393,9 @@ w4os:
   view_active: Actief
   view_inactive: Inactief
   degraded: Verstoord
-  parcels: Perceel
+  parcels: Percelen
   shortcodes_title: 'Beschikbare shortcodes'
-  shortcodes_help: 'Korte codes kunnen worden opgenomen in elke pagina of artikel.'
+  shortcodes_help: 'Shortcodes kunnen worden opgenomen in elke pagina of artikel.'
   shortcode_options: Opties
   shortcode_option_title: 'Titel van het blok'
   shortcode_option_level: 'Titelniveau (h1 tot h6)'
@@ -412,13 +412,13 @@ w4os:
   block_search_help: 'Een zoekformulier voor de plaatsen, evenementen, advertenties en personen van het grid.'
   block_profile_help: 'Het profiel van een avatar.'
   block_new_avatars_help: 'De laatste avatars die zich bij het grid hebben aangesloten.'
-  shortcode_home_help: 'Uw tekst met de populaire plaatsen, de gids, de status van het grid en het bericht van de dag.'
+  shortcode_home_help: 'Je tekst met de populaire plaatsen, de gids, de status van het grid en het bericht van de dag.'
   shortcode_guest_help: 'Toont zijn tekst alleen aan bezoekers die niet zijn aangemeld.'
   shortcode_register_help: 'Toont zijn tekst alleen als de site een registratiepagina heeft.'
   shortcode_text_help: 'Toont een tekst van de site in de taal van de pagina.'
   shortcode_uri_help: 'Het inlogadres van het grid, om in een viewer te kopiëren.'
   shortcode_slogan_help: 'De slogan van de site.'
-  setting_login: 'Inloggen URI'
+  setting_login: Login-URI
   setting_login_help: 'Het adres waar de viewers inloggen en waar ze vragen wat het grid over zichzelf zegt (get_grid_info).'
   setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'Het adres waarmee andere grids dit grid bereiken (hypergrid).'
@@ -428,28 +428,28 @@ w4os:
   setting_welcome_help: 'De welkomstpagina die in de viewer wordt getoond met het inlogformulier. Een korte, niet scrollende pagina, met alleen essentiële info. Het is verplicht, of op zijn minst sterk aanbevolen.'
   setting_economy: Economie
   setting_economy_help: "Valuta's en enkele andere diensten die de viewer opvraagt. De avatars openen ze niet rechtstreeks."
-  setting_about: 'Over dit rooster'
-  setting_about_help: 'Gedetailleerde informatiepagina op uw website, via een link op de inlogpagina van de kijker.'
+  setting_about: 'Over dit grid'
+  setting_about_help: 'Gedetailleerde informatiepagina op je website, via een link op de inlogpagina van de viewer.'
   setting_register: 'Registratie pagina'
   setting_register_help: 'Link naar de registratie van een avatar.'
-  setting_help: Help
-  setting_help_help: 'Link naar een hulppagina op uw website.'
+  setting_help: Hulp
+  setting_help_help: 'Link naar een hulppagina op je website.'
   setting_password: Wachtwoordherstel
-  setting_password_help: 'Link naar de verloren wachtwoord pagina.'
+  setting_password_help: 'Link naar de pagina voor een vergeten wachtwoord.'
   setting_grid_status: Gridstatus
   setting_grid_status_help: 'De pagina met de status van het grid.'
   setting_grid_status_rss: Gridstatus-feed
   setting_grid_status_rss_help: 'De feed met de status van het grid die de viewers lezen (RSS).'
-  setting_web_profile: 'Avatar profiel'
-  setting_web_profile_help: 'De basis URL voor avatar web profielen.'
+  setting_web_profile: Avatarprofiel
+  setting_web_profile_help: 'De basis-URL voor de webprofielen van de avatars.'
   setting_web_search: 'Zoeken op het web'
-  setting_web_search_help: 'Web tabblad van viewer zoekvensters. Relevant als u een zoekpagina hebt met inhoud uit het raster.'
+  setting_web_search_help: 'Webtabblad van de zoekvensters van de viewer. Relevant als je een zoekpagina hebt met inhoud uit het grid.'
   setting_destination_guide: 'Gids voor bestemmingen'
-  setting_destination_guide_help: 'De Destinations-gids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
+  setting_destination_guide_help: 'De bestemmingsgids is een functie van Viewer 3 en biedt een venster met suggesties voor plaatsen.'
   setting_message_url: 'Bericht van de dag'
   setting_message_url_help: 'Het bericht dat de viewers bij het inloggen tonen.'
   setting_search_service: Zoekdienst
-  setting_search_service_help: 'Zoekdienst gebruikt door de viewer. Zoeken kan worden geleverd door de simulator kern (beperkt), of door een externe service voor extra functionaliteiten (zoals gebeurtenissen). Vereist OpenSimSearch.Modules.dll.'
+  setting_search_service_help: 'Zoekdienst die de viewer gebruikt. Zoeken kan worden geleverd door de kern van de simulator (beperkt), of door een externe dienst voor extra functies (zoals evenementen). Vereist OpenSimSearch.Modules.dll.'
   setting_data_service: Gegevensdienst
   setting_data_service_help: "Waar de simulators hun regio's aanmelden, zodat de zoekfunctie ze vindt. Geen pagina."
   setting_offline_messages: 'Offline berichten'
@@ -458,7 +458,7 @@ w4os:
   setting_offline_module_help: 'De module van de simulators die de berichten van afwezige avatars bewaart: V2 door Robust, V1 door de helpers.'
   setting_money_script_key: 'Sleutel van de geldscripts'
   setting_money_script_key_help: 'De sleutel die de valutadiensten en de geldserver delen: nooit getoond, alleen of hij is ingesteld.'
-  setting_helpers: 'basis van helpers'
+  setting_helpers: 'Basis van de helpers'
   setting_helpers_help: "De basis van de pagina's en services van de helpers."
   setting_directory: Gids
   setting_directory_help: "De pagina van het grid in de gedeelde gids van de regio's."
@@ -472,7 +472,7 @@ w4os:
   setting_private_port: Privépoort
   setting_storage_provider: Opslagprovider
   setting_database: Databaseverbindingsstring
-  setting_grid_name: 'Grid Naam'
+  setting_grid_name: Gridnaam
   setting_grid_nick: 'Gridnaam (kort)'
   setting_welcome_message: Welkomstbericht
   setting_currency_symbol: Valutasymbool
@@ -505,18 +505,18 @@ w4os:
   gloebit_production: Productie
   setting_guide_source: Bron
   setting_guide_source_help: 'Een tekstbestand met een opgemaakte lijst van bestemmingen.'
-  setting_search_database: 'OS Search database'
-  setting_events_url: 'Evenementen Server URL'
+  setting_search_database: 'Database van OS Search'
+  setting_events_url: 'URL van de evenementenserver'
   setting_logo_url: 'URL van het gridlogo'
-  setting_mail_sender: 'Afzender e-mailadres'
+  setting_mail_sender: 'E-mailadres van de afzender'
   setting_mail_sender_help: 'Een no-reply e-mailadres om berichten door te sturen voor avatars die de optie "E-mail mij IM''s als ik offline ben" hebben ingeschakeld.'
   setting_currency_rate: Valutawisselkoers
-  setting_currency_rate_help: 'Bedrag te betalen in US$ voor 1000 inwereldse geldeenheden. Wordt gebruikt om de kosten te schatten. Indien niet ingesteld, zal de koers 10/1000 zijn (1 cent per geldeenheid)'
+  setting_currency_rate_help: 'Bedrag te betalen in US$ voor 1000 geldeenheden in de wereld. Wordt gebruikt om de kosten te schatten. Indien niet ingesteld, zal de koers 10/1000 zijn (1 cent per geldeenheid).'
   setting_currency_rate_per: 'Geldeenheden per koers'
   setting_gloebit_threshold: Gloebit-omrekendrempel
-  setting_podex_message: 'Podex omleiding bericht'
-  setting_podex_url: 'Uitwisselen van Teleport URL'
-  setting_assets_url: 'Web Assets Server URL'
+  setting_podex_message: 'Omleidingsbericht van Podex'
+  setting_podex_url: 'Teleport-URL van het wisselkantoor'
+  setting_assets_url: 'URL van de webassets-server'
   setting_assets_url_help: 'De webassetserver van het grid wanneer het niet die van de helpers is: hij zet de afbeeldingen van de wereld (JPEG 2000) om voor het web.'
   offline_module_v1: 'Door de helpers (V1)'
   offline_module_v2: 'Door Robust (V2)'
@@ -529,7 +529,7 @@ w4os:
   db_use_default: 'Standaard gebruiken'
   db_default_main: 'Standaard: de hoofddatabase van het grid.'
   db_default_simulator: 'Standaard: de database van de simulator.'
-  economy_database: 'Economie Database'
+  economy_database: Economiedatabase
   usage_robust_simulators: 'Robust-service, gebruikt door de simulators'
   usage_robust_viewers: 'Robust-service, gebruikt door de viewers en de andere grids'
   usage_helper_simulators: 'Helper aangeroepen door de simulators'
@@ -538,14 +538,14 @@ w4os:
   usage_web_tool: 'Webtool, gebruikt met een script in de virtuele wereld'
   usage_task: 'Taak van het grid, uitgevoerd op de achtergrond'
   usage_web_assets: 'Web-assets, voor de websites'
-  service_asset: 'Assets Service'
+  service_asset: Assetservice
   service_asset_help: 'De assets van het grid (texturen, geluiden, objecten...): de simulators lezen en bewaren ze.'
   service_inventory: Inventarisservice
   service_inventory_help: 'De inventarissen van de avatars.'
   service_grid: Gridservice
   service_grid_help: "De regio's van het grid: waar elke ligt en welke simulator haar draait."
-  service_estate: Estate-service
-  service_estate_help: "De estates van de regio's, hun eigenaars en hun beheerders."
+  service_estate: Landgoedservice
+  service_estate_help: "De landgoederen van de regio's, hun eigenaars en hun beheerders."
   service_authentication: Authenticatieservice
   service_authentication_help: 'De wachtwoorden van de accounts en hun sessies.'
   service_avatar: Avatarservice
@@ -569,8 +569,8 @@ w4os:
   service_groups: Groepenservice
   service_groups_help: 'De groepen van de avatars, hun leden, rollen en mededelingen.'
   service_profile: Profielenservice
-  service_profile_help: 'De profielen van de avatars, hun picks en hun advertenties.'
-  service_get_grid_info: 'Grid info'
+  service_profile_help: 'De profielen van de avatars, hun favorieten en hun advertenties.'
+  service_get_grid_info: Gridgegevens
   service_get_grid_info_help: 'Wat het grid over zichzelf aan de viewers vertelt (get_grid_info).'
   service_hg_friends: Hypergrid-vriendenservice
   service_hg_friends_help: 'De vriendschappen met de avatars van andere grids (hypergrid).'
@@ -593,7 +593,7 @@ w4os:
   service_text_images: 'Tekst naar afbeelding'
   service_text_images_help: 'Maakt een afbeelding van een tekst, voor een script in de virtuele wereld (textgen.php).'
   service_assets: 'Web assets-server'
-  service_assets_help: "Een web assets server is nodig om in-world assets (uit het grid) op de website te tonen (b.v. profielfoto's)."
+  service_assets_help: "Een webassets-server is nodig om in-world assets (uit het grid) op de website te tonen (bijv. profielfoto's)."
   service_instant_message: 'Service voor directe berichten'
   service_instant_message_help: 'De berichten tussen de avatars van verschillende grids (hypergrid).'
   health_unset: 'Niet ingesteld: niet geleverd en niet getest.'
@@ -609,7 +609,7 @@ w4os:
   health_matches_search: 'komt overeen met search van [GridInfoService]'
   health_with_xmlrpc: 'met een geldig XMLRPC-verzoek'
   health_with_post: 'met geldige verzonden gegevens'
-  health_with_query: 'met een geldige zoekopdracht'
+  health_with_query: 'met een geldige query'
   health_without_data: 'zonder gegevens'
   health_slow: 'antwoordde in %d ms, na meer dan %s s de eerste keer'
   health_block_missing: 'de pagina toont het blok %s niet'
@@ -694,7 +694,7 @@ w4os:
   flux_empty: 'Geen Flux Berichten gevonden'
   list_empty: 'Geen items gevonden.'
   posts_count: '%d berichten'
-  flux_post: 'Flux Post'
+  flux_post: Flux-bericht
   kind_iar: 'Inventaris (IAR)'
   kind_oar: 'Regio (OAR)'
   kind_backup: Back-up
@@ -709,12 +709,12 @@ w4os:
   column_memory: Geheugen
   column_traffic: Verkeer
   column_for_sale: 'Te koop'
-  column_in_search: 'In het zoeken'
+  column_in_search: 'In de zoekresultaten'
   parcel_scripts: Scripts
-  parcel_build: Bouw
+  parcel_build: Bouwen
   parcel_public: 'Openbare toegang'
   column_regions: "Regio's"
-  column_estates: Estates
+  column_estates: Landgoederen
   parcel: Perceel
   column_type: Type
   filter_local: Lokaal
@@ -755,7 +755,7 @@ w4os:
   error_not_found_avatar_model: 'Avatarmodel niet gevonden'
   error_not_found_region: 'Regio niet gevonden'
   error_not_found_simulator: 'Simulator niet gevonden'
-  error_not_found_estate: 'Estate niet gevonden'
+  error_not_found_estate: 'Landgoed niet gevonden'
   error_not_found_parcel: 'Perceel niet gevonden'
   error_not_found_asset: 'Asset niet gevonden'
   error_not_found_post: 'Bericht niet gevonden'
@@ -763,14 +763,14 @@ w4os:
   error_invalid_request: 'Dat is niet mogelijk.'
   error_invalid_document: 'Dat is niet mogelijk.'
   error_type_conflict: 'Dat is niet mogelijk.'
-  error_unauthorized: 'De grid is nu niet bereikbaar. Probeer het later opnieuw.'
+  error_unauthorized: 'Het grid is nu niet bereikbaar. Probeer het later opnieuw.'
   error_method_not_allowed: 'Dat is niet mogelijk.'
-  error_channel_unavailable: 'De grid is nu niet bereikbaar. Probeer het later opnieuw.'
-  error_instance_failed: 'De grid is nu niet bereikbaar. Probeer het later opnieuw.'
-  error_internal_error: 'De grid is nu niet bereikbaar. Probeer het later opnieuw.'
+  error_channel_unavailable: 'Het grid is nu niet bereikbaar. Probeer het later opnieuw.'
+  error_instance_failed: 'Het grid is nu niet bereikbaar. Probeer het later opnieuw.'
+  error_internal_error: 'Het grid is nu niet bereikbaar. Probeer het later opnieuw.'
   error_sign_in_refused: 'De naam of het wachtwoord is fout.'
-  error_account_disabled: 'Deze avatar is gedeactiveerd. Neem contact op met de beheerders van de grid.'
-  error_account_banned: 'Dit avatar is verbannen.'
+  error_account_disabled: 'Deze avatar is gedeactiveerd. Neem contact op met de beheerders van het grid.'
+  error_account_banned: 'Deze avatar is verbannen.'
   error_post_invalid: 'Een bericht heeft 1 tot 1000 tekens.'
   error_email_unconfirmed: 'Deze avatar is nog niet actief: bevestig je e-mail met de link die we je stuurden.'
   error_name_invalid: 'De voor- en achternaam bestaan uit letters, cijfers en koppeltekens, zonder accenten.'

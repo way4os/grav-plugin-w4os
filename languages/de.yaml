@@ -30,7 +30,7 @@ w4os:
   resend_button: 'Neuen Link senden'
   confirm_resent: 'Ein neuer Link ist unterwegs.'
   confirm_resent_test: 'Testseite, keine E-Mail: Bestätige mit diesem Link: %s'
-  avatar_name: 'Avatar Name'
+  avatar_name: Avatarname
   login_title: Anmeldung
   log_in: Einloggen
   logout: Abmelden
@@ -62,7 +62,7 @@ w4os:
   want_buy: Kaufen
   want_sell: Verkaufen
   want_be_hired: 'Angeworben werden'
-  want_hire: Mieten
+  want_hire: Anstellen
   skill_textures: Texturen
   skill_architecture: Architektur
   skill_event_planning: 'Planung von Veranstaltungen'
@@ -93,7 +93,7 @@ w4os:
   db_default_opensim: 'Standard: die Datenbank der Simulatoren des Grids, sonst seine Hauptdatenbank.'
   settings_grid: Grid-Einstellungen
   settings_menu_grid: Grid
-  group_grid_info: 'Grid info'
+  group_grid_info: Grid-Info
   group_robust: Robust
   group_services: Dienste
   group_avatars: Avatare
@@ -110,7 +110,7 @@ w4os:
   uri_default_login: 'Standard: die Login-URI.'
   setting_profile_page: Profilseite
   setting_exclude_from_stats: 'Aus der Statistik ausschließen'
-  setting_exclude_from_stats_help: 'Konten ohne E-Mail-Adresse sind normalerweise Test- oder Servicekonten, die von der Konsole aus erstellt wurden. Deaktivieren Sie dies nur, wenn Sie echte Avatare ohne E-Mail-Adresse haben.'
+  setting_exclude_from_stats_help: 'Konten ohne E-Mail-Adresse sind normalerweise Test- oder Servicekonten, die von der Konsole aus erstellt wurden. Deaktiviere dies nur, wenn du echte Avatare ohne E-Mail-Adresse hast.'
   exclude_models: Modelle
   exclude_nomail: 'Konten ohne E-Mail-Adresse'
   exclude_hypergrid: Hypergrid-Besucher
@@ -122,41 +122,41 @@ w4os:
   settings_search: Suchmaschineneinstellungen
   settings_guide: 'Einstellungen für den Reiseführer der Ziele'
   settings_offline: 'Einstellungen für Offline-Nachrichten'
-  settings_assets: 'Web Assets Server'
+  settings_assets: Web-Assets-Server
   settings_menu_economy: Wirtschaft
   settings_menu_search: Suchmaschine
-  settings_menu_guide: Zielführer
-  settings_menu_offline: Offline-Meldungen
+  settings_menu_guide: Reiseführer
+  settings_menu_offline: Offline-Nachrichten
   settings_menu_assets: Web-Assets
   settings_saved: 'Einstellungen gespeichert.'
-  provide_economy: 'Bereitstellung von Wirtschaftshelfern'
+  provide_economy: 'Wirtschafts-Helper bereitstellen'
   provide_search: 'In-World-Suche bereitstellen'
-  provide_guide: 'Bereitstellung des Reiseführers für Ziele'
-  provide_offline: 'Offline-Helper bereitstellen'
-  provide_offline_help: 'Ehre die Option des Viewers "Sende mir E-Mails, wenn ich offline bin".'
-  provide_assets: 'Web Assets Server bereitstellen'
+  provide_guide: 'Reiseführer für Ziele bereitstellen'
+  provide_offline: 'Dienst für Offline-Nachrichten bereitstellen'
+  provide_offline_help: 'Die Viewer-Option "IMs per E-Mail senden, wenn ich offline bin" berücksichtigen.'
+  provide_assets: 'Web-Assets-Server bereitstellen'
   provide_assets_help: 'Ein Web-Assets-Server wird benötigt, um In-World-Assets (aus dem Grid) auf der Website anzuzeigen (z. B. Profilbilder).'
   provide_path: Pfad
   provide_offline_help_core: 'Das Offline-Nachrichtenmodul des OpenSimulator-Kerns unterstützt die E-Mail-Weiterleitungsoption nicht, die in den Viewer-Einstellungen verfügbar ist.'
-  economy_helper_uri: 'Wirtschaft Basis URI'
+  economy_helper_uri: 'URI des Wirtschafts-Helpers'
   economy_helper_uri_help: 'Die URL muss in der Konfiguration von Robust festgelegt werden.'
-  economy_help_helpers: 'Economy-Helfer sind zusätzliche Skripte, die benötigt werden, wenn Sie in Ihrem Grid Wirtschaft implementieren (mit echter oder gefälschter Währung).'
-  economy_help_scripts: 'Hilfsskripte ermöglichen die Kommunikation zwischen dem Geldserver und dem Grid: Aktualisierung des aktuellen Kontostands, Schätzung der Währungskosten, Verkauf von Land und Objekten, Zahlungen...'
-  economy_help_module: 'Dieses Plugin stellt nur die erforderlichen Web-Helfer für das Money-Server-Modul bereit. Ein Drittanbieter-Modul muss auf dem Simulator installiert und konfiguriert werden, zum Beispiel:'
+  economy_help_helpers: 'Wirtschafts-Helpers sind zusätzliche Skripte, die benötigt werden, wenn du in deinem Grid eine Wirtschaft einrichtest (mit echter oder fiktiver Währung).'
+  economy_help_scripts: 'Helper-Skripte ermöglichen die Kommunikation zwischen dem Geldserver und dem Grid: Aktualisierung des aktuellen Kontostands, Schätzung der Währungskosten, Verkauf von Land und Objekten, Zahlungen...'
+  economy_help_module: 'Dieses Plugin stellt nur die erforderlichen Web-Helpers für das Money-Server-Modul bereit. Ein Drittanbieter-Modul muss auf dem Simulator installiert und konfiguriert werden, zum Beispiel:'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: 'Gebrauchsfertige Binärdateien und Beispiel-Konfigurationsdateien können hier heruntergeladen werden: github.com/magicoli/opensim-helpers'
   gloebit_configuration: Gloebit-Konfiguration
-  gloebit_help_crash: 'Der Gloebit-Modul muss vor dem Neustart der Region konfiguriert werden, da es sonst den Simulator zum Absturz bringen könnte.'
+  gloebit_help_crash: 'Das Gloebit-Modul muss vor dem Neustart der Region konfiguriert werden, da es sonst den Simulator zum Absturz bringen könnte.'
   gloebit_help_linux: 'Für Linux siehe README-Gloebit.md (github.com/magicoli/opensim-helpers), um zertifikatsbezogene Fehler zu vermeiden.'
   gloebit_help_register: 'Registriere ein Konto oder melde dich auf gloebit.com an und folge den Anweisungen auf dev.gloebit.com, um eine App für dein Grid/deinen Simulator einzurichten.'
   gloebit_help_config: 'Füge die Gloebit-Konfiguration in die OpenSim.ini ein.'
-  gloebit_help_dll: 'Lade die neueste DLL in den bin/-Ordner deines OpenSimulator herunter (benenne sie in Gloebit.dll um), von github.com/GuduleLapointe/opensim-debian oder dev.gloebit.com'
-  money_script_access_key: 'Money Script Zugangsschlüssel'
+  gloebit_help_dll: 'Lade die neueste DLL in den bin/-Ordner von OpenSimulator herunter (benenne sie in Gloebit.dll um), von github.com/GuduleLapointe/opensim-debian oder dev.gloebit.com'
+  money_script_access_key: 'Zugangsschlüssel der Geldskripte'
   money_script_access_key_help: 'Wähle einen eindeutigen Zugriffsschlüssel und setze ihn in der MoneyServer.ini'
   search_engine_url: Suchmaschinen-URL
   search_url_help_viewer: 'URL der vom Viewer intern verwendeten Suchmaschine (ohne Argumente).'
   search_url_help_one: 'Nur eine kann festgelegt werden, die anderen Zeilen sind alternative Beispiele.'
-  search_url_help_web: 'Bitte beachten Sie, dass sich die Such-URL von der Web-Such-URL unterscheidet, die derzeit nicht von W4OS behandelt wird. Die Web-Suche ist relevant, wenn Sie eine Web-Suchseite für Grid-Inhalte haben, die Ergebnisse mit In-World-URLs liefert (hop:// oder secondlife://). Sie ist optional und wird hier nur erwähnt, um die Einstellungen, die leider ähnliche Namen haben, zu verdeutlichen.'
+  search_url_help_web: 'Bitte beachte, dass sich die Such-URL von der Web-Such-URL unterscheidet, die derzeit nicht von W4OS behandelt wird. Die Web-Suche ist relevant, wenn du eine Web-Suchseite für Grid-Inhalte hast, die Ergebnisse mit In-World-URLs liefert (hop:// oder secondlife://). Sie ist optional und wird hier nur erwähnt, um die Einstellungen, die leider ähnliche Namen haben, auseinanderzuhalten.'
   search_register_url: Suchregister-URL
   search_include_2do: '2do.directory einbeziehen'
   search_registers: 'Weitere Suchregistrierungen'
@@ -167,28 +167,28 @@ w4os:
   search_register_help_data: 'Datendienst, der dazu dient, Regionen, Objekte oder Grundstücke zum Verkauf zu registrieren.'
   search_register_help_several: 'Du kannst dich bei mehreren Suchmaschinen registrieren.'
   search_register_help_prefix: 'Jede Zeile muss einen eindeutigen Bezeichner haben, der mit "DATA_SRV_" beginnt.'
-  events_help_fetch: 'HYPEvents Server-URL, der verwendet wird, um bevorstehende Veranstaltungen abzurufen und sie in der Suche verfügbar zu machen.'
-  search_help_local: 'Aktivieren Sie die Verwendung einer lokalen Suchmaschine, die nur lokale Ergebnisse zulässt (empfohlen für private Grids).'
-  search_help_external: 'Deaktivieren Sie die Verwendung einer externen Suchmaschine wie 2do Directory, um Ergebnisse sowohl von Ihrem Grid als auch von anderen öffentlichen Grids zu ermöglichen.'
+  events_help_fetch: 'URL des HYPEvents-Servers, die verwendet wird, um bevorstehende Veranstaltungen abzurufen und sie in der Suche verfügbar zu machen.'
+  search_help_local: 'Aktivieren, um eine lokale Suchmaschine zu verwenden, die nur lokale Ergebnisse liefert (empfohlen für private Grids).'
+  search_help_external: 'Deaktivieren, um eine externe Suchmaschine wie 2do Directory zu verwenden, mit Ergebnissen aus deinem Grid und aus anderen öffentlichen Grids.'
   search_help_module: 'Die Suchfunktionen erfordern die Installation des OpenSimSearch-Moduls auf OpenSimulator.'
   search_help_binary: 'Die gebrauchsfertige Binärdatei OpenSimSearch.Modules.dll findest du hier: github.com/magicoli/opensim-helpers'
   guide_url: 'URL des Reiseführers für Ziele'
   guide_source_help_file: 'Eine Textdatei mit einer formatierten Liste von Zielen.'
-  guide_source_help_where: 'Die Quelle kann eine URL oder der vollständige Pfad zu einer lokalen Datei sein, auf die Ihr Webserver zugreifen kann.'
+  guide_source_help_where: 'Die Quelle kann eine URL oder der vollständige Pfad zu einer lokalen Datei sein, auf die dein Webserver zugreifen kann.'
   guide_source_help_name: 'Ein Dateiname allein wird im Konfigurationsordner des Grids gelesen.'
   guide_example: 'Beispiel einer Zieldatei'
   snippet_ini: 'Zeilen, die zu %s hinzuzufügen sind'
   snippet_example: Beispiel
-  dashboard_grid_info: 'Grid info'
-  dashboard_grid_status: 'Grid status'
+  dashboard_grid_info: Grid-Info
+  dashboard_grid_status: Grid-Status
   total: Insgesamt
   tip_models_match: 'Wie ein Modell erkannt wird'
   tip_models_pattern: 'Teil des Namens der Modelle'
   tip_economy_url: 'Wo currency.php und landtool.php liegen'
   tip_gloebit_environment: 'Sandbox zum Testen, Produktion zum Verkaufen'
-  tip_gloebit_keys: 'Aus Ihrem Gloebit-Händlerkonto'
+  tip_gloebit_keys: 'Aus deinem Gloebit-Händlerkonto'
   tip_currency_rate: 'US$ für 1000 Einheiten in der Welt'
-  tip_money_script_key: 'Dieselbe in MoneyServer.ini'
+  tip_money_script_key: 'Derselbe in der MoneyServer.ini'
   tip_podex_message: 'Vor dem Teleport angezeigt'
   tip_podex_url: 'Wo die Podex-Terminals sind'
   tip_search_url: 'Direkt von den Simulatoren verwendet'
@@ -203,23 +203,23 @@ w4os:
   guide_source_help_categories: 'Zeilen, die nur Text enthalten, werden als Kategorien interpretiert.'
   guide_source_help_comments: 'Zeilen, die mit "#" oder "//" beginnen, werden ignoriert.'
   guide_source_help_board: 'Das Format ist identisch mit dem Format des In-World-Objekts Gudz Teleport Board, sodass dieselbe Quell-URL für beide verwendet werden kann.'
-  guide_help_feature: 'Der Destinations Guide ist eine Funktion des Viewers 3 und bietet ein Fenster mit Vorschlägen für Orte.'
-  guide_help_places: 'Auch wenn es nicht verpflichtend ist und nicht jeder Avatar davon profitiert, ist es eine nützliche Möglichkeit, ihnen eine Liste sehenswerter Orte anzubieten, aus Ihrem eigenen Grid oder von außerhalb.'
+  guide_help_feature: 'Der Reiseführer für Ziele ist eine Funktion von Viewer 3 und bietet ein Fenster mit Vorschlägen für Orte.'
+  guide_help_places: 'Auch wenn es nicht verpflichtend ist und nicht jeder Avatar davon profitiert, ist es eine nützliche Möglichkeit, ihnen eine Liste sehenswerter Orte anzubieten, aus deinem eigenen Grid oder von außerhalb.'
   offline_helper: Offline-Nachrichten-Helper
   offline_helper_help: 'Lege die URL in den OpenSimulator-Konfigurationen fest.'
-  assets_url: 'Web Assets Server URL'
-  assets_external_help: 'Wenn die Option "Web Assets Server bereitstellen" deaktiviert ist, ist es notwendig, einen Drittanbieterdienst zu installieren und dessen URL hier einzugeben, um die ordnungsgemäße Funktion des Plugins sicherzustellen.'
+  assets_url: 'URL des Web-Assets-Servers'
+  assets_external_help: 'Wenn die Option "Web-Assets-Server bereitstellen" deaktiviert ist, ist es notwendig, einen Drittanbieterdienst zu installieren und dessen URL hier einzugeben, um die ordnungsgemäße Funktion des Plugins sicherzustellen.'
   assets_path_help: 'Jeder Pfad unter der Website: die Engine liefert die Bilder dort aus, unabhängig von den Helpers.'
-  models_match: Passen
+  models_match: Abgleich
   models_match_first: Vorname
-  models_match_any: Jeder
+  models_match_any: Beliebig
   models_match_last: Nachname
   models_match_uuid: 'Benutzerdefinierte Liste'
-  models_pattern: 'Name (Name)'
+  models_pattern: Name
   models_list: 'Modelle auswählen'
   models_list_placeholder: 'Wähle einen oder mehrere vorhandene Avatare aus'
   action_save_changes: 'Änderungen speichern'
-  models_preview: 'Modelle Vorschau'
+  models_preview: 'Vorschau der Modelle'
   models_none: 'Keine Modelle gefunden.'
   models_help_choice: 'Wenn Avatar-Modelle definiert sind, bietet das Formular zur Avatar-Erstellung eine Auswahl an, die das Anfangsoutfit des neuen Avatars bestimmt.'
   models_help_create: 'Der Grid-Administrator muss jedes Modell von der ROBUST-Konsole aus erstellen, sich mit dem Viewer einloggen, das Outfit anpassen und ein Profilbild hinzufügen.'
@@ -286,8 +286,8 @@ w4os:
   state_stopped: Gestoppt
   state_unresponsive: 'Antwortet nicht'
   state_crashed: Abgestürzt
-  connection_console: Console
-  connection_console_failed: 'Console nicht erreichbar'
+  connection_console: Konsole
+  connection_console_failed: 'Konsole nicht erreichbar'
   connection_screen: Screen
   connection_screen_failed: 'Screen nicht gefunden'
   connection_config: OpenSim.ini
@@ -366,12 +366,12 @@ w4os:
   filter_any: Alle
   filter_clear: 'Filter entfernen'
   filter_email: 'Mit E-Mail'
-  filter_model: Avatar-Vorlage
+  filter_model: Avatar-Modell
   filter_technical: Dienstkonto
   filter_active: 'Kann sich anmelden'
   column_map: Karte
   column_region: Region
-  column_region_name: 'Region Name'
+  column_region_name: 'Name der Region'
   column_presence: Anwesenheit
   column_prims: Prims
   column_scripts: Skripte
@@ -395,70 +395,70 @@ w4os:
   degraded: Eingeschränkt
   parcels: Parzellen
   shortcodes_title: 'Verfügbare Shortcodes'
-  shortcodes_help: 'Kurzcodes können in jeder Seite oder jedem Artikel eingefügt werden.'
+  shortcodes_help: 'Shortcodes können in jede Seite und jeden Artikel eingefügt werden.'
   shortcode_options: Optionen
-  shortcode_option_title: Bloc-Titel
+  shortcode_option_title: 'Titel des Blocks'
   shortcode_option_level: 'Titelstufe (h1 bis h6)'
   shortcode_option_name: 'Der Name des Avatars (Vorname.Nachname)'
   shortcode_option_count: 'Maximale Ergebnisse'
   shortcode_option_include_hypergrid: 'Hypergrid einbeziehen'
-  shortcode_option_include_landsales: 'Grundstücke zum Verkauf inklusive'
+  shortcode_option_include_landsales: 'Grundstücke zum Verkauf einbeziehen'
   block_grid_info_help: 'Allgemeine Informationen (Gridname und Login-URI)'
   block_grid_status_help: 'Avatare online, Regionen usw.'
-  block_popular_places_help: 'Am meisten besuchte Regionen in Ihrem Raster.'
+  block_popular_places_help: 'Am meisten besuchte Regionen in deinem Grid.'
   block_motd_help: 'Die Nachricht des Tages, die die Viewer beim Login zeigen.'
   block_destination_guide_help: 'Orte zum Besuchen, dieselbe Liste wie im Reiseführer der Viewer.'
   block_directory_info_help: 'Die anderen Grids, deren Orte in der Suche dieses Grids zu finden sind.'
   block_search_help: 'Ein Suchformular für Orte, Events, Kleinanzeigen und Personen des Grids.'
   block_profile_help: 'Das Profil eines Avatars.'
   block_new_avatars_help: 'Die zuletzt beigetretenen Avatare des Grids.'
-  shortcode_home_help: 'Ihr Text mit den beliebten Orten, dem Reiseführer, dem Grid-Status und der Nachricht des Tages.'
+  shortcode_home_help: 'Dein Text mit den beliebten Orten, dem Reiseführer, dem Grid-Status und der Nachricht des Tages.'
   shortcode_guest_help: 'Zeigt seinen Text nur Besuchern, die nicht angemeldet sind.'
   shortcode_register_help: 'Zeigt seinen Text nur, wenn die Website eine Registrierungsseite hat.'
   shortcode_text_help: 'Zeigt einen Text der Website in der Sprache der Seite.'
   shortcode_uri_help: 'Die Login-Adresse des Grids, zum Kopieren in einen Viewer.'
   shortcode_slogan_help: 'Der Slogan der Website.'
-  setting_login: 'Login URL'
+  setting_login: Login-URI
   setting_login_help: 'Die Adresse, unter der sich die Viewer anmelden und bei der sie erfragen, was das Grid über sich selbst sagt (get_grid_info).'
   setting_gatekeeper: Gatekeeper
   setting_gatekeeper_help: 'Die Adresse, unter der andere Grids dieses erreichen (Hypergrid).'
   setting_uas: User-Agent-Dienst
   setting_uas_help: 'Wo die Avatare dieses Grids bekannt sind, wenn sie andere Grids besuchen (Hypergrid).'
-  setting_welcome: Spash
+  setting_welcome: Splash
   setting_welcome_help: 'Die Willkommensseite, die im Viewer mit dem Anmeldeformular angezeigt wird. Eine kurze, nicht scrollbare Seite, die nur die wichtigsten Informationen enthält. Sie ist erforderlich oder zumindest sehr empfehlenswert.'
   setting_economy: Wirtschaft
   setting_economy_help: 'Währungen und einige andere Dienste, die der Viewer abfragt. Die Avatare öffnen sie nicht direkt.'
   setting_about: 'Über dieses Grid'
-  setting_about_help: 'Detaillierte Informationsseite auf Ihrer Website, über einen Link auf der Anmeldeseite des Viewers.'
-  setting_register: Registrierungseite
+  setting_about_help: 'Detaillierte Informationsseite auf deiner Website, über einen Link auf der Anmeldeseite des Viewers.'
+  setting_register: Registrierungsseite
   setting_register_help: 'Link zur Registrierung eines Avatars.'
   setting_help: Hilfe
-  setting_help_help: 'Link zu einer Hilfeseite auf Ihrer Website.'
+  setting_help_help: 'Link zu einer Hilfeseite auf deiner Website.'
   setting_password: Passwortwiederherstellung
   setting_password_help: 'Link zur Seite "Passwort verloren".'
-  setting_grid_status: 'Grid status'
+  setting_grid_status: Grid-Status
   setting_grid_status_help: 'Die Seite mit dem Status des Grids.'
   setting_grid_status_rss: Grid-Status-Feed
   setting_grid_status_rss_help: 'Der Feed mit dem Status des Grids, den die Viewer lesen (RSS).'
   setting_web_profile: Avatar-Profil
   setting_web_profile_help: 'Die Basis-URL für Avatar-Webprofile.'
   setting_web_search: Web-Suche
-  setting_web_search_help: 'Web-Registerkarte der Viewer-Suchfenster. Relevant, wenn Sie eine Suchseite haben, die Inhalte aus dem Raster bereitstellt.'
+  setting_web_search_help: 'Web-Registerkarte der Viewer-Suchfenster. Relevant, wenn du eine Suchseite hast, die Inhalte aus dem Grid bereitstellt.'
   setting_destination_guide: 'Reiseführer für Ziele'
-  setting_destination_guide_help: 'Der Destinations Guide ist eine Funktion des Viewers 3 und bietet ein Fenster mit Vorschlägen für Orte.'
+  setting_destination_guide_help: 'Der Reiseführer für Ziele ist eine Funktion von Viewer 3 und bietet ein Fenster mit Vorschlägen für Orte.'
   setting_message_url: 'Nachricht des Tages'
   setting_message_url_help: 'Die Nachricht, die die Viewer bei der Anmeldung anzeigen.'
-  setting_search_service: Suche
-  setting_search_service_help: 'Vom Viewer verwendeter Suchdienst. Die Suche kann vom Simulatorkern (eingeschränkt) oder von einem externen Dienst für zusätzliche Funktionalitäten (wie Ereignisse) bereitgestellt werden. Erfordert OpenSimSearch.Modules.dll.'
+  setting_search_service: Suchdienst
+  setting_search_service_help: 'Vom Viewer verwendeter Suchdienst. Die Suche kann vom Simulatorkern (eingeschränkt) oder von einem externen Dienst für zusätzliche Funktionen (wie Veranstaltungen) bereitgestellt werden. Erfordert OpenSimSearch.Modules.dll.'
   setting_data_service: Datendienst
   setting_data_service_help: 'Wo die Simulatoren ihre Regionen anmelden, damit die Suche sie findet. Keine Seite.'
-  setting_offline_messages: Offline-Meldungen
+  setting_offline_messages: Offline-Nachrichten
   setting_offline_messages_help: 'Von den Viewern benötigt, um Nachrichten aufzubewahren, während ein Avatar offline ist, und sie zuzustellen, wenn er wieder online ist. Interner Dienst, die Avatare öffnen ihn nicht direkt.'
   setting_offline_module: 'Modul der Offline-Nachrichten'
   setting_offline_module_help: 'Das Modul der Simulatoren, das die Nachrichten abwesender Avatare aufbewahrt: V2 durch Robust, V1 durch die Helpers.'
   setting_money_script_key: 'Schlüssel der Geldskripte'
   setting_money_script_key_help: 'Der Schlüssel, den die Währungsdienste und der Geldserver teilen: nie angezeigt, nur ob er gesetzt ist.'
-  setting_helpers: Helfer-Basis
+  setting_helpers: 'Basis der Helpers'
   setting_helpers_help: 'Die Basis der Seiten und Dienste der Helpers.'
   setting_directory: Verzeichnis
   setting_directory_help: 'Die Seite des Grids im gemeinsamen Verzeichnis der Regionen.'
@@ -472,7 +472,7 @@ w4os:
   setting_private_port: 'Privater Port'
   setting_storage_provider: Speicheranbieter
   setting_database: Datenbank-Verbindungszeichenfolge
-  setting_grid_name: 'Grid Name'
+  setting_grid_name: Grid-Name
   setting_grid_nick: Grid-Kurzname
   setting_welcome_message: Willkommensnachricht
   setting_currency_symbol: Währungssymbol
@@ -500,29 +500,29 @@ w4os:
   money_server_warning_title: Sicherheit
   money_server_warning: 'Der Geldserver und Podex werden der Bequemlichkeit halber angeboten, nicht als Empfehlung: Der Geldserver kann Geld schaffen, er braucht ein Sicherheitsaudit, bevor er echtes Geld verwaltet.'
   currency_symbol_help: 'G$ mit Gloebit, einer globalen Währung; jedes Symbol mit den anderen Modulen.'
-  setting_currency_provider: 'Währung Anbieter'
+  setting_currency_provider: Währungsanbieter
   gloebit_sandbox: Sandbox
   gloebit_production: Produktion
   setting_guide_source: Quelle
   setting_guide_source_help: 'Eine Textdatei mit einer formatierten Liste von Zielen.'
   setting_search_database: 'Datenbank für OS-Suche'
-  setting_events_url: Ereignis-Server-URL
+  setting_events_url: 'URL des Veranstaltungs-Servers'
   setting_logo_url: Grid-Logo-URL
-  setting_mail_sender: 'E-Mail Adresse des Absenders'
+  setting_mail_sender: 'E-Mail-Adresse des Absenders'
   setting_mail_sender_help: 'Eine No-Reply-E-Mail-Adresse, um Nachrichten für Avatare weiterzuleiten, die die Option "IMs per E-Mail senden, wenn ich offline bin" aktiviert haben.'
   setting_currency_rate: Währungsumrechnungskurs
-  setting_currency_rate_help: 'Zu zahlender Betrag in US$ für 1000 in-world Geldeinheiten. Wird für Kostenschätzungen verwendet. Wenn nicht festgelegt, wird der Kurs 10/1000 (1 Cent pro Geldeinheit) sein.'
+  setting_currency_rate_help: 'Zu zahlender Betrag in US$ für 1000 In-World-Geldeinheiten. Wird für Kostenschätzungen verwendet. Wenn nicht festgelegt, wird der Kurs 10/1000 (1 Cent pro Geldeinheit) sein.'
   setting_currency_rate_per: 'Geldeinheiten pro Kurs'
   setting_gloebit_threshold: Gloebit-Umrechnungsschwelle
   setting_podex_message: Podex-Weiterleitungsnachricht
-  setting_podex_url: 'Austausch der Teleport-URL'
-  setting_assets_url: 'Web Assets Server URL'
-  setting_assets_url_help: 'Der Web-Asset-Server des Grids, wenn es nicht der der Helpers ist: er wandelt die Bilder der Welt (JPEG 2000) für das Web um.'
+  setting_podex_url: 'Teleport-URL der Wechselstube'
+  setting_assets_url: 'URL des Web-Assets-Servers'
+  setting_assets_url_help: 'Der Web-Assets-Server des Grids, wenn er nicht der der Helpers ist: Er wandelt die Bilder der Welt (JPEG 2000) für das Web um.'
   offline_module_v1: 'Durch die Helpers (V1)'
   offline_module_v2: 'Durch Robust (V2)'
   offline_database: 'Datenbank der Offline-Nachrichten'
   db_host: Hostname
-  db_port: Hafen
+  db_port: Port
   db_name: Datenbankname
   db_user: Benutzer
   db_password: Passwort
@@ -538,7 +538,7 @@ w4os:
   usage_web_tool: 'Web-Werkzeug, mit einem Skript in der Welt genutzt'
   usage_task: 'Aufgabe des Grids, im Hintergrund ausgeführt'
   usage_web_assets: 'Web-Assets, für die Websites'
-  service_asset: 'Assets Service'
+  service_asset: Assets-Dienst
   service_asset_help: 'Die Assets des Grids (Texturen, Sounds, Objekte ...): Die Simulatoren lesen und speichern sie.'
   service_inventory: Inventar-Dienst
   service_inventory_help: 'Die Inventare der Avatare.'
@@ -569,8 +569,8 @@ w4os:
   service_groups: Gruppendienst
   service_groups_help: 'Die Gruppen der Avatare, ihre Mitglieder, Rollen und Mitteilungen.'
   service_profile: Profildienst
-  service_profile_help: 'Die Profile der Avatare, ihre Empfehlungen und ihre Kleinanzeigen.'
-  service_get_grid_info: 'Grid info'
+  service_profile_help: 'Die Profile der Avatare, ihre Favoriten und ihre Kleinanzeigen.'
+  service_get_grid_info: Grid-Info
   service_get_grid_info_help: 'Was das Grid den Viewern über sich selbst sagt (get_grid_info).'
   service_hg_friends: Hypergrid-Freundesdienst
   service_hg_friends_help: 'Die Freundschaften mit den Avataren anderer Grids (Hypergrid).'
@@ -592,7 +592,7 @@ w4os:
   service_events_parser_help: 'Liest die Veranstaltungen des Kalenders: eine Aufgabe des Grids.'
   service_text_images: 'Text zu Bild'
   service_text_images_help: 'Macht ein Bild aus einem Text, für ein Skript in der Welt (textgen.php).'
-  service_assets: 'Web Assets Server'
+  service_assets: Web-Assets-Server
   service_assets_help: 'Ein Web-Assets-Server wird benötigt, um In-World-Assets (aus dem Grid) auf der Website anzuzeigen (z. B. Profilbilder).'
   service_instant_message: Sofortnachrichtendienst
   service_instant_message_help: 'Die Nachrichten zwischen den Avataren verschiedener Grids (Hypergrid).'
@@ -639,8 +639,8 @@ w4os:
   health_third_party: 'Dieser Dienst erfordert eine separate Webanwendung.'
   presence: Anwesenheit
   region_flag_default_region: Standard
-  region_flag_default_hg_region: 'Standard HG'
-  region_flag_fallback_region: Ausweich
+  region_flag_default_hg_region: Standard-HG
+  region_flag_fallback_region: Ausweichregion
   region_flag_no_direct_login: 'Kein direktes Anmelden'
   region_flag_persistent: Dauerhaft
   region_flag_locked_out: Gesperrt
@@ -685,12 +685,12 @@ w4os:
   column_author: Autor
   avatars_title: Avatare
   avatars_menu: Avatare
-  avatars_search: 'Suche Avatare'
+  avatars_search: 'Avatare suchen'
   regions_menu: Regionen
   regions_search: 'Regionen suchen'
   flux_title: Flux-Beiträge
   flux_menu: Flux
-  flux_search: 'Suche nach Flux-Beiträgen'
+  flux_search: 'Flux-Beiträge suchen'
   flux_empty: 'Keine Flux-Beiträge gefunden'
   list_empty: 'Keine Elemente gefunden.'
   posts_count: '%d Beiträge'
@@ -785,7 +785,7 @@ w4os:
   error_link_invalid: 'Das ist nicht möglich.'
   error_field_unknown: 'Das ist nicht möglich.'
   error_field_read_only: 'Name, Ort und Größe einer Region werden in ihrer Datei geändert, von ihrem Betreiber.'
-  error_flag_unknown: 'Diese Markierung gibt es nicht.'
+  error_flag_unknown: 'Dieses Flag gibt es nicht.'
   error_owner_unknown: 'Diesen Avatar gibt es nicht.'
   error_config_not_writable: 'Das lässt sich von hier aus nicht ändern: die Dateien des Grids gehören seinem Server.'
   error_instance_user_required: 'Das ist von hier aus nicht möglich: die Simulatoren werden auf ihrem Server gestartet und gestoppt.'
@@ -806,7 +806,7 @@ w4os:
   notice_robust_config_elsewhere: 'Die Konfiguration von Robust liegt nicht auf diesem Rechner: setze dort {line} in [{section}], damit die Region ihre Rollen behält, wenn sie sich wieder anmeldet.'
   notice_start_simulator: 'Starte den Simulator {slug}: {command}'
   notice_start_simulator_regions: 'Der Simulator {slug} lädt seine neuen Regionen beim Start: {command}'
-  notice_region_roles_later: 'Robust gibt {region} seine Rollen ({roles}) aus seiner Konfiguration, die es beim Start liest: starte Robust neu ({restart}), bevor du {slug} startest, oder sobald die Region läuft: {command}'
+  notice_region_roles_later: 'Robust gibt {region} ihre Rollen ({roles}) aus seiner Konfiguration, die es beim Start liest: starte Robust neu ({restart}), bevor du {slug} startest, oder sobald die Region läuft: {command}'
   notice_plan_reserves_nothing: 'Ein Plan reserviert nichts: die Orte und Ports, die er vorschlägt, sind die jetzt freien und werden beim Anwenden neu gewählt. Wende einen Plan an, bevor du den nächsten planst, oder gib die Regionen in einer Datei an.'
   notice_import_read_access: 'Der Benutzer, der den Import ausführt, kann {paths} nicht lesen: gib ihm vor dem Anwenden Lesezugriff darauf (setfacl -R -m u:<user>:rX auf etc, var/data und var/cache der alten Installation), bis dahin wird nichts geschrieben.'
   notice_import_stop_source: 'Der Simulator, der jetzt {regions} betreibt, läuft weiter, bis er gestoppt wird: stoppe ihn und verhindere seinen Neustart (Cron, Screen), bevor dieser startet, die Datenbank ist dieselbe.'
@@ -828,9 +828,9 @@ w4os:
   notice_registered: 'Der Avatar {name} ist bereit: melde dich mit seinem Namen und seinem Passwort an.'
   notice_registered_confirm: 'Eine Mail wurde an {email} geschickt: das Konto entsteht, sobald dem Link darin gefolgt wird.'
   notice_registered_mail_failed: 'Die Registrierung bleibt bestehen, aber die Mail an {email} konnte nicht gesendet werden: fordere sie später erneut an.'
-  notice_setting_file_unwritable: 'Dieser Server kann {file} nicht schreiben, wo das Grid es liest: Stellen Sie es dort von Hand ein.'
-  notice_setting_file_unwritable_unkept: 'Dieser Server kann {file} nicht schreiben, und die Anwendung speichert keine Einstellungen für das Grid: Stellen Sie es dort von Hand ein.'
-  notice_setting_no_files: 'Das Grid hat keine Dateien auf diesem Rechner: Es liest diese Einstellung in seinen Dateien, stellen Sie sie dort von Hand ein.'
+  notice_setting_file_unwritable: 'Dieser Server kann {file} nicht schreiben, wo das Grid es liest: stelle es dort von Hand ein.'
+  notice_setting_file_unwritable_unkept: 'Dieser Server kann {file} nicht schreiben, und die Anwendung speichert keine Einstellungen für das Grid: stelle es dort von Hand ein.'
+  notice_setting_no_files: 'Das Grid hat keine Dateien auf diesem Rechner: Es liest diese Einstellung in seinen Dateien, stelle sie dort von Hand ein.'
   notice_setting_no_files_unkept: 'Das Grid hat keine Dateien auf diesem Rechner, und die Anwendung speichert keine Einstellungen dafür.'
   notice_options_no_files: 'Das Grid hat keine Dateien auf diesem Rechner: Seine Optionen werden dort repariert, wo seine Konfiguration liegt.'
   notice_database_unsaid: 'Die Konfiguration des Grids sagt nicht, wo diese Datenbank ist.'

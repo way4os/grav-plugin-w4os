@@ -129,20 +129,20 @@ w4os:
   settings_menu_offline: 'Messages hors-ligne'
   settings_menu_assets: 'Ressources web'
   settings_saved: 'Réglages enregistrés.'
-  provide_economy: "Fournir l'assistant d'économie"
+  provide_economy: "Fournir le helper d'économie"
   provide_search: 'Fournir la recherche dans le monde virtuel'
   provide_guide: 'Fournir le service de guide des destinations'
   provide_offline: 'Fournir le service Messages hors-ligne'
-  provide_offline_help: 'Honorer l''option "M''envoyer les IM par e-mail quand je suis hors ligne" du visualiseur.'
+  provide_offline_help: 'Honorer l''option "M''envoyer les IM par e-mail quand je suis hors ligne" du viewer.'
   provide_assets: 'Activer le serveur de ressources web'
   provide_assets_help: 'Un serveur web de ressources (web assets server) est requis pour afficher les images du monde virtuel sur le site web (par exemple les images de profil).'
   provide_path: Chemin
   provide_offline_help_core: "Le module de messagerie hors ligne du cœur d'OpenSimulator ne gère pas l'option de transfert d'e-mails disponible dans les paramètres du viewer."
-  economy_helper_uri: "URI de l'assistant d'économie"
+  economy_helper_uri: "URI du helper d'économie"
   economy_helper_uri_help: "Réglez l'URL dans la configuration de Robust."
-  economy_help_helpers: "Les assistants d'économie sont des scripts additionnels, nécessaires si vous implémentez une économie dans votre grille (avec une monnaie réelle ou factice)."
-  economy_help_scripts: "Les scripts permettent la communication entre le serveur de monnaie et la grille: mise à jour du solde, estimation du coût d'achat de monnaie, vente d'objets et de terrains, paiements..."
-  economy_help_module: 'Cette extension fournit uniquement les assistants web requis par le module du serveur de devises. Un module tiers doit être installé et configuré sur le simulateur, par exemple :'
+  economy_help_helpers: "Les helpers d'économie sont des scripts additionnels, nécessaires si vous implémentez une économie dans votre grille (avec une monnaie réelle ou factice)."
+  economy_help_scripts: "Les scripts des helpers permettent la communication entre le serveur de monnaie et la grille: mise à jour du solde, estimation du coût d'achat de monnaie, vente d'objets et de terrains, paiements..."
+  economy_help_module: 'Cette extension fournit uniquement les helpers web requis par le module du serveur de devises. Un module tiers doit être installé et configuré sur le simulateur, par exemple :'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: "Des binaires prêts à l'emploi et des exemples de fichiers de configuration sont téléchargeables ici : github.com/magicoli/opensim-helpers"
   gloebit_configuration: 'Configuration Gloebit'
@@ -156,7 +156,7 @@ w4os:
   search_engine_url: 'URL du moteur de recherche'
   search_url_help_viewer: 'URL du moteur de recherche utilisé par le viewer pour fournir des résultats de recherche (sans arguments)'
   search_url_help_one: 'Une seule peut être définie, les autres lignes sont des exemples.'
-  search_url_help_web: "Attention, ce Search URL est différent du Web search URL (qui n'est pas utilisé pour le moment par w4os). La recherche web est utile si vous avez une page web dédiée à la recherche de contenu de la grille et fournissant des résultats avec des liens hop:// ou secondlife://. Elle est optionnelle et documentée ici uniquement pour marquer la différence deux réglages qui ont malheureusement le même nom."
+  search_url_help_web: "Attention, ce Search URL est différent du Web search URL (qui n'est pas utilisé pour le moment par w4os). La recherche web est utile si vous avez une page web dédiée à la recherche de contenu de la grille et fournissant des résultats avec des liens hop:// ou secondlife://. Elle est optionnelle et documentée ici uniquement pour marquer la différence entre deux réglages qui ont malheureusement le même nom."
   search_register_url: "URL d'inscription au moteur de recherche"
   search_include_2do: 'Inclure 2do.directory'
   search_registers: 'Autres inscriptions de recherche'
@@ -205,7 +205,7 @@ w4os:
   guide_source_help_board: "Le format est identique à celui de l'objet en monde Gudz Teleport Board, la même URL source peut donc servir pour les deux."
   guide_help_feature: 'Le guide des destinations est une fonctionnalité de Viewer 3, qui propose une fenêtre avec des suggestions de lieux.'
   guide_help_places: "Bien que ce ne soit pas obligatoire et que tous les avatars n'en profitent pas, c'est un moyen utile de leur proposer une liste de lieux à voir, de votre propre grille ou d'ailleurs."
-  offline_helper: 'Assistant Messages hors-ligne'
+  offline_helper: 'Helper des messages hors ligne'
   offline_helper_help: "Réglez l'URL dans les configurations d'OpenSimulator."
   assets_url: 'URL du serveur de ressources web'
   assets_external_help: "Si l'option « Activer le serveur de ressources web » est désactivée, il est nécessaire d'installer un service tiers et d'entrer son URL ici pour assurer le bon fonctionnement du plugin."
@@ -222,7 +222,7 @@ w4os:
   models_preview: 'Aperçu des modèles'
   models_none: 'Aucun modèle trouvé.'
   models_help_choice: "Si des modèles d'avatar sont définis, le formulaire de création d'avatar en propose le choix, qui détermine la tenue initiale du nouvel avatar."
-  models_help_create: "L'administrateur de la grille doit créer chaque modèle à partir de la console ROBUST, se connecter avec le visualiseur, personnaliser la tenue et ajouter une photo de profil."
+  models_help_create: "L'administrateur de la grille doit créer chaque modèle à partir de la console ROBUST, se connecter avec le viewer, personnaliser la tenue et ajouter une photo de profil."
   models_help_not_users: 'Les avatars utilisés comme modèles ne doivent jamais être des avatars que des personnes utilisent.'
   models_help_outfit: "Le nouvel avatar portera la même tenue que le modèle au moment de l'enregistrement."
   models_help_rule: "Si la règle d'affectation du modèle est basée sur le nom, chaque avatar nouvellement créé correspondant à cette règle sera automatiquement ajouté à la liste."
@@ -320,8 +320,8 @@ w4os:
   avatar_type_model: 'Modèle par défaut'
   avatar_type_service: 'Compte de service'
   state_grid_banned: 'Banni de la grille'
-  state_estate_banned: 'Banni de domaines'
-  filter_estate_banned: 'Bans de domaines'
+  state_estate_banned: 'Banni des domaines'
+  filter_estate_banned: 'Bannissements des domaines'
   action_ban: Bannir
   action_unban: Débannir
   action_estate_ban: 'Bannir des domaines'
@@ -425,11 +425,11 @@ w4os:
   setting_uas: 'Service des agents'
   setting_uas_help: 'Là où les avatars de cette grille sont connus quand ils visitent d’autres grilles (hypergrid).'
   setting_welcome: Splash
-  setting_welcome_help: 'La page de bienvenue affichée dans le visualiseur avec le formulaire de connexion. Une page courte, sans défilement, avec seulement le contenu essentiel. Requise, ou tout au moins hautement recommandée.'
+  setting_welcome_help: 'La page de bienvenue affichée dans le viewer avec le formulaire de connexion. Une page courte, sans défilement, avec seulement le contenu essentiel. Requise, ou tout au moins hautement recommandée.'
   setting_economy: Économie
   setting_economy_help: 'Monnaies et quelques autres services interrogés par le viewer. Les avatars ne les ouvrent pas directement.'
   setting_about: 'À propos de cette grille'
-  setting_about_help: "Page d'informations détaillées, sur votre site web, via un lien affiché sur la page de connexion du visualiseur."
+  setting_about_help: "Page d'informations détaillées, sur votre site web, via un lien affiché sur la page de connexion du viewer."
   setting_register: "Page d'enregistrement"
   setting_register_help: "Lien vers l'inscription d'un avatar."
   setting_help: Aide
@@ -443,13 +443,13 @@ w4os:
   setting_web_profile: "Profil d'avatar"
   setting_web_profile_help: "La base d'URL pour les profils d'avatars."
   setting_web_search: 'Recherche web'
-  setting_web_search_help: 'Onglet web de la fenêtre de recherche. Utile si vous avez une page de recherche fournissant des résultats pour la grille.'
+  setting_web_search_help: 'Onglet web de la fenêtre de recherche du viewer. Utile si vous avez une page de recherche fournissant des résultats pour la grille.'
   setting_destination_guide: 'Guide des destinations'
   setting_destination_guide_help: 'Le guide des destinations est une fonctionnalité de Viewer 3, qui propose une fenêtre avec des suggestions de lieux.'
   setting_message_url: 'Message du jour'
   setting_message_url_help: 'Le message que les viewers affichent à la connexion.'
   setting_search_service: 'Service de recherche'
-  setting_search_service_help: 'Service de recherche utilisé par le visualiseur. La recherche peut être fournie par le cœur du simulateur (limité) ou par un service externe pour des fonctionnalités supplémentaires (comme les événements). Nécessite OpenSimSearch.Modules.dll.'
+  setting_search_service_help: 'Service de recherche utilisé par le viewer. La recherche peut être fournie par le cœur du simulateur (limité) ou par un service externe pour des fonctionnalités supplémentaires (comme les événements). Nécessite OpenSimSearch.Modules.dll.'
   setting_data_service: 'Service de données'
   setting_data_service_help: 'Là où les simulateurs inscrivent leurs régions, pour que la recherche les trouve. Pas une page.'
   setting_offline_messages: 'Messages hors-ligne'
@@ -509,7 +509,7 @@ w4os:
   setting_events_url: "URL du serveur d'événements"
   setting_logo_url: 'URL du logo de la grille'
   setting_mail_sender: "Adresse e-mail de l'expéditeur"
-  setting_mail_sender_help: 'Une adresse e-mail no-reply utilisée pour transférer les messages des avatars ayant activé l''option "Envoyer les IMs par email si je suis hors ligne".'
+  setting_mail_sender_help: 'Une adresse e-mail no-reply utilisée pour transférer les messages des avatars ayant activé l''option "M''envoyer les IM par e-mail quand je suis hors ligne".'
   setting_currency_rate: 'Taux de conversion des devises'
   setting_currency_rate_help: "Montant à payer en dollars américains pour 1000 unités de monnaie virtuelle. Utilisé pour l'estimation des coûts. Si non défini, le taux sera de 10/1000 (1 centime par unité de monnaie)."
   setting_currency_rate_per: 'Unités monétaires par taux'
@@ -531,13 +531,13 @@ w4os:
   db_default_simulator: 'Par défaut : la base du simulateur.'
   economy_database: "Base de données sur l'économie"
   usage_robust_simulators: 'Service de Robust, utilisé par les simulateurs'
-  usage_robust_viewers: 'Service de Robust, utilisé par les visualiseurs et les autres grilles'
+  usage_robust_viewers: 'Service de Robust, utilisé par les viewers et les autres grilles'
   usage_helper_simulators: 'Helper appelé par les simulateurs'
-  usage_helper_viewers: 'Helper appelé par le visualiseur'
-  usage_page: 'Page web, affichée par le visualiseur ou le site web'
+  usage_helper_viewers: 'Helper appelé par le viewer'
+  usage_page: 'Page web, affichée par le viewer ou le site web'
   usage_web_tool: 'Outil web, utilisé avec un script dans le monde'
   usage_task: 'Tâche de la grille, exécutée en arrière-plan'
-  usage_web_assets: 'Web assets, pour les sites web'
+  usage_web_assets: 'Ressources web, pour les sites web'
   service_asset: 'Service des assets'
   service_asset_help: 'Les assets de la grille (textures, sons, objets...) : les simulateurs les lisent et les enregistrent.'
   service_inventory: 'Service des inventaires'
@@ -571,7 +571,7 @@ w4os:
   service_profile: 'Service des profils'
   service_profile_help: 'Les profils des avatars, leurs favoris et leurs petites annonces.'
   service_get_grid_info: 'Infos sur la grille'
-  service_get_grid_info_help: "Ce que la grille dit d'elle-même aux visualiseurs (get_grid_info)."
+  service_get_grid_info_help: "Ce que la grille dit d'elle-même aux viewers (get_grid_info)."
   service_hg_friends: 'Service des amis hypergrid'
   service_hg_friends_help: "Les amitiés avec les avatars d'autres grilles (hypergrid)."
   service_hg_asset: 'Service des assets hypergrid'
@@ -581,11 +581,11 @@ w4os:
   service_hg_groups: 'Service des groupes hypergrid'
   service_hg_groups_help: "Les groupes qu'atteignent les avatars d'autres grilles (hypergrid)."
   service_map: 'Service de la carte'
-  service_map_help: 'Les tuiles de la carte que lisent les visualiseurs et les autres grilles.'
+  service_map_help: 'Les tuiles de la carte que lisent les viewers et les autres grilles.'
   service_currency: 'Helper de la monnaie'
-  service_currency_help: 'La monnaie de la grille, appelée par le visualiseur (currency.php) : le solde, le prix de la monnaie.'
+  service_currency_help: 'La monnaie de la grille, appelée par le viewer (currency.php) : le solde, le prix de la monnaie.'
   service_landtool: 'Helper des terrains'
-  service_landtool_help: "Les ventes de terrain qu'appelle le visualiseur (landtool.php)."
+  service_landtool_help: "Les ventes de terrain qu'appelle le viewer (landtool.php)."
   service_parser: 'Analyseur de la recherche'
   service_parser_help: 'Lit les régions inscrites à la recherche : une tâche de la grille.'
   service_events_parser: 'Analyseur des événements'
@@ -785,7 +785,7 @@ w4os:
   error_link_invalid: 'Ce n’est pas possible.'
   error_field_unknown: 'Ce n’est pas possible.'
   error_field_read_only: "Le nom, la place et la taille d'une région se changent dans son fichier, par son administrateur."
-  error_flag_unknown: "Ce drapeau n'existe pas."
+  error_flag_unknown: "Cet indicateur n'existe pas."
   error_owner_unknown: "Cet avatar n'existe pas."
   error_config_not_writable: "Ceci ne peut pas être changé d'ici : les fichiers de la grille appartiennent à son serveur."
   error_instance_user_required: "Ceci ne peut pas être fait d'ici : les simulateurs sont démarrés et arrêtés sur leur serveur."

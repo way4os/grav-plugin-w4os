@@ -41,7 +41,7 @@ w4os:
   forgot_button: 'Inviami un link'
   forgot_sent: 'Se un avatar ha questo nome o questa email, un link sta arrivando al suo indirizzo.'
   forgot_test: 'Sito di prova, nessuna email: il link di una nuova password non è mostrato qui, lo dà l’API dell’engine (send: false).'
-  reset_title: 'Resetta Password'
+  reset_title: 'Reimposta la password'
   reset_text: 'Scegli la nuova password del tuo avatar.'
   reset_no_token: 'Questa pagina si apre dal link dell’email che hai ricevuto.'
   reset_button: 'Salva la nuova password'
@@ -55,11 +55,11 @@ w4os:
   about: Informazioni
   wants: Vorrebbe
   skills: Abilità
-  want_build: Costruisci
-  want_explore: Esplora
+  want_build: Costruire
+  want_explore: Esplorare
   want_meet: Incontrare
-  want_group: Gruppo
-  want_buy: Acquista
+  want_group: 'Unirsi a gruppi'
+  want_buy: Acquistare
   want_sell: Vendere
   want_be_hired: 'Essere assunto'
   want_hire: Assumere
@@ -114,7 +114,7 @@ w4os:
   exclude_models: Modelli
   exclude_nomail: 'Account senza indirizzo email'
   exclude_hypergrid: 'Visitatori Hypergrid'
-  setting_allow_multiple_avatars: 'Consenti a più avatar'
+  setting_allow_multiple_avatars: 'Consenti più avatar'
   setting_allow_multiple_avatars_help: 'Consenti più di un avatar per un singolo indirizzo email.'
   setting_reserved_names: 'Nomi vietati'
   setting_reserved_names_help: 'Nessun nuovo avatar può avere uno di questi come nome o cognome, né il nome della griglia.'
@@ -129,20 +129,20 @@ w4os:
   settings_menu_offline: 'Messaggi offline'
   settings_menu_assets: 'Risorse web'
   settings_saved: 'Impostazioni salvate.'
-  provide_economy: 'Fornisci Assistente Economico'
+  provide_economy: "Fornisci l'helper dell'economia"
   provide_search: 'Fornisci la ricerca'
   provide_guide: 'Fornisci il servizio di Guida alle Destinazioni'
   provide_offline: 'Fornisci il servizio di messaggi offline'
-  provide_offline_help: 'Onora l''opzione del viewer "Inviami email quando sono offline".'
+  provide_offline_help: 'Rispetta l''opzione del viewer "Inviami gli IM via email quando sono offline".'
   provide_assets: 'Fornisci il server delle risorse web'
   provide_assets_help: 'È necessario un server di risorse web per visualizzare le risorse in-world (dalla griglia) sul sito web (ad esempio, le immagini del profilo).'
   provide_path: Percorso
   provide_offline_help_core: "Il modulo principale offline di OpenSimulator non gestisce l'opzione di inoltro e-mail disponibile nelle impostazioni del viewer."
-  economy_helper_uri: 'Economy Helper URI'
+  economy_helper_uri: "URI dell'helper dell'economia"
   economy_helper_uri_help: "L'URL deve essere impostata nella configurazione di Robust."
-  economy_help_helpers: "Gli assistenti economici sono script aggiuntivi necessari se si implementa l'economia sulla propria griglia (con valuta reale o fittizia)."
-  economy_help_scripts: 'Gli script di assistenza consentono la comunicazione tra il server di denaro e la griglia: aggiornamento del saldo corrente, stima dei costi della valuta, vendite di terreni e oggetti, pagamenti...'
-  economy_help_module: 'Questo plugin fornisce solo gli aiuti web richiesti dal modulo del server di denaro. Deve essere installato e configurato un modulo di terze parti sul simulatore, ad esempio:'
+  economy_help_helpers: "Gli helpers dell'economia sono script aggiuntivi necessari se si implementa l'economia sulla propria griglia (con valuta reale o fittizia)."
+  economy_help_scripts: 'Gli script degli helpers consentono la comunicazione tra il server della moneta e la griglia: aggiornamento del saldo corrente, stima dei costi della valuta, vendite di terreni e oggetti, pagamenti...'
+  economy_help_module: 'Questo plugin fornisce solo gli helpers web richiesti dal modulo del server della moneta. Deve essere installato e configurato un modulo di terze parti sul simulatore, ad esempio:'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
   economy_help_binaries: "Binari pronti all'uso e file di configurazione di esempio possono essere scaricati qui: github.com/magicoli/opensim-helpers"
   gloebit_configuration: 'Configurazione di Gloebit'
@@ -205,10 +205,10 @@ w4os:
   guide_source_help_board: "Il formato è identico a quello usato dall'oggetto in-world Gudz Teleport Board, quindi lo stesso URL sorgente può essere usato per entrambi."
   guide_help_feature: 'La guida delle destinazioni è una funzionalità del Viewer 3, che fornisce una finestra con suggerimenti di luoghi.'
   guide_help_places: 'Anche se non è obbligatorio e non tutti gli avatar ne trarranno vantaggio, è un modo utile per offrire loro un elenco di luoghi da vedere, della tua griglia o di altre.'
-  offline_helper: 'Assistente per i messaggi offline'
+  offline_helper: 'Helper dei messaggi offline'
   offline_helper_help: "Imposta l'URL nelle configurazioni di OpenSimulator."
   assets_url: 'URL del server delle risorse web'
-  assets_external_help: "Se 'Fornisci server di risorse web' è disabilitato, è necessario installare un servizio di terze parti e inserire il suo URL qui per garantire il corretto funzionamento del plugin."
+  assets_external_help: "Se 'Fornisci il server delle risorse web' è disabilitato, è necessario installare un servizio di terze parti e inserire il suo URL qui per garantire il corretto funzionamento del plugin."
   assets_path_help: "Qualsiasi percorso sotto il sito: l'engine vi serve le immagini, qualunque siano gli helpers."
   models_match: Corrispondenza
   models_match_first: Nome
@@ -307,7 +307,7 @@ w4os:
   no_avatars: 'Nessun risultato'
   avatars_count: '%d avatar'
   status: Stato
-  last_seen: 'Ultima visualizzazione'
+  last_seen: 'Ultimo accesso'
   created: Creato
   actions: Azioni
   god: Dio
@@ -318,7 +318,7 @@ w4os:
   status_banned: Bannato
   avatar_type_user: Residente
   avatar_type_model: 'Modello predefinito'
-  avatar_type_service: 'Accounto di servizio'
+  avatar_type_service: 'Account di servizio'
   state_grid_banned: 'Bannato dalla griglia'
   state_estate_banned: 'Bannato dalle proprietà'
   filter_estate_banned: 'Ban delle proprietà'
@@ -336,9 +336,9 @@ w4os:
   role_god: Dio
   role_maintenance: Manutenzione
   role_model: Modello
-  role_service_account: 'Account del servizio'
+  role_service_account: 'Account di servizio'
   action_enable: Attiva
-  action_disable: Disabilita
+  action_disable: Disattiva
   action_start: Avvia
   action_stop: Ferma
   action_restart: Riavvia
@@ -393,9 +393,9 @@ w4os:
   view_active: Attivo
   view_inactive: Inattivo
   degraded: Degradato
-  parcels: Parzelli
+  parcels: Lotti
   shortcodes_title: 'Shortcode disponibili'
-  shortcodes_help: 'I codici brevi possono essere inclusi in qualsiasi pagina o articolo.'
+  shortcodes_help: 'Gli shortcode possono essere inclusi in qualsiasi pagina o articolo.'
   shortcode_options: Opzioni
   shortcode_option_title: 'Titolo del blocco'
   shortcode_option_level: 'Livello del titolo (h1 a h6)'
@@ -405,7 +405,7 @@ w4os:
   shortcode_option_include_landsales: 'Includi Terreni in Vendita'
   block_grid_info_help: 'Informazioni generali (nome della griglia e URI di accesso)'
   block_grid_status_help: 'Avatar online, regioni, ecc.'
-  block_popular_places_help: 'Region più visitate nel tuo grid.'
+  block_popular_places_help: 'Regioni più visitate nella tua griglia.'
   block_motd_help: "Il messaggio del giorno che i viewer mostrano all'accesso."
   block_destination_guide_help: 'Luoghi da visitare, la stessa lista della guida alle destinazioni dei viewer.'
   block_directory_info_help: 'Le altre griglie i cui luoghi si trovano nella ricerca di questa griglia.'
@@ -428,7 +428,7 @@ w4os:
   setting_welcome_help: 'La pagina di benvenuto visualizzata nel viewer con il modulo di accesso. Una pagina breve, senza scorrimento, con solo le informazioni essenziali. È richiesta, o almeno altamente consigliata.'
   setting_economy: Economia
   setting_economy_help: 'Valute e alcuni altri servizi interrogati dal viewer. Gli avatar non li aprono direttamente.'
-  setting_about: 'Riguardo a questa griglia'
+  setting_about: 'Informazioni su questa griglia'
   setting_about_help: 'Pagina dettagliata sul tuo sito web, tramite un link visualizzato sulla pagina di accesso del viewer.'
   setting_register: 'Pagina di registrazione'
   setting_register_help: 'Link alla registrazione di un avatar.'
@@ -458,9 +458,9 @@ w4os:
   setting_offline_module_help: 'Il modulo dei simulatori che conserva i messaggi degli avatar assenti: V2 da Robust, V1 dagli helpers.'
   setting_money_script_key: 'Chiave degli script di valuta'
   setting_money_script_key_help: 'La chiave condivisa dai servizi di valuta e dal server della moneta: mai mostrata, solo se è impostata.'
-  setting_helpers: 'base degli aiutanti'
+  setting_helpers: 'Base degli helpers'
   setting_helpers_help: 'La base delle pagine e dei servizi degli helpers.'
-  setting_directory: Elenco
+  setting_directory: Directory
   setting_directory_help: 'La pagina della griglia nella directory condivisa delle regioni.'
   setting_cache_assets: 'Cache delle immagini'
   setting_cache_assets_help: 'La cartella in cui sono conservate le immagini: senza di essa, vengono rifatte a ogni richiesta.'
@@ -505,7 +505,7 @@ w4os:
   gloebit_production: Produzione
   setting_guide_source: Sorgente
   setting_guide_source_help: 'Un file di testo con un elenco formattato di destinazioni.'
-  setting_search_database: 'Ricerca nel database di OS'
+  setting_search_database: 'Database della ricerca OS'
   setting_events_url: 'URL del server degli eventi'
   setting_logo_url: 'URL del logo della griglia'
   setting_mail_sender: 'Indirizzo e-mail del mittente'
@@ -515,7 +515,7 @@ w4os:
   setting_currency_rate_per: 'Unità di denaro per tasso'
   setting_gloebit_threshold: 'Soglia di conversione Gloebit'
   setting_podex_message: 'Messaggio di reindirizzamento Podex'
-  setting_podex_url: 'Scambio URL di Teletrasporto'
+  setting_podex_url: 'URL di teletrasporto per il cambio'
   setting_assets_url: 'URL del server delle risorse web'
   setting_assets_url_help: 'Il server di risorse web della griglia quando non è quello degli helpers: converte le immagini del mondo (JPEG 2000) per il web.'
   offline_module_v1: 'Dagli helpers (V1)'
@@ -529,7 +529,7 @@ w4os:
   db_use_default: 'Usa predefinito'
   db_default_main: 'Predefinito: il database principale della griglia.'
   db_default_simulator: 'Predefinito: il database del simulatore.'
-  economy_database: 'Database Economico'
+  economy_database: "Database dell'economia"
   usage_robust_simulators: 'Servizio di Robust, usato dai simulatori'
   usage_robust_viewers: 'Servizio di Robust, usato dai viewer e dalle altre griglie'
   usage_helper_simulators: 'Helper chiamato dai simulatori'
@@ -544,8 +544,8 @@ w4os:
   service_inventory_help: 'Gli inventari degli avatar.'
   service_grid: 'Servizio griglia'
   service_grid_help: 'Le regioni della griglia: dove si trova ciascuna e quale simulatore la esegue.'
-  service_estate: 'Servizio estate'
-  service_estate_help: 'Gli estate delle regioni, i loro proprietari e i loro gestori.'
+  service_estate: 'Servizio proprietà'
+  service_estate_help: 'Le proprietà delle regioni, i loro proprietari e i loro gestori.'
   service_authentication: 'Servizio di autenticazione'
   service_authentication_help: 'Le password degli account e le loro sessioni.'
   service_avatar: 'Servizio avatar'
@@ -581,7 +581,7 @@ w4os:
   service_hg_groups: 'Servizio gruppi hypergrid'
   service_hg_groups_help: 'I gruppi che raggiungono gli avatar di altre griglie (hypergrid).'
   service_map: 'Servizio della mappa'
-  service_map_help: 'Le tessere della mappa che leggono i viewer e le altre griglie.'
+  service_map_help: 'Le tile della mappa che leggono i viewer e le altre griglie.'
   service_currency: 'Helper della valuta'
   service_currency_help: 'La valuta della griglia, chiamata dal viewer (currency.php): il saldo, il prezzo della valuta.'
   service_landtool: 'Helper dello strumento terreno'
@@ -694,7 +694,7 @@ w4os:
   flux_empty: 'Nessun post di Flux trovato'
   list_empty: 'Nessun elemento trovato.'
   posts_count: '%d post'
-  flux_post: 'Flusso di post'
+  flux_post: 'Post di Flux'
   kind_iar: 'Inventario (IAR)'
   kind_oar: 'Regione (OAR)'
   kind_backup: Backup
@@ -768,7 +768,7 @@ w4os:
   error_channel_unavailable: 'La griglia non risponde in questo momento. Riprova più tardi.'
   error_instance_failed: 'La griglia non risponde in questo momento. Riprova più tardi.'
   error_internal_error: 'La griglia non risponde in questo momento. Riprova più tardi.'
-  error_sign_in_refused: 'Il nome o la password è sbagliato.'
+  error_sign_in_refused: 'Il nome o la password sono sbagliati.'
   error_account_disabled: 'Questo avatar è disattivato. Contatta i gestori della griglia.'
   error_account_banned: 'Questo avatar è bannato.'
   error_post_invalid: 'Un post ha da 1 a 1000 caratteri.'
@@ -823,11 +823,11 @@ w4os:
   notice_restore_estate_missing: "Le regioni {regions} non hanno una proprietà in {database}, il database della griglia qui, mantenuto così com'è: partirebbero senza. Ripristina lì la loro proprietà, o collegale a una (estate link region) prima di avviare."
   notice_restore_estate_unchecked: "Le proprietà delle regioni non si sono potute verificare in {database}, il database della griglia qui, mantenuto così com'è: verifica che ci siano prima di avviare."
   notice_restore_start: 'Avvia {instance} una volta ripristinato: {command}'
-  notice_mail_sent_if_known: 'Se un avatar ha questo nome o questa email, gli è stata inviata una mail.'
-  notice_mail_sent: "È stata inviata una mail all'avatar."
+  notice_mail_sent_if_known: "Se un avatar ha questo nome o questa email, gli è stata inviata un'email."
+  notice_mail_sent: "È stata inviata un'email all'avatar."
   notice_registered: "L'avatar {name} è pronto: accedi con il suo nome e la sua password."
-  notice_registered_confirm: "È stata inviata una mail a {email}: l'account viene creato non appena si segue il link che contiene."
-  notice_registered_mail_failed: 'La registrazione è conservata, ma la mail a {email} non è stata inviata: richiedila più tardi.'
+  notice_registered_confirm: "È stata inviata un'email a {email}: l'account viene creato non appena si segue il link che contiene."
+  notice_registered_mail_failed: "La registrazione è conservata, ma l'email a {email} non è stata inviata: richiedila più tardi."
   notice_setting_file_unwritable: 'Questo server non può scrivere {file}, dove la griglia lo legge: impostalo lì a mano.'
   notice_setting_file_unwritable_unkept: "Questo server non può scrivere {file}, e l'applicazione non conserva impostazioni per la griglia: impostalo lì a mano."
   notice_setting_no_files: 'La griglia non ha file su questa macchina: legge questa impostazione nei suoi file, impostala lì a mano.'
