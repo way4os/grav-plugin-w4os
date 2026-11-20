@@ -79,9 +79,9 @@ w4os:
   profile_tab_about: Über
   profile_tab_web: Web
   profile_tab_feed: Feed
-  post_label: 'New post'
-  post_help: 'Plain text, 1000 characters at most.'
-  action_save: Save
+  post_label: 'Neuer Beitrag'
+  post_help: 'Reiner Text, höchstens 1000 Zeichen.'
+  action_save: Speichern
   settings_models: Avatar-Modelle
   settings_avatars: Avatar-Einstellungen
   group_simulator: Simulator
@@ -226,13 +226,13 @@ w4os:
   models_help_not_users: 'Die als Modelle verwendeten Avatare sollten niemals Avatare sein, die Personen benutzen.'
   models_help_outfit: 'Der neue Avatar wird dasselbe Outfit tragen wie das Modell zum Zeitpunkt der Registrierung.'
   models_help_rule: 'Wenn die Modellzuweisungsregel auf dem Namen basiert, wird jeder neu erstellte Avatar, der dieser Regel entspricht, automatisch zur Liste hinzugefügt.'
-  action_post: Post
+  action_post: Veröffentlichen
   action_new_avatar: 'Neuer Avatar'
   action_create_avatar: 'Avatar erstellen'
-  action_delete_post: Delete
-  ask_delete_post: 'Delete this post?'
-  manage_post: 'Your post is published.'
-  manage_delete_post: 'Your post is deleted.'
+  action_delete_post: Löschen
+  ask_delete_post: 'Diesen Beitrag löschen?'
+  manage_post: 'Dein Beitrag ist veröffentlicht.'
+  manage_delete_post: 'Dein Beitrag ist gelöscht.'
   profile_tab_interests: Interessen
   profile_tab_picks: Favoriten
   profile_tab_classifieds: Kleinanzeigen
@@ -391,7 +391,7 @@ w4os:
   offline: Offline
   all: Alle
   view_active: Aktiv
-  view_inactive: Inactive
+  view_inactive: Inaktiv
   degraded: Eingeschränkt
   parcels: Parzellen
   shortcodes_title: 'Verfügbare Shortcodes'
@@ -399,7 +399,7 @@ w4os:
   shortcode_options: Optionen
   shortcode_option_title: Bloc-Titel
   shortcode_option_level: 'Titelstufe (h1 bis h6)'
-  shortcode_option_name: 'The name of the avatar (First.Last)'
+  shortcode_option_name: 'Der Name des Avatars (Vorname.Nachname)'
   shortcode_option_count: 'Maximale Ergebnisse'
   shortcode_option_include_hypergrid: 'Hypergrid einbeziehen'
   shortcode_option_include_landsales: 'Grundstücke zum Verkauf inklusive'
@@ -462,10 +462,10 @@ w4os:
   setting_helpers_help: 'Die Basis der Seiten und Dienste der Helpers.'
   setting_directory: Verzeichnis
   setting_directory_help: 'Die Seite des Grids im gemeinsamen Verzeichnis der Regionen.'
-  setting_cache_assets: 'Picture cache'
-  setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
-  setting_cache_tasks: 'Task state'
-  setting_cache_tasks_help: 'The folder of the state of the tasks: without it, no task runs and the search index never fills.'
+  setting_cache_assets: Bilder-Cache
+  setting_cache_assets_help: 'Der Ordner, in dem die Bilder aufbewahrt werden: ohne ihn werden sie bei jeder Anfrage neu erstellt.'
+  setting_cache_tasks: 'Status der Aufgaben'
+  setting_cache_tasks_help: 'Der Ordner des Status der Aufgaben: ohne ihn läuft keine Aufgabe und der Suchindex füllt sich nie.'
   setting_base_url: Basis-URL
   setting_base_hostname: Basis-Hostname
   setting_public_port: 'Öffentlicher Port'
@@ -530,14 +530,14 @@ w4os:
   db_default_main: 'Standard: die Hauptdatenbank des Grids.'
   db_default_simulator: 'Standard: die Datenbank des Simulators.'
   economy_database: Wirtschaftsdatenbank
-  usage_robust_simulators: 'Robust service, used by the simulators'
-  usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
-  usage_helper_simulators: 'Helper called by the simulators'
-  usage_helper_viewers: 'Helper called by the viewer'
-  usage_page: 'Web page, shown by the viewer or the web site'
-  usage_web_tool: 'Web tool, used with a script in-world'
-  usage_task: 'Task of the grid, run in the background'
-  usage_web_assets: 'Web assets, for the web sites'
+  usage_robust_simulators: 'Robust-Dienst, von den Simulatoren genutzt'
+  usage_robust_viewers: 'Robust-Dienst, von den Viewern und den anderen Grids genutzt'
+  usage_helper_simulators: 'Helper, von den Simulatoren aufgerufen'
+  usage_helper_viewers: 'Helper, vom Viewer aufgerufen'
+  usage_page: 'Webseite, vom Viewer oder von der Website angezeigt'
+  usage_web_tool: 'Web-Werkzeug, mit einem Skript in der Welt genutzt'
+  usage_task: 'Aufgabe des Grids, im Hintergrund ausgeführt'
+  usage_web_assets: 'Web-Assets, für die Websites'
   service_asset: 'Assets Service'
   service_asset_help: 'Die Assets des Grids (Texturen, Sounds, Objekte ...): Die Simulatoren lesen und speichern sie.'
   service_inventory: Inventar-Dienst
@@ -571,31 +571,31 @@ w4os:
   service_profile: Profildienst
   service_profile_help: 'Die Profile der Avatare, ihre Empfehlungen und ihre Kleinanzeigen.'
   service_get_grid_info: 'Grid info'
-  service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
-  service_hg_friends: 'Hypergrid friends service'
-  service_hg_friends_help: 'The friendships with the avatars of other grids (hypergrid).'
-  service_hg_asset: 'Hypergrid assets service'
-  service_hg_asset_help: 'The assets the other grids ask for (hypergrid).'
-  service_hg_inventory: 'Hypergrid inventory service'
-  service_hg_inventory_help: 'The inventories the avatars of this grid reach from other grids (hypergrid).'
-  service_hg_groups: 'Hypergrid groups service'
-  service_hg_groups_help: 'The groups the avatars of other grids reach (hypergrid).'
-  service_map: 'Map service'
-  service_map_help: 'The tiles of the map the viewers and the other grids read.'
+  service_get_grid_info_help: 'Was das Grid den Viewern über sich selbst sagt (get_grid_info).'
+  service_hg_friends: Hypergrid-Freundesdienst
+  service_hg_friends_help: 'Die Freundschaften mit den Avataren anderer Grids (Hypergrid).'
+  service_hg_asset: Hypergrid-Assets-Dienst
+  service_hg_asset_help: 'Die Assets, die die anderen Grids anfragen (Hypergrid).'
+  service_hg_inventory: Hypergrid-Inventar-Dienst
+  service_hg_inventory_help: 'Die Inventare, die die Avatare dieses Grids von anderen Grids aus erreichen (Hypergrid).'
+  service_hg_groups: Hypergrid-Gruppendienst
+  service_hg_groups_help: 'Die Gruppen, die die Avatare anderer Grids erreichen (Hypergrid).'
+  service_map: Kartendienst
+  service_map_help: 'Die Kacheln der Karte, die die Viewer und die anderen Grids lesen.'
   service_currency: Währungs-Helper
-  service_currency_help: 'The currency of the grid, called by the viewer (currency.php): the balance, the cost of currency.'
+  service_currency_help: 'Die Währung des Grids, vom Viewer aufgerufen (currency.php): der Kontostand, der Preis der Währung.'
   service_landtool: Landtool-Helper
-  service_landtool_help: 'The land sales the viewer calls (landtool.php).'
-  service_parser: 'Search parser'
-  service_parser_help: 'Reads the regions registered with the search: a task of the grid.'
-  service_events_parser: 'Events parser'
-  service_events_parser_help: 'Reads the events of the calendar: a task of the grid.'
-  service_text_images: 'Text to image'
-  service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
+  service_landtool_help: 'Die Grundstücksverkäufe, die der Viewer aufruft (landtool.php).'
+  service_parser: Such-Parser
+  service_parser_help: 'Liest die bei der Suche eingetragenen Regionen: eine Aufgabe des Grids.'
+  service_events_parser: Veranstaltungs-Parser
+  service_events_parser_help: 'Liest die Veranstaltungen des Kalenders: eine Aufgabe des Grids.'
+  service_text_images: 'Text zu Bild'
+  service_text_images_help: 'Macht ein Bild aus einem Text, für ein Skript in der Welt (textgen.php).'
   service_assets: 'Web Assets Server'
   service_assets_help: 'Ein Web-Assets-Server wird benötigt, um In-World-Assets (aus dem Grid) auf der Website anzuzeigen (z. B. Profilbilder).'
-  service_instant_message: 'Instant messages service'
-  service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
+  service_instant_message: Sofortnachrichtendienst
+  service_instant_message_help: 'Die Nachrichten zwischen den Avataren verschiedener Grids (Hypergrid).'
   health_unset: 'Nicht gesetzt: weder bereitgestellt noch getestet.'
   health_options_all: 'alle Optionen des Grids'
   health_options_missing: 'fehlen: %s'
@@ -815,6 +815,11 @@ w4os:
   notice_import_module_missing: 'Das Modul {module} ({key} von [{section}]) ist weder im Kern noch in den Modulen dieser Installation: Der Simulator würde es nicht laden. Lege einen Build davon für diesen Kern in {folder} ab und füge {name} zu EnabledModules in opensim.conf hinzu, oder lass die Einstellung weg.'
   notice_import_module_found: 'Das Modul {module} ({key} von [{section}]) ist weder im Kern noch in den Modulen dieser Installation, die ältere Installation hat es in {file}: Der Simulator würde es nicht laden. Lege einen Build davon für diesen Kern in {folder} ab (ein Modul wird für eine Version von OpenSimulator gebaut: diese Datei nur, wenn beide Kerne dieselbe Version haben) und füge {name} zu EnabledModules in opensim.conf hinzu, oder lass die Einstellung weg.'
   notice_import_enable_start: 'Dann: {enable}, {start}.'
+  notice_restart_grid: 'Ein Neustart des Grids ist nötig: {restart}.'
+  notice_restart_simulators: 'Ein Neustart der Simulatoren ist nötig: {restart}.'
+  notice_import_stop_grid: 'Der alte Robust von {grid} läuft weiter, bis er gestoppt wird: stoppe ihn und verhindere, dass er wieder startet (sein Dienst, sein Cron, sein Screen); seine Ports {ports} sind die des Grids hier, seine Datenbank dieselbe.'
+  notice_in_place_enable: 'Das Grid ist an Ort und Stelle registriert, deaktiviert: sobald sein eigener Start gestoppt ist (sein Dienst, sein Cron, sein Screen), {enable}, dann {start}.'
+  notice_import_switch: 'Dann umschalten: {command} (das Grid und seine Simulatoren hier aktiviert und gestartet).'
   notice_restore_estate_missing: 'Die Regionen {regions} haben kein Estate in {database}, der Datenbank des Grids hier, die so bleibt, wie sie ist: sie würden ohne starten. Stelle ihr Estate dort wieder her oder verknüpfe sie vor dem Start mit einem (estate link region).'
   notice_restore_estate_unchecked: 'Die Estates der Regionen konnten in {database}, der Datenbank des Grids hier, die so bleibt, wie sie ist, nicht geprüft werden: prüfe vor dem Start, dass sie da sind.'
   notice_restore_start: 'Starte {instance}, sobald es wiederhergestellt ist: {command}'

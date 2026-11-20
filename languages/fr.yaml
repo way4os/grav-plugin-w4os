@@ -399,7 +399,7 @@ w4os:
   shortcode_options: Options
   shortcode_option_title: 'Titre du bloc'
   shortcode_option_level: 'Niveau de titre (de h1 à h6)'
-  shortcode_option_name: 'The name of the avatar (First.Last)'
+  shortcode_option_name: "Le nom de l'avatar (Prénom.Nom)"
   shortcode_option_count: 'Maximum résultats'
   shortcode_option_include_hypergrid: 'Inclure Hypergrid'
   shortcode_option_include_landsales: 'Inclure des terrains à vendre'
@@ -815,6 +815,11 @@ w4os:
   notice_import_module_missing: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation : le simulateur ne le chargerait pas. Placez une version compilée pour ce cœur dans {folder} et ajoutez {name} à EnabledModules dans opensim.conf, ou laissez ce réglage de côté."
   notice_import_module_found: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation, l'ancienne installation l'a dans {file} : le simulateur ne le chargerait pas. Placez une version compilée pour ce cœur dans {folder} (un module est compilé pour une version d'OpenSimulator : ce fichier seulement si les deux cœurs sont de la même version) et ajoutez {name} à EnabledModules dans opensim.conf, ou laissez ce réglage de côté."
   notice_import_enable_start: 'Ensuite : {enable}, {start}.'
+  notice_restart_grid: 'Redémarrage de la grille nécessaire : {restart}.'
+  notice_restart_simulators: 'Redémarrage du ou des simulateurs nécessaire : {restart}.'
+  notice_import_stop_grid: "L'ancien Robust de {grid} tourne tant qu'il n'est pas arrêté : arrêtez-le et empêchez-le de redémarrer (son service, son cron, son screen), ses ports {ports} sont ceux de la grille ici, sa base de données la même."
+  notice_in_place_enable: 'La grille est inscrite sur place, désactivée : une fois son propre démarrage arrêté (son service, son cron, son screen), {enable}, puis {start}.'
+  notice_import_switch: 'Puis basculez : {command} (la grille et ses simulateurs activés et démarrés ici).'
   notice_restore_estate_missing: "Les régions {regions} n'ont pas de domaine dans {database}, la base de la grille ici, gardée telle quelle : elles démarreraient sans. Restaurez-y leur domaine, ou rattachez-les à un domaine (estate link region) avant de démarrer."
   notice_restore_estate_unchecked: "Les domaines des régions n'ont pas pu être vérifiés dans {database}, la base de la grille ici, gardée telle quelle : vérifiez qu'ils y sont avant de démarrer."
   notice_restore_start: 'Démarrez {instance} une fois restauré : {command}'

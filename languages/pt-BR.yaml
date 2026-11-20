@@ -79,9 +79,9 @@ w4os:
   profile_tab_about: Sobre
   profile_tab_web: Web
   profile_tab_feed: Feed
-  post_label: 'New post'
-  post_help: 'Plain text, 1000 characters at most.'
-  action_save: Save
+  post_label: 'Nova publicação'
+  post_help: 'Texto simples, no máximo 1000 caracteres.'
+  action_save: Salvar
   settings_models: 'Modelos de Avatar'
   settings_avatars: 'Configurações de avatares'
   group_simulator: Simulador
@@ -226,13 +226,13 @@ w4os:
   models_help_not_users: 'Os avatares usados como modelos nunca devem ser avatares que pessoas usam.'
   models_help_outfit: 'O novo avatar usará a mesma roupa que o modelo no momento do registro.'
   models_help_rule: 'Se a regra de atribuição do modelo for baseada no nome, cada novo avatar criado que corresponder a essa regra será automaticamente adicionado à lista.'
-  action_post: Post
+  action_post: Publicar
   action_new_avatar: 'Novo Avatar'
   action_create_avatar: 'Criar Avatar'
-  action_delete_post: Delete
-  ask_delete_post: 'Delete this post?'
-  manage_post: 'Your post is published.'
-  manage_delete_post: 'Your post is deleted.'
+  action_delete_post: Excluir
+  ask_delete_post: 'Excluir esta publicação?'
+  manage_post: 'Sua publicação está no ar.'
+  manage_delete_post: 'Sua publicação foi excluída.'
   profile_tab_interests: Interesses
   profile_tab_picks: Favoritos
   profile_tab_classifieds: Classificados
@@ -391,7 +391,7 @@ w4os:
   offline: Offline
   all: Tudo
   view_active: Ativo
-  view_inactive: Inactive
+  view_inactive: Inativo
   degraded: Degradado
   parcels: Terrenos
   shortcodes_title: 'Shortcodes Disponíveis'
@@ -399,7 +399,7 @@ w4os:
   shortcode_options: Opções
   shortcode_option_title: 'Título do Bloco'
   shortcode_option_level: 'Nível do título (h1 a h6)'
-  shortcode_option_name: 'The name of the avatar (First.Last)'
+  shortcode_option_name: 'O nome do avatar (Nome.Sobrenome)'
   shortcode_option_count: 'Resultados Máximos'
   shortcode_option_include_hypergrid: 'Incluir Hypergrid'
   shortcode_option_include_landsales: 'Incluir Terrenos à Venda'
@@ -462,10 +462,10 @@ w4os:
   setting_helpers_help: 'A base das páginas e dos serviços dos helpers.'
   setting_directory: Diretório
   setting_directory_help: 'A página do grid no diretório compartilhado das regiões.'
-  setting_cache_assets: 'Picture cache'
-  setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
-  setting_cache_tasks: 'Task state'
-  setting_cache_tasks_help: 'The folder of the state of the tasks: without it, no task runs and the search index never fills.'
+  setting_cache_assets: 'Cache de imagens'
+  setting_cache_assets_help: 'A pasta onde as imagens são guardadas: sem ela, elas são refeitas a cada solicitação.'
+  setting_cache_tasks: 'Estado das tarefas'
+  setting_cache_tasks_help: 'A pasta do estado das tarefas: sem ela, nenhuma tarefa é executada e o índice de busca nunca se preenche.'
   setting_base_url: 'URL base'
   setting_base_hostname: 'Hostname base'
   setting_public_port: 'Porta pública'
@@ -530,14 +530,14 @@ w4os:
   db_default_main: 'Padrão: o banco de dados principal do grid.'
   db_default_simulator: 'Padrão: o banco de dados do simulador.'
   economy_database: 'Banco de Dados Econômico'
-  usage_robust_simulators: 'Robust service, used by the simulators'
-  usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
-  usage_helper_simulators: 'Helper called by the simulators'
-  usage_helper_viewers: 'Helper called by the viewer'
-  usage_page: 'Web page, shown by the viewer or the web site'
-  usage_web_tool: 'Web tool, used with a script in-world'
-  usage_task: 'Task of the grid, run in the background'
-  usage_web_assets: 'Web assets, for the web sites'
+  usage_robust_simulators: 'Serviço do Robust, usado pelos simuladores'
+  usage_robust_viewers: 'Serviço do Robust, usado pelos viewers e pelos outros grids'
+  usage_helper_simulators: 'Helper chamado pelos simuladores'
+  usage_helper_viewers: 'Helper chamado pelo viewer'
+  usage_page: 'Página web, exibida pelo viewer ou pelo site'
+  usage_web_tool: 'Ferramenta web, usada com um script no mundo virtual'
+  usage_task: 'Tarefa do grid, executada em segundo plano'
+  usage_web_assets: 'Assets web, para os sites'
   service_asset: 'Serviço de Ativos'
   service_asset_help: 'Os assets do grid (texturas, sons, objetos...): os simuladores os leem e os armazenam.'
   service_inventory: 'Serviço de inventário'
@@ -571,31 +571,31 @@ w4os:
   service_profile: 'Serviço de perfis'
   service_profile_help: 'Os perfis dos avatares, seus destaques e seus classificados.'
   service_get_grid_info: 'Informações do grid'
-  service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
-  service_hg_friends: 'Hypergrid friends service'
-  service_hg_friends_help: 'The friendships with the avatars of other grids (hypergrid).'
-  service_hg_asset: 'Hypergrid assets service'
-  service_hg_asset_help: 'The assets the other grids ask for (hypergrid).'
-  service_hg_inventory: 'Hypergrid inventory service'
-  service_hg_inventory_help: 'The inventories the avatars of this grid reach from other grids (hypergrid).'
-  service_hg_groups: 'Hypergrid groups service'
-  service_hg_groups_help: 'The groups the avatars of other grids reach (hypergrid).'
-  service_map: 'Map service'
-  service_map_help: 'The tiles of the map the viewers and the other grids read.'
+  service_get_grid_info_help: 'O que o grid diz de si mesmo aos viewers (get_grid_info).'
+  service_hg_friends: 'Serviço de amigos hypergrid'
+  service_hg_friends_help: 'As amizades com os avatares de outros grids (hypergrid).'
+  service_hg_asset: 'Serviço de assets hypergrid'
+  service_hg_asset_help: 'Os assets que os outros grids pedem (hypergrid).'
+  service_hg_inventory: 'Serviço de inventários hypergrid'
+  service_hg_inventory_help: 'Os inventários que os avatares deste grid alcançam a partir de outros grids (hypergrid).'
+  service_hg_groups: 'Serviço de grupos hypergrid'
+  service_hg_groups_help: 'Os grupos que os avatares de outros grids alcançam (hypergrid).'
+  service_map: 'Serviço do mapa'
+  service_map_help: 'Os blocos do mapa que os viewers e os outros grids leem.'
   service_currency: 'Helper de moeda'
-  service_currency_help: 'The currency of the grid, called by the viewer (currency.php): the balance, the cost of currency.'
+  service_currency_help: 'A moeda do grid, chamada pelo viewer (currency.php): o saldo, o preço da moeda.'
   service_landtool: 'Helper da ferramenta de terreno'
-  service_landtool_help: 'The land sales the viewer calls (landtool.php).'
-  service_parser: 'Search parser'
-  service_parser_help: 'Reads the regions registered with the search: a task of the grid.'
-  service_events_parser: 'Events parser'
-  service_events_parser_help: 'Reads the events of the calendar: a task of the grid.'
-  service_text_images: 'Text to image'
-  service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
+  service_landtool_help: 'As vendas de terrenos que o viewer chama (landtool.php).'
+  service_parser: 'Analisador da busca'
+  service_parser_help: 'Lê as regiões registradas na busca: uma tarefa do grid.'
+  service_events_parser: 'Analisador de eventos'
+  service_events_parser_help: 'Lê os eventos do calendário: uma tarefa do grid.'
+  service_text_images: 'Texto em imagem'
+  service_text_images_help: 'Faz uma imagem de um texto, para um script no mundo virtual (textgen.php).'
   service_assets: 'Servidor de Ativos Web'
   service_assets_help: 'É necessário um servidor de ativos da web para exibir ativos do mundo virtual (da grade) no site (por exemplo, fotos de perfil).'
-  service_instant_message: 'Instant messages service'
-  service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
+  service_instant_message: 'Serviço de mensagens instantâneas'
+  service_instant_message_help: 'As mensagens entre os avatares de grids diferentes (hypergrid).'
   health_unset: 'Não definido: nem servido nem testado.'
   health_options_all: 'todas as opções do grid'
   health_options_missing: 'faltando: %s'
@@ -815,6 +815,11 @@ w4os:
   notice_import_module_missing: 'O módulo {module} ({key} de [{section}]) não está no núcleo nem nos módulos desta instalação: o simulador não o carregaria. Coloque uma versão compilada para este núcleo em {folder} e adicione {name} a EnabledModules em opensim.conf, ou deixe a configuração de fora.'
   notice_import_module_found: 'O módulo {module} ({key} de [{section}]) não está no núcleo nem nos módulos desta instalação, a instalação antiga o tem em {file}: o simulador não o carregaria. Coloque uma versão compilada para este núcleo em {folder} (um módulo é compilado para uma versão do OpenSimulator: esse arquivo só se os dois núcleos forem da mesma versão) e adicione {name} a EnabledModules em opensim.conf, ou deixe a configuração de fora.'
   notice_import_enable_start: 'Depois: {enable}, {start}.'
+  notice_restart_grid: 'É preciso reiniciar o grid: {restart}.'
+  notice_restart_simulators: 'É preciso reiniciar o(s) simulador(es): {restart}.'
+  notice_import_stop_grid: 'O antigo Robust de {grid} continua rodando até ser parado: pare-o e impeça que ele inicie de novo (seu serviço, seu cron, seu screen); suas portas {ports} são as do grid aqui, seu banco de dados o mesmo.'
+  notice_in_place_enable: 'O grid está registrado no lugar, desativado: assim que sua própria inicialização for parada (seu serviço, seu cron, seu screen), {enable}, depois {start}.'
+  notice_import_switch: 'Depois troque: {command} (o grid e seus simuladores ativados e iniciados aqui).'
   notice_restore_estate_missing: 'As regiões {regions} não têm propriedade em {database}, o banco de dados do grid aqui, mantido como está: elas iniciariam sem nenhuma. Restaure lá a propriedade delas, ou ligue-as a uma (estate link region) antes de iniciar.'
   notice_restore_estate_unchecked: 'As propriedades das regiões não puderam ser verificadas em {database}, o banco de dados do grid aqui, mantido como está: verifique se estão lá antes de iniciar.'
   notice_restore_start: 'Inicie {instance} depois de restaurado: {command}'

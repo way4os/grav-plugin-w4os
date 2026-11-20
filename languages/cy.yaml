@@ -79,9 +79,9 @@ w4os:
   profile_tab_about: Amdanaf
   profile_tab_web: Gwe
   profile_tab_feed: Ffrwd
-  post_label: 'New post'
-  post_help: 'Plain text, 1000 characters at most.'
-  action_save: Save
+  post_label: 'Postiad newydd'
+  post_help: 'Testun plaen, 1000 nod ar y mwyaf.'
+  action_save: Cadw
   settings_models: 'Modelau Afatar'
   settings_avatars: 'Gosodiadau Afatarau'
   group_simulator: Simulator
@@ -226,13 +226,13 @@ w4os:
   models_help_not_users: "Ni ddylai'r afatarau a ddefnyddir fel modelau fyth fod yn afatarau y mae pobl yn eu defnyddio."
   models_help_outfit: "Bydd yr afatar newydd yn gwisgo'r un dillad â'r model ar adeg y cofrestru."
   models_help_rule: "Os yw'r rheol cyfrif model yn seiliedig ar yr enw, bydd unrhyw afatar newydd a grëwyd sy'n cyd-fynd â'r rheol hwnnw yn cael ei ychwanegu'n awtomatig i'r rhestr."
-  action_post: Post
+  action_post: Postio
   action_new_avatar: 'Avatar Newydd'
   action_create_avatar: 'Creu Avatar'
-  action_delete_post: Delete
-  ask_delete_post: 'Delete this post?'
-  manage_post: 'Your post is published.'
-  manage_delete_post: 'Your post is deleted.'
+  action_delete_post: Dileu
+  ask_delete_post: "Dileu'r postiad hwn?"
+  manage_post: "Mae eich postiad wedi'i gyhoeddi."
+  manage_delete_post: "Mae eich postiad wedi'i ddileu."
   profile_tab_interests: Diddordebau
   profile_tab_picks: Dewisiadau
   profile_tab_classifieds: Hysbysebion
@@ -391,7 +391,7 @@ w4os:
   offline: All-lein
   all: Cy_GB
   view_active: Gweithgar
-  view_inactive: Inactive
+  view_inactive: Anweithgar
   degraded: Diraddiedig
   parcels: Tirionau
   shortcodes_title: 'Codau Byr Sydd Ar Gael'
@@ -399,7 +399,7 @@ w4os:
   shortcode_options: Opsiynau
   shortcode_option_title: 'Teitl y Bloc'
   shortcode_option_level: 'Lefel y Teitl (h1 i h6)'
-  shortcode_option_name: 'The name of the avatar (First.Last)'
+  shortcode_option_name: "Enw'r avatar (Enw.Cyfenw)"
   shortcode_option_count: 'Nifer Mwyaf o Ganlyniadau'
   shortcode_option_include_hypergrid: 'Cynnwys Hypergrid'
   shortcode_option_include_landsales: 'Cynnwys tir ar werth'
@@ -462,10 +462,10 @@ w4os:
   setting_helpers_help: "Sail tudalennau a gwasanaethau'r helpers."
   setting_directory: Cyfeiriadur
   setting_directory_help: 'Tudalen y grid yng nghyfeiriadur a rennir y rhanbarthau.'
-  setting_cache_assets: 'Picture cache'
-  setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
-  setting_cache_tasks: 'Task state'
-  setting_cache_tasks_help: 'The folder of the state of the tasks: without it, no task runs and the search index never fills.'
+  setting_cache_assets: 'Storfa lluniau'
+  setting_cache_assets_help: 'Y ffolder lle cedwir y lluniau: hebddo, cânt eu gwneud eto ar bob cais.'
+  setting_cache_tasks: 'Cyflwr y tasgau'
+  setting_cache_tasks_help: "Ffolder cyflwr y tasgau: hebddo, nid oes unrhyw dasg yn rhedeg ac nid yw'r mynegai chwilio byth yn llenwi."
   setting_base_url: 'URL sylfaenol'
   setting_base_hostname: 'Enw gwesteiwr sylfaenol'
   setting_public_port: 'Porth cyhoeddus'
@@ -530,14 +530,14 @@ w4os:
   db_default_main: "Rhagosodiad: prif gronfa ddata'r grid."
   db_default_simulator: "Rhagosodiad: cronfa ddata'r efelychydd."
   economy_database: 'Cronfa Ddata Economi'
-  usage_robust_simulators: 'Robust service, used by the simulators'
-  usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
-  usage_helper_simulators: 'Helper called by the simulators'
-  usage_helper_viewers: 'Helper called by the viewer'
-  usage_page: 'Web page, shown by the viewer or the web site'
-  usage_web_tool: 'Web tool, used with a script in-world'
-  usage_task: 'Task of the grid, run in the background'
-  usage_web_assets: 'Web assets, for the web sites'
+  usage_robust_simulators: 'Gwasanaeth Robust, a ddefnyddir gan yr efelychwyr'
+  usage_robust_viewers: "Gwasanaeth Robust, a ddefnyddir gan y gwylwyr a'r gridiau eraill"
+  usage_helper_simulators: 'Helper a elwir gan yr efelychwyr'
+  usage_helper_viewers: 'Helper a elwir gan y gwyliwr'
+  usage_page: "Tudalen we, a ddangosir gan y gwyliwr neu'r wefan"
+  usage_web_tool: 'Offeryn gwe, a ddefnyddir gyda sgript yn y byd rhithwir'
+  usage_task: "Tasg y grid, sy'n rhedeg yn y cefndir"
+  usage_web_assets: 'Asedau gwe, ar gyfer y gwefannau'
   service_asset: 'Gwasanaeth Asedau'
   service_asset_help: "Asedau'r grid (gweadau, synau, gwrthrychau...): mae'r efelychwyr yn eu darllen a'u storio."
   service_inventory: 'Gwasanaeth rhestr eiddo'
@@ -571,31 +571,31 @@ w4os:
   service_profile: 'Gwasanaeth proffiliau'
   service_profile_help: "Proffiliau'r avatarau, eu dewisiadau a'u hysbysebion."
   service_get_grid_info: 'Gwybodaeth grid'
-  service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
-  service_hg_friends: 'Hypergrid friends service'
-  service_hg_friends_help: 'The friendships with the avatars of other grids (hypergrid).'
-  service_hg_asset: 'Hypergrid assets service'
-  service_hg_asset_help: 'The assets the other grids ask for (hypergrid).'
-  service_hg_inventory: 'Hypergrid inventory service'
-  service_hg_inventory_help: 'The inventories the avatars of this grid reach from other grids (hypergrid).'
-  service_hg_groups: 'Hypergrid groups service'
-  service_hg_groups_help: 'The groups the avatars of other grids reach (hypergrid).'
-  service_map: 'Map service'
-  service_map_help: 'The tiles of the map the viewers and the other grids read.'
+  service_get_grid_info_help: "Yr hyn y mae'r grid yn ei ddweud amdano'i hun wrth y gwylwyr (get_grid_info)."
+  service_hg_friends: 'Gwasanaeth ffrindiau hypergrid'
+  service_hg_friends_help: 'Y cyfeillgarwch ag avatarau gridiau eraill (hypergrid).'
+  service_hg_asset: 'Gwasanaeth asedau hypergrid'
+  service_hg_asset_help: "Yr asedau y mae'r gridiau eraill yn gofyn amdanynt (hypergrid)."
+  service_hg_inventory: 'Gwasanaeth rhestr eiddo hypergrid'
+  service_hg_inventory_help: "Y rhestrau eiddo y mae avatarau'r grid hwn yn eu cyrraedd o gridiau eraill (hypergrid)."
+  service_hg_groups: 'Gwasanaeth grwpiau hypergrid'
+  service_hg_groups_help: 'Y grwpiau y mae avatarau gridiau eraill yn eu cyrraedd (hypergrid).'
+  service_map: 'Gwasanaeth map'
+  service_map_help: "Teils y map y mae'r gwylwyr a'r gridiau eraill yn eu darllen."
   service_currency: 'Cynorthwyydd arian cyfred'
-  service_currency_help: 'The currency of the grid, called by the viewer (currency.php): the balance, the cost of currency.'
+  service_currency_help: 'Arian cyfred y grid, a elwir gan y gwyliwr (currency.php): y balans, cost yr arian cyfred.'
   service_landtool: 'Cynorthwyydd offeryn tir'
-  service_landtool_help: 'The land sales the viewer calls (landtool.php).'
-  service_parser: 'Search parser'
-  service_parser_help: 'Reads the regions registered with the search: a task of the grid.'
-  service_events_parser: 'Events parser'
-  service_events_parser_help: 'Reads the events of the calendar: a task of the grid.'
-  service_text_images: 'Text to image'
-  service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
+  service_landtool_help: "Y gwerthiannau tir y mae'r gwyliwr yn eu galw (landtool.php)."
+  service_parser: 'Dosrannydd chwilio'
+  service_parser_help: "Yn darllen y rhanbarthau sydd wedi'u cofrestru gyda'r chwilio: tasg y grid."
+  service_events_parser: 'Dosrannydd digwyddiadau'
+  service_events_parser_help: "Yn darllen digwyddiadau'r calendr: tasg y grid."
+  service_text_images: 'Testun i lun'
+  service_text_images_help: 'Yn gwneud llun o destun, ar gyfer sgript yn y byd rhithwir (textgen.php).'
   service_assets: 'Gweinydd Asedau Gwe'
   service_assets_help: "Mae angen gweinydd asedau gwe i arddangos asedau yn y byd (o'r grid) ar y wefan (e.e. lluniau proffil)."
-  service_instant_message: 'Instant messages service'
-  service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
+  service_instant_message: 'Gwasanaeth negeseuon gwib'
+  service_instant_message_help: 'Y negeseuon rhwng avatarau gridiau gwahanol (hypergrid).'
   health_unset: "Heb ei osod: heb ei weini na'i brofi."
   health_options_all: "holl opsiynau'r grid"
   health_options_missing: 'ar goll: %s'
@@ -815,6 +815,11 @@ w4os:
   notice_import_module_missing: "Nid yw'r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau'r gosodiad hwn: ni fyddai'r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi'i hadeiladu ar gyfer y craidd hwn yn {folder} ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan."
   notice_import_module_found: "Nid yw'r modiwl {module} ({key} o [{section}]) yn y craidd nac ym modiwlau'r gosodiad hwn, mae gan yr hen osodiad ef yn {file}: ni fyddai'r efelychydd yn ei lwytho. Rhowch fersiwn ohono wedi'i hadeiladu ar gyfer y craidd hwn yn {folder} (mae modiwl wedi'i adeiladu ar gyfer fersiwn o OpenSimulator: y ffeil honno dim ond os yw'r ddau graidd yr un fersiwn) ac ychwanegwch {name} at EnabledModules yn opensim.conf, neu gadewch y gosodiad allan."
   notice_import_enable_start: 'Yna: {enable}, {start}.'
+  notice_restart_grid: 'Mae angen ailgychwyn y grid: {restart}.'
+  notice_restart_simulators: 'Mae angen ailgychwyn yr efelychydd(ion): {restart}.'
+  notice_import_stop_grid: "Mae hen Robust {grid} yn dal i redeg nes iddo gael ei atal: ataliwch ef a'i rwystro rhag cychwyn eto (ei wasanaeth, ei cron, ei screen); ei borthladdoedd {ports} yw rhai'r grid yma, a'r un yw ei gronfa ddata."
+  notice_in_place_enable: "Mae'r grid wedi'i gofrestru yn ei le, wedi'i analluogi: unwaith y bydd ei gychwyn ei hun wedi'i atal (ei wasanaeth, ei cron, ei screen), {enable}, yna {start}."
+  notice_import_switch: "Yna newidiwch: {command} (y grid a'i efelychwyr wedi'u galluogi a'u cychwyn yma)."
   notice_restore_estate_missing: "Nid oes gan y rhanbarthau {regions} ystâd yn {database}, cronfa ddata'r grid yma, a gedwir fel y mae: byddent yn cychwyn heb un. Adferwch eu hystâd yno, neu cysylltwch nhw ag un (estate link region) cyn cychwyn."
   notice_restore_estate_unchecked: "Ni ellid gwirio ystadau'r rhanbarthau yn {database}, cronfa ddata'r grid yma, a gedwir fel y mae: gwiriwch eu bod yno cyn cychwyn."
   notice_restore_start: 'Cychwynnwch {instance} unwaith y caiff ei adfer: {command}'

@@ -79,9 +79,9 @@ w4os:
   profile_tab_about: Informazioni
   profile_tab_web: Web
   profile_tab_feed: Feed
-  post_label: 'New post'
-  post_help: 'Plain text, 1000 characters at most.'
-  action_save: Save
+  post_label: 'Nuovo post'
+  post_help: 'Testo semplice, al massimo 1000 caratteri.'
+  action_save: Salva
   settings_models: 'Modelli di avatar'
   settings_avatars: 'Impostazioni avatar'
   group_simulator: Simulatore
@@ -226,13 +226,13 @@ w4os:
   models_help_not_users: 'Gli avatar usati come modelli non dovrebbero mai essere avatar usati da persone.'
   models_help_outfit: 'Il nuovo avatar indosserà lo stesso outfit del modello al momento della registrazione.'
   models_help_rule: 'Se la regola di assegnazione del modello è basata sul nome, ogni nuovo avatar creato che corrisponde a quella regola verrà automaticamente aggiunto alla lista.'
-  action_post: Post
+  action_post: Pubblica
   action_new_avatar: 'Nuovo Avatar'
   action_create_avatar: 'Crea Avatar'
-  action_delete_post: Delete
-  ask_delete_post: 'Delete this post?'
-  manage_post: 'Your post is published.'
-  manage_delete_post: 'Your post is deleted.'
+  action_delete_post: Elimina
+  ask_delete_post: 'Eliminare questo post?'
+  manage_post: 'Il tuo post è pubblicato.'
+  manage_delete_post: 'Il tuo post è eliminato.'
   profile_tab_interests: Interessi
   profile_tab_picks: Preferiti
   profile_tab_classifieds: Annunci
@@ -391,7 +391,7 @@ w4os:
   offline: Offline
   all: Tutto
   view_active: Attivo
-  view_inactive: Inactive
+  view_inactive: Inattivo
   degraded: Degradato
   parcels: Parzelli
   shortcodes_title: 'Shortcode disponibili'
@@ -399,7 +399,7 @@ w4os:
   shortcode_options: Opzioni
   shortcode_option_title: 'Titolo del blocco'
   shortcode_option_level: 'Livello del titolo (h1 a h6)'
-  shortcode_option_name: 'The name of the avatar (First.Last)'
+  shortcode_option_name: "Il nome dell'avatar (Nome.Cognome)"
   shortcode_option_count: 'Risultati massimi'
   shortcode_option_include_hypergrid: 'Includi Hypergrid'
   shortcode_option_include_landsales: 'Includi Terreni in Vendita'
@@ -462,10 +462,10 @@ w4os:
   setting_helpers_help: 'La base delle pagine e dei servizi degli helpers.'
   setting_directory: Elenco
   setting_directory_help: 'La pagina della griglia nella directory condivisa delle regioni.'
-  setting_cache_assets: 'Picture cache'
-  setting_cache_assets_help: 'The folder the pictures are kept in: without it, they are made again on every request.'
-  setting_cache_tasks: 'Task state'
-  setting_cache_tasks_help: 'The folder of the state of the tasks: without it, no task runs and the search index never fills.'
+  setting_cache_assets: 'Cache delle immagini'
+  setting_cache_assets_help: 'La cartella in cui sono conservate le immagini: senza di essa, vengono rifatte a ogni richiesta.'
+  setting_cache_tasks: 'Stato delle attività'
+  setting_cache_tasks_help: "La cartella dello stato delle attività: senza di essa, nessuna attività viene eseguita e l'indice di ricerca non si riempie mai."
   setting_base_url: 'URL di base'
   setting_base_hostname: 'Hostname di base'
   setting_public_port: 'Porta pubblica'
@@ -530,14 +530,14 @@ w4os:
   db_default_main: 'Predefinito: il database principale della griglia.'
   db_default_simulator: 'Predefinito: il database del simulatore.'
   economy_database: 'Database Economico'
-  usage_robust_simulators: 'Robust service, used by the simulators'
-  usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
-  usage_helper_simulators: 'Helper called by the simulators'
-  usage_helper_viewers: 'Helper called by the viewer'
-  usage_page: 'Web page, shown by the viewer or the web site'
-  usage_web_tool: 'Web tool, used with a script in-world'
-  usage_task: 'Task of the grid, run in the background'
-  usage_web_assets: 'Web assets, for the web sites'
+  usage_robust_simulators: 'Servizio di Robust, usato dai simulatori'
+  usage_robust_viewers: 'Servizio di Robust, usato dai viewer e dalle altre griglie'
+  usage_helper_simulators: 'Helper chiamato dai simulatori'
+  usage_helper_viewers: 'Helper chiamato dal viewer'
+  usage_page: 'Pagina web, mostrata dal viewer o dal sito web'
+  usage_web_tool: 'Strumento web, usato con uno script nel mondo virtuale'
+  usage_task: 'Attività della griglia, eseguita in background'
+  usage_web_assets: 'Asset web, per i siti web'
   service_asset: 'Servizio degli asset'
   service_asset_help: 'Gli asset della griglia (texture, suoni, oggetti...): i simulatori li leggono e li salvano.'
   service_inventory: 'Servizio inventario'
@@ -571,31 +571,31 @@ w4os:
   service_profile: 'Servizio profili'
   service_profile_help: 'I profili degli avatar, i loro luoghi preferiti e i loro annunci.'
   service_get_grid_info: 'Informazioni sulla griglia'
-  service_get_grid_info_help: 'What the grid says of itself to the viewers (get_grid_info).'
-  service_hg_friends: 'Hypergrid friends service'
-  service_hg_friends_help: 'The friendships with the avatars of other grids (hypergrid).'
-  service_hg_asset: 'Hypergrid assets service'
-  service_hg_asset_help: 'The assets the other grids ask for (hypergrid).'
-  service_hg_inventory: 'Hypergrid inventory service'
-  service_hg_inventory_help: 'The inventories the avatars of this grid reach from other grids (hypergrid).'
-  service_hg_groups: 'Hypergrid groups service'
-  service_hg_groups_help: 'The groups the avatars of other grids reach (hypergrid).'
-  service_map: 'Map service'
-  service_map_help: 'The tiles of the map the viewers and the other grids read.'
+  service_get_grid_info_help: 'Ciò che la griglia dice di sé ai viewer (get_grid_info).'
+  service_hg_friends: 'Servizio amici hypergrid'
+  service_hg_friends_help: 'Le amicizie con gli avatar di altre griglie (hypergrid).'
+  service_hg_asset: 'Servizio asset hypergrid'
+  service_hg_asset_help: 'Gli asset che chiedono le altre griglie (hypergrid).'
+  service_hg_inventory: 'Servizio inventari hypergrid'
+  service_hg_inventory_help: 'Gli inventari che gli avatar di questa griglia raggiungono da altre griglie (hypergrid).'
+  service_hg_groups: 'Servizio gruppi hypergrid'
+  service_hg_groups_help: 'I gruppi che raggiungono gli avatar di altre griglie (hypergrid).'
+  service_map: 'Servizio della mappa'
+  service_map_help: 'Le tessere della mappa che leggono i viewer e le altre griglie.'
   service_currency: 'Helper della valuta'
-  service_currency_help: 'The currency of the grid, called by the viewer (currency.php): the balance, the cost of currency.'
+  service_currency_help: 'La valuta della griglia, chiamata dal viewer (currency.php): il saldo, il prezzo della valuta.'
   service_landtool: 'Helper dello strumento terreno'
-  service_landtool_help: 'The land sales the viewer calls (landtool.php).'
-  service_parser: 'Search parser'
-  service_parser_help: 'Reads the regions registered with the search: a task of the grid.'
-  service_events_parser: 'Events parser'
-  service_events_parser_help: 'Reads the events of the calendar: a task of the grid.'
-  service_text_images: 'Text to image'
-  service_text_images_help: 'Makes an image of a text, for a script in-world (textgen.php).'
+  service_landtool_help: 'Le vendite di terreni che chiama il viewer (landtool.php).'
+  service_parser: 'Analizzatore della ricerca'
+  service_parser_help: "Legge le regioni registrate nella ricerca: un'attività della griglia."
+  service_events_parser: 'Analizzatore degli eventi'
+  service_events_parser_help: "Legge gli eventi del calendario: un'attività della griglia."
+  service_text_images: 'Testo in immagine'
+  service_text_images_help: "Crea un'immagine da un testo, per uno script nel mondo virtuale (textgen.php)."
   service_assets: 'Server delle risorse web'
   service_assets_help: 'È necessario un server di risorse web per visualizzare le risorse in-world (dalla griglia) sul sito web (ad esempio, le immagini del profilo).'
-  service_instant_message: 'Instant messages service'
-  service_instant_message_help: 'The messages between the avatars of different grids (hypergrid).'
+  service_instant_message: 'Servizio messaggi istantanei'
+  service_instant_message_help: 'I messaggi tra gli avatar di griglie diverse (hypergrid).'
   health_unset: 'Non impostato: né servito né testato.'
   health_options_all: 'tutte le opzioni della griglia'
   health_options_missing: 'mancanti: %s'
@@ -815,6 +815,11 @@ w4os:
   notice_import_module_missing: "Il modulo {module} ({key} di [{section}]) non è né nel core né nei moduli di questa installazione: il simulatore non lo caricherebbe. Metti una build per questo core in {folder} e aggiungi {name} a EnabledModules in opensim.conf, oppure lascia fuori l'impostazione."
   notice_import_module_found: "Il modulo {module} ({key} di [{section}]) non è né nel core né nei moduli di questa installazione, la vecchia installazione lo ha in {file}: il simulatore non lo caricherebbe. Metti una build per questo core in {folder} (un modulo è compilato per una versione di OpenSimulator: quel file solo se i due core sono della stessa versione) e aggiungi {name} a EnabledModules in opensim.conf, oppure lascia fuori l'impostazione."
   notice_import_enable_start: 'Poi: {enable}, {start}.'
+  notice_restart_grid: 'È necessario riavviare la griglia: {restart}.'
+  notice_restart_simulators: 'È necessario riavviare il simulatore o i simulatori: {restart}.'
+  notice_import_stop_grid: 'Il vecchio Robust di {grid} continua a funzionare finché non viene fermato: fermalo e impediscigli di ripartire (il suo servizio, il suo cron, il suo screen); le sue porte {ports} sono quelle della griglia qui, il suo database lo stesso.'
+  notice_in_place_enable: 'La griglia è registrata sul posto, disattivata: una volta fermato il suo avvio (il suo servizio, il suo cron, il suo screen), {enable}, poi {start}.'
+  notice_import_switch: 'Poi passa: {command} (la griglia e i suoi simulatori attivati e avviati qui).'
   notice_restore_estate_missing: "Le regioni {regions} non hanno una proprietà in {database}, il database della griglia qui, mantenuto così com'è: partirebbero senza. Ripristina lì la loro proprietà, o collegale a una (estate link region) prima di avviare."
   notice_restore_estate_unchecked: "Le proprietà delle regioni non si sono potute verificare in {database}, il database della griglia qui, mantenuto così com'è: verifica che ci siano prima di avviare."
   notice_restore_start: 'Avvia {instance} una volta ripristinato: {command}'
