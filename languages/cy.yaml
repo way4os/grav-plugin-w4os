@@ -848,7 +848,7 @@ w4os:
   admin_db_password: 'Cyfrinair y gronfa ddata'
   admin_db_password_help: 'Wedi’i gadw y tu allan i’r ffurfweddiad ac i git'
   admin_serve_helpers: 'Gwasanaethu’r helpers'
-  admin_serve_helpers_help: 'Yr hyn y mae’r gwylwyr a’r efelychwyr yn ei ofyn (croeso, chwilio, proffiliau, economi, negeseuon all-lein) ar gyfeiriadau’r grid, sy’n gorfod bod yn rhai’r safle hwn. I ffwrdd: mae’r grid yn cadw ei helpers ei hun'
+  admin_serve_helpers_help: 'Yr hyn y mae’r viewers a’r efelychwyr yn ei ofyn (croeso, chwilio, proffiliau, economi, negeseuon all-lein) ar gyfeiriadau’r grid, sy’n gorfod bod yn rhai’r safle hwn. I ffwrdd: mae’r grid yn cadw ei helpers ei hun'
   admin_tab_connection: Cysylltiad
   admin_tab_accounts: Cyfrifon
   admin_tab_pages: Tudalennau
@@ -869,15 +869,15 @@ w4os:
   admin_built_in_css_help: 'Taflen arddull yr ategyn (ei dudalennau, y modelau, y blociau); i ffwrdd pan fydd y thema’n eu steilio'
   admin_register: Cofrestru
   admin_confirm_email: 'Cadarnhau’r ebost'
-  admin_confirm_email_help: 'Mae avatar newydd yn anweithredol nes iddo glicio’r ddolen y mae’r engine yn ei hanfon ato'
+  admin_confirm_email_help: 'Mae afatar newydd yn anweithredol nes iddo glicio’r ddolen y mae’r engine yn ei hanfon ato'
   admin_terms: 'Tudalen y telerau'
   admin_terms_help: 'Llwybr tudalen i gytuno â hi cyn cofrestru; gwag am ddim'
   admin_per_page: 'Afatarau fesul tudalen'
   admin_per_page_help: 'Rhestr yr afatarau i’r rheolwyr, un dudalen ar y tro'
   admin_admin_level: "Tudalennau gweinyddu o'r lefel"
-  admin_admin_level_help: "Mae avatarau'r lefel defnyddiwr hon neu uwch yn mynd i mewn i'r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine"
+  admin_admin_level_help: "Mae afatarau'r lefel defnyddiwr hon neu uwch yn mynd i mewn i'r tudalennau gweinyddu; mae pob tudalen, gweithred a maes wedyn yn gofyn am ei lefel ei hun, un yr engine"
   admin_save_accounts: 'Cadw cyfrifon Grav'
-  admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob avatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
+  admin_save_accounts_help: 'Cadw cyfrif Grav (user/accounts) ar gyfer pob afatar sy’n mewngofnodi; ymlaen bob amser gyda’r ategyn API'
   admin_menu: 'Eitem yn y ddewislen'
   admin_menu_help: 'Eitem yn newislen y safle, gydag unrhyw thema: mewngofnodi, neu gyfrif yr afatar sydd wedi mewngofnodi (ei broffil, allgofnodi)'
   admin_site_settings: 'Gosodiadau’r safle'

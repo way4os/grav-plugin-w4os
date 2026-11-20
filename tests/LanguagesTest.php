@@ -57,4 +57,27 @@ describe('languages', function () {
             }
         }
     });
+
+    test('the texts of the plugin follow the words of the engine: viewer and helpers kept, no word of another meaning', function () {
+        $read = fn (string $lang) => (array) Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__)."/i18n/$lang.yaml")['w4os'];
+        // The patterns of the catalog test of the engine: a port of ships, a raster or a grate for the grid, an assistant for the
+        // helpers, a projector for the viewer
+        $wrong = [
+            'cy' => '/porthladd|cynorthwy|\\bg?wyl(iwr|wyr)\\b|golygydd/iu',
+            'de' => '/\\b(Hafen|Raster)\\b|Helfer|Assistent|Betrachter/u',
+            'fr' => '/\\bassistants?\\b|visionneuse|visualiseur/iu',
+            'it' => '/\\bporto\\b|\\b(aiutant|assistent|visualizzator)\\w*/iu',
+            'nl' => '/\\b(haven|raster|rooster|kijker)\\b|assistent/iu',
+            'pt-BR' => '/\\b(porto|grade|visualizador|ajudantes?|assistentes?|auxiliar(es)?)\\b/iu',
+        ];
+        $english = $read('en');
+        foreach ($wrong as $lang => $pattern) {
+            $texts = $read($lang);
+            expect(array_filter($texts, fn (string $text) => preg_match($pattern, $text) === 1))->toBe([], $lang);
+            foreach (['viewer', 'helper'] as $term) {
+                $renamed = array_filter($texts, fn (string $text, string $key) => stripos($english[$key], $term) !== false && stripos($text, $term) === false, ARRAY_FILTER_USE_BOTH);
+                expect($renamed)->toBe([], "$lang $term");
+            }
+        }
+    });
 });
