@@ -252,7 +252,7 @@ final class Items
                     + (isset($field['fallback']) ? ['outerclasses' => 'w4os-fallback-of-'.$field['name']] : []);
             }
 
-            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'legend' => 'w4os.'.$field['label'], 'classes' => 'form-fieldset', 'fields' => $parts]
+            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'label' => 'w4os.'.$field['label'], 'classes' => 'w4os-database', 'fields' => $parts]
                 + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []);
         }
         // A path on the address it is under, which is not changed here, ending with the slash the path never starts with

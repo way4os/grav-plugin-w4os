@@ -53,17 +53,17 @@ describe('the settings pages of the services of the grid', function () {
         $fields = Items::fields(FormView::of($form, $item, null, true, 250), shown: true);
         $database = $fields['searchDatabase'];
 
-        expect($database)->toMatchArray(['type' => 'fieldset', 'legend' => 'w4os.setting_search_database', 'classes' => 'form-fieldset'])
+        expect($database)->toMatchArray(['type' => 'fieldset', 'label' => 'w4os.setting_search_database', 'classes' => 'w4os-database'])
             ->and(array_keys($database['fields']))->toBe(['searchDatabase.useDefault', 'searchDatabase.host', 'searchDatabase.port', 'searchDatabase.database', 'searchDatabase.user', 'searchDatabase.password'])
             ->and($database['fields']['searchDatabase.port'])->toMatchArray(['type' => 'number', 'placeholder' => '3306', 'label' => 'w4os.db_port'])
             ->and($database['fields']['searchDatabase.password'])->toMatchArray(['type' => 'password']);
     });
 
-    test('a database its values hide is hidden whole, its legend with its parts, and found by the script of the form', function () {
+    test('a database its values hide is hidden whole, its label with its parts, and found by the script of the form', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
         $fields = Items::fields(FormView::of($form, ['provide' => false, 'economyModule' => 'BetaGridLikeMoneyModule'], null, true, 250), shown: true);
 
-        expect($fields['gloebitDatabase'])->toMatchArray(['type' => 'fieldset', 'id' => 'w4os-field-gloebitDatabase', 'classes' => 'form-fieldset w4os-unmet'])
+        expect($fields['gloebitDatabase'])->toMatchArray(['type' => 'fieldset', 'id' => 'w4os-field-gloebitDatabase', 'classes' => 'w4os-database w4os-unmet'])
             ->and($fields['gloebitDatabase'])->not->toHaveKey('outerclasses')
             ->and((string) file_get_contents(dirname(__DIR__).'/js/conditions.js'))->toContain('w4os-field-${name}');
     });
@@ -208,13 +208,14 @@ describe('the settings pages of the services of the grid', function () {
             ->toBe('http://grid.example.org/helpers/');
     });
 
-    test('a database says its tip under its legend', function () {
+    test('a database has its label where the others have theirs, its tip under it, its parts beside it', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true], null, true, 250), shown: true);
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/fieldset/w4os-admin-fieldset.html.twig');
 
         expect($fields['searchDatabase'])->toMatchArray(['type' => 'fieldset', 'help' => 'w4os.tip_search_database'])
-            ->and($template)->toContain('<legend>', 'field.help', 'form-hint');
+            ->and($template)->toContain('col-form-label', 'field.label', 'field.help', 'form-hint', 'w4os-database-parts')
+            ->and($fields['searchDatabase'])->not->toHaveKey('legend');
     });
 
     test('the registers of other search engines as a list of addresses, one by line of their own', function () {
