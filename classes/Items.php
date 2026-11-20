@@ -231,6 +231,29 @@ final class Items
     }
 
     /**
+     * The data of a form with each Use default (a database, an address) as posted: unchecked, nothing is posted for it, and the data
+     * of the form keep what it was filled with.
+     *
+     * @param array<string,mixed> $data
+     * @param \Closure(string): mixed $posted what was posted for a field (`name.part`)
+     * @return array<string,mixed>
+     */
+    public static function posted(array $data, \Closure $posted): array
+    {
+        foreach ($data as $name => $value) {
+            is_array($value) && array_key_exists('useDefault', $value) && $data[$name]['useDefault'] = (bool) $posted("$name.useDefault");
+        }
+
+        return $data;
+    }
+
+    /** Whether a form has a field with a Use default (a database, an address), whose parts its script hides while it is checked. */
+    public static function defaulted(FormView $view): bool
+    {
+        return array_filter($view->fields, fn (array $field) => isset($field['fallback'])) !== [];
+    }
+
+    /**
      * The options of a field (value => catalog key) for Grav (value => `w4os.` key).
      *
      * @param array<string,mixed> $field
@@ -278,7 +301,7 @@ final class Items
 
             return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'label' => 'w4os.'.$field['label'], 'classes' => 'w4os-defaulted',
                 'fields' => [$field['name'].'.useDefault' => ['type' => 'checkbox', 'label' => 'w4os.'.$field['fallback']],
-                    $field['name'].'.value' => ['label' => '', 'outerclasses' => 'w4os-fallback-of-'.$field['name']] + $value]]
+                    $field['name'].'.value' => ['label' => false, 'outerclasses' => 'w4os-fallback-of-'.$field['name']] + $value]]
                 + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []) + ($help === null ? [] : ['description' => $help]);
         }
         // A path on the address it is under, which is not changed here, ending with the slash the path never starts with

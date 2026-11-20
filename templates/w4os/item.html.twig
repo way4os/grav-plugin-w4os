@@ -25,8 +25,6 @@
             } %}
         {% elseif page_item.edit %}
             {% include 'w4os/admin-form.html.twig' with {form: forms('w4os-item')} %}
-            {% do assets.add('jquery', 101) %}
-            {% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}
         {% else %}
             {# Its fields, but the ones its header shows (w4os-views ItemView): its name, its picture, its state #}
             {% for group in w4os_item_view(page_item).groups %}

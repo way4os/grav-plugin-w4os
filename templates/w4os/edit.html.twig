@@ -8,8 +8,5 @@
         {% include 'w4os/admin-form.html.twig' with {form: forms('w4os-edit')} %}
     </div></div>
 {% endif %}
-{# The tabs of the Form plugin need jQuery (Grav's collection); js/form-tabs.js makes them keyboard tabs, keeps the tab open in
-   the address, and grows the text areas where the browser cannot #}
-{% do assets.add('jquery', 101) %}
-{% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}
+{# The tab open kept in the address, the text areas grown where the browser cannot (its tabs and their scripts: admin-form) #}
 {% do assets.addJs('plugin://w4os/js/keep-tab.js', {group: 'bottom', loading: 'defer'}) %}

@@ -33,7 +33,7 @@ describe('the settings of the grid and of its avatars', function () {
         return $tabs;
     });
 
-    test('an address with a default (the assets service) as a field of its own, its Use default then its value, hidden while it is checked', function (array $tabs) {
+    test('an address with a default (the assets service) as a field of its own, its Use default then its value without a label of its own, hidden while it is checked', function (array $tabs) {
         $uri = $tabs['services']['fields']['assetServerUri'];
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('grid');
         $own = Items::fields(FormView::of($form, ['assetServerUri' => 'http://assets.example.org:8003'], null, true, 250), shown: true)['groups']['fields']['services']['fields']['assetServerUri'];
@@ -41,9 +41,22 @@ describe('the settings of the grid and of its avatars', function () {
         expect($uri)->toMatchArray(['type' => 'fieldset', 'label' => 'w4os.setting_assets_service_uri', 'classes' => 'w4os-defaulted'])
             ->and(array_keys($uri['fields']))->toBe(['assetServerUri.useDefault', 'assetServerUri.value'])
             ->and($uri['fields']['assetServerUri.useDefault'])->toMatchArray(['type' => 'checkbox', 'label' => 'w4os.db_use_default'])
-            ->and($uri['fields']['assetServerUri.value'])->toMatchArray(['type' => 'url', 'outerclasses' => 'w4os-fallback-of-assetServerUri w4os-unmet'])
-            ->and($own['fields']['assetServerUri.value']['outerclasses'])->toBe('w4os-fallback-of-assetServerUri');
+            ->and($uri['fields']['assetServerUri.value'])->toMatchArray(['type' => 'url', 'label' => false, 'outerclasses' => 'w4os-fallback-of-assetServerUri w4os-unmet'])
+            ->and($own['fields']['assetServerUri.value']['outerclasses'])->toBe('w4os-fallback-of-assetServerUri')
+            // The script that shows it as the box is unchecked, on a form without a condition too
+            ->and(Items::conditions(FormView::of($form, [], null, true, 250)))->toBe([])
+            ->and(Items::defaulted(FormView::of($form, [], null, true, 250)))->toBeTrue()
+            ->and(Items::defaulted(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('avatars'), [], null, true, 250)))->toBeFalse();
     })->depends('the grid in the tabs of its groups: Grid Info, Robust, Services, Avatars');
+
+    test('a Use default unchecked is no more checked, though the form was filled with it', function () {
+        $data = ['assetServerUri' => ['useDefault' => true, 'value' => 'http://a.example.org:8003'], 'moneyDatabase' => ['useDefault' => true], 'gridName' => 'Mine'];
+        $posted = Items::posted($data, fn (string $key) => ['moneyDatabase.useDefault' => '1'][$key] ?? null);
+
+        expect($posted['assetServerUri'])->toBe(['useDefault' => false, 'value' => 'http://a.example.org:8003'])
+            ->and($posted['moneyDatabase'])->toBe(['useDefault' => true])
+            ->and($posted['gridName'])->toBe('Mine');
+    });
 
     test('the names an avatar may not take as a list, one by line; several avatars by email as a box', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('avatars');
@@ -53,3 +66,4 @@ describe('the settings of the grid and of its avatars', function () {
             ->and($fields['allowMultipleAvatars']['type'])->toBe('checkbox');
     });
 });
+

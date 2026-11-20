@@ -208,12 +208,13 @@ describe('the settings pages of the services of the grid', function () {
             ->toBe('http://grid.example.org/helpers/');
     });
 
-    test('a database has its label where the others have theirs, its tip under it, its parts beside it', function () {
+    test('a database has its label where the others have theirs, its tip under it, its parts then what its default is beside it', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true], null, true, 250), shown: true);
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/fieldset/w4os-admin-fieldset.html.twig');
 
-        expect($fields['searchDatabase'])->toMatchArray(['type' => 'fieldset', 'help' => 'w4os.tip_search_database'])
+        expect($fields['searchDatabase'])->toMatchArray(['type' => 'fieldset', 'label' => 'w4os.setting_search_database'])
+            ->and($fields['searchDatabase']['description'])->toContain('w4os.db_default_main')
             ->and($template)->toContain('col-form-label', 'field.label', 'field.help', 'form-hint', 'w4os-fieldset-parts', 'form-description')
             ->and($fields['searchDatabase'])->not->toHaveKey('legend');
     });
@@ -222,7 +223,7 @@ describe('the settings pages of the services of the grid', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'registers' => ['https://2do.directory/register.php']], null, true, 250), shown: true);
 
-        expect($fields['registers'])->toMatchArray(['type' => 'array', 'value_only' => true, 'label' => 'w4os.search_registers', 'help' => 'w4os.tip_search_registers'])
+        expect($fields['registers'])->toMatchArray(['type' => 'array', 'value_only' => true, 'label' => 'w4os.search_registers'])
             ->and(FormView::of($form, ['provide' => true, 'registers' => []], null, true, 250)->changes(['registers' => ['https://2do.directory/register.php', ' ']]))
             ->toMatchArray(['registers' => ['https://2do.directory/register.php']]);
     });
@@ -237,11 +238,11 @@ describe('the settings pages of the services of the grid', function () {
             ->and(Items::values($fields, ['provide' => false])['provide'])->toBeFalse();
     });
 
-    test('a form with a list loads the jQuery of Grav its script needs, numbers its lines once one is moved; one + at its end, a line alone neither moved nor removed', function () {
+    test('a form with tabs or a list loads the jQuery of Grav their scripts need, numbers its lines once one is moved; one + at its end, a line alone neither moved nor removed', function () {
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig');
         $css = (string) file_get_contents(dirname(__DIR__).'/css/admin.css');
 
-        expect($template)->toContain("(form.fields ?? [])|filter(field => (field.type ?? '') == 'array')", "assets.addJs('jquery'", 'plugin://w4os/js/lists.js')
+        expect($template)->toContain("(form.fields ?? [])|map(field => (field.type ?? ''))", "'array' in types or 'tabs' in types", "assets.addJs('jquery'", 'plugin://w4os/js/lists.js', 'plugin://w4os/js/form-tabs.js')
             ->and((string) file_get_contents(dirname(__DIR__).'/js/lists.js'))->toContain("data('array-sort')", "'onEnd'")
             ->and($css)->toContain('[data-grav-array-type=row]:not(:last-child) [data-grav-array-action=add]', '[data-grav-array-type=row]:only-child');
     });

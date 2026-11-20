@@ -13,10 +13,11 @@
 {% set form_button_outer_classes = 'btn-list justify-content-end' %}
 {% set form_button_classes = 'btn' %}
 {% include 'forms/form.html.twig' with {form: form, layout: 'w4os-admin', field_layout: 'w4os-admin'} %}
-{# A list of values (the Form plugin's array field): its script needs jQuery, Grav's own copy, which the admin does not load otherwise; its lines numbered in their order once one is moved #}
-{% if (form.fields ?? [])|filter(field => (field.type ?? '') == 'array')|length %}
-    {% do assets.addJs('jquery', 101) %}
-    {% do assets.addJs('plugin://w4os/js/lists.js', {group: 'bottom', loading: 'defer'}) %}
-{% endif %}
+{# Tabs and lists of values (the Form plugin's tabs and array fields): their scripts need jQuery, Grav's own copy, which the admin
+   does not load otherwise; the tabs as keyboard tabs (js/form-tabs.js), the lines of a list numbered in their order once one is moved #}
+{% set types = (form.fields ?? [])|map(field => (field.type ?? '')) %}
+{% if 'array' in types or 'tabs' in types %}{% do assets.addJs('jquery', 101) %}{% endif %}
+{% if 'tabs' in types %}{% do assets.addJs('plugin://w4os/js/form-tabs.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}
+{% if 'array' in types %}{% do assets.addJs('plugin://w4os/js/lists.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}
 {# The fields shown by the values of the others, as they are changed #}
 {% if form.attributes['data-w4os-conditions'] ?? false %}{% do assets.addJs('plugin://w4os/js/conditions.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}

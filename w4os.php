@@ -609,6 +609,7 @@ class W4osPlugin extends Plugin
             $data['email'] = trim((string) ($this->grav['uri']->post('data.email') ?? ''));
             $data['published'] = (bool) $this->grav['uri']->post('data.published');
         }
+        $data = Items::posted($data, fn (string $key) => $this->grav['uri']->post("data.$key"));
         $site = $this->site();
         $forms = $site->forms();
         $routes = $site->routes();
@@ -1197,7 +1198,7 @@ class W4osPlugin extends Plugin
         $templates = \Composer\InstalledVersions::getInstallPath('magicoli/opensim-helpers').'/templates';
         $language = (string) ($this->grav['language']->getActive() ?: 'en');
 
-        return (new \OpenSim\Helpers\View\View($templates))->items($kind, $this->avatarItems($uuid, $kind), $this->site()->engine()->assetsUrl(), $language);
+        return (new \OpenSim\Helpers\View\View($templates))->items($kind, $this->avatarItems($uuid, $kind), $this->site()->assetsUrl(), $language);
     }
 
     /** The name of an avatar by its UUID (a partner), '' when the engine has none. */
@@ -1230,7 +1231,7 @@ class W4osPlugin extends Plugin
         $language = $this->grav['language'];
         $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));
         // The pictures of the grid at the addresses of this site
-        $args['assets'] = $this->site()->engine()->assetsUrl();
+        $args['assets'] = $this->site()->assetsUrl();
         // The links of the helpers to the pages of this site, in the language of the page
         $routes = $this->site()->routes();
         ($routes['search'] ?? '/') === '/' || $args['search_url'] = $this->site()->url('search');
@@ -1525,8 +1526,9 @@ class W4osPlugin extends Plugin
             $value = $view->item[$field['name']] ?? '';
             $form->setData($field['name'], is_array($value) ? implode("\n", array_map('strval', $value)) : $value);
         }
+        // The script of the form for its conditions, and for the parts a Use default hides
         $conditions = Items::conditions($view);
-        $conditions === [] || $form->set('attributes', ['data-w4os-conditions' => json_encode($conditions, JSON_UNESCAPED_SLASHES)] + (array) $form->get('attributes'));
+        ($conditions === [] && ! Items::defaulted($view)) || $form->set('attributes', ['data-w4os-conditions' => json_encode($conditions, JSON_UNESCAPED_SLASHES)] + (array) $form->get('attributes'));
     }
 
     /** The form of the page of an item: the engine's fields (x-form) as the visitor sees and changes them, filled with the item. */
