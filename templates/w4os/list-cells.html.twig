@@ -24,6 +24,7 @@
     {% if column.picture is defined %}<div class="w4os-who"><img class="w4os-thumb{{ (column.default ?? null) == 'person' ? ' w4os-thumb-person' }}" src="{{ w4os_picture(attribute(item, column.picture) ?? null, column.default ?? null)|e('html_attr') }}" alt="" width="32" height="32"><span>{% endif %}
     {%- if column.count is defined and value is not null -%}{{ counted ? w4os_count('w4os.' ~ column.count, value) : w4os_number(value, 0) }}
     {%- elseif type == 'date' -%}{{ value|w4os_date }}
+    {%- elseif type == 'connection-string' -%}{% if value is iterable and (value.host ?? '') != '' %}{{ value.user ?? '' ? value.user ~ '@' }}{{ value.host }}{{ value.port ?? '' ? ':' ~ value.port }}{{ value.database ?? '' ? '/' ~ value.database }}{% elseif column.fallback is defined %}{{ (column.description ?? column.fallback) is iterable ? (column.description|map(key => ('w4os.' ~ key)|t)|join(' ')) : ('w4os.' ~ (column.description ?? column.fallback))|t }}{% endif %}
     {%- elseif type == 'datetime' -%}{% if value %}<time title="{{ value|w4os_date('full')|e('html_attr') }}">{{ value|w4os_date(dates) }}</time>{% endif %}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
     {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates)|trim %}{% if text is not empty %}{% set shown = shown|merge(['<div>' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}

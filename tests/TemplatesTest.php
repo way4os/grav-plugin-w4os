@@ -74,6 +74,20 @@ describe('templates', function () {
             ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love']]))->toContain('class="w4os-thumb w4os-thumb-person"', 'none-person');
     });
 
+    test('a database reads user@host:port/database, never its password; its default said in words when the grid takes it', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
+        $database = ['name' => 'database', 'type' => 'connection-string', 'fallback' => 'db_use_default', 'description' => ['db_default_opensim']];
+
+        expect(trim($cell->render(['column' => $database, 'item' => ['database' => ['host' => 'db.example.org', 'port' => 3306, 'database' => 'opensim', 'user' => 'os', 'password' => '********']]])))
+            ->toBe('os@db.example.org:3306/opensim')
+            ->and(trim($cell->render(['column' => $database, 'item' => ['database' => null]])))->toBe('[w4os.db_default_opensim]')
+            ->and(trim($cell->render(['column' => ['fallback' => 'db_use_default'] + array_diff_key($database, ['description' => 1]), 'item' => []])))->toBe('[w4os.db_use_default]');
+    });
+
     test('an area reads in km² as the engine says it (two decimals under 10, none above), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
         expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_km2', '0.07'])
             ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19'])
