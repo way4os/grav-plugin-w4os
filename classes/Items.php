@@ -263,8 +263,11 @@ final class Items
         }
         // Several addresses (the registers of other search engines): a list, one by line of its own
         if (! empty($field['multiple']) && $field['type'] === 'url' && empty($field['readOnly'])) {
+            // A list: its first default in its first line
+            $empty = self::placeholder((isset($field['default']) ? ['default' => ((array) $field['default'])[0] ?? null] : []) + $field, $translate);
+
             return ['type' => 'array', 'value_only' => true, 'label' => 'w4os.'.$field['label']]
-                + (isset($field['placeholder']) ? ['placeholder_value' => self::placeholder((string) $field['placeholder'])] : []) + $words;
+                + ($empty === null ? [] : ['placeholder_value' => $empty]) + $words;
         }
         // Several addresses the options of the grid set: one by line
         ! empty($field['multiple']) && ! empty($field['readOnly']) && $field['type'] = 'text';
@@ -295,17 +298,31 @@ final class Items
             'type' => ! empty($field['multiple']) ? 'array' : null, 'pattern' => isset($field['pattern']) ? (string) $field['pattern'] : null], fn ($rule) => $rule !== null);
         $validate = ($input['validate'] ?? []) + $validate;
 
-        // A placeholder is a text of the catalog, or an example as it is (an address, a file, a port)
-        isset($field['placeholder']) && $input['placeholder'] = self::placeholder((string) $field['placeholder']);
+        // What an empty field shows: its default as it is, an example as one, else a text of the catalog
+        ($empty = self::placeholder($field, $translate)) === null || $input['placeholder'] = $empty;
 
         // The pictures of the models say their help themselves
         return $input + ['label' => 'w4os.'.$field['label']] + ($input['type'] !== 'w4os_models' ? $words : []) + ($validate === [] ? [] : ['validate' => $validate]);
     }
 
-    /** A placeholder: a text of the catalog (its key), or an example as it is (an address, a file, a port). */
-    private static function placeholder(string $placeholder): string
+    /**
+     * What an empty field shows: the value it takes when left empty as it is (`default`: the guide of 2do.directory, 3306), a value
+     * given as an example said as one (`example`: e.g.: YC$, the engine's example_value), else a text of the catalog
+     * (`placeholder`, its key); null for none.
+     *
+     * @param array<string,mixed> $field
+     * @param ?\Closure(string): string $translate
+     */
+    private static function placeholder(array $field, ?\Closure $translate = null): ?string
     {
-        return preg_match('/^[a-z][a-z0-9_]*$/', $placeholder) === 1 ? 'w4os.'.$placeholder : $placeholder;
+        if (isset($field['default']) && is_scalar($field['default'])) {
+            return (string) $field['default'];
+        }
+        if (isset($field['example']) && is_scalar($field['example'])) {
+            return $translate === null ? (string) $field['example'] : sprintf($translate('w4os.example_value'), $field['example']);
+        }
+
+        return isset($field['placeholder']) ? 'w4os.'.$field['placeholder'] : null;
     }
 
     /**

@@ -32,6 +32,20 @@ describe('the settings pages of the services of the grid', function () {
             ->and($fields['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org', 'outerclasses' => 'w4os-unmet']);
     });
 
+    test('shows a default as it is and an example as one (e.g.: YC$), never one as the other', function () {
+        $t = fn (string $key) => ['w4os.example_value' => 'ex. : %s'][$key] ?? $key;
+        $economy = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy'), ['provide' => true, 'economyModule' => 'DTLNSLMoneyModule'], null, true, 250), shown: true, translate: $t);
+        $guide = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), ['provide' => true], null, true, 250), shown: true, translate: $t);
+        $search = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('search'), ['provide' => true], null, true, 250), shown: true, translate: $t);
+
+        expect($economy['currencySymbol']['placeholder'])->toBe('ex. : YC$')
+            ->and($economy['currencyRate']['placeholder'])->toBe('10')
+            ->and($economy['moneyDatabase']['fields']['moneyDatabase.port']['placeholder'])->toBe('3306')
+            ->and($guide['guideSource']['placeholder'])->toBe('https://2do.directory/destinations/guide')
+            // A list: its first default in its first line
+            ->and($search['registers']['placeholder_value'])->toBe('http://2do.directory/helpers/register.php');
+    });
+
     test('a database as its parts, its password never filled in', function () {
         $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
         $item = ['provide' => true, 'searchUrl' => 'https://play.example.org/query.php', 'dataServices' => ['https://a.example.org/register.php'], 'eventsUrl' => '',
