@@ -83,6 +83,34 @@ w4os:
   post_help: 'Plain text, 1000 characters at most.'
   action_save: Save
   settings_models: 'Modelau Afatar'
+  settings_avatars: 'Gosodiadau Afatarau'
+  settings_grid: 'Gosodiadau Grid'
+  settings_menu_grid: Grid
+  group_grid_info: 'Gwybodaeth y Grid'
+  group_robust: Robust
+  group_services: Gwasanaethau
+  group_avatars: Avatars
+  setting_robust_uri: 'URI Robust'
+  setting_robust_uri_help: "Cyfeiriad preifat Robust y mae'r efelychwyr yn ei alw ar gyfer gwasanaethau'r grid."
+  setting_robust_database: 'Cronfa ddata ROBUST'
+  setting_console_user: 'Defnyddiwr y consol'
+  setting_console_pass: 'Cyfrinair y consol'
+  setting_console_port: 'Porth y consol'
+  setting_console_port_help: "Porth consol pell Robust, sy'n ei yrru."
+  setting_assets_service_uri: 'URI gwasanaeth asedau'
+  setting_profile_service_uri: 'URI gwasanaeth proffiliau'
+  uri_default_robust: "Defnyddio'r rhagosodiad: cyfeiriad Robust."
+  uri_default_login: "Defnyddio'r rhagosodiad: yr URI mewngofnodi."
+  setting_profile_page: 'Proffil Page'
+  setting_exclude_from_stats: 'Eithrio o ystadegau'
+  setting_exclude_from_stats_help: "Cyfrifon heb gyfeiriad e-bost fel arfer yw cyfrifon prawf neu wasanaeth, a grëwyd o'r consol. Dicewch dim ond os oes gennych gymeriadau go iawn heb gyfeiriad e-bost."
+  exclude_models: Modelau
+  exclude_nomail: 'Cyfrifon heb gyfeiriad post'
+  exclude_hypergrid: 'Ymwelwyr Hypergrid'
+  setting_allow_multiple_avatars: 'Caniatáu llu o avatarau'
+  setting_allow_multiple_avatars_help: 'Caniatáu mwy nag un avatar ar gyfer cyfeiriad ebost unigol.'
+  setting_reserved_names: 'Enwau gwaharddedig'
+  setting_reserved_names_help: "Ni chaiff unrhyw afatar newydd gael un ohonynt fel ei enw cyntaf neu olaf, nac enw'r grid."
   settings_economy: Gosodiadau
   settings_search: "Gosodiadau'r peiriant chwilio"
   settings_guide: "Gosodiadau'r Ganllawiau o Destyniadau"
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: "Dim ond un y gellir ei osod, mae'r llinellau eraill yn enghreifftiau amgen."
   search_url_help_web: "Sylwch fod URL Chwilio yn wahanol i URL chwilio Gwe, nad yw W4OS yn ei drin ar hyn o bryd. Mae chwiliad gwe yn berthnasol os oes gennych chi dudalen chwilio gwe sy'n ymroddedig i gynnwys grid, sy'n darparu canlyniadau gydag URLs yn y byd (hop: / neu secondlife://). Mae'n ddewisol a chyfeirir ato yma dim ond i ddadamwys gosodiadau sydd yn anffodus ag enwau tebyg."
   search_register_url: 'URL Cofrestru Chwilio'
+  search_include_2do: 'Cynnwys 2do.directory'
   search_registers: 'Cofrestriadau chwilio eraill'
   search_register_help_2do: "Argymhellir cofrestru ar 2do.directory: yna mae rhanbarthau'r grid i'w cael yn chwiliad y gridiau eraill hefyd."
   web_search_url: "URL chwilio'r we"
@@ -500,8 +529,9 @@ w4os:
   db_name: "Enw'r gronfa ddata"
   db_user: Defnyddiwr
   db_password: Cyfrinair
-  db_use_default: "Defnyddio'r rhagosodiad (yr un fath â'r brif gronfa ddata)"
-  db_use_simulator: "Defnyddio'r rhagosodiad (cronfa ddata'r efelychydd)"
+  db_use_default: "Defnyddio'r rhagosodiad"
+  db_default_main: "Defnyddio'r rhagosodiad: prif gronfa ddata'r grid."
+  db_default_simulator: "Defnyddio'r rhagosodiad: cronfa ddata'r efelychydd."
   economy_database: 'Cronfa Ddata Economi'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'Mae’r enw cyntaf a’r cyfenw wedi’u gwneud o lythrennau, digidau a chysylltnodau, heb acenion.'
   error_name_reserved: 'Mae’r enw hwn wedi’i gadw, dewiswch un arall.'
   error_name_taken: 'Mae gan avatar yr enw hwn yn barod, dewiswch un arall.'
+  error_email_taken: 'Mae gan afatar y cyfeiriad e-bost hwn eisoes.'
   error_password_required: 'Llenwch bob maes os gwelwch yn dda.'
   error_password_invalid: 'Rhaid i’r cyfrinair fod rhwng 6 ac 16 nod, heb ddyfynnod dwbl.'
   error_email_invalid: 'Nid yw’r cyfeiriad ebost hwn yn ddilys.'

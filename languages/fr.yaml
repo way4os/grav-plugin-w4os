@@ -83,6 +83,34 @@ w4os:
   post_help: 'Texte brut, 1000 caractères au plus.'
   action_save: Enregistrer
   settings_models: "Modèles d'avatars"
+  settings_avatars: 'Réglages des avatars'
+  settings_grid: 'Réglages de la grille'
+  settings_menu_grid: Grille
+  group_grid_info: 'Infos sur la grille'
+  group_robust: Robust
+  group_services: Services
+  group_avatars: Avatars
+  setting_robust_uri: 'URI de Robust'
+  setting_robust_uri_help: "L'adresse privée de Robust que les simulateurs appellent pour les services de la grille."
+  setting_robust_database: 'Base de données ROBUST'
+  setting_console_user: 'Utilisateur de la console'
+  setting_console_pass: 'Mot de passe de la console'
+  setting_console_port: 'Port de la console'
+  setting_console_port_help: 'Le port de la console distante de Robust, qui la pilote.'
+  setting_assets_service_uri: 'URI du service des assets'
+  setting_profile_service_uri: 'URI du service des profils'
+  uri_default_robust: "Utiliser la valeur par défaut : l'adresse de Robust."
+  uri_default_login: "Utiliser la valeur par défaut : l'URI de connexion."
+  setting_profile_page: 'Page de profil'
+  setting_exclude_from_stats: 'Exclure des statistiques'
+  setting_exclude_from_stats_help: 'Les comptes sans adresse e-mail sont généralement des comptes de test ou de service, créés depuis la console. Décochez uniquement si vous avez de vrais avatars sans adresse e-mail.'
+  exclude_models: Modèles
+  exclude_nomail: 'Comptes sans adresse e-mail'
+  exclude_hypergrid: 'Visiteurs hypergrid'
+  setting_allow_multiple_avatars: 'Autoriser plusieurs avatars'
+  setting_allow_multiple_avatars_help: "Autoriser plus d'un avatar pour une seule adresse e-mail."
+  setting_reserved_names: 'Noms interdits'
+  setting_reserved_names_help: "Aucun nouvel avatar ne peut avoir l'un d'eux comme prénom ou nom, ni le nom de la grille."
   settings_economy: "Réglages de l'économie"
   settings_search: 'Réglages du moteur de recherche'
   settings_guide: 'Paramètres du guide des destinations'
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: 'Une seule peut être définie, les autres lignes sont des exemples.'
   search_url_help_web: "Attention, ce Search URL est différent du Web search URL (qui n'est pas utilisé pour le moment par w4os). La recherche web est utile si vous avez une page web dédiée à la recherche de contenu de la grille et fournissant des résultats avec des liens hop:// ou secondlife://. Elle est optionnelle et documentée ici uniquement pour marquer la différence deux réglages qui ont malheureusement le même nom."
   search_register_url: "URL d'inscription au moteur de recherche"
+  search_include_2do: 'Inclure 2do.directory'
   search_registers: 'Autres inscriptions de recherche'
   search_register_help_2do: "L'inscription sur 2do.directory est recommandée : les régions de la grille se trouvent alors aussi dans la recherche des autres grilles."
   web_search_url: 'URL de la recherche web'
@@ -500,8 +529,9 @@ w4os:
   db_name: 'Nom de la base de données'
   db_user: Utilisateur
   db_password: 'Mot de passe'
-  db_use_default: 'Utiliser la base par défaut (la même que la base principale)'
-  db_use_simulator: 'Utiliser la base par défaut (celle du simulateur)'
+  db_use_default: 'Utiliser la valeur par défaut'
+  db_default_main: 'Utiliser la valeur par défaut : la base principale de la grille.'
+  db_default_simulator: 'Utiliser la valeur par défaut : la base du simulateur.'
   economy_database: "Base de données sur l'économie"
   usage_robust_simulators: 'Service de Robust, utilisé par les simulateurs'
   usage_robust_viewers: 'Service de Robust, utilisé par les visualiseurs et les autres grilles'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'Le prénom et le nom sont faits de lettres, de chiffres et de tirets, sans accents.'
   error_name_reserved: 'Ce nom est réservé, merci d’en choisir un autre.'
   error_name_taken: 'Un avatar porte déjà ce nom, merci d’en choisir un autre.'
+  error_email_taken: 'Un avatar a déjà cette adresse e-mail.'
   error_password_required: 'Merci de remplir tous les champs.'
   error_password_invalid: 'Le mot de passe doit avoir de 6 à 16 caractères, sans guillemet double.'
   error_email_invalid: 'Cette adresse e-mail n’est pas valide.'

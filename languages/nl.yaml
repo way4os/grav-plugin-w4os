@@ -83,6 +83,34 @@ w4os:
   post_help: 'Plain text, 1000 characters at most.'
   action_save: Save
   settings_models: 'Avatar Modellen'
+  settings_avatars: Avatarinstellingen
+  settings_grid: Gridinstellingen
+  settings_menu_grid: Grid
+  group_grid_info: Gridgegevens
+  group_robust: Robust
+  group_services: Diensten
+  group_avatars: Avatars
+  setting_robust_uri: Robust-URI
+  setting_robust_uri_help: 'Het privéadres van Robust dat de simulators aanroepen voor de diensten van het grid.'
+  setting_robust_database: 'ROBUST database'
+  setting_console_user: Consolegebruiker
+  setting_console_pass: Consolewachtwoord
+  setting_console_port: Consolepoort
+  setting_console_port_help: 'De poort van de externe console van Robust, waarmee het wordt bestuurd.'
+  setting_assets_service_uri: 'URI van de assetdienst'
+  setting_profile_service_uri: 'URI van de profieldienst'
+  uri_default_robust: 'Standaard gebruiken: het adres van Robust.'
+  uri_default_login: 'Standaard gebruiken: de login-URI.'
+  setting_profile_page: Profielpagina
+  setting_exclude_from_stats: 'Uitsluiten van statistieken'
+  setting_exclude_from_stats_help: 'Accounts zonder e-mailadres zijn meestal test- of serviceaccounts, aangemaakt vanuit de console. Schakel dit alleen uit als je echte avatars zonder e-mailadres hebt.'
+  exclude_models: Modellen
+  exclude_nomail: 'Accounts zonder e-mailadres'
+  exclude_hypergrid: 'Hypergrid bezoekers'
+  setting_allow_multiple_avatars: 'Meerdere avatars toestaan'
+  setting_allow_multiple_avatars_help: 'Sta meer dan één avatar toe voor een enkel e-mailadres.'
+  setting_reserved_names: 'Verboden namen'
+  setting_reserved_names_help: 'Geen nieuwe avatar mag een van deze als voor- of achternaam hebben, noch de naam van het grid.'
   settings_economy: Economie-instellingen
   settings_search: 'Zoekmachine instellingen'
   settings_guide: 'Instellingen voor de Gids van Bestemmingen'
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: 'Slechts één kan worden ingesteld, andere regels zijn alternatieve voorbeelden.'
   search_url_help_web: 'Merk op dat Zoek URL verschillend is van Web-zoek URL, welke momenteel niet door W4OS wordt behandeld. Zoeken op het web is relevant als je een zoekpagina op het web hebt die gewijd is aan raster-inhoud en die resultaten geeft met in-wereld URLs (hop:// of secondlife://). Het is optioneel en wordt hier alleen genoemd om instellingen uit elkaar te houden die helaas vergelijkbare namen hebben.'
   search_register_url: 'Registratie-URL van de zoekmachine'
+  search_include_2do: '2do.directory opnemen'
   search_registers: 'Andere zoekregistraties'
   search_register_help_2do: "Registratie op 2do.directory wordt aanbevolen: de regio's van het grid zijn dan ook te vinden in de zoekfunctie van de andere grids."
   web_search_url: 'URL van de webzoekfunctie'
@@ -500,8 +529,9 @@ w4os:
   db_name: 'Database naam'
   db_user: Gebruiker
   db_password: Wachtwoord
-  db_use_default: 'Standaard gebruiken (zelfde als de hoofddatabase)'
-  db_use_simulator: 'Standaard gebruiken (de database van de simulator)'
+  db_use_default: 'Standaard gebruiken'
+  db_default_main: 'Standaard gebruiken: de hoofddatabase van het grid.'
+  db_default_simulator: 'Standaard gebruiken: de database van de simulator.'
   economy_database: 'Economie Database'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'De voor- en achternaam bestaan uit letters, cijfers en koppeltekens, zonder accenten.'
   error_name_reserved: 'Deze naam is gereserveerd, kies een andere.'
   error_name_taken: 'Een avatar heeft deze naam al, kies een andere.'
+  error_email_taken: 'Een avatar heeft dit e-mailadres al.'
   error_password_required: 'Vul alle velden in.'
   error_password_invalid: 'Het wachtwoord moet 6 tot 16 tekens hebben, zonder dubbele aanhalingstekens.'
   error_email_invalid: 'Dit e-mailadres is niet geldig.'

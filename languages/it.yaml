@@ -83,6 +83,34 @@ w4os:
   post_help: 'Plain text, 1000 characters at most.'
   action_save: Save
   settings_models: 'Modelli di avatar'
+  settings_avatars: 'Impostazioni avatar'
+  settings_grid: 'Impostazioni griglia'
+  settings_menu_grid: Griglia
+  group_grid_info: 'Informazioni sulla griglia'
+  group_robust: Robust
+  group_services: Servizi
+  group_avatars: Avatar
+  setting_robust_uri: 'URI di Robust'
+  setting_robust_uri_help: "L'indirizzo privato di Robust che i simulatori chiamano per i servizi della griglia."
+  setting_robust_database: 'Database ROBUST'
+  setting_console_user: 'Utente della console'
+  setting_console_pass: 'Password della console'
+  setting_console_port: 'Porta della console'
+  setting_console_port_help: 'La porta della console remota di Robust, che lo pilota.'
+  setting_assets_service_uri: 'URI del servizio asset'
+  setting_profile_service_uri: 'URI del servizio profili'
+  uri_default_robust: "Usa predefinito: l'indirizzo di Robust."
+  uri_default_login: "Usa predefinito: l'URI di accesso."
+  setting_profile_page: 'Pagina del profilo'
+  setting_exclude_from_stats: 'Escludi dalle statistiche'
+  setting_exclude_from_stats_help: 'Gli account senza indirizzo email sono di solito account di test o di servizio, creati dalla console. Deseleziona solo se hai avatar reali senza indirizzo email.'
+  exclude_models: Modelli
+  exclude_nomail: 'Account senza indirizzo email'
+  exclude_hypergrid: 'Visitatori Hypergrid'
+  setting_allow_multiple_avatars: 'Consenti a più avatar'
+  setting_allow_multiple_avatars_help: 'Consenti più di un avatar per un singolo indirizzo email.'
+  setting_reserved_names: 'Nomi vietati'
+  setting_reserved_names_help: 'Nessun nuovo avatar può avere uno di questi come nome o cognome, né il nome della griglia.'
   settings_economy: 'Impostazioni economiche'
   settings_search: 'Impostazioni del motore di ricerca'
   settings_guide: 'Impostazioni della Guida delle Destinazioni'
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: 'Solo uno può essere impostato, le altre righe sono esempi alternativi.'
   search_url_help_web: "Si prega di notare che l'URL di ricerca è diverso dall'URL di ricerca web, che attualmente non è gestito da W4OS. La ricerca web è rilevante se si dispone di una pagina di ricerca web dedicata ai contenuti della griglia, che fornisce risultati con URL all'interno del mondo virtuale (hop:// o secondlife://). È opzionale e viene menzionata qui solo per chiarire le impostazioni che, sfortunatamente, hanno nomi simili."
   search_register_url: 'URL di registrazione della ricerca'
+  search_include_2do: 'Includi 2do.directory'
   search_registers: 'Altre registrazioni di ricerca'
   search_register_help_2do: 'La registrazione su 2do.directory è consigliata: le regioni della griglia si trovano allora anche nella ricerca delle altre griglie.'
   web_search_url: 'URL della ricerca web'
@@ -500,8 +529,9 @@ w4os:
   db_name: 'Nome del database'
   db_user: Utente
   db_password: Password
-  db_use_default: 'Usa il predefinito (come il database principale)'
-  db_use_simulator: 'Usa il predefinito (il database del simulatore)'
+  db_use_default: 'Usa predefinito'
+  db_default_main: 'Usa predefinito: il database principale della griglia.'
+  db_default_simulator: 'Usa predefinito: il database del simulatore.'
   economy_database: 'Database Economico'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'Nome e cognome sono fatti di lettere, cifre e trattini, senza accenti.'
   error_name_reserved: 'Questo nome è riservato, scegline un altro.'
   error_name_taken: 'Un avatar ha già questo nome, scegline un altro.'
+  error_email_taken: 'Un avatar ha già questo indirizzo e-mail.'
   error_password_required: 'Compila tutti i campi.'
   error_password_invalid: 'La password deve avere da 6 a 16 caratteri, senza virgolette doppie.'
   error_email_invalid: 'Questo indirizzo email non è valido.'

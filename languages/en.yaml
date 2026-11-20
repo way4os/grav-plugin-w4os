@@ -83,6 +83,34 @@ w4os:
   post_help: 'Plain text, 1000 characters at most.'
   action_save: Save
   settings_models: 'Avatar Models'
+  settings_avatars: 'Avatar Settings'
+  settings_grid: 'Grid Settings'
+  settings_menu_grid: Grid
+  group_grid_info: 'Grid Info'
+  group_robust: Robust
+  group_services: Services
+  group_avatars: Avatars
+  setting_robust_uri: 'Robust URI'
+  setting_robust_uri_help: 'The private address of Robust the simulators call for the services of the grid.'
+  setting_robust_database: 'ROBUST Database'
+  setting_console_user: 'Console User'
+  setting_console_pass: 'Console Password'
+  setting_console_port: 'Console Port'
+  setting_console_port_help: 'The port of the remote console of Robust, what drives it.'
+  setting_assets_service_uri: 'Assets Service URI'
+  setting_profile_service_uri: 'Profile Service URI'
+  uri_default_robust: 'Use default: the address of Robust.'
+  uri_default_login: 'Use default: the login URI.'
+  setting_profile_page: 'Profile Page'
+  setting_exclude_from_stats: 'Exclude from stats'
+  setting_exclude_from_stats_help: 'Accounts without email address are usually test or service accounts, created from the console. Uncheck only if you have real avatars without email address.'
+  exclude_models: Models
+  exclude_nomail: 'Accounts without mail address'
+  exclude_hypergrid: 'Hypergrid visitors'
+  setting_allow_multiple_avatars: 'Allow multiple avatars'
+  setting_allow_multiple_avatars_help: 'Allow more than one avatar for a single email address.'
+  setting_reserved_names: 'Forbidden names'
+  setting_reserved_names_help: 'No new avatar may have one of them as its first or last name, nor the name of the grid.'
   settings_economy: 'Economy Settings'
   settings_search: 'Search Engine Settings'
   settings_guide: 'Destinations Guide Settings'
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: 'Only one can be set, other lines are alternative examples.'
   search_url_help_web: 'Please note that Search URL is different from Web search URL, which is not handled by W4OS currently. Web search is relevant if you have a web search page dedicated to grid content, providing results with in-world URLs (hop:// or secondlife://). It is optional and is referenced here only to disambiguate settings which unfortunately have similar names.'
   search_register_url: 'Search Register URL'
+  search_include_2do: 'Include 2do.directory'
   search_registers: 'Other Search Registers'
   search_register_help_2do: 'Registering on 2do.directory is recommended: the regions of the grid are then found in the search of the other grids too.'
   web_search_url: 'Web Search URL'
@@ -500,8 +529,9 @@ w4os:
   db_name: 'Database name'
   db_user: User
   db_password: Password
-  db_use_default: 'Use default (same as main database)'
-  db_use_simulator: 'Use default (the database of the simulator)'
+  db_use_default: 'Use default'
+  db_default_main: 'Use default: the main database of the grid.'
+  db_default_simulator: 'Use default: the database of the simulator.'
   economy_database: 'Economy Database'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'The first and the last name are made of letters, digits and hyphens, without accents.'
   error_name_reserved: 'This name is reserved, please choose another one.'
   error_name_taken: 'An avatar already has this name, please choose another one.'
+  error_email_taken: 'An avatar already has this email address.'
   error_password_required: 'Please fill in every field.'
   error_password_invalid: 'The password must have 6 to 16 characters, without double quote.'
   error_email_invalid: 'This email address is not valid.'

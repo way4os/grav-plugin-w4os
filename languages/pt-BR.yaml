@@ -83,6 +83,34 @@ w4os:
   post_help: 'Plain text, 1000 characters at most.'
   action_save: Save
   settings_models: 'Modelos de Avatar'
+  settings_avatars: 'Configurações de avatares'
+  settings_grid: 'Configurações do grid'
+  settings_menu_grid: Grid
+  group_grid_info: 'Informações do Grid'
+  group_robust: Robust
+  group_services: Serviços
+  group_avatars: Avatares
+  setting_robust_uri: 'URI do Robust'
+  setting_robust_uri_help: 'O endereço privado do Robust que os simuladores chamam para os serviços do grid.'
+  setting_robust_database: 'Banco de dados ROBUST'
+  setting_console_user: 'Usuário do console'
+  setting_console_pass: 'Senha do console'
+  setting_console_port: 'Porta do console'
+  setting_console_port_help: 'A porta do console remoto do Robust, que o controla.'
+  setting_assets_service_uri: 'URI do serviço de assets'
+  setting_profile_service_uri: 'URI do serviço de perfis'
+  uri_default_robust: 'Usar padrão: o endereço do Robust.'
+  uri_default_login: 'Usar padrão: o URI de login.'
+  setting_profile_page: 'Página de Perfil'
+  setting_exclude_from_stats: 'Excluir das estatísticas'
+  setting_exclude_from_stats_help: 'Contas sem endereço de e-mail geralmente são contas de teste ou de serviço, criadas a partir do console. Desmarque apenas se você tiver avatares reais sem endereço de e-mail.'
+  exclude_models: Modelos
+  exclude_nomail: 'Contas sem endereço de e-mail'
+  exclude_hypergrid: 'Visitantes do Hypergrid'
+  setting_allow_multiple_avatars: 'Permitir vários avatares'
+  setting_allow_multiple_avatars_help: 'Permitir mais de um avatar para um único endereço de e-mail.'
+  setting_reserved_names: 'Nomes proibidos'
+  setting_reserved_names_help: 'Nenhum novo avatar pode ter um deles como nome ou sobrenome, nem o nome do grid.'
   settings_economy: 'Configurações Econômicas'
   settings_search: 'Configurações do mecanismo de busca'
   settings_guide: 'Configurações do Guia de Destinos'
@@ -123,6 +151,7 @@ w4os:
   search_url_help_one: 'Apenas um pode ser definido, as outras linhas são exemplos alternativos.'
   search_url_help_web: 'Por favor, observe que a URL de pesquisa é diferente da URL de pesquisa na web, que atualmente não é suportada pelo W4OS. A pesquisa na web é relevante se você tiver uma página de pesquisa na web dedicada ao conteúdo do grid, fornecendo resultados com URLs dentro do mundo virtual (hop:// ou secondlife://). Essa configuração é opcional e é mencionada aqui apenas para diferenciar as configurações que, infelizmente, possuem nomes semelhantes.'
   search_register_url: 'URL de registro da busca'
+  search_include_2do: 'Incluir 2do.directory'
   search_registers: 'Outros registros de busca'
   search_register_help_2do: 'O registro no 2do.directory é recomendado: as regiões do grid aparecem então também na busca dos outros grids.'
   web_search_url: 'URL da busca na web'
@@ -500,8 +529,9 @@ w4os:
   db_name: 'Nome do banco de dados'
   db_user: Usuário
   db_password: Senha
-  db_use_default: 'Usar o padrão (o mesmo do banco de dados principal)'
-  db_use_simulator: 'Usar o padrão (o banco de dados do simulador)'
+  db_use_default: 'Usar padrão'
+  db_default_main: 'Usar padrão: o banco de dados principal do grid.'
+  db_default_simulator: 'Usar padrão: o banco de dados do simulador.'
   economy_database: 'Banco de Dados Econômico'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'
@@ -749,6 +779,7 @@ w4os:
   error_name_invalid: 'O nome e o sobrenome são feitos de letras, números e hífens, sem acentos.'
   error_name_reserved: 'Este nome é reservado, escolha outro.'
   error_name_taken: 'Um avatar já tem este nome, escolha outro.'
+  error_email_taken: 'Um avatar já tem este endereço de e-mail.'
   error_password_required: 'Preencha todos os campos.'
   error_password_invalid: 'A senha deve ter de 6 a 16 caracteres, sem aspas duplas.'
   error_email_invalid: 'Este endereço de email não é válido.'
