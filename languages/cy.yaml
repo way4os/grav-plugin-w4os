@@ -99,8 +99,8 @@ w4os:
   setting_console_port_help: "Porth consol pell Robust, sy'n ei yrru."
   setting_assets_service_uri: 'URI gwasanaeth asedau'
   setting_profile_service_uri: 'URI gwasanaeth proffiliau'
-  uri_default_robust: "Defnyddio'r rhagosodiad: cyfeiriad Robust."
-  uri_default_login: "Defnyddio'r rhagosodiad: yr URI mewngofnodi."
+  uri_default_robust: 'Rhagosodiad: cyfeiriad Robust.'
+  uri_default_login: 'Rhagosodiad: yr URI mewngofnodi.'
   setting_profile_page: 'Proffil Page'
   setting_exclude_from_stats: 'Eithrio o ystadegau'
   setting_exclude_from_stats_help: "Cyfrifon heb gyfeiriad e-bost fel arfer yw cyfrifon prawf neu wasanaeth, a grëwyd o'r consol. Dicewch dim ond os oes gennych gymeriadau go iawn heb gyfeiriad e-bost."
@@ -156,7 +156,6 @@ w4os:
   search_register_help_2do: "Argymhellir cofrestru ar 2do.directory: yna mae rhanbarthau'r grid i'w cael yn chwiliad y gridiau eraill hefyd."
   web_search_url: "URL chwilio'r we"
   web_search_help: "Tudalen we lle mae pobl yn chwilio lleoedd, digwyddiadau a phobl y grid; mae'r gwylwyr yn ei hagor o'u ffenestr chwilio. Mae URL y peiriant chwilio uchod yn beth arall: mae'r efelychwyr yn ei galw, does neb yn ei gweld."
-  tip_search_registers: '2do.directory a argymhellir'
   tip_web_search: "Ffurflen chwilio i'r cyhoedd"
   search_register_help_data: 'Gwasanaeth data, a ddefnyddir i gofrestru rhanbarthau, gwrthrychau neu dir ar werth.'
   search_register_help_several: 'Gallwch gofrestru gyda sawl injan chwilio.'
@@ -178,25 +177,16 @@ w4os:
   total: Cyfanswm
   tip_models_match: 'Sut mae model yn cael ei adnabod'
   tip_models_pattern: "Rhan o enw'r modelau"
-  tip_models_list: 'Y modelau a ddewiswyd fesul un'
   tip_economy_url: 'Lle mae currency.php a landtool.php'
-  tip_economy_module: 'Arian y grid'
-  tip_money_database: "Cronfa ddata'r gweinydd arian"
-  tip_gloebit_database: 'Lle mae Gloebit yn cadw ei drafodion'
   tip_gloebit_environment: 'Sandbox i brofi, cynhyrchu i werthu'
   tip_gloebit_keys: "O'ch cyfrif masnachwr Gloebit"
   tip_currency_rate: "US$ am 1000 o unedau'r byd"
   tip_money_script_key: 'Yr un fath yn MoneyServer.ini'
   tip_podex_message: 'Yn cael ei ddangos cyn y teleportio'
   tip_podex_url: 'Lle mae terfynellau Podex'
-  tip_search_database: "Lle mae'r helpers yn cadw'r chwiliad"
   tip_search_url: "Yn cael ei defnyddio'n uniongyrchol gan yr efelychwyr"
-  tip_search_register: "Lle mae'r rhanbarthau'n cael eu rhestru i'w chwilio"
-  tip_events_url: 'Calendr y digwyddiadau'
   tip_guide_source: 'URL neu ffeil o gyrchfannau'
   tip_guide_url: "Y dudalen y mae'r gwylwyr yn ei dangos"
-  tip_mail_sender: 'Anfonwr yr e-byst a anfonir ymlaen'
-  tip_offline_database: "Lle mae'r helpers yn cadw'r negeseuon"
   tip_offline_module: 'V1 gan yr helpers, V2 gan Robust'
   tip_offline_url: 'Yn cael ei galw gan yr efelychwyr'
   tip_assets_url: "Lle mae lluniau'r byd yn cael eu gweini"
@@ -530,8 +520,8 @@ w4os:
   db_user: Defnyddiwr
   db_password: Cyfrinair
   db_use_default: "Defnyddio'r rhagosodiad"
-  db_default_main: "Defnyddio'r rhagosodiad: prif gronfa ddata'r grid."
-  db_default_simulator: "Defnyddio'r rhagosodiad: cronfa ddata'r efelychydd."
+  db_default_main: "Rhagosodiad: prif gronfa ddata'r grid."
+  db_default_simulator: "Rhagosodiad: cronfa ddata'r efelychydd."
   economy_database: 'Cronfa Ddata Economi'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'

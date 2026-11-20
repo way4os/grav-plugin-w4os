@@ -99,8 +99,8 @@ w4os:
   setting_console_port_help: 'De poort van de externe console van Robust, waarmee het wordt bestuurd.'
   setting_assets_service_uri: 'URI van de assetdienst'
   setting_profile_service_uri: 'URI van de profieldienst'
-  uri_default_robust: 'Standaard gebruiken: het adres van Robust.'
-  uri_default_login: 'Standaard gebruiken: de login-URI.'
+  uri_default_robust: 'Standaard: het adres van Robust.'
+  uri_default_login: 'Standaard: de login-URI.'
   setting_profile_page: Profielpagina
   setting_exclude_from_stats: 'Uitsluiten van statistieken'
   setting_exclude_from_stats_help: 'Accounts zonder e-mailadres zijn meestal test- of serviceaccounts, aangemaakt vanuit de console. Schakel dit alleen uit als je echte avatars zonder e-mailadres hebt.'
@@ -156,7 +156,6 @@ w4os:
   search_register_help_2do: "Registratie op 2do.directory wordt aanbevolen: de regio's van het grid zijn dan ook te vinden in de zoekfunctie van de andere grids."
   web_search_url: 'URL van de webzoekfunctie'
   web_search_help: 'Een webpagina waar men de plaatsen, evenementen en personen van het grid zoekt; de viewers openen hem vanuit hun zoekvenster. De URL van de zoekmachine hierboven is iets anders: de simulators roepen hem aan, niemand ziet hem.'
-  tip_search_registers: '2do.directory aanbevolen'
   tip_web_search: 'Zoekformulier voor het publiek'
   search_register_help_data: "Gegevensdienst, gebruikt om regio's, objecten of grond te koop aan te melden."
   search_register_help_several: 'Je kunt je registreren bij verschillende zoekmachines.'
@@ -178,25 +177,16 @@ w4os:
   total: Totaal
   tip_models_match: 'Hoe een model wordt herkend'
   tip_models_pattern: 'Deel van de naam van de modellen'
-  tip_models_list: 'De modellen één voor één gekozen'
   tip_economy_url: 'Waar currency.php en landtool.php staan'
-  tip_economy_module: 'De munteenheid van het grid'
-  tip_money_database: 'De database van de geldserver'
-  tip_gloebit_database: 'Waar Gloebit zijn transacties bewaart'
   tip_gloebit_environment: 'Sandbox om te testen, productie om te verkopen'
   tip_gloebit_keys: 'Uit uw Gloebit-handelaarsaccount'
   tip_currency_rate: 'US$ voor 1000 eenheden in de wereld'
   tip_money_script_key: 'Dezelfde in MoneyServer.ini'
   tip_podex_message: 'Getoond vóór de teleport'
   tip_podex_url: 'Waar de Podex-terminals staan'
-  tip_search_database: 'Waar de helpers de zoekfunctie bewaren'
   tip_search_url: 'Rechtstreeks gebruikt door de simulators'
-  tip_search_register: "Waar de regio's voor de zoekfunctie staan"
-  tip_events_url: 'De kalender van de evenementen'
   tip_guide_source: 'Een URL of een bestand met bestemmingen'
   tip_guide_url: 'De pagina die de viewers tonen'
-  tip_mail_sender: 'De afzender van de doorgestuurde e-mails'
-  tip_offline_database: 'Waar de helpers de berichten bewaren'
   tip_offline_module: 'V1 door de helpers, V2 door Robust'
   tip_offline_url: 'Aangeroepen door de simulators'
   tip_assets_url: 'Waar de afbeeldingen van de wereld worden geleverd'
@@ -530,8 +520,8 @@ w4os:
   db_user: Gebruiker
   db_password: Wachtwoord
   db_use_default: 'Standaard gebruiken'
-  db_default_main: 'Standaard gebruiken: de hoofddatabase van het grid.'
-  db_default_simulator: 'Standaard gebruiken: de database van de simulator.'
+  db_default_main: 'Standaard: de hoofddatabase van het grid.'
+  db_default_simulator: 'Standaard: de database van de simulator.'
   economy_database: 'Economie Database'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'

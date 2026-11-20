@@ -99,8 +99,8 @@ w4os:
   setting_console_port_help: 'La porta della console remota di Robust, che lo pilota.'
   setting_assets_service_uri: 'URI del servizio asset'
   setting_profile_service_uri: 'URI del servizio profili'
-  uri_default_robust: "Usa predefinito: l'indirizzo di Robust."
-  uri_default_login: "Usa predefinito: l'URI di accesso."
+  uri_default_robust: "Predefinito: l'indirizzo di Robust."
+  uri_default_login: "Predefinito: l'URI di accesso."
   setting_profile_page: 'Pagina del profilo'
   setting_exclude_from_stats: 'Escludi dalle statistiche'
   setting_exclude_from_stats_help: 'Gli account senza indirizzo email sono di solito account di test o di servizio, creati dalla console. Deseleziona solo se hai avatar reali senza indirizzo email.'
@@ -156,7 +156,6 @@ w4os:
   search_register_help_2do: 'La registrazione su 2do.directory è consigliata: le regioni della griglia si trovano allora anche nella ricerca delle altre griglie.'
   web_search_url: 'URL della ricerca web'
   web_search_help: "Una pagina web dove si cercano i luoghi, gli eventi e le persone della griglia; i viewer la aprono dalla loro finestra di ricerca. L'URL del motore di ricerca qui sopra è un'altra cosa: lo chiamano i simulatori, nessuno lo vede."
-  tip_search_registers: '2do.directory consigliato'
   tip_web_search: 'Modulo di ricerca per il pubblico'
   search_register_help_data: 'Servizio dati, utilizzato per registrare regioni, oggetti o terreni in vendita.'
   search_register_help_several: 'Puoi registrarti su diversi motori di ricerca.'
@@ -178,25 +177,16 @@ w4os:
   total: Totale
   tip_models_match: 'Come si riconosce un modello'
   tip_models_pattern: 'Parte del nome dei modelli'
-  tip_models_list: 'I modelli scelti uno a uno'
   tip_economy_url: 'Dove sono currency.php e landtool.php'
-  tip_economy_module: 'La valuta della griglia'
-  tip_money_database: 'Il database del server della moneta'
-  tip_gloebit_database: 'Dove Gloebit tiene le sue transazioni'
   tip_gloebit_environment: 'Sandbox per provare, produzione per vendere'
   tip_gloebit_keys: 'Dal tuo account commerciante Gloebit'
   tip_currency_rate: 'US$ per 1000 unità del mondo'
   tip_money_script_key: 'La stessa in MoneyServer.ini'
   tip_podex_message: 'Mostrato prima del teletrasporto'
   tip_podex_url: 'Dove sono i terminali Podex'
-  tip_search_database: 'Dove gli helpers tengono la ricerca'
   tip_search_url: 'Usato direttamente dai simulatori'
-  tip_search_register: 'Dove le regioni sono elencate per la ricerca'
-  tip_events_url: 'Il calendario degli eventi'
   tip_guide_source: 'Un URL o un file di destinazioni'
   tip_guide_url: 'La pagina che mostrano i viewer'
-  tip_mail_sender: 'Il mittente delle e-mail inoltrate'
-  tip_offline_database: 'Dove gli helpers tengono i messaggi'
   tip_offline_module: 'V1 dagli helpers, V2 da Robust'
   tip_offline_url: 'Chiamato dai simulatori'
   tip_assets_url: 'Dove sono servite le immagini del mondo'
@@ -530,8 +520,8 @@ w4os:
   db_user: Utente
   db_password: Password
   db_use_default: 'Usa predefinito'
-  db_default_main: 'Usa predefinito: il database principale della griglia.'
-  db_default_simulator: 'Usa predefinito: il database del simulatore.'
+  db_default_main: 'Predefinito: il database principale della griglia.'
+  db_default_simulator: 'Predefinito: il database del simulatore.'
   economy_database: 'Database Economico'
   usage_robust_simulators: 'Robust service, used by the simulators'
   usage_robust_viewers: 'Robust service, used by the viewers and the other grids'

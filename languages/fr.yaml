@@ -99,8 +99,8 @@ w4os:
   setting_console_port_help: 'Le port de la console distante de Robust, qui la pilote.'
   setting_assets_service_uri: 'URI du service des assets'
   setting_profile_service_uri: 'URI du service des profils'
-  uri_default_robust: "Utiliser la valeur par défaut : l'adresse de Robust."
-  uri_default_login: "Utiliser la valeur par défaut : l'URI de connexion."
+  uri_default_robust: "Par défaut : l'adresse de Robust."
+  uri_default_login: "Par défaut : l'URI de connexion."
   setting_profile_page: 'Page de profil'
   setting_exclude_from_stats: 'Exclure des statistiques'
   setting_exclude_from_stats_help: 'Les comptes sans adresse e-mail sont généralement des comptes de test ou de service, créés depuis la console. Décochez uniquement si vous avez de vrais avatars sans adresse e-mail.'
@@ -156,7 +156,6 @@ w4os:
   search_register_help_2do: "L'inscription sur 2do.directory est recommandée : les régions de la grille se trouvent alors aussi dans la recherche des autres grilles."
   web_search_url: 'URL de la recherche web'
   web_search_help: "Une page web où l'on cherche les lieux, les événements et les personnes de la grille ; les viewers l'ouvrent depuis leur fenêtre de recherche. L'URL du moteur de recherche ci-dessus est autre chose : les simulateurs l'appellent, personne ne la voit."
-  tip_search_registers: '2do.directory recommandé'
   tip_web_search: 'Formulaire de recherche pour le public'
   search_register_help_data: 'Service de données, utilisé pour enregistrer les régions, objets ou parcelles disponibles à la recherche ou en vente.'
   search_register_help_several: 'Vous pouvez vous inscrire sur plusieurs moteurs de recherche.'
@@ -178,25 +177,16 @@ w4os:
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
   tip_models_pattern: 'Partie du nom des modèles'
-  tip_models_list: 'Les modèles choisis un par un'
   tip_economy_url: 'Où sont currency.php et landtool.php'
-  tip_economy_module: 'La monnaie de la grille'
-  tip_money_database: 'La base du serveur de monnaie'
-  tip_gloebit_database: 'Où Gloebit garde ses transactions'
   tip_gloebit_environment: 'Sandbox pour tester, production pour vendre'
   tip_gloebit_keys: 'De votre compte marchand Gloebit'
   tip_currency_rate: 'US$ pour 1000 unités du monde'
   tip_money_script_key: 'La même dans MoneyServer.ini'
   tip_podex_message: 'Montré avant la téléportation'
   tip_podex_url: 'Où sont les terminaux Podex'
-  tip_search_database: 'Où les helpers gardent la recherche'
   tip_search_url: 'Utilisée directement par les simulateurs'
-  tip_search_register: 'Où les régions sont inscrites pour la recherche'
-  tip_events_url: 'Le calendrier des événements'
   tip_guide_source: 'Une URL ou un fichier de destinations'
   tip_guide_url: 'La page que montrent les viewers'
-  tip_mail_sender: "L'expéditeur des e-mails transférés"
-  tip_offline_database: 'Où les helpers gardent les messages'
   tip_offline_module: 'V1 par les helpers, V2 par Robust'
   tip_offline_url: 'Appelée par les simulateurs'
   tip_assets_url: 'Où sont servies les images du monde'
@@ -530,8 +520,8 @@ w4os:
   db_user: Utilisateur
   db_password: 'Mot de passe'
   db_use_default: 'Utiliser la valeur par défaut'
-  db_default_main: 'Utiliser la valeur par défaut : la base principale de la grille.'
-  db_default_simulator: 'Utiliser la valeur par défaut : la base du simulateur.'
+  db_default_main: 'Par défaut : la base principale de la grille.'
+  db_default_simulator: 'Par défaut : la base du simulateur.'
   economy_database: "Base de données sur l'économie"
   usage_robust_simulators: 'Service de Robust, utilisé par les simulateurs'
   usage_robust_viewers: 'Service de Robust, utilisé par les visualiseurs et les autres grilles'
