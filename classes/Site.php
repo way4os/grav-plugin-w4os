@@ -586,7 +586,7 @@ final class Site
 
     public const ADMIN_ROUTES = [
         'dashboard' => '', 'manage' => '/avatars', 'edit' => '/avatars/edit', 'new' => '/avatars/new', 'regions' => '/regions',
-        'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health',
+        'region' => '/regions/region', 'simulators' => '/simulators', 'simulator' => '/simulators/simulator', 'models' => '/models', 'health' => '/health',
         'shortcodes' => '/shortcodes', 'settings' => '/settings', 'flux' => '/flux',
         'settings_economy' => '/economy', 'settings_search' => '/search', 'settings_guide' => '/guide', 'settings_offline' => '/offline',
         'settings_assets' => '/assets', 'settings_grid' => '/grid', 'settings_avatars' => '/avatars/settings',
@@ -1133,10 +1133,10 @@ final class Site
     }
 
     /** The section of the admin a page is in: its list for the page of one item. */
-    public const ADMIN_SECTIONS = ['region' => 'regions', 'edit' => 'manage', 'new' => 'manage'];
+    public const ADMIN_SECTIONS = ['region' => 'regions', 'simulator' => 'simulators', 'edit' => 'manage', 'new' => 'manage'];
 
     /** The items an admin page lists: the page shows to whom the contract lets read them. */
-    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators', 'flux' => 'posts'];
+    public const ADMIN_TYPES = ['manage' => 'avatars', 'edit' => 'avatars', 'regions' => 'regions', 'region' => 'regions', 'simulators' => 'simulators', 'simulator' => 'simulators', 'flux' => 'posts'];
 
     /**
      * The entries of the admin menu: the admin pages of the plugin, then the ones other plugins add (event onW4osAdminMenu, its

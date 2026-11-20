@@ -464,7 +464,7 @@ class W4osPlugin extends Plugin
             $this->grav['page']->title($this->site()->translate('w4os.search'));
         } elseif (Site::serviceGroup((string) $type) !== null && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'run_task') {
             $this->runTask((string) ($_POST['task'] ?? ''), (string) ($_POST['nonce'] ?? ''));
-        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'flux', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
+        } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'simulator', 'flux', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
             $this->listAction((array) ($_POST ?? []));
         } elseif ($type === 'edit') {
             // The name of the avatar in the title; the title of the list when there is no such avatar
@@ -476,7 +476,7 @@ class W4osPlugin extends Plugin
             $this->healthLine((string) $this->grav['uri']->query('check'));
         } elseif ($type === 'models' && $this->grav['uri']->query('format') === 'preview') {
             $this->modelsPreview((array) ($_GET['filter'] ?? []));
-        } elseif ($type === 'region') {
+        } elseif (in_array($type, ['region', 'simulator'], true)) {
             // The name of the item in the title
             $name = (string) ($this->item()['item']['name'] ?? '');
             $name === '' || $this->grav['page']->title($name);
