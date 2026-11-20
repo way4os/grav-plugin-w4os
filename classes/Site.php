@@ -363,7 +363,8 @@ final class Site
         $provided = $this->assetsRoute();
         $route = $provided ?? ($this->routes()['assets'] ?? '');
         $asked = $route === '' ? null : self::assetAsked($route, $path);
-        $bundled = $asked === null ? null : $this->bundled();
+        // The bundled engine when the site talks to it, else the engine of the grid (a site has the bundled library either way)
+        $bundled = $asked === null || self::engineChannel($this->config(), $this->apiKey() !== '') !== 'bundled' ? null : $this->bundled();
         if ($asked === null || ($bundled === null && $provided === null)) {
             return null;
         }
