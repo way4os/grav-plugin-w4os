@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: 'Modelos de Avatar'
   settings_avatars: 'Configurações de avatares'
+  group_simulator: Simulador
+  group_console: Console
+  group_database: 'Banco de dados'
+  setting_simulator_uri: 'URI do simulador'
+  setting_http_port: 'Porta HTTP'
+  setting_simulator_database: 'Banco de dados do simulador'
+  db_default_opensim: 'Padrão: o banco de dados dos simuladores do grid, senão o principal.'
   settings_grid: 'Configurações do grid'
   settings_menu_grid: Grid
   group_grid_info: 'Informações do Grid'
@@ -91,7 +98,7 @@ w4os:
   group_services: Serviços
   group_avatars: Avatares
   setting_robust_uri: 'URI do Robust'
-  setting_robust_uri_help: 'O endereço privado do Robust que os simuladores chamam para os serviços do grid.'
+  setting_robust_uri_help: 'O endereço privado do Robust, que os simuladores chamam para os serviços do grid.'
   setting_robust_database: 'Banco de dados ROBUST'
   setting_console_user: 'Usuário do console'
   setting_console_pass: 'Senha do console'
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: 'Defina a URL nas configurações do OpenSimulator.'
   assets_url: 'URL do Servidor de Ativos Web'
   assets_external_help: "Se a opção 'Fornecer Servidor de Ativos Web' estiver desativada, é necessário instalar um serviço de terceiros e inserir sua URL aqui para garantir o funcionamento adequado do plugin."
-  provide_path_help: 'Sob o endereço do site: sob a base dos helpers, os helpers respondem; em outro lugar, o site, numa página com o seu bloco.'
+  assets_path_help: 'Qualquer caminho sob o site: o engine serve as imagens ali, independentemente dos helpers.'
   models_match: Correspondência
   models_match_first: 'Primeiro Nome'
   models_match_any: Qualquer

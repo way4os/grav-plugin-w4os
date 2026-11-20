@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: 'Modelli di avatar'
   settings_avatars: 'Impostazioni avatar'
+  group_simulator: Simulatore
+  group_console: Console
+  group_database: Database
+  setting_simulator_uri: 'URI del simulatore'
+  setting_http_port: 'Porta HTTP'
+  setting_simulator_database: 'Database del simulatore'
+  db_default_opensim: 'Predefinito: il database dei simulatori della griglia, altrimenti il suo database principale.'
   settings_grid: 'Impostazioni griglia'
   settings_menu_grid: Griglia
   group_grid_info: 'Informazioni sulla griglia'
@@ -91,7 +98,7 @@ w4os:
   group_services: Servizi
   group_avatars: Avatar
   setting_robust_uri: 'URI di Robust'
-  setting_robust_uri_help: "L'indirizzo privato di Robust che i simulatori chiamano per i servizi della griglia."
+  setting_robust_uri_help: "L'indirizzo privato di Robust, che i simulatori chiamano per i servizi della griglia."
   setting_robust_database: 'Database ROBUST'
   setting_console_user: 'Utente della console'
   setting_console_pass: 'Password della console'
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: "Imposta l'URL nelle configurazioni di OpenSimulator."
   assets_url: 'URL del server delle risorse web'
   assets_external_help: "Se 'Fornisci server di risorse web' è disabilitato, è necessario installare un servizio di terze parti e inserire il suo URL qui per garantire il corretto funzionamento del plugin."
-  provide_path_help: "Sotto l'indirizzo del sito: sotto la base degli helpers rispondono gli helpers; altrove il sito, su una pagina con il suo blocco."
+  assets_path_help: "Qualsiasi percorso sotto il sito: l'engine vi serve le immagini, qualunque siano gli helpers."
   models_match: Corrispondenza
   models_match_first: Nome
   models_match_any: Qualsiasi

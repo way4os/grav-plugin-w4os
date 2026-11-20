@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: 'Modelau Afatar'
   settings_avatars: 'Gosodiadau Afatarau'
+  group_simulator: Simulator
+  group_console: Consôl
+  group_database: 'Cronfa ddata'
+  setting_simulator_uri: 'URI yr efelychydd'
+  setting_http_port: 'Porth HTTP'
+  setting_simulator_database: "Cronfa ddata'r efelychydd"
+  db_default_opensim: 'Rhagosodiad: cronfa ddata efelychwyr y grid, fel arall ei phrif gronfa ddata.'
   settings_grid: 'Gosodiadau Grid'
   settings_menu_grid: Grid
   group_grid_info: 'Gwybodaeth y Grid'
@@ -91,7 +98,7 @@ w4os:
   group_services: Gwasanaethau
   group_avatars: Avatars
   setting_robust_uri: 'URI Robust'
-  setting_robust_uri_help: "Cyfeiriad preifat Robust y mae'r efelychwyr yn ei alw ar gyfer gwasanaethau'r grid."
+  setting_robust_uri_help: "Cyfeiriad preifat Robust, y mae'r efelychwyr yn ei alw ar gyfer gwasanaethau'r grid."
   setting_robust_database: 'Cronfa ddata ROBUST'
   setting_console_user: 'Defnyddiwr y consol'
   setting_console_pass: 'Cyfrinair y consol'
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: 'Gosodwch yr URL yng ngffurfweddiadau OpenSimulator.'
   assets_url: 'Web Assets Server URL'
   assets_external_help: "Os yw 'Darparu Gweinydd Asedau Gwe' wedi'i analluogi, mae angen gosod gwasanaeth trydydd parti a rhoi ei URL yma er mwyn i'r ategyn weithio'n iawn."
-  provide_path_help: "O dan gyfeiriad y wefan: o dan sylfaen yr helpers, yr helpers sy'n ateb; mewn man arall, y wefan, ar dudalen gyda'i bloc."
+  assets_path_help: "Unrhyw lwybr o dan y wefan: mae'r injan yn gweini'r lluniau yno, beth bynnag am yr helpers."
   models_match: Cyfateb
   models_match_first: 'Enw Cyntaf'
   models_match_any: Unrhyw

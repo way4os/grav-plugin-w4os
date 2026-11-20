@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: 'Avatar Models'
   settings_avatars: 'Avatar Settings'
+  group_simulator: Simulator
+  group_console: Console
+  group_database: Database
+  setting_simulator_uri: 'Simulator URI'
+  setting_http_port: 'HTTP Port'
+  setting_simulator_database: 'Simulator Database'
+  db_default_opensim: 'Default: the database of the simulators of the grid, else its main database.'
   settings_grid: 'Grid Settings'
   settings_menu_grid: Grid
   group_grid_info: 'Grid Info'
@@ -91,7 +98,7 @@ w4os:
   group_services: Services
   group_avatars: Avatars
   setting_robust_uri: 'Robust URI'
-  setting_robust_uri_help: 'The private address of Robust the simulators call for the services of the grid.'
+  setting_robust_uri_help: 'The private address of Robust, which the simulators call for the services of the grid.'
   setting_robust_database: 'ROBUST Database'
   setting_console_user: 'Console User'
   setting_console_pass: 'Console Password'
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: 'Set the URL in OpenSimulator configurations.'
   assets_url: 'Web Assets Server URL'
   assets_external_help: "If 'Provide Web Assets Server' is disabled, it is necessary to install a third-party service and enter its URL here to ensure the proper functioning of the plugin."
-  provide_path_help: 'Under the address of the site: under the base of the helpers, the helpers answer; elsewhere, the site, on a page with its block.'
+  assets_path_help: 'Any path under the site: the engine serves the pictures there, whatever the helpers.'
   models_match: Match
   models_match_first: 'First Name'
   models_match_any: Any

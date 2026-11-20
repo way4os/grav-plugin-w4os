@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: Avatar-Modelle
   settings_avatars: Avatar-Einstellungen
+  group_simulator: Simulator
+  group_console: Konsole
+  group_database: Datenbank
+  setting_simulator_uri: Simulator-URI
+  setting_http_port: HTTP-Port
+  setting_simulator_database: Simulator-Datenbank
+  db_default_opensim: 'Standard: die Datenbank der Simulatoren des Grids, sonst seine Hauptdatenbank.'
   settings_grid: Grid-Einstellungen
   settings_menu_grid: Grid
   group_grid_info: 'Grid info'
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: 'Lege die URL in den OpenSimulator-Konfigurationen fest.'
   assets_url: 'Web Assets Server URL'
   assets_external_help: 'Wenn die Option "Web Assets Server bereitstellen" deaktiviert ist, ist es notwendig, einen Drittanbieterdienst zu installieren und dessen URL hier einzugeben, um die ordnungsgemäße Funktion des Plugins sicherzustellen.'
-  provide_path_help: 'Unter der Adresse der Website: unter der Basis der Helpers antworten die Helpers; anderswo die Website, auf einer Seite mit ihrem Block.'
+  assets_path_help: 'Jeder Pfad unter der Website: die Engine liefert die Bilder dort aus, unabhängig von den Helpers.'
   models_match: Passen
   models_match_first: Vorname
   models_match_any: Jeder

@@ -84,6 +84,13 @@ w4os:
   action_save: Save
   settings_models: 'Avatar Modellen'
   settings_avatars: Avatarinstellingen
+  group_simulator: Simulator
+  group_console: Console
+  group_database: Database
+  setting_simulator_uri: Simulator-URI
+  setting_http_port: HTTP-poort
+  setting_simulator_database: Simulatordatabase
+  db_default_opensim: 'Standaard: de database van de simulators van het grid, anders de hoofddatabase.'
   settings_grid: Gridinstellingen
   settings_menu_grid: Grid
   group_grid_info: Gridgegevens
@@ -91,7 +98,7 @@ w4os:
   group_services: Diensten
   group_avatars: Avatars
   setting_robust_uri: Robust-URI
-  setting_robust_uri_help: 'Het privéadres van Robust dat de simulators aanroepen voor de diensten van het grid.'
+  setting_robust_uri_help: 'Het privéadres van Robust, dat de simulators aanroepen voor de diensten van het grid.'
   setting_robust_database: 'ROBUST database'
   setting_console_user: Consolegebruiker
   setting_console_pass: Consolewachtwoord
@@ -202,7 +209,7 @@ w4os:
   offline_helper_help: 'Stel de URL in in de OpenSimulator-configuraties.'
   assets_url: 'Web Assets Server URL'
   assets_external_help: "Als 'Bied Web Assets Server' is uitgeschakeld, is het noodzakelijk om een externe service te installeren en de URL hiervan hier in te voeren om ervoor te zorgen dat de plugin naar behoren werkt."
-  provide_path_help: 'Onder het adres van de site: onder de basis van de helpers antwoorden de helpers; elders de site, op een pagina met zijn blok.'
+  assets_path_help: 'Elk pad onder de site: de engine levert daar de afbeeldingen, los van de helpers.'
   models_match: Wedstrijd
   models_match_first: Voornaam
   models_match_any: Elke
