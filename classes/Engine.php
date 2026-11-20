@@ -45,6 +45,20 @@ final class Engine
         return $this->assetsUrl().'/'.rawurlencode($uuid).'.'.$format;
     }
 
+    /**
+     * A picture of the grid as the engine gives it (its open operation, GET /assets/{id}.{format}), for the site to serve.
+     *
+     * @return array{int, string, array<string,string>} the status, the body, its headers (type, length, cache)
+     */
+    public function picture(string $id, string $format): array
+    {
+        $answer = ($this->send)('GET', $this->url.$this->path('/assets/'.rawurlencode($id).'.'.$format), $this->key === '' ? [] : ['Authorization' => 'Bearer '.$this->key], null);
+        $headers = array_change_key_case((array) ($answer[2] ?? []));
+
+        return [(int) $answer[0], (string) $answer[1], array_map(fn ($values) => implode(', ', (array) $values),
+            array_intersect_key($headers, array_flip(['content-type', 'content-length', 'cache-control', 'etag', 'last-modified'])))];
+    }
+
     /** The address the pictures of the grid are under (<UUID>.<format>). */
     public function assetsUrl(): string
     {

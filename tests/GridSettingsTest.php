@@ -67,3 +67,14 @@ describe('the settings of the grid and of its avatars', function () {
     });
 });
 
+describe('the web assets of the grid', function () {
+    test('served under the path of their settings when the site provides them, routed to the engine, not a page of the site', function () {
+        expect(Site::providedRoute(['provide' => true, 'path' => 'helpers/assets']))->toBe('/helpers/assets')
+            ->and(Site::providedRoute(['provide' => true, 'path' => 'assets/']))->toBe('/assets')
+            ->and(Site::providedRoute(['provide' => false, 'path' => 'helpers/assets', 'assetsUrl' => 'https://assets.example.org/']))->toBeNull()
+            ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/00000000-0000-1111-9999-000000000001.jpg'))->toBe(['00000000-0000-1111-9999-000000000001', 'jpg'])
+            ->and(Site::assetAsked('/helpers/assets/', '/helpers/assets/00000000-0000-1111-9999-000000000001.png'))->toBe(['00000000-0000-1111-9999-000000000001', 'png'])
+            ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/page'))->toBeNull()
+            ->and(Site::assetAsked('/helpers/assets', '/helpers/register.php'))->toBeNull();
+    });
+});

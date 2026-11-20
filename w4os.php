@@ -98,11 +98,7 @@ class W4osPlugin extends Plugin
         if ($this->isAdmin()) {
             return;
         }
-        // The helpers of the grid (viewers, simulators), when the site serves them
-        if ($this->site()->helpers($this->grav['uri']->path())) {
-            exit;
-        }
-        // The pictures of the grid, served by the bundled engine
+        // The pictures of the grid (its web assets, under the helpers' address by default), served by the engine
         if ($answer = $this->site()->asset($this->grav['uri']->path())) {
             [$status, $body, $headers] = $answer;
             http_response_code($status);
@@ -110,6 +106,10 @@ class W4osPlugin extends Plugin
                 header("$name: $value");
             }
             echo $body;
+            exit;
+        }
+        // The helpers of the grid (viewers, simulators), when the site serves them
+        if ($this->site()->helpers($this->grav['uri']->path())) {
             exit;
         }
         $this->enable([
@@ -702,6 +702,7 @@ class W4osPlugin extends Plugin
                     if ($changes !== []) {
                         try {
                             $site->engine()->updateSettings((string) $service['group'], $changes);
+                            $service['group'] === 'assets' && $site->forgetAssetsRoute();
                         } catch (EngineException $e) {
                             throw $forms->error($e);
                         }

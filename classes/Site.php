@@ -353,21 +353,83 @@ final class Site
     }
 
     /**
-     * Answers the address of a picture of the grid (route "assets") with the bundled engine: the pictures of the models.
+     * Answers the address of a picture of the grid with the engine: under the web assets of the grid when the site provides them (the
+     * engine's settings `assets`, their path), else under the route "assets" with the bundled engine (the pictures of the models).
      *
      * @return ?array{int, string, array<string,string>} the status, the body, the headers; null when it is not such an address
      */
     public function asset(string $path): ?array
     {
-        $route = $this->routes()['assets'] ?? '';
-        $bundled = $route === '' ? null : $this->bundled();
-        if ($bundled === null || preg_match('#^'.preg_quote($route, '#').'/([0-9a-fA-F-]{36})\.(jpg|png)$#', $path, $m) !== 1) {
+        $provided = $this->assetsRoute();
+        $route = $provided ?? ($this->routes()['assets'] ?? '');
+        $asked = $route === '' ? null : self::assetAsked($route, $path);
+        $bundled = $asked === null ? null : $this->bundled();
+        if ($asked === null || ($bundled === null && $provided === null)) {
             return null;
         }
-
-        // From the web: the engine locked, it answers what it says is public only
-        return $bundled->publicRoute('GET', '/grids/'.rawurlencode($bundled->nick())."/assets/{$m[1]}.{$m[2]}");
+        [$id, $format] = $asked;
+        // From the web: the bundled engine locked, it answers what it says is public only; else the engine of the grid, its open operation
+        if ($bundled !== null) {
+            return $bundled->publicRoute('GET', '/grids/'.rawurlencode($bundled->nick())."/assets/$id.$format");
+        }
+        return $this->engine()->picture($id, $format);
     }
+
+    /** The address the pictures of the grid are under: the web assets the site provides, else where the engine says. */
+    public function assetsUrl(): string
+    {
+        $route = $this->assetsRoute();
+
+        return $route !== null ? rtrim($this->grav['uri']->rootUrl(true), '/').$route : $this->engine()->assetsUrl();
+    }
+
+    /** The address of a picture of the grid (a model, a profile), by its asset UUID. */
+    public function assetUrl(string $uuid, string $format = 'jpg'): string
+    {
+        return $this->assetsUrl().'/'.rawurlencode($uuid).'.'.$format;
+    }
+
+    /** The UUID and the format of a picture asked under a route (<route>/<UUID>.jpg), null for another address. */
+    public static function assetAsked(string $route, string $path): ?array
+    {
+        return preg_match('#^'.preg_quote(rtrim($route, '/'), '#').'/([0-9a-fA-F-]{36})\.(jpg|png)$#', $path, $m) === 1 ? [$m[1], $m[2]] : null;
+    }
+
+    /**
+     * Where the site serves the web assets of the grid (the engine's settings `assets`): the route of their path when it provides them,
+     * null when another server does or the engine does not say; kept a while, forgotten when they are saved (forgetAssetsRoute()).
+     */
+    public function assetsRoute(): ?string
+    {
+        $cache = $this->grav['cache'];
+        $route = $cache->fetch(self::ASSETS_ROUTE);
+        if (! is_string($route)) {
+            try {
+                $route = self::providedRoute($this->engine()->settings('assets')) ?? '';
+            } catch (\Throwable) {
+                $route = '';
+            }
+            $cache->save(self::ASSETS_ROUTE, $route, 600);
+        }
+
+        return $route === '' ? null : $route;
+    }
+
+    public function forgetAssetsRoute(): void
+    {
+        $this->grav['cache']->delete(self::ASSETS_ROUTE);
+    }
+
+    /** The route of a service the site provides (its settings: `provide`, `path` under the site), null when it does not. */
+    public static function providedRoute(array $settings): ?string
+    {
+        $path = trim((string) ($settings['path'] ?? ''), '/');
+
+        return ! empty($settings['provide']) && $path !== '' ? "/$path" : null;
+    }
+
+    /** The key of the cache of the route of the web assets. */
+    private const ASSETS_ROUTE = 'w4os-assets-route';
 
     public function forms(): Forms
     {
@@ -450,7 +512,7 @@ final class Site
             ? ($person ? \OpenSim\Assets\WebAssets::PERSON : \OpenSim\Assets\WebAssets::PLACEHOLDER)
             : '00000000-0000-0000-0000-000000000000';
 
-        return $this->engine()->assetUrl($none ? $placeholder : (string) $uuid).($person ? '?default=person' : '');
+        return $this->assetUrl($none ? $placeholder : (string) $uuid).($person ? '?default=person' : '');
     }
 
     /**
@@ -464,7 +526,7 @@ final class Site
     {
         $read = function () use ($rule) {
             try {
-                return array_map(fn (array $m) => $m + ['image' => $this->engine()->assetUrl((string) $m['picture'])], $this->engine()->models($rule));
+                return array_map(fn (array $m) => $m + ['image' => $this->assetUrl((string) $m['picture'])], $this->engine()->models($rule));
             } catch (EngineException $e) {
                 $this->grav['log']->warning('w4os: avatar models: '.$e->getMessage());
 
