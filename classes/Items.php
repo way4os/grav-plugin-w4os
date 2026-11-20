@@ -214,6 +214,23 @@ final class Items
     }
 
     /**
+     * The values of the fields of a form as the Form plugin fills them in: a list left empty has one empty line of its own
+     * (data[name][0]), which the lines its script adds are numbered after.
+     *
+     * @param array<string,array<string,mixed>> $fields the fields of the form (Items::fields)
+     * @param array<string,mixed> $values
+     * @return array<string,mixed>
+     */
+    public static function values(array $fields, array $values): array
+    {
+        foreach ($values as $name => $value) {
+            ($fields[$name]['type'] ?? '') === 'array' && in_array($value, [[], null], true) && $values[$name] = [''];
+        }
+
+        return $values;
+    }
+
+    /**
      * The options of a field (value => catalog key) for Grav (value => `w4os.` key).
      *
      * @param array<string,mixed> $field

@@ -227,6 +227,24 @@ describe('the settings pages of the services of the grid', function () {
             ->toMatchArray(['registers' => ['https://2do.directory/register.php']]);
     });
 
+    test('a list left empty has one line of its own, numbered as the lines its script adds', function () {
+        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $view = FormView::of($form, ['provide' => true, 'registers' => []], null, true, 250);
+        $fields = Items::fields($view, shown: true);
+
+        expect(Items::values($fields, $view->values)['registers'])->toBe([''])
+            ->and(Items::values($fields, ['registers' => ['https://a.example.org/register.php']])['registers'])->toBe(['https://a.example.org/register.php'])
+            ->and(Items::values($fields, ['provide' => false])['provide'])->toBeFalse();
+    });
+
+    test('a form with a list loads the jQuery of Grav its script needs; one + at its end, a line alone neither moved nor removed', function () {
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig');
+        $css = (string) file_get_contents(dirname(__DIR__).'/css/admin.css');
+
+        expect($template)->toContain("field.type ?? '') == 'array'", "assets.addJs('jquery'")
+            ->and($css)->toContain('[data-grav-array-type=row]:not(:last-child) [data-grav-array-action=add]', '[data-grav-array-type=row]:only-child');
+    });
+
     test('shows the examples and the lines of the files right after the form, in its column, before its help', function () use ($render) {
         $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
         $html = $render(['view' => $view, 'help' => ['guide_help'], 'meta' => ['examples' => [['label' => 'guide_example', 'text' => "Section 1\nName|grid.example.org:8002"]],

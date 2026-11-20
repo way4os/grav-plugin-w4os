@@ -13,5 +13,7 @@
 {% set form_button_outer_classes = 'btn-list justify-content-end' %}
 {% set form_button_classes = 'btn' %}
 {% include 'forms/form.html.twig' with {form: form, layout: 'w4os-admin', field_layout: 'w4os-admin'} %}
+{# A list of values (the Form plugin's array field): its script needs jQuery, Grav's own copy, which the admin does not load otherwise #}
+{% if form.fields|filter(field => (field.type ?? '') == 'array')|length %}{% do assets.addJs('jquery', 101) %}{% endif %}
 {# The fields shown by the values of the others, as they are changed #}
 {% if form.attributes['data-w4os-conditions'] ?? false %}{% do assets.addJs('plugin://w4os/js/conditions.js', {group: 'bottom', loading: 'defer'}) %}{% endif %}

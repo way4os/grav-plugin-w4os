@@ -109,6 +109,11 @@
 .w4os-admin [data-grav-array-action=sort]::before { content: "\2261"; }
 .w4os-admin [data-grav-array-action=rem]::before { content: "\2212"; }
 .w4os-admin [data-grav-array-action=add]::before { content: "+"; }
+.w4os-admin [data-grav-array-action] { cursor: pointer; padding: 0 .25rem; }
+.w4os-admin [data-grav-array-action=sort] { cursor: grab; }
+/* One + at its end, after its last line; a line alone neither moved nor removed */
+.w4os-admin [data-grav-array-type=row]:not(:last-child) [data-grav-array-action=add],
+.w4os-admin [data-grav-array-type=row]:only-child :is([data-grav-array-action=rem], [data-grav-array-action=sort]) { visibility: hidden; }
 /* A theme without a picture in the gallery of the settings: a neutral card of the same size */
 /* The gallery of the themes: as many cards a row as the width of the field holds */
 .w4os-themes { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: .5rem; }

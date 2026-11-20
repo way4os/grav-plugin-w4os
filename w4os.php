@@ -1515,8 +1515,9 @@ class W4osPlugin extends Plugin
     private function viewForm($form, \W4OS\Views\FormView $view, bool $shown = false, string|array $base = '', array $fixed = []): void
     {
         $base = $base !== '' ? $base : rtrim((string) $this->grav['uri']->rootUrl(true), '/');
-        $form->setFields(Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), $base, $fixed));
-        foreach ($view->values as $key => $value) {
+        $fields = Items::fields($view, $shown, fn (string $key) => $this->site()->translate($key), $base, $fixed);
+        $form->setFields($fields);
+        foreach (Items::values($fields, $view->values) as $key => $value) {
             $form->getData()->get($key) === null && $form->setData($key, $value);
         }
         // What the options of the grid set, as it is (several addresses one by line)
