@@ -14,7 +14,7 @@
 {% set form_button_classes = 'btn' %}
 {% include 'forms/form.html.twig' with {form: form, layout: 'w4os-admin', field_layout: 'w4os-admin'} %}
 {# A list of values (the Form plugin's array field): its script needs jQuery, Grav's own copy, which the admin does not load otherwise; its lines numbered in their order once one is moved #}
-{% if form.fields|filter(field => (field.type ?? '') == 'array')|length %}
+{% if (form.fields ?? [])|filter(field => (field.type ?? '') == 'array')|length %}
     {% do assets.addJs('jquery', 101) %}
     {% do assets.addJs('plugin://w4os/js/lists.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}

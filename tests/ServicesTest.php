@@ -241,7 +241,7 @@ describe('the settings pages of the services of the grid', function () {
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-form.html.twig');
         $css = (string) file_get_contents(dirname(__DIR__).'/css/admin.css');
 
-        expect($template)->toContain("field.type ?? '') == 'array'", "assets.addJs('jquery'", 'plugin://w4os/js/lists.js')
+        expect($template)->toContain("(form.fields ?? [])|filter(field => (field.type ?? '') == 'array')", "assets.addJs('jquery'", 'plugin://w4os/js/lists.js')
             ->and((string) file_get_contents(dirname(__DIR__).'/js/lists.js'))->toContain("data('array-sort')", "'onEnd'")
             ->and($css)->toContain('[data-grav-array-type=row]:not(:last-child) [data-grav-array-action=add]', '[data-grav-array-type=row]:only-child');
     });
