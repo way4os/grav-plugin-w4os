@@ -1,7 +1,7 @@
 {# The avatar models of the grid, for the managers the contract lets read their rule, laid out as w4os-wp has them: the form of the
-   rule (the settings `models` of the grid: which avatars are models) for whom the contract lets change it, beside it its help (the
-   points of its description) then the models it picks (its preview: each its picture and name, a new avatar wears a copy of its
-   outfit), updated as the form is changed (js/models-preview.js) #}
+   rule (the settings `models` of the grid: which avatars are models) for whom the contract lets change it, under it the models it
+   picks (its preview: each its picture and name, a new avatar wears a copy of its outfit), updated as the form is changed
+   (js/models-preview.js), its help (the points of its description) beside them #}
 {% set rule = w4os_models_rule() %}
 {% if rule.error %}
     <div class="alert alert-danger" role="alert">{{ rule.error }}</div>
@@ -15,27 +15,27 @@
     </div>
 {% endset %}
 {% if not rule.error and rule.changeable %}
-    {# The form as wide as the page leaves it, its help then the models it picks beside it #}
+    {# The form then the models it picks, its help beside them #}
     <div class="row row-cards">
         <div class="col-lg-8">
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-body">
                     {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-models') } %}
                 </div>
             </div>
+            {{ preview }}
         </div>
-        <div class="col-lg-4">
-            {% if rule.help %}
-                <div class="card mb-3">
+        {% if rule.help %}
+            <div class="col-lg-4">
+                <div class="card">
                     <div class="card-body">
                         <ul class="w4os-models-help text-secondary mb-0">
                             {% for key in rule.help %}<li>{{ ('w4os.' ~ key)|t }}</li>{% endfor %}
                         </ul>
                     </div>
                 </div>
-            {% endif %}
-            {{ preview }}
-        </div>
+            </div>
+        {% endif %}
     </div>
 {% else %}
     {{ preview }}

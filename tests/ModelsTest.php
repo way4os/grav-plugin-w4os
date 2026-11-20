@@ -32,12 +32,12 @@ describe('the avatar models page of the admin', function () {
         return [$twig->render('w4os/models.html.twig', ['page' => [], 'assets' => $assets]), $assets->js];
     };
 
-    test('shows the form of the rule, its help beside it, then the models it picks with their pictures and names, updated as it is changed', function () use ($render) {
+    test('shows the form of the rule, under it the models it picks with their pictures and names, updated as it is changed, its help beside them', function () use ($render) {
         $preview = ['label' => 'models_preview', 'empty' => 'models_none', 'path' => '/grids/{grid}/avatar-models', 'filters' => ['match', 'pattern', 'list']];
         [$html, $js] = $render([['uuid' => 'm1', 'name' => 'Default Ruth', 'label' => 'Ruth', 'image' => '/assets/p1.jpg']], ['help' => ['models_help_choice', 'models_help_create'], 'preview' => $preview]);
 
         expect($html)->toContain('src="&#x2F;assets&#x2F;p1.jpg"', 'Ruth', 'Default Ruth', '<form id="w4os-models"></form>', '[w4os.models_preview]')
-            ->and($html)->toMatch('~<form id="w4os-models"></form>.*<li>\[w4os.models_help_choice\]</li><li>\[w4os.models_help_create\]</li>.*data-w4os-models-preview="&#x3F;format&#x3D;preview" data-form="w4os-models" data-filters="&#x5B;&quot;match&quot;,&quot;pattern&quot;,&quot;list&quot;&#x5D;".*Default Ruth~s')
+            ->and($html)->toMatch('~<div class="col-lg-8">\s*<div class="card mb-3">.*<form id="w4os-models"></form>.*data-w4os-models-preview="&#x3F;format&#x3D;preview" data-form="w4os-models" data-filters="&#x5B;&quot;match&quot;,&quot;pattern&quot;,&quot;list&quot;&#x5D;".*Default Ruth.*<div class="col-lg-4">.*<li>\[w4os.models_help_choice\]</li><li>\[w4os.models_help_create\]</li>~s')
             ->and($js)->toBe(['plugin://w4os/js/models-preview.js']);
     });
 
@@ -78,9 +78,9 @@ describe('the avatar models page of the admin', function () {
         }
     });
 
-    test('shows its models two by row beside the form, as wide as the column they are in', function () use ($render) {
+    test('shows its models under the form, four by row on a wide screen, two on a phone', function () use ($render) {
         [$html] = $render([['uuid' => 'm1', 'name' => 'Default Ruth', 'image' => '/assets/p1.jpg']], ['preview' => ['label' => 'models_preview', 'filters' => []]]);
 
-        expect($html)->toContain('class="col-6 col-sm-4 col-lg-6"')->not->toContain('col-xl-2');
+        expect($html)->toContain('class="col-6 col-sm-4 col-xl-3"')->not->toContain('col-lg-6');
     });
 });
