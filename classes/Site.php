@@ -526,7 +526,7 @@ final class Site
         'region' => '/regions/region', 'simulators' => '/simulators', 'models' => '/models', 'health' => '/health',
         'shortcodes' => '/shortcodes', 'settings' => '/settings', 'flux' => '/flux',
         'settings_economy' => '/economy', 'settings_search' => '/search', 'settings_guide' => '/guide', 'settings_offline' => '/offline',
-        'settings_assets' => '/assets',
+        'settings_assets' => '/assets', 'settings_grid' => '/grid', 'settings_avatars' => '/avatars/settings',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -1009,7 +1009,9 @@ final class Site
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
         'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle', 'parent' => 'manage'],
-        // The settings of the services of the grid, as w4os-wp has them in its menu
+        'settings_avatars' => ['label' => 'w4os.settings_avatars', 'icon' => 'ti ti-user-cog', 'parent' => 'manage'],
+        // The settings of the grid, then of its services, as w4os-wp has them in its menu
+        'settings_grid' => ['label' => 'w4os.settings_menu_grid', 'icon' => 'ti ti-world-cog'],
         'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin'],
         'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search'],
         'settings_guide' => ['label' => 'w4os.settings_menu_guide', 'icon' => 'ti ti-map-pin'],
@@ -1058,7 +1060,8 @@ final class Site
     public const ADMIN_OPERATIONS = ['health' => ['get', '/grids/{grid}/health'], 'models' => ['get', '/grids/{grid}/settings/models'], 'new' => ['post', '/grids/{grid}/avatars'],
         'settings_economy' => ['get', '/grids/{grid}/settings/economy'], 'settings_search' => ['get', '/grids/{grid}/settings/search'],
         'settings_guide' => ['get', '/grids/{grid}/settings/guide'], 'settings_offline' => ['get', '/grids/{grid}/settings/offline'],
-        'settings_assets' => ['get', '/grids/{grid}/settings/assets']];
+        'settings_assets' => ['get', '/grids/{grid}/settings/assets'], 'settings_grid' => ['get', '/grids/{grid}/settings/grid'],
+        'settings_avatars' => ['get', '/grids/{grid}/settings/avatars']];
 
     /** The group of settings of the engine a settings page of a service shows (settings_economy: economy), null for another page. */
     public static function serviceGroup(string $type): ?string

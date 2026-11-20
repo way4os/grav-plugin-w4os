@@ -1,5 +1,6 @@
-{# A fieldset of a form of the admin (field_layout: w4os-admin). One with a label (a database): a field as the others, its label and
-   its tip in the column of the labels, its parts beside it; else its legend above its fields #}
+{# A fieldset of a form of the admin (field_layout: w4os-admin). One with a label (a database, an address with its Use default): a
+   field as the others, its label and its tip in the column of the labels, its parts then its details beside it; else its legend
+   above its fields #}
 {% extends "forms/field.html.twig" %}
 {% set scope = field.nest_id ? scope ~ field.name ~ '.' : scope %}
 
@@ -10,8 +11,9 @@
     <span class="form-label">{{ field.label|t }}</span>
     {%- if field.help %}<small class="form-hint">{{ field.help|t }}</small>{% endif %}
   </legend>
-  <div class="{{ form_field_outer_data_classes ?? 'col-12 col-md-9' }} w4os-database-parts">
+  <div class="{{ form_field_outer_data_classes ?? 'col-12 col-md-9' }} w4os-fieldset-parts">
     {% include 'forms/default/fields.html.twig' with {name: field.name, fields: field.fields} %}
+    {% if field.description is defined %}<span class="form-description">{{ (form_field_description ?? field.description|t)|raw }}</span>{% endif %}
   </div>
 </fieldset>
 {% else %}

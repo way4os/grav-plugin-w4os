@@ -140,14 +140,15 @@
 .w4os-admin .form-field input.form-control { max-width: 20rem; }
 .w4os-admin .form-field select.form-select { width: auto; max-width: 100%; }
 .w4os-admin .form-field .ts-wrapper { display: inline-block; width: auto; min-width: min(26rem, 100%); max-width: 100%; }
-/* A database: its label where the others have theirs, its Use default then its parts side by side, each its label above it */
-.w4os-admin .w4os-database > legend { margin-bottom: 0; }
-.w4os-admin .w4os-database-parts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr)); gap: 0 1rem; align-content: start; }
-.w4os-admin .w4os-database-parts > .form-field.row:not(.w4os-unmet) { display: block; margin: 0 0 .75rem; }
-.w4os-admin .w4os-database-parts > .form-field.row > [class*="col-"] { width: auto; margin-left: 0; padding: 0; }
-.w4os-admin .w4os-database-parts > .form-field:has([data-grav-field=checkbox]) { grid-column: 1 / -1; }
-.w4os-admin .w4os-database-parts .col-form-label:has(> .form-label:empty) { display: none; }
-.w4os-admin .w4os-database-parts .form-field input.form-control { max-width: none; }
+/* A field of parts (a database, an address with its Use default): its label where the others have theirs, its parts beside it, each
+   its label above it; a database's side by side */
+.w4os-admin :is(.w4os-database, .w4os-defaulted) > legend { margin-bottom: 0; }
+.w4os-admin .w4os-database .w4os-fieldset-parts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(11rem, 100%), 1fr)); gap: 0 1rem; align-content: start; }
+.w4os-admin .w4os-fieldset-parts > .form-field.row:not(.w4os-unmet) { display: block; margin: 0 0 .75rem; }
+.w4os-admin .w4os-fieldset-parts > .form-field.row > [class*="col-"] { width: auto; margin-left: 0; padding: 0; }
+.w4os-admin .w4os-fieldset-parts > :is(.form-field:has([data-grav-field=checkbox]), .form-description) { grid-column: 1 / -1; }
+.w4os-admin .w4os-fieldset-parts .col-form-label:has(> .form-label:empty) { display: none; }
+.w4os-admin .w4os-database .w4os-fieldset-parts .form-field input.form-control { max-width: none; }
 /* A field the values of the others hide for now (js/conditions.js), shown again as they are changed */
 .w4os-js .w4os-unmet { display: none; }
 /* The help of a form beside it (the avatar models), its points apart; the models it picks dimmed while they are asked again */

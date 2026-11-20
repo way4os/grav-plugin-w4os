@@ -270,7 +270,16 @@ final class Items
             }
 
             return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'label' => 'w4os.'.$field['label'], 'classes' => 'w4os-database', 'fields' => $parts]
-                + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []);
+                + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []) + ($help === null ? [] : ['description' => $help]);
+        }
+        // Another field with a default the grid takes without it (an address): its Use default, its value hidden while it is checked
+        if (isset($field['fallback'])) {
+            $value = self::input(array_diff_key($field, ['fallback' => 1, 'tip' => 1, 'description' => 1]), $translate, $base);
+
+            return ['type' => 'fieldset', 'id' => 'w4os-field-'.$field['name'], 'label' => 'w4os.'.$field['label'], 'classes' => 'w4os-defaulted',
+                'fields' => [$field['name'].'.useDefault' => ['type' => 'checkbox', 'label' => 'w4os.'.$field['fallback']],
+                    $field['name'].'.value' => ['label' => '', 'outerclasses' => 'w4os-fallback-of-'.$field['name']] + $value]]
+                + (isset($field['tip']) ? ['help' => 'w4os.'.$field['tip']] : []) + ($help === null ? [] : ['description' => $help]);
         }
         // A path on the address it is under, which is not changed here, ending with the slash the path never starts with
         if ($field['type'] === 'path') {
@@ -278,8 +287,8 @@ final class Items
 
             return ['type' => 'w4os_path', 'base' => rtrim($under, '/').'/', 'label' => 'w4os.'.$field['label']] + $words;
         }
-        // Several addresses (the registers of other search engines): a list, one by line of its own
-        if (! empty($field['multiple']) && $field['type'] === 'url' && empty($field['readOnly'])) {
+        // Several addresses or words (the registers of other search engines, the names an avatar may not take): a list, one by line
+        if (! empty($field['multiple']) && in_array($field['type'], ['url', 'string'], true) && empty($field['readOnly'])) {
             // A list: its first default in its first line
             $empty = self::placeholder((isset($field['default']) ? ['default' => ((array) $field['default'])[0] ?? null] : []) + $field, $translate);
 

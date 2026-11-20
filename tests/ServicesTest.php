@@ -6,7 +6,7 @@ use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
 describe('the settings pages of the services of the grid', function () {
-    test('live under the admin route, in the admin menu after the avatars and the Flux as w4os-wp has them, for whom the contract lets read them', function () {
+    test('live under the admin route, in the admin menu after the avatars and the grid as w4os-wp has them, for whom the contract lets read them', function () {
         $routes = Site::adminRoutes(['admin' => '/w4os'], []);
         $services = ['settings_economy' => 'economy', 'settings_search' => 'search', 'settings_guide' => 'guide', 'settings_offline' => 'offline', 'settings_assets' => 'assets'];
         foreach ($services as $type => $group) {
@@ -18,7 +18,7 @@ describe('the settings pages of the services of the grid', function () {
         }
         $pages = array_keys(Site::ADMIN_PAGES);
 
-        expect(array_slice($pages, array_search('flux', $pages, true) + 1, 5))->toBe(array_keys($services))
+        expect(array_slice($pages, array_search('settings_grid', $pages, true) + 1, 5))->toBe(array_keys($services))
             ->and(Site::serviceGroup('models'))->toBeNull();
     });
 
@@ -42,8 +42,8 @@ describe('the settings pages of the services of the grid', function () {
             ->and($economy['currencyRate']['placeholder'])->toBe('10')
             ->and($economy['moneyDatabase']['fields']['moneyDatabase.port']['placeholder'])->toBe('3306')
             ->and($guide['guideSource']['placeholder'])->toBe('https://2do.directory/destinations/guide')
-            // A list: its first default in its first line
-            ->and($search['registers']['placeholder_value'])->toBe('http://2do.directory/helpers/register.php');
+            // A list without a default: nothing in its first line
+            ->and($search['registers'])->not->toHaveKey('placeholder_value');
     });
 
     test('a database as its parts, its password never filled in', function () {
@@ -214,7 +214,7 @@ describe('the settings pages of the services of the grid', function () {
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/fieldset/w4os-admin-fieldset.html.twig');
 
         expect($fields['searchDatabase'])->toMatchArray(['type' => 'fieldset', 'help' => 'w4os.tip_search_database'])
-            ->and($template)->toContain('col-form-label', 'field.label', 'field.help', 'form-hint', 'w4os-database-parts')
+            ->and($template)->toContain('col-form-label', 'field.label', 'field.help', 'form-hint', 'w4os-fieldset-parts', 'form-description')
             ->and($fields['searchDatabase'])->not->toHaveKey('legend');
     });
 
