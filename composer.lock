@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e7d113eab30af0bc79f701d2c299401",
+    "content-hash": "8d378fb3a6bedad7fb1d4cd7f894028f",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -712,7 +712,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "c392cdcdc0b570e411b94b1fe4079ef61483430e"
+                "reference": "996c6a82428672560cc1f100a3bb31869c73c27a"
             },
             "require": {
                 "ext-curl": "*",
@@ -741,7 +741,7 @@
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
                 "magicoli/bash-tools": "^1.0",
-                "magicoli/build-tools": "^0.1.2",
+                "magicoli/build-tools": "dev-dev",
                 "magicoli/pest-failure-summary": "^1.0",
                 "nyholm/psr7": "^1.8",
                 "pestphp/pest": "^3.0",
@@ -825,7 +825,7 @@
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
                 "magicoli/bash-tools": "^1.0.7",
-                "magicoli/build-tools": "^0.1.2",
+                "magicoli/build-tools": "^0.2.0",
                 "magicoli/pest-failure-summary": "^1.0",
                 "pestphp/pest": "^3.0",
                 "phpcompatibility/php-compatibility": "dev-develop",
@@ -892,7 +892,7 @@
             "require-dev": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
                 "magicoli/bash-tools": "^1.0.7",
-                "magicoli/build-tools": "^0.1.1",
+                "magicoli/build-tools": "dev-dev",
                 "magicoli/pest-failure-summary": "^1.0",
                 "pestphp/pest": "^3.0",
                 "phpcompatibility/php-compatibility": "dev-develop",
@@ -930,7 +930,7 @@
             "dist": {
                 "type": "path",
                 "url": "../w4os-views",
-                "reference": "7cadaee557e780db0b028fe819fd788ef5dbf72f"
+                "reference": "7935a295dcfaa75328b336bf8fba365eef936074"
             },
             "require": {
                 "ext-intl": "*",
@@ -3543,16 +3543,16 @@
         },
         {
             "name": "magicoli/build-tools",
-            "version": "0.1.11",
+            "version": "0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magicoli/build-tools.git",
-                "reference": "23830de70a31794375c40ad937a3e360c4820b27"
+                "reference": "8929c7fa7a154ee96a9616a711a6a8b216d152a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magicoli/build-tools/zipball/23830de70a31794375c40ad937a3e360c4820b27",
-                "reference": "23830de70a31794375c40ad937a3e360c4820b27",
+                "url": "https://api.github.com/repos/magicoli/build-tools/zipball/8929c7fa7a154ee96a9616a711a6a8b216d152a9",
+                "reference": "8929c7fa7a154ee96a9616a711a6a8b216d152a9",
                 "shasum": ""
             },
             "require": {
@@ -3577,9 +3577,9 @@
             "description": "Build, release and publish a project: Debian packages, zip, GitHub release, apt repository.",
             "support": {
                 "issues": "https://github.com/magicoli/build-tools/issues",
-                "source": "https://github.com/magicoli/build-tools/tree/0.1.11"
+                "source": "https://github.com/magicoli/build-tools/tree/0.2.0"
             },
-            "time": "2026-10-26T13:16:05+00:00"
+            "time": "2026-11-19T12:05:45+00:00"
         },
         {
             "name": "myclabs/deep-copy",

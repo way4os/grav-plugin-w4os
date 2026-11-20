@@ -95,7 +95,7 @@
         "pestphp/pest": "^4.0",
         "symfony/yaml": "^7.0 || ^8.0",
         "magicoli/bash-tools": "^1.0",
-        "magicoli/build-tools": "^0.1.2"
+        "magicoli/build-tools": "^0.2.0"
     },
     "autoload": {
         "psr-4": {
