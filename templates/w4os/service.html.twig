@@ -1,6 +1,7 @@
 {# The settings of a service of the grid (economy, search, guide, offline messages, web assets), for the managers the contract lets
    read them, as w4os-wp has them: the form as the engine describes it (x-form), as wide as the page, what the options of the grid set
-   shown and unchangeable, its help beside it when it has one #}
+   shown and unchangeable, its help beside it when it has one; its examples and the lines of the files it needs right after the form,
+   in its column #}
 {% set service = w4os_service() %}
 {% if service.error %}
     <div class="alert alert-danger" role="alert">{{ service.error }}</div>
@@ -12,6 +13,22 @@
                     {% include 'w4os/admin-form.html.twig' with { form: forms('w4os-service') } %}
                 </div>
             </div>
+            {# The examples of the page (a list of destinations), after its form, in its column, apart from its settings #}
+            {% for example in service.meta.examples ?? [] %}
+                <div class="card mt-3">
+                    <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ example.label)|t }}</h3></div>
+                    <div class="card-body"><pre class="mb-0">{{ example.text }}</pre></div>
+                </div>
+            {% endfor %}
+            {# The lines of the files of the grid the page needs, for the values saved: one block for each file, its name before it #}
+            {% for snippet in service.meta.snippets ?? [] %}
+                <div class="card mt-3 w4os-snippet">
+                    <div class="card-body">
+                        <div class="small text-secondary mb-2"><i class="ti ti-file-text" aria-hidden="true"></i> {{ snippet.file }}</div>
+                        <pre class="mb-0">{{ snippet.text }}</pre>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
         {% if service.help or service.tasks %}
             <div class="col-lg-4">
@@ -47,20 +64,4 @@
             </div>
         {% endif %}
     </div>
-    {# The examples of the page (a list of destinations), at its bottom, apart from its settings #}
-    {% for example in service.meta.examples ?? [] %}
-        <div class="card mt-3">
-            <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ example.label)|t }}</h3></div>
-            <div class="card-body"><pre class="mb-0">{{ example.text }}</pre></div>
-        </div>
-    {% endfor %}
-    {# The lines of the files of the grid the page needs, for the values saved: one block for each file, its name before it #}
-    {% for snippet in service.meta.snippets ?? [] %}
-        <div class="card mt-3 w4os-snippet">
-            <div class="card-body">
-                <div class="small text-secondary mb-2"><i class="ti ti-file-text" aria-hidden="true"></i> {{ snippet.file }}</div>
-                <pre class="mb-0">{{ snippet.text }}</pre>
-            </div>
-        </div>
-    {% endfor %}
 {% endif %}

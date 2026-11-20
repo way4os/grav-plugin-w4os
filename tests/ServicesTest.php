@@ -227,12 +227,15 @@ describe('the settings pages of the services of the grid', function () {
             ->toMatchArray(['registers' => ['https://2do.directory/register.php']]);
     });
 
-    test('shows the examples of a page at its bottom, apart from its settings', function () use ($render) {
+    test('shows the examples and the lines of the files right after the form, in its column, before its help', function () use ($render) {
         $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
-        $html = $render(['view' => $view, 'meta' => ['examples' => [['label' => 'guide_example', 'text' => "Section 1\nName|grid.example.org:8002"]]]]);
+        $html = $render(['view' => $view, 'help' => ['guide_help'], 'meta' => ['examples' => [['label' => 'guide_example', 'text' => "Section 1\nName|grid.example.org:8002"]],
+            'snippets' => [['file' => 'OpenSim.ini', 'text' => '[LoginService]']]]]);
 
-        expect($html)->toContain('[w4os.guide_example]', "Section 1\nName|grid.example.org:8002")
-            ->and(strpos($html, '[w4os.guide_example]'))->toBeGreaterThan(strpos($html, '<form id="w4os-service">'));
+        expect($html)->toContain('[w4os.guide_example]', "Section 1\nName|grid.example.org:8002", '[LoginService]')
+            ->and(strpos($html, '[w4os.guide_example]'))->toBeGreaterThan(strpos($html, '<form id="w4os-service">'))
+            ->and(strpos($html, '[LoginService]'))->toBeLessThan(strpos($html, 'col-lg-4'))
+            ->and(strpos($html, '[w4os.guide_example]'))->toBeLessThan(strpos($html, 'col-lg-4'));
     });
 
     test('a field the form hides now asks nothing: its condition unmet, it is not required', function () {
