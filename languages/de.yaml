@@ -133,7 +133,6 @@ w4os:
   search_register_help_several: 'Du kannst dich bei mehreren Suchmaschinen registrieren.'
   search_register_help_prefix: 'Jede Zeile muss einen eindeutigen Bezeichner haben, der mit "DATA_SRV_" beginnt.'
   events_help_fetch: 'HYPEvents Server-URL, der verwendet wird, um bevorstehende Veranstaltungen abzurufen und sie in der Suche verfügbar zu machen.'
-  events_help_blank: 'Lassen Sie diese Option leer, um Ereignisse zu ignorieren oder wenn Sie andere Ereignisse implementiert haben.'
   search_help_local: 'Aktivieren Sie die Verwendung einer lokalen Suchmaschine, die nur lokale Ergebnisse zulässt (empfohlen für private Grids).'
   search_help_external: 'Deaktivieren Sie die Verwendung einer externen Suchmaschine wie 2do Directory, um Ergebnisse sowohl von Ihrem Grid als auch von anderen öffentlichen Grids zu ermöglichen.'
   search_help_module: 'Die Suchfunktionen erfordern die Installation des OpenSimSearch-Moduls auf OpenSimulator.'
@@ -252,6 +251,7 @@ w4os:
   filters: Filter
   filters_active: '%d aktive Filter'
   label_value: '%1$s: %2$s'
+  example_value: 'z. B.: %s'
   tab_overview: Übersicht
   column_status: Status
   state_enabled: Aktiviert
@@ -490,7 +490,6 @@ w4os:
   setting_gloebit_threshold: Gloebit-Umrechnungsschwelle
   setting_podex_message: Podex-Weiterleitungsnachricht
   setting_podex_url: 'Austausch der Teleport-URL'
-  podex_message_placeholder: 'Bitte benutzen Sie unsere Terminals in der Welt, um fortzufahren. Klicken Sie auf OK, um sich in den Bereich der Podex-Börse zu teleportieren.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: 'Der Web-Asset-Server des Grids, wenn es nicht der der Helpers ist: er wandelt die Bilder der Welt (JPEG 2000) für das Web um.'
   offline_module_v1: 'Durch die Helpers (V1)'

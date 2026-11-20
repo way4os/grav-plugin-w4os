@@ -133,7 +133,6 @@ w4os:
   search_register_help_several: 'Puoi registrarti su diversi motori di ricerca.'
   search_register_help_prefix: 'Ogni riga deve avere un identificatore univoco che inizia con "DATA_SRV_"'
   events_help_fetch: 'URL del server HYPEvents, utilizzato per recuperare gli eventi imminenti e renderli disponibili nella ricerca.'
-  events_help_blank: "Lascia vuoto per ignorare gli eventi o se hai un'altra implementazione degli eventi."
   search_help_local: "Abilita l'uso di un motore di ricerca locale, consentendo solo risultati locali (consigliato per griglie private)."
   search_help_external: "Disabilita l'uso di un motore di ricerca esterno come 2do Directory, consentendo i risultati sia dalla tua griglia che da altre griglie pubbliche."
   search_help_module: "Le funzionalità di ricerca richiedono l'installazione del modulo OpenSimSearch su OpenSimulator."
@@ -252,6 +251,7 @@ w4os:
   filters: Filtri
   filters_active: '%d filtri attivi'
   label_value: '%1$s: %2$s'
+  example_value: 'es.: %s'
   tab_overview: Panoramica
   column_status: Stato
   state_enabled: Attivato
@@ -490,7 +490,6 @@ w4os:
   setting_gloebit_threshold: 'Soglia di conversione Gloebit'
   setting_podex_message: 'Messaggio di reindirizzamento Podex'
   setting_podex_url: 'Scambio URL di Teletrasporto'
-  podex_message_placeholder: "Per favore, utilizza i nostri terminali all'interno del mondo virtuale per procedere. Clicca su OK per teletrasportarti all'area di scambio di Podex."
   setting_assets_url: 'URL del server delle risorse web'
   setting_assets_url_help: 'Il server di risorse web della griglia quando non è quello degli helpers: converte le immagini del mondo (JPEG 2000) per il web.'
   offline_module_v1: 'Dagli helpers (V1)'

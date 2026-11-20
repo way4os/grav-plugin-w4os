@@ -133,7 +133,6 @@ w4os:
   search_register_help_several: 'Vous pouvez vous inscrire sur plusieurs moteurs de recherche.'
   search_register_help_prefix: 'Chaque ligne doit avoir un identifiant unique commençant par "DATA_SRV_".'
   events_help_fetch: 'URL du serveur HYPEvents, utilisé pour récupérer les événements à venir et les rendre disponibles dans la recherche.'
-  events_help_blank: 'Laissez vide pour ignorer les événements ou si vous avez une autre implémentation pour les événements.'
   search_help_local: "Permet d'utiliser un moteur de recherche local, n'autorisant que les résultats locaux (recommandé pour les grilles privées)."
   search_help_external: "Désactiver pour utiliser un moteur de recherche externe comme 2do Directory, permettant les résultats de votre grille et d'autres grilles publiques."
   search_help_module: "Les fonctionnalités de recherche nécessitent l'installation du module OpenSimSearch sur OpenSimulator."
@@ -252,6 +251,7 @@ w4os:
   filters: Filtres
   filters_active: '%d filtres actifs'
   label_value: '%1$s : %2$s'
+  example_value: 'ex. : %s'
   tab_overview: Aperçu
   column_status: Statut
   state_enabled: Activé
@@ -490,7 +490,6 @@ w4os:
   setting_gloebit_threshold: 'Seuil de conversion Gloebit'
   setting_podex_message: 'Message de redirection de Podex'
   setting_podex_url: "URL de téléportation vers l'échange"
-  podex_message_placeholder: "Veuillez utiliser nos terminaux dans le monde virtuel pour procéder. Cliquez sur OK pour être téléporté vers la zone d'échange Podex."
   setting_assets_url: 'URL du serveur de ressources web'
   setting_assets_url_help: "Le serveur de ressources web de la grille quand ce n'est pas celui des helpers : il convertit les images du monde (JPEG 2000) pour le web."
   offline_module_v1: 'Par les helpers (V1)'

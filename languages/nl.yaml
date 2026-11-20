@@ -133,7 +133,6 @@ w4os:
   search_register_help_several: 'Je kunt je registreren bij verschillende zoekmachines.'
   search_register_help_prefix: 'Elke regel moet een unieke identificatie hebben die begint met "DATA_SRV_".'
   events_help_fetch: 'HYPEvents Server URL, gebruikt om aankomende evenementen op te halen en beschikbaar te maken in de zoekfunctie.'
-  events_help_blank: 'Laat leeg om gebeurtenissen te negeren of als u een andere gebeurtenissen implementatie hebt.'
   search_help_local: 'Schakel het gebruik van een lokale zoekmachine in, waarmee alleen lokale resultaten worden weergegeven (aanbevolen voor privégrids).'
   search_help_external: 'Schakel het gebruik van een externe zoekmachine zoals 2do Directory uit, waardoor resultaten worden weergegeven van zowel jouw grid als andere openbare grids.'
   search_help_module: 'Zoekfuncties vereisen de installatie van de OpenSimSearch-module op OpenSimulator.'
@@ -252,6 +251,7 @@ w4os:
   filters: Filters
   filters_active: '%d actieve filters'
   label_value: '%1$s: %2$s'
+  example_value: 'bijv.: %s'
   tab_overview: Overzicht
   column_status: Status
   state_enabled: Ingeschakeld
@@ -490,7 +490,6 @@ w4os:
   setting_gloebit_threshold: Gloebit-omrekendrempel
   setting_podex_message: 'Podex omleiding bericht'
   setting_podex_url: 'Uitwisselen van Teleport URL'
-  podex_message_placeholder: 'Gebruik alstublieft onze terminals in de wereld om verder te gaan. Klik op OK om naar het Podex Exchange-gebied te teleporteren.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: 'De webassetserver van het grid wanneer het niet die van de helpers is: hij zet de afbeeldingen van de wereld (JPEG 2000) om voor het web.'
   offline_module_v1: 'Door de helpers (V1)'

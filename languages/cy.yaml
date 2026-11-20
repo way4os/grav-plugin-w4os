@@ -133,7 +133,6 @@ w4os:
   search_register_help_several: 'Gallwch gofrestru gyda sawl injan chwilio.'
   search_register_help_prefix: 'Rhaid i bob llinell fod ag enw unigryw yn dechrau gyda "DATA_SRV_"'
   events_help_fetch: "HYPEvents Server URL, a'gus airson tachartasan ri teachd agus a dhèanamh ri fhaotainn ann an cuairt."
-  events_help_blank: 'Gadewch yn wag i anwybyddu digwyddiadau neu os oes gennych weithrediad digwyddiadau eraill.'
   search_help_local: "Enable i'r defnyddio peiriant chwilio lleol, gan ganiatáu dim ond canlyniadau lleol (argymhellir ar gyfer gridiau preifat)."
   search_help_external: "Disable i'r defnydd o injan chwilio allanol fel 2do Directory, gan ganiatáu canlyniadau o'ch grid chi ac o gridiau cyhoeddus eraill."
   search_help_module: 'Search features require the installation of the OpenSimSearch Module on OpenSimulator.'
@@ -252,6 +251,7 @@ w4os:
   filters: Hidlyddion
   filters_active: '%d hidlydd gweithredol'
   label_value: '%1$s: %2$s'
+  example_value: 'e.e.: %s'
   tab_overview: Trosolwg
   column_status: Statws
   state_enabled: "Wedi'i alluogi"
@@ -490,7 +490,6 @@ w4os:
   setting_gloebit_threshold: 'Trothwy trosi Gloebit'
   setting_podex_message: 'Neges ailgyfeirio Podex'
   setting_podex_url: 'URL teleportio i’r gyfnewidfa'
-  podex_message_placeholder: 'Defnyddiwch ein terfynellau yn y byd i fwrw ymlaen. Cliciwch OK i deleportio i ardal Cyfnewid Podex.'
   setting_assets_url: 'Web Assets Server URL'
   setting_assets_url_help: "Gweinydd asedau gwe'r grid pan nad yw'n un yr helpers: mae'n trosi lluniau'r byd (JPEG 2000) ar gyfer y we."
   offline_module_v1: 'Gan yr helpers (V1)'
