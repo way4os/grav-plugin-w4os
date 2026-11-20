@@ -44,4 +44,17 @@ describe('languages', function () {
             }
         }
     });
+
+    test('every text of the plugin is in each of its languages, with the same placeholders', function () {
+        $read = fn (string $lang) => (array) Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__)."/i18n/$lang.yaml")['w4os'];
+        $placeholders = fn (string $text) => preg_match_all('/%[sd]/', $text, $found) ? $found[0] : [];
+        $english = $read('en');
+        foreach (['fr', 'de', 'it', 'nl', 'pt-BR', 'cy'] as $lang) {
+            $texts = $read($lang);
+            expect(array_keys($texts))->toEqualCanonicalizing(array_keys($english), "$lang has not every text");
+            foreach ($english as $key => $text) {
+                expect($placeholders($texts[$key]))->toBe($placeholders($text), "$lang $key");
+            }
+        }
+    });
 });

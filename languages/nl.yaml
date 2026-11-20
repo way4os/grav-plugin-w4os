@@ -872,83 +872,83 @@ w4os:
   admin_confirm_email_help: 'Een nieuwe avatar blijft inactief tot hij op de link klikt die de engine hem stuurt'
   admin_terms: 'Pagina met voorwaarden'
   admin_terms_help: 'Het pad van een pagina om mee akkoord te gaan voor de registratie; leeg voor geen'
-  admin_per_page: 'Avatars per page'
-  admin_per_page_help: 'The list of the avatars for the managers, a page at a time'
+  admin_per_page: 'Avatars per pagina'
+  admin_per_page_help: 'De lijst van de avatars voor de beheerders, een pagina tegelijk'
   admin_admin_level: "Beheerpagina's vanaf niveau"
   admin_admin_level_help: "De avatars vanaf dit gebruikersniveau komen in de beheerpagina's; elke pagina, actie en elk veld vraagt dan zijn eigen niveau, dat van de engine"
   admin_save_accounts: 'Grav-accounts bewaren'
   admin_save_accounts_help: 'Een Grav-account (user/accounts) bewaren voor elke avatar die inlogt; altijd aan met de API-plugin'
-  admin_menu: 'Entry in the menu'
-  admin_menu_help: 'An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in (its profile, sign out)'
-  admin_site_settings: 'Site settings'
-  admin_site_appearance: Appearance
-  admin_site_theme: Theme
-  admin_site_theme_help: 'The theme of the site, among the ones installed'
-  admin_site_saved: 'The settings of the site are saved.'
+  admin_menu: 'Item in het menu'
+  admin_menu_help: 'Een item in het menu van de site, met elk thema: inloggen, of het account van de ingelogde avatar (zijn profiel, uitloggen)'
+  admin_site_settings: 'Instellingen van de site'
+  admin_site_appearance: Uiterlijk
+  admin_site_theme: Thema
+  admin_site_theme_help: 'Het thema van de site, uit de geïnstalleerde'
+  admin_site_saved: 'De instellingen van de site zijn opgeslagen.'
   admin_site_logo: Logo
-  admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
+  admin_site_logo_help: 'Het logo van de site, voor elk thema (zonder houdt elk zijn eigen); een PNG werkt met allemaal'
   admin_site_favicon: Favicon
-  admin_site_favicon_help: 'The icon of the site in the tabs of the browsers, for every theme (without it, each keeps its own)'
-  admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
-  admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
-  admin_route: 'Admin pages'
-  admin_route_help: 'The route of the admin pages of the grid and of the site, never under the route of Grav’s admin'
-  admin_menu_list: List
-  admin_avatar_created: 'The avatar %s is created.'
-  admin_search_parcels: 'Parcel name'
-  admin_no_parcels: 'No parcel'
-  admin_parcels_count: '%d parcels'
-  admin_shortcode_home_help: 'The home page of the grid around its text: the popular places and the destination guide, the grid info and status and the message of the day beside them'
-  admin_shortcode_guest_help: 'Its text for the visitors only, not for an avatar signed in'
-  admin_shortcode_register_help: 'Its text only when the site has its registration page'
-  admin_shortcode_uri_help: 'The login address of the grid'
-  admin_shortcode_grid_name_help: 'The name of the grid'
-  admin_shortcode_base_url_help: 'The address of the site'
-  admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: Health
-  admin_health_ok: 'All that is checked answers as it should.'
-  admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
-  admin_health_check: 'Check again'
-  admin_health_checked: 'checked %s'
-  admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
-  admin_health_not_checked: 'Not checked again: %s'
-  admin_health_expected: Expected
-  admin_health_value: Value
-  admin_health_set: Set
-  admin_health_state: State
-  admin_health_version: Version
-  admin_health_exists: Exists
-  admin_health_writable: Writable
-  admin_health_readable: Readable
-  admin_health_extension: Extension
-  admin_health_path: Path
-  admin_health_instance: Instance
-  admin_health_installed: Installed
-  admin_health_missing: Missing
-  admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_blocks_no_url: 'the setting "Helpers address" of the site is empty'
-  admin_blocks_http: 'they answered with the error HTTP %s'
-  admin_blocks_no_answer: 'they did not answer (%s)'
-  admin_blocks_nothing: 'they gave nothing'
+  admin_site_favicon_help: 'Het pictogram van de site in de tabbladen van de browsers, voor elk thema (zonder houdt elk zijn eigen)'
+  admin_site_logo_unsupported: 'Het huidige thema toont geen logo van de site; het blijft bewaard voor het volgende thema dat er een toont'
+  admin_site_favicon_unsupported: 'Het huidige thema toont geen favicon van de site; het blijft bewaard voor het volgende thema dat er een toont'
+  admin_route: Beheerpagina’s
+  admin_route_help: 'De route van de beheerpagina’s van de grid en van de site, nooit onder die van de beheer van Grav'
+  admin_menu_list: Lijst
+  admin_avatar_created: 'De avatar %s is aangemaakt.'
+  admin_search_parcels: 'Naam van het perceel'
+  admin_no_parcels: 'Geen perceel'
+  admin_parcels_count: '%d percelen'
+  admin_shortcode_home_help: 'De startpagina van de grid rond zijn tekst: de populaire plaatsen en de bestemmingsgids, ernaast de info en de status van de grid en het bericht van de dag'
+  admin_shortcode_guest_help: 'Zijn tekst alleen voor bezoekers, niet voor een ingelogde avatar'
+  admin_shortcode_register_help: 'Zijn tekst alleen als de site zijn registratiepagina heeft'
+  admin_shortcode_uri_help: 'Het inlogadres van de grid'
+  admin_shortcode_grid_name_help: 'De naam van de grid'
+  admin_shortcode_base_url_help: 'Het adres van de site'
+  admin_shortcode_slogan_help: 'De slogan van de site'
+  admin_health_title: Gezondheid
+  admin_health_ok: 'Alles wat gecontroleerd wordt, antwoordt zoals het hoort.'
+  admin_health_error: 'Sommige adressen antwoorden niet zoals het hoort: zie de rode regels.'
+  admin_health_check: 'Opnieuw controleren'
+  admin_health_checked: 'gecontroleerd %s'
+  admin_health_refresh_failed: 'De controle kon niet opnieuw lopen (%s): dit rapport is van %s.'
+  admin_health_not_checked: 'Niet opnieuw gecontroleerd: %s'
+  admin_health_expected: Verwacht
+  admin_health_value: Waarde
+  admin_health_set: Ingesteld
+  admin_health_state: Status
+  admin_health_version: Versie
+  admin_health_exists: Bestaat
+  admin_health_writable: Schrijfbaar
+  admin_health_readable: Leesbaar
+  admin_health_extension: Extensie
+  admin_health_path: Pad
+  admin_health_instance: Instantie
+  admin_health_installed: Geïnstalleerd
+  admin_health_missing: Ontbreekt
+  admin_blocks_unavailable: 'De helpers van de grid gaven %s niet: %s.'
+  admin_blocks_no_url: 'de instelling „Adres van de helpers” van de site is leeg'
+  admin_blocks_http: 'ze antwoordden met de fout HTTP %s'
+  admin_blocks_no_answer: 'ze antwoordden niet (%s)'
+  admin_blocks_nothing: 'ze gaven niets'
   admin_shortcodes_menu: Shortcodes
-  admin_health_setting: Setting
-  admin_health_address: Address
-  admin_health_answer: Answer
-  admin_health_time: Time
-  admin_health_addresses: 'Addresses of the grid'
-  admin_health_service: Service
-  admin_health_source: Source
-  admin_health_source_provider: 'the service itself'
-  admin_health_source_config: 'its config'
-  admin_health_source_live: 'the running grid'
-  admin_health_source_default: 'by default, not set'
-  admin_health_source_simulator: 'a simulator'
-  admin_models_saved: 'The rule of the avatar models is saved.'
-  admin_health_problems: 'The health of the grid found %d problems:'
-  admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
-  admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
-  admin_task_run: 'Run now'
-  admin_task_last: 'Last run %s'
-  admin_task_never: 'Never run'
+  admin_health_setting: Instelling
+  admin_health_address: Adres
+  admin_health_answer: Antwoord
+  admin_health_time: Tijd
+  admin_health_addresses: 'Adressen van de grid'
+  admin_health_service: Dienst
+  admin_health_source: Herkomst
+  admin_health_source_provider: 'de dienst zelf'
+  admin_health_source_config: 'zijn configuratie'
+  admin_health_source_live: 'de draaiende grid'
+  admin_health_source_default: 'standaard, niet ingesteld'
+  admin_health_source_simulator: 'een simulator'
+  admin_models_saved: 'De regel van de avatarmodellen is opgeslagen.'
+  admin_health_problems: 'De controle van de grid vond %d problemen:'
+  admin_service_no_page: 'De site heeft geen pagina op %s: de dienst vraagt er een die het blok %s toont.'
+  admin_service_no_block: 'De pagina %s van de site toont het blok %s niet dat de dienst nodig heeft.'
+  admin_task_run: 'Nu uitvoeren'
+  admin_task_last: 'Laatst uitgevoerd %s'
+  admin_task_never: 'Nooit uitgevoerd'
   admin_task_ran: '%s: %s'
-  admin_sidebar_pin: 'Pin the sidebar'
+  admin_sidebar_pin: 'Zijbalk vastzetten'
