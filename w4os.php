@@ -285,10 +285,11 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
-        // The grid added to a viewer (w4os/add-grid.html.twig) and the steps of a newcomer (w4os/getting-started.html.twig)
+        // The grid added to a viewer (w4os/add-grid.html.twig) and the Connect block (w4os/getting-started.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_add_grid', fn () => $this->site()->addGrid()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_uri', fn () => $this->site()->loginUri()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_name', fn () => $this->site()->gridName()));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_login_link', fn () => Site::loginLink($this->site()->loginUri())));
         // Its steps from the avatar signed in: logged in-world once when it has a last visit, unknown when the engine does not say
         $twig->addFunction(new \Twig\TwigFunction('w4os_start_steps', function () {
             $avatar = self::current() ?? [];
@@ -380,9 +381,10 @@ class W4osPlugin extends Plugin
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
      * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri] ([login-uri
-     * add-grid] with the button that adds the grid to a viewer), [getting-started], [base_url], [grid-name], [site-slogan]. The
+     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..."], [base_url], [grid-name], [site-slogan]. The
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
+     * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
      * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
      * [w4os-home]...[/w4os-home]: the home page of a grid around the text, its blocks beside it where there is room
      */
@@ -397,8 +399,9 @@ class W4osPlugin extends Plugin
         $handlers->add('login-uri', fn ($shortcode) => array_key_exists('add-grid', (array) $shortcode->getParameters())
             ? $this->grav['twig']->processTemplate('w4os/add-grid.html.twig')
             : '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>');
-        // [getting-started]: the steps of a newcomer, the next one to do standing out (templates/w4os/getting-started.html.twig)
-        $handlers->add('getting-started', fn () => $this->grav['twig']->processTemplate('w4os/getting-started.html.twig'));
+        // [getting-started title="..."]: the Connect block, the next step to do standing out (templates/w4os/getting-started.html.twig)
+        $handlers->add('getting-started', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/getting-started.html.twig',
+            ['start_title' => trim((string) $shortcode->getParameter('title', ''))]));
         $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         $handlers->add('grid-name', fn () => htmlspecialchars($this->site()->gridName()));
         $handlers->add('site-slogan', fn () => htmlspecialchars($this->site()->slogan()));

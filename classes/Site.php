@@ -570,6 +570,12 @@ final class Site
         return is_array($links) ? $links : null;
     }
 
+    /** The link that opens the viewer on its login with the grid of this login URI (host:port) chosen, null without one. */
+    public static function loginLink(string $loginUri): ?string
+    {
+        return $loginUri === '' ? null : 'secondlife:///app/login?grid='.rawurlencode($loginUri);
+    }
+
     /**
      * The steps of a newcomer and their state: done, next (the one to do now) or todo. The avatar is done once signed in; adding the
      * grid to the viewer and logging in are done once the avatar has logged in-world (a viewer that logs in has the grid).
@@ -1155,7 +1161,7 @@ final class Site
         ['code' => '[new-avatars]', 'help' => 'block_new_avatars_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => [['option' => 'add-grid', 'help' => 'admin_shortcode_option_add_grid']]],
-        ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => []],
+        ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title']]],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],
         ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
         ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],

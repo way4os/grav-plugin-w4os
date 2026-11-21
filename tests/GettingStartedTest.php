@@ -7,13 +7,14 @@ use Twig\TwigFunction;
 use W4OS\Grav\Site;
 
 /** A template of the plugin with the grid, the visitor and the steps given, the texts as their keys and their values, its entities decoded. */
-function render_start(string $template, array $given): string
+function render_start(string $template, array $given, array $context = []): string
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $given += ['links' => null, 'uri' => '', 'grid' => 'Demo World', 'avatar' => [], 'steps' => [], 'routes' => ['register' => '/register']];
     $twig->addFunction(new TwigFunction('w4os_add_grid', fn () => $given['links']));
     $twig->addFunction(new TwigFunction('w4os_login_uri', fn () => $given['uri']));
     $twig->addFunction(new TwigFunction('w4os_grid_name', fn () => $given['grid']));
+    $twig->addFunction(new TwigFunction('w4os_login_link', fn () => Site::loginLink($given['uri'])));
     $twig->addFunction(new TwigFunction('w4os_avatar', fn () => $given['avatar']));
     $twig->addFunction(new TwigFunction('w4os_start_steps', fn () => $given['steps']));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => $given['routes'][$type] ?? null));
@@ -23,7 +24,7 @@ function render_start(string $template, array $given): string
         public function addJs(string $url): void { $this->js[] = $url; }
     };
 
-    return html_entity_decode($twig->render($template, ['assets' => $assets, 'base_url_relative' => '', 'config' => ['plugins' => ['login' => ['route' => '/login']]]]), ENT_QUOTES | ENT_HTML5);
+    return html_entity_decode($twig->render($template, $context + ['assets' => $assets, 'base_url_relative' => '', 'config' => ['plugins' => ['login' => ['route' => '/login']]]]), ENT_QUOTES | ENT_HTML5);
 }
 
 describe('the steps of a newcomer', function () {
@@ -35,21 +36,38 @@ describe('the steps of a newcomer', function () {
             ->and(array_column(Site::steps(true, true), 'step'))->toBe(['avatar', 'viewer', 'login']);
     });
 
-    test('stand out the one to do now, the avatar to create with the registration page and the sign-in', function () {
-        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'uri' => 'grid.example.org:8002']);
+    test('stand out the one to do now: the avatar to create, a button alone; the grid to add, its button, its login URI and the note on the viewer; log in, a button alone', function () {
+        $links = ['hop' => 'hop:///app/gridmanager/addgrid/grid.example.org%3A8002', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/grid.example.org%3A8002'];
+        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'uri' => 'grid.example.org:8002', 'links' => $links]);
 
-        expect($html)->toContain('class="w4os-start-step w4os-start-avatar is-next" aria-current="step"', 'class="btn btn-primary" href="/register">w4os.register_title</a>', 'href="/login">w4os.log_in</a>')
-            ->and($html)->toContain('w4os-start-viewer is-todo', 'w4os.start_viewer_text(Demo World)', 'https://www.firestormviewer.org/os-operating-system/', 'w4os.start_login_text(Demo World)')
-            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>');
+        expect($html)->toContain('<h2 class="w4os-start-title">w4os.start_title</h2>', 'class="w4os-start-step w4os-start-avatar is-next" aria-current="step"')
+            ->and($html)->toContain('<a class="btn btn-primary" href="/register">w4os.start_avatar</a>')
+            ->and($html)->toContain('<h3 class="w4os-start-step-title">w4os.start_viewer</h3>', '<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid(Demo World)</a>')
+            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'w4os.start_viewer_note(<a href="https://www.firestormviewer.org/downloads/" target="_blank" rel="noopener">Firestorm</a>)')
+            ->and($html)->toContain('<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login</a>')
+            ->and(substr_count($html, '<h3'))->toBe(1)
+            ->and($html)->not->toContain('w4os.start_next', 'w4os.log_in', 'secondlife:///app/gridmanager');
     });
 
-    test('mark the avatar done with its name, the viewer next, the name to log in with', function () {
-        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(true, false), 'avatar' => ['name' => 'Ada Love'],
-            'links' => ['hop' => 'hop:///app/gridmanager/addgrid/http%3A%2F%2Fgrid.example.org%3A8002', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/http%3A%2F%2Fgrid.example.org%3A8002']]);
+    test('mark the avatar done with its name, the grid to add next', function () {
+        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(true, false), 'avatar' => ['name' => 'Ada Love'], 'uri' => 'grid.example.org:8002',
+            'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
-        expect($html)->toContain('w4os-start-avatar is-done', 'w4os.start_done', 'w4os.start_avatar_done(Ada Love)', 'w4os-start-viewer is-next', 'w4os-start-login is-todo', '<strong class="w4os-start-name">Ada Love</strong>')
-            ->and($html)->toContain('href="hop:///app/gridmanager/addgrid/http%3A%2F%2Fgrid.example.org%3A8002">w4os.viewer_add_grid(Demo World)</a>')
-            ->and($html)->not->toContain('w4os.register_title');
+        expect($html)->toContain('w4os-start-avatar is-done', '<span class="visually-hidden">w4os.start_done</span>', 'w4os.start_avatar_done(Ada Love)', 'w4os-start-viewer is-next', 'w4os-start-login is-todo')
+            ->and($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.start_add_grid(Demo World)</a>')
+            ->and($html)->not->toContain('w4os.start_avatar<');
+    });
+
+    test('the sign-in in place of the avatar to create while registration is closed, the title a site gives', function () {
+        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'routes' => []], ['start_title' => 'Try it']);
+
+        expect($html)->toContain('<h2 class="w4os-start-title">Try it</h2>', '<a class="btn btn-primary" href="/login">w4os.log_in</a>')
+            ->and($html)->not->toContain('w4os.start_avatar<', 'w4os-login-button', 'w4os-login-uri');
+    });
+
+    test('the link that opens the viewer on its login with the grid chosen, from the login URI', function () {
+        expect(Site::loginLink('grid.example.org:8002'))->toBe('secondlife:///app/login?grid=grid.example.org%3A8002')
+            ->and(Site::loginLink(''))->toBeNull();
     });
 });
 
@@ -82,6 +100,7 @@ describe('the grid added to a viewer', function () {
         expect($account)->toContain("include 'w4os/getting-started.html.twig'", "include 'w4os/add-grid.html.twig'")
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/confirm.html.twig'))->toContain("include 'w4os/add-grid.html.twig'")
             ->and(array_column(Site::SHORTCODES, 'code'))->toContain('[login-uri]', '[getting-started]')
+            ->and(array_column(Site::SHORTCODES[array_search('[getting-started]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['title'])
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
 });

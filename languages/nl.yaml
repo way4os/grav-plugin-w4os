@@ -187,18 +187,14 @@ w4os:
   viewer_login_uri_by_hand: 'Of voeg het toe in de gridmanager van je viewer, met de login-URI:'
   copy: Kopiëren
   copied: Gekopieerd
-  start_title: 'Aan de slag'
+  start_title: Verbinden
   start_avatar: 'Maak je avatar'
-  start_avatar_text: 'Kies de naam en het uiterlijk. De naam is definitief: die kan later niet meer worden gewijzigd.'
   start_avatar_done: 'Je avatar is %s.'
-  start_viewer: 'Voeg het grid toe aan je viewer'
-  start_viewer_text: 'De viewer is het programma dat de virtuele wereld opent. Installeer er een die voor OpenSimulator gemaakt is, zoals Firestorm (de OpenSim-versie), en voeg er dan %s aan toe.'
-  start_viewer_get: 'Firestorm downloaden'
-  start_viewer_others: 'Andere viewers'
+  start_viewer: 'Het grid toevoegen'
+  start_add_grid: '%s toevoegen'
+  start_viewer_note: 'Nog geen viewer? Neem %s, of een andere viewer voor OpenSim.'
   start_login: Inloggen
-  start_login_text: 'Kies in de viewer %s in de lijst met grids en log dan in met de naam van je avatar en het wachtwoord.'
   start_done: Klaar
-  start_next: 'Volgende stap'
   total: Totaal
   tip_models_match: 'Hoe een model wordt herkend'
   tip_models_pattern: 'Deel van de naam van de modellen'

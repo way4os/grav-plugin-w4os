@@ -187,18 +187,14 @@ w4os:
   viewer_login_uri_by_hand: 'Oder füge es im Grid-Manager deines Viewers mit seiner Login-URI hinzu:'
   copy: Kopieren
   copied: Kopiert
-  start_title: 'Erste Schritte'
-  start_avatar: 'Erstelle deinen Avatar'
-  start_avatar_text: 'Wähle seinen Namen und sein Aussehen. Der Name ist endgültig: Er kann später nicht geändert werden.'
+  start_title: Verbinden
+  start_avatar: 'Avatar erstellen'
   start_avatar_done: 'Dein Avatar ist %s.'
-  start_viewer: 'Füge das Grid zu deinem Viewer hinzu'
-  start_viewer_text: 'Der Viewer ist das Programm, das die virtuelle Welt öffnet. Installiere einen für OpenSimulator, etwa Firestorm (seine OpenSim-Version), und füge dann %s hinzu.'
-  start_viewer_get: 'Firestorm herunterladen'
-  start_viewer_others: 'Andere Viewer'
+  start_viewer: 'Grid hinzufügen'
+  start_add_grid: '%s hinzufügen'
+  start_viewer_note: 'Noch keinen Viewer? Hol dir %s oder einen anderen Viewer für OpenSim.'
   start_login: Einloggen
-  start_login_text: 'Wähle im Viewer %s in der Liste der Grids und logge dich dann mit dem Namen deines Avatars und seinem Passwort ein.'
   start_done: Erledigt
-  start_next: 'Nächster Schritt'
   total: Insgesamt
   tip_models_match: 'Wie ein Modell erkannt wird'
   tip_models_pattern: 'Teil des Namens der Modelle'

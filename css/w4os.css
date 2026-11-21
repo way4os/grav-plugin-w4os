@@ -43,18 +43,26 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-add-grid .w4os-copy { padding: .2rem .7rem; font-size: .875rem; min-height: 0; }
 .w4os-add-grid .w4os-copy[hidden] { display: none; }
 
-/* The steps of a newcomer: numbered, the one to do now framed, the ones done faded with a check, the ones after faded */
-.w4os-start { margin: 1.5rem 0; }
+/* The Connect block: numbered steps, the one to do now framed with its number filled, the ones done checked, the others faded;
+   the colour of the frame and the number the theme's (--w4os-accent), else the colour of the text */
+.w4os-start { margin: 1.5rem 0; container-type: inline-size; }
 .w4os-start-steps { list-style: none; counter-reset: w4os-step; padding: 0; margin: 0; display: grid; gap: .75rem; }
-.w4os-start-step { counter-increment: w4os-step; position: relative; margin: 0; padding: .75rem 1rem .75rem 3.25rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
-.w4os-start-step::before { content: counter(w4os-step); position: absolute; left: 1rem; top: .8rem; width: 1.6rem; height: 1.6rem; line-height: 1.6rem; text-align: center; border-radius: 50%; border: 1px solid currentColor; font-weight: bold; }
-.w4os-start-step-title { margin: 0; font-size: 1.1em; display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .75rem; }
+.w4os-start-step { counter-increment: w4os-step; position: relative; margin: 0; padding: .75rem 1rem .75rem 3.25rem; min-height: 3.2rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-start-step::before { content: counter(w4os-step); position: absolute; left: 1rem; top: .8rem; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 45%, transparent); font-weight: bold; font-size: .9rem; }
+.w4os-start-step-title { margin: 0 0 .5rem; font-size: 1.1em; }
 .w4os-start-step p { margin: .5rem 0 0; }
-.w4os-start-state { font-size: .8rem; font-weight: normal; text-transform: uppercase; letter-spacing: .04em; opacity: .8; }
-.w4os-start-step.is-next { border: 2px solid currentColor; }
-.w4os-start-step.is-done, .w4os-start-step.is-todo { opacity: .65; }
-.w4os-start-step.is-done::before { content: "\2713"; }
-.w4os-start-viewers a { margin-right: 1rem; }
+.w4os-start-step.is-next { border: 2px solid var(--w4os-accent, currentColor); }
+.w4os-start-step.is-next::before { background: var(--w4os-accent, currentColor); border-color: var(--w4os-accent, currentColor); color: Canvas; }
+.w4os-start-step.is-done::before { content: "\2713"; border-color: var(--w4os-accent, currentColor); color: var(--w4os-accent, currentColor); }
+.w4os-start-step.is-done, .w4os-start-step.is-todo { opacity: .7; }
+.w4os-start-uri .w4os-login-uri { overflow-wrap: anywhere; user-select: all; }
+.w4os-start-uri .w4os-copy { padding: .2rem .7rem; font-size: .875rem; min-height: 0; }
+.w4os-start-uri .w4os-copy[hidden] { display: none; }
+.w4os-start-note { font-size: .9em; }
+/* Side by side where the block has the room (a page), stacked where it has not (a sidebar) */
+@container (min-width: 42rem) {
+    .w4os-start-steps { grid-template-columns: repeat(3, 1fr); }
+}
 
 /* The login URI to copy: one click selects it whole */
 .w4os-login-uri { user-select: all; cursor: text; }
