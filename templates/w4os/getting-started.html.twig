@@ -19,7 +19,7 @@
                 {% else %}
                 <p>{{ 'w4os.start_avatar_text'|t }}</p>
                 <p>
-                    {% if w4os_route('register') %}<a class="button{{ item.state == 'next' ? ' primary' }}" href="{{ (base_url_relative ~ w4os_route('register'))|e('html_attr') }}">{{ 'w4os.register_title'|t }}</a>{% endif %}
+                    {% if w4os_route('register') %}<a class="btn {{ item.state == 'next' ? 'btn-primary' : 'btn-ghost' }}" href="{{ (base_url_relative ~ w4os_route('register'))|e('html_attr') }}">{{ 'w4os.register_title'|t }}</a>{% endif %}
                     <a href="{{ (base_url_relative ~ (config.plugins.login.route ?: '/login'))|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
                 </p>
                 {% endif %}

@@ -38,7 +38,7 @@ describe('the steps of a newcomer', function () {
     test('stand out the one to do now, the avatar to create with the registration page and the sign-in', function () {
         $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'uri' => 'grid.example.org:8002']);
 
-        expect($html)->toContain('class="w4os-start-step w4os-start-avatar is-next" aria-current="step"', 'class="button primary" href="/register">w4os.register_title</a>', 'href="/login">w4os.log_in</a>')
+        expect($html)->toContain('class="w4os-start-step w4os-start-avatar is-next" aria-current="step"', 'class="btn btn-primary" href="/register">w4os.register_title</a>', 'href="/login">w4os.log_in</a>')
             ->and($html)->toContain('w4os-start-viewer is-todo', 'w4os.start_viewer_text(Demo World)', 'https://www.firestormviewer.org/os-operating-system/', 'w4os.start_login_text(Demo World)')
             ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>');
     });
@@ -58,7 +58,7 @@ describe('the grid added to a viewer', function () {
         $html = render_start('w4os/add-grid.html.twig', ['uri' => 'grid.example.org:8002',
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
-        expect($html)->toContain('<a class="button primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
+        expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
             ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
             ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'data-w4os-copy="grid.example.org:8002"', 'data-w4os-copied="w4os.copied"');
     });
