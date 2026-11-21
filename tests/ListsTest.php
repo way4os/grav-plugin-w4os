@@ -62,14 +62,14 @@ describe('a list of the engine', function () {
 
     test('the simulators of the regions: several, as the rows have them, with their text', function () use ($document) {
         $list = Lists::showing((new OpenApi($document))->listOf('regions'), ['flags', 'simulator']);
-        $query = Lists::query($list, ['simulator' => ['192.168.8.69:9010', '192.168.8.69:9020']], 10);
-        $meta = ['available' => ['simulator' => [['value' => '192.168.8.69:9010', 'label' => 'Welcome sim']], 'flags' => ['Persistent']]];
+        $query = Lists::query($list, ['simulator' => ['sim.example.org:9010', 'sim.example.org:9020']], 10);
+        $meta = ['available' => ['simulator' => [['value' => 'sim.example.org:9010', 'label' => 'Welcome sim']], 'flags' => ['Persistent']]];
         $offered = array_column(Lists::offering($list, $meta, $query['page'])['filters'], null, 'name');
 
-        expect($query['api']['filter[simulator]'])->toBe('192.168.8.69:9010,192.168.8.69:9020')
+        expect($query['api']['filter[simulator]'])->toBe('sim.example.org:9010,sim.example.org:9020')
             ->and($offered['simulator']['values'])->toBe([
-                ['value' => '192.168.8.69:9010', 'label' => '', 'text' => 'Welcome sim'],
-                ['value' => '192.168.8.69:9020', 'label' => ''],
+                ['value' => 'sim.example.org:9010', 'label' => '', 'text' => 'Welcome sim'],
+                ['value' => 'sim.example.org:9020', 'label' => ''],
             ])
             ->and(array_column($offered['flags']['values'], 'value'))->toBe(['Persistent']);
     });
