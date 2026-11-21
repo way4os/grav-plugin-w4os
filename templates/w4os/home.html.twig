@@ -1,6 +1,6 @@
 {# The home page of a grid, as content of any page (the shortcode [w4os-home]...[/w4os-home], in the theme's default page): the
    text of the page, the popular places and the guide, then what the grid is (its info, its status, the Connect block) and its
-   message of the day with the last news of the site (its page /news, when it has one).
+   message of the day with the last news of the site (its page /news, when it has one) and a link to all of them.
    Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
    column, if it has one, stays the theme's. The main column a section, its blocks titled h2 (the page's own title is h1); the
    others asides, their blocks titled h3. A theme adds its own boxes to the asides by extending this template
@@ -23,7 +23,7 @@
             {{ w4os_block('motd', {level: 'h3'}) }}
             {% if news %}
             <section class="w4os-latest">
-                <h3 class="w4os-latest-title"><a href="{{ news.url|e('html_attr') }}">{{ news.title }}</a></h3>
+                <h3 class="w4os-latest-title">{{ news.title }}</h3>
                 {% for item in news.collection()|slice(0, 3) %}
                 {% set image = (item.header.thumb ?? false) ? item.media[item.header.thumb] : item.media.images|first %}
                 <article class="w4os-latest-item">
@@ -33,6 +33,7 @@
                     <p class="w4os-latest-date"><time datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|w4os_date }}</time></p>
                 </article>
                 {% endfor %}
+                <p class="w4os-latest-all"><a href="{{ news.url|e('html_attr') }}">{{ 'w4os.home_all_news'|t }}</a></p>
             </section>
             {% endif %}
             {% block w4os_home_news_extra %}{% endblock %}

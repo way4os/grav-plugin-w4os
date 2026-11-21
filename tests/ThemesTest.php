@@ -145,7 +145,7 @@ describe('the home page of a grid', function () {
             ->and($html)->toContain('<h3 class="block-title">grid-info</h3>', '<h3 class="block-title">grid-status</h3>', '<h3 class="block-title">motd</h3>');
     });
 
-    test('has the Connect block under what the grid is, the last three news of the site under its message of the day', function () {
+    test('has the Connect block under what the grid is, the last three news of the site under its message of the day, then a link to all of them', function () {
         $twig = themeless_twig();
         $post = fn (int $n) => new class($n) {
             public array $header = [];
@@ -179,7 +179,7 @@ describe('the home page of a grid', function () {
 
         expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
             ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
-            ->and($html)->toContain('<h3 class="w4os-latest-title"><a href="/news">News</a></h3>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
+            ->and($html)->toContain('<h3 class="w4os-latest-title">News</h3>', '<p class="w4os-latest-all"><a href="/news">[w4os.home_all_news]</a></p>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
             ->and($html)->not->toContain('Post 4')
             // The excerpt cut with an ellipsis written once, never escaped again (&amp;hellip;)
             ->and($raw)->toContain(str_repeat('Long text ', 14).'…')->not->toContain('hellip')
