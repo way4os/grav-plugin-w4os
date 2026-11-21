@@ -519,15 +519,21 @@ final class Site
     }
 
     /**
-     * A picture of the grid that never shows broken: its initials (initials()) on a tint, the picture over them, hidden when it
-     * cannot be loaded (a texture the grid has not, its assets out of reach); $class gives its size and shape.
+     * A picture of the grid that never shows broken, never under initials: the picture when there is one ($src), its initials
+     * (initials()) on a tint when there is none, or when it cannot be loaded (the picture taken away then); $class gives its shape.
      */
-    public static function pictureTag(string $src, string $initials, string $class = '', int $size = 32): string
+    public static function pictureTag(?string $src, string $initials, string $class = '', int $size = 32): string
     {
         $esc = fn (string $text) => htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $picture = $src === null || $src === '' ? '' : '<img src="'.$esc($src).'" alt="" width="'.$size.'" height="'.$size.'" onerror="this.parentNode.classList.remove(\'w4os-pic-shown\');this.remove()">';
 
-        return '<span class="'.$esc(trim("w4os-pic $class")).'" style="width: '.$size.'px; height: '.$size.'px" data-initials="'.$esc($initials).'">'
-            .'<img src="'.$esc($src).'" alt="" width="'.$size.'" height="'.$size.'" loading="lazy" onerror="this.hidden=true"></span>';
+        return '<span class="'.$esc(trim('w4os-pic'.($picture === '' ? '' : ' w4os-pic-shown')." $class")).'" style="width: '.$size.'px; height: '.$size.'px" data-initials="'.$esc($initials).'">'.$picture.'</span>';
+    }
+
+    /** Whether a picture of the grid is one: an asset UUID that is not the one of nothing (zeros). */
+    public static function hasPicture(?string $uuid): bool
+    {
+        return $uuid !== null && trim($uuid, "0- ") !== '';
     }
 
     /** The initials of a name (Ada Love: AL; Plaza: P), '' for none. */

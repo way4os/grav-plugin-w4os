@@ -373,8 +373,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => $this->site()->picture($uuid, $default)));
         // A teleport link that fits where it is seen, browser or viewer (Site::tpLink(), W4OS\Views\TeleportLink)
         $twig->addFunction(new \Twig\TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null) => $this->site()->tpLink((string) $destination, $label), ['is_safe' => ['html']]));
-        // A picture of the grid that never shows broken: the initials of its name under it (Site::pictureTag())
-        $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag($this->site()->picture($uuid, $default), Site::initials($name), $class, $size), ['is_safe' => ['html']]));
+        // A picture of the grid that never shows broken: the picture when it has one, else the initials of its name (Site::pictureTag())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag(Site::hasPicture($uuid) ? $this->site()->picture($uuid, $default) : null, Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     }
 
     public function onTwigSiteVariables(): void

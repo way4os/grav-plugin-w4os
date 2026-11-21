@@ -17,7 +17,7 @@ function item_twig(array $page = []): Environment
     $twig->addFunction(new TwigFunction('w4os_item', fn () => $page));
     $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links, fixed: $fixed)));
     $twig->addFunction(new TwigFunction('w4os_item_view', fn (array $page) => W4OS\Views\ItemView::of($api->listOf($page['type']) ?? ['columns' => []], $page['item'], $page['groups'] ?? [], W4OS\Views\Rows::actions($page['form'], $page['item']))));
-    $twig->addFunction(new TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag("/pictures/$uuid.jpg", W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]));
+    $twig->addFunction(new TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => "/$type"));
     $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));

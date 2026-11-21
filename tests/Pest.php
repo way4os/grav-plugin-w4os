@@ -11,5 +11,5 @@ function link_function(string $prefix = ''): Twig\TwigFunction
 /** The w4os_picture_tag() of the plugin's Twig, its picture at /pictures/<uuid>.jpg (none-<default> without one). */
 function picture_tag_function(): Twig\TwigFunction
 {
-    return new Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag('/pictures/'.($uuid ?? "none-$default").'.jpg', W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]);
+    return new Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]);
 }
