@@ -136,6 +136,7 @@ describe('the home page of a grid', function () {
     test('has its main column a section, its blocks titled h2, its side columns asides, their blocks titled h3', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\"><".($args['level'] ?? 'h3')." class=\"block-title\">$name</".($args['level'] ?? 'h3').'></section>', ['is_safe' => ['html']]));
         $html = $twig->render('w4os/home.html.twig', ['content' => '<h1>Welcome</h1>']);
@@ -191,6 +192,7 @@ describe('the home page of a grid', function () {
         $loader->addPath(dirname(__DIR__).'/templates', 'w4os');
         $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid_extra %}<p>Support</p>{% endblock %}{% block w4os_home_news_before %}<p>Before</p>{% endblock %}{% block w4os_home_news_extra %}<p>Extra</p>{% endblock %}"]), $loader]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/home.html.twig', ['content' => '']);
 

@@ -1,5 +1,6 @@
 {# The home page of a grid, as content of any page (the shortcode [w4os-home]...[/w4os-home], in the theme's default page): the
-   text of the page, the popular places and the guide, then what the grid is (its info, its status, the Connect block) and its
+   text of the page, the popular places and the guide, then what the grid is (its info, its status, the Connect block, its texts
+   start_title, start_content and start_footer from the front matter of the page) and its
    message of the day with the last news of the site (its page /news, when it has one) and a link to all of them.
    Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
    column, if it has one, stays the theme's. The main column a section, its blocks titled h2 (the page's own title is h1); the
@@ -17,7 +18,7 @@
         <aside class="w4os-home-grid">
             {{ w4os_block('grid-info', {level: 'h3'}) }}
             {{ w4os_block('grid-status', {level: 'h3'}) }}
-            {% include 'w4os/getting-started.html.twig' with {start_level: 'h3'} %}
+            {% include 'w4os/getting-started.html.twig' with {start_level: 'h3', start_title: page.header.start_title ?? '', start_content: page.header.start_content ?? '', start_footer: page.header.start_footer ?? ''} %}
             {% block w4os_home_grid_extra %}{% endblock %}
         </aside>
         <aside class="w4os-home-news">

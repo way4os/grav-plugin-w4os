@@ -294,6 +294,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
         // A link of the site for the page shown: its base, the language of the visitor, never a prefix twice (the engine's Url::build())
         $twig->addFunction(new \Twig\TwigFunction('w4os_url', fn (?string $target, array $args = []) => $this->site()->links()->build((string) $target, $args)));
+        // A text a site gives a block (Markdown, inline HTML), as the text of a page, its links in the language of the visitor
+        $twig->addFilter(new \Twig\TwigFilter('w4os_text', fn (?string $text) => $this->site()->text($text), ['is_safe' => ['html']]));
         // The grid added to a viewer (w4os/add-grid.html.twig) and the Connect block (w4os/getting-started.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_add_grid', fn () => $this->site()->addGrid()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_uri', fn () => $this->site()->loginUri()));
@@ -392,7 +394,7 @@ class W4osPlugin extends Plugin
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
      * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri] ([login-uri
-     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..."], [base_url], [grid-name], [site-slogan]. The
+     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [base_url], [grid-name], [site-slogan]. The
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
@@ -410,9 +412,13 @@ class W4osPlugin extends Plugin
         $handlers->add('login-uri', fn ($shortcode) => array_key_exists('add-grid', (array) $shortcode->getParameters())
             ? $this->grav['twig']->processTemplate('w4os/add-grid.html.twig')
             : '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>');
-        // [getting-started title="..."]: the Connect block, the next step to do standing out (templates/w4os/getting-started.html.twig)
-        $handlers->add('getting-started', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/getting-started.html.twig',
-            ['start_title' => trim((string) $shortcode->getParameter('title', ''))]));
+        // [getting-started title="..." content="..." footer="..."]: the Connect block, the next step to do standing out, the texts of
+        // the site above and under its steps (templates/w4os/getting-started.html.twig)
+        $handlers->add('getting-started', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/getting-started.html.twig', [
+            'start_title' => trim((string) $shortcode->getParameter('title', '')),
+            'start_content' => trim((string) $shortcode->getParameter('content', '')),
+            'start_footer' => trim((string) $shortcode->getParameter('footer', '')),
+        ]));
         $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         $handlers->add('grid-name', fn () => htmlspecialchars($this->site()->gridName()));
         $handlers->add('site-slogan', fn () => htmlspecialchars($this->site()->slogan()));

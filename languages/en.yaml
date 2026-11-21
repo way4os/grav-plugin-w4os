@@ -967,4 +967,6 @@ w4os:
   admin_sidebar_pin: 'Pin the sidebar'
   admin_menu_tools: Tools
   admin_shortcode_option_add_grid: 'With the button that adds the grid to a viewer, and the login URI to copy'
+  admin_shortcode_option_content: "A text between the title and the steps (Markdown, a link to /help goes to the page in the visitor's language)"
+  admin_shortcode_option_footer: 'A text under the steps (Markdown: a link to the help page, for instance)'
   admin_shortcode_getting_started_help: 'The steps of a newcomer: create the avatar, add the grid to the viewer, log in; the next one to do stands out'

@@ -967,4 +967,6 @@ w4os:
   admin_sidebar_pin: 'Fixar a barra lateral'
   admin_menu_tools: Ferramentas
   admin_shortcode_option_add_grid: 'Com o botão que adiciona o grid ao viewer, e a URI de login para copiar'
+  admin_shortcode_option_content: 'Um texto entre o título e os passos (Markdown; um link para /help leva à página no idioma do visitante)'
+  admin_shortcode_option_footer: 'Um texto abaixo dos passos (Markdown: por exemplo, um link para a página de ajuda)'
   admin_shortcode_getting_started_help: 'Os passos de quem chega: criar o avatar, adicionar o grid ao viewer, entrar; o próximo a fazer fica em destaque'

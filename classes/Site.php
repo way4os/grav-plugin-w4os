@@ -698,6 +698,23 @@ final class Site
         return new Url(base: $base, language: trim($prefix, '/'), languages: array_values(array_map('strval', $languages)), path: $path);
     }
 
+    /**
+     * A text a site gives a block (Markdown, inline HTML), as the text of a page: Grav's Markdown, its links to a path of the site in
+     * the language of the visitor (localLinks()); '' for none.
+     */
+    public function text(?string $text): string
+    {
+        $text = trim((string) $text);
+
+        return $text === '' ? '' : self::localLinks(\Grav\Common\Utils::processMarkdown($text), $this->links());
+    }
+
+    /** The links of some HTML to a path of the site (href="/help") built for the page shown: its base and language, never twice. */
+    public static function localLinks(string $html, Url $links): string
+    {
+        return (string) preg_replace_callback('#\shref="(/(?!/)[^"]*)"#', fn (array $m) => ' href="'.htmlspecialchars($links->build(html_entity_decode($m[1], ENT_QUOTES)), ENT_QUOTES).'"', $html);
+    }
+
     /** The path of a route of the plugin on this site, without the host: a page shows it whatever address it was reached at. */
     public function path(string $type, bool $language = false): string
     {
@@ -1192,7 +1209,7 @@ final class Site
         ['code' => '[new-avatars]', 'help' => 'block_new_avatars_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => [['option' => 'add-grid', 'help' => 'admin_shortcode_option_add_grid']]],
-        ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title']]],
+        ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'content', 'help' => 'admin_shortcode_option_content'], ['option' => 'footer', 'help' => 'admin_shortcode_option_footer']]],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],
         ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
         ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],

@@ -19,6 +19,8 @@ function render_start(string $template, array $given, array $context = []): stri
     $twig->addFunction(new TwigFunction('w4os_avatar', fn () => $given['avatar']));
     $twig->addFunction(new TwigFunction('w4os_start_steps', fn () => $given['steps']));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => $given['routes'][$type] ?? null));
+    // The texts of a site as w4os_text gives them, HTML here, from a /fr page
+    $twig->addFilter(new TwigFilter('w4os_text', fn (?string $text) => trim((string) $text) === '' ? '' : Site::localLinks((string) $text, Site::siteLinks('', '/fr', ['en', 'fr'], '/aide')), ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
     $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
@@ -103,11 +105,31 @@ describe('the grid added to a viewer', function () {
         expect($account)->toContain("include 'w4os/getting-started.html.twig'", "include 'w4os/add-grid.html.twig'")
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/confirm.html.twig'))->toContain("include 'w4os/add-grid.html.twig'")
             ->and(array_column(Site::SHORTCODES, 'code'))->toContain('[login-uri]', '[getting-started]')
-            ->and(array_column(Site::SHORTCODES[array_search('[getting-started]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['title'])
+            ->and(array_column(Site::SHORTCODES[array_search('[getting-started]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['title', 'content', 'footer'])
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
 
     test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle; the copy of the login URI on its line', function () {
         expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field { display: inline-flex;', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
+    });
+
+    test('takes the texts of a site above and under its steps, a link to a path of the site in the language of the page, nothing when empty', function () {
+        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'routes' => []],
+            ['start_content' => '<p>Three steps</p>', 'start_footer' => '<p><a href="/aide">Aide complète</a></p>']);
+
+        expect($html)->toContain('<div class="w4os-start-content"><p>Three steps</p></div>', '<div class="w4os-start-footer"><p><a href="/fr/aide">Aide complète</a></p></div>')
+            ->and(strpos($html, 'w4os-start-title'))->toBeLessThan(strpos($html, 'w4os-start-content'))
+            ->and(strpos($html, 'w4os-start-content'))->toBeLessThan(strpos($html, 'w4os-start-steps'))
+            ->and(strpos($html, 'w4os-start-steps'))->toBeLessThan(strpos($html, 'w4os-start-footer'))
+            ->and(render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'routes' => []]))->not->toContain('w4os-start-content', 'w4os-start-footer')
+            ->and(Site::localLinks('<a href="/fr/aide">a</a> <a href="https://example.org/x">b</a> <a href="//cdn.example.org/y">c</a>', Site::siteLinks('', '/fr', ['en', 'fr'], '/')))
+            ->toBe('<a href="/fr/aide">a</a> <a href="https://example.org/x">b</a> <a href="//cdn.example.org/y">c</a>');
+    });
+
+    test('on the home page, has the texts the page gives it (start_title, start_content, start_footer)', function () {
+        $home = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/home.html.twig');
+
+        expect($home)->toContain("start_title: page.header.start_title ?? ''", "start_content: page.header.start_content ?? ''", "start_footer: page.header.start_footer ?? ''")
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("'start_content' => trim((string) \$shortcode->getParameter('content', ''))", "'start_footer' => trim((string) \$shortcode->getParameter('footer', ''))");
     });
 });

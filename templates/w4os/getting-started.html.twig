@@ -1,5 +1,6 @@
 {# The Connect block (w4os_start_steps()): create the avatar, add the grid to the viewer, log in. The step to do now stands out, the
-   ones done are marked. start_title: the title of the block, Connect by default; start_level: its level, h2 by default. #}
+   ones done are marked. start_title: the title of the block, Connect by default; start_level: its level, h2 by default;
+   start_content and start_footer: texts of the site (Markdown) between the title and the steps, and under them, nothing when empty. #}
 {% set level = start_level|default('h2') %}
 {% set steps = w4os_start_steps() %}
 {% set avatar = w4os_avatar() %}
@@ -7,6 +8,8 @@
 {% set links = w4os_add_grid() %}
 <section class="w4os-start">
     <{{ level }} class="w4os-start-title">{{ start_title|default('w4os.start_title'|t) }}</{{ level }}>
+    {% set content = start_content|default('')|w4os_text %}
+    {% if content %}<div class="w4os-start-content">{{ content }}</div>{% endif %}
     <ol class="w4os-start-steps">
         {% for item in steps %}
         {% set button = item.state == 'next' ? 'btn btn-primary' : 'btn btn-ghost' %}
@@ -31,4 +34,6 @@
         </li>
         {% endfor %}
     </ol>
+    {% set footer = start_footer|default('')|w4os_text %}
+    {% if footer %}<div class="w4os-start-footer">{{ footer }}</div>{% endif %}
 </section>

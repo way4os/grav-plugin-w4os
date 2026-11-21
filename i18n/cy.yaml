@@ -120,4 +120,6 @@ w4os:
   admin_sidebar_pin: 'Pinio’r bar ochr'
   admin_menu_tools: 'Offer'
   admin_shortcode_option_add_grid: 'Gyda’r botwm sy’n ychwanegu’r grid at y viewer, a’r URI mewngofnodi i’w gopïo'
+  admin_shortcode_option_content: 'Testun rhwng y teitl a’r camau (Markdown; mae dolen i /help yn mynd i’r dudalen yn iaith yr ymwelydd)'
+  admin_shortcode_option_footer: 'Testun o dan y camau (Markdown: dolen i’r dudalen gymorth, er enghraifft)'
   admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'
