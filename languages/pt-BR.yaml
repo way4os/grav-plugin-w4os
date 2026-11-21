@@ -194,6 +194,9 @@ w4os:
   start_login: Entrar
   start_done: Concluído
   home_all_news: 'Todas as notícias'
+  hg_visit_title: 'Visite de outro grid'
+  hg_visit_text: 'Já tem um avatar em outro grid OpenSim? Venha nos visitar sem criar outro: digite este endereço no mapa ou na busca do seu viewer.'
+  hg_visit_go: 'Teletransportar para cá'
   total: Total
   tip_models_match: 'Como um modelo é reconhecido'
   tip_models_pattern: 'Parte do nome dos modelos'
@@ -970,3 +973,4 @@ w4os:
   admin_shortcode_option_content: 'Um texto entre o título e os passos (Markdown; um link para /help leva à página no idioma do visitante)'
   admin_shortcode_option_footer: 'Um texto abaixo dos passos (Markdown: por exemplo, um link para a página de ajuda)'
   admin_shortcode_getting_started_help: 'Os passos de quem chega: criar o avatar, adicionar o grid ao viewer, entrar; o próximo a fazer fica em destaque'
+  admin_shortcode_hypergrid_visit_help: 'A visita do grid para os avatares de outros grids (o endereço hypergrid e um botão para vir); nada quando o grid não é acessível por hypergrid'

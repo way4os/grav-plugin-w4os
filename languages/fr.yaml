@@ -194,6 +194,9 @@ w4os:
   start_login: 'Se connecter'
   start_done: Terminé
   home_all_news: 'Toutes les actualités'
+  hg_visit_title: 'Visiter depuis une autre grille'
+  hg_visit_text: 'Vous avez déjà un avatar sur une autre grille OpenSim ? Venez nous voir sans en créer un : entrez cette adresse dans la carte ou la recherche de votre viewer.'
+  hg_visit_go: 'Se téléporter ici'
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
   tip_models_pattern: 'Partie du nom des modèles'
@@ -970,3 +973,4 @@ w4os:
   admin_shortcode_option_content: 'Un texte entre le titre et les étapes (Markdown ; un lien vers /help mène à la page dans la langue du visiteur)'
   admin_shortcode_option_footer: 'Un texte sous les étapes (Markdown : un lien vers la page d’aide, par exemple)'
   admin_shortcode_getting_started_help: 'Les étapes d’un nouveau venu : créer son avatar, ajouter la grille au viewer, se connecter ; la prochaine à faire est mise en avant'
+  admin_shortcode_hypergrid_visit_help: 'La visite de la grille pour les avatars d’autres grilles (son adresse hypergrid et un bouton pour venir) ; rien quand la grille n’est pas joignable en hypergrid'

@@ -296,6 +296,10 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_url', fn (?string $target, array $args = []) => $this->site()->links()->build((string) $target, $args)));
         // A link of the site by its kind (plain, more, button, primary: W4OS\Views\Link), its address built for the page shown
         $twig->addFunction(new \Twig\TwigFunction('w4os_link', fn (?string $target, string $text, string $kind = 'plain', array $args = [], string $class = '') => \W4OS\Views\Link::to($this->site()->links(), (string) $target, $text, $kind, $args, $class), ['is_safe' => ['html']]));
+        // A link to an address built already (another grid, a viewer), by its kind (W4OS\Views\Link)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_anchor', fn (string $href, string $text, string $kind = 'plain', string $class = '') => \W4OS\Views\Link::html($href, $text, $kind, $class), ['is_safe' => ['html']]));
+        // The visit of the grid from another one (w4os/hypergrid-visit.html.twig), null when it is not reachable by hypergrid
+        $twig->addFunction(new \Twig\TwigFunction('w4os_hypergrid', fn () => $this->site()->hypergrid()));
         // A text a site gives a block (Markdown, inline HTML), as the text of a page, its links in the language of the visitor
         $twig->addFilter(new \Twig\TwigFilter('w4os_text', fn (?string $text, bool $more = false) => $this->site()->text($text, $more), ['is_safe' => ['html']]));
         // The grid added to a viewer (w4os/add-grid.html.twig) and the Connect block (w4os/getting-started.html.twig)
@@ -396,7 +400,7 @@ class W4osPlugin extends Plugin
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
      * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri] ([login-uri
-     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [base_url], [grid-name], [site-slogan]. The
+     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [hypergrid-visit title="..."], [base_url], [grid-name], [site-slogan]. The
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
@@ -420,6 +424,11 @@ class W4osPlugin extends Plugin
             'start_title' => trim((string) $shortcode->getParameter('title', '')),
             'start_content' => trim((string) $shortcode->getParameter('content', '')),
             'start_footer' => trim((string) $shortcode->getParameter('footer', '')),
+        ]));
+        // [hypergrid-visit title="..." level=h2]: the visit of the grid for the avatars of other grids, nothing without hypergrid
+        $handlers->add('hypergrid-visit', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/hypergrid-visit.html.twig', [
+            'hg_title' => trim((string) $shortcode->getParameter('title', '')),
+            'hg_level' => preg_match('/^h[2-6]$/', (string) $shortcode->getParameter('level', '')) === 1 ? (string) $shortcode->getParameter('level') : 'h2',
         ]));
         $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         $handlers->add('grid-name', fn () => htmlspecialchars($this->site()->gridName()));

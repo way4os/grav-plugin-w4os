@@ -123,3 +123,4 @@ w4os:
   admin_shortcode_option_content: 'Ein Text zwischen dem Titel und den Schritten (Markdown; ein Link auf /help führt zur Seite in der Sprache des Besuchers)'
   admin_shortcode_option_footer: 'Ein Text unter den Schritten (Markdown: zum Beispiel ein Link auf die Hilfeseite)'
   admin_shortcode_getting_started_help: 'Die Schritte für Neue: den Avatar erstellen, das Grid zum Viewer hinzufügen, sich einloggen; der nächste Schritt wird hervorgehoben'
+  admin_shortcode_hypergrid_visit_help: 'Der Besuch des Grids für Avatare anderer Grids (seine Hypergrid-Adresse und ein Knopf zum Kommen); nichts, wenn das Grid per Hypergrid nicht erreichbar ist'

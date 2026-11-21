@@ -194,6 +194,9 @@ w4os:
   start_login: Mewngofnodi
   start_done: "Wedi'i wneud"
   home_all_news: 'Yr holl newyddion'
+  hg_visit_title: 'Ymweld o grid arall'
+  hg_visit_text: 'Oes gennych chi afatar ar grid OpenSim arall yn barod? Dewch i ymweld heb greu un: rhowch y cyfeiriad hwn ym map neu chwiliad eich viewer.'
+  hg_visit_go: 'Teleportio yma'
   total: Cyfanswm
   tip_models_match: 'Sut mae model yn cael ei adnabod'
   tip_models_pattern: "Rhan o enw'r modelau"
@@ -970,3 +973,4 @@ w4os:
   admin_shortcode_option_content: 'Testun rhwng y teitl a’r camau (Markdown; mae dolen i /help yn mynd i’r dudalen yn iaith yr ymwelydd)'
   admin_shortcode_option_footer: 'Testun o dan y camau (Markdown: dolen i’r dudalen gymorth, er enghraifft)'
   admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'
+  admin_shortcode_hypergrid_visit_help: 'Ymweliad y grid i afatarau gridiau eraill (ei gyfeiriad hypergrid a botwm i ddod); dim pan na ellir cyrraedd y grid drwy hypergrid'

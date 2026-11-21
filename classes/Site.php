@@ -7,6 +7,7 @@ use Grav\Common\HTTP\Client;
 use Grav\Common\Page\Page;
 use Grav\Common\User\Interfaces\UserInterface;
 use W4OS\Engine\Http\Url;
+use W4OS\Engine\Hypergrid\Destination;
 use W4OS\Views\Access;
 use W4OS\Views\Contract;
 
@@ -544,6 +545,33 @@ final class Site
     public function gridName(): string
     {
         return $this->info('grid name', fn () => $this->engine()->gridName());
+    }
+
+    /**
+     * The visit of the grid from another one, for the avatars of other grids: its address to enter in a viewer (its gatekeeper,
+     * host:port) and the link that takes a viewer there; null when the grid is not reachable by hypergrid (no gatekeeper).
+     *
+     * @return array{address: string, link: string}|null
+     */
+    public function hypergrid(): ?array
+    {
+        return self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
+    }
+
+    /**
+     * The visit of a grid by its gatekeeper (http://host:port, host:port): the address host:port, the link of the engine for a
+     * page of the web (Destination AUTO: hop://host:port, to the grid's default region); null without one.
+     *
+     * @return array{address: string, link: string}|null
+     */
+    public static function hypergridVisit(string $gatekeeper): ?array
+    {
+        $address = trim($gatekeeper) === '' ? null : Destination::loginUri(trim($gatekeeper));
+        if ($address === null || $address === '') {
+            return null;
+        }
+
+        return ['address' => $address, 'link' => (string) Destination::format($address, Destination::AUTO, "\n", ['client' => 'web'])];
     }
 
     /** The login URI of the grid (host:port), kept for the time of the setting "cache"; empty when the engine cannot tell it. */
@@ -1221,6 +1249,7 @@ final class Site
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => [['option' => 'add-grid', 'help' => 'admin_shortcode_option_add_grid']]],
         ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'content', 'help' => 'admin_shortcode_option_content'], ['option' => 'footer', 'help' => 'admin_shortcode_option_footer']]],
+        ['code' => '[hypergrid-visit]', 'help' => 'admin_shortcode_hypergrid_visit_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h2', 'help' => 'shortcode_option_level']]],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],
         ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
         ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],

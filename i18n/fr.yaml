@@ -123,3 +123,4 @@ w4os:
   admin_shortcode_option_content: 'Un texte entre le titre et les étapes (Markdown ; un lien vers /help mène à la page dans la langue du visiteur)'
   admin_shortcode_option_footer: 'Un texte sous les étapes (Markdown : un lien vers la page d’aide, par exemple)'
   admin_shortcode_getting_started_help: 'Les étapes d’un nouveau venu : créer son avatar, ajouter la grille au viewer, se connecter ; la prochaine à faire est mise en avant'
+  admin_shortcode_hypergrid_visit_help: 'La visite de la grille pour les avatars d’autres grilles (son adresse hypergrid et un bouton pour venir) ; rien quand la grille n’est pas joignable en hypergrid'

@@ -123,3 +123,4 @@ w4os:
   admin_shortcode_option_content: 'Un testo tra il titolo e i passi (Markdown; un link a /help porta alla pagina nella lingua del visitatore)'
   admin_shortcode_option_footer: 'Un testo sotto i passi (Markdown: per esempio un link alla pagina di aiuto)'
   admin_shortcode_getting_started_help: 'I passi di chi arriva: creare l’avatar, aggiungere la griglia al viewer, accedere; il prossimo da fare è messo in evidenza'
+  admin_shortcode_hypergrid_visit_help: 'La visita della griglia per gli avatar di altre griglie (il suo indirizzo hypergrid e un pulsante per venire); niente quando la griglia non è raggiungibile in hypergrid'

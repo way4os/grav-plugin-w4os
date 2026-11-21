@@ -1,0 +1,13 @@
+{# The visit of the grid for the avatars of other grids, a callout: what to do, the address to enter in the map or the search of a
+   viewer (the grid's gatekeeper, host:port, to copy), the button that takes a viewer there. Nothing when the grid is not reachable
+   by hypergrid. hg_title: its title (Visit from another grid by default); hg_level: the level of its title (h2). #}
+{% set hypergrid = w4os_hypergrid() %}
+{% if hypergrid %}
+{% set level = hg_level|default('h2') %}
+<aside class="w4os-callout w4os-hypergrid-visit">
+    <{{ level }} class="w4os-callout-title">{{ hg_title|default('w4os.hg_visit_title'|t) }}</{{ level }}>
+    <p>{{ 'w4os.hg_visit_text'|t }}</p>
+    <p class="w4os-hypergrid-address">{% include 'w4os/login-uri.html.twig' with {uri: hypergrid.address} %}</p>
+    {% if hypergrid.link %}<p>{{ w4os_anchor(hypergrid.link, 'w4os.hg_visit_go'|t, 'primary') }}</p>{% endif %}
+</aside>
+{% endif %}

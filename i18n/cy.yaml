@@ -123,3 +123,4 @@ w4os:
   admin_shortcode_option_content: 'Testun rhwng y teitl a’r camau (Markdown; mae dolen i /help yn mynd i’r dudalen yn iaith yr ymwelydd)'
   admin_shortcode_option_footer: 'Testun o dan y camau (Markdown: dolen i’r dudalen gymorth, er enghraifft)'
   admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'
+  admin_shortcode_hypergrid_visit_help: 'Ymweliad y grid i afatarau gridiau eraill (ei gyfeiriad hypergrid a botwm i ddod); dim pan na ellir cyrraedd y grid drwy hypergrid'

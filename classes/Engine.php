@@ -101,6 +101,12 @@ final class Engine
         return (string) ($this->info()['login'] ?? '');
     }
 
+    /** The gatekeeper of the grid, as its grid info says it (the address another grid's avatars come in at), '' for none. */
+    public function gatekeeper(): string
+    {
+        return (string) ($this->info()['elements']['gatekeeper'] ?? '');
+    }
+
     /** @return array{hop: string, secondlife: string}|null the links that add the grid to a viewer, as the engine writes them */
     public function addGrid(): ?array
     {
