@@ -4,7 +4,8 @@
    Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
    column, if it has one, stays the theme's. The main column a section, its blocks titled h2 (the page's own title is h1); the
    others asides, their blocks titled h3. A theme adds its own boxes to the asides by extending this template
-   ({% extends '@w4os/w4os/home.html.twig' %}) and filling the blocks w4os_home_grid_extra and w4os_home_news_extra. #}
+   ({% extends '@w4os/w4os/home.html.twig' %}) and filling the blocks w4os_home_grid_extra (under what the grid is),
+   w4os_home_news_before (between the message of the day and the news) and w4os_home_news_extra (under the news). #}
 {% set news = w4os_home_news() %}
 <div class="w4os-home">
     <div class="w4os-home-layout">
@@ -21,6 +22,7 @@
         </aside>
         <aside class="w4os-home-news">
             {{ w4os_block('motd', {level: 'h3'}) }}
+            {% block w4os_home_news_before %}{% endblock %}
             {% if news %}
             <section class="w4os-latest">
                 <h3 class="w4os-latest-title">{{ news.title }}</h3>

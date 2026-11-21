@@ -189,12 +189,15 @@ describe('the home page of a grid', function () {
     test('takes the boxes of a theme in its asides, the theme extending it (@w4os) rather than copying it', function () {
         $loader = new FilesystemLoader(dirname(__DIR__).'/templates');
         $loader->addPath(dirname(__DIR__).'/templates', 'w4os');
-        $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid_extra %}<p>Support</p>{% endblock %}{% block w4os_home_news_extra %}<p>Extra</p>{% endblock %}"]), $loader]));
+        $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid_extra %}<p>Support</p>{% endblock %}{% block w4os_home_news_before %}<p>Before</p>{% endblock %}{% block w4os_home_news_extra %}<p>Extra</p>{% endblock %}"]), $loader]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/home.html.twig', ['content' => '']);
 
-        expect($html)->toContain('<p>Support</p>', '<p>Extra</p>', '<aside class="w4os-home-grid">')
+        expect($html)->toContain('<p>Support</p>', '<p>Before</p>', '<p>Extra</p>', '<aside class="w4os-home-grid">')
+            // Between the message of the day and the news, in the order of the page (screen readers read it so)
+            ->and(strpos($html, 'block-motd'))->toBeLessThan(strpos($html, '<p>Before</p>'))
+            ->and(strpos($html, '<p>Before</p>'))->toBeLessThan(strpos($html, '<p>Extra</p>'))
             ->and(strpos($html, 'w4os-start'))->toBeLessThan(strpos($html, 'Support'))
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("addPath(__DIR__.'/templates', 'w4os')")
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('grid-template-rows: auto 1fr;', '.w4os-home-news { align-self: start; }');
