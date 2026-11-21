@@ -222,6 +222,8 @@ describe('the menus of the visitor', function () {
 
         expect($css)->toContain('.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible;')
             ->and($css)->toMatch('/\.w4os-menus-open \.w4os-user-list \{ position: static; visibility: visible;/')
+            // One entry under the other whatever the theme does with the lists of its nav (Quark2: nav ul { display: flex }), inside the window
+            ->and($css)->toContain('.w4os-user-list { display: block; position: absolute; right: 0; left: auto;', 'max-width: calc(100vw - 2rem); max-height: calc(100vh - 6rem); overflow-y: auto;', '.w4os-user-list li { display: block; margin: 0; padding: 0; }')
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-menu.html.twig'))->toContain('<div class="w4os-user-menu w4os-admin-menu">', '<ul class="w4os-user-list">')
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/user-menu.html.twig'))->toContain('<div class="w4os-user-menu">', '<ul class="w4os-user-list">');
     });

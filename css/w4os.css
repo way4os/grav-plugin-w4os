@@ -116,16 +116,17 @@ li:empty { display: none; }
 .w4os-latest .w4os-latest-date { margin-top: .35rem; font-size: .8rem; opacity: .7; }
 .w4os-latest-all { margin: 0; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
 /* The menus of the visitor in the top bar of a theme (w4os/user-menu.html.twig, w4os/admin-menu.html.twig): the name, its list
-   below it on hover or focus; inside .w4os-menus-open (the menu of a phone), the lists shown as they are */
+   below it on hover or focus, one entry under the other whatever a theme does with the lists of its nav (Quark2: nav ul, a row),
+   inside the window; inside .w4os-menus-open (the menu of a phone), the lists shown as they are */
 .w4os-user-menu { position: relative; display: inline-block; }
 .w4os-user-current { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .2rem; white-space: nowrap; color: inherit; text-decoration: none; }
-.w4os-user-list { position: absolute; right: 0; top: 100%; z-index: 20; min-width: 13rem; margin: 0; padding: .4rem 0; list-style: none; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: Canvas; color: CanvasText; box-shadow: 0 .6rem 1.6rem color-mix(in srgb, CanvasText 18%, transparent); visibility: hidden; opacity: 0; transition: opacity .15s; }
+.w4os-user-list { display: block; position: absolute; right: 0; left: auto; top: 100%; z-index: 20; min-width: 13rem; max-width: calc(100vw - 2rem); max-height: calc(100vh - 6rem); overflow-y: auto; margin: 0; padding: .4rem 0; list-style: none; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: Canvas; color: CanvasText; box-shadow: 0 .6rem 1.6rem color-mix(in srgb, CanvasText 18%, transparent); visibility: hidden; opacity: 0; transition: opacity .15s; }
 .w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible; opacity: 1; }
-.w4os-user-list li { margin: 0; }
-.w4os-user-list a { display: block; padding: .45rem 1rem; color: inherit; text-decoration: none; white-space: nowrap; }
+.w4os-user-list li { display: block; margin: 0; padding: 0; }
+.w4os-user-list a { display: block; margin: 0; padding: .45rem 1rem; line-height: 1.4; color: inherit; text-decoration: none; white-space: nowrap; }
 .w4os-user-list a:hover, .w4os-user-list a:focus { background: color-mix(in srgb, currentColor 8%, transparent); }
 .w4os-menus-open .w4os-user-menu { display: block; }
-.w4os-menus-open .w4os-user-list { position: static; visibility: visible; opacity: 1; min-width: 0; margin: .3rem 0 1rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
+.w4os-menus-open .w4os-user-list { position: static; visibility: visible; opacity: 1; min-width: 0; max-height: none; overflow: visible; margin: .3rem 0 1rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
 .w4os-menus-open .w4os-user-list a { padding: .3rem 0; }
 /* The profile of an avatar (a block of the helpers): its picture beside its name */
 .block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
