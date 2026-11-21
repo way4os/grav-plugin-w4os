@@ -180,7 +180,7 @@ describe('the home page of a grid', function () {
 
         expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
             ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
-            ->and($html)->toContain('<h3 class="w4os-latest-title">News</h3>', '<p class="w4os-latest-all w4os-more"><a href="/news">[w4os.home_all_news]</a></p>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
+            ->and($html)->toContain('<h3 class="w4os-latest-title">News</h3>', '<p class="w4os-latest-all"><a class="w4os-more" href="/news">[w4os.home_all_news]</a></p>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
             ->and($html)->not->toContain('Post 4')
             // The excerpt cut with an ellipsis written once, never escaped again (&amp;hellip;)
             ->and($raw)->toContain(str_repeat('Long text ', 14).'…')->not->toContain('hellip')

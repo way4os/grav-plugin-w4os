@@ -713,7 +713,11 @@ final class Site
     /** A text that is one link alone, a link to more (.w4os-more: at the right, a chevron before it); any other as it is. */
     public static function moreLink(string $html): string
     {
-        return (string) preg_replace('#^\s*<p>(\s*<a\s[^>]*>(?:(?!</a>).)*</a>\s*)</p>\s*$#s', '<p class="w4os-more">$1</p>', $html);
+        if (preg_match('#^\s*<p>\s*<a\s[^>]*>(?:(?!</a>).)*</a>\s*</p>\s*$#s', $html) !== 1 || str_contains($html, 'w4os-more')) {
+            return $html;
+        }
+
+        return (string) preg_replace('#<a\s(?![^>]*\sclass=)#', '<a class="w4os-more" ', $html, 1);
     }
 
     /** The links of some HTML to a path of the site (href="/help") built for the page shown: its base and language, never twice. */

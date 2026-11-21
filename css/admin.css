@@ -202,6 +202,7 @@
 .w4os-group > div { white-space: normal; }
 /* A number in its column at the end, as numbers are read */
 .w4os-list .w4os-cell-number { text-align: end; }
-/* A link to more (All news, See all, a page's own "Read more"): on its own line, at the right, a chevron before it */
+/* A link to more (All news, See all, a page's own "Read more", in Markdown [Details](/page?classes=w4os-more)): on its own line,
+   at the right, a chevron before it */
 .w4os-more { display: block; text-align: right; }
-.w4os-more a::before { content: "\203A\00A0"; }
+.w4os-more::before { content: "\203A\00A0"; }

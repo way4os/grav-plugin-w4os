@@ -38,7 +38,7 @@ describe('the dashboard', function () {
     test('says how many of a list are online of all it knows as n/n, its link to the list apart in its footer', function () use ($api, $render) {
         $html = $render([['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null]]);
 
-        expect($html)->toContain('[w4os.regions_title]', '>5/7<', '<div class="card-footer text-end w4os-more"><a href="&#x2F;regions">[w4os.see_all]</a></div>')
+        expect($html)->toContain('[w4os.regions_title]', '>5/7<', '<div class="card-footer text-end"><a class="w4os-more" href="&#x2F;regions">[w4os.see_all]</a></div>')
             ->and($html)->not->toContain('regions_online');
     });
 
@@ -58,7 +58,7 @@ describe('the dashboard', function () {
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
         $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_avatars', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end w4os-more"><a href="&#x2F;avatars">[w4os.see_all]</a></div>')
+        expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a class="w4os-more" href="&#x2F;avatars">[w4os.see_all]</a></div>')
             ->not->toContain(date('Y-m-d', $created));
     });
 
