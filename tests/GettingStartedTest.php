@@ -54,13 +54,14 @@ describe('the steps of a newcomer', function () {
 });
 
 describe('the grid added to a viewer', function () {
-    test('its button (hop), the other link (secondlife), and the login URI with a button that copies it', function () {
+    test('its button (hop), the other link (secondlife), and the login URI with a button that copies it, shown only where the browser has a clipboard (https)', function () {
         $html = render_start('w4os/add-grid.html.twig', ['uri' => 'grid.example.org:8002',
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
         expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
             ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
-            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'data-w4os-copy="grid.example.org:8002"', 'data-w4os-copied="w4os.copied"');
+            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'w4os-copy" hidden data-w4os-copy="grid.example.org:8002"', 'data-w4os-copied="w4os.copied"')
+            ->and((string) file_get_contents(dirname(__DIR__).'/js/copy.js'))->toContain('if (navigator.clipboard) {', 'button.hidden = false');
     });
 
     test('the login URI alone when the engine gives no link, nothing when it gives neither', function () {

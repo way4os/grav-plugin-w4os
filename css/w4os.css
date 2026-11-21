@@ -41,6 +41,7 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-add-grid p { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .5rem 0; }
 .w4os-add-grid .w4os-login-uri { overflow-wrap: anywhere; }
 .w4os-add-grid .w4os-copy { padding: .2rem .7rem; font-size: .875rem; min-height: 0; }
+.w4os-add-grid .w4os-copy[hidden] { display: none; }
 
 /* The steps of a newcomer: numbered, the one to do now framed, the ones done faded with a check, the ones after faded */
 .w4os-start { margin: 1.5rem 0; }
