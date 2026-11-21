@@ -18,16 +18,16 @@ describe('a teleport link of the site', function () {
             ->and(Site::placeName('demo.w4os.org:3405'))->toBe('demo.w4os.org:3405');
     });
 
-    test('is a shortcode and a Twig function of the site, its script on every page of the site, the links of the other client hidden', function () {
+    test('is a shortcode and a Twig function of the site, its style and script from the views on every page of the site', function () {
         $php = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
-        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.css');
-        $js = (string) file_get_contents(dirname(__DIR__).'/js/tp-link.js');
 
         expect(array_column(Site::SHORTCODES, 'code'))->toContain('[tp-link]')
-            ->and($php)->toContain("\$handlers->add('tp-link'", "new \\Twig\\TwigFunction('w4os_tp_link'", "addJs('plugin://w4os/js/tp-link.js'")
-            ->and($css)->toContain('.w4os-tp[data-client="browser"] [data-for="viewer"], .w4os-tp[data-client="viewer"] [data-for="browser"] { display: none; }', '.w4os-tp-menu[hidden] { display: none; }', '.w4os-tp-main:not([href]) { color: inherit; text-decoration: none; cursor: default; }')
-            // The client told by the page's own user agent, Escape and a click outside close it, the address selected without a clipboard
-            ->and($js)->toContain("new RegExp(tp.dataset.viewerPattern, 'i').test(navigator.userAgent)", "event.key === 'Escape'", 'tp.contains(event.target) || close(tp)', 'navigator.clipboard ?', 'input.select()', "main.removeAttribute('href')")
+            ->and($php)->toContain("\$handlers->add('tp-link'", "new \\Twig\\TwigFunction('w4os_tp_link'", "TeleportLink::ASSETS['js'] as \$file", "addJs('plugin://w4os/vendor/w4os/w4os-views/assets/'.\$file", "addCss('plugin://w4os/vendor/w4os/w4os-views/assets/'.\$file")
+            // Its style and script the views' own (one source for every bridge), none left in the plugin
+            ->and(dirname(__DIR__).'/vendor/w4os/w4os-views/assets/'.\W4OS\Views\TeleportLink::ASSETS['js'][0])->toBeFile()
+            ->and(dirname(__DIR__).'/vendor/w4os/w4os-views/assets/'.\W4OS\Views\TeleportLink::ASSETS['css'][0])->toBeFile()
+            ->and(dirname(__DIR__).'/js/tp-link.js')->not->toBeFile()
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->not->toContain('.w4os-tp')
             ->and(Site::viewerPattern())->toContain('Firestorm')->not->toStartWith('/');
     });
 });

@@ -380,11 +380,18 @@ class W4osPlugin extends Plugin
     public function onTwigSiteVariables(): void
     {
         $page = $this->grav['page'] ?? null;
-        $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
-            && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
-        // The script of the teleport links (js/tp-link.js), on the pages of the site: a link in a text kept in a cache needs it too
-        Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
-            && $this->grav['assets']->addJs('plugin://w4os/js/tp-link.js', ['group' => 'bottom', 'loading' => 'defer']);
+        $site = Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null);
+        if ($site) {
+            $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+            // The teleport links' own style and script (TeleportLink::ASSETS, from the views), on the pages of the site: a link in a
+            // text kept in a cache needs them too
+            foreach (\W4OS\Views\TeleportLink::ASSETS['css'] as $file) {
+                $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/vendor/w4os/w4os-views/assets/'.$file);
+            }
+            foreach (\W4OS\Views\TeleportLink::ASSETS['js'] as $file) {
+                $this->grav['assets']->addJs('plugin://w4os/vendor/w4os/w4os-views/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
+            }
+        }
         // The files of the blocks the text of a page shows (its shortcodes), before the theme writes its head
         if ($page !== null && ! $this->sitePage()) {
             foreach (Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) as $block) {
