@@ -195,7 +195,7 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os [hidden] { display: none !important; }
 
 /* The stream of its own avatar: the field compact (one line, growing as it is written or once it has the focus), a small button;
-   the actions of a post in a small menu at its end (⋯), the size of the text, in the colors of the page */
+   the actions of a post in a small menu at its end (⋮), the size of the text, in the colors of the page */
 .w4os-post-form { margin: 0 0 1.5rem; }
 .w4os-post-form .form-field, .w4os-post-form .form-group { margin-bottom: .5rem; }
 .w4os-post-form textarea.w4os-post-field { min-height: 2.5rem; height: auto; resize: vertical; }

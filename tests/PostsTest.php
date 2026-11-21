@@ -36,13 +36,13 @@ describe('the posts of a profile', function () {
             ->and(Posts::inFeed('<p>Not found</p>', '<form></form>', fn () => 'x'))->toBe('<p>Not found</p>');
     });
 
-    test('have their actions in a small menu each (⋯), delete asked before, with the nonce of the form and the id of the post', function () use ($view) {
+    test('have their actions in a small menu each (⋮), delete asked before, with the nonce of the form and the id of the post', function () use ($view) {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('nonce_field', fn (string $action) => "<input type=\"hidden\" name=\"nonce\" value=\"$action\">"));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $html = $twig->render('w4os/post-actions.html.twig', ['view' => $view, 'post' => 'p1']);
 
-        expect($html)->toContain('<details class="w4os-post-menu">', '<summary aria-label="&#x5B;w4os.actions&#x5D;" title="&#x5B;w4os.actions&#x5D;">⋯</summary>', '<form method="post" class="w4os-post-actions">', '<input type="hidden" name="nonce" value="w4os-post">', '<input type="hidden" name="post" value="p1">',
+        expect($html)->toContain('<details class="w4os-post-menu">', '<summary aria-label="&#x5B;w4os.actions&#x5D;" title="&#x5B;w4os.actions&#x5D;">⋮</summary>', '<form method="post" class="w4os-post-actions">', '<input type="hidden" name="nonce" value="w4os-post">', '<input type="hidden" name="post" value="p1">',
             '<button name="action" value="deletePost" data-w4os-ask="&#x5B;w4os.ask_delete_post&#x5D;" onclick="return confirm(this.dataset.w4osAsk)"', '[w4os.action_delete_post]</button>');
     });
 });

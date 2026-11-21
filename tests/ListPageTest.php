@@ -165,7 +165,7 @@ describe('the list of a page of the admin', function () {
         $menu = substr($html, strpos($html, 'class="dropdown w4os-menu"'));
 
         expect($html)->toMatch('~<a class="btn btn-ghost-secondary btn-icon btn-sm" href="&#x2F;sim&#x3F;id&#x3D;[^"]*" title="&#x5B;w4os.action_view_item&#x5D;"[^>]*><i class="ti ti-eye"~')
-            ->and($menu)->toContain('ti ti-dots', 'data-bs-toggle="dropdown"')->not->toContain('class="dropdown-item" href=')
+            ->and($menu)->toContain('ti ti-dots-vertical', 'data-bs-toggle="dropdown"')->not->toContain('class="dropdown-item" href=')
             // Nothing above the asked ones here (the view is an icon): no divider before them
             ->and($menu)->toMatch('~value="restart"[^>]*class="dropdown-item text-danger"~s')->not->toContain('dropdown-divider');
     });
@@ -186,5 +186,12 @@ describe('the list of a page of the admin', function () {
             expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-list-card { container-type: inline-size; }', '@container (min-width: 58rem) { .w4os-list .w4os-tier-xl { display: table-cell; }', '.w4os-list td.w4os-cell-email { overflow-wrap: anywhere;');
         }
         expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/list.html.twig'))->not->toContain('d-none d-', '-table-cell');
+    });
+
+    test('opens the actions of a row with an icon known as a menu (vertical dots, never an ellipsis), its icons as big as the ones of the status', function () {
+        foreach (['list-cells', 'item-parts'] as $template) {
+            expect((string) file_get_contents(dirname(__DIR__)."/templates/w4os/$template.html.twig"))->toContain('ti ti-dots-vertical')->not->toMatch('/ti ti-dots"/');
+        }
+        expect((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toContain('.w4os-admin .w4os-actions .btn-icon i { font-size: 1.15rem; }', '.w4os-admin .w4os-indicator i { font-size: 1.15rem; }');
     });
 });

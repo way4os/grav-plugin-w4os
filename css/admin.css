@@ -29,6 +29,8 @@
 .w4os-admin .w4os-tone-warning { color: var(--tblr-warning); }
 .w4os-admin .w4os-tone-failed { color: var(--tblr-danger); }
 .w4os-admin .w4os-indicator i { font-size: 1.15rem; }
+/* The actions of a row (view, edit, its menu) as big as the icons of its status */
+.w4os-admin .w4os-actions .btn-icon i { font-size: 1.15rem; }
 /* The lists: the search as wide as it reads, the filters at their width on its line, else together on the next one; the grey line of a row under its name */
 .w4os-admin .w4os-filters { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
 .w4os-admin .w4os-filters .w4os-search { flex: 1 1 16rem; max-width: 28rem; }

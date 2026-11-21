@@ -1,5 +1,5 @@
 {# The parts of a list of the engine (w4os/list.html.twig), drawn from the views of w4os-views: a sortable column title (ColumnView),
-   a cell by the display type of its column, the indicators of a row (IndicatorView), its "…" menu (RowView). A column may also show
+   a cell by the display type of its column, the indicators of a row (IndicatorView), its menu (vertical dots, RowView). A column may also show
    a picture before its value (`picture`: the attribute of an asset) and a tag after it (`tag`: a true attribute, `tagLabel` its
    text). #}
 
@@ -68,7 +68,7 @@
     </span>
 {% endmacro %}
 
-{# The actions of a row: its links (view, edit) as icons, the same as on the pages of the site (eye, pencil); then the "…" menu
+{# The actions of a row: its links (view, edit) as icons, the same as on the pages of the site (eye, pencil); then the menu (vertical dots)
    (Tabler's dropdown) of its other actions (RowView), posted to the page, the ones the engine asks to confirm (`ask`) last, apart
    and marked #}
 {% macro menu(row) %}
@@ -81,7 +81,7 @@
     {% set others = row.links|filter(link => icons[link.key] is not defined) %}
     {% if others or row.actions %}
     <div class="dropdown w4os-menu">
-        <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" aria-label="{{ ('w4os.actions'|t ~ ': ' ~ (row.item.name ?? ''))|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots" aria-hidden="true"></i></button>
+        <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-toggle="dropdown" data-bs-popper-config='{"strategy":"fixed"}' aria-expanded="false" aria-label="{{ ('w4os.actions'|t ~ ': ' ~ (row.item.name ?? ''))|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots-vertical" aria-hidden="true"></i></button>
         <div class="dropdown-menu dropdown-menu-end">
             {% for link in others %}<a class="dropdown-item" href="{{ link.url|e('html_attr') }}">{{ ('w4os.' ~ link.key)|t }}</a>{% endfor %}
             {% if row.actions %}

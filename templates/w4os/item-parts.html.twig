@@ -2,7 +2,7 @@
 
 {# The header (Tabler's page header) of an item from its view (w4os-views ItemView): the link back to its list, its picture and its
    name as its list shows them, its state as badges (the icon and the label of each state, in its tone: green, grey, orange, red), at
-   the right the links given (`links`: url, label, id) and the "…" menu of the engine's actions that apply to it, the ones the engine
+   the right the links given (`links`: url, label, id) and the menu (vertical dots) of the engine's actions that apply to it, the ones the engine
    asks to confirm last, apart and marked #}
 {% macro header(view, back = null, links = []) %}
     {% set tones = {ok: 'green', off: 'secondary', warning: 'orange', failed: 'red'} %}
@@ -27,7 +27,7 @@
                         {% for link in links %}<a class="btn"{% if link.id is defined %} id="{{ link.id|e('html_attr') }}"{% endif %} href="{{ link.url|e('html_attr') }}">{{ link.label }}</a>{% endfor %}
                         {% if view.actions %}
                         <div class="dropdown">
-                            <button type="button" class="btn btn-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ 'w4os.actions'|t|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-icon" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{{ 'w4os.actions'|t|e('html_attr') }}" title="{{ 'w4os.actions'|t|e('html_attr') }}"><i class="ti ti-dots-vertical" aria-hidden="true"></i></button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <form method="post">
                                     {{ nonce_field('w4os-list')|raw }}
