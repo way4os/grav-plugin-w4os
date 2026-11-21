@@ -4,6 +4,6 @@
 /DEVELOPERS.md
 /dev
 /tests
-/phpunit.xml
+/phpunit.xml.dist
 /docs
 /build
