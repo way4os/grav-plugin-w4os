@@ -189,9 +189,10 @@ w4os:
   copied: Copied
   start_title: Connect
   start_avatar: 'Create your avatar'
-  start_avatar_done: 'Your avatar is %s.'
+  start_avatar_done: 'Signed in as %s'
   start_add_grid: 'Add the grid'
   start_login: 'Log in'
+  start_login_done: Enjoy!
   start_done: Done
   home_all_news: 'All news'
   hg_visit_title: 'Visit from another grid'
@@ -439,6 +440,18 @@ w4os:
   setting_login: 'Login URI'
   setting_login_help: 'The address the viewers log in at, and ask what the grid says of itself (get_grid_info).'
   setting_gatekeeper: Gatekeeper
+  group_links: 'Links to the places'
+  setting_link_format_browser: 'Links in a web browser'
+  setting_link_format_viewer: 'Links in the viewer'
+  link_format_grid: 'Location with its grid (secondlife://grid/secondlife/Region)'
+  link_format_hop: 'Hypergrid link (hop://)'
+  link_format_apptp: 'Teleport of the viewer (secondlife:///app/teleport)'
+  link_format_local: 'Region of the grid the viewer is on (secondlife://Region)'
+  link_menu_grid: 'secondlife:// link'
+  link_menu_hop: 'hop:// link'
+  link_menu_apptp: 'Teleport in the viewer'
+  link_menu_local: 'Region of this grid'
+  link_menu_txt: 'Copy the address'
   setting_gatekeeper_help: 'The address other grids reach this one by (hypergrid).'
   setting_uas: 'User agent service'
   setting_uas_help: 'Where the avatars of this grid are known when they visit other grids (hypergrid).'

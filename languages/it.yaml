@@ -189,9 +189,10 @@ w4os:
   copied: Copiato
   start_title: Connettiti
   start_avatar: 'Crea il tuo avatar'
-  start_avatar_done: 'Il tuo avatar è %s.'
+  start_avatar_done: 'Accesso come %s'
   start_add_grid: 'Aggiungi la griglia'
   start_login: Accedi
+  start_login_done: 'Buon divertimento!'
   start_done: Fatto
   home_all_news: 'Tutte le notizie'
   hg_visit_title: "Visita da un'altra griglia"
@@ -439,6 +440,18 @@ w4os:
   setting_login: 'URI di accesso'
   setting_login_help: "L'indirizzo a cui i viewer effettuano l'accesso e chiedono ciò che la griglia dice di sé (get_grid_info)."
   setting_gatekeeper: Gatekeeper
+  group_links: 'Link ai luoghi'
+  setting_link_format_browser: 'Link in un browser web'
+  setting_link_format_viewer: 'Link nel viewer'
+  link_format_grid: 'Luogo con la sua griglia (secondlife://griglia/secondlife/Regione)'
+  link_format_hop: 'Link hypergrid (hop://)'
+  link_format_apptp: 'Teletrasporto del viewer (secondlife:///app/teleport)'
+  link_format_local: 'Regione della griglia in cui è il viewer (secondlife://Regione)'
+  link_menu_grid: 'Link secondlife://'
+  link_menu_hop: 'Link hop://'
+  link_menu_apptp: 'Teletrasporto nel viewer'
+  link_menu_local: 'Regione di questa griglia'
+  link_menu_txt: "Copia l'indirizzo"
   setting_gatekeeper_help: "L'indirizzo con cui le altre griglie raggiungono questa (hypergrid)."
   setting_uas: 'Servizio user agent'
   setting_uas_help: 'Dove gli avatar di questa griglia sono conosciuti quando visitano altre griglie (hypergrid).'

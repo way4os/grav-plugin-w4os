@@ -189,9 +189,10 @@ w4os:
   copied: "Wedi'i gopïo"
   start_title: Cysylltu
   start_avatar: 'Creu eich afatar'
-  start_avatar_done: 'Eich afatar yw %s.'
+  start_avatar_done: 'Wedi mewngofnodi fel %s'
   start_add_grid: "Ychwanegu'r grid"
   start_login: Mewngofnodi
+  start_login_done: Mwynhewch!
   start_done: "Wedi'i wneud"
   home_all_news: 'Yr holl newyddion'
   hg_visit_title: 'Ymweld o grid arall'
@@ -439,6 +440,18 @@ w4os:
   setting_login: 'URI mewngofnodi'
   setting_login_help: "Y cyfeiriad y mae'r viewers yn mewngofnodi iddo ac yn gofyn iddo beth mae'r grid yn ei ddweud amdano'i hun (get_grid_info)."
   setting_gatekeeper: Gatekeeper
+  group_links: "Dolenni i'r lleoedd"
+  setting_link_format_browser: 'Dolenni mewn porwr gwe'
+  setting_link_format_viewer: 'Dolenni yn y viewer'
+  link_format_grid: "Lle gyda'i grid (secondlife://grid/secondlife/Rhanbarth)"
+  link_format_hop: 'Dolen hypergrid (hop://)'
+  link_format_apptp: 'Teleport y viewer (secondlife:///app/teleport)'
+  link_format_local: "Rhanbarth y grid y mae'r viewer arno (secondlife://Rhanbarth)"
+  link_menu_grid: 'Dolen secondlife://'
+  link_menu_hop: 'Dolen hop://'
+  link_menu_apptp: 'Teleport yn y viewer'
+  link_menu_local: 'Rhanbarth y grid hwn'
+  link_menu_txt: "Copïo'r cyfeiriad"
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'
   setting_uas: 'Gwasanaeth asiant defnyddiwr'
   setting_uas_help: "Ble mae afatarau'r grid hwn yn hysbys pan fyddant yn ymweld â gridiau eraill (hypergrid)."

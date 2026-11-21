@@ -189,9 +189,10 @@ w4os:
   copied: Copié
   start_title: Connexion
   start_avatar: 'Créer votre avatar'
-  start_avatar_done: 'Votre avatar est %s.'
+  start_avatar_done: 'Connecté comme %s'
   start_add_grid: 'Ajouter la grille'
   start_login: 'Se connecter'
+  start_login_done: 'Bon séjour !'
   start_done: Terminé
   home_all_news: 'Toutes les actualités'
   hg_visit_title: 'Visiter depuis une autre grille'
@@ -439,6 +440,18 @@ w4os:
   setting_login: 'URI de connexion'
   setting_login_help: 'L’adresse où les viewers se connectent, et demandent ce que la grille dit d’elle-même (get_grid_info).'
   setting_gatekeeper: Gatekeeper
+  group_links: 'Liens vers les lieux'
+  setting_link_format_browser: 'Liens dans un navigateur web'
+  setting_link_format_viewer: 'Liens dans le viewer'
+  link_format_grid: 'Lieu avec sa grille (secondlife://grille/secondlife/Région)'
+  link_format_hop: 'Lien hypergrid (hop://)'
+  link_format_apptp: 'Téléportation du viewer (secondlife:///app/teleport)'
+  link_format_local: 'Région de la grille où est le viewer (secondlife://Région)'
+  link_menu_grid: 'Lien secondlife://'
+  link_menu_hop: 'Lien hop://'
+  link_menu_apptp: 'Téléportation dans le viewer'
+  link_menu_local: 'Région de cette grille'
+  link_menu_txt: "Copier l'adresse"
   setting_gatekeeper_help: 'L’adresse par laquelle les autres grilles atteignent celle-ci (hypergrid).'
   setting_uas: 'Service des agents'
   setting_uas_help: 'Là où les avatars de cette grille sont connus quand ils visitent d’autres grilles (hypergrid).'
