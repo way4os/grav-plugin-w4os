@@ -48,10 +48,10 @@ describe('the list of a page of the admin', function () {
         expect($html)->toContain('href="&#x2F;sim&#x3F;id&#x3D;h&#x25;3A9040"')
             // A value that does not say what it is after the label of its column
             // Each in it until its column shows: 2 from md, 3 from xl, 4 from xxl (Tabler's breakpoints)
-            ->and($html)->toContain('<div class="w4os-subtitle text-secondary w4os-folded d-xl-none"><span class="d-xl-none">[w4os.label_value:[w4os.column_grid]|demo]</span></div>')
+            ->and($html)->toContain('<div class="w4os-subtitle text-secondary w4os-folded w4os-fold-xl"><span class="w4os-fold-xl">[w4os.label_value:[w4os.column_grid]|demo]</span></div>')
             // Its address under its name, at every width (the first of its subtitle attributes that has one)
             ->and($html)->toContain('<div class="w4os-subtitle text-secondary">h:9040</div>')
-            ->and($html)->toContain('<th class="w4os-cell-text d-none d-xl-table-cell">', '<th class="w4os-cell-number d-none d-md-table-cell">')
+            ->and($html)->toContain('<th class="w4os-cell-text w4os-tier-xl">', '<th class="w4os-cell-number w4os-tier-md">')
             // The status (indicators) shows at every width
             ->and($html)->toContain('<td class="w4os-cell-indicators">');
     });
@@ -65,8 +65,8 @@ describe('the list of a page of the admin', function () {
         $regions = (new OpenApi(Contract::document()))->listOf('regions');
         $place = render_list($regions, [['uuid' => 'r1', 'name' => 'Plaza', 'location' => '8015, 8012', 'size' => 256]], ['total' => 1]);
 
-        expect($html)->toContain('<span class="d-md-none">1 items</span><span class="d-md-none">2150 items</span>')
-            ->and($place)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xl-none">[w4os.unit_dimensions:256|256]</span>')
+        expect($html)->toContain('<span class="w4os-fold-md">1 items</span><span class="w4os-fold-md">2150 items</span>')
+            ->and($place)->toContain('<span class="w4os-fold-xl">8015, 8012</span><span class="w4os-fold-xl">[w4os.unit_dimensions:256|256]</span>')
             ->and($html)->not->toContain('[w4os.column_usage]|');
     });
 
@@ -75,8 +75,8 @@ describe('the list of a page of the admin', function () {
             ['name' => 'prims', 'label' => 'column_prims_short', 'type' => 'number', 'count' => 'count_prims', 'bare' => true, 'priority' => 4]]];
         $html = render_list($list, [['uuid' => 'r1', 'name' => 'Plaza', 'prims' => 2150]], ['total' => 1]);
 
-        expect($html)->toMatch('~<td class="w4os-cell-number d-none d-xxl-table-cell">\s*2,150\s*</td>~')
-            ->and($html)->toContain('<span class="d-xxl-none">2150 items</span>');
+        expect($html)->toMatch('~<td class="w4os-cell-number w4os-tier-xxl">\s*2,150\s*</td>~')
+            ->and($html)->toContain('<span class="w4os-fold-xxl">2150 items</span>');
     });
 
     test('folds a bare part of a group, and a bare column, without its label', function () {
@@ -85,7 +85,7 @@ describe('the list of a page of the admin', function () {
             ['name' => 'flagNames', 'label' => 'column_flags', 'type' => 'list', 'priority' => 4, 'bare' => true]]];
         $html = render_list($list, [['uuid' => 'r1', 'name' => 'Plaza', 'location' => '8015, 8012', 'flagNames' => ['Persistent']]], ['total' => 1]);
 
-        expect($html)->toContain('<span class="d-xl-none">8015, 8012</span><span class="d-xxl-none">Persistent</span>')
+        expect($html)->toContain('<span class="w4os-fold-xl">8015, 8012</span><span class="w4os-fold-xxl">Persistent</span>')
             ->and($html)->not->toContain('[w4os.column_flags]|');
     });
 
@@ -107,7 +107,7 @@ describe('the list of a page of the admin', function () {
             ->and(W4OS\Views\Dates::format($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
             ->and(W4OS\Views\Dates::format($old, 'en'))->toBe('Nov 16, 2026')
             ->and(W4OS\Views\Dates::format(null, 'fr'))->toBe('')
-            ->and($html)->toContain('<span class="d-md-none">[w4os.role_resident]</span><span class="d-md-none">[w4os.label_value:[w4os.last_seen]|il y a 3 jours]</span><span class="d-xl-none">bart@example.org</span><span class="d-xl-none">[w4os.label_value:[w4os.born]|'.$short.']</span></div>')
+            ->and($html)->toContain('<span class="w4os-fold-md">[w4os.role_resident]</span><span class="w4os-fold-md">[w4os.label_value:[w4os.last_seen]|il y a 3 jours]</span><span class="w4os-fold-xl">bart@example.org</span><span class="w4os-fold-xl">[w4os.label_value:[w4os.born]|'.$short.']</span></div>')
             ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
             ->and($html)->not->toContain(date('Y-m-d', $older));
     });
@@ -179,5 +179,12 @@ describe('the list of a page of the admin', function () {
         $html = render_list($simulators, [$solo], ['total' => 120, 'page' => 2, 'perPage' => 50]);
 
         expect($html)->toContain('<ul class="pagination', 'class="page-item active"', 'class="page-link" href="?page=3"');
+    });
+
+    test('shows its columns by the width of its card, not of the window the sidebar shares, an address breaking rather than pushing the actions out', function () {
+        foreach (['css/admin.css', 'css/w4os.css'] as $css) {
+            expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-list-card { container-type: inline-size; }', '@container (min-width: 58rem) { .w4os-list .w4os-tier-xl { display: table-cell; }', '.w4os-list td.w4os-cell-email { overflow-wrap: anywhere;');
+        }
+        expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/list.html.twig'))->not->toContain('d-none d-', '-table-cell');
     });
 });

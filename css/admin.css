@@ -212,3 +212,11 @@
 .w4os-pic::before { content: attr(data-initials); grid-area: 1 / 1; font-size: .8em; opacity: .7; }
 .w4os-pic img { grid-area: 1 / 1; display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
 .w4os-pic img[hidden] { display: none; }
+/* The columns of a list by the width of its card (not of the window, which the sidebar of the admin shares): the ones of priority 2
+   (md), 3 (xl), 4 and more (xxl) from that width, folded in the grey line under the name below it; a long address breaks */
+.w4os-list-card { container-type: inline-size; }
+.w4os-list .w4os-tier-md, .w4os-list .w4os-tier-xl, .w4os-list .w4os-tier-xxl { display: none; }
+.w4os-list td.w4os-cell-email { overflow-wrap: anywhere; min-width: 8rem; }
+@container (min-width: 36rem) { .w4os-list .w4os-tier-md { display: table-cell; } .w4os-list .w4os-fold-md { display: none; } }
+@container (min-width: 58rem) { .w4os-list .w4os-tier-xl { display: table-cell; } .w4os-list .w4os-fold-xl { display: none; } }
+@container (min-width: 76rem) { .w4os-list .w4os-tier-xxl { display: table-cell; } .w4os-list .w4os-fold-xxl { display: none; } }
