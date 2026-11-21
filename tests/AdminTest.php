@@ -107,6 +107,7 @@ describe('the menu of the admin', function () {
         expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'settings_search', 'settings_guide', 'tools', 'health', 'settings'])
             ->and($menu[1])->toBe(['type' => 'services', 'label' => 'Services', 'heading' => true])
             ->and($menu[3]['active'])->toBeTrue()
+            ->and(array_column($menu, 'gap', 'type'))->toBe(['settings' => true])
             ->and(array_column($menu, 'children'))->toBe([])
             ->and(array_column(Site::menuTree(array_slice($items, 1, 2)), 'type'))->toBe(['settings_search', 'settings_guide']);
     });
@@ -135,14 +136,16 @@ describe('the menu of the admin', function () {
             ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
     });
 
-    test('shows a section as a heading above its pages, always shown, a line in the folded sidebar', function () {
+    test('shows a section as a heading above its pages, always shown, a line in the folded sidebar, the next page set apart', function () {
         $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], [
             ['type' => 'services', 'label' => 'Services', 'heading' => true],
             ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'icon' => 'ti ti-search', 'active' => false],
+            ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'icon' => 'ti ti-settings', 'active' => false, 'gap' => true],
         ]);
 
         expect($html)->toMatch('~<li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">Services</span></li>\s*<li class="nav-item">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;search">~')
-            ->and((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toMatch('~\[data-bs-sidebar=folded-hover\][^{]*\) \.w4os-nav-heading \{[^}]*border-top-color~');
+            ->and($html)->toMatch('~<li class="nav-item w4os-nav-gap">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;settings">~')
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toMatch('~\[data-bs-sidebar=folded-hover\][^{]*\) :is\(\.w4os-nav-heading, \.w4os-nav-gap\) \{[^}]*border-top-color~');
     });
 });
 

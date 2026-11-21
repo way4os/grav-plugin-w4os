@@ -1176,7 +1176,7 @@ final class Site
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
      * first, named as a list ($list, not the name of the parent), then theirs; the parent open (active) when one of them is the page
      * shown. A parent that is a section of $groups (no page: its label) is a heading (`heading`) before its first entry, its entries
-     * left in the menu after it. An entry whose parent is in neither stays where it is.
+     * left in the menu after it, the next entry out of it set apart (`gap`). An entry whose parent is in neither stays where it is.
      *
      * @param list<array<string,mixed>> $items
      * @param array<string, array{label: string}> $groups
@@ -1192,15 +1192,19 @@ final class Site
         }
         $menu = [];
         $headings = [];
+        $section = null;
         foreach ($items as $item) {
             if ($nested($item)) {
                 continue;
             }
-            $group = $item['parent'] ?? null;
-            if ($group !== null && isset($groups[$group]) && ! isset($headings[$group])) {
+            $group = isset($groups[$item['parent'] ?? null]) ? $item['parent'] : null;
+            if ($group !== null && ! isset($headings[$group])) {
                 $headings[$group] = true;
                 $menu[] = ['type' => $group, 'label' => $groups[$group]['label'], 'heading' => true];
             }
+            // The first entry out of a section, set apart from it
+            $group === null && $section !== null && $item['gap'] = true;
+            $section = $group;
             if (isset($children[$item['type'] ?? null])) {
                 $item['children'] = [['label' => $list ?? $item['label']] + $item, ...$children[$item['type']]];
                 $item['active'] = in_array(true, array_column($item['children'], 'active'), true);
