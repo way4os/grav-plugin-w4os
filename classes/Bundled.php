@@ -299,12 +299,19 @@ final class Bundled
     {
         $scheme = (string) (parse_url($login, PHP_URL_SCHEME) ?: 'http');
         $said = [];
-        $planned = RemoteGridPlanner::with([
-            'environment' => $environment,
-            'says' => function (string $host, int $port) use ($scheme, &$said): array {
-                return $said = $this->says("$scheme://$host:$port");
-            },
-        ])->plan(['address' => $login] + (trim((string) ($this->settings['grid'] ?? '')) === '' ? [] : ['nick' => trim((string) $this->settings['grid'])]));
+        $plan = function () use ($environment, $login, $scheme, &$said): array {
+            return RemoteGridPlanner::with([
+                'environment' => $environment,
+                'says' => function (string $host, int $port) use ($scheme, &$said): array {
+                    return $said = $this->says("$scheme://$host:$port");
+                },
+            ])->plan(['address' => $login] + (trim((string) ($this->settings['grid'] ?? '')) === '' ? [] : ['nick' => trim((string) $this->settings['grid'])]));
+        };
+        $planned = $plan();
+        // A grid described from another login address (changed in the settings): described again, its cache dropped
+        if ($planned['grid'] !== null && $this->forgetsOther($planned['grid'], rtrim($login, '/').'/')) {
+            $planned = $plan();
+        }
         if ($planned['error'] !== null || $planned['grid'] === null) {
             throw new EngineException(503, (string) ($planned['error'] ?? 'The grid cannot be described.'), ['code' => 'channel-unavailable']);
         }
@@ -331,6 +338,33 @@ final class Bundled
         }
 
         return (string) $grid['nick'];
+    }
+
+    /**
+     * Whether the description of a grid was made here from another login address than this one (the login its Helpers.ini keeps),
+     * then forgotten: its description and its cache, the folders of the site only. One made from this login, or never made here,
+     * stays.
+     */
+    private function forgetsOther(Grid $grid, string $login): bool
+    {
+        $helpers = $grid->directory().'/Helpers.ini';
+        $made = is_file($helpers) ? (string) (parse_ini_file($helpers, true, INI_SCANNER_RAW)['GridInfoService']['login'] ?? '') : '';
+        if ($made === '' || $made === $login) {
+            return false;
+        }
+        $ours = fn (string $path) => array_filter([$this->root, $this->cache], fn (string $base) => $base !== '' && str_starts_with($path, rtrim($base, '/').'/')) !== [];
+        $description = $grid->directory().'/'.$grid->nick().'.conf';
+        $ours($description) && is_file($description) && unlink($description);
+        $cache = $grid->cacheDirectory();
+        if ($cache !== '' && $ours($cache) && is_dir($cache)) {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($cache, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::CHILD_FIRST);
+            foreach ($files as $file) {
+                $file->isDir() && ! $file->isLink() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+            }
+            rmdir($cache);
+        }
+
+        return true;
     }
 
     /**

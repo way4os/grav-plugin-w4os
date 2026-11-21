@@ -36,6 +36,30 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
+    test('describes the grid again when its login address changes in the settings, its cache dropped; the same login keeps both', function () {
+        $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
+        $settings = ['login' => 'http://grid.example.org:8002/', 'database' => ['host' => 'db.example.org', 'name' => 'robust', 'user' => 'opensim', 'password' => 'secret']];
+        $says = fn (string $login) => fn (string $url) => "<gridinfo><gridname>Demo World</gridname><gridnick>demo</gridnick><login>$login</login></gridinfo>";
+        (new Bundled($settings, $root, $says('http://grid.example.org:8002/'), "$root/cache"))->nick();
+        mkdir("$root/cache/demo/info", 0700, true);
+        file_put_contents("$root/cache/demo/info/grid.json", '{"login":"http://grid.example.org:8002/"}');
+
+        // The same login: its description and its cache kept
+        (new Bundled($settings, $root, $says('http://grid.example.org:8002/'), "$root/cache"))->nick();
+        expect("$root/cache/demo/info/grid.json")->toBeFile();
+
+        // Another login: described from it, the cache of the old one gone
+        $moved = new Bundled(['login' => 'http://copy.example.org:3405'] + $settings, $root, $says('http://copy.example.org:3405/'), "$root/cache");
+
+        expect($moved->nick())->toBe('demo')
+            ->and((string) file_get_contents("$root/etc/grids/demo/demo.conf"))->toContain('BaseHostname = copy.example.org', 'PublicPort = 3405')->not->toContain('grid.example.org')
+            ->and((string) file_get_contents("$root/etc/grids/demo/Helpers.ini"))->toContain('login = "http://copy.example.org:3405/"')
+            ->and("$root/cache/demo/info/grid.json")->not->toBeFile()
+            ->and($moved->grid()?->baseHostname())->toBe('copy.example.org');
+
+        exec('rm -rf '.escapeshellarg($root));
+    });
+
     test('takes the nick a wrong one stands for, as the engine does (a warning, never a failure that stops the site)', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
         $bundled = new Bundled(
@@ -144,4 +168,20 @@ describe('bundled engine', function () {
 
         exec('rm -rf '.escapeshellarg($root));
     })->skip(fn () => W4OS\Engine\Assets\ImagickConverter::available(), 'imagick reads JPEG 2000 here');
+});
+
+describe('the cache of the site', function () {
+    test('keeps a value for the grid the settings name: another login address, API, grid or engine is another key', function () {
+        $settings = ['engine' => 'bundled', 'api_url' => '', 'grid' => '', 'bundled' => ['login' => 'http://grid.example.org:8002']];
+        $id = W4OS\Grav\Site::cacheId('login uri', 'en', $settings);
+
+        expect(W4OS\Grav\Site::cacheId('login uri', 'en', $settings))->toBe($id)
+            ->and([
+                W4OS\Grav\Site::cacheId('login uri', 'fr', $settings),
+                W4OS\Grav\Site::cacheId('login uri', 'en', ['bundled' => ['login' => 'http://copy.example.org:3405']] + $settings),
+                W4OS\Grav\Site::cacheId('login uri', 'en', ['api_url' => 'https://grid.example.org/api'] + $settings),
+                W4OS\Grav\Site::cacheId('login uri', 'en', ['grid' => 'other'] + $settings),
+                W4OS\Grav\Site::cacheId('login uri', 'en', ['engine' => 'remote'] + $settings),
+            ])->not->toContain($id);
+    });
 });

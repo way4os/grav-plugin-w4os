@@ -2263,10 +2263,23 @@ final class Site
     }
 
     /** A value kept in the cache of Grav for the time of the setting "cache" (or the one given, in seconds); null is not kept. */
+    /**
+     * The key of a value kept in the cache of Grav: for a language, and for the grid the settings name (another engine, API, grid or
+     * login address is another grid, never the old one's values).
+     *
+     * @param array<string,mixed> $config the settings of the plugin
+     */
+    public static function cacheId(string $key, string $language, array $config): string
+    {
+        $source = [$config['engine'] ?? 'remote', $config['api_url'] ?? '', $config['grid'] ?? '', $config['bundled']['login'] ?? ''];
+
+        return 'w4os-'.md5($key.'|'.$language.'|'.json_encode($source));
+    }
+
     private function cached(string $key, \Closure $value, ?int $lifetime = null): mixed
     {
         $cache = $this->grav['cache'];
-        $id = 'w4os-'.md5($key.'|'.$this->grav['language']->getActive());
+        $id = self::cacheId($key, (string) $this->grav['language']->getActive(), $this->config());
         $kept = $cache->fetch($id);
         if ($kept !== false && $kept !== null) {
             return $kept;
