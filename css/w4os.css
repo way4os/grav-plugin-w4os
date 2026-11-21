@@ -51,7 +51,6 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-start-steps { list-style: none; counter-reset: w4os-step; padding: 0; margin: 0; display: grid; gap: .75rem; }
 .w4os-start-step { counter-increment: w4os-step; position: relative; margin: 0; padding: .75rem 1rem .75rem 3.25rem; min-height: 3.2rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
 .w4os-start-step::before { content: counter(w4os-step); position: absolute; left: 1rem; top: .8rem; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 45%, transparent); font-weight: bold; font-size: .9rem; }
-.w4os-start-step-title { margin: 0 0 .5rem; font: inherit; font-weight: 600; letter-spacing: normal; }
 .w4os-start-step p { margin: .5rem 0 0; }
 .w4os-start-step.is-next { border: 2px solid var(--w4os-accent, currentColor); }
 .w4os-start-step.is-next::before { background: var(--w4os-accent, currentColor); border-color: var(--w4os-accent, currentColor); color: Canvas; }

@@ -43,11 +43,11 @@ describe('the steps of a newcomer', function () {
 
         expect($html)->toContain('<h2 class="w4os-start-title">w4os.start_title</h2>', 'class="w4os-start-step w4os-start-avatar is-next" aria-current="step"')
             ->and($html)->toContain('<a class="btn btn-primary" href="/register">w4os.start_avatar</a>')
-            ->and($html)->toContain('<h3 class="w4os-start-step-title">w4os.start_viewer</h3>', '<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid(Demo World)</a>')
+            ->and($html)->toContain('<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid(Demo World)</a>')
             ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>')
             ->and($html)->not->toContain('start_viewer_note', 'firestormviewer')
             ->and($html)->toContain('<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login</a>')
-            ->and(substr_count($html, '<h3'))->toBe(1)
+            ->and(substr_count($html, '<h3'))->toBe(0)
             ->and($html)->not->toContain('w4os.start_next', 'w4os.log_in', 'secondlife:///app/gridmanager');
     });
 
@@ -107,6 +107,6 @@ describe('the grid added to a viewer', function () {
     });
 
     test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-step-title { margin: 0 0 .5rem; font: inherit; font-weight: 600; letter-spacing: normal; }', '.w4os-start-title::before { display: none; }');
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
     });
 });
