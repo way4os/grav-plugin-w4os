@@ -102,14 +102,14 @@ final class Engine
     }
 
     /**
-     * The teleport links of the grid for a browser, as the grid makes them (tpLinks() of the engine, in its info): each its
-     * `format`, `link` and `label`, the one the grid chooses first; none when the engine gives none.
+     * A destination as a site shows a link to it (GET /grids/{grid}/place of the engine): its address (`tpUri`) and its links for
+     * a browser and for the viewer (`browser`, `viewer`: each `format`, `link`, `label`, the one AUTO gives first).
      *
-     * @return list<array{format: int, link: string, label: string}>
+     * @return array{tpUri?: string, browser?: list<array{format:int,link:string,label:string}>, viewer?: list<array{format:int,link:string,label:string}>}
      */
-    public function tpLinks(): array
+    public function place(string $destination): array
     {
-        return array_values(array_filter((array) ($this->info()['tpLinks'] ?? []), 'is_array'));
+        return $this->resource($this->call('GET', '/place', null, ['destination' => $destination]));
     }
 
     /** The gatekeeper of the grid, as its grid info says it (the address another grid's avatars come in at), '' for none. */

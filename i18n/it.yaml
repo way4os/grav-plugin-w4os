@@ -128,3 +128,6 @@ w4os:
   admin_shortcode_option_footer: 'Un testo sotto i passi (Markdown: per esempio un link alla pagina di aiuto)'
   admin_shortcode_getting_started_help: 'I passi di chi arriva: creare l’avatar, aggiungere la griglia al viewer, accedere; il prossimo da fare è messo in evidenza'
   admin_shortcode_hypergrid_visit_help: 'La visita della griglia per gli avatar di altre griglie (il suo indirizzo hypergrid e un pulsante per venire); niente quando la griglia non è raggiungibile in hypergrid'
+  admin_shortcode_tp_link_help: 'Un link di teletrasporto che si adatta a dove lo si vede: dal browser o dal viewer, il suo link, e un menu degli altri e dell’indirizzo da copiare'
+  admin_shortcode_option_destination: 'Il luogo: host:porta:Regione/x/y/z, hop://... o una regione della griglia'
+  admin_shortcode_option_label: 'Il suo testo (il nome del luogo per impostazione predefinita)'

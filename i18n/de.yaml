@@ -128,3 +128,6 @@ w4os:
   admin_shortcode_option_footer: 'Ein Text unter den Schritten (Markdown: zum Beispiel ein Link auf die Hilfeseite)'
   admin_shortcode_getting_started_help: 'Die Schritte für Neue: den Avatar erstellen, das Grid zum Viewer hinzufügen, sich einloggen; der nächste Schritt wird hervorgehoben'
   admin_shortcode_hypergrid_visit_help: 'Der Besuch des Grids für Avatare anderer Grids (seine Hypergrid-Adresse und ein Knopf zum Kommen); nichts, wenn das Grid per Hypergrid nicht erreichbar ist'
+  admin_shortcode_tp_link_help: 'Ein Teleport-Link, der sich anpasst, wo man ihn sieht: im Browser oder im Viewer sein eigener Link, dazu ein Menü der anderen und der Adresse zum Kopieren'
+  admin_shortcode_option_destination: 'Der Ort: Host:Port:Region/x/y/z, hop://... oder eine Region des Grids'
+  admin_shortcode_option_label: 'Sein Text (standardmäßig der Name des Ortes)'

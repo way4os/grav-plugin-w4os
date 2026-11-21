@@ -128,3 +128,6 @@ w4os:
   admin_shortcode_option_footer: 'A text under the steps (Markdown: a link to the help page, for instance)'
   admin_shortcode_getting_started_help: 'The steps of a newcomer: create the avatar, add the grid to the viewer, log in; the next one to do stands out'
   admin_shortcode_hypergrid_visit_help: 'The visit of the grid for the avatars of other grids (its hypergrid address and a button to come); nothing when the grid is not reachable by hypergrid'
+  admin_shortcode_tp_link_help: 'A teleport link that fits where it is seen: from a browser or from the viewer, its own link, and a menu of the others and the address to copy'
+  admin_shortcode_option_destination: 'The place: host:port:Region/x/y/z, hop://..., or a region of the grid'
+  admin_shortcode_option_label: 'Its text (the name of the place by default)'

@@ -128,3 +128,6 @@ w4os:
   admin_shortcode_option_footer: 'Un texte sous les étapes (Markdown : un lien vers la page d’aide, par exemple)'
   admin_shortcode_getting_started_help: 'Les étapes d’un nouveau venu : créer son avatar, ajouter la grille au viewer, se connecter ; la prochaine à faire est mise en avant'
   admin_shortcode_hypergrid_visit_help: 'La visite de la grille pour les avatars d’autres grilles (son adresse hypergrid et un bouton pour venir) ; rien quand la grille n’est pas joignable en hypergrid'
+  admin_shortcode_tp_link_help: 'Un lien de téléportation qui s’adapte à l’endroit où on le voit : depuis un navigateur ou depuis le viewer, son lien, et un menu des autres et de l’adresse à copier'
+  admin_shortcode_option_destination: 'Le lieu : hôte:port:Région/x/y/z, hop://..., ou une région de la grille'
+  admin_shortcode_option_label: 'Son texte (le nom du lieu par défaut)'

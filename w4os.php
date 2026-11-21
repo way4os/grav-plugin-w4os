@@ -371,6 +371,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => $this->site()->picture($uuid, $default)));
+        // A teleport link that fits where it is seen, browser or viewer (Site::tpLink(), W4OS\Views\TeleportLink)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null) => $this->site()->tpLink((string) $destination, $label), ['is_safe' => ['html']]));
         // A picture of the grid that never shows broken: the initials of its name under it (Site::pictureTag())
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag($this->site()->picture($uuid, $default), Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     }
@@ -380,6 +382,9 @@ class W4osPlugin extends Plugin
         $page = $this->grav['page'] ?? null;
         $this->config->get('plugins.w4os.built_in_css', true) && Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
             && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+        // The script of the teleport links (js/tp-link.js), on the pages of the site: a link in a text kept in a cache needs it too
+        Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null)
+            && $this->grav['assets']->addJs('plugin://w4os/js/tp-link.js', ['group' => 'bottom', 'loading' => 'defer']);
         // The files of the blocks the text of a page shows (its shortcodes), before the theme writes its head
         if ($page !== null && ! $this->sitePage()) {
             foreach (Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) as $block) {
@@ -402,7 +407,7 @@ class W4osPlugin extends Plugin
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
      * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri] ([login-uri
-     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [hypergrid-visit title="..."], [base_url], [grid-name], [site-slogan]. The
+     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [hypergrid-visit title="..."], [tp-link destination="..." label="..."], [base_url], [grid-name], [site-slogan]. The
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
@@ -427,6 +432,8 @@ class W4osPlugin extends Plugin
             'start_content' => trim((string) $shortcode->getParameter('content', '')),
             'start_footer' => trim((string) $shortcode->getParameter('footer', '')),
         ]));
+        // [tp-link destination="host:port:Region/x/y/z" label="..."]: a teleport link that fits where it is seen, browser or viewer
+        $handlers->add('tp-link', fn ($shortcode) => $this->site()->tpLink((string) $shortcode->getParameter('destination', ''), ((string) $shortcode->getParameter('label', '')) ?: null));
         // [hypergrid-visit title="..." level=h2]: the visit of the grid for the avatars of other grids, nothing without hypergrid
         $handlers->add('hypergrid-visit', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/hypergrid-visit.html.twig', [
             'hg_title' => trim((string) $shortcode->getParameter('title', '')),

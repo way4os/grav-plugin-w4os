@@ -9,6 +9,6 @@
     <{{ level }} class="w4os-callout-title">{{ hg_title|default('w4os.hg_visit_title'|t) }}</{{ level }}>
     <p>{{ hypergrid.examples|default('') ? 'w4os.hg_visit_text_examples'|t(hypergrid.examples) : 'w4os.hg_visit_text'|t }}</p>
     <p class="w4os-hypergrid-address">{% include 'w4os/login-uri.html.twig' with {uri: hypergrid.address} %}</p>
-    {% if hypergrid.link %}<p>{{ w4os_anchor(hypergrid.link, 'w4os.hg_visit_go'|t, 'primary') }}</p>{% endif %}
+    <p class="w4os-hypergrid-go">{{ w4os_tp_link(hypergrid.address, 'w4os.hg_visit_go'|t) }}</p>
 </aside>
 {% endif %}

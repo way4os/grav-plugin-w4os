@@ -128,3 +128,6 @@ w4os:
   admin_shortcode_option_footer: 'Testun o dan y camau (Markdown: dolen i’r dudalen gymorth, er enghraifft)'
   admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'
   admin_shortcode_hypergrid_visit_help: 'Ymweliad y grid i afatarau gridiau eraill (ei gyfeiriad hypergrid a botwm i ddod); dim pan na ellir cyrraedd y grid drwy hypergrid'
+  admin_shortcode_tp_link_help: 'Dolen teleportio sy’n addasu i ble mae’n cael ei gweld: mewn porwr neu yn y viewer, ei dolen ei hun, a dewislen o’r lleill a’r cyfeiriad i’w gopïo'
+  admin_shortcode_option_destination: 'Y lle: gwesteiwr:porth:Rhanbarth/x/y/z, hop://... neu ranbarth o’r grid'
+  admin_shortcode_option_label: 'Ei thestun (enw’r lle yn ddiofyn)'

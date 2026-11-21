@@ -569,21 +569,14 @@ final class Site
 
     /**
      * The visit of the grid from another one, for the avatars of other grids: its address to enter in a viewer (its gatekeeper,
-     * host:port), the link that takes a viewer there and the grids they may come from, as the site names them (setting
+     * host:port, its teleport link built from it) and the grids they may come from, as the site names them (setting
      * hypergrid.examples, '' for none); null when the grid is not reachable by hypergrid (no gatekeeper).
      *
-     * @return array{address: string, link: string, examples: string}|null
+     * @return array{address: string, examples: string}|null
      */
     public function hypergrid(): ?array
     {
-        $links = $this->cached('tp links', function () {
-            try {
-                return $this->engine()->tpLinks();
-            } catch (EngineException $e) {
-                return [];
-            }
-        });
-        $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()), is_array($links) ? $links : []);
+        $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
 
         $hypergrid = (array) ($this->config()['hypergrid'] ?? []);
         $examples = self::examplesOfDay((array) ($hypergrid['examples'] ?? []), (int) ($hypergrid['count'] ?? 3), gmdate('Y-m-d'));
@@ -616,22 +609,16 @@ final class Site
     }
 
     /**
-     * The visit of a grid by its gatekeeper (http://host:port, host:port): the address host:port to enter in a viewer, and the
-     * first of the links the grid makes for a browser that a browser opens (its tpLinks, the address to copy left out: none, no
-     * button); null without a gatekeeper.
+     * The visit of a grid by its gatekeeper (http://host:port, host:port): its address host:port, to enter in a viewer and to go
+     * to by its teleport link (tpLink()); null without a gatekeeper.
      *
-     * @param list<array{format: int, link: string, label: string}> $links
-     * @return array{address: string, link: string}|null
+     * @return array{address: string}|null
      */
-    public static function hypergridVisit(string $gatekeeper, array $links = []): ?array
+    public static function hypergridVisit(string $gatekeeper): ?array
     {
         $address = trim($gatekeeper) === '' ? null : Destination::loginUri(trim($gatekeeper));
-        if ($address === null || $address === '') {
-            return null;
-        }
-        $opened = array_values(array_filter($links, fn (array $link) => (int) ($link['format'] ?? 0) !== Destination::TXT && (string) ($link['link'] ?? '') !== ''));
 
-        return ['address' => $address, 'link' => (string) ($opened[0]['link'] ?? '')];
+        return $address === null || $address === '' ? null : ['address' => $address];
     }
 
     /** The login URI of the grid (host:port), kept for the time of the setting "cache"; empty when the engine cannot tell it. */
@@ -854,6 +841,55 @@ final class Site
     public function isViewer(): bool
     {
         return $this->client() === 'viewer';
+    }
+
+    /**
+     * A teleport link that fits where it is seen (W4OS\Views\TeleportLink): the links the engine gives a destination for a browser
+     * and for the viewer (kept for the time of the setting "cache"), their labels in the language of the page, the main one of the
+     * client the server tells; its text the one given, else the name of the place (its region; a grid alone, its address). The
+     * address alone, as text, when the engine gives no link.
+     */
+    public function tpLink(string $destination, ?string $label = null): string
+    {
+        $destination = trim($destination);
+        $place = $destination === '' ? [] : $this->cached('place '.$destination, function () use ($destination) {
+            try {
+                return $this->engine()->place($destination);
+            } catch (EngineException $e) {
+                return [];
+            }
+        });
+        $place = is_array($place) ? $place : [];
+        $links = [];
+        foreach (\W4OS\Views\TeleportLink::CLIENTS as $client) {
+            $links[$client] = array_map(fn ($link) => ['label' => $this->translate('w4os.'.($link['label'] ?? ''))] + (array) $link, (array) ($place[$client] ?? []));
+        }
+        $text = trim((string) $label) !== '' ? (string) $label : self::placeName((string) ($place['tpUri'] ?? $destination));
+
+        return \W4OS\Views\TeleportLink::html($links, $text, $this->client(), [
+            'more' => $this->translate('w4os.tp_more'),
+            'copied' => $this->translate('w4os.copied'),
+        ], self::viewerPattern());
+    }
+
+    /** The name a place is shown by: its region (host:port/Region/x/y/z, host:port:Region), a grid alone its address. */
+    public static function placeName(string $uri): string
+    {
+        $uri = preg_replace('#^[a-z]+://#i', '', trim($uri)) ?? '';
+        if (preg_match('#^[^/:]+:\d+[/:]([^/]+)#', $uri, $m) === 1) {
+            return rawurldecode($m[1]);
+        }
+
+        return rtrim(explode('/', $uri)[0], ':');
+    }
+
+    /** The user agents of the viewers, as the engine knows them (Destination::VIEWER_PATTERN), for the script of a page. */
+    public static function viewerPattern(): string
+    {
+        Bundled::library();
+        $pattern = defined(\W4OS\Engine\Hypergrid\Destination::class.'::VIEWER_PATTERN') ? (string) constant(\W4OS\Engine\Hypergrid\Destination::class.'::VIEWER_PATTERN') : '/SecondLife|OpenSim|Firestorm/i';
+
+        return trim((string) preg_replace('#^/(.*)/[a-z]*$#s', '$1', $pattern));
     }
 
     /** The class of the visitor, as the engine tells it from its user agent (Destination::client()): `viewer` or `browser`. */
@@ -1309,6 +1345,7 @@ final class Site
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => [['option' => 'add-grid', 'help' => 'admin_shortcode_option_add_grid']]],
         ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'content', 'help' => 'admin_shortcode_option_content'], ['option' => 'footer', 'help' => 'admin_shortcode_option_footer']]],
+        ['code' => '[tp-link]', 'help' => 'admin_shortcode_tp_link_help', 'options' => [['option' => 'destination', 'help' => 'admin_shortcode_option_destination'], ['option' => 'label', 'help' => 'admin_shortcode_option_label']]],
         ['code' => '[hypergrid-visit]', 'help' => 'admin_shortcode_hypergrid_visit_help', 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h2', 'help' => 'shortcode_option_level']]],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],
         ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
