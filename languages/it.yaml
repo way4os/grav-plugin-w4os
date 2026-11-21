@@ -442,6 +442,7 @@ w4os:
   setting_gatekeeper: Gatekeeper
   group_links: 'Link ai luoghi'
   setting_link_format_browser: 'Link in un browser web'
+  setting_link_format_browser_help: 'hop:// è il formato di OpenSimulator, secondlife:// può aprire un viewer di Second Life.'
   setting_link_format_viewer: 'Link nel viewer'
   link_format_grid: 'Luogo con la sua griglia (secondlife://griglia/secondlife/Regione)'
   link_format_hop: 'Link hypergrid (hop://)'

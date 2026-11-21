@@ -442,6 +442,7 @@ w4os:
   setting_gatekeeper: Gatekeeper
   group_links: "Dolenni i'r lleoedd"
   setting_link_format_browser: 'Dolenni mewn porwr gwe'
+  setting_link_format_browser_help: 'hop:// yw fformat OpenSimulator, gall secondlife:// agor viewer Second Life.'
   setting_link_format_viewer: 'Dolenni yn y viewer'
   link_format_grid: "Lle gyda'i grid (secondlife://grid/secondlife/Rhanbarth)"
   link_format_hop: 'Dolen hypergrid (hop://)'
