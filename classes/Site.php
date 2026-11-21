@@ -1067,22 +1067,27 @@ final class Site
     /** The pages of the admin menu, for the managers of the grid: their route (routes) and the text of their title. */
     public const ADMIN_PAGES = [
         'dashboard' => ['label' => 'w4os.dashboard_title', 'icon' => 'ti ti-layout-dashboard'],
+        'settings_grid' => ['label' => 'w4os.settings_menu_grid', 'icon' => 'ti ti-world-cog'],
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
         'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle', 'parent' => 'manage'],
         'settings_avatars' => ['label' => 'w4os.settings_avatars', 'icon' => 'ti ti-user-cog', 'parent' => 'manage'],
-        // The settings of the grid, then of its services, as w4os-wp has them in its menu
-        'settings_grid' => ['label' => 'w4os.settings_menu_grid', 'icon' => 'ti ti-world-cog'],
-        'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin'],
-        'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search'],
-        'settings_guide' => ['label' => 'w4os.settings_menu_guide', 'icon' => 'ti ti-map-pin'],
-        'settings_offline' => ['label' => 'w4os.settings_menu_offline', 'icon' => 'ti ti-mail'],
-        'settings_assets' => ['label' => 'w4os.settings_menu_assets', 'icon' => 'ti ti-photo'],
-        'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
-        'shortcodes' => ['label' => 'w4os.admin_shortcodes_menu', 'icon' => 'ti ti-code'],
+        'settings_search' => ['label' => 'w4os.settings_menu_search', 'icon' => 'ti ti-search', 'parent' => 'services'],
+        'settings_guide' => ['label' => 'w4os.settings_menu_guide', 'icon' => 'ti ti-map-pin', 'parent' => 'services'],
+        'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin', 'parent' => 'services'],
+        'settings_offline' => ['label' => 'w4os.settings_menu_offline', 'icon' => 'ti ti-mail', 'parent' => 'services'],
+        'settings_assets' => ['label' => 'w4os.settings_menu_assets', 'icon' => 'ti ti-photo', 'parent' => 'services'],
+        'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat', 'parent' => 'tools'],
+        'shortcodes' => ['label' => 'w4os.admin_shortcodes_menu', 'icon' => 'ti ti-code', 'parent' => 'tools'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
+    ];
+
+    /** The sections of the admin menu that are no page, the pages whose `parent` they are gathered under their name. */
+    public const ADMIN_GROUPS = [
+        'services' => ['label' => 'w4os.group_services', 'icon' => 'ti ti-plug-connected'],
+        'tools' => ['label' => 'w4os.admin_menu_tools', 'icon' => 'ti ti-tool'],
     ];
 
     /**
@@ -1162,27 +1167,38 @@ final class Site
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 
-        return self::menuTree(array_values((array) $event['items']), $this->translate('w4os.admin_menu_list'));
+        $groups = array_map(fn (array $group) => ['label' => $this->translate($group['label'])] + $group, self::ADMIN_GROUPS);
+
+        return self::menuTree(array_values((array) $event['items']), $this->translate('w4os.admin_menu_list'), $groups);
     }
 
     /**
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
      * first, named as a list ($list, not the name of the parent), then theirs; the parent open (active) when one of them is the page
-     * shown. An entry whose parent is not in the menu stays where it is.
+     * shown. A parent that is a section of $groups (no page: its label and icon) is put where its first entry is, leading to it, with
+     * only its entries under it. An entry whose parent is in neither stays where it is.
      *
      * @param list<array<string,mixed>> $items
+     * @param array<string, array{label: string, icon: string}> $groups
      * @return list<array<string,mixed>>
      */
-    public static function menuTree(array $items, ?string $list = null): array
+    public static function menuTree(array $items, ?string $list = null, array $groups = []): array
     {
         $types = array_column($items, 'type');
+        $nested = fn (array $item) => isset($item['parent']) && (in_array($item['parent'], $types, true) || isset($groups[$item['parent']]));
         $children = [];
         foreach ($items as $item) {
-            isset($item['parent']) && in_array($item['parent'], $types, true) && $children[$item['parent']][] = $item;
+            $nested($item) && $children[$item['parent']][] = $item;
         }
         $menu = [];
         foreach ($items as $item) {
-            if (isset($item['parent']) && in_array($item['parent'], $types, true)) {
+            $group = $item['parent'] ?? null;
+            if ($nested($item)) {
+                // A section with no page, at the place of its first entry
+                if (! in_array($group, $types, true) && ! isset($menu[$group])) {
+                    $menu[$group] = ['type' => $group, 'label' => $groups[$group]['label'], 'icon' => $groups[$group]['icon'], 'url' => $item['url'] ?? '',
+                        'children' => $children[$group], 'active' => in_array(true, array_column($children[$group], 'active'), true)];
+                }
                 continue;
             }
             if (isset($children[$item['type'] ?? null])) {
@@ -1192,7 +1208,7 @@ final class Site
             $menu[] = $item;
         }
 
-        return $menu;
+        return array_values($menu);
     }
 
     /**

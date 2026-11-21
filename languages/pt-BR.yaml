@@ -952,3 +952,4 @@ w4os:
   admin_task_never: 'Nunca executada'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Fixar a barra lateral'
+  admin_menu_tools: Ferramentas

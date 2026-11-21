@@ -14,9 +14,12 @@ describe('admin', function () {
             ->and(Site::brandColor(null))->toBeNull();
     });
 
-    test('has its sections in their order, each with its icon of Tabler', function () {
-        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'simulators', 'regions', 'manage', 'models', 'flux', 'settings_avatars', 'settings_grid', 'settings_economy', 'settings_search', 'settings_guide', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
-            ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-');
+    test('has its sections in their order, the grid first, each with its icon of Tabler', function () {
+        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
+            ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-')
+            ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools'])
+            ->and(array_column(Site::ADMIN_GROUPS, 'icon'))->each->toStartWith('ti ti-')
+            ->and(array_keys(array_filter(Site::ADMIN_PAGES, fn (array $page) => ($page['parent'] ?? null) === 'tools')))->toBe(['health', 'shortcodes']);
     });
 
     test('is a layout of its own (Tabler), the site\'s identity in its sidebar, the sections the visitor opens', function () {
@@ -90,6 +93,25 @@ describe('the menu of the admin', function () {
             ->and(array_column($menu[1]['children'], 'label'))->toBe(['List', 'Avatar Models'])
             ->and(array_column($menu[1]['children'], 'active'))->toBe([false, true])
             ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
+    });
+
+    test('gathers the pages of a section that is no page (Services, Tools) under its name, where its first page is, without a list', function () {
+        $items = [
+            ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
+            ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'active' => false, 'parent' => 'services'],
+            ['type' => 'settings_guide', 'label' => 'Guide', 'url' => '/w4os/guide', 'active' => true, 'parent' => 'services'],
+            ['type' => 'health', 'label' => 'Health', 'url' => '/w4os/health', 'active' => false, 'parent' => 'tools'],
+            ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'active' => false],
+        ];
+        $groups = ['services' => ['label' => 'Services', 'icon' => 'ti ti-plug-connected'], 'tools' => ['label' => 'Tools', 'icon' => 'ti ti-tool']];
+        $menu = Site::menuTree($items, 'List', $groups);
+
+        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'tools', 'settings'])
+            ->and($menu[1])->toMatchArray(['label' => 'Services', 'icon' => 'ti ti-plug-connected', 'url' => '/w4os/search', 'active' => true])
+            ->and(array_column($menu[1]['children'], 'label'))->toBe(['Search', 'Guide'])
+            ->and(array_column($menu[2]['children'], 'label'))->toBe(['Health'])
+            ->and($menu[2]['active'])->toBeFalse()
+            ->and(array_column(Site::menuTree(array_slice($items, 3, 1), 'List', $groups)[0]['children'], 'type'))->toBe(['health']);
     });
 
     test('shows the pages nested under their parent', function () {

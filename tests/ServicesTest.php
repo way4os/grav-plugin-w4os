@@ -6,9 +6,9 @@ use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
 describe('the settings pages of the services of the grid', function () {
-    test('live under the admin route, in the admin menu after the avatars and the grid as w4os-wp has them, for whom the contract lets read them', function () {
+    test('live under the admin route, in the Services section of the admin menu after the avatars, for whom the contract lets read them', function () {
         $routes = Site::adminRoutes(['admin' => '/w4os'], []);
-        $services = ['settings_economy' => 'economy', 'settings_search' => 'search', 'settings_guide' => 'guide', 'settings_offline' => 'offline', 'settings_assets' => 'assets'];
+        $services = ['settings_search' => 'search', 'settings_guide' => 'guide', 'settings_economy' => 'economy', 'settings_offline' => 'offline', 'settings_assets' => 'assets'];
         foreach ($services as $type => $group) {
             expect($routes[$type])->toBe("/w4os/$group")
                 ->and(Site::ADMIN_PAGES[$type]['label'])->toBe("w4os.settings_menu_$group")
@@ -18,7 +18,8 @@ describe('the settings pages of the services of the grid', function () {
         }
         $pages = array_keys(Site::ADMIN_PAGES);
 
-        expect(array_slice($pages, array_search('settings_grid', $pages, true) + 1, 5))->toBe(array_keys($services))
+        expect(array_slice($pages, array_search('settings_avatars', $pages, true) + 1, 5))->toBe(array_keys($services))
+            ->and(array_unique(array_column(array_intersect_key(Site::ADMIN_PAGES, $services), 'parent')))->toBe(['services'])
             ->and(Site::serviceGroup('models'))->toBeNull();
     });
 

@@ -952,3 +952,4 @@ w4os:
   admin_task_never: 'Nooit uitgevoerd'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'
+  admin_menu_tools: Hulpmiddelen

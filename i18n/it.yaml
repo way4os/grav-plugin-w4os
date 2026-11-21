@@ -118,3 +118,4 @@ w4os:
   admin_task_never: 'Mai eseguita'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Fissa la barra laterale'
+  admin_menu_tools: 'Strumenti'

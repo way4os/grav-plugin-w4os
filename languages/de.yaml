@@ -952,3 +952,4 @@ w4os:
   admin_task_never: 'Nie ausgeführt'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'
+  admin_menu_tools: Werkzeuge
