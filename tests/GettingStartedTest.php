@@ -22,6 +22,7 @@ function render_start(string $template, array $given, array $context = []): stri
     // The texts of a site as w4os_text gives them, HTML here, from a /fr page
     $twig->addFilter(new TwigFilter('w4os_text', fn (?string $text) => trim((string) $text) === '' ? '' : Site::localLinks((string) $text, Site::siteLinks('', '/fr', ['en', 'fr'], '/aide')), ['is_safe' => ['html']]));
     $twig->addFunction(link_function());
+    $twig->addFunction(new TwigFunction('w4os_anchor', fn (string $href, string $text, string $kind = 'plain', string $class = '') => W4OS\Views\Link::html($href, $text, $kind, $class), ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
     $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
@@ -164,5 +165,16 @@ describe('the grid added to a viewer', function () {
             expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-more { display: block; margin-top: .6rem; text-align: right; font-weight: 600; }', '.w4os-more::before { content: "\\203A\\00A0"; }');
         }
         expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig'))->toContain("<div class=\"card-footer text-end\">{{ w4os_link(card.url, 'w4os.see_all'|t, 'more') }}</div>");
+    });
+
+    test('for an avatar that has been in the world: signed in as its name, the login URI without the button that adds the grid, Enjoy! to log in', function () {
+        $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(true, true), 'avatar' => ['name' => 'Way Forest'], 'uri' => 'grid.example.org:8002',
+            'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
+
+        expect($html)->toContain('w4os.start_avatar_done(Way Forest)', '<code class="w4os-login-uri">grid.example.org:8002</code>', '<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login_done</a>')
+            ->and($html)->not->toContain('w4os-add-grid-button', 'w4os.start_add_grid', '>w4os.start_login<')
+            // Signed in, not yet in the world: the button that adds the grid, Log in
+            ->and(render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(true, false), 'avatar' => ['name' => 'Way Forest'], 'uri' => 'grid.example.org:8002',
+                'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]))->toContain('w4os-add-grid-button', '>w4os.start_login</a>');
     });
 });

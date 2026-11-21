@@ -12,7 +12,6 @@
     <ol class="w4os-start-steps">
         {% for item in steps %}
         {% set kind = item.state == 'next' ? 'primary' : 'button' %}
-        {% set button = item.state == 'next' ? 'btn btn-primary' : 'btn btn-ghost' %}
         <li class="w4os-start-step w4os-start-{{ item.step }} is-{{ item.state }}"{% if item.state == 'next' %} aria-current="step"{% endif %}>
             {% if item.state == 'done' %}<span class="visually-hidden">{{ 'w4os.start_done'|t }}</span>{% endif %}
             {% if item.step == 'avatar' %}
@@ -24,12 +23,13 @@
                 {{ w4os_link(config.plugins.login.route ?: '/login', 'w4os.log_in'|t, kind) }}
                 {% endif %}
             {% elseif item.step == 'viewer' %}
-                {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t }}</a>{% endif %}
+                {# Once the avatar has been in the world, the grid is in its viewer: its login URI alone #}
+                {% if links and item.state != 'done' %}{{ w4os_anchor(links.hop, 'w4os.start_add_grid'|t, kind, 'w4os-add-grid-button') }}{% endif %}
                 {% if uri %}
                 <p class="w4os-start-uri">{% include 'w4os/login-uri.html.twig' %}</p>
                 {% endif %}
             {% elseif item.step == 'login' and uri %}
-                <a class="{{ button }} w4os-login-button" href="{{ w4os_login_link()|e('html_attr') }}">{{ 'w4os.start_login'|t }}</a>
+                {{ w4os_anchor(w4os_login_link(), (item.state == 'done' ? 'w4os.start_login_done' : 'w4os.start_login')|t, kind, 'w4os-login-button') }}
             {% endif %}
         </li>
         {% endfor %}
