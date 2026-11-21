@@ -158,6 +158,7 @@ describe('the home page of a grid', function () {
             public function __construct(int $n)
             {
                 [$this->url, $this->title, $this->date] = ["/news/post-$n", "Post $n", 1_700_000_000 + $n];
+                $n === 2 && $this->content = '<p>'.str_repeat('Long text ', 20).'</p>';
                 $this->media = new class { public array $images = []; };
             }
         };
@@ -170,13 +171,18 @@ describe('the home page of a grid', function () {
             public function collection(): array { return $this->posts; }
         };
         $twig->addFunction(new TwigFunction('w4os_home_news', fn () => $news));
-        $html = html_entity_decode($twig->render('w4os/home.html.twig', ['content' => '']), ENT_QUOTES | ENT_HTML5);
+        // Grav's truncate, its ellipsis &hellip; by default
+        $twig->addFilter(new TwigFilter('truncate', fn (string $text, int $limit, bool $word = false, string $break = ' ', string $pad = '&hellip;') => mb_strlen($text) <= $limit ? $text : mb_substr($text, 0, $limit).$pad));
+        $raw = $twig->render('w4os/home.html.twig', ['content' => '']);
+        $html = html_entity_decode($raw, ENT_QUOTES | ENT_HTML5);
         $grid = substr($html, (int) strpos($html, '<aside class="w4os-home-grid">'), (int) strpos($html, '<aside class="w4os-home-news">') - (int) strpos($html, '<aside class="w4os-home-grid">'));
 
         expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
             ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
             ->and($html)->toContain('<h3 class="w4os-latest-title"><a href="/news">News</a></h3>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
             ->and($html)->not->toContain('Post 4')
+            // The excerpt cut with an ellipsis written once, never escaped again (&amp;hellip;)
+            ->and($raw)->toContain(str_repeat('Long text ', 14).'…')->not->toContain('hellip')
             ->and(themeless_twig()->render('w4os/home.html.twig', ['content' => '']))->not->toContain('w4os-latest');
     });
 

@@ -29,7 +29,7 @@
                 <article class="w4os-latest-item">
                     {% if image %}<a class="w4os-latest-image" href="{{ item.url|e('html_attr') }}" tabindex="-1" aria-hidden="true">{{ image.cropZoom(600, 338).html('', '')|raw }}</a>{% endif %}
                     <h4><a href="{{ item.url|e('html_attr') }}">{{ item.title }}</a></h4>
-                    <p>{{ ((item.header.intro ?? '') ?: item.content|striptags|trim)|truncate(140, true) }}</p>
+                    <p>{{ ((item.header.intro ?? '') ?: item.content|striptags|trim)|truncate(140, true, ' ', '…') }}</p>
                     <p class="w4os-latest-date"><time datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|w4os_date }}</time></p>
                 </article>
                 {% endfor %}
