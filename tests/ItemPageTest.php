@@ -17,7 +17,7 @@ function item_twig(array $page = []): Environment
     $twig->addFunction(new TwigFunction('w4os_item', fn () => $page));
     $twig->addFunction(new TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => W4OS\Views\ListView::of($list, $items, $meta, $query, $links, fixed: $fixed)));
     $twig->addFunction(new TwigFunction('w4os_item_view', fn (array $page) => W4OS\Views\ItemView::of($api->listOf($page['type']) ?? ['columns' => []], $page['item'], $page['groups'] ?? [], W4OS\Views\Rows::actions($page['form'], $page['item']))));
-    $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
+    $twig->addFunction(new TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag("/pictures/$uuid.jpg", W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => "/$type"));
     $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
@@ -40,7 +40,7 @@ describe('the page of an item in the admin', function () {
         $html = item_twig($page)->render('w4os/item-header.html.twig', []);
 
         expect($html)->toContain('class="page-header d-print-none w4os-item-header"', '<div class="page-pretitle"><a href="&#x2F;regions">', '[w4os.regions_title]',
-            '<h2 class="page-title">Test East</h2>', 'src="&#x2F;pictures&#x2F;m1.jpg"', 'class="badge bg-green-lt"')
+            '<h2 class="page-title">Test East</h2>', 'data-initials="TE"><img src="/pictures/m1.jpg"', 'class="badge bg-green-lt"')
             ->and($html)->toContain('<span class="badge bg-green-lt"><i class="ti&#x20;ti-power me-1" aria-hidden="true"></i>[w4os.state_enabled]</span>')
             ->and($html)->toContain('name="action" value="disable"');
     });

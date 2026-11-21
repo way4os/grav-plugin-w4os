@@ -12,6 +12,7 @@ describe('the dashboard', function () {
     $api = new OpenApi(Contract::document());
     $render = function (array $cards) {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(picture_tag_function());
         $twig->addFunction(link_function());
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => $cards));
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
@@ -76,6 +77,7 @@ describe('the dashboard', function () {
         ]];
         $problems = Site::healthProblems($health);
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(picture_tag_function());
         $twig->addFunction(link_function());
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => []));
         $twig->addFunction(new TwigFunction('w4os_health_problems', fn () => $problems + ['url' => '/w4os/health']));

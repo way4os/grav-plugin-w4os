@@ -371,6 +371,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => $this->site()->picture($uuid, $default)));
+        // A picture of the grid that never shows broken: the initials of its name under it (Site::pictureTag())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag($this->site()->picture($uuid, $default), Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     }
 
     public function onTwigSiteVariables(): void

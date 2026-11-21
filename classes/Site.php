@@ -519,6 +519,26 @@ final class Site
     }
 
     /**
+     * A picture of the grid that never shows broken: its initials (initials()) on a tint, the picture over them, hidden when it
+     * cannot be loaded (a texture the grid has not, its assets out of reach); $class gives its size and shape.
+     */
+    public static function pictureTag(string $src, string $initials, string $class = '', int $size = 32): string
+    {
+        $esc = fn (string $text) => htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+        return '<span class="'.$esc(trim("w4os-pic $class")).'" style="width: '.$size.'px; height: '.$size.'px" data-initials="'.$esc($initials).'">'
+            .'<img src="'.$esc($src).'" alt="" width="'.$size.'" height="'.$size.'" loading="lazy" onerror="this.hidden=true"></span>';
+    }
+
+    /** The initials of a name (Ada Love: AL; Plaza: P), '' for none. */
+    public static function initials(?string $name): string
+    {
+        $words = preg_split('/[\s._-]+/u', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return mb_strtoupper(implode('', array_map(fn (string $word) => mb_substr($word, 0, 1), array_slice($words, 0, 2))));
+    }
+
+    /**
      * The avatar models, with the address of their picture, kept for the time of the setting "cache"; the ones another rule picks
      * (Engine::models(), the preview of the rule as it is changed) asked each time.
      *

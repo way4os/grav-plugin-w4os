@@ -9,6 +9,7 @@ use Twig\TwigFunction;
 function themeless_twig(bool $viewer = true): Environment
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+    $twig->addFunction(picture_tag_function());
     // A block with its title, none when the page asks it without (an empty title)
     $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\">".(($args['title'] ?? null) === '' ? '' : '<h1 class="block-title">Bart Simpson</h1>').'</section>', ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
@@ -136,6 +137,7 @@ describe('the home page of a grid', function () {
 
     test('has its main column a section, its blocks titled h2, its side columns asides, their blocks titled h3', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(picture_tag_function());
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
         $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
