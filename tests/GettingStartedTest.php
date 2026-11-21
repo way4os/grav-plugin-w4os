@@ -15,6 +15,7 @@ function render_start(string $template, array $given, array $context = []): stri
     $twig->addFunction(new TwigFunction('w4os_login_uri', fn () => $given['uri']));
     $twig->addFunction(new TwigFunction('w4os_grid_name', fn () => $given['grid']));
     $twig->addFunction(new TwigFunction('w4os_login_link', fn () => Site::loginLink($given['uri'])));
+    $twig->addFunction(new TwigFunction('w4os_profile_page', fn () => '/profile/'.str_replace(' ', '.', (string) ($given['avatar']['name'] ?? ''))));
     $twig->addFunction(new TwigFunction('w4os_avatar', fn () => $given['avatar']));
     $twig->addFunction(new TwigFunction('w4os_start_steps', fn () => $given['steps']));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => $given['routes'][$type] ?? null));
@@ -36,24 +37,25 @@ describe('the steps of a newcomer', function () {
             ->and(array_column(Site::steps(true, true), 'step'))->toBe(['avatar', 'viewer', 'login']);
     });
 
-    test('stand out the one to do now: the avatar to create, a button alone; the grid to add, its button, its login URI and the note on the viewer; log in, a button alone', function () {
+    test('stand out the one to do now: the avatar to create, a button alone; the grid to add, its button and its login URI; log in, a button alone', function () {
         $links = ['hop' => 'hop:///app/gridmanager/addgrid/grid.example.org%3A8002', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/grid.example.org%3A8002'];
         $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(false, null), 'uri' => 'grid.example.org:8002', 'links' => $links]);
 
         expect($html)->toContain('<h2 class="w4os-start-title">w4os.start_title</h2>', 'class="w4os-start-step w4os-start-avatar is-next" aria-current="step"')
             ->and($html)->toContain('<a class="btn btn-primary" href="/register">w4os.start_avatar</a>')
             ->and($html)->toContain('<h3 class="w4os-start-step-title">w4os.start_viewer</h3>', '<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid(Demo World)</a>')
-            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'w4os.start_viewer_note(<a href="https://www.firestormviewer.org/downloads/" target="_blank" rel="noopener">Firestorm</a>)')
+            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>')
+            ->and($html)->not->toContain('start_viewer_note', 'firestormviewer')
             ->and($html)->toContain('<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login</a>')
             ->and(substr_count($html, '<h3'))->toBe(1)
             ->and($html)->not->toContain('w4os.start_next', 'w4os.log_in', 'secondlife:///app/gridmanager');
     });
 
-    test('mark the avatar done with its name, the grid to add next', function () {
+    test('mark the avatar done with its name, a link to its profile, the grid to add next', function () {
         $html = render_start('w4os/getting-started.html.twig', ['steps' => Site::steps(true, false), 'avatar' => ['name' => 'Ada Love'], 'uri' => 'grid.example.org:8002',
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
-        expect($html)->toContain('w4os-start-avatar is-done', '<span class="visually-hidden">w4os.start_done</span>', 'w4os.start_avatar_done(Ada Love)', 'w4os-start-viewer is-next', 'w4os-start-login is-todo')
+        expect($html)->toContain('w4os-start-avatar is-done', '<span class="visually-hidden">w4os.start_done</span>', '<a href="/profile/Ada.Love">w4os.start_avatar_done(Ada Love)</a>', 'w4os-start-viewer is-next', 'w4os-start-login is-todo')
             ->and($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.start_add_grid(Demo World)</a>')
             ->and($html)->not->toContain('w4os.start_avatar<');
     });
@@ -104,7 +106,7 @@ describe('the grid added to a viewer', function () {
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
 
-    test('keeps its links inline in a sidebar, whose list links a theme may make blocks', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', '.w4os-start-note a { display: inline; }');
+    test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle', function () {
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', 'letter-spacing: normal;');
     });
 });

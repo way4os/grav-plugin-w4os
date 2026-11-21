@@ -16,7 +16,7 @@
             {% if item.state == 'done' %}<span class="visually-hidden">{{ 'w4os.start_done'|t }}</span>{% endif %}
             {% if item.step == 'avatar' %}
                 {% if avatar %}
-                <p>{{ 'w4os.start_avatar_done'|t(avatar.name) }}</p>
+                <p><a href="{{ w4os_profile_page()|e('html_attr') }}">{{ 'w4os.start_avatar_done'|t(avatar.name) }}</a></p>
                 {% elseif w4os_route('register') %}
                 <a class="{{ button }}" href="{{ (base_url_relative ~ w4os_route('register'))|e('html_attr') }}">{{ 'w4os.start_avatar'|t }}</a>
                 {% else %}
@@ -32,7 +32,6 @@
                 </p>
                 {% do assets.addJs('plugin://w4os/js/copy.js', {group: 'bottom', loading: 'defer'}) %}
                 {% endif %}
-                <p class="w4os-start-note">{{ 'w4os.start_viewer_note'|t('<a href="https://www.firestormviewer.org/downloads/" target="_blank" rel="noopener">Firestorm</a>')|raw }}</p>
             {% elseif item.step == 'login' and uri %}
                 <a class="{{ button }} w4os-login-button" href="{{ w4os_login_link()|e('html_attr') }}">{{ 'w4os.start_login'|t }}</a>
             {% endif %}
