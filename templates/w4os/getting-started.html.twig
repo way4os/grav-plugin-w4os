@@ -33,5 +33,5 @@
         </li>
         {% endfor %}
     </ol>
-    {% if start_footer|default('')|trim %}<div class="w4os-start-footer">{{ start_footer|w4os_text }}</div>{% endif %}
+    {% if start_footer|default('')|trim %}<div class="w4os-start-footer">{{ start_footer|w4os_text(true) }}</div>{% endif %}
 </section>

@@ -700,13 +700,20 @@ final class Site
 
     /**
      * A text a site gives a block (Markdown, inline HTML), as the text of a page: Grav's Markdown, its links to a path of the site in
-     * the language of the visitor (localLinks()); '' for none.
+     * the language of the visitor (localLinks()); a link alone a link to more with $more (moreLink()); '' for none.
      */
-    public function text(?string $text): string
+    public function text(?string $text, bool $more = false): string
     {
         $text = trim((string) $text);
+        $html = $text === '' ? '' : self::localLinks(\Grav\Common\Utils::processMarkdown($text), $this->links());
 
-        return $text === '' ? '' : self::localLinks(\Grav\Common\Utils::processMarkdown($text), $this->links());
+        return $more ? self::moreLink($html) : $html;
+    }
+
+    /** A text that is one link alone, a link to more (.w4os-more: at the right, a chevron before it); any other as it is. */
+    public static function moreLink(string $html): string
+    {
+        return (string) preg_replace('#^\s*<p>(\s*<a\s[^>]*>(?:(?!</a>).)*</a>\s*)</p>\s*$#s', '<p class="w4os-more">$1</p>', $html);
     }
 
     /** The links of some HTML to a path of the site (href="/help") built for the page shown: its base and language, never twice. */

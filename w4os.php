@@ -295,7 +295,7 @@ class W4osPlugin extends Plugin
         // A link of the site for the page shown: its base, the language of the visitor, never a prefix twice (the engine's Url::build())
         $twig->addFunction(new \Twig\TwigFunction('w4os_url', fn (?string $target, array $args = []) => $this->site()->links()->build((string) $target, $args)));
         // A text a site gives a block (Markdown, inline HTML), as the text of a page, its links in the language of the visitor
-        $twig->addFilter(new \Twig\TwigFilter('w4os_text', fn (?string $text) => $this->site()->text($text), ['is_safe' => ['html']]));
+        $twig->addFilter(new \Twig\TwigFilter('w4os_text', fn (?string $text, bool $more = false) => $this->site()->text($text, $more), ['is_safe' => ['html']]));
         // The grid added to a viewer (w4os/add-grid.html.twig) and the Connect block (w4os/getting-started.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_add_grid', fn () => $this->site()->addGrid()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_uri', fn () => $this->site()->loginUri()));

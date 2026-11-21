@@ -137,11 +137,26 @@ describe('the grid added to a viewer', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'), ['autoescape' => 'html']);
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->addFilter(new TwigFilter('t', fn (string $key) => $key));
-        $twig->addFilter(new TwigFilter('w4os_text', fn (?string $text) => trim((string) $text) === '' ? '' : Site::localLinks('<p>'.$text.'</p>', Site::siteLinks('', '/fr', ['en', 'fr'], '/')), ['is_safe' => ['html']]));
+        $twig->addFilter(new TwigFilter('w4os_text', function (?string $text, bool $more = false) {
+            $html = trim((string) $text) === '' ? '' : Site::localLinks('<p>'.$text.'</p>', Site::siteLinks('', '/fr', ['en', 'fr'], '/'));
+
+            return $more ? Site::moreLink($html) : $html;
+        }, ['is_safe' => ['html']]));
         $html = $twig->render('w4os/getting-started.html.twig', ['start_content' => 'Three steps', 'start_footer' => '<a href="/aide">Aide détaillée</a>']);
 
-        expect($html)->toContain('<div class="w4os-start-footer"><p><a href="/fr/aide">Aide détaillée</a></p></div>', '<div class="w4os-start-content"><p>Three steps</p></div>')
+        expect($html)->toContain('<div class="w4os-start-footer"><p class="w4os-more"><a href="/fr/aide">Aide détaillée</a></p></div>', '<div class="w4os-start-content"><p>Three steps</p></div>')
             ->and($html)->not->toContain('&lt;p&gt;')
             ->and($twig->render('w4os/getting-started.html.twig', ['start_footer' => '  ']))->not->toContain('w4os-start-footer');
+    });
+
+    test('makes a footer that is one link alone a link to more, at the right with a chevron, like All news and See all', function () {
+        expect(Site::moreLink('<p><a href="/fr/aide">Aide détaillée</a></p>'))->toBe('<p class="w4os-more"><a href="/fr/aide">Aide détaillée</a></p>')
+            ->and(Site::moreLink('<p>See <a href="/help">the help</a></p>'))->toBe('<p>See <a href="/help">the help</a></p>')
+            ->and(Site::moreLink('<p><a href="/a">A</a> <a href="/b">B</a></p>'))->toBe('<p><a href="/a">A</a> <a href="/b">B</a></p>')
+            ->and(Site::moreLink(''))->toBe('');
+        foreach (['css/w4os.css', 'css/admin.css'] as $css) {
+            expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-more { display: block; text-align: right; }', '.w4os-more a::before { content: "\\203A\\00A0"; }');
+        }
+        expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig'))->toContain('card-footer text-end w4os-more');
     });
 });
