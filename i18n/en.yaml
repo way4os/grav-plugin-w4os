@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pin the sidebar'
   admin_menu_tools: 'Tools'
+  admin_shortcode_option_add_grid: 'With the button that adds the grid to a viewer, and the login URI to copy'
+  admin_shortcode_getting_started_help: 'The steps of a newcomer: create the avatar, add the grid to the viewer, log in; the next one to do stands out'

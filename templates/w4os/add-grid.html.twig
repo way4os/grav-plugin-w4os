@@ -1,0 +1,23 @@
+{# The grid added to a viewer: the button that adds it and selects it (hop://, the form Windows and macOS open, the viewer running
+   or not), the other form of the link (secondlife://), and the login URI to copy in the grid manager of a viewer, which works
+   everywhere. Nothing when the engine tells neither. #}
+{% set links = w4os_add_grid() %}
+{% set uri = w4os_login_uri() %}
+{% if links or uri %}
+<div class="w4os-add-grid">
+    {% if links %}
+    <p class="w4os-add-grid-links">
+        <a class="button primary w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.viewer_add_grid'|t(w4os_grid_name()) }}</a>
+        <a class="w4os-add-grid-other" href="{{ links.secondlife|e('html_attr') }}">{{ 'w4os.viewer_add_grid_other'|t }}</a>
+    </p>
+    {% endif %}
+    {% if uri %}
+    <p class="w4os-add-grid-uri">
+        {% if links %}<span>{{ 'w4os.viewer_login_uri_by_hand'|t }}</span>{% endif %}
+        <code class="w4os-login-uri">{{ uri }}</code>
+        <button type="button" class="button w4os-copy" data-w4os-copy="{{ uri|e('html_attr') }}" data-w4os-copied="{{ 'w4os.copied'|t|e('html_attr') }}">{{ 'w4os.copy'|t }}</button>
+    </p>
+    {% endif %}
+</div>
+{% do assets.addJs('plugin://w4os/js/copy.js', {group: 'bottom', loading: 'defer'}) %}
+{% endif %}

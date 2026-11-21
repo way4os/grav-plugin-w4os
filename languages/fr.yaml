@@ -181,6 +181,24 @@ w4os:
   snippet_example: Exemple
   dashboard_grid_info: 'Infos sur la grille'
   dashboard_grid_status: 'Statut de la grille'
+  grid_add_to_viewer: 'Ajouter cette grille à votre viewer'
+  viewer_add_grid: 'Ajouter %1$s à votre viewer'
+  viewer_add_grid_other: 'Autre lien'
+  viewer_login_uri_by_hand: 'Ou ajoutez-la dans le gestionnaire de grilles de votre viewer, avec son URI de connexion :'
+  copy: Copier
+  copied: Copié
+  start_title: 'Premiers pas'
+  start_avatar: 'Créez votre avatar'
+  start_avatar_text: 'Choisissez son nom et son apparence. Le nom est définitif : il ne pourra plus être changé.'
+  start_avatar_done: 'Votre avatar est %s.'
+  start_viewer: 'Ajoutez la grille à votre viewer'
+  start_viewer_text: 'Le viewer est le programme qui ouvre le monde virtuel. Installez-en un fait pour OpenSimulator, comme Firestorm (sa version OpenSim), puis ajoutez-y %s.'
+  start_viewer_get: 'Télécharger Firestorm'
+  start_viewer_others: 'Autres viewers'
+  start_login: Connexion
+  start_login_text: 'Dans le viewer, choisissez %s dans la liste des grilles, puis connectez-vous avec le nom de votre avatar et son mot de passe.'
+  start_done: Terminé
+  start_next: 'Étape suivante'
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
   tip_models_pattern: 'Partie du nom des modèles'
@@ -953,3 +971,5 @@ w4os:
   admin_task_ran: '%s : %s'
   admin_sidebar_pin: 'Épingler la barre latérale'
   admin_menu_tools: Outils
+  admin_shortcode_option_add_grid: 'Avec le bouton qui ajoute la grille au viewer, et l’URI de connexion à copier'
+  admin_shortcode_getting_started_help: 'Les étapes d’un nouveau venu : créer son avatar, ajouter la grille au viewer, se connecter ; la prochaine à faire est mise en avant'

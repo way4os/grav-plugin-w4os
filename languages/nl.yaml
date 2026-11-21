@@ -181,6 +181,24 @@ w4os:
   snippet_example: Voorbeeld
   dashboard_grid_info: Gridgegevens
   dashboard_grid_status: Gridstatus
+  grid_add_to_viewer: 'Voeg dit grid toe aan je viewer'
+  viewer_add_grid: 'Voeg %1$s toe aan je viewer'
+  viewer_add_grid_other: 'Andere link'
+  viewer_login_uri_by_hand: 'Of voeg het toe in de gridmanager van je viewer, met de login-URI:'
+  copy: Kopiëren
+  copied: Gekopieerd
+  start_title: 'Aan de slag'
+  start_avatar: 'Maak je avatar'
+  start_avatar_text: 'Kies de naam en het uiterlijk. De naam is definitief: die kan later niet meer worden gewijzigd.'
+  start_avatar_done: 'Je avatar is %s.'
+  start_viewer: 'Voeg het grid toe aan je viewer'
+  start_viewer_text: 'De viewer is het programma dat de virtuele wereld opent. Installeer er een die voor OpenSimulator gemaakt is, zoals Firestorm (de OpenSim-versie), en voeg er dan %s aan toe.'
+  start_viewer_get: 'Firestorm downloaden'
+  start_viewer_others: 'Andere viewers'
+  start_login: Inloggen
+  start_login_text: 'Kies in de viewer %s in de lijst met grids en log dan in met de naam van je avatar en het wachtwoord.'
+  start_done: Klaar
+  start_next: 'Volgende stap'
   total: Totaal
   tip_models_match: 'Hoe een model wordt herkend'
   tip_models_pattern: 'Deel van de naam van de modellen'
@@ -953,3 +971,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'
   admin_menu_tools: Hulpmiddelen
+  admin_shortcode_option_add_grid: 'Met de knop die het grid aan de viewer toevoegt, en de login-URI om te kopiëren'
+  admin_shortcode_getting_started_help: 'De stappen voor nieuwkomers: de avatar maken, het grid aan de viewer toevoegen, inloggen; de volgende stap valt op'

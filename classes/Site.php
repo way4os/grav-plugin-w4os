@@ -551,6 +551,45 @@ final class Site
         return $this->info('login uri', fn () => $this->engine()->loginUri());
     }
 
+    /**
+     * The links that add the grid to a viewer (hop, secondlife), kept for the time of the setting "cache"; null when the engine
+     * cannot tell them.
+     *
+     * @return array{hop: string, secondlife: string}|null
+     */
+    public function addGrid(): ?array
+    {
+        $links = $this->cached('add grid', function () {
+            try {
+                return $this->engine()->addGrid();
+            } catch (EngineException $e) {
+                return null;
+            }
+        });
+
+        return is_array($links) ? $links : null;
+    }
+
+    /**
+     * The steps of a newcomer and their state: done, next (the one to do now) or todo. The avatar is done once signed in; adding the
+     * grid to the viewer and logging in are done once the avatar has logged in-world (a viewer that logs in has the grid).
+     *
+     * @return list<array{step: string, state: string}>
+     */
+    public static function steps(bool $signedIn, ?bool $visited): array
+    {
+        $done = ['avatar' => $signedIn, 'viewer' => $signedIn && $visited === true, 'login' => $signedIn && $visited === true];
+        $steps = [];
+        $next = false;
+        foreach ($done as $step => $isDone) {
+            $state = $isDone ? 'done' : ($next ? 'todo' : 'next');
+            $isDone || $next = true;
+            $steps[] = ['step' => $step, 'state' => $state];
+        }
+
+        return $steps;
+    }
+
     private function info(string $key, \Closure $value): string
     {
         $kept = $this->cached($key, function () use ($value) {
@@ -1115,7 +1154,8 @@ final class Site
         ['code' => '[destination-guide]', 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[new-avatars]', 'help' => 'block_new_avatars_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
-        ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => []],
+        ['code' => '[login-uri]', 'help' => 'admin_shortcode_uri_help', 'options' => [['option' => 'add-grid', 'help' => 'admin_shortcode_option_add_grid']]],
+        ['code' => '[getting-started]', 'help' => 'admin_shortcode_getting_started_help', 'options' => []],
         ['code' => '[base_url]', 'help' => 'admin_shortcode_base_url_help', 'options' => []],
         ['code' => '[w4os-home]…[/w4os-home]', 'help' => 'admin_shortcode_home_help', 'options' => []],
         ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],

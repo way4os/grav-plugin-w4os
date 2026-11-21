@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'
   admin_menu_tools: 'Werkzeuge'
+  admin_shortcode_option_add_grid: 'Mit dem Knopf, der das Grid zum Viewer hinzufügt, und der Login-URI zum Kopieren'
+  admin_shortcode_getting_started_help: 'Die Schritte für Neue: den Avatar erstellen, das Grid zum Viewer hinzufügen, sich einloggen; der nächste Schritt wird hervorgehoben'

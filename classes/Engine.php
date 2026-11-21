@@ -101,6 +101,14 @@ final class Engine
         return (string) ($this->info()['uri'] ?? '');
     }
 
+    /** @return array{hop: string, secondlife: string}|null the links that add the grid to a viewer, as the engine writes them */
+    public function addGrid(): ?array
+    {
+        $links = $this->info()['addGrid'] ?? null;
+
+        return is_array($links) && isset($links['hop'], $links['secondlife']) ? ['hop' => (string) $links['hop'], 'secondlife' => (string) $links['secondlife']] : null;
+    }
+
     /** @return array<string,mixed> what the engine says of the grid (/info) */
     private function info(): array
     {

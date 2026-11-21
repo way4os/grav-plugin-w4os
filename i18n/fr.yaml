@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s : %s'
   admin_sidebar_pin: 'Épingler la barre latérale'
   admin_menu_tools: 'Outils'
+  admin_shortcode_option_add_grid: 'Avec le bouton qui ajoute la grille au viewer, et l’URI de connexion à copier'
+  admin_shortcode_getting_started_help: 'Les étapes d’un nouveau venu : créer son avatar, ajouter la grille au viewer, se connecter ; la prochaine à faire est mise en avant'

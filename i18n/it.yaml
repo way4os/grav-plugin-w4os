@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Fissa la barra laterale'
   admin_menu_tools: 'Strumenti'
+  admin_shortcode_option_add_grid: 'Con il pulsante che aggiunge la griglia al viewer, e l’URI di accesso da copiare'
+  admin_shortcode_getting_started_help: 'I passi di chi arriva: creare l’avatar, aggiungere la griglia al viewer, accedere; il prossimo da fare è messo in evidenza'

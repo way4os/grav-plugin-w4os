@@ -181,6 +181,24 @@ w4os:
   snippet_example: Example
   dashboard_grid_info: 'Grid Info'
   dashboard_grid_status: 'Grid Status'
+  grid_add_to_viewer: 'Add this grid to your viewer'
+  viewer_add_grid: 'Add %1$s to your viewer'
+  viewer_add_grid_other: 'Other link'
+  viewer_login_uri_by_hand: 'Or add it in the grid manager of your viewer with its login URI:'
+  copy: Copy
+  copied: Copied
+  start_title: 'Getting started'
+  start_avatar: 'Create your avatar'
+  start_avatar_text: 'Choose its name and its look. The name is for good: it cannot be changed later.'
+  start_avatar_done: 'Your avatar is %s.'
+  start_viewer: 'Add the grid to your viewer'
+  start_viewer_text: 'The viewer is the program that opens the virtual world. Install one made for OpenSimulator, such as Firestorm (its OpenSim version), then add %s to it.'
+  start_viewer_get: 'Get Firestorm'
+  start_viewer_others: 'Other viewers'
+  start_login: 'Log in'
+  start_login_text: 'In the viewer, choose %s in the list of grids, then log in with the name of your avatar and its password.'
+  start_done: Done
+  start_next: 'Next step'
   total: Total
   tip_models_match: 'How a model is recognised'
   tip_models_pattern: 'Part of the name of the models'
@@ -953,3 +971,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pin the sidebar'
   admin_menu_tools: Tools
+  admin_shortcode_option_add_grid: 'With the button that adds the grid to a viewer, and the login URI to copy'
+  admin_shortcode_getting_started_help: 'The steps of a newcomer: create the avatar, add the grid to the viewer, log in; the next one to do stands out'

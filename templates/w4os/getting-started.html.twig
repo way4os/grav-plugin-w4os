@@ -1,0 +1,40 @@
+{# The steps of a newcomer (w4os_start_steps()): create the avatar, add the grid to the viewer, log in. The one to do now stands out,
+   the ones done are marked and folded to their title. #}
+{% set steps = w4os_start_steps() %}
+{% set avatar = w4os_avatar() %}
+{% set grid = w4os_grid_name() %}
+{% set titles = {avatar: 'w4os.start_avatar', viewer: 'w4os.start_viewer', login: 'w4os.start_login'} %}
+<section class="w4os-start">
+    <h2 class="w4os-start-title">{{ 'w4os.start_title'|t }}</h2>
+    <ol class="w4os-start-steps">
+        {% for item in steps %}
+        <li class="w4os-start-step w4os-start-{{ item.step }} is-{{ item.state }}"{% if item.state == 'next' %} aria-current="step"{% endif %}>
+            <h3 class="w4os-start-step-title">
+                {{ titles[item.step]|t }}
+                {% if item.state == 'done' %}<span class="w4os-start-state">{{ 'w4os.start_done'|t }}</span>{% elseif item.state == 'next' %}<span class="w4os-start-state">{{ 'w4os.start_next'|t }}</span>{% endif %}
+            </h3>
+            {% if item.step == 'avatar' %}
+                {% if avatar %}
+                <p>{{ 'w4os.start_avatar_done'|t(avatar.name) }}</p>
+                {% else %}
+                <p>{{ 'w4os.start_avatar_text'|t }}</p>
+                <p>
+                    {% if w4os_route('register') %}<a class="button{{ item.state == 'next' ? ' primary' }}" href="{{ (base_url_relative ~ w4os_route('register'))|e('html_attr') }}">{{ 'w4os.register_title'|t }}</a>{% endif %}
+                    <a href="{{ (base_url_relative ~ (config.plugins.login.route ?: '/login'))|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
+                </p>
+                {% endif %}
+            {% elseif item.step == 'viewer' and item.state != 'done' %}
+                <p>{{ 'w4os.start_viewer_text'|t(grid) }}</p>
+                <p class="w4os-start-viewers">
+                    <a href="https://www.firestormviewer.org/os-operating-system/" target="_blank" rel="noopener">{{ 'w4os.start_viewer_get'|t }}</a>
+                    <a href="http://opensimulator.org/wiki/Compatible_Viewers" target="_blank" rel="noopener">{{ 'w4os.start_viewer_others'|t }}</a>
+                </p>
+                {% include 'w4os/add-grid.html.twig' %}
+            {% elseif item.step == 'login' and item.state != 'done' %}
+                <p>{{ 'w4os.start_login_text'|t(grid) }}</p>
+                {% if avatar %}<p><strong class="w4os-start-name">{{ avatar.name }}</strong></p>{% endif %}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</section>

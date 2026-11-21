@@ -181,6 +181,24 @@ w4os:
   snippet_example: Beispiel
   dashboard_grid_info: Grid-Info
   dashboard_grid_status: Grid-Status
+  grid_add_to_viewer: 'Dieses Grid zu deinem Viewer hinzufügen'
+  viewer_add_grid: 'Füge %1$s zu deinem Viewer hinzu'
+  viewer_add_grid_other: 'Anderer Link'
+  viewer_login_uri_by_hand: 'Oder füge es im Grid-Manager deines Viewers mit seiner Login-URI hinzu:'
+  copy: Kopieren
+  copied: Kopiert
+  start_title: 'Erste Schritte'
+  start_avatar: 'Erstelle deinen Avatar'
+  start_avatar_text: 'Wähle seinen Namen und sein Aussehen. Der Name ist endgültig: Er kann später nicht geändert werden.'
+  start_avatar_done: 'Dein Avatar ist %s.'
+  start_viewer: 'Füge das Grid zu deinem Viewer hinzu'
+  start_viewer_text: 'Der Viewer ist das Programm, das die virtuelle Welt öffnet. Installiere einen für OpenSimulator, etwa Firestorm (seine OpenSim-Version), und füge dann %s hinzu.'
+  start_viewer_get: 'Firestorm herunterladen'
+  start_viewer_others: 'Andere Viewer'
+  start_login: Einloggen
+  start_login_text: 'Wähle im Viewer %s in der Liste der Grids und logge dich dann mit dem Namen deines Avatars und seinem Passwort ein.'
+  start_done: Erledigt
+  start_next: 'Nächster Schritt'
   total: Insgesamt
   tip_models_match: 'Wie ein Modell erkannt wird'
   tip_models_pattern: 'Teil des Namens der Modelle'
@@ -953,3 +971,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'
   admin_menu_tools: Werkzeuge
+  admin_shortcode_option_add_grid: 'Mit dem Knopf, der das Grid zum Viewer hinzufügt, und der Login-URI zum Kopieren'
+  admin_shortcode_getting_started_help: 'Die Schritte für Neue: den Avatar erstellen, das Grid zum Viewer hinzufügen, sich einloggen; der nächste Schritt wird hervorgehoben'

@@ -1,3 +1,5 @@
 <p class="w4os-intro">{{ 'w4os.confirm_text'|t }}</p>
+{# Meanwhile, the grid added to the viewer #}
+{% include 'w4os/add-grid.html.twig' %}
 <h2>{{ 'w4os.resend_title'|t }}</h2>
 {% include 'forms/form.html.twig' with { form: forms('w4os-resend') } %}

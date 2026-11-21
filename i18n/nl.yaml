@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'
   admin_menu_tools: 'Hulpmiddelen'
+  admin_shortcode_option_add_grid: 'Met de knop die het grid aan de viewer toevoegt, en de login-URI om te kopiëren'
+  admin_shortcode_getting_started_help: 'De stappen voor nieuwkomers: de avatar maken, het grid aan de viewer toevoegen, inloggen; de volgende stap valt op'

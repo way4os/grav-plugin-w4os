@@ -119,3 +119,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pinio’r bar ochr'
   admin_menu_tools: 'Offer'
+  admin_shortcode_option_add_grid: 'Gyda’r botwm sy’n ychwanegu’r grid at y viewer, a’r URI mewngofnodi i’w gopïo'
+  admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'

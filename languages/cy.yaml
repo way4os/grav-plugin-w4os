@@ -181,6 +181,24 @@ w4os:
   snippet_example: Enghraifft
   dashboard_grid_info: 'Gwybodaeth y Grid'
   dashboard_grid_status: 'Statws grid'
+  grid_add_to_viewer: "Ychwanegu'r grid hwn at eich viewer"
+  viewer_add_grid: 'Ychwanegu %1$s at eich viewer'
+  viewer_add_grid_other: 'Dolen arall'
+  viewer_login_uri_by_hand: "Neu ychwanegwch ef yn rheolwr gridiau eich viewer, gyda'i URI mewngofnodi:"
+  copy: Copïo
+  copied: "Wedi'i gopïo"
+  start_title: 'Dechrau arni'
+  start_avatar: 'Creu eich afatar'
+  start_avatar_text: "Dewiswch ei enw a'i olwg. Mae'r enw yn barhaol: ni ellir ei newid wedyn."
+  start_avatar_done: 'Eich afatar yw %s.'
+  start_viewer: "Ychwanegu'r grid at eich viewer"
+  start_viewer_text: "Y viewer yw'r rhaglen sy'n agor y byd rhithwir. Gosodwch un a wnaed ar gyfer OpenSimulator, fel Firestorm (ei fersiwn OpenSim), yna ychwanegwch %s ato."
+  start_viewer_get: 'Cael Firestorm'
+  start_viewer_others: 'Viewers eraill'
+  start_login: Mewngofnodi
+  start_login_text: "Yn y viewer, dewiswch %s yn y rhestr o gridiau, yna mewngofnodwch gydag enw eich afatar a'i gyfrinair."
+  start_done: "Wedi'i wneud"
+  start_next: 'Cam nesaf'
   total: Cyfanswm
   tip_models_match: 'Sut mae model yn cael ei adnabod'
   tip_models_pattern: "Rhan o enw'r modelau"
@@ -953,3 +971,5 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pinio’r bar ochr'
   admin_menu_tools: Offer
+  admin_shortcode_option_add_grid: 'Gyda’r botwm sy’n ychwanegu’r grid at y viewer, a’r URI mewngofnodi i’w gopïo'
+  admin_shortcode_getting_started_help: 'Camau newydd-ddyfodiad: creu’r afatar, ychwanegu’r grid at y viewer, mewngofnodi; mae’r cam nesaf yn sefyll allan'
