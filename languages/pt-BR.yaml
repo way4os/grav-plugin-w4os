@@ -192,7 +192,6 @@ w4os:
   start_avatar_done: 'Seu avatar é %s.'
   start_viewer: 'Adicionar o grid'
   start_add_grid: 'Adicionar %s'
-  start_viewer_note: 'Ainda não tem um viewer? Baixe o %s ou qualquer viewer para OpenSim.'
   start_login: Entrar
   start_done: Concluído
   total: Total

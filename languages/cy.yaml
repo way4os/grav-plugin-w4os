@@ -192,7 +192,6 @@ w4os:
   start_avatar_done: 'Eich afatar yw %s.'
   start_viewer: "Ychwanegu'r grid"
   start_add_grid: 'Ychwanegu %s'
-  start_viewer_note: 'Dim viewer eto? Mynnwch %s, neu unrhyw viewer ar gyfer OpenSim.'
   start_login: Mewngofnodi
   start_done: "Wedi'i wneud"
   total: Cyfanswm

@@ -192,7 +192,6 @@ w4os:
   start_avatar_done: 'Je avatar is %s.'
   start_viewer: 'Het grid toevoegen'
   start_add_grid: '%s toevoegen'
-  start_viewer_note: 'Nog geen viewer? Neem %s, of een andere viewer voor OpenSim.'
   start_login: Inloggen
   start_done: Klaar
   total: Totaal
