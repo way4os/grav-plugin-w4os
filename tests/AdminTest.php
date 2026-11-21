@@ -18,7 +18,6 @@ describe('admin', function () {
         expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
             ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-')
             ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools'])
-            ->and(array_column(Site::ADMIN_GROUPS, 'icon'))->each->toStartWith('ti ti-')
             ->and(array_keys(array_filter(Site::ADMIN_PAGES, fn (array $page) => ($page['parent'] ?? null) === 'tools')))->toBe(['health', 'shortcodes']);
     });
 
@@ -95,7 +94,7 @@ describe('the menu of the admin', function () {
             ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
     });
 
-    test('gathers the pages of a section that is no page (Services, Tools) under its name, where its first page is, without a list', function () {
+    test('heads the pages of a section that is no page (Services, Tools) with its name, the pages listed flat under it', function () {
         $items = [
             ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
             ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'active' => false, 'parent' => 'services'],
@@ -103,15 +102,13 @@ describe('the menu of the admin', function () {
             ['type' => 'health', 'label' => 'Health', 'url' => '/w4os/health', 'active' => false, 'parent' => 'tools'],
             ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'active' => false],
         ];
-        $groups = ['services' => ['label' => 'Services', 'icon' => 'ti ti-plug-connected'], 'tools' => ['label' => 'Tools', 'icon' => 'ti ti-tool']];
-        $menu = Site::menuTree($items, 'List', $groups);
+        $menu = Site::menuTree($items, 'List', ['services' => ['label' => 'Services'], 'tools' => ['label' => 'Tools']]);
 
-        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'tools', 'settings'])
-            ->and($menu[1])->toMatchArray(['label' => 'Services', 'icon' => 'ti ti-plug-connected', 'url' => '/w4os/search', 'active' => true])
-            ->and(array_column($menu[1]['children'], 'label'))->toBe(['Search', 'Guide'])
-            ->and(array_column($menu[2]['children'], 'label'))->toBe(['Health'])
-            ->and($menu[2]['active'])->toBeFalse()
-            ->and(array_column(Site::menuTree(array_slice($items, 3, 1), 'List', $groups)[0]['children'], 'type'))->toBe(['health']);
+        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'settings_search', 'settings_guide', 'tools', 'health', 'settings'])
+            ->and($menu[1])->toBe(['type' => 'services', 'label' => 'Services', 'heading' => true])
+            ->and($menu[3]['active'])->toBeTrue()
+            ->and(array_column($menu, 'children'))->toBe([])
+            ->and(array_column(Site::menuTree(array_slice($items, 1, 2)), 'type'))->toBe(['settings_search', 'settings_guide']);
     });
 
     test('shows the pages nested under their parent', function () {
@@ -136,6 +133,16 @@ describe('the menu of the admin', function () {
         // The parent opens its pages (a flyout in the folded rail), shown under it on the page of one of them
         expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="true">~')
             ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
+    });
+
+    test('shows a section as a heading above its pages, always shown, a line in the folded sidebar', function () {
+        $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], [
+            ['type' => 'services', 'label' => 'Services', 'heading' => true],
+            ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'icon' => 'ti ti-search', 'active' => false],
+        ]);
+
+        expect($html)->toMatch('~<li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">Services</span></li>\s*<li class="nav-item">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;search">~')
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toMatch('~\[data-bs-sidebar=folded-hover\][^{]*\) \.w4os-nav-heading \{[^}]*border-top-color~');
     });
 });
 

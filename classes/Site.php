@@ -1084,10 +1084,10 @@ final class Site
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings'],
     ];
 
-    /** The sections of the admin menu that are no page, the pages whose `parent` they are gathered under their name. */
+    /** The sections of the admin menu that are no page: a heading above the pages whose `parent` they are. */
     public const ADMIN_GROUPS = [
-        'services' => ['label' => 'w4os.group_services', 'icon' => 'ti ti-plug-connected'],
-        'tools' => ['label' => 'w4os.admin_menu_tools', 'icon' => 'ti ti-tool'],
+        'services' => ['label' => 'w4os.group_services'],
+        'tools' => ['label' => 'w4os.admin_menu_tools'],
     ];
 
     /**
@@ -1175,31 +1175,31 @@ final class Site
     /**
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
      * first, named as a list ($list, not the name of the parent), then theirs; the parent open (active) when one of them is the page
-     * shown. A parent that is a section of $groups (no page: its label and icon) is put where its first entry is, leading to it, with
-     * only its entries under it. An entry whose parent is in neither stays where it is.
+     * shown. A parent that is a section of $groups (no page: its label) is a heading (`heading`) before its first entry, its entries
+     * left in the menu after it. An entry whose parent is in neither stays where it is.
      *
      * @param list<array<string,mixed>> $items
-     * @param array<string, array{label: string, icon: string}> $groups
+     * @param array<string, array{label: string}> $groups
      * @return list<array<string,mixed>>
      */
     public static function menuTree(array $items, ?string $list = null, array $groups = []): array
     {
         $types = array_column($items, 'type');
-        $nested = fn (array $item) => isset($item['parent']) && (in_array($item['parent'], $types, true) || isset($groups[$item['parent']]));
+        $nested = fn (array $item) => isset($item['parent']) && in_array($item['parent'], $types, true);
         $children = [];
         foreach ($items as $item) {
             $nested($item) && $children[$item['parent']][] = $item;
         }
         $menu = [];
+        $headings = [];
         foreach ($items as $item) {
-            $group = $item['parent'] ?? null;
             if ($nested($item)) {
-                // A section with no page, at the place of its first entry
-                if (! in_array($group, $types, true) && ! isset($menu[$group])) {
-                    $menu[$group] = ['type' => $group, 'label' => $groups[$group]['label'], 'icon' => $groups[$group]['icon'], 'url' => $item['url'] ?? '',
-                        'children' => $children[$group], 'active' => in_array(true, array_column($children[$group], 'active'), true)];
-                }
                 continue;
+            }
+            $group = $item['parent'] ?? null;
+            if ($group !== null && isset($groups[$group]) && ! isset($headings[$group])) {
+                $headings[$group] = true;
+                $menu[] = ['type' => $group, 'label' => $groups[$group]['label'], 'heading' => true];
             }
             if (isset($children[$item['type'] ?? null])) {
                 $item['children'] = [['label' => $list ?? $item['label']] + $item, ...$children[$item['type']]];
@@ -1208,7 +1208,7 @@ final class Site
             $menu[] = $item;
         }
 
-        return array_values($menu);
+        return $menu;
     }
 
     /**

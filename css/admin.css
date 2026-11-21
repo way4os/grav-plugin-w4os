@@ -17,6 +17,11 @@
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-icon { display: block; flex: none; width: 2rem; height: 2rem; }
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-brand-full { display: none; }
 }
+/* A section of the sidebar (Services, Tools): its name above its pages, a line in place of it in the folded sidebar */
+.w4os-admin .w4os-nav-heading { margin-top: 1rem; padding: .5rem .75rem .25rem; border-top: 1px solid transparent; }
+@media (min-width: 992px) {
+    .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-nav-heading { margin-top: .5rem; padding: 0; border-top-color: var(--tblr-border-color); }
+}
 /* The tones of the indicators in the colors of Tabler: green when good, grey when off as it should be, orange for a warning, red on an error */
 .w4os-admin .w4os-tone-ok { color: var(--tblr-success); }
 .w4os-admin .w4os-tone-off { color: var(--tblr-secondary); }

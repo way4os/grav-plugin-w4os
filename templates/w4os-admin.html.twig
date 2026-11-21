@@ -59,7 +59,10 @@
             <div class="collapse navbar-collapse" id="w4os-sidebar">
                 <ul class="navbar-nav pt-lg-3">
                     {% for item in menu %}
-                    {% if item.children ?? false %}
+                    {% if item.heading ?? false %}
+                    {# A section of the pages under it (Services, Tools): its name, a line in the folded sidebar #}
+                    <li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">{{ item.label }}</span></li>
+                    {% elseif item.children ?? false %}
                     {# A page with the ones under it (Avatars: its list, the avatar models): it opens its list, its pages shown under it
                        (Tabler's dropdown menu) on the page of one of them #}
                     <li class="nav-item dropdown{{ item.active ? ' active' }}">
