@@ -23,7 +23,7 @@ describe('the settings of the grid and of its avatars', function () {
         $tabs = $fields['groups']['fields'];
 
         expect($fields['groups']['type'])->toBe('tabs')
-            ->and(array_keys($tabs))->toBe(['grid', 'robust', 'services', 'avatars'])
+            ->and(array_keys($tabs))->toBe(['grid', 'robust', 'services', 'avatars', 'links'])
             ->and($tabs['grid']['title'])->toBe('w4os.group_grid_info')
             ->and(array_keys($tabs['robust']['fields']))->toContain('gridServerUri', 'database', 'consoleUser', 'consolePass', 'consolePort')
             ->and($tabs['robust']['fields']['database'])->toMatchArray(['type' => 'fieldset', 'label' => 'w4os.setting_robust_database'])
