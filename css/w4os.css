@@ -242,6 +242,7 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-tp-toggle:hover, .w4os-tp-toggle:focus-visible, .w4os-tp-toggle[aria-expanded="true"] { opacity: 1; }
 .w4os-tp-menu { position: absolute; left: 0; top: 100%; z-index: 30; display: flex; flex-direction: column; min-width: 12rem; max-width: calc(100vw - 2rem); margin-top: .25rem; padding: .3rem 0; border: 1px solid color-mix(in srgb, currentColor 25%, transparent); border-radius: .5rem; background: Canvas; color: CanvasText; box-shadow: 0 .5rem 1.25rem color-mix(in srgb, CanvasText 15%, transparent); font-size: .95rem; font-weight: normal; }
 .w4os-tp-menu[hidden] { display: none; }
+.w4os-tp-main:not([href]) { color: inherit; text-decoration: none; cursor: default; }
 .w4os-tp-item { display: block; margin: 0; padding: .4rem .9rem; border: 0; background: none; color: inherit; font: inherit; line-height: 1.3; text-align: start; text-decoration: none; white-space: nowrap; cursor: pointer; }
 .w4os-tp-item:hover, .w4os-tp-item:focus { background: color-mix(in srgb, currentColor 8%, transparent); }
 .w4os-tp[data-client="browser"] [data-for="viewer"], .w4os-tp[data-client="viewer"] [data-for="browser"] { display: none; }

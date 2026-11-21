@@ -25,7 +25,7 @@ describe('a teleport link of the site', function () {
 
         expect(array_column(Site::SHORTCODES, 'code'))->toContain('[tp-link]')
             ->and($php)->toContain("\$handlers->add('tp-link'", "new \\Twig\\TwigFunction('w4os_tp_link'", "addJs('plugin://w4os/js/tp-link.js'")
-            ->and($css)->toContain('.w4os-tp[data-client="browser"] [data-for="viewer"], .w4os-tp[data-client="viewer"] [data-for="browser"] { display: none; }', '.w4os-tp-menu[hidden] { display: none; }')
+            ->and($css)->toContain('.w4os-tp[data-client="browser"] [data-for="viewer"], .w4os-tp[data-client="viewer"] [data-for="browser"] { display: none; }', '.w4os-tp-menu[hidden] { display: none; }', '.w4os-tp-main:not([href]) { color: inherit; text-decoration: none; cursor: default; }')
             // The client told by the page's own user agent, Escape and a click outside close it, the address selected without a clipboard
             ->and($js)->toContain("new RegExp(tp.dataset.viewerPattern, 'i').test(navigator.userAgent)", "event.key === 'Escape'", 'tp.contains(event.target) || close(tp)', 'navigator.clipboard ?', 'input.select()', "main.removeAttribute('href')")
             ->and(Site::viewerPattern())->toContain('Firestorm')->not->toStartWith('/');
