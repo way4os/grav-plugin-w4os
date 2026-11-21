@@ -36,7 +36,7 @@ describe('bundled engine', function () {
         exec('rm -rf '.escapeshellarg($root));
     });
 
-    test('refuses a grid whose nick is not one, rather than changing it', function () {
+    test('takes the nick a wrong one stands for, as the engine does (a warning, never a failure that stops the site)', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
         $bundled = new Bundled(
             ['login' => 'http://grid.example.org:8002/', 'database' => ['host' => 'db.example.org:3307', 'name' => 'robust', 'user' => 'opensim', 'password' => 'secret']],
@@ -44,8 +44,8 @@ describe('bundled engine', function () {
             fn (string $url) => '<gridinfo><gridname>Demo World</gridname><gridnick>Demo World!</gridnick></gridinfo>',
         );
 
-        expect(fn () => $bundled->nick())->toThrow(W4OS\Grav\EngineException::class)
-            ->and(glob("$root/etc/grids/*") ?: [])->toBe([]);
+        expect($bundled->nick())->toBe('demo_world')
+            ->and(array_map('basename', glob("$root/etc/grids/*") ?: []))->toBe(['demo_world']);
 
         exec('rm -rf '.escapeshellarg($root));
     });
