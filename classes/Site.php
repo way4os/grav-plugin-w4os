@@ -558,7 +558,25 @@ final class Site
     {
         $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
 
-        return $visit === null ? null : $visit + ['examples' => self::joinOr((array) ($this->config()['hypergrid']['examples'] ?? []), $this->translate('w4os.list_or'))];
+        $hypergrid = (array) ($this->config()['hypergrid'] ?? []);
+        $examples = self::examplesOfDay((array) ($hypergrid['examples'] ?? []), (int) ($hypergrid['count'] ?? 3), gmdate('Y-m-d'));
+
+        return $visit === null ? null : $visit + ['examples' => self::joinOr($examples, $this->translate('w4os.list_or'))];
+    }
+
+    /**
+     * A few names of a list, others each day and the same all day: shuffled by a hash of the day and the name (no storage, the
+     * same on every request and every server of that day, a page kept in a cache stays right); $count 0 or more than the list:
+     * all of them, in the order of the day.
+     *
+     * @return list<string>
+     */
+    public static function examplesOfDay(array $names, int $count, string $day): array
+    {
+        $names = array_values(array_unique(array_filter(array_map(fn ($name) => trim((string) $name), $names), fn (string $name) => $name !== '')));
+        usort($names, fn (string $a, string $b) => strcmp(hash('sha256', "$day|$a"), hash('sha256', "$day|$b")));
+
+        return $count > 0 ? array_slice($names, 0, $count) : $names;
     }
 
     /** Names joined as a language lists choices (A, B or C): the others by a comma, the last two by its pattern (list_or); '' for none. */

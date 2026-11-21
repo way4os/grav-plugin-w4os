@@ -35,6 +35,8 @@ w4os:
   admin_cache: 'Cache (seconden)'
   admin_hypergrid_examples: 'Grids als voorbeeld'
   admin_hypergrid_examples_help: 'Grids waar een avatar vandaan kan komen, genoemd bij het bezoek vanaf een ander grid ([hypergrid-visit]); leeg: geen namen'
+  admin_hypergrid_count: 'Grids tegelijk genoemd'
+  admin_hypergrid_count_help: 'Hoeveel van deze grids het bezoek noemt, elke dag andere; 0: allemaal'
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
   admin_register: 'Registreren'

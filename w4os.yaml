@@ -44,7 +44,9 @@ menu: true
 cache: 60
 hypergrid:
   # The grids an avatar may come from, named by the visit of the grid from another one ([hypergrid-visit]); none: no names
-  examples: ['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely']
+  examples: ['Wolf Territories', 'Groovy Verse', 'GBG World', 'Alternate Metaverse', 'DigiWorldz', 'New Life Italy', 'Neverworld', "Darkheart's Playground", 'Cave Grid', 'Kitely']
+  # How many of them it names, others each day (0: all of them)
+  count: 3
 register:
   # Registration on the site: off, nobody registers here
   enabled: true

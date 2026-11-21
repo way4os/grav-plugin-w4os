@@ -63,7 +63,21 @@ describe('the visit of the grid from another one', function () {
             ->and(Site::joinOr(['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely'], '%1$s ou %2$s'))->toBe('Wolf Territories, Groovy Verse, Alternate Metaverse ou Kitely')
             ->and(Site::joinOr(['Kitely', ' '], '%1$s or %2$s'))->toBe('Kitely')
             ->and(Site::joinOr([], '%1$s or %2$s'))->toBe('')
-            ->and(Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['hypergrid']['examples'])->toBe(['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely'])
-            ->and((string) file_get_contents(dirname(__DIR__).'/blueprints.yaml'))->toContain('hypergrid.examples:');
+            ->and(Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['hypergrid'])->toBe(['examples' => ['Wolf Territories', 'Groovy Verse', 'GBG World', 'Alternate Metaverse', 'DigiWorldz', 'New Life Italy', 'Neverworld', "Darkheart's Playground", 'Cave Grid', 'Kitely'], 'count' => 3])
+            ->and((string) file_get_contents(dirname(__DIR__).'/blueprints.yaml'))->toContain('hypergrid.examples:', 'hypergrid.count:');
+    });
+
+    test('names a few of the grids, the same all day, others another day, all of them with a count of 0, none without a list', function () {
+        $grids = Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['hypergrid']['examples'];
+        $today = Site::examplesOfDay($grids, 3, '2026-11-21');
+        $week = array_map(fn (int $day) => Site::examplesOfDay($grids, 3, sprintf('2026-11-%02d', $day)), range(21, 27));
+
+        expect($today)->toHaveCount(3)
+            ->and(array_diff($today, $grids))->toBe([])
+            ->and(Site::examplesOfDay($grids, 3, '2026-11-21'))->toBe($today)
+            ->and(count(array_unique(array_map('serialize', $week))))->toBeGreaterThan(1)
+            ->and(Site::examplesOfDay($grids, 0, '2026-11-21'))->toHaveCount(10)
+            ->and(Site::examplesOfDay(['Kitely', ' ', 'Kitely'], 3, '2026-11-21'))->toBe(['Kitely'])
+            ->and(Site::examplesOfDay([], 3, '2026-11-21'))->toBe([]);
     });
 });

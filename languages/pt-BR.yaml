@@ -885,6 +885,8 @@ w4os:
   admin_cache: 'Cache (segundos)'
   admin_hypergrid_examples: 'Grids citados como exemplo'
   admin_hypergrid_examples_help: 'Grids de onde um avatar pode vir, citados na visita de outro grid ([hypergrid-visit]); vazio: nenhum nome'
+  admin_hypergrid_count: 'Grids citados por vez'
+  admin_hypergrid_count_help: 'Quantos desses grids a visita cita, outros escolhidos a cada dia; 0: todos'
   admin_built_in_css: 'CSS embutido'
   admin_built_in_css_help: 'A folha de estilo do plugin (suas páginas, os modelos, os blocos); desligada quando o tema os estiliza'
   admin_register: Registrar

@@ -35,6 +35,8 @@ w4os:
   admin_cache: 'Storfa (eiliadau)'
   admin_hypergrid_examples: 'Gridiau i’w henwi fel enghreifftiau'
   admin_hypergrid_examples_help: 'Gridiau y gall afatar ddod ohonynt, wedi’u henwi gan yr ymweliad o grid arall ([hypergrid-visit]); gwag: dim enwau'
+  admin_hypergrid_count: 'Gridiau a enwir ar y tro'
+  admin_hypergrid_count_help: 'Faint o’r gridiau hyn y mae’r ymweliad yn eu henwi, eraill bob dydd; 0: pob un'
   admin_built_in_css: 'CSS adeiledig'
   admin_built_in_css_help: 'Taflen arddull yr ategyn (ei dudalennau, y modelau, y blociau); i ffwrdd pan fydd y thema’n eu steilio'
   admin_register: 'Cofrestru'
