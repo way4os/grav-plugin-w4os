@@ -447,10 +447,11 @@ w4os:
   link_format_hop: 'Link hypergrid (hop://)'
   link_format_apptp: 'Teletrasporto del viewer (secondlife:///app/teleport)'
   link_format_local: 'Regione della griglia in cui è il viewer (secondlife://Regione)'
-  link_menu_grid: 'Link secondlife://'
-  link_menu_hop: 'Link hop://'
-  link_menu_apptp: 'Teletrasporto nel viewer'
-  link_menu_local: 'Regione di questa griglia'
+  link_menu_grid: 'Teletrasportati (secondlife://)'
+  link_menu_hop: 'Teletrasportati (hop://)'
+  link_menu_apptp: 'Teletrasportati (app/teleport)'
+  link_menu_local: 'Teletrasportati (questa griglia)'
+  link_menu_map: 'Mostra sulla mappa'
   link_menu_copy: "Copia l'indirizzo"
   tp_more: 'Altri modi per andarci'
   setting_gatekeeper_help: "L'indirizzo con cui le altre griglie raggiungono questa (hypergrid)."

@@ -447,10 +447,11 @@ w4os:
   link_format_hop: 'Dolen hypergrid (hop://)'
   link_format_apptp: 'Teleport y viewer (secondlife:///app/teleport)'
   link_format_local: "Rhanbarth y grid y mae'r viewer arno (secondlife://Rhanbarth)"
-  link_menu_grid: 'Dolen secondlife://'
-  link_menu_hop: 'Dolen hop://'
-  link_menu_apptp: 'Teleport yn y viewer'
-  link_menu_local: 'Rhanbarth y grid hwn'
+  link_menu_grid: 'Teleportio (secondlife://)'
+  link_menu_hop: 'Teleportio (hop://)'
+  link_menu_apptp: 'Teleportio (app/teleport)'
+  link_menu_local: 'Teleportio (y grid hwn)'
+  link_menu_map: 'Dangos ar y map'
   link_menu_copy: "Copïo'r cyfeiriad"
   tp_more: 'Mwy o ffyrdd o fynd yno'
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'
