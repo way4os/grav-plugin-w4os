@@ -202,6 +202,17 @@ describe('the home page of a grid', function () {
     });
 });
 
+describe('the menus of the visitor', function () {
+    test('open below their name on hover and on focus (the keyboard), shown as they are in the menu of a phone (.w4os-menus-open)', function () {
+        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.css');
+
+        expect($css)->toContain('.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible;')
+            ->and($css)->toMatch('/\.w4os-menus-open \.w4os-user-list \{ position: static; visibility: visible;/')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/admin-menu.html.twig'))->toContain('<div class="w4os-user-menu w4os-admin-menu">', '<ul class="w4os-user-list">')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/user-menu.html.twig'))->toContain('<div class="w4os-user-menu">', '<ul class="w4os-user-list">');
+    });
+});
+
 describe('a page of an earlier version', function () {
     test('laid out by the splash template of the plugin is the home page made content, nothing to change on an upgrade', function () {
         expect(W4OS\Grav\Site::isSplash('w4os/splash'))->toBeTrue()
