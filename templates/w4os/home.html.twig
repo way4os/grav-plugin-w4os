@@ -36,7 +36,7 @@
                     <p class="w4os-latest-date"><time datetime="{{ item.date|date('Y-m-d') }}">{{ item.date|w4os_date }}</time></p>
                 </article>
                 {% endfor %}
-                <p class="w4os-latest-all"><a class="w4os-more" href="{{ news.url|e('html_attr') }}">{{ 'w4os.home_all_news'|t }}</a></p>
+                <p class="w4os-latest-all">{{ w4os_link(news.url, 'w4os.home_all_news'|t, 'more') }}</p>
             </section>
             {% endif %}
             {% block w4os_home_news_extra %}{% endblock %}

@@ -12,6 +12,7 @@ describe('the dashboard', function () {
     $api = new OpenApi(Contract::document());
     $render = function (array $cards) {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(link_function());
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => $cards));
         $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
         $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "block:$name", ['is_safe' => ['html']]));
@@ -38,7 +39,7 @@ describe('the dashboard', function () {
     test('says how many of a list are online of all it knows as n/n, its link to the list apart in its footer', function () use ($api, $render) {
         $html = $render([['kind' => 'count', 'page' => 'regions', 'list' => $api->listOf('regions'), 'part' => 5, 'total' => 7, 'url' => '/regions', 'partUrl' => '/regions?status=online', 'error' => null]]);
 
-        expect($html)->toContain('[w4os.regions_title]', '>5/7<', '<div class="card-footer text-end"><a class="w4os-more" href="&#x2F;regions">[w4os.see_all]</a></div>')
+        expect($html)->toContain('[w4os.regions_title]', '>5/7<', '<div class="card-footer text-end"><a class="w4os-more" href="/regions">[w4os.see_all]</a></div>')
             ->and($html)->not->toContain('regions_online');
     });
 
@@ -58,7 +59,7 @@ describe('the dashboard', function () {
         $bart = ['uuid' => 'a1', 'name' => 'Bart Simpson', 'created' => $created, 'profileImage' => null];
         $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_avatars', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
-        expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a class="w4os-more" href="&#x2F;avatars">[w4os.see_all]</a></div>')
+        expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a class="w4os-more" href="/avatars">[w4os.see_all]</a></div>')
             ->not->toContain(date('Y-m-d', $created));
     });
 
@@ -75,6 +76,7 @@ describe('the dashboard', function () {
         ]];
         $problems = Site::healthProblems($health);
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(link_function());
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => []));
         $twig->addFunction(new TwigFunction('w4os_health_problems', fn () => $problems + ['url' => '/w4os/health']));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));

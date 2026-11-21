@@ -63,7 +63,7 @@
                 {% endfor %}
                 </div>
             {% endif %}
-            {% if card.url ?? false %}<div class="card-footer text-end"><a class="w4os-more" href="{{ card.url|e('html_attr') }}">{{ 'w4os.see_all'|t }}</a></div>{% endif %}
+            {% if card.url ?? false %}<div class="card-footer text-end">{{ w4os_link(card.url, 'w4os.see_all'|t, 'more') }}</div>{% endif %}
         </div>
     </div>
     {% endfor %}

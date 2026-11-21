@@ -21,6 +21,7 @@ function render_start(string $template, array $given, array $context = []): stri
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => $given['routes'][$type] ?? null));
     // The texts of a site as w4os_text gives them, HTML here, from a /fr page
     $twig->addFilter(new TwigFilter('w4os_text', fn (?string $text) => trim((string) $text) === '' ? '' : Site::localLinks((string) $text, Site::siteLinks('', '/fr', ['en', 'fr'], '/aide')), ['is_safe' => ['html']]));
+    $twig->addFunction(link_function());
     $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
     $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
@@ -135,6 +136,8 @@ describe('the grid added to a viewer', function () {
 
     test('prints the texts of a site as HTML where Twig escapes what it prints, as Grav does', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'), ['autoescape' => 'html']);
+        $twig->addFunction(link_function('/fr'));
+        $twig->addFunction(new TwigFunction('w4os_start_steps', fn () => Site::steps(false, null)));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->addFilter(new TwigFilter('t', fn (string $key) => $key));
         $twig->addFilter(new TwigFilter('w4os_text', function (?string $text, bool $more = false) {
@@ -146,6 +149,8 @@ describe('the grid added to a viewer', function () {
 
         expect($html)->toContain('<div class="w4os-start-footer"><p><a class="w4os-more" href="/fr/aide">Aide détaillée</a></p></div>', '<div class="w4os-start-content"><p>Three steps</p></div>')
             ->and($html)->not->toContain('&lt;p&gt;')
+            // Its buttons built by the views' Link (w4os_link): the address in the language of the page, the class of their kind
+            ->and($html)->toContain('<a class="btn btn-primary" href="/fr/login">w4os.log_in</a>')
             ->and($twig->render('w4os/getting-started.html.twig', ['start_footer' => '  ']))->not->toContain('w4os-start-footer');
     });
 
@@ -158,6 +163,6 @@ describe('the grid added to a viewer', function () {
         foreach (['css/w4os.css', 'css/admin.css'] as $css) {
             expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-more { display: block; margin-top: .6rem; text-align: right; font-weight: 600; }', '.w4os-more::before { content: "\\203A\\00A0"; }');
         }
-        expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig'))->toContain('<div class="card-footer text-end"><a class="w4os-more"');
+        expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig'))->toContain("<div class=\"card-footer text-end\">{{ w4os_link(card.url, 'w4os.see_all'|t, 'more') }}</div>");
     });
 });

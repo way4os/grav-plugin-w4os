@@ -13,6 +13,7 @@ function themeless_twig(bool $viewer = true): Environment
     $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\">".(($args['title'] ?? null) === '' ? '' : '<h1 class="block-title">Bart Simpson</h1>').'</section>', ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
     $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => $viewer));
+    $twig->addFunction(link_function());
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
     $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
