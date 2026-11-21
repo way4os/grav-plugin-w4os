@@ -129,7 +129,7 @@ describe('the grid added to a viewer', function () {
     test('on the home page, has the texts the page gives it (start_title, start_content, start_footer)', function () {
         $home = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/home.html.twig');
 
-        expect($home)->toContain("start_title: page.header.start_title ?? ''", "start_content: page.header.start_content ?? ''", "start_footer: page.header.start_footer ?? ''")
+        expect($home)->toContain("start_title: start_title ?? grav.page.header.start_title ?? ''", "start_content: start_content ?? grav.page.header.start_content ?? ''", "start_footer: start_footer ?? grav.page.header.start_footer ?? ''")
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("'start_content' => trim((string) \$shortcode->getParameter('content', ''))", "'start_footer' => trim((string) \$shortcode->getParameter('footer', ''))");
     });
 });
