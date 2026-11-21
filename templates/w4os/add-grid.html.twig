@@ -14,10 +14,8 @@
     {% if uri %}
     <p class="w4os-add-grid-uri">
         {% if links %}<span>{{ 'w4os.viewer_login_uri_by_hand'|t }}</span>{% endif %}
-        <code class="w4os-login-uri">{{ uri }}</code>
-        <button type="button" class="btn btn-ghost btn-sm w4os-copy" hidden data-w4os-copy="{{ uri|e('html_attr') }}" data-w4os-copied="{{ 'w4os.copied'|t|e('html_attr') }}">{{ 'w4os.copy'|t }}</button>
+        {% include 'w4os/login-uri.html.twig' %}
     </p>
     {% endif %}
 </div>
-{% do assets.addJs('plugin://w4os/js/copy.js', {group: 'bottom', loading: 'defer'}) %}
 {% endif %}

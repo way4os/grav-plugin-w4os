@@ -74,13 +74,13 @@ describe('the steps of a newcomer', function () {
 });
 
 describe('the grid added to a viewer', function () {
-    test('its button (hop), the other link (secondlife), and the login URI with a button that copies it, shown only where the browser has a clipboard (https)', function () {
+    test('its button (hop), the other link (secondlife), and the login URI with a quiet icon at its end that copies it (Copy its label), shown only where the browser has a clipboard (https)', function () {
         $html = render_start('w4os/add-grid.html.twig', ['uri' => 'grid.example.org:8002',
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
         expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
             ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
-            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>', 'w4os-copy" hidden data-w4os-copy="grid.example.org:8002"', 'data-w4os-copied="w4os.copied"')
+            ->and($html)->toMatch('#<span class="w4os-uri-field">\s*<code class="w4os-login-uri">grid.example.org:8002</code>\s*<button type="button" class="w4os-copy" hidden title="w4os.copy" aria-label="w4os.copy" data-w4os-copy="grid.example.org:8002" data-w4os-copied="w4os.copied"><i class="fa-regular fa-copy w4os-copy-icon" aria-hidden="true"></i>#')
             ->and((string) file_get_contents(dirname(__DIR__).'/js/copy.js'))->toContain('if (navigator.clipboard) {', 'button.hidden = false');
     });
 
@@ -106,7 +106,7 @@ describe('the grid added to a viewer', function () {
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
 
-    test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
+    test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle; the copy of the login URI on its line', function () {
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field { display: inline-flex;', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
     });
 });

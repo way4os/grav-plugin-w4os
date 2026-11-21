@@ -24,11 +24,7 @@
             {% elseif item.step == 'viewer' %}
                 {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t(grid) }}</a>{% endif %}
                 {% if uri %}
-                <p class="w4os-start-uri">
-                    <code class="w4os-login-uri">{{ uri }}</code>
-                    <button type="button" class="btn btn-ghost btn-sm w4os-copy" hidden data-w4os-copy="{{ uri|e('html_attr') }}" data-w4os-copied="{{ 'w4os.copied'|t|e('html_attr') }}">{{ 'w4os.copy'|t }}</button>
-                </p>
-                {% do assets.addJs('plugin://w4os/js/copy.js', {group: 'bottom', loading: 'defer'}) %}
+                <p class="w4os-start-uri">{% include 'w4os/login-uri.html.twig' %}</p>
                 {% endif %}
             {% elseif item.step == 'login' and uri %}
                 <a class="{{ button }} w4os-login-button" href="{{ w4os_login_link()|e('html_attr') }}">{{ 'w4os.start_login'|t }}</a>

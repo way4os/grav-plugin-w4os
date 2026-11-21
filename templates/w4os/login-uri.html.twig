@@ -1,0 +1,7 @@
+{# The login URI to copy (uri): the address, a quiet button with an icon at its end, which copies it (js/copy.js), shown only where
+   the browser has a clipboard (https). "Copy" its label and its tooltip, "Copied" for a moment once done. #}
+<span class="w4os-uri-field">
+    <code class="w4os-login-uri">{{ uri }}</code>
+    <button type="button" class="w4os-copy" hidden title="{{ 'w4os.copy'|t|e('html_attr') }}" aria-label="{{ 'w4os.copy'|t|e('html_attr') }}" data-w4os-copy="{{ uri|e('html_attr') }}" data-w4os-copied="{{ 'w4os.copied'|t|e('html_attr') }}"><i class="fa-regular fa-copy w4os-copy-icon" aria-hidden="true"></i><i class="fa-solid fa-check w4os-copied-icon" aria-hidden="true"></i></button>
+</span>
+{% do assets.addJs('plugin://w4os/js/copy.js', {group: 'bottom', loading: 'defer'}) %}
