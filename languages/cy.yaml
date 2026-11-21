@@ -193,6 +193,7 @@ w4os:
   start_add_grid: 'Ychwanegu %s at eich viewer'
   start_login: Mewngofnodi
   start_done: "Wedi'i wneud"
+  home_all_news: 'Yr holl newyddion'
   total: Cyfanswm
   tip_models_match: 'Sut mae model yn cael ei adnabod'
   tip_models_pattern: "Rhan o enw'r modelau"

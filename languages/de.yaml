@@ -193,6 +193,7 @@ w4os:
   start_add_grid: '%s zum Viewer hinzufügen'
   start_login: Einloggen
   start_done: Erledigt
+  home_all_news: 'Alle Neuigkeiten'
   total: Insgesamt
   tip_models_match: 'Wie ein Modell erkannt wird'
   tip_models_pattern: 'Teil des Namens der Modelle'

@@ -193,6 +193,7 @@ w4os:
   start_add_grid: 'Add %s to your viewer'
   start_login: 'Log in'
   start_done: Done
+  home_all_news: 'All news'
   total: Total
   tip_models_match: 'How a model is recognised'
   tip_models_pattern: 'Part of the name of the models'
