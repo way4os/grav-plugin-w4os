@@ -156,7 +156,7 @@ describe('the grid added to a viewer', function () {
             ->and(Site::moreLink('<p><a href="/a">A</a> <a href="/b">B</a></p>'))->toBe('<p><a href="/a">A</a> <a href="/b">B</a></p>')
             ->and(Site::moreLink(''))->toBe('');
         foreach (['css/w4os.css', 'css/admin.css'] as $css) {
-            expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-more { display: block; text-align: right; }', '.w4os-more::before { content: "\\203A\\00A0"; }');
+            expect((string) file_get_contents(dirname(__DIR__)."/$css"))->toContain('.w4os-more { display: block; margin-top: .6rem; text-align: right; font-weight: 600; }', '.w4os-more::before { content: "\\203A\\00A0"; }');
         }
         expect((string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig'))->toContain('<div class="card-footer text-end"><a class="w4os-more"');
     });

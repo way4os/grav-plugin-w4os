@@ -211,5 +211,5 @@ body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .
 .w4os-icon { width: 1.25rem; height: 1.25rem; }
 /* A link to more (All news, See all, a page's own "Read more", in Markdown [Details](/page?classes=w4os-more)): on its own line,
    at the right, a chevron before it */
-.w4os-more { display: block; text-align: right; }
+.w4os-more { display: block; margin-top: .6rem; text-align: right; font-weight: 600; }
 .w4os-more::before { content: "\203A\00A0"; }
