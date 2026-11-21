@@ -190,7 +190,7 @@ w4os:
   start_title: Verbinden
   start_avatar: 'Je avatar maken'
   start_avatar_done: 'Je avatar is %s.'
-  start_add_grid: '%s aan je viewer toevoegen'
+  start_add_grid: 'Het grid toevoegen'
   start_login: Inloggen
   start_done: Klaar
   home_all_news: 'Al het nieuws'
