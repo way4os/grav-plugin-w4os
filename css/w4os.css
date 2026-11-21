@@ -59,6 +59,9 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-start-uri .w4os-copy { padding: .2rem .7rem; font-size: .875rem; min-height: 0; }
 .w4os-start-uri .w4os-copy[hidden] { display: none; }
 .w4os-start-note { font-size: .9em; }
+/* Its links as they are in a sidebar too, where a theme makes the links of a list blocks (Quark2: aside li a) */
+.w4os-start-step a { display: inline-block; }
+.w4os-start-note a { display: inline; }
 /* Side by side where the block has the room (a page), stacked where it has not (a sidebar) */
 @container (min-width: 42rem) {
     .w4os-start-steps { grid-template-columns: repeat(3, 1fr); }

@@ -103,4 +103,8 @@ describe('the grid added to a viewer', function () {
             ->and(array_column(Site::SHORTCODES[array_search('[getting-started]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['title'])
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
+
+    test('keeps its links inline in a sidebar, whose list links a theme may make blocks', function () {
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', '.w4os-start-note a { display: inline; }');
+    });
 });
