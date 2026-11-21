@@ -8,9 +8,10 @@
             client = tp.dataset.viewerPattern && new RegExp(tp.dataset.viewerPattern, 'i').test(navigator.userAgent) ? 'viewer' : 'browser';
         } catch (error) {}
         tp.dataset.client = client;
+        // Its main link, the one of that client: none where it has none (the text alone)
         const main = tp.querySelector('a.w4os-tp-main');
-        if (main && main.dataset[client]) {
-            main.href = main.dataset[client];
+        if (main) {
+            main.dataset[client] ? main.setAttribute('href', main.dataset[client]) : main.removeAttribute('href');
         }
     });
     const menuOf = (tp) => tp.querySelector('.w4os-tp-menu');
