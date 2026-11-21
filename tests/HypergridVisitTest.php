@@ -21,14 +21,22 @@ function render_visit(?array $hypergrid, array $context = []): string
 }
 
 describe('the visit of the grid from another one', function () {
-    test('is the gatekeeper as host:port and the engine\'s link for the web, none without a gatekeeper', function () {
-        expect(Site::hypergridVisit('http://demo.w4os.org:3405'))->toBe(['address' => 'demo.w4os.org:3405', 'link' => 'hop://demo.w4os.org:3405'])
+    test('is the gatekeeper as host:port and the first link the grid makes for a browser, none without a gatekeeper', function () {
+        $links = [['format' => 8, 'link' => 'hop://demo.w4os.org:3405', 'label' => 'link_menu_hop'], ['format' => 16, 'link' => 'demo.w4os.org:3405', 'label' => 'link_menu_txt']];
+
+        expect(Site::hypergridVisit('http://demo.w4os.org:3405', $links))->toBe(['address' => 'demo.w4os.org:3405', 'link' => 'hop://demo.w4os.org:3405'])
+            // The address to copy is no link a browser opens: no button
+            ->and(Site::hypergridVisit('http://demo.w4os.org:3405', [$links[1]]))->toBe(['address' => 'demo.w4os.org:3405', 'link' => ''])
             ->and(Site::hypergridVisit('demo.w4os.org:3405')['address'])->toBe('demo.w4os.org:3405')
             ->and(Site::hypergridVisit(''))->toBeNull()
             ->and(Site::hypergridVisit('  '))->toBeNull();
     });
 
-    test('is read from the grid info of the engine (its gatekeeper)', function () {
+    test('is read from the grid info of the engine (its gatekeeper, its links for a browser)', function () {
+        $links = [['format' => 8, 'link' => 'hop://demo.w4os.org:3405', 'label' => 'link_menu_hop']];
+        expect(fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['tpLinks' => $links]]]]], $log)->tpLinks())->toBe($links)
+            ->and(fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => []]]]], $log)->tpLinks())->toBe([]);
+
         expect(fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['elements' => ['gatekeeper' => 'http://demo.w4os.org:3405']]]]]], $log)->gatekeeper())->toBe('http://demo.w4os.org:3405')
             ->and(fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['elements' => []]]]]], $log)->gatekeeper())->toBe('');
     });

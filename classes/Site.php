@@ -576,7 +576,14 @@ final class Site
      */
     public function hypergrid(): ?array
     {
-        $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
+        $links = $this->cached('tp links', function () {
+            try {
+                return $this->engine()->tpLinks();
+            } catch (EngineException $e) {
+                return [];
+            }
+        });
+        $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()), is_array($links) ? $links : []);
 
         $hypergrid = (array) ($this->config()['hypergrid'] ?? []);
         $examples = self::examplesOfDay((array) ($hypergrid['examples'] ?? []), (int) ($hypergrid['count'] ?? 3), gmdate('Y-m-d'));
@@ -609,19 +616,22 @@ final class Site
     }
 
     /**
-     * The visit of a grid by its gatekeeper (http://host:port, host:port): the address host:port, the link of the engine for a
-     * page of the web (Destination AUTO: hop://host:port, to the grid's default region); null without one.
+     * The visit of a grid by its gatekeeper (http://host:port, host:port): the address host:port to enter in a viewer, and the
+     * first of the links the grid makes for a browser that a browser opens (its tpLinks, the address to copy left out: none, no
+     * button); null without a gatekeeper.
      *
+     * @param list<array{format: int, link: string, label: string}> $links
      * @return array{address: string, link: string}|null
      */
-    public static function hypergridVisit(string $gatekeeper): ?array
+    public static function hypergridVisit(string $gatekeeper, array $links = []): ?array
     {
         $address = trim($gatekeeper) === '' ? null : Destination::loginUri(trim($gatekeeper));
         if ($address === null || $address === '') {
             return null;
         }
+        $opened = array_values(array_filter($links, fn (array $link) => (int) ($link['format'] ?? 0) !== Destination::TXT && (string) ($link['link'] ?? '') !== ''));
 
-        return ['address' => $address, 'link' => (string) Destination::format($address, Destination::AUTO, "\n", ['client' => 'web'])];
+        return ['address' => $address, 'link' => (string) ($opened[0]['link'] ?? '')];
     }
 
     /** The login URI of the grid (host:port), kept for the time of the setting "cache"; empty when the engine cannot tell it. */

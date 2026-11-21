@@ -101,6 +101,17 @@ final class Engine
         return (string) ($this->info()['login'] ?? '');
     }
 
+    /**
+     * The teleport links of the grid for a browser, as the grid makes them (tpLinks() of the engine, in its info): each its
+     * `format`, `link` and `label`, the one the grid chooses first; none when the engine gives none.
+     *
+     * @return list<array{format: int, link: string, label: string}>
+     */
+    public function tpLinks(): array
+    {
+        return array_values(array_filter((array) ($this->info()['tpLinks'] ?? []), 'is_array'));
+    }
+
     /** The gatekeeper of the grid, as its grid info says it (the address another grid's avatars come in at), '' for none. */
     public function gatekeeper(): string
     {
