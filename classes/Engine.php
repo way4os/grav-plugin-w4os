@@ -98,7 +98,7 @@ final class Engine
     /** The login URI of the grid as a viewer takes it (host:port), as the engine writes it. */
     public function loginUri(): string
     {
-        return (string) ($this->info()['uri'] ?? '');
+        return (string) ($this->info()['login'] ?? '');
     }
 
     /** @return array{hop: string, secondlife: string}|null the links that add the grid to a viewer, as the engine writes them */
