@@ -794,10 +794,13 @@ final class Site
         return $sections;
     }
 
-    /** The menu of the site (setting `menu`, menuEntries()) as pages of the tree of Grav, under its root, their children under them. */
+    /**
+     * The menu of the site (setting `menu`, menuEntries()) as pages of the tree of Grav, under its root, their children under them;
+     * none under a theme that shows the menus of the visitor itself (menuShown()).
+     */
     public function addMenu(): void
     {
-        if (! ($this->config()['menu'] ?? true)) {
+        if (! self::menuShown($this->config(), (array) $this->grav['config']->get('theme', []))) {
             return;
         }
         $root = $this->grav['pages']->root();
@@ -805,6 +808,15 @@ final class Site
         foreach (self::menuEntries($routes, $this->avatar() !== null, $this->isManager() ? $this->adminSections() : []) as $entry) {
             $this->menuPage($entry, $root);
         }
+    }
+
+    /**
+     * Whether the plugin adds its entries to the menu of the site: as its setting `menu` says, never under a theme that shows the
+     * menus of the visitor itself, in its top bar (its setting `w4os_menus: true`, w4os/user-menu.html.twig and w4os/admin-menu.html.twig).
+     */
+    public static function menuShown(array $config, array $theme): bool
+    {
+        return (bool) ($config['menu'] ?? true) && ! ($theme['w4os_menus'] ?? false);
     }
 
     /**

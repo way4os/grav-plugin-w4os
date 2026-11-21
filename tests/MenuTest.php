@@ -46,4 +46,11 @@ describe('the menu of the site', function () {
             ->and(Site::menuTitleKey(['type' => 'flux', 'label' => 'w4os.flux_menu']))->toBe('w4os.flux_title')
             ->and(Site::menuTitleKey(['type' => 'settings_economy', 'label' => 'w4os.settings_menu_economy']))->toBe('w4os.settings_economy');
     });
+
+    test('the plugin\'s own entries as its setting says, none under a theme that shows the menus of the visitor itself (w4os_menus)', function () {
+        expect(Site::menuShown([], []))->toBeTrue()
+            ->and(Site::menuShown(['menu' => false], []))->toBeFalse()
+            ->and(Site::menuShown(['menu' => true], ['w4os_menus' => true]))->toBeFalse()
+            ->and(Site::menuShown(['menu' => true], ['w4os_menus' => false]))->toBeTrue();
+    });
 });
