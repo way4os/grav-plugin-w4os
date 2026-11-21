@@ -4,7 +4,7 @@
 {% if page_item.item is empty %}
     {% include 'w4os/admin-header.html.twig' %}
 {% else %}
-    {% set back = page_item.list ? {url: base_url_relative ~ w4os_route(page_item.list), label: ('w4os.' ~ page_item.list ~ '_title')|t} : null %}
+    {% set back = page_item.list ? {url: w4os_url(w4os_route(page_item.list)), label: ('w4os.' ~ page_item.list ~ '_title')|t} : null %}
     {# Its links: the addresses the item gives (w4os_item.links of the page: key, attribute, id), its profile page... #}
     {% set links = [] %}
     {% for link in page.header.w4os_item.links ?? [] %}

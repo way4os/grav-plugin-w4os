@@ -3,6 +3,6 @@
    with `route_forgot: false` in its settings. #}
 {% set routes = config.plugins.w4os.routes %}
 <p class="w4os-login-links">
-    {% if w4os_route('register') %}<a href="{{ base_url_relative ~ w4os_route('register') }}">{{ 'w4os.register'|t }}</a><span aria-hidden="true"> – </span>{% endif %}
-    <a href="{{ base_url_relative ~ routes.forgot }}">{{ 'w4os.forgot_title'|t }}</a>
+    {% if w4os_route('register') %}<a href="{{ w4os_url(w4os_route('register')) }}">{{ 'w4os.register'|t }}</a><span aria-hidden="true"> – </span>{% endif %}
+    <a href="{{ w4os_url(routes.forgot) }}">{{ 'w4os.forgot_title'|t }}</a>
 </p>

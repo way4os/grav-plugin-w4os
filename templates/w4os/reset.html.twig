@@ -3,5 +3,5 @@
     {% include 'forms/form.html.twig' with { form: forms('w4os-reset') } %}
 {% else %}
     <p class="w4os-intro">{{ 'w4os.reset_no_token'|t }}</p>
-    <p class="w4os-links"><a href="{{ base_url_relative ~ w4os_route('forgot') }}">{{ 'w4os.forgot_title'|t }}</a></p>
+    <p class="w4os-links"><a href="{{ w4os_url(w4os_route('forgot')) }}">{{ 'w4os.forgot_title'|t }}</a></p>
 {% endif %}

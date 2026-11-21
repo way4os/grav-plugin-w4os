@@ -4,7 +4,7 @@
     <div class="form-field w4os-terms">
         <label class="inline">
             <input type="checkbox" name="{{ (scope ~ field.name)|fieldName }}" value="1" required>
-            {{ 'w4os.terms_agree'|t('<a href="' ~ (base_url_relative ~ terms)|e('html_attr') ~ '" target="_blank">' ~ terms|e ~ '</a>')|raw }}
+            {{ 'w4os.terms_agree'|t('<a href="' ~ w4os_url(terms)|e('html_attr') ~ '" target="_blank">' ~ terms|e ~ '</a>')|raw }}
         </label>
     </div>
 {% endif %}

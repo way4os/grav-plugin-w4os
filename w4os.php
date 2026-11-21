@@ -292,6 +292,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_count', fn (string $key, int $n) => $this->site()->count($key, $n)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_route', fn (string $type) => $this->site()->routes()[$type] ?? null));
+        // A link of the site for the page shown: its base, the language of the visitor, never a prefix twice (the engine's Url::build())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_url', fn (?string $target, array $args = []) => $this->site()->links()->build((string) $target, $args)));
         // The grid added to a viewer (w4os/add-grid.html.twig) and the Connect block (w4os/getting-started.html.twig)
         $twig->addFunction(new \Twig\TwigFunction('w4os_add_grid', fn () => $this->site()->addGrid()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_uri', fn () => $this->site()->loginUri()));
@@ -1153,7 +1155,7 @@ class W4osPlugin extends Plugin
     {
         $route = (string) ($this->site()->config()['register']['terms'] ?? '');
 
-        return '<a href="'.htmlspecialchars($this->grav['base_url_relative'].$this->grav['language']->getLanguageURLPrefix().$route).'" target="_blank">'.htmlspecialchars($route).'</a>';
+        return '<a href="'.htmlspecialchars($this->site()->links()->build($route)).'" target="_blank">'.htmlspecialchars($route).'</a>';
     }
 
     /**

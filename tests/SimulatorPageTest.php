@@ -14,7 +14,7 @@ describe('the page of a simulator', function () {
             ->and(Site::ADMIN_SECTIONS['simulator'])->toBe('simulators')
             ->and(Site::ADMIN_TYPES['simulator'])->toBe('simulators')
             ->and($page)->toContain('w4os: item', 'type: simulators', 'list: simulators')
-            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/simulators.html.twig'))->toContain("w4os_route('simulator') ~ '?id={uuid}'");
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/simulators.html.twig'))->toContain("w4os_url(w4os_route('simulator')) ~ '?id={uuid}'");
     });
 
     test('its form in the tabs of its groups: its port, its console, its database with its Use default; its URI only shown', function () {

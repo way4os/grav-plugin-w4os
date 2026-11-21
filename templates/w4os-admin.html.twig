@@ -94,7 +94,7 @@
                     </li>
                     {% if visitor %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ (base_url_relative ~ (config.plugins.w4os.routes.account ?? '/account'))|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-user-circle" aria-hidden="true"></i></span><span class="nav-link-title">{{ visitor.name }}</span></a>
+                        <a class="nav-link" href="{{ w4os_url(config.plugins.w4os.routes.account ?? '/account')|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-user-circle" aria-hidden="true"></i></span><span class="nav-link-title">{{ visitor.name }}</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url(uri.addNonce((uri.path)|trim('/') ~ '/task' ~ config.system.param_sep ~ 'login.logout', 'logout-form', 'logout-nonce'))|e('html_attr') }}"><span class="nav-link-icon"><i class="ti ti-logout" aria-hidden="true"></i></span><span class="nav-link-title">{{ 'w4os.logout'|t }}</span></a>

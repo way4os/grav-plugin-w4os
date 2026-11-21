@@ -20,6 +20,7 @@ function item_twig(array $page = []): Environment
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => "/$type"));
+    $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
     $twig->addFunction(new TwigFunction('nonce_field', fn () => '<input type="hidden" name="nonce">'));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
@@ -36,7 +37,7 @@ describe('the page of an item in the admin', function () {
         'changeable' => true, 'edit' => false];
 
     test('has a header: back to its list, its picture and name, its state as badges in their tone, its actions, the dangerous ones last and marked', function () use ($page) {
-        $html = item_twig($page)->render('w4os/item-header.html.twig', ['base_url_relative' => '']);
+        $html = item_twig($page)->render('w4os/item-header.html.twig', []);
 
         expect($html)->toContain('class="page-header d-print-none w4os-item-header"', '<div class="page-pretitle"><a href="&#x2F;regions">', '[w4os.regions_title]',
             '<h2 class="page-title">Test East</h2>', 'src="&#x2F;pictures&#x2F;m1.jpg"', 'class="badge bg-green-lt"')
@@ -46,7 +47,7 @@ describe('the page of an item in the admin', function () {
 
     test('has the links its page gives, to the addresses of the item (its profile page)', function () use ($page) {
         $html = item_twig(['item' => $page['item'] + ['profilePage' => '/profile/Test.East']] + $page)->render('w4os/item-header.html.twig',
-            ['base_url_relative' => '', 'page' => ['header' => ['w4os_item' => ['links' => [['key' => 'action_view', 'attribute' => 'profilePage', 'id' => 'w4os-view-profile'], ['key' => 'none', 'attribute' => 'missing']]]]]]);
+            ['page' => ['header' => ['w4os_item' => ['links' => [['key' => 'action_view', 'attribute' => 'profilePage', 'id' => 'w4os-view-profile'], ['key' => 'none', 'attribute' => 'missing']]]]]]);
 
         expect($html)->toContain('<a class="btn" id="w4os-view-profile" href="&#x2F;profile&#x2F;Test.East">[w4os.action_view]</a>')->not->toContain('[w4os.none]');
     });

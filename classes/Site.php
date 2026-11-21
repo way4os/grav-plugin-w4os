@@ -6,6 +6,7 @@ use Grav\Common\Grav;
 use Grav\Common\HTTP\Client;
 use Grav\Common\Page\Page;
 use Grav\Common\User\Interfaces\UserInterface;
+use W4OS\Engine\Http\Url;
 use W4OS\Views\Access;
 use W4OS\Views\Contract;
 
@@ -680,18 +681,33 @@ final class Site
         return $type !== false && ($routes[$type] ?? null) !== self::OLD_ADMIN_ROUTES[$type] ? $routes[$type] : null;
     }
 
-    /** The absolute address of a page of the plugin, in the language of the visitor (or none: the pictures). */
+    /**
+     * The links of the site for the page shown (the engine's Url): its base, with its host when absolute, the prefix of the language
+     * of the visitor (none without $language: the pictures), the languages of the site, so a route that has its prefix already keeps it.
+     */
+    public function links(bool $absolute = false, bool $language = true): Url
+    {
+        $languages = $this->grav['language'];
+
+        return self::siteLinks((string) $this->grav['uri']->rootUrl($absolute), $language ? (string) $languages->getLanguageURLPrefix() : '', (array) $languages->getLanguages(), (string) $this->grav['uri']->path());
+    }
+
+    /** The links of a site at this base, in the language of this prefix ('/fr', '' for none), on the page of this path. */
+    public static function siteLinks(string $base, string $prefix, array $languages, string $path): Url
+    {
+        return new Url(base: $base, language: trim($prefix, '/'), languages: array_values(array_map('strval', $languages)), path: $path);
+    }
+
     /** The path of a route of the plugin on this site, without the host: a page shows it whatever address it was reached at. */
     public function path(string $type, bool $language = false): string
     {
-        return rtrim($this->grav['uri']->rootUrl(false), '/').($language ? $this->grav['language']->getLanguageURLPrefix() : '').($this->routes()[$type] ?? '/');
+        return $this->links(false, $language)->build($this->routes()[$type] ?? '/');
     }
 
+    /** The absolute address of a page of the plugin, in the language of the visitor (or none: the pictures). */
     public function url(string $type, bool $language = true): string
     {
-        $route = $this->routes()[$type] ?? '/';
-
-        return rtrim($this->grav['uri']->rootUrl(true), '/').($language ? $this->grav['language']->getLanguageURLPrefix() : '').$route;
+        return $this->links(true, $language)->build($this->routes()[$type] ?? '/');
     }
 
     /**

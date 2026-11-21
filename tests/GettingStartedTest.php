@@ -19,13 +19,14 @@ function render_start(string $template, array $given, array $context = []): stri
     $twig->addFunction(new TwigFunction('w4os_avatar', fn () => $given['avatar']));
     $twig->addFunction(new TwigFunction('w4os_start_steps', fn () => $given['steps']));
     $twig->addFunction(new TwigFunction('w4os_route', fn (string $type) => $given['routes'][$type] ?? null));
+    $twig->addFunction(new TwigFunction('w4os_url', fn (?string $target, array $args = []) => W4OS\Grav\Site::siteLinks('', '', [], '/')->build((string) $target, $args)));
     $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
         public array $js = [];
         public function addJs(string $url): void { $this->js[] = $url; }
     };
 
-    return html_entity_decode($twig->render($template, $context + ['assets' => $assets, 'base_url_relative' => '', 'config' => ['plugins' => ['login' => ['route' => '/login']]]]), ENT_QUOTES | ENT_HTML5);
+    return html_entity_decode($twig->render($template, $context + ['assets' => $assets, 'config' => ['plugins' => ['login' => ['route' => '/login']]]]), ENT_QUOTES | ENT_HTML5);
 }
 
 describe('the steps of a newcomer', function () {

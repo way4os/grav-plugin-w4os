@@ -17,9 +17,9 @@
                 {% if avatar %}
                 <p><a href="{{ w4os_profile_page()|e('html_attr') }}">{{ 'w4os.start_avatar_done'|t(avatar.name) }}</a></p>
                 {% elseif w4os_route('register') %}
-                <a class="{{ button }}" href="{{ (base_url_relative ~ w4os_route('register'))|e('html_attr') }}">{{ 'w4os.start_avatar'|t }}</a>
+                <a class="{{ button }}" href="{{ w4os_url(w4os_route('register'))|e('html_attr') }}">{{ 'w4os.start_avatar'|t }}</a>
                 {% else %}
-                <a class="{{ button }}" href="{{ (base_url_relative ~ (config.plugins.login.route ?: '/login'))|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
+                <a class="{{ button }}" href="{{ w4os_url(config.plugins.login.route ?: '/login')|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
                 {% endif %}
             {% elseif item.step == 'viewer' %}
                 {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t(grid) }}</a>{% endif %}

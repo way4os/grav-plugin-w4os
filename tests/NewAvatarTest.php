@@ -64,7 +64,7 @@ describe('the registration', function () {
             public array $js = [];
             public function addJs(string $url, array $options = []): void { $this->js[] = $url; }
         };
-        $twig->render('w4os/register.html.twig', ['assets' => $assets, 'config' => ['plugins' => ['login' => []]], 'base_url_relative' => '']);
+        $twig->render('w4os/register.html.twig', ['assets' => $assets, 'config' => ['plugins' => ['login' => []]]]);
 
         foreach (['first_name', 'last_name'] as $name) {
             expect($fields[$name])->toMatchArray(['maxlength' => 32, 'help' => "w4os.{$name}_help"])
