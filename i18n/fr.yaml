@@ -31,6 +31,8 @@ w4os:
   admin_send_mail: 'Envoyer les mails'
   admin_send_mail_help: 'Désactivé sur un site de test seulement : l’engine n’envoie rien, les liens des inscriptions et des changements d’e-mail s’affichent sur la page'
   admin_cache: 'Cache (secondes)'
+  admin_hypergrid_examples: 'Grilles à citer en exemple'
+  admin_hypergrid_examples_help: 'Grilles d’où un avatar peut venir, citées par la visite depuis une autre grille ([hypergrid-visit]) ; vide : aucun nom'
   admin_built_in_css: 'CSS intégré'
   admin_built_in_css_help: 'La feuille de style du plugin (ses pages, les modèles, les blocs) ; désactivée quand le thème les stylise'
   admin_register: 'Inscription'

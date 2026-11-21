@@ -112,6 +112,11 @@ form:
               type: number
               label: w4os.admin_cache
               validate: { type: int, min: 0 }
+            hypergrid.examples:
+              type: selectize
+              label: w4os.admin_hypergrid_examples
+              help: w4os.admin_hypergrid_examples_help
+              validate: { type: commalist }
 
         tab_accounts:
           type: tab

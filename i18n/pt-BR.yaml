@@ -33,6 +33,8 @@ w4os:
   admin_send_mail: 'Enviar os emails'
   admin_send_mail_help: 'Desligado só num site de teste: o engine não envia nada, os links dos cadastros e das trocas de email aparecem na página'
   admin_cache: 'Cache (segundos)'
+  admin_hypergrid_examples: 'Grids citados como exemplo'
+  admin_hypergrid_examples_help: 'Grids de onde um avatar pode vir, citados na visita de outro grid ([hypergrid-visit]); vazio: nenhum nome'
   admin_built_in_css: 'CSS embutido'
   admin_built_in_css_help: 'A folha de estilo do plugin (suas páginas, os modelos, os blocos); desligada quando o tema os estiliza'
   admin_register: 'Registrar'

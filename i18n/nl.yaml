@@ -33,6 +33,8 @@ w4os:
   admin_send_mail: 'Mails versturen'
   admin_send_mail_help: 'Alleen uit op een testsite: de engine verstuurt niets, de links van de registraties en e-mailwijzigingen staan op de pagina'
   admin_cache: 'Cache (seconden)'
+  admin_hypergrid_examples: 'Grids als voorbeeld'
+  admin_hypergrid_examples_help: 'Grids waar een avatar vandaan kan komen, genoemd bij het bezoek vanaf een ander grid ([hypergrid-visit]); leeg: geen namen'
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
   admin_register: 'Registreren'

@@ -197,6 +197,8 @@ w4os:
   hg_visit_title: 'Visiter depuis une autre grille'
   hg_visit_text: 'Vous avez déjà un avatar sur une autre grille OpenSim ? Venez nous voir sans en créer un : entrez cette adresse dans la carte ou la recherche de votre viewer.'
   hg_visit_go: 'Se téléporter ici'
+  hg_visit_text_examples: 'Vous avez déjà un avatar sur une autre grille OpenSim, comme %s ? Venez nous voir sans en créer un : entrez cette adresse dans la carte ou la recherche de votre viewer.'
+  list_or: '%1$s ou %2$s'
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
   tip_models_pattern: 'Partie du nom des modèles'
@@ -881,6 +883,8 @@ w4os:
   admin_send_mail: 'Envoyer les mails'
   admin_send_mail_help: 'Désactivé sur un site de test seulement : l’engine n’envoie rien, les liens des inscriptions et des changements d’e-mail s’affichent sur la page'
   admin_cache: 'Cache (secondes)'
+  admin_hypergrid_examples: 'Grilles à citer en exemple'
+  admin_hypergrid_examples_help: 'Grilles d’où un avatar peut venir, citées par la visite depuis une autre grille ([hypergrid-visit]) ; vide : aucun nom'
   admin_built_in_css: 'CSS intégré'
   admin_built_in_css_help: 'La feuille de style du plugin (ses pages, les modèles, les blocs) ; désactivée quand le thème les stylise'
   admin_register: Inscription

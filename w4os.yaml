@@ -42,6 +42,9 @@ built_in_css: true
 menu: true
 # How long (seconds) the blocks of the helpers (but the search) and the avatar models are kept before being read again
 cache: 60
+hypergrid:
+  # The grids an avatar may come from, named by the visit of the grid from another one ([hypergrid-visit]); none: no names
+  examples: ['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely']
 register:
   # Registration on the site: off, nobody registers here
   enabled: true

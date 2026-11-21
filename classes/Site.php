@@ -549,13 +549,25 @@ final class Site
 
     /**
      * The visit of the grid from another one, for the avatars of other grids: its address to enter in a viewer (its gatekeeper,
-     * host:port) and the link that takes a viewer there; null when the grid is not reachable by hypergrid (no gatekeeper).
+     * host:port), the link that takes a viewer there and the grids they may come from, as the site names them (setting
+     * hypergrid.examples, '' for none); null when the grid is not reachable by hypergrid (no gatekeeper).
      *
-     * @return array{address: string, link: string}|null
+     * @return array{address: string, link: string, examples: string}|null
      */
     public function hypergrid(): ?array
     {
-        return self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
+        $visit = self::hypergridVisit($this->info('gatekeeper', fn () => $this->engine()->gatekeeper()));
+
+        return $visit === null ? null : $visit + ['examples' => self::joinOr((array) ($this->config()['hypergrid']['examples'] ?? []), $this->translate('w4os.list_or'))];
+    }
+
+    /** Names joined as a language lists choices (A, B or C): the others by a comma, the last two by its pattern (list_or); '' for none. */
+    public static function joinOr(array $names, string $pattern): string
+    {
+        $names = array_values(array_filter(array_map(fn ($name) => trim((string) $name), $names), fn (string $name) => $name !== ''));
+        $last = array_pop($names);
+
+        return $last === null ? '' : ($names === [] ? $last : sprintf($pattern, implode(', ', $names), $last));
     }
 
     /**

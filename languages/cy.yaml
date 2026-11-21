@@ -197,6 +197,8 @@ w4os:
   hg_visit_title: 'Ymweld o grid arall'
   hg_visit_text: 'Oes gennych chi afatar ar grid OpenSim arall yn barod? Dewch i ymweld heb greu un: rhowch y cyfeiriad hwn ym map neu chwiliad eich viewer.'
   hg_visit_go: 'Teleportio yma'
+  hg_visit_text_examples: 'Oes gennych chi afatar ar grid OpenSim arall yn barod, fel %s? Dewch i ymweld heb greu un: rhowch y cyfeiriad hwn ym map neu chwiliad eich viewer.'
+  list_or: '%1$s neu %2$s'
   total: Cyfanswm
   tip_models_match: 'Sut mae model yn cael ei adnabod'
   tip_models_pattern: "Rhan o enw'r modelau"
@@ -881,6 +883,8 @@ w4os:
   admin_send_mail: 'Anfon yr ebyst'
   admin_send_mail_help: 'I ffwrdd ar safle prawf yn unig: nid yw’r engine yn anfon dim, mae dolenni’r cofrestriadau a’r newidiadau ebost yn cael eu dangos ar y dudalen'
   admin_cache: 'Storfa (eiliadau)'
+  admin_hypergrid_examples: 'Gridiau i’w henwi fel enghreifftiau'
+  admin_hypergrid_examples_help: 'Gridiau y gall afatar ddod ohonynt, wedi’u henwi gan yr ymweliad o grid arall ([hypergrid-visit]); gwag: dim enwau'
   admin_built_in_css: 'CSS adeiledig'
   admin_built_in_css_help: 'Taflen arddull yr ategyn (ei dudalennau, y modelau, y blociau); i ffwrdd pan fydd y thema’n eu steilio'
   admin_register: Cofrestru

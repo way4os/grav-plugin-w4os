@@ -197,6 +197,8 @@ w4os:
   hg_visit_title: 'Besuch aus einem anderen Grid'
   hg_visit_text: 'Du hast schon einen Avatar in einem anderen OpenSim-Grid? Besuch uns, ohne einen neuen zu erstellen: Gib diese Adresse in die Karte oder die Suche deines Viewers ein.'
   hg_visit_go: 'Hierher teleportieren'
+  hg_visit_text_examples: 'Du hast schon einen Avatar in einem anderen OpenSim-Grid, etwa %s? Besuch uns, ohne einen neuen zu erstellen: Gib diese Adresse in die Karte oder die Suche deines Viewers ein.'
+  list_or: '%1$s oder %2$s'
   total: Insgesamt
   tip_models_match: 'Wie ein Modell erkannt wird'
   tip_models_pattern: 'Teil des Namens der Modelle'
@@ -881,6 +883,8 @@ w4os:
   admin_send_mail: 'E-Mails senden'
   admin_send_mail_help: 'Nur auf einer Testseite aus: Die Engine sendet nichts, die Links der Registrierungen und E-Mail-Änderungen erscheinen auf der Seite'
   admin_cache: 'Cache (Sekunden)'
+  admin_hypergrid_examples: 'Grids als Beispiele'
+  admin_hypergrid_examples_help: 'Grids, aus denen ein Avatar kommen kann, genannt beim Besuch aus einem anderen Grid ([hypergrid-visit]); leer: keine Namen'
   admin_built_in_css: 'Eingebautes CSS'
   admin_built_in_css_help: 'Das Stylesheet des Plugins (seine Seiten, die Modelle, die Blöcke); aus, wenn das Theme sie gestaltet'
   admin_register: Registrieren

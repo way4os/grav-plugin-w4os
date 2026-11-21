@@ -197,6 +197,8 @@ w4os:
   hg_visit_title: 'Op bezoek vanaf een ander grid'
   hg_visit_text: 'Heb je al een avatar op een ander OpenSim-grid? Kom op bezoek zonder er een te maken: voer dit adres in op de kaart of in de zoekfunctie van je viewer.'
   hg_visit_go: 'Hierheen teleporteren'
+  hg_visit_text_examples: 'Heb je al een avatar op een ander OpenSim-grid, zoals %s? Kom op bezoek zonder er een te maken: voer dit adres in op de kaart of in de zoekfunctie van je viewer.'
+  list_or: '%1$s of %2$s'
   total: Totaal
   tip_models_match: 'Hoe een model wordt herkend'
   tip_models_pattern: 'Deel van de naam van de modellen'
@@ -881,6 +883,8 @@ w4os:
   admin_send_mail: 'Mails versturen'
   admin_send_mail_help: 'Alleen uit op een testsite: de engine verstuurt niets, de links van de registraties en e-mailwijzigingen staan op de pagina'
   admin_cache: 'Cache (seconden)'
+  admin_hypergrid_examples: 'Grids als voorbeeld'
+  admin_hypergrid_examples_help: 'Grids waar een avatar vandaan kan komen, genoemd bij het bezoek vanaf een ander grid ([hypergrid-visit]); leeg: geen namen'
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
   admin_register: Registreren

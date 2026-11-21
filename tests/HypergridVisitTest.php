@@ -12,7 +12,7 @@ function render_visit(?array $hypergrid, array $context = []): string
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'), ['autoescape' => 'html']);
     $twig->addFunction(new TwigFunction('w4os_hypergrid', fn () => $hypergrid));
     $twig->addFunction(new TwigFunction('w4os_anchor', fn (string $href, string $text, string $kind = 'plain', string $class = '') => W4OS\Views\Link::html($href, $text, $kind, $class), ['is_safe' => ['html']]));
-    $twig->addFilter(new TwigFilter('t', fn (string $key) => $key));
+    $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
         public function addJs(string $url): void {}
     };
@@ -53,5 +53,17 @@ describe('the visit of the grid from another one', function () {
         expect($codes)->toContain('[hypergrid-visit]')
             ->and(array_column($visit['options'], 'option'))->toBe(['title', 'level=h2'])
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("\$handlers->add('hypergrid-visit'");
+    });
+
+    test('names the grids an avatar may come from, as the site sets them, joined as the language lists choices; none, the text without', function () {
+        $with = render_visit(['address' => 'a.org:8002', 'link' => 'hop://a.org:8002', 'examples' => 'Wolf Territories, Groovy Verse ou Kitely']);
+
+        expect($with)->toContain('<p>w4os.hg_visit_text_examples(Wolf Territories, Groovy Verse ou Kitely)</p>')
+            ->and(render_visit(['address' => 'a.org:8002', 'link' => 'hop://a.org:8002', 'examples' => '']))->toContain('<p>w4os.hg_visit_text</p>')
+            ->and(Site::joinOr(['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely'], '%1$s ou %2$s'))->toBe('Wolf Territories, Groovy Verse, Alternate Metaverse ou Kitely')
+            ->and(Site::joinOr(['Kitely', ' '], '%1$s or %2$s'))->toBe('Kitely')
+            ->and(Site::joinOr([], '%1$s or %2$s'))->toBe('')
+            ->and(Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['hypergrid']['examples'])->toBe(['Wolf Territories', 'Groovy Verse', 'Alternate Metaverse', 'Kitely'])
+            ->and((string) file_get_contents(dirname(__DIR__).'/blueprints.yaml'))->toContain('hypergrid.examples:');
     });
 });

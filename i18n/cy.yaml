@@ -33,6 +33,8 @@ w4os:
   admin_send_mail: 'Anfon yr ebyst'
   admin_send_mail_help: 'I ffwrdd ar safle prawf yn unig: nid yw’r engine yn anfon dim, mae dolenni’r cofrestriadau a’r newidiadau ebost yn cael eu dangos ar y dudalen'
   admin_cache: 'Storfa (eiliadau)'
+  admin_hypergrid_examples: 'Gridiau i’w henwi fel enghreifftiau'
+  admin_hypergrid_examples_help: 'Gridiau y gall afatar ddod ohonynt, wedi’u henwi gan yr ymweliad o grid arall ([hypergrid-visit]); gwag: dim enwau'
   admin_built_in_css: 'CSS adeiledig'
   admin_built_in_css_help: 'Taflen arddull yr ategyn (ei dudalennau, y modelau, y blociau); i ffwrdd pan fydd y thema’n eu steilio'
   admin_register: 'Cofrestru'
