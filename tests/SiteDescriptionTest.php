@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the description of the grid the site keeps for its helpers', function () {
     test('is asked to the engine when it is older than the cache, kept with its time, and the one kept when the engine cannot tell', function () {

@@ -89,27 +89,27 @@ describe('templates', function () {
     });
 
     test('an area reads in km² as the engine says it (two decimals under 10, none above), a usage as a bar in the colour of its thresholds, of its total when it has one', function () {
-        expect(W4os\Grav\Site::areaText(65536))->toBe(['unit_km2', '0.07'])
-            ->and(W4os\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19'])
-            ->and(W4os\Grav\Site::areaText(26214400))->toBe(['unit_km2', '26'])
+        expect(W4OS\Grav\Site::areaText(65536))->toBe(['unit_km2', '0.07'])
+            ->and(W4OS\Grav\Site::areaText(4194304))->toBe(['unit_km2', '4.19'])
+            ->and(W4OS\Grav\Site::areaText(26214400))->toBe(['unit_km2', '26'])
             // In the language of the page, by the formatter of PHP (Intl)
-            ->and(W4os\Grav\Site::areaText(524288, 'fr'))->toBe(['unit_km2', '0,52'])
-            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::number(15565, 'fr')))->toBe('15 565')
-            ->and(W4os\Grav\Site::number(15565, 'de'))->toBe('15.565')
-            ->and(W4os\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5')
+            ->and(W4OS\Grav\Site::areaText(524288, 'fr'))->toBe(['unit_km2', '0,52'])
+            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4OS\Grav\Site::number(15565, 'fr')))->toBe('15 565')
+            ->and(W4OS\Grav\Site::number(15565, 'de'))->toBe('15.565')
+            ->and(W4OS\Grav\Site::number(12.5, 'pt-BR'))->toBe('12,5')
             // A counted text (2 150 prims) says its number as the others
-            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4os\Grav\Site::counted('%d prims', 2150, 'fr')))->toBe('2 150 prims')
-            ->and(W4os\Grav\Site::counted('%d prims', 2150, 'en'))->toBe('2,150 prims')
-            ->and(W4os\Grav\Site::counted('%d av.', 0, 'fr'))->toBe('0 av.');
+            ->and(str_replace(["\u{202F}", "\u{A0}"], ' ', W4OS\Grav\Site::counted('%d prims', 2150, 'fr')))->toBe('2 150 prims')
+            ->and(W4OS\Grav\Site::counted('%d prims', 2150, 'en'))->toBe('2,150 prims')
+            ->and(W4OS\Grav\Site::counted('%d av.', 0, 'fr'))->toBe('0 av.');
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4os\Grav\Site::areaText((float) $m2))));
-        $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));
+        $twig->addFunction(new TwigFunction('w4os_area', fn ($m2) => implode(':', W4OS\Grav\Site::areaText((float) $m2))));
+        $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4OS\Grav\Site::number((float) $value, 'en', $decimals)));
         $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "count:$key:$n"));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $cell = $twig->createTemplate("{% import 'w4os/list-cells.html.twig' as cells %}{{ cells.cell(column, item) }}");
-        $columns = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators')['columns'], null, 'name');
+        $columns = array_column((new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document()))->listOf('simulators')['columns'], null, 'name');
 
         expect($cell->render(['column' => $columns['area'], 'item' => ['area' => 65536]]))->toContain('unit_km2:0.07')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => ['cpu' => 75]]))->toContain('progress-bar bg-warning', 'width: 75%', '75 %')
@@ -118,12 +118,12 @@ describe('templates', function () {
             ->toContain('bg-danger', '[w4os.usage_of:[w4os.unit_mb:15,565]|[w4os.unit_mb:16,384]]')
             ->and($cell->render(['column' => $columns['cpu'], 'item' => []]))->not->toContain('progress');
         // The size of a region: its width and its height in meters (the engine's unit_dimensions), in the language of the page
-        $size = array_column(array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['place']['parts'], null, 'name')['size'];
+        $size = array_column(array_column((new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document()))->listOf('regions')['columns'], null, 'name')['place']['parts'], null, 'name')['size'];
         expect($cell->render(['column' => $size, 'item' => ['size' => 512, 'width' => 512, 'height' => 1024]]))->toContain('[w4os.unit_dimensions:512|1,024]')->not->toContain('text-nowrap')
             ->and($cell->render(['column' => $size, 'item' => ['size' => 256]]))->toContain('[w4os.unit_dimensions:256|256]');
 
         // Several values in one column (a group): each alone, one under the other, a count said as its text (3 prims), an empty one left out
-        $regions = array_column((new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('regions')['columns'], null, 'name');
+        $regions = array_column((new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document()))->listOf('regions')['columns'], null, 'name');
         $counts = ['name' => 'usage', 'type' => 'group', 'bare' => true, 'parts' => [
             ['name' => 'avatars', 'label' => 'column_presence', 'type' => 'number', 'count' => 'count_avatars_short', 'bare' => true],
             ['name' => 'prims', 'label' => 'column_prims', 'type' => 'number', 'count' => 'count_prims', 'bare' => true],
@@ -139,7 +139,7 @@ describe('templates', function () {
     });
 
     test('an indicators column shows an icon by state (its tone, its title), its action as the button of the icon, nothing for a value it does not list', function () {
-        $list = (new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->listOf('simulators');
+        $list = (new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document()))->listOf('simulators');
         $row = ['id' => 'h:9040', 'slug' => 'demo.solo', 'name' => 'Test Solo', 'enabled' => true, 'running' => true, 'state' => 'running', 'connections' => ['console' => 'ok', 'screen' => 'failed', 'config' => 'configured', 'regions' => 'none', 'mysql' => 'none', 'sqlite' => 'none']];
         ['indicators' => $cell, 'menu' => $menu] = row_html($list, $row, [], 'fa');
 
@@ -164,7 +164,7 @@ describe('templates', function () {
     });
 
     test('a ban, a presence show by their icons, never by their color alone: a user banned or online, the world cancelled or crossed', function () {
-        $api = new W4OS\Views\Contract(OpenSim\Api\Contract::document());
+        $api = new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document());
         $avatars = ['actions' => []] + $api->listOf('avatars');
         $regions = ['actions' => []] + $api->listOf('regions');
         $hard = row_html($avatars, ['uuid' => 'a1', 'accountState' => 'banned', 'ban' => 'hard'])['indicators'];

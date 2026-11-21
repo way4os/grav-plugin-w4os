@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 use W4OS\Views\PostsView;
 

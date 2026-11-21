@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 use Grav\Common\Grav;
 use Grav\Common\HTTP\Client;
@@ -30,7 +30,7 @@ final class Site
      */
     public static function areaText(float $m2, string $language = 'en'): array
     {
-        [$value, $unit, $decimals] = \OpenSim\Text\Units::area($m2);
+        [$value, $unit, $decimals] = \W4OS\Engine\Text\Units::area($m2);
 
         return [$unit, self::number($value, $language, $decimals)];
     }
@@ -481,15 +481,15 @@ final class Site
     }
 
     /**
-     * The address of a logo of the engine the plugin bundles (a file of OpenSim\Assets\Logos::FILES), null when it has none.
+     * The address of a logo of the engine the plugin bundles (a file of W4OS\Engine\Assets\Logos::FILES), null when it has none.
      */
     public function logo(string $file): ?string
     {
         Bundled::library();
-        if (! class_exists(\OpenSim\Assets\Logos::class) || ! in_array($file, \OpenSim\Assets\Logos::FILES, true)) {
+        if (! class_exists(\W4OS\Engine\Assets\Logos::class) || ! in_array($file, \W4OS\Engine\Assets\Logos::FILES, true)) {
             return null;
         }
-        $path = 'vendor/magicoli/opensim-engine/'.\OpenSim\Assets\Logos::FOLDER.'/'.$file;
+        $path = 'vendor/w4os/w4os-engine/'.\W4OS\Engine\Assets\Logos::FOLDER.'/'.$file;
 
         return is_file(dirname(__DIR__).'/'.$path) ? \Grav\Common\Utils::url("plugin://w4os/$path") : null;
     }
@@ -509,8 +509,8 @@ final class Site
         Bundled::library();
         $person = $default === 'person';
         $none = $uuid === null || trim($uuid, "0- ") === '';
-        $placeholder = class_exists(\OpenSim\Assets\WebAssets::class)
-            ? ($person ? \OpenSim\Assets\WebAssets::PERSON : \OpenSim\Assets\WebAssets::PLACEHOLDER)
+        $placeholder = class_exists(\W4OS\Engine\Assets\WebAssets::class)
+            ? ($person ? \W4OS\Engine\Assets\WebAssets::PERSON : \W4OS\Engine\Assets\WebAssets::PLACEHOLDER)
             : '00000000-0000-0000-0000-000000000000';
 
         return $this->assetUrl($none ? $placeholder : (string) $uuid).($person ? '?default=person' : '');
@@ -684,8 +684,8 @@ final class Site
     {
         Bundled::library();
 
-        return class_exists(\OpenSim\Hypergrid\Destination::class) && method_exists(\OpenSim\Hypergrid\Destination::class, 'client')
-            ? \OpenSim\Hypergrid\Destination::client((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''))
+        return class_exists(\W4OS\Engine\Hypergrid\Destination::class) && method_exists(\W4OS\Engine\Hypergrid\Destination::class, 'client')
+            ? \W4OS\Engine\Hypergrid\Destination::client((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''))
             : 'browser';
     }
 
@@ -906,8 +906,8 @@ final class Site
             return [];
         }
         $levels = [];
-        foreach (array_keys(\OpenSim\Models\Avatar::LEVELS) as $level) {
-            $levels[$level] = 'w4os.'.\OpenSim\I18n\Catalog::roleKey(\OpenSim\Models\Avatar::roleOf($level));
+        foreach (array_keys(\W4OS\Engine\Models\Avatar::LEVELS) as $level) {
+            $levels[$level] = 'w4os.'.\W4OS\Engine\I18n\Catalog::roleKey(\W4OS\Engine\Models\Avatar::roleOf($level));
         }
 
         return $levels;
@@ -918,7 +918,7 @@ final class Site
     {
         $level = is_numeric($config['admin_level'] ?? null) ? (int) $config['admin_level'] : -1;
 
-        return isset(self::adminLevels()[$level]) ? $level : \OpenSim\Models\Avatar::GOD_CUSTOMER_SERVICE;
+        return isset(self::adminLevels()[$level]) ? $level : \W4OS\Engine\Models\Avatar::GOD_CUSTOMER_SERVICE;
     }
 
     /** Whether an avatar of this level reads the admin pages (adminLevel()). */
@@ -1906,11 +1906,11 @@ final class Site
         Bundled::library();
         $name = (string) preg_replace('/^w4os\./', '', $key);
         $language = (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en');
-        if (! class_exists(\OpenSim\I18n\Catalog::class) || ! isset(\OpenSim\I18n\Catalog::SINGULARS[$name])) {
+        if (! class_exists(\W4OS\Engine\I18n\Catalog::class) || ! isset(\W4OS\Engine\I18n\Catalog::SINGULARS[$name])) {
             return self::counted($this->translate($key), $n, $language);
         }
 
-        return self::counted(\OpenSim\I18n\Catalog::plural($language, $name, $n), $n, $language);
+        return self::counted(\W4OS\Engine\I18n\Catalog::plural($language, $name, $n), $n, $language);
     }
 
     /** A text that counts (%d prims) with its number said in the language of the page, as the others (2 150 prims). */

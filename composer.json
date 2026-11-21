@@ -1,11 +1,11 @@
 {
-    "name": "magicoli/grav-plugin-w4os",
+    "name": "w4os/grav-plugin-w4os",
     "description": "Grav plugin: the website of an OpenSimulator grid, through the OpenSim engine API of the grid or the engine and helpers it bundles",
     "type": "grav-plugin",
     "license": "AGPL-3.0-or-later",
     "repositories": [
         {
-            "name": "magicoli/w4os-views",
+            "name": "w4os/w4os-views",
             "url": "../w4os-views/",
             "type": "path",
             "options": {
@@ -13,7 +13,7 @@
             }
         },
         {
-            "name": "magicoli/opensim-engine",
+            "name": "w4os/w4os-engine",
             "url": "../opensim-engine/",
             "type": "path",
             "options": {
@@ -21,7 +21,7 @@
             }
         },
         {
-            "name": "magicoli/opensim-helpers",
+            "name": "w4os/w4os-helpers",
             "url": "../opensim-helpers/",
             "type": "path",
             "options": {
@@ -83,13 +83,13 @@
     ],
     "require": {
         "php": "^8.3",
-        "magicoli/opensim-engine": "@dev",
-        "magicoli/opensim-helpers": "@dev",
+        "w4os/w4os-engine": "@dev",
+        "w4os/w4os-helpers": "@dev",
         "magicoli/opensim-rest-php": "@dev",
         "npm-asset/tabler-core": "1.7.5",
         "npm-asset/tabler-icons-webfont": "3.52.0",
         "npm-asset/tom-select": "2.7.0",
-        "magicoli/w4os-views": "@dev"
+        "w4os/w4os-views": "@dev"
     },
     "require-dev": {
         "pestphp/pest": "^4.0",
@@ -99,17 +99,17 @@
     },
     "autoload": {
         "psr-4": {
-            "W4os\\Grav\\": "classes/"
+            "W4OS\\Grav\\": "classes/"
         }
     },
     "scripts": {
         "test": "pest",
         "languages": "php dev/languages.php",
         "post-install-cmd": [
-            "W4os\\Grav\\Assets::composer"
+            "W4OS\\Grav\\Assets::composer"
         ],
         "post-update-cmd": [
-            "W4os\\Grav\\Assets::composer"
+            "W4OS\\Grav\\Assets::composer"
         ]
     },
     "config": {

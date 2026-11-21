@@ -1,11 +1,11 @@
 <?php
 
-use OpenSim\Api\Contract;
-use OpenSim\Models\Avatar;
-use W4os\Grav\Items;
-use W4os\Grav\Lists;
+use W4OS\Engine\Api\Contract;
+use W4OS\Engine\Models\Avatar;
+use W4OS\Grav\Items;
+use W4OS\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('managers', function () {
     $api = new OpenApi(Contract::document());

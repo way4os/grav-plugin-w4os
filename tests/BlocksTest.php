@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\BlockUnavailable;
-use W4os\Grav\Blocks;
+use W4OS\Grav\BlockUnavailable;
+use W4OS\Grav\Blocks;
 
 describe('blocks', function () {
     test('reads a block of the helpers with its arguments', function () {
@@ -96,9 +96,9 @@ describe('blocks', function () {
 
 describe('the page of a profile', function () {
     test('is a page that does not exist for an avatar the grid does not have, unavailable for now when the grid cannot be reached', function () {
-        expect(W4os\Grav\Site::profileStatus(new W4os\Grav\FormError('w4os.error_not_found')))->toBe(404)
-            ->and(W4os\Grav\Site::profileStatus(new W4os\Grav\FormError('w4os.error_channel_unavailable')))->toBe(503)
-            ->and(W4os\Grav\Site::profileStatus(null))->toBe(404);
+        expect(W4OS\Grav\Site::profileStatus(new W4OS\Grav\FormError('w4os.error_not_found')))->toBe(404)
+            ->and(W4OS\Grav\Site::profileStatus(new W4OS\Grav\FormError('w4os.error_channel_unavailable')))->toBe(503)
+            ->and(W4OS\Grav\Site::profileStatus(null))->toBe(404);
     });
 });
 
@@ -118,17 +118,17 @@ describe('the blocks that cannot be read', function () {
         $reason = function (Closure $failing) use ($t) {
             try {
                 $failing();
-            } catch (W4os\Grav\BlockUnavailable $e) {
+            } catch (W4OS\Grav\BlockUnavailable $e) {
                 return $e->reason($t);
             }
         };
 
         expect($reason(fn () => (Blocks::remote('', fn () => ''))->html('grid-info', [])))->toBe('[w4os.admin_blocks_no_url]')
             ->and($reason(fn () => Blocks::answer(500, '', [])))->toBe('[w4os.admin_blocks_http:500]')
-            ->and($reason(fn () => throw new W4os\Grav\BlockUnavailable('Idle timeout reached', 'admin_blocks_no_answer', ['Idle timeout reached'])))
+            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('Idle timeout reached', 'admin_blocks_no_answer', ['Idle timeout reached'])))
             ->toBe('[w4os.admin_blocks_no_answer:Idle timeout reached]')
             // A reason the helpers said themselves (in the language they were asked): as it is
-            ->and($reason(fn () => throw new W4os\Grav\BlockUnavailable('La base de données est injoignable.')))->toBe('La base de données est injoignable.');
+            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('La base de données est injoignable.')))->toBe('La base de données est injoignable.');
     });
 
     test('are said to a visitor only when the block is the whole page, without a reason', function () use ($t) {

@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the engine the site asks', function () {
     test('is the API of the engine whenever the site has its address and key, whatever bundles the helpers: only the engine touches the configs', function () {

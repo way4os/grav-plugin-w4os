@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\FormError;
-use W4os\Grav\Forms;
+use W4OS\Grav\FormError;
+use W4OS\Grav\Forms;
 
 function forms(array $answers, ?array &$log = null, array $config = []): Forms
 {

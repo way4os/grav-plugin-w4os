@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Engine;
+use W4OS\Grav\Engine;
 
 /**
  * A fake engine API: answers given in order, each [status, document]; the requests are kept in $log.

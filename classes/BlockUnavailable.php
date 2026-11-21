@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * A block of the helpers that cannot be read: its reason (no address of the helpers, an error of theirs, no answer), said by a key

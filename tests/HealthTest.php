@@ -4,7 +4,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the health page of the admin', function () {
     test('lives under the admin route, in the admin menu, for whom the contract lets read the health of the grid', function () {
@@ -163,12 +163,12 @@ describe('the health page of the admin', function () {
             ['label' => 'PHP', 'status' => '8.3', 'texts' => []],
         ]]]];
         $french = ['w4os.health_not_answering' => 'ne répond pas', 'w4os.health_http' => 'HTTP %s'];
-        $said = W4os\Grav\Site::healthSaid($health, fn (string $key, array $params) => isset($french[$key]) ? vsprintf($french[$key], $params) : $key);
+        $said = W4OS\Grav\Site::healthSaid($health, fn (string $key, array $params) => isset($french[$key]) ? vsprintf($french[$key], $params) : $key);
         $rows = $said['groups'][0]['rows'];
 
         expect($rows[0]['status'])->toBe('ne répond pas')
             ->and($rows[0]['detail'])->toBe('HTTP 404')
             ->and($rows[1]['status'])->toBe('8.3')
-            ->and(W4os\Grav\Site::healthSaid(['groups' => []], fn () => ''))->toBe(['groups' => []]);
+            ->and(W4OS\Grav\Site::healthSaid(['groups' => []], fn () => ''))->toBe(['groups' => []]);
     });
 });

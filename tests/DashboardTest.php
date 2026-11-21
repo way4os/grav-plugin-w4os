@@ -1,12 +1,12 @@
 <?php
 
-use OpenSim\Api\Contract;
+use W4OS\Engine\Api\Contract;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 use W4OS\Views\Contract as OpenApi;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the dashboard', function () {
     $api = new OpenApi(Contract::document());

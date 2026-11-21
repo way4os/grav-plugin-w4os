@@ -1,7 +1,7 @@
 <?php
 
 use Symfony\Component\Yaml\Yaml;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 test('a notice of the engine is told in the language of the page, else in English, an old one as it is', function () {
     $french = Yaml::parseFile(dirname(__DIR__).'/languages/fr.yaml')['w4os'];

@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /** A form that cannot be done: the key of its text (languages/<lang>.yaml), and what the engine said (English, for the log). */
 final class FormError extends \RuntimeException

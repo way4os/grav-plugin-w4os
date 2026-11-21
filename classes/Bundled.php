@@ -1,18 +1,18 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
-use OpenSim\Api\Api;
-use OpenSim\Api\Router;
-use OpenSim\Config\ConnectionString;
-use OpenSim\Config\Layout;
-use OpenSim\Helpers\View\View;
-use OpenSim\Models\Grid;
-use OpenSim\Models\SiteDescription;
-use OpenSim\Provisioning\GridConf;
-use OpenSim\Provisioning\Presets;
-use OpenSim\Provisioning\RemoteGridPlanner;
-use OpenSim\Runtime\Environment;
+use W4OS\Engine\Api\Api;
+use W4OS\Engine\Api\Router;
+use W4OS\Engine\Config\ConnectionString;
+use W4OS\Engine\Config\Layout;
+use W4OS\Helpers\View\View;
+use W4OS\Engine\Models\Grid;
+use W4OS\Engine\Models\SiteDescription;
+use W4OS\Engine\Provisioning\GridConf;
+use W4OS\Engine\Provisioning\Presets;
+use W4OS\Engine\Provisioning\RemoteGridPlanner;
+use W4OS\Engine\Runtime\Environment;
 
 /**
  * The engine and the helpers the plugin bundles (its vendor folder), used as libraries: no package of the system, nothing read from
@@ -56,7 +56,7 @@ final class Bundled
         if ($loaded === null) {
             $autoload = dirname(__DIR__).'/vendor/autoload.php';
             is_file($autoload) && require_once $autoload;
-            $loaded = class_exists(\OpenSim\Models\Grid::class);
+            $loaded = class_exists(\W4OS\Engine\Models\Grid::class);
         }
 
         return $loaded;
@@ -98,7 +98,7 @@ final class Bundled
      */
     public function publicRoute(string $method, string $path, ?string $body = null): array
     {
-        $this->public ??= new Router($this->api(), authenticator: new \OpenSim\Security\Locked());
+        $this->public ??= new Router($this->api(), authenticator: new \W4OS\Engine\Security\Locked());
         parse_str((string) parse_url($path, PHP_URL_QUERY), $query);
         $response = $this->public->route($method, (string) parse_url($path, PHP_URL_PATH), $query, (string) $body);
 
@@ -161,7 +161,7 @@ final class Bundled
     /** Answers the request of this process with the helpers of the grid (their Slim application), then does what waits for it. */
     public function serveHelpers(): void
     {
-        \OpenSim\Helpers\App::create(fn (string $nick) => $this->grid())->run();
+        \W4OS\Helpers\App::create(fn (string $nick) => $this->grid())->run();
         // What waits for the answer, as the helpers' own index.php does it: the answer goes first, then a simulator that registered
         // is read and the tasks that are due run (the search index fills by itself)
         if (function_exists('fastcgi_finish_request')) {
@@ -169,7 +169,7 @@ final class Bundled
         } elseif (function_exists('litespeed_finish_request')) {
             litespeed_finish_request();
         }
-        method_exists(\OpenSim\Helpers\Http\Action\Engine::class, 'finish') && \OpenSim\Helpers\Http\Action\Engine::finish();
+        method_exists(\W4OS\Helpers\Http\Action\Engine::class, 'finish') && \W4OS\Helpers\Http\Action\Engine::finish();
     }
 
     /**
@@ -211,12 +211,12 @@ final class Bundled
     public function block(string $name, array $args = []): ?string
     {
         $grid = $this->grid();
-        if ($grid === null || \OpenSim\Helpers\Block\Blocks::name($name) === null) {
+        if ($grid === null || \W4OS\Helpers\Block\Blocks::name($name) === null) {
             return null;
         }
-        $templates = \Composer\InstalledVersions::getInstallPath('magicoli/opensim-helpers').'/templates';
+        $templates = \Composer\InstalledVersions::getInstallPath('w4os/w4os-helpers').'/templates';
         $view = new View($templates);
-        $html = $view->block((string) \OpenSim\Helpers\Block\Blocks::name($name), $grid, $args);
+        $html = $view->block((string) \W4OS\Helpers\Block\Blocks::name($name), $grid, $args);
         $this->unavailable = method_exists($view, 'unavailable') && $view->unavailable();
 
         return $html;
@@ -271,7 +271,7 @@ final class Bundled
      * The access to the databases of the grid the site gives (its setting `database`: host, with its port or not, port, user,
      * password), applied to every database of the grid, each its own name; null when it gives none.
      */
-    private function databaseAccess(): ?\OpenSim\Data\DatabaseAccess
+    private function databaseAccess(): ?\W4OS\Engine\Data\DatabaseAccess
     {
         $db = (array) ($this->settings['database'] ?? []);
         $host = trim((string) ($db['host'] ?? ''));
@@ -284,7 +284,7 @@ final class Bundled
             return null;
         }
 
-        return new \OpenSim\Data\DatabaseAccess($host, $port, $user, (string) ($db['password'] ?? ''));
+        return new \W4OS\Engine\Data\DatabaseAccess($host, $port, $user, (string) ($db['password'] ?? ''));
     }
 
     /**

@@ -47,7 +47,7 @@ describe('themes', function () {
         $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']], 'assets' => new FakeAssets()]);
 
         expect($html)->toStartWith('<!doctype html>')
-            ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/magicoli/opensim-helpers/assets/css/page.css">', '<link href="plugin://w4os/css/viewer.css">',
+            ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css">', '<link href="plugin://w4os/css/viewer.css">',
                 '<div class="w4os w4os-page w4os-profile">', '<section class="block block-profile">')
             // The page is the theme there: it shows the title of the page, the block none
             ->and(substr_count($html, '<h1'))->toBe(1)
@@ -59,11 +59,11 @@ describe('the sign-in page', function () {
     test('has "remember me" checked, whatever the theme draws around the form of the Login plugin', function () {
         $form = '<div class="form-input-wrapper"><input type="checkbox" value="1" name="rememberme" id="#rememberme"><label class="inline" for="#rememberme">Remember me</label></div>';
 
-        expect(W4os\Grav\Site::rememberChecked($form))->toContain('<input type="checkbox" value="1" name="rememberme" id="#rememberme" checked>')
-            ->and(W4os\Grav\Site::rememberChecked(W4os\Grav\Site::rememberChecked($form)))->toBe(W4os\Grav\Site::rememberChecked($form))
-            ->and(W4os\Grav\Site::rememberChecked('<p>No form</p>'))->toBe('<p>No form</p>')
+        expect(W4OS\Grav\Site::rememberChecked($form))->toContain('<input type="checkbox" value="1" name="rememberme" id="#rememberme" checked>')
+            ->and(W4OS\Grav\Site::rememberChecked(W4OS\Grav\Site::rememberChecked($form)))->toBe(W4OS\Grav\Site::rememberChecked($form))
+            ->and(W4OS\Grav\Site::rememberChecked('<p>No form</p>'))->toBe('<p>No form</p>')
             // A theme's own form (Mundana's: its classes first)
-            ->and(W4os\Grav\Site::rememberChecked('<input class="form-check-input" type="checkbox" value="1" name="rememberme" id="#rememberme">'))
+            ->and(W4OS\Grav\Site::rememberChecked('<input class="form-check-input" type="checkbox" value="1" name="rememberme" id="#rememberme">'))
             ->toBe('<input class="form-check-input" type="checkbox" value="1" name="rememberme" id="#rememberme" checked>');
     });
 });
@@ -86,9 +86,9 @@ describe('the sign-in page links', function () {
         $form = '<form method="post"><button type="submit" name="task" value="login.login">Log in</button></form>';
         $page = '<main><form id="search"></form><section id="grav-login">'.$form.'</section><section id="other"></section></main>';
 
-        expect(W4os\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><form id="search"></form><section id="grav-login">'.$form.'<p class="links"></p></section><section id="other"></section></main>')
-            ->and(W4os\Grav\Site::withLoginLinks('<section style="height: 80vh">'.$form.'</section>', '<p class="links"></p>'))->toBe('<section style="height: 80vh">'.$form.'<p class="links"></p></section>')
-            ->and(W4os\Grav\Site::withLoginLinks('<p>No form</p>', '<p class="links"></p>'))->toBe('<p>No form</p>');
+        expect(W4OS\Grav\Site::withLoginLinks($page, '<p class="links"></p>'))->toBe('<main><form id="search"></form><section id="grav-login">'.$form.'<p class="links"></p></section><section id="other"></section></main>')
+            ->and(W4OS\Grav\Site::withLoginLinks('<section style="height: 80vh">'.$form.'</section>', '<p class="links"></p>'))->toBe('<section style="height: 80vh">'.$form.'<p class="links"></p></section>')
+            ->and(W4OS\Grav\Site::withLoginLinks('<p>No form</p>', '<p class="links"></p>'))->toBe('<p>No form</p>');
     });
 });
 
@@ -143,18 +143,18 @@ describe('the home page of a grid', function () {
     });
 
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
-        expect(W4os\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
-            ->and(W4os\Grav\Site::shortcodeBlocks('[grid-status] and [avatar-profile name="A.B" /], [new-avatars]'))->toBe(['grid_status', 'profile', 'new_users'])
-            ->and(W4os\Grav\Site::shortcodeBlocks('[grid-statusbar] [/grid-info]'))->toBe([])
-            ->and(W4os\Grav\Site::shortcodeBlocks('No block'))->toBe([]);
+        expect(W4OS\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
+            ->and(W4OS\Grav\Site::shortcodeBlocks('[grid-status] and [avatar-profile name="A.B" /], [new-avatars]'))->toBe(['grid_status', 'profile', 'new_users'])
+            ->and(W4OS\Grav\Site::shortcodeBlocks('[grid-statusbar] [/grid-info]'))->toBe([])
+            ->and(W4OS\Grav\Site::shortcodeBlocks('No block'))->toBe([]);
     });
 });
 
 describe('a page of an earlier version', function () {
     test('laid out by the splash template of the plugin is the home page made content, nothing to change on an upgrade', function () {
-        expect(W4os\Grav\Site::isSplash('w4os/splash'))->toBeTrue()
-            ->and(W4os\Grav\Site::isSplash('default'))->toBeFalse()
-            ->and(W4os\Grav\Site::isSplash(null))->toBeFalse();
+        expect(W4OS\Grav\Site::isSplash('w4os/splash'))->toBeTrue()
+            ->and(W4OS\Grav\Site::isSplash('default'))->toBeFalse()
+            ->and(W4OS\Grav\Site::isSplash(null))->toBeFalse();
     });
 });
 

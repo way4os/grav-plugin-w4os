@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the posts of the grid in the admin (Flux)', function () {
     test('live under the admin route, in the menu after the avatars as w4os-wp has them, the engine list of the posts', function () {

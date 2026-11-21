@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 use W4OS\Views\Contract;
 use W4OS\Views\Rows;
 
@@ -23,7 +23,7 @@ describe('a session that comes back by its remember-me token', function () {
     });
 
     test('takes the engine\'s level of now: a god demoted loses the admin pages and the actions of a god', function () {
-        $avatars = (new Contract(OpenSim\Api\Contract::document()))->listOf('avatars');
+        $avatars = (new Contract(W4OS\Engine\Api\Contract::document()))->listOf('avatars');
         $row = ['uuid' => 'b1', 'status' => 'active', 'estateBanned' => false];
 
         expect(Site::readsAdmin(200, []))->toBeTrue()

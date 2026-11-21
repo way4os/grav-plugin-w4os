@@ -6,15 +6,15 @@ use Grav\Common\Plugin;
 use Grav\Common\Utils;
 use Grav\Plugin\Login\Events\UserLoginEvent;
 use RocketTheme\Toolbox\Event\Event;
-use W4os\Grav\Blocks;
-use W4os\Grav\EngineException;
-use W4os\Grav\FormError;
-use W4os\Grav\Forms;
-use W4os\Grav\Items;
-use W4os\Grav\Lists;
-use W4os\Grav\Posts;
-use W4os\Grav\RememberTokens;
-use W4os\Grav\Site;
+use W4OS\Grav\Blocks;
+use W4OS\Grav\EngineException;
+use W4OS\Grav\FormError;
+use W4OS\Grav\Forms;
+use W4OS\Grav\Items;
+use W4OS\Grav\Lists;
+use W4OS\Grav\Posts;
+use W4OS\Grav\RememberTokens;
+use W4OS\Grav\Site;
 
 require_once __DIR__.'/classes/EngineException.php';
 require_once __DIR__.'/classes/Engine.php';
@@ -1185,7 +1185,7 @@ class W4osPlugin extends Plugin
 
         return $days === 0
             ? $this->site()->translate('w4os.profile_age_today')
-            : sprintf(\OpenSim\I18n\Catalog::plural($language, 'profile_age_days', $days), $days);
+            : sprintf(\W4OS\Engine\I18n\Catalog::plural($language, 'profile_age_days', $days), $days);
     }
 
     /**
@@ -1193,13 +1193,13 @@ class W4osPlugin extends Plugin
      */
     private function itemsHtml(string $uuid, string $kind): string
     {
-        if (! class_exists(\OpenSim\Helpers\View\View::class) || ! method_exists(\OpenSim\Helpers\View\View::class, 'items')) {
+        if (! class_exists(\W4OS\Helpers\View\View::class) || ! method_exists(\W4OS\Helpers\View\View::class, 'items')) {
             return '';
         }
-        $templates = \Composer\InstalledVersions::getInstallPath('magicoli/opensim-helpers').'/templates';
+        $templates = \Composer\InstalledVersions::getInstallPath('w4os/w4os-helpers').'/templates';
         $language = (string) ($this->grav['language']->getActive() ?: 'en');
 
-        return (new \OpenSim\Helpers\View\View($templates))->items($kind, $this->avatarItems($uuid, $kind), $this->site()->assetsUrl(), $language);
+        return (new \W4OS\Helpers\View\View($templates))->items($kind, $this->avatarItems($uuid, $kind), $this->site()->assetsUrl(), $language);
     }
 
     /** The name of an avatar by its UUID (a partner), '' when the engine has none. */
@@ -1243,13 +1243,13 @@ class W4osPlugin extends Plugin
 
         try {
             $html = $this->site()->blocks()->html($name, $args);
-        } catch (\W4os\Grav\BlockUnavailable $e) {
+        } catch (\W4OS\Grav\BlockUnavailable $e) {
             $this->blockUnavailable($name, $e->reason(fn (string $key, array $vars) => $this->site()->translate($key, $vars)), $e->getMessage());
 
             return '';
         }
         // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
-        $html === '' && $this->pageBlock() === \W4os\Grav\Blocks::name($name) && $this->blockUnavailable($name, $this->site()->translate('w4os.admin_blocks_nothing', []), 'empty answer');
+        $html === '' && $this->pageBlock() === \W4OS\Grav\Blocks::name($name) && $this->blockUnavailable($name, $this->site()->translate('w4os.admin_blocks_nothing', []), 'empty answer');
         $html === '' || $this->blockFiles($name);
 
         return $html;
@@ -1260,7 +1260,7 @@ class W4osPlugin extends Plugin
     {
         $block = (string) ($this->grav['page']->header()->w4os_block ?? '');
 
-        return $block === '' ? null : \W4os\Grav\Blocks::name($block);
+        return $block === '' ? null : \W4OS\Grav\Blocks::name($block);
     }
 
     /**
@@ -1282,7 +1282,7 @@ class W4osPlugin extends Plugin
      */
     private function blockUnavailable(string $name, string $reason, string $logged): void
     {
-        $name = \W4os\Grav\Blocks::name($name);
+        $name = \W4OS\Grav\Blocks::name($name);
         if (! isset($this->blockFailures[$name])) {
             $this->grav['log']->warning("w4os: the block $name of the helpers cannot be read: $logged");
             $this->blockFailures[$name] = $reason;
@@ -1298,7 +1298,7 @@ class W4osPlugin extends Plugin
         $site = $this->site();
         $manager = $site->isManager();
         $health = $manager && isset($site->routes()['health']) && $site->canOperation('health') ? $site->path('health', true) : null;
-        foreach (\W4os\Grav\Blocks::notices($this->blockFailures, $manager, $this->pageBlock(), $health, fn (string $key, array $vars) => $site->translate($key, $vars)) as $notice) {
+        foreach (\W4OS\Grav\Blocks::notices($this->blockFailures, $manager, $this->pageBlock(), $health, fn (string $key, array $vars) => $site->translate($key, $vars)) as $notice) {
             $this->grav['messages']->add($notice['text'], $notice['level']);
         }
         $this->blockFailures = [];
@@ -1307,18 +1307,18 @@ class W4osPlugin extends Plugin
     /** The styles and the script a block of the helpers needs, from the helpers the plugin bundles (View::blockFiles()). */
     private function blockFiles(string $name): void
     {
-        \W4os\Grav\Bundled::library();
-        $view = \OpenSim\Helpers\View\View::class;
+        \W4OS\Grav\Bundled::library();
+        $view = \W4OS\Helpers\View\View::class;
         if (! class_exists($view) || ! method_exists($view, 'blockFiles')) {
             return;
         }
         $assets = $this->grav['assets'];
         $files = $view::blockFiles($name);
         foreach ($files['css'] as $file) {
-            $assets->addCss('plugin://w4os/vendor/magicoli/opensim-helpers/assets/'.$file);
+            $assets->addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file);
         }
         foreach ($files['js'] as $file) {
-            $assets->addJs('plugin://w4os/vendor/magicoli/opensim-helpers/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
+            $assets->addJs('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
         }
     }
 

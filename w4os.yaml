@@ -20,7 +20,7 @@ grid: ''
 # and the database of its Robust.
 bundled:
   # The login address of the grid (http://grid.example.org:8002): its name and its addresses come from it (get_grid_info).
-  # Empty: the grid of the OpenSim install of this server (its opensim.conf, found or given below).
+  # Empty: the grid of the OpenSim install of this server (its w4os.conf, found or given below).
   login: ''
   # The database of its Robust. The password typed on the settings page is kept in user-data://w4os/database.json (never in this
   # file nor in git); the environment can set it too (GRAV_CONFIG__PLUGINS__W4OS__BUNDLED__DATABASE__PASSWORD).

@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * What the forms of the site ask of the engine: register an avatar, confirm its email, forgotten password, the account of the

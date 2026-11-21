@@ -13,7 +13,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>{{ page.title }}{{ brand.title ? ' | ' ~ brand.title }}</title>
     {# The icon of w4os, the admin's own whatever the theme, its favicon and its icon for a phone's home screen #}
-    {% set icons = 'plugin://w4os/vendor/magicoli/opensim-engine/share/images/logos/cropped-w4os-logo-v1-square-' %}
+    {% set icons = 'plugin://w4os/vendor/w4os/w4os-engine/share/images/logos/cropped-w4os-logo-v1-square-' %}
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url(icons ~ '32x32.png')|e('html_attr') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url(icons ~ '192x192.png')|e('html_attr') }}">
     <link rel="apple-touch-icon" href="{{ url(icons ~ '180x180.png')|e('html_attr') }}">
@@ -50,7 +50,7 @@
             <div class="navbar-brand">
                 <a class="w4os-admin-brand" href="{{ brand.home|e('html_attr') }}" title="{{ brand.title|e('html_attr') }}">
                     {# The icon of the site in the folded rail; unfolded, its logo alone (its title as its text), else its title #}
-                    <img class="navbar-brand-image w4os-admin-icon" src="{{ (brand.icon ?? url('plugin://w4os/vendor/magicoli/opensim-engine/share/images/logos/cropped-w4os-logo-v1-square-32x32.png'))|e('html_attr') }}" alt="" width="32" height="32">
+                    <img class="navbar-brand-image w4os-admin-icon" src="{{ (brand.icon ?? url('plugin://w4os/vendor/w4os/w4os-engine/share/images/logos/cropped-w4os-logo-v1-square-32x32.png'))|e('html_attr') }}" alt="" width="32" height="32">
                     <span class="w4os-admin-brand-full">{% if brand.logo %}<img class="w4os-admin-logo" src="{{ brand.logo|e('html_attr') }}" alt="{{ brand.title|e('html_attr') }}">{% else %}<span class="w4os-admin-title">{{ brand.title }}</span>{% endif %}</span>
                 </a>
                 {# Tabler's pin button: the sidebar kept unfolded, or folded to its icons (unfolded on hover), saved in the browser #}

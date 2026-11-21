@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\Items;
-use W4os\Grav\Site;
+use W4OS\Grav\Items;
+use W4OS\Grav\Site;
 use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
@@ -18,7 +18,7 @@ describe('the settings of the grid and of its avatars', function () {
     });
 
     test('the grid in the tabs of its groups: Grid Info, Robust, Services, Avatars', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('grid');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('grid');
         $fields = Items::fields(FormView::of($form, [], null, true, 250), shown: true);
         $tabs = $fields['groups']['fields'];
 
@@ -35,7 +35,7 @@ describe('the settings of the grid and of its avatars', function () {
 
     test('an address with a default (the assets service) as a field of its own, its Use default then its value without a label of its own, hidden while it is checked', function (array $tabs) {
         $uri = $tabs['services']['fields']['assetServerUri'];
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('grid');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('grid');
         $own = Items::fields(FormView::of($form, ['assetServerUri' => 'http://assets.example.org:8003'], null, true, 250), shown: true)['groups']['fields']['services']['fields']['assetServerUri'];
 
         expect($uri)->toMatchArray(['type' => 'fieldset', 'label' => 'w4os.setting_assets_service_uri', 'classes' => 'w4os-defaulted'])
@@ -46,7 +46,7 @@ describe('the settings of the grid and of its avatars', function () {
             // The script that shows it as the box is unchecked, on a form without a condition too
             ->and(Items::conditions(FormView::of($form, [], null, true, 250)))->toBe([])
             ->and(Items::defaulted(FormView::of($form, [], null, true, 250)))->toBeTrue()
-            ->and(Items::defaulted(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('avatars'), [], null, true, 250)))->toBeFalse();
+            ->and(Items::defaulted(FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('avatars'), [], null, true, 250)))->toBeFalse();
     })->depends('the grid in the tabs of its groups: Grid Info, Robust, Services, Avatars');
 
     test('a Use default unchecked is no more checked, though the form was filled with it', function () {
@@ -59,7 +59,7 @@ describe('the settings of the grid and of its avatars', function () {
     });
 
     test('the names an avatar may not take as a list, one by line; several avatars by email as a box', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('avatars');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('avatars');
         $fields = Items::fields(FormView::of($form, ['reservedNames' => ['Default', 'Test']], null, true, 250), shown: true);
 
         expect($fields['reservedNames'])->toMatchArray(['type' => 'array', 'value_only' => true])

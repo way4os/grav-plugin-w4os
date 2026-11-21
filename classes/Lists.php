@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * A list of the engine on a page of the site, from its description (Contract::listOf()): the filters the page shows, the query of
@@ -113,7 +113,7 @@ final class Lists
         }
         // A free value of its format (an owner: a UUID, also when the rows give its values)
         if (($filter['format'] ?? null) === 'uuid') {
-            return Bundled::library() && \OpenSim\Text\Uuid::isValid($value);
+            return Bundled::library() && \W4OS\Engine\Text\Uuid::isValid($value);
         }
         // The values of a dynamic filter the engine does not list are the ones of the rows (a simulator...)
         if (isset($filter['format']) || (! empty($filter['dynamic']) && $filter['values'] === [])) {

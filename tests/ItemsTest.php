@@ -1,7 +1,7 @@
 <?php
 
-use OpenSim\Api\Contract;
-use W4os\Grav\Items;
+use W4OS\Engine\Api\Contract;
+use W4OS\Grav\Items;
 use W4OS\Views\Contract as OpenApi;
 
 describe('the page of an item of the engine', function () {
@@ -56,9 +56,9 @@ describe('the fields of a profile the grid does not allow', function () {
     test('are the ones whose setting of the grid is off (meta.settings of the item), as the contract says (AllowUserProfileWebURLs)', function () {
         $described = ['fields' => [['name' => 'about'], ['name' => 'profileUrl', 'setting' => 'allowProfileUrls'], ['name' => 'firstLife']]];
 
-        expect(W4os\Grav\Items::unallowed($described, ['allowProfileUrls' => false]))->toBe(['profileUrl'])
-            ->and(W4os\Grav\Items::unallowed($described, ['allowProfileUrls' => true]))->toBe([])
-            ->and(W4os\Grav\Items::unallowed($described, []))->toBe([]);
+        expect(W4OS\Grav\Items::unallowed($described, ['allowProfileUrls' => false]))->toBe(['profileUrl'])
+            ->and(W4OS\Grav\Items::unallowed($described, ['allowProfileUrls' => true]))->toBe([])
+            ->and(W4OS\Grav\Items::unallowed($described, []))->toBe([]);
     });
 
     test('leave the form without them, and without a tab left empty', function () {
@@ -67,7 +67,7 @@ describe('the fields of a profile the grid does not allow', function () {
             'web' => ['type' => 'tab', 'fields' => ['profileUrl' => ['type' => 'url']]],
         ]]];
 
-        expect(W4os\Grav\Items::without($fields, ['profileUrl'])['tabs']['fields'])->toHaveKey('world')->not->toHaveKey('web');
+        expect(W4OS\Grav\Items::without($fields, ['profileUrl'])['tabs']['fields'])->toHaveKey('world')->not->toHaveKey('web');
     });
 });
 

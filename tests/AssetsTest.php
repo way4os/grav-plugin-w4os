@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Assets;
+use W4OS\Grav\Assets;
 
 describe('assets', function () {
     test('the libraries of the browser are pinned to their npm release, with its checksum', function () {
@@ -27,7 +27,7 @@ describe('assets', function () {
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.woff2', 'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons-200.arrows-1.woff2',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.ttf',
             'npm-asset/tom-select/LICENSE', 'npm-asset/tom-select/dist/js/tom-select.popular.min.js', 'npm-asset/tom-select/dist/js/tom-select.complete.js',
-            'npm-asset/tom-select/dist/css/tom-select.min.css', 'magicoli/opensim-engine/README.md',
+            'npm-asset/tom-select/dist/css/tom-select.min.css', 'w4os/w4os-engine/README.md',
         ];
         foreach ($files as $file) {
             is_dir(dirname("$vendor/$file")) || mkdir(dirname("$vendor/$file"), 0777, true);
@@ -46,7 +46,7 @@ describe('assets', function () {
             'npm-asset/tabler-icons-webfont/LICENSE', 'npm-asset/tabler-icons-webfont/dist/tabler-icons.min.css',
             'npm-asset/tabler-icons-webfont/dist/fonts/tabler-icons.arrows-1.woff2',
             'npm-asset/tom-select/LICENSE', 'npm-asset/tom-select/dist/js/tom-select.popular.min.js', 'npm-asset/tom-select/dist/css/tom-select.min.css',
-            'magicoli/opensim-engine/README.md',
+            'w4os/w4os-engine/README.md',
         ]);
         exec('rm -rf '.escapeshellarg($vendor));
     });

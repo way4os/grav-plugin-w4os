@@ -1,7 +1,7 @@
 <?php
 
-use OpenSim\I18n\Catalog;
-use W4os\Grav\Forms;
+use W4OS\Engine\I18n\Catalog;
+use W4OS\Grav\Forms;
 
 describe('languages', function () {
     test('the files are the ones the catalog of the engine and i18n/ give (composer languages)', function () {
@@ -30,7 +30,7 @@ describe('languages', function () {
 
     test('every problem code of the engine has its text, under the key the catalog gives it', function () {
         expect(Catalog::missingCodes())->toBe([])
-            ->and(Forms::CODES)->toEqualCanonicalizing(array_keys(OpenSim\Api\Problem::CODES));
+            ->and(Forms::CODES)->toEqualCanonicalizing(array_keys(W4OS\Engine\Api\Problem::CODES));
         foreach (Forms::CODES as $code) {
             expect('error_'.str_replace('-', '_', $code))->toBe(Catalog::errorKey($code))
                 ->and(Catalog::MESSAGES)->toHaveKey(Catalog::errorKey($code));

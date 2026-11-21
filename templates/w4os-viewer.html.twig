@@ -9,7 +9,7 @@
     <meta name="robots" content="noindex, nofollow">
     <title>{{ page.title }}</title>
     {# The style of the helpers' own pages (the same in a viewer), then the plugin's, compact #}
-    {% do assets.addCss('plugin://w4os/vendor/magicoli/opensim-helpers/assets/css/page.css', {priority: 20}) %}
+    {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20}) %}
     {% do assets.addCss('plugin://w4os/css/viewer.css', {priority: 5}) %}
     {{ assets.css()|raw }}
     {{ assets.js()|raw }}

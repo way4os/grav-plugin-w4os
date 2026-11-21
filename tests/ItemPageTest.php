@@ -1,13 +1,13 @@
 <?php
 
-use OpenSim\Api\Contract;
+use W4OS\Engine\Api\Contract;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Lists;
+use W4OS\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 /** The templates of the admin with the plugin's functions as plain stubs; the item of the page as `w4os_item()` gives it. */
 function item_twig(array $page = []): Environment

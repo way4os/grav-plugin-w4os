@@ -4,7 +4,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the page of the shortcodes', function () {
     test('is a page of the admin, as the page Shortcodes of w4os-wp', function () {

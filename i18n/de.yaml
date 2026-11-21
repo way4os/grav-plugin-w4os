@@ -1,5 +1,5 @@
 # The texts of the plugin that are Grav's alone (its settings page), in this language. The other texts come from the
-# catalog of opensim-engine: dev/languages.php writes languages/<lang>.yaml from both.
+# catalog of w4os-engine: dev/languages.php writes languages/<lang>.yaml from both.
 w4os:
   admin_engine: 'Engine'
   admin_engine_help: 'Wo die Seite alles über das Grid erfragt'

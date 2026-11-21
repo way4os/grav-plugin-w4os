@@ -1,11 +1,11 @@
 <?php
 
-use OpenSim\Api\Contract;
+use W4OS\Engine\Api\Contract;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Lists;
+use W4OS\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
 
 /** The list of a page of the admin, rendered by its template with the plugin's functions as plain stubs. */
@@ -16,7 +16,7 @@ function render_list(?array $list, array $items, array $meta, array $links = [],
     $twig->addFunction(new TwigFunction('w4os_count', fn (string $key, int $n) => "$n ".($key === 'w4os.filters_active' ? 'filters' : 'items')));
     $twig->addFunction(new TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => "/pictures/$uuid.jpg"));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "ti ti-$icon"));
-    $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4os\Grav\Site::number((float) $value, 'en', $decimals)));
+    $twig->addFunction(new TwigFunction('w4os_number', fn ($value, int $decimals = 2) => W4OS\Grav\Site::number((float) $value, 'en', $decimals)));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));

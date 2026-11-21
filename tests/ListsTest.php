@@ -1,7 +1,7 @@
 <?php
 
-use OpenSim\Api\Contract;
-use W4os\Grav\Lists;
+use W4OS\Engine\Api\Contract;
+use W4OS\Grav\Lists;
 use W4OS\Views\Contract as OpenApi;
 
 describe('a list of the engine', function () {

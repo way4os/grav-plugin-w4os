@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the settings the plugin gives a theme', function () {
     $hadron = [

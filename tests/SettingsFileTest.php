@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\Bundled;
-use W4os\Grav\SettingsFile;
+use W4OS\Grav\Bundled;
+use W4OS\Grav\SettingsFile;
 
 describe('the settings the site keeps for its engine', function () {
     test('are kept in a file of the site only its web server reads, and read back', function () {

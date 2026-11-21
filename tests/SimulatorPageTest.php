@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\Items;
-use W4os\Grav\Site;
+use W4OS\Grav\Items;
+use W4OS\Grav\Site;
 use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
@@ -18,7 +18,7 @@ describe('the page of a simulator', function () {
     });
 
     test('its form in the tabs of its groups: its port, its console, its database with its Use default; its URI only shown', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->itemOf('simulators');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->itemOf('simulators');
         $item = ['uuid' => 's1', 'uri' => 'http://sim.example.org:9001', 'httpPort' => 9001, 'consoleUser' => 'console', 'consolePort' => 9010, 'database' => null];
         $tabs = Items::fields(FormView::of($form, $item, null, true, 250))['groups']['fields'];
 

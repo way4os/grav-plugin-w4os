@@ -1,8 +1,8 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
-use OpenSim\Config\SettingsStore;
+use W4OS\Engine\Config\SettingsStore;
 
 /**
  * The settings the site keeps for the engine it bundles (the key of the money, the addresses of its services, what its settings

@@ -33,10 +33,10 @@ describe('pages', function () {
         $used = array_diff(array_unique($used), ['manage', 'action', 'error', 'notice']);
         expect($used)->not->toBeEmpty();
         // Every problem code of the engine has its text
-        $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4os\Grav\Forms::CODES));
+        $used = array_merge($used, array_map(fn (string $code) => 'error_'.str_replace('-', '_', $code), W4OS\Grav\Forms::CODES));
         // Every label of the lists of the engine (their columns, filters, values, actions), the texts of their statuses and the
         // message of an action once done
-        $document = OpenSim\Api\Contract::document();
+        $document = W4OS\Engine\Api\Contract::document();
         // The lists of a grid and the ones of the machine (its simulators)
         $types = array_unique(array_filter(array_map(fn ($path) => preg_match('#^(?:/grids/\{grid\})?/([a-z-]+)$#', $path, $m) === 1 ? $m[1] : null, array_keys($document['paths']))));
         expect($types)->toContain('avatars', 'regions', 'simulators');
@@ -87,7 +87,7 @@ describe('pages', function () {
 
     test('every icon of the engine has its icon of Tabler Icons, in the settings a site can change (one the engine names next may come first)', function () {
         $icons = (array) (Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['icons'] ?? []);
-        $engine = (new ReflectionClassConstant(OpenSim\Data\Listing::class, 'ICONS'))->getValue();
+        $engine = (new ReflectionClassConstant(W4OS\Engine\Data\Listing::class, 'ICONS'))->getValue();
 
         expect(array_keys($icons))->toContain(...$engine);
         foreach ($icons as $classes) {

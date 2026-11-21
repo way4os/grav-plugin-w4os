@@ -6,8 +6,8 @@ use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Items;
-use W4os\Grav\Site;
+use W4OS\Grav\Items;
+use W4OS\Grav\Site;
 
 describe('the avatar models page of the admin', function () {
     test('lives under the admin route, in the admin menu, for whom the contract lets read the rule of the models', function () {
@@ -48,7 +48,7 @@ describe('the avatar models page of the admin', function () {
     });
 
     test('shows the rule as the engine describes it: Match as radios (its widget), the list shown by the choice of a custom list', function () {
-        $form = (new W4OS\Views\Contract(OpenSim\Api\Contract::document()))->settingsOf('models');
+        $form = (new W4OS\Views\Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('models');
         $view = W4OS\Views\FormView::of($form, ['match' => 'any', 'pattern' => 'Default', 'list' => []], null, true, 200);
         $fields = Items::fields($view);
 

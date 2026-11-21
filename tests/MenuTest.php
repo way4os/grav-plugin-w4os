@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the menu of the site', function () {
     $routes = ['search' => '/search', 'profile' => '/profile', 'account' => '/account', 'register' => '/register', 'login' => '/login', 'dashboard' => '/w4os', 'settings' => '/w4os/settings'];

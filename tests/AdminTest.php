@@ -4,7 +4,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('admin', function () {
     test('takes the accent color of the site as the primary color of Tabler, nothing when there is none', function () {
@@ -54,7 +54,7 @@ describe('admin', function () {
             ->and($html)->toContain('href="&#x2F;user&#x2F;plugins&#x2F;w4os&#x2F;vendor&#x2F;npm-asset&#x2F;tabler-core&#x2F;dist&#x2F;css&#x2F;tabler.min.css"', 'tabler-icons.min.css', 'tabler.min.js')
             ->and($html)->toContain('Eli Mail')
             // The icon of w4os, whatever the theme
-            ->and($html)->toContain('<link rel="icon" type="image/png" sizes="32x32" href="&#x2F;user&#x2F;plugins&#x2F;w4os&#x2F;vendor&#x2F;magicoli&#x2F;opensim-engine&#x2F;share&#x2F;images&#x2F;logos&#x2F;cropped-w4os-logo-v1-square-32x32.png"', 'rel="apple-touch-icon"')
+            ->and($html)->toContain('<link rel="icon" type="image/png" sizes="32x32" href="&#x2F;user&#x2F;plugins&#x2F;w4os&#x2F;vendor&#x2F;w4os&#x2F;w4os-engine&#x2F;share&#x2F;images&#x2F;logos&#x2F;cropped-w4os-logo-v1-square-32x32.png"', 'rel="apple-touch-icon"')
             // The visitor's block at the bottom of the sidebar, the page as wide as the content area
             ->and($html)->toContain('<div class="navbar-footer">', '<div class="container-fluid">')
             ->and($html)->not->toContain('partials/base');
@@ -171,11 +171,11 @@ describe('the styles of the admin', function () {
             '<link href="/user/plugins/form/assets/form-styles.css?6afe" type="text/css" rel="stylesheet">',
             '<link href="/user/plugins/login/css/login.css?6afe" type="text/css" rel="stylesheet">',
             '<link href="/user/plugins/oli-langswitcher/css/oli-langswitcher.css?6afe" type="text/css" rel="stylesheet">',
-            '<link href="/user/plugins/w4os/vendor/magicoli/opensim-helpers/assets/profile.css" type="text/css" rel="stylesheet">',
+            '<link href="/user/plugins/w4os/vendor/w4os/w4os-helpers/assets/profile.css" type="text/css" rel="stylesheet">',
             '<link href="/user/themes/quark2/css/theme.css" type="text/css" rel="stylesheet">',
         ]);
 
-        expect(Site::adminCss($css))->toContain('form-styles.css', 'opensim-helpers/assets/profile.css')
+        expect(Site::adminCss($css))->toContain('form-styles.css', 'w4os-helpers/assets/profile.css')
             ->not->toContain('login.css')->not->toContain('oli-langswitcher')->not->toContain('quark2');
     });
 });

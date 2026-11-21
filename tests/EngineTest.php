@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\EngineException;
+use W4OS\Grav\EngineException;
 
 describe('engine', function () {
     test('signs in by name or email, with the key and a JSON:API body', function () {
@@ -86,7 +86,7 @@ describe('engine', function () {
     });
 
     test('a transport failure is a 503', function () {
-        $engine = new W4os\Grav\Engine('https://x', 'k', '', fn () => throw new RuntimeException('timeout'));
+        $engine = new W4OS\Grav\Engine('https://x', 'k', '', fn () => throw new RuntimeException('timeout'));
 
         expect(fn () => $engine->avatar('u1'))->toThrow(fn (EngineException $e) => expect($e->status)->toBe(503));
     });
@@ -114,19 +114,19 @@ describe('grid info', function () {
 
 describe('the address of a remote engine', function () {
     test('is its own setting, never the /api of the helpers', function () {
-        expect(W4os\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers']))->toBe('')
-            ->and(W4os\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers', 'api_url' => ' http://127.0.0.1:8780/api ']))->toBe('http://127.0.0.1:8780/api')
-            ->and(W4os\Grav\Site::apiUrl([]))->toBe('');
+        expect(W4OS\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers']))->toBe('')
+            ->and(W4OS\Grav\Site::apiUrl(['url' => 'https://grid.example.org/helpers', 'api_url' => ' http://127.0.0.1:8780/api ']))->toBe('http://127.0.0.1:8780/api')
+            ->and(W4OS\Grav\Site::apiUrl([]))->toBe('');
     });
 
     test('shows the pictures of the grid at the public address of its helpers, never at the API\'s', function () {
-        expect(W4os\Grav\Site::picturesUrl(['url' => 'https://grid.example.org/helpers/', 'api_url' => 'http://127.0.0.1:8780/api']))->toBe('https://grid.example.org/helpers/pictures')
-            ->and(W4os\Grav\Site::picturesUrl(['api_url' => 'https://grid.example.org/api']))->toBe('');
+        expect(W4OS\Grav\Site::picturesUrl(['url' => 'https://grid.example.org/helpers/', 'api_url' => 'http://127.0.0.1:8780/api']))->toBe('https://grid.example.org/helpers/pictures')
+            ->and(W4OS\Grav\Site::picturesUrl(['api_url' => 'https://grid.example.org/api']))->toBe('');
     });
 
     test('waits for the end of a change (an instance restarted), not for a read', function () {
-        expect(W4os\Grav\Site::timeout('GET'))->toBe(15)
-            ->and(W4os\Grav\Site::timeout('POST'))->toBeGreaterThanOrEqual(300)
-            ->and(W4os\Grav\Site::timeout('patch'))->toBe(W4os\Grav\Site::timeout('POST'));
+        expect(W4OS\Grav\Site::timeout('GET'))->toBe(15)
+            ->and(W4OS\Grav\Site::timeout('POST'))->toBeGreaterThanOrEqual(300)
+            ->and(W4OS\Grav\Site::timeout('patch'))->toBe(W4OS\Grav\Site::timeout('POST'));
     });
 });

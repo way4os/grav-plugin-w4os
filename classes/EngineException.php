@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * A problem (RFC 9457) the engine API answered, or the API that cannot be reached (503 channel-unavailable). Its code says which

@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * The blocks of the helpers of the grid (grid info, grid status, message of the day, search, profile...), as the HTML fragments the

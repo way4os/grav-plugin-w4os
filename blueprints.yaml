@@ -143,7 +143,7 @@ form:
               label: w4os.admin_admin_level
               help: w4os.admin_admin_level_help
               default: 100
-              data-options@: '\W4os\Grav\Site::adminLevels'
+              data-options@: '\W4OS\Grav\Site::adminLevels'
               validate: { type: int }
             send_mail:
               type: toggle

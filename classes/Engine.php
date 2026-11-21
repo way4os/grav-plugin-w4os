@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * The OpenSim engine API, as the site uses it: JSON:API documents, problems (RFC 9457) thrown as EngineException, the API key of the

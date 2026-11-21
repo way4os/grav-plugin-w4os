@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Bundled;
+use W4OS\Grav\Bundled;
 
 /** What the engine of the grid's machine says of it for a site (GET /grids/{grid}/site-description), with this config. */
 function bundled_description(array $config): array
@@ -44,7 +44,7 @@ describe('bundled engine', function () {
             fn (string $url) => '<gridinfo><gridname>Demo World</gridname><gridnick>Demo World!</gridnick></gridinfo>',
         );
 
-        expect(fn () => $bundled->nick())->toThrow(W4os\Grav\EngineException::class)
+        expect(fn () => $bundled->nick())->toThrow(W4OS\Grav\EngineException::class)
             ->and(glob("$root/etc/grids/*") ?: [])->toBe([]);
 
         exec('rm -rf '.escapeshellarg($root));
@@ -55,7 +55,7 @@ describe('bundled engine', function () {
         mkdir("$root/etc/grids/demo", 0700, true);
         file_put_contents("$root/etc/grids/demo/demo.conf", "[Grid]\nGridName = Demo Grid\n");
         file_put_contents("$root/etc/grids/demo/Robust.HG.ini", "[Const]\n    BaseURL = \"http://grid.example.org\"\n");
-        $bundled = new Bundled(['config' => "$root/etc", 'opensim_conf' => "$root/etc/opensim.conf", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
+        $bundled = new Bundled(['config' => "$root/etc", 'w4os_conf' => "$root/etc/w4os.conf", 'grid' => 'demo'], "$root/site", fn () => null, "$root/site/cache");
 
         expect($bundled->grid())->toBeNull()
             ->and(is_dir("$root/site/etc/grids/demo"))->toBeFalse();
@@ -84,11 +84,11 @@ describe('bundled engine', function () {
         $root = sys_get_temp_dir().'/w4os-bundled-'.bin2hex(random_bytes(4));
         $bundled = new Bundled(['grid' => 'demo', 'database' => ['host' => 'db.example.org', 'user' => 'site', 'password' => 'secret']], "$root/site", fn () => null, "$root/site/cache",
             describe: fn () => bundled_description(['Robust' => ['DatabaseService' => ['ConnectionString' => 'Data Source=;Database=demo_robust;']]]));
-        OpenSim\Data\Connections::using(static fn () => null);
+        W4OS\Engine\Data\Connections::using(static fn () => null);
 
-        expect(fn () => $bundled->rendered('profile', ['name' => 'Ada.Love']))->toThrow(W4os\Grav\BlockUnavailable::class, 'cannot be reached');
+        expect(fn () => $bundled->rendered('profile', ['name' => 'Ada.Love']))->toThrow(W4OS\Grav\BlockUnavailable::class, 'cannot be reached');
 
-        OpenSim\Data\Connections::using(null);
+        W4OS\Engine\Data\Connections::using(null);
         exec('rm -rf '.escapeshellarg($root));
     });
 
@@ -110,11 +110,11 @@ describe('bundled engine', function () {
     });
 
     test('never gives the helpers an address of the engine API: the engine alone serves it', function () {
-        expect(W4os\Grav\Bundled::isApi('/helpers/api', 'https://grid.example.org/helpers'))->toBeTrue()
-            ->and(W4os\Grav\Bundled::isApi('/helpers/api/grids/demo/avatars', 'https://grid.example.org/helpers/'))->toBeTrue()
-            ->and(W4os\Grav\Bundled::isApi('/helpers/apish', 'https://grid.example.org/helpers'))->toBeFalse()
-            ->and(W4os\Grav\Bundled::isApi('/helpers/search', 'https://grid.example.org/helpers'))->toBeFalse()
-            ->and(W4os\Grav\Bundled::isApi('/api/grids', 'https://grid.example.org/helpers'))->toBeFalse();
+        expect(W4OS\Grav\Bundled::isApi('/helpers/api', 'https://grid.example.org/helpers'))->toBeTrue()
+            ->and(W4OS\Grav\Bundled::isApi('/helpers/api/grids/demo/avatars', 'https://grid.example.org/helpers/'))->toBeTrue()
+            ->and(W4OS\Grav\Bundled::isApi('/helpers/apish', 'https://grid.example.org/helpers'))->toBeFalse()
+            ->and(W4OS\Grav\Bundled::isApi('/helpers/search', 'https://grid.example.org/helpers'))->toBeFalse()
+            ->and(W4OS\Grav\Bundled::isApi('/api/grids', 'https://grid.example.org/helpers'))->toBeFalse();
     });
 
     test('answers the web only what the engine says is public (a picture), never the rest of its API', function () {
@@ -143,5 +143,5 @@ describe('bundled engine', function () {
         expect([$status, $headers['Location'] ?? null])->toBe([302, 'https://assets.example.org/a/cb2052ae-d161-43e9-b11b-c834217823cd.jpg']);
 
         exec('rm -rf '.escapeshellarg($root));
-    })->skip(fn () => OpenSim\Assets\ImagickConverter::available(), 'imagick reads JPEG 2000 here');
+    })->skip(fn () => W4OS\Engine\Assets\ImagickConverter::available(), 'imagick reads JPEG 2000 here');
 });

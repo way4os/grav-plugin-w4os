@@ -7,7 +7,7 @@ use Twig\Loader\ChainLoader;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the settings of the site', function () {
     test('have their page titled in the language of the page, as every page of the plugin', function () {

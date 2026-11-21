@@ -1,6 +1,6 @@
 <?php
 
-use W4os\Grav\Site;
+use W4OS\Grav\Site;
 
 describe('the admin pages', function () {
     test('live under the admin route of the plugin (/w4os), each section in it, unless the site names one itself', function () {

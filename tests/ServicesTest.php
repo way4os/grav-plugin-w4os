@@ -1,7 +1,7 @@
 <?php
 
-use W4os\Grav\Items;
-use W4os\Grav\Site;
+use W4OS\Grav\Items;
+use W4OS\Grav\Site;
 use W4OS\Views\Contract;
 use W4OS\Views\FormView;
 
@@ -24,7 +24,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('shows the choice of the module and, with Provide off, the address of the service elsewhere', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('offline');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('offline');
         $fields = Items::fields(FormView::of($form, ['provide' => false, 'offlineModule' => 'OfflineMessageModule', 'offlineMessageUrl' => 'https://play.example.org/offline', 'mailSender' => ''], null, true, 250), shown: true);
 
         expect($fields['offlineModule'])->toMatchArray(['type' => 'select', 'label' => 'w4os.setting_offline_module'])
@@ -35,9 +35,9 @@ describe('the settings pages of the services of the grid', function () {
 
     test('shows a default as it is and an example as one (e.g.: YC$), never one as the other', function () {
         $t = fn (string $key) => ['w4os.example_value' => 'ex. : %s'][$key] ?? $key;
-        $economy = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy'), ['provide' => true, 'economyModule' => 'DTLNSLMoneyModule'], null, true, 250), shown: true, translate: $t);
-        $guide = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), ['provide' => true], null, true, 250), shown: true, translate: $t);
-        $search = Items::fields(FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('search'), ['provide' => true], null, true, 250), shown: true, translate: $t);
+        $economy = Items::fields(FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy'), ['provide' => true, 'economyModule' => 'DTLNSLMoneyModule'], null, true, 250), shown: true, translate: $t);
+        $guide = Items::fields(FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide'), ['provide' => true], null, true, 250), shown: true, translate: $t);
+        $search = Items::fields(FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search'), ['provide' => true], null, true, 250), shown: true, translate: $t);
 
         expect($economy['currencySymbol']['placeholder'])->toBe('ex. : YC$')
             ->and($economy['currencyRate']['placeholder'])->toBe('10')
@@ -48,7 +48,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a database as its parts, its password never filled in', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $item = ['provide' => true, 'searchUrl' => 'https://play.example.org/query.php', 'dataServices' => ['https://a.example.org/register.php'], 'eventsUrl' => '',
             'searchDatabase' => ['host' => 'db.example.org', 'port' => 3306, 'database' => 'search', 'user' => 'os', 'password' => '********']];
         $fields = Items::fields(FormView::of($form, $item, null, true, 250), shown: true);
@@ -61,7 +61,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a database its values hide is hidden whole, its label with its parts, and found by the script of the form', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy');
         $fields = Items::fields(FormView::of($form, ['provide' => false, 'economyModule' => 'BetaGridLikeMoneyModule'], null, true, 250), shown: true);
 
         expect($fields['gloebitDatabase'])->toMatchArray(['type' => 'fieldset', 'id' => 'w4os-field-gloebitDatabase', 'classes' => 'w4os-database w4os-unmet'])
@@ -81,7 +81,7 @@ describe('the settings pages of the services of the grid', function () {
     };
 
     test('is the form of the engine as wide as the page, or why it could not be read', function () use ($render) {
-        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
+        $view = FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
 
         expect($render(['view' => $view]))->toContain('<div class="col-12">', '<form id="w4os-service"></form>')
             ->and($render(['error' => 'The grid cannot be reached']))->toContain('alert-danger', 'The grid cannot be reached')->not->toContain('<form');
@@ -90,11 +90,11 @@ describe('the settings pages of the services of the grid', function () {
     test('every page of the engine makes a form: its help of several points said in full, its notes shown, its path on the address of the site', function () {
         $t = fn (string $key) => "[".substr($key, 5)."]";
         foreach (['models', 'economy', 'search', 'guide', 'offline', 'assets'] as $group) {
-            $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf($group);
+            $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf($group);
             $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org');
             array_walk_recursive($fields, fn ($value) => expect(is_scalar($value) || $value === null)->toBeTrue());
         }
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'path' => 'helpers'], null, true, 250), shown: true, translate: $t, base: 'http://grid.example.org/');
 
         expect($fields['path'])->toMatchArray(['type' => 'w4os_path', 'base' => 'http://grid.example.org/', 'help' => 'w4os.tip_economy_url', 'description' => '[economy_helper_uri_help]'])
@@ -103,7 +103,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('shows Provide as a switch', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => 'helpers'], null, true, 250), shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org/');
 
         expect($fields['provide'])->toMatchArray(['type' => 'checkbox'])
@@ -112,7 +112,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('shows the lines of the files of the grid at the end of the page, one block for each file, preceded by its name alone', function () use ($render) {
-        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('search'), [], null, true, 250);
+        $view = FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search'), [], null, true, 250);
         $html = $render(['view' => $view, 'meta' => ['snippets' => [
             ['file' => 'OpenSim.ini', 'text' => "[Search]\n    SearchURL = http://grid.example.org/helpers/query.php"],
             ['file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    SearchURL = http://grid.example.org/search/"],
@@ -141,7 +141,7 @@ describe('the settings pages of the services of the grid', function () {
             ['id' => 'friendly_fowl:backup', 'name' => 'backup', 'scope' => 'friendly_fowl', 'label' => 'Back up'],
         ];
         $shown = Site::serviceTasks($tasks, 'friendly_fowl', 'search');
-        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
+        $view = FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
         $html = $render(['view' => $view, 'tasks' => $shown, 'run' => true]);
 
         expect(array_column($shown, 'id'))->toBe(['friendly_fowl:search-parse', 'friendly_fowl:events-parse'])
@@ -151,7 +151,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a setting this site cannot write is shown unchangeable, with why and the line to add by hand, and never sent', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide');
         $fixed = ['path' => ['reason' => 'this server cannot write Robust.HG.ini, where the grid reads it: set it there by hand', 'file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]];
         $view = FormView::of($form, ['provide' => true, 'path' => '/guide', 'guideSource' => 'destinations.txt'], null, true, 250);
         $fields = Items::fields($view, shown: true, translate: fn ($key) => $key, base: 'http://grid.example.org', fixed: $fixed);
@@ -163,9 +163,9 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('says why a setting cannot be changed in the language of the page, from the notice the engine gives', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide');
         $fixed = ['path' => ['reason' => ['code' => 'setting-file-unwritable', 'params' => ['file' => 'Robust.HG.ini']], 'file' => 'Robust.HG.ini', 'text' => "[LoginService]\n    DestinationGuide = http://grid.example.org/guide"]];
-        $french = OpenSim\I18n\Catalog::messages('fr_FR');
+        $french = W4OS\Engine\I18n\Catalog::messages('fr_FR');
         $translate = fn (string $key) => $french[substr($key, 5)] ?? $key;
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => '/guide'], null, true, 250), shown: true, translate: $translate, fixed: $fixed);
 
@@ -174,7 +174,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a database the grid has a default for starts with its Use default, its parts hidden while it is checked', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'searchDatabase' => null], null, true, 250), shown: true);
         $parts = $fields['searchDatabase']['fields'];
 
@@ -186,7 +186,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a database this site cannot write has every part unchangeable', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy');
         $fixed = ['gloebitDatabase' => ['reason' => 'r', 'file' => 'OpenSim.ini', 'text' => '[Gloebit]']];
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Gloebit', 'gloebitDatabase' => null], null, true, 250), shown: true, fixed: $fixed);
 
@@ -201,7 +201,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a path is under the address the engine says (meta.service.prefix), ending with the slash its value never starts with', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'path' => 'query.php'], null, true, 250), shown: true, base: 'http://grid.example.org/helpers/');
 
         expect($fields['path']['base'])->toBe('http://grid.example.org/helpers/')
@@ -210,7 +210,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a database has its label where the others have theirs, its tip under it, its parts then what its default is beside it', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true], null, true, 250), shown: true);
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/forms/fields/fieldset/w4os-admin-fieldset.html.twig');
 
@@ -221,7 +221,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('the registers of other search engines as a list of addresses, one by line of their own', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $fields = Items::fields(FormView::of($form, ['provide' => true, 'registers' => ['https://2do.directory/register.php']], null, true, 250), shown: true);
 
         expect($fields['registers'])->toMatchArray(['type' => 'array', 'value_only' => true, 'label' => 'w4os.search_registers'])
@@ -230,7 +230,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a list left empty has one line of its own, numbered as the lines its script adds', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('search');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('search');
         $view = FormView::of($form, ['provide' => true, 'registers' => []], null, true, 250);
         $fields = Items::fields($view, shown: true);
 
@@ -249,7 +249,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('shows the examples and the lines of the files right after the form, in its column, before its help', function () use ($render) {
-        $view = FormView::of((new Contract(OpenSim\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
+        $view = FormView::of((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('guide'), [], null, true, 250);
         $html = $render(['view' => $view, 'help' => ['guide_help'], 'meta' => ['examples' => [['label' => 'guide_example', 'text' => "Section 1\nName|grid.example.org:8002"]],
             'snippets' => [['file' => 'OpenSim.ini', 'text' => '[LoginService]']]]]);
 
@@ -260,7 +260,7 @@ describe('the settings pages of the services of the grid', function () {
     });
 
     test('a field the form hides now asks nothing: its condition unmet, it is not required', function () {
-        $form = (new Contract(OpenSim\Api\Contract::document()))->settingsOf('economy');
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('economy');
         $off = Items::fields(FormView::of($form, ['provide' => false, 'economyModule' => 'Podex'], null, true, 250), shown: true);
         $on = Items::fields(FormView::of($form, ['provide' => true, 'economyModule' => 'Podex'], null, true, 250), shown: true);
 

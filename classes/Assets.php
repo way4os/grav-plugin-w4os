@@ -1,6 +1,6 @@
 <?php
 
-namespace W4os\Grav;
+namespace W4OS\Grav;
 
 /**
  * The libraries of the browser the plugin serves (Tabler, its icons, Tom Select): npm releases pinned in composer.json (package
