@@ -107,6 +107,6 @@ describe('the grid added to a viewer', function () {
     });
 
     test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', 'letter-spacing: normal;');
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-step-title { margin: 0 0 .5rem; font: inherit; font-weight: 600; letter-spacing: normal; }');
     });
 });
