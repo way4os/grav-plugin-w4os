@@ -132,9 +132,23 @@ final class Blocks
     }
 
     /**
+     * The parameters of the page a search takes, as the helpers list them (SearchBlock::PARAMETERS: a new field of their form needs
+     * nothing here); q and topic with helpers before that list.
+     *
+     * @return list<string>
+     */
+    public static function searchParameters(): array
+    {
+        Bundled::library();
+        $listed = \W4OS\Helpers\Block\SearchBlock::class.'::PARAMETERS';
+
+        return defined($listed) ? array_values(array_map('strval', (array) constant($listed))) : ['q', 'topic'];
+    }
+
+    /**
      * The HTML of a block, empty when it is not one.
      *
-     * @param array<string,scalar> $args name and feed_only (profile: its stream alone), q and topic (search), category (destination_guide), count, include_hypergrid and include_landsales (popular_places), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
+     * @param array<string,scalar|list<scalar>> $args name and feed_only (profile: its stream alone), the parameters of a search (searchParameters(): q, rating[]...), category (destination_guide), count, include_hypergrid and include_landsales (popular_places), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
      *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME])
      * @throws BlockUnavailable when it cannot be read
      */
@@ -145,7 +159,10 @@ final class Blocks
             return '';
         }
         // An empty title is asked as it is: the block leaves its title to the page
-        $query = array_filter(array_intersect_key($args, array_flip(self::ARGS)), fn ($v, $k) => $v !== null && ($v !== '' || $k === 'title'), ARRAY_FILTER_USE_BOTH);
+        $taken = $name === 'search' ? [...self::ARGS, ...self::searchParameters()] : self::ARGS;
+        // A list (the ratings of a search) of its words only, never deeper
+        $args = array_map(fn ($v) => is_array($v) ? array_values(array_filter(array_map(fn ($one) => is_scalar($one) ? (string) $one : '', $v), fn ($one) => $one !== '')) : $v, $args);
+        $query = array_filter(array_intersect_key($args, array_flip($taken)), fn ($v, $k) => $v !== null && $v !== [] && ($v !== '' || $k === 'title'), ARRAY_FILTER_USE_BOTH);
         $html = ($this->fetch)($name, $query);
 
         return is_string($html) ? trim($html) : '';

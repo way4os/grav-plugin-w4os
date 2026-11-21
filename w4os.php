@@ -1291,6 +1291,12 @@ class W4osPlugin extends Plugin
             // helpers see the site, not the visitor); one copy of a block per class is kept
             'client' => $this->site()->client(),
         ]);
+        // A search: every parameter of its form the helpers list (Blocks::searchParameters()), as the page has them
+        if (\W4OS\Grav\Blocks::name($name) === 'search') {
+            foreach (\W4OS\Grav\Blocks::searchParameters() as $parameter) {
+                $args[$parameter] ??= $uri->query($parameter);
+            }
+        }
         // The helpers translate their blocks: they are asked in the language of the page
         $language = $this->grav['language'];
         $args['lang'] = (string) ($language->getActive() ?: ($language->getDefault() ?: 'en'));

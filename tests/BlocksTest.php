@@ -25,6 +25,29 @@ describe('blocks', function () {
         expect(json_decode($blocks->html('search', ['q' => 'Ada'] + $site), true))->toBe(['q' => 'Ada'] + $site);
     });
 
+    test('asks a search for every parameter of its form the helpers list (q and topic before they list them), its ratings a list', function () {
+        $listed = W4OS\Helpers\Block\SearchBlock::class.'::PARAMETERS';
+        $parameters = Blocks::searchParameters();
+        $page = ['rating' => ['general', 'moderate', '', ['deeper']], 'other' => 'y'] + array_fill_keys($parameters, 'x');
+        $asked = json_decode((new Blocks(fn (string $name, array $args) => json_encode($args)))->html('search', $page), true);
+        $url = '';
+        Blocks::remote('https://grid.example.org/helpers', function (string $at) use (&$url) {
+            return $url = $at;
+        })->html('search', $page);
+
+        expect($parameters)->toBe(defined($listed) ? array_values((array) constant($listed)) : ['q', 'topic'])
+            ->and(array_keys($asked))->toEqualCanonicalizing($parameters)
+            ->and($asked)->not->toHaveKey('other')
+            // Read from the page by the plugin, the list of the helpers, never one of its own
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("foreach (\\W4OS\\Grav\\Blocks::searchParameters() as \$parameter)", "\$args[\$parameter] ??= \$uri->query(\$parameter);");
+        if (in_array('rating', $parameters, true)) {
+            expect($asked['rating'])->toBe(['general', 'moderate'])
+                ->and(urldecode($url))->toContain('rating[0]=general&rating[1]=moderate');
+        }
+        // Another block takes none of them
+        expect(json_decode((new Blocks(fn (string $name, array $args) => json_encode($args)))->html('popular_places', ['rating' => ['general'], 'when' => 'today']), true))->toBe([]);
+    });
+
     test('asks the popular places for the options the page gives them, as w4os-wp has them', function () {
         $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
 
