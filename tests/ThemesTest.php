@@ -14,6 +14,7 @@ function themeless_twig(bool $viewer = true): Environment
     $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
     $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => $viewer));
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+    $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
 
     return $twig;
@@ -134,12 +135,62 @@ describe('the home page of a grid', function () {
 
     test('has its main column a section, its blocks titled h2, its side columns asides, their blocks titled h3', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
         $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\"><".($args['level'] ?? 'h3')." class=\"block-title\">$name</".($args['level'] ?? 'h3').'></section>', ['is_safe' => ['html']]));
         $html = $twig->render('w4os/home.html.twig', ['content' => '<h1>Welcome</h1>']);
 
         expect($html)->toContain('<section class="w4os-home-main">', '<aside class="w4os-home-grid">', '<aside class="w4os-home-news">')
             ->and($html)->toContain('<h2 class="block-title">popular-places</h2>', '<h2 class="block-title">destination_guide</h2>')
             ->and($html)->toContain('<h3 class="block-title">grid-info</h3>', '<h3 class="block-title">grid-status</h3>', '<h3 class="block-title">motd</h3>');
+    });
+
+    test('has the Connect block under what the grid is, the last three news of the site under its message of the day', function () {
+        $twig = themeless_twig();
+        $post = fn (int $n) => new class($n) {
+            public array $header = [];
+            public string $content = '<p>Text of the post</p>';
+            public string $url;
+            public string $title;
+            public int $date;
+            public object $media;
+
+            public function __construct(int $n)
+            {
+                [$this->url, $this->title, $this->date] = ["/news/post-$n", "Post $n", 1_700_000_000 + $n];
+                $this->media = new class { public array $images = []; };
+            }
+        };
+        $news = new class([$post(1), $post(2), $post(3), $post(4)]) {
+            public string $url = '/news';
+            public string $title = 'News';
+
+            public function __construct(private array $posts) {}
+
+            public function collection(): array { return $this->posts; }
+        };
+        $twig->addFunction(new TwigFunction('w4os_home_news', fn () => $news));
+        $html = html_entity_decode($twig->render('w4os/home.html.twig', ['content' => '']), ENT_QUOTES | ENT_HTML5);
+        $grid = substr($html, (int) strpos($html, '<aside class="w4os-home-grid">'), (int) strpos($html, '<aside class="w4os-home-news">') - (int) strpos($html, '<aside class="w4os-home-grid">'));
+
+        expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
+            ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
+            ->and($html)->toContain('<h3 class="w4os-latest-title"><a href="/news">News</a></h3>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
+            ->and($html)->not->toContain('Post 4')
+            ->and(themeless_twig()->render('w4os/home.html.twig', ['content' => '']))->not->toContain('w4os-latest');
+    });
+
+    test('takes the boxes of a theme in its asides, the theme extending it (@w4os) rather than copying it', function () {
+        $loader = new FilesystemLoader(dirname(__DIR__).'/templates');
+        $loader->addPath(dirname(__DIR__).'/templates', 'w4os');
+        $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid_extra %}<p>Support</p>{% endblock %}{% block w4os_home_news_extra %}<p>Extra</p>{% endblock %}"]), $loader]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $html = $twig->render('w4os/home.html.twig', ['content' => '']);
+
+        expect($html)->toContain('<p>Support</p>', '<p>Extra</p>', '<aside class="w4os-home-grid">')
+            ->and(strpos($html, 'w4os-start'))->toBeLessThan(strpos($html, 'Support'))
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("addPath(__DIR__.'/templates', 'w4os')");
     });
 
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {

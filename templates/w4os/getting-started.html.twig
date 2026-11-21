@@ -1,12 +1,14 @@
 {# The Connect block (w4os_start_steps()): create the avatar, add the grid to the viewer, log in. The step to do now stands out, the
-   ones done are marked. start_title: the title of the block, Connect by default. #}
+   ones done are marked. start_title: the title of the block, Connect by default; start_level: its level, h2 by default. #}
+{% set level = start_level|default('h2') %}
+{% set step_level = 'h' ~ (level|slice(1) + 1) %}
 {% set steps = w4os_start_steps() %}
 {% set avatar = w4os_avatar() %}
 {% set grid = w4os_grid_name() %}
 {% set uri = w4os_login_uri() %}
 {% set links = w4os_add_grid() %}
 <section class="w4os-start">
-    <h2 class="w4os-start-title">{{ start_title|default('w4os.start_title'|t) }}</h2>
+    <{{ level }} class="w4os-start-title">{{ start_title|default('w4os.start_title'|t) }}</{{ level }}>
     <ol class="w4os-start-steps">
         {% for item in steps %}
         {% set button = item.state == 'next' ? 'btn btn-primary' : 'btn btn-ghost' %}
@@ -21,7 +23,7 @@
                 <a class="{{ button }}" href="{{ (base_url_relative ~ (config.plugins.login.route ?: '/login'))|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
                 {% endif %}
             {% elseif item.step == 'viewer' %}
-                <h3 class="w4os-start-step-title">{{ 'w4os.start_viewer'|t }}</h3>
+                <{{ step_level }} class="w4os-start-step-title">{{ 'w4os.start_viewer'|t }}</{{ step_level }}>
                 {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t(grid) }}</a>{% endif %}
                 {% if uri %}
                 <p class="w4os-start-uri">

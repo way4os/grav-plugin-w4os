@@ -115,6 +115,7 @@ class W4osPlugin extends Plugin
         $this->enable([
             'onThemeInitialized' => ['onThemeInitialized', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
+            'onTwigLoader' => ['onTwigLoader', 0],
             'onTwigInitialized' => ['onTwigInitialized', 0],
             // Last, once the others set their variables: the text of a page with blocks rendered before the theme shows its messages
             'onTwigSiteVariables' => [['onTwigSiteVariables', 0], ['onTwigSiteVariablesLast', -1000]],
@@ -274,6 +275,12 @@ class W4osPlugin extends Plugin
         $this->grav['twig']->twig_paths[] = __DIR__.'/templates';
     }
 
+    /** The templates of the plugin also as @w4os, for a theme that extends one of them rather than copying it. */
+    public function onTwigLoader(): void
+    {
+        $this->grav['twig']->addPath(__DIR__.'/templates', 'w4os');
+    }
+
     public function onTwigInitialized(): void
     {
         $twig = $this->grav['twig']->twig();
@@ -290,6 +297,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_uri', fn () => $this->site()->loginUri()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_name', fn () => $this->site()->gridName()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_login_link', fn () => Site::loginLink($this->site()->loginUri())));
+        // The news page of the site (/news), whose last posts the home page shows; null when the site has none
+        $twig->addFunction(new \Twig\TwigFunction('w4os_home_news', fn () => $this->grav['pages']->find(Site::NEWS_ROUTE)));
         // Its steps from the avatar signed in: logged in-world once when it has a last visit, unknown when the engine does not say
         $twig->addFunction(new \Twig\TwigFunction('w4os_start_steps', function () {
             $avatar = self::current() ?? [];

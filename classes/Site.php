@@ -1145,6 +1145,9 @@ final class Site
         'motd' => 'motd',
     ];
 
+    /** The route of the news page of a site, whose last posts the home page of the grid shows. */
+    public const NEWS_ROUTE = '/news';
+
     /**
      * The shortcodes of the site and the blocks of the helpers they show, for the page of the shortcodes (as the page Shortcodes of
      * w4os-wp): the blocks first, in its order, then the shortcodes of the site; each its code, the catalog key of what it shows, the
