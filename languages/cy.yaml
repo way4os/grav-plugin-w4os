@@ -451,7 +451,7 @@ w4os:
   link_menu_hop: 'Dolen hop://'
   link_menu_apptp: 'Teleport yn y viewer'
   link_menu_local: 'Rhanbarth y grid hwn'
-  link_menu_txt: "Copïo'r cyfeiriad"
+  link_menu_copy: "Copïo'r cyfeiriad"
   tp_more: 'Mwy o ffyrdd o fynd yno'
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'
   setting_uas: 'Gwasanaeth asiant defnyddiwr'

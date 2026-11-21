@@ -451,7 +451,7 @@ w4os:
   link_menu_hop: 'Link hop://'
   link_menu_apptp: 'Teletrasporto nel viewer'
   link_menu_local: 'Regione di questa griglia'
-  link_menu_txt: "Copia l'indirizzo"
+  link_menu_copy: "Copia l'indirizzo"
   tp_more: 'Altri modi per andarci'
   setting_gatekeeper_help: "L'indirizzo con cui le altre griglie raggiungono questa (hypergrid)."
   setting_uas: 'Servizio user agent'

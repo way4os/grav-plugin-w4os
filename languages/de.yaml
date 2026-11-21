@@ -451,7 +451,7 @@ w4os:
   link_menu_hop: 'hop://-Link'
   link_menu_apptp: 'Teleport im Viewer'
   link_menu_local: 'Region dieses Grids'
-  link_menu_txt: 'Adresse kopieren'
+  link_menu_copy: 'Adresse kopieren'
   tp_more: 'Weitere Wege dorthin'
   setting_gatekeeper_help: 'Die Adresse, unter der andere Grids dieses erreichen (Hypergrid).'
   setting_uas: User-Agent-Dienst

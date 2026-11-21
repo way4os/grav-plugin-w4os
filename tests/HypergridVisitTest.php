@@ -11,7 +11,7 @@ function render_visit(?array $hypergrid, array $context = []): string
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'), ['autoescape' => 'html']);
     $twig->addFunction(new TwigFunction('w4os_hypergrid', fn () => $hypergrid));
-    $twig->addFunction(new TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null) => W4OS\Views\TeleportLink::html(['browser' => [['format' => 8, 'link' => "hop://$destination", 'label' => 'hop'], ['format' => 16, 'link' => (string) $destination, 'label' => 'Copy']]], (string) $label), ['is_safe' => ['html']]));
+    $twig->addFunction(new TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null) => W4OS\Views\TeleportLink::html(['browser' => [['format' => 8, 'link' => "hop://$destination", 'label' => 'hop'], ['format' => 1024, 'link' => (string) $destination, 'label' => 'Copy']]], (string) $label), ['is_safe' => ['html']]));
     $twig->addFilter(new TwigFilter('t', fn (string $key, ...$values) => $values === [] ? $key : $key.'('.implode(',', $values).')'));
     $assets = new class {
         public function addJs(string $url): void {}
