@@ -452,6 +452,8 @@ w4os:
   link_menu_apptp: 'Teleportio (app/teleport)'
   link_menu_local: 'Teleportio (y grid hwn)'
   link_menu_map: 'Dangos ar y map'
+  link_menu_hop_apptp: 'Teleportio (hop app)'
+  link_menu_hop_map: 'Dangos ar y map (hop app)'
   link_menu_copy: "Copïo'r cyfeiriad"
   tp_more: 'Mwy o ffyrdd o fynd yno'
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'

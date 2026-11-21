@@ -452,6 +452,8 @@ w4os:
   link_menu_apptp: 'Teletrasportati (app/teleport)'
   link_menu_local: 'Teletrasportati (questa griglia)'
   link_menu_map: 'Mostra sulla mappa'
+  link_menu_hop_apptp: 'Teletrasportati (hop app)'
+  link_menu_hop_map: 'Mostra sulla mappa (hop app)'
   link_menu_copy: "Copia l'indirizzo"
   tp_more: 'Altri modi per andarci'
   setting_gatekeeper_help: "L'indirizzo con cui le altre griglie raggiungono questa (hypergrid)."

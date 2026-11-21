@@ -452,6 +452,8 @@ w4os:
   link_menu_apptp: 'Teleportieren (app/teleport)'
   link_menu_local: 'Teleportieren (dieses Grid)'
   link_menu_map: 'Auf der Karte zeigen'
+  link_menu_hop_apptp: 'Teleportieren (hop app)'
+  link_menu_hop_map: 'Auf der Karte zeigen (hop app)'
   link_menu_copy: 'Adresse kopieren'
   tp_more: 'Weitere Wege dorthin'
   setting_gatekeeper_help: 'Die Adresse, unter der andere Grids dieses erreichen (Hypergrid).'
