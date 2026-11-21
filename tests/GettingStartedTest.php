@@ -132,4 +132,16 @@ describe('the grid added to a viewer', function () {
         expect($home)->toContain("start_title: start_title ?? grav.page.header.start_title ?? ''", "start_content: start_content ?? grav.page.header.start_content ?? ''", "start_footer: start_footer ?? grav.page.header.start_footer ?? ''")
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("'start_content' => trim((string) \$shortcode->getParameter('content', ''))", "'start_footer' => trim((string) \$shortcode->getParameter('footer', ''))");
     });
+
+    test('prints the texts of a site as HTML where Twig escapes what it prints, as Grav does', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'), ['autoescape' => 'html']);
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->addFilter(new TwigFilter('t', fn (string $key) => $key));
+        $twig->addFilter(new TwigFilter('w4os_text', fn (?string $text) => trim((string) $text) === '' ? '' : Site::localLinks('<p>'.$text.'</p>', Site::siteLinks('', '/fr', ['en', 'fr'], '/')), ['is_safe' => ['html']]));
+        $html = $twig->render('w4os/getting-started.html.twig', ['start_content' => 'Three steps', 'start_footer' => '<a href="/aide">Aide détaillée</a>']);
+
+        expect($html)->toContain('<div class="w4os-start-footer"><p><a href="/fr/aide">Aide détaillée</a></p></div>', '<div class="w4os-start-content"><p>Three steps</p></div>')
+            ->and($html)->not->toContain('&lt;p&gt;')
+            ->and($twig->render('w4os/getting-started.html.twig', ['start_footer' => '  ']))->not->toContain('w4os-start-footer');
+    });
 });

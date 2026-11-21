@@ -8,8 +8,7 @@
 {% set links = w4os_add_grid() %}
 <section class="w4os-start">
     <{{ level }} class="w4os-start-title">{{ start_title|default('w4os.start_title'|t) }}</{{ level }}>
-    {% set content = start_content|default('')|w4os_text %}
-    {% if content %}<div class="w4os-start-content">{{ content }}</div>{% endif %}
+    {% if start_content|default('')|trim %}<div class="w4os-start-content">{{ start_content|w4os_text }}</div>{% endif %}
     <ol class="w4os-start-steps">
         {% for item in steps %}
         {% set button = item.state == 'next' ? 'btn btn-primary' : 'btn btn-ghost' %}
@@ -34,6 +33,5 @@
         </li>
         {% endfor %}
     </ol>
-    {% set footer = start_footer|default('')|w4os_text %}
-    {% if footer %}<div class="w4os-start-footer">{{ footer }}</div>{% endif %}
+    {% if start_footer|default('')|trim %}<div class="w4os-start-footer">{{ start_footer|w4os_text }}</div>{% endif %}
 </section>
