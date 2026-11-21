@@ -190,8 +190,7 @@ w4os:
   start_title: Verbinden
   start_avatar: 'Avatar erstellen'
   start_avatar_done: 'Dein Avatar ist %s.'
-  start_viewer: 'Grid hinzufügen'
-  start_add_grid: '%s hinzufügen'
+  start_add_grid: '%s zum Viewer hinzufügen'
   start_login: Einloggen
   start_done: Erledigt
   total: Insgesamt

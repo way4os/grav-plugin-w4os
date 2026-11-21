@@ -190,8 +190,7 @@ w4os:
   start_title: Cysylltu
   start_avatar: 'Creu eich afatar'
   start_avatar_done: 'Eich afatar yw %s.'
-  start_viewer: "Ychwanegu'r grid"
-  start_add_grid: 'Ychwanegu %s'
+  start_add_grid: 'Ychwanegu %s at eich viewer'
   start_login: Mewngofnodi
   start_done: "Wedi'i wneud"
   total: Cyfanswm

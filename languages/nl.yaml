@@ -188,10 +188,9 @@ w4os:
   copy: Kopiëren
   copied: Gekopieerd
   start_title: Verbinden
-  start_avatar: 'Maak je avatar'
+  start_avatar: 'Je avatar maken'
   start_avatar_done: 'Je avatar is %s.'
-  start_viewer: 'Het grid toevoegen'
-  start_add_grid: '%s toevoegen'
+  start_add_grid: '%s aan je viewer toevoegen'
   start_login: Inloggen
   start_done: Klaar
   total: Totaal

@@ -190,8 +190,7 @@ w4os:
   start_title: Connettiti
   start_avatar: 'Crea il tuo avatar'
   start_avatar_done: 'Il tuo avatar è %s.'
-  start_viewer: 'Aggiungi la griglia'
-  start_add_grid: 'Aggiungi %s'
+  start_add_grid: 'Aggiungi %s al viewer'
   start_login: Accedi
   start_done: Fatto
   total: Totale

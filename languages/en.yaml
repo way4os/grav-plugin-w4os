@@ -190,8 +190,7 @@ w4os:
   start_title: Connect
   start_avatar: 'Create your avatar'
   start_avatar_done: 'Your avatar is %s.'
-  start_viewer: 'Add the grid'
-  start_add_grid: 'Add %s'
+  start_add_grid: 'Add %s to your viewer'
   start_login: 'Log in'
   start_done: Done
   total: Total

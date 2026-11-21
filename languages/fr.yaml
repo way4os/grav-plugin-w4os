@@ -190,9 +190,8 @@ w4os:
   start_title: Connexion
   start_avatar: 'Créer votre avatar'
   start_avatar_done: 'Votre avatar est %s.'
-  start_viewer: 'Ajouter la grille'
-  start_add_grid: 'Ajouter %s'
-  start_login: Connectez-vous
+  start_add_grid: 'Ajouter %s au viewer'
+  start_login: 'Se connecter'
   start_done: Terminé
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
