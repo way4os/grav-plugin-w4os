@@ -75,12 +75,14 @@ li:empty { display: none; }
 .w4os-home-layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
 .w4os-home-grid, .w4os-home-news { overflow-wrap: anywhere; }
 .w4os-home-grid > * + *, .w4os-home-news > * + * { margin-top: 2rem; }
+/* Two columns: the news right under what the grid is, not halfway down the text */
 @container (min-width: 46rem) {
-    .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+    .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; }
     .w4os-home-main { grid-row: span 2; }
+    .w4os-home-news { align-self: start; }
 }
 @container (min-width: 72rem) {
-    .w4os-home-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); }
+    .w4os-home-layout { grid-template-columns: minmax(0, 3fr) minmax(0, 6fr) minmax(0, 3fr); grid-template-rows: none; }
     .w4os-home-main { grid-row: auto; grid-column: 2; }
     .w4os-home-grid { grid-column: 1; grid-row: 1; }
     .w4os-home-news { grid-column: 3; grid-row: 1; }

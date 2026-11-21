@@ -190,7 +190,8 @@ describe('the home page of a grid', function () {
 
         expect($html)->toContain('<p>Support</p>', '<p>Extra</p>', '<aside class="w4os-home-grid">')
             ->and(strpos($html, 'w4os-start'))->toBeLessThan(strpos($html, 'Support'))
-            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("addPath(__DIR__.'/templates', 'w4os')");
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("addPath(__DIR__.'/templates', 'w4os')")
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('grid-template-rows: auto 1fr;', '.w4os-home-news { align-self: start; }');
     });
 
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
