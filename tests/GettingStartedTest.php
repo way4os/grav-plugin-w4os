@@ -44,7 +44,7 @@ describe('the steps of a newcomer', function () {
 
         expect($html)->toContain('<h2 class="w4os-start-title">w4os.start_title</h2>', 'class="w4os-start-step w4os-start-avatar is-next" aria-current="step"')
             ->and($html)->toContain('<a class="btn btn-primary" href="/register">w4os.start_avatar</a>')
-            ->and($html)->toContain('<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid(Demo World)</a>')
+            ->and($html)->toContain('<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid</a>')
             ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>')
             ->and($html)->not->toContain('start_viewer_note', 'firestormviewer')
             ->and($html)->toContain('<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login</a>')
@@ -57,7 +57,7 @@ describe('the steps of a newcomer', function () {
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
         expect($html)->toContain('w4os-start-avatar is-done', '<span class="visually-hidden">w4os.start_done</span>', '<a href="/profile/Ada.Love">w4os.start_avatar_done(Ada Love)</a>', 'w4os-start-viewer is-next', 'w4os-start-login is-todo')
-            ->and($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.start_add_grid(Demo World)</a>')
+            ->and($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.start_add_grid</a>')
             ->and($html)->not->toContain('w4os.start_avatar<');
     });
 

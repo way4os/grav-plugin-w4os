@@ -3,7 +3,6 @@
 {% set level = start_level|default('h2') %}
 {% set steps = w4os_start_steps() %}
 {% set avatar = w4os_avatar() %}
-{% set grid = w4os_grid_name() %}
 {% set uri = w4os_login_uri() %}
 {% set links = w4os_add_grid() %}
 <section class="w4os-start">
@@ -22,7 +21,7 @@
                 <a class="{{ button }}" href="{{ w4os_url(config.plugins.login.route ?: '/login')|e('html_attr') }}">{{ 'w4os.log_in'|t }}</a>
                 {% endif %}
             {% elseif item.step == 'viewer' %}
-                {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t(grid) }}</a>{% endif %}
+                {% if links %}<a class="{{ button }} w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.start_add_grid'|t }}</a>{% endif %}
                 {% if uri %}
                 <p class="w4os-start-uri">{% include 'w4os/login-uri.html.twig' %}</p>
                 {% endif %}
