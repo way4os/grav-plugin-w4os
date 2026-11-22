@@ -76,6 +76,21 @@ describe('managers', function () {
             ->and(Site::readsAdmin(200, ['admin_level' => 200]))->toBeTrue();
     });
 
+    test('decide the access of a visitor by the level the engine gives it (the owner of the grid a god whatever its user level), its user level kept', function () {
+        // The owner of the grid at user level 0 (Way Forest), a resident at level 0, a god, an engine before accessLevel
+        $owner = Site::accessOf(['level' => 0, 'accessLevel' => 200, 'owner' => true]);
+        $resident = Site::accessOf(['level' => 0, 'accessLevel' => 0, 'owner' => false]);
+
+        expect($owner)->toBe(['level' => 200, 'userLevel' => 0, 'owner' => true])
+            ->and(Site::readsAdmin($owner['level'], []))->toBeTrue()
+            ->and($resident)->toBe(['level' => 0, 'userLevel' => 0, 'owner' => false])
+            ->and(Site::readsAdmin($resident['level'], []))->toBeFalse()
+            ->and(Site::accessOf(['level' => 250, 'accessLevel' => 250, 'owner' => false])['level'])->toBe(250)
+            ->and(Site::accessOf(['level' => 200]))->toBe(['level' => 200, 'userLevel' => 200, 'owner' => false])
+            // Site::user() keeps it for every check (Site::level())
+            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Site.php'))->toContain('$granted = self::accessOf($avatar);', "self::readsAdmin(\$granted['level'], \$this->config())", "'name' => (string) \$avatar['name']] + \$granted");
+    });
+
     test('the setting is one of the engine\'s levels, never a number of its own', function () {
         expect(array_keys(Site::adminLevels()))->toBe(array_keys(Avatar::LEVELS))
             ->and(Site::adminLevels()[100])->toBe('w4os.role_customer_service')

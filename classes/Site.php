@@ -1152,6 +1152,20 @@ final class Site
         return isset(self::adminLevels()[$level]) ? $level : \W4OS\Engine\Models\Avatar::GOD_CUSTOMER_SERVICE;
     }
 
+    /**
+     * The access of an avatar as the engine gives it: the level its access is decided by (`accessLevel`: its user level, a god's for
+     * the owner of the grid whatever its own; its user level with an engine before it), its user level, whether it owns the grid.
+     *
+     * @param array<string,mixed> $avatar
+     * @return array{level: int, userLevel: int, owner: bool}
+     */
+    public static function accessOf(array $avatar): array
+    {
+        $userLevel = (int) ($avatar['level'] ?? 0);
+
+        return ['level' => (int) ($avatar['accessLevel'] ?? $userLevel), 'userLevel' => $userLevel, 'owner' => (bool) ($avatar['owner'] ?? false)];
+    }
+
     /** Whether an avatar of this level reads the admin pages (adminLevel()). */
     public static function readsAdmin(int $level, array $config): bool
     {
@@ -1183,15 +1197,16 @@ final class Site
     public function user(array $avatar, ?UserInterface $user = null): UserInterface
     {
         $user ??= $this->grav['accounts']->load(strtolower((string) ($avatar['slug'] ?? $avatar['uuid'])));
-        $level = (int) ($avatar['level'] ?? 0);
+        $granted = self::accessOf($avatar);
         $user->set('fullname', (string) $avatar['name']);
         $user->set('email', (string) ($avatar['email'] ?? ''));
         $user->set('state', 'enabled');
         $user->set('provider', 'w4os');
-        $user->set('w4os', ['uuid' => (string) $avatar['uuid'], 'name' => (string) $avatar['name'], 'level' => (int) ($avatar['level'] ?? 0)]);
+        // The level every check reads (level()), its user level as it is, whether it owns the grid
+        $user->set('w4os', ['uuid' => (string) $avatar['uuid'], 'name' => (string) $avatar['name']] + $granted);
         $access = (array) $user->get('access', []);
         $access['site']['login'] = true;
-        $access['site']['w4os']['manage'] = self::readsAdmin($level, $this->config());
+        $access['site']['w4os']['manage'] = self::readsAdmin($granted['level'], $this->config());
         $user->set('access', $access);
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();
@@ -1200,7 +1215,7 @@ final class Site
         return $user;
     }
 
-    /** @return ?array{uuid: string, name: string, level: int} the avatar of the visitor, null when none signed in */
+    /** @return ?array{uuid: string, name: string, level: int, userLevel?: int, owner?: bool} the avatar of the visitor, null when none signed in */
     public function avatar(): ?array
     {
         $user = $this->grav['user'] ?? null;
@@ -1534,7 +1549,7 @@ final class Site
         return $this->avatar() !== null && (bool) $user->authorize('site.w4os.manage');
     }
 
-    /** The user level of the visitor, as the engine gave it at sign-in; 0 for nobody. */
+    /** The level the access of the visitor is decided by, as the engine gave it at sign-in (accessOf()); 0 for nobody. */
     public function level(): int
     {
         return (int) ($this->avatar()['level'] ?? 0);
