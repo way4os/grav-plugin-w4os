@@ -460,7 +460,7 @@ w4os:
   web_search_events: Événements
   web_search_classifieds: Annonces
   web_search_people: Personnes
-  web_search_submit: Recherche
+  web_search_submit: Rechercher
   web_search_words: 'Termes de la recherche'
   web_search_name: Nom
   web_search_min_letters: 'Au moins %d lettres.'
