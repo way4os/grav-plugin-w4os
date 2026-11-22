@@ -454,6 +454,106 @@ w4os:
   link_menu_local: 'Teleportio (y grid hwn)'
   link_menu_map: 'Dangos ar y map'
   link_menu_copy: "Copïo'r cyfeiriad"
+  web_search_places: Lleoedd
+  web_search_land: 'Tir ar werth'
+  web_search_events: Digwyddiadau
+  web_search_classifieds: Hysbysebion
+  web_search_people: Pobl
+  web_search_submit: Chwilio
+  web_search_words: Geiriau
+  web_search_name: Enw
+  web_search_min_letters: 'O leiaf %d llythyren.'
+  web_search_category: Categori
+  web_search_any_category: 'Pob categori'
+  web_search_ratings: Graddfeydd
+  web_search_rating_general: Cyffredinol
+  web_search_rating_moderate: Cymedrol
+  web_search_rating_adult: Oedolion
+  web_search_land_type: Math
+  web_search_land_any: 'Pob un'
+  web_search_land_mainland: 'Tir mawr'
+  web_search_land_estate: Ystad
+  web_search_price_max: 'Pris uchaf'
+  web_search_area_min: 'Arwynebedd lleiaf'
+  web_search_when: Pryd
+  web_search_upcoming: 'Cyfredol ac i ddod'
+  web_search_day: 'Ar ddiwrnod'
+  web_search_previous_day: 'Diwrnod blaenorol'
+  web_search_next_day: 'Diwrnod nesaf'
+  web_search_nothing: 'Dim canlyniadau'
+  web_search_price: Pris
+  web_search_area: Arwynebedd
+  web_search_traffic: Traffig
+  web_search_region: Rhanbarth
+  web_search_date: Dyddiad
+  web_search_duration: Hyd
+  web_search_sort: 'Trefnu yn ôl'
+  web_search_price_m2: Pris/m²
+  web_search_time: Amser
+  web_search_adult_content: 'Cynnwys i oedolion'
+  web_search_yes: Ie
+  web_search_no: Na
+  web_search_organizer: Trefnydd
+  web_search_location: Lleoliad
+  web_search_entry_fee: 'Tâl mynediad'
+  web_search_none: Dim
+  web_search_description: Disgrifiad
+  web_search_content_type: 'Math o gynnwys'
+  web_search_creation_date: 'Dyddiad creu'
+  web_search_listing_cost: 'Cost yr hysbyseb'
+  web_search_rating: Gradd
+  web_search_next: Nesaf
+  web_search_previous: Blaenorol
+  web_search_groups: Grwpiau
+  web_search_members: Aelodau
+  web_search_key: Allwedd
+  web_search_born: 'Dyddiad geni'
+  web_search_account: Cyfrif
+  web_search_partner: Partner
+  web_search_about: Gwybodaeth
+  web_search_show_profile: 'Agor y proffil'
+  web_search_group_key: 'Allwedd y grŵp'
+  web_search_founder: 'Sefydlwyd gan'
+  web_search_charter: 'Siarter y grŵp'
+  web_search_member: Aelod
+  web_search_title: Teitl
+  web_search_status: Statws
+  web_search_online: Ar-lein
+  web_search_open_enrollment: 'Gall unrhyw un ymuno'
+  web_search_join_fee: 'Cost ymuno'
+  web_search_content_general: 'Cynnwys cyffredinol'
+  web_search_content_moderate: 'Cynnwys cymedrol'
+  place_category_arts: 'Celfyddydau a diwylliant'
+  place_category_business: Busnes
+  place_category_educational: Addysgol
+  place_category_gaming: Gemau
+  place_category_hangout: 'Man cyfarfod'
+  place_category_newcomer: 'Croesawgar i newydd-ddyfodiaid'
+  place_category_parks: 'Parciau a natur'
+  place_category_residential: Preswyl
+  place_category_shopping: Siopa
+  place_category_other: Arall
+  place_category_rental: Rhentu
+  event_category_discussion: Trafodaeth
+  event_category_sports: Chwaraeon
+  event_category_live_music: 'Cerddoriaeth fyw'
+  event_category_commercial: Masnachol
+  event_category_nightlife: 'Bywyd nos/Adloniant'
+  event_category_games: Gemau/Cystadlaethau
+  event_category_pageants: Pasiantau
+  event_category_education: Addysg
+  event_category_arts: 'Celfyddydau a diwylliant'
+  event_category_charity: 'Elusen/Grwpiau cymorth'
+  event_category_miscellaneous: Amrywiol
+  classified_category_shopping: Siopa
+  classified_category_land_rental: 'Rhentu tir'
+  classified_category_property_rental: 'Rhentu eiddo'
+  classified_category_attraction: 'Atyniad arbennig'
+  classified_category_new_products: 'Cynhyrchion newydd'
+  classified_category_employment: Cyflogaeth
+  classified_category_wanted: 'Yn eisiau'
+  classified_category_service: Gwasanaeth
+  classified_category_personal: Personol
   tp_more: 'Mwy o ffyrdd o fynd yno'
   setting_gatekeeper_help: 'Y cyfeiriad y mae gridiau eraill yn cyrraedd yr un hwn drwyddo (hypergrid).'
   setting_uas: 'Gwasanaeth asiant defnyddiwr'

@@ -454,6 +454,106 @@ w4os:
   link_menu_local: 'Teletrasportati (questa griglia)'
   link_menu_map: 'Mostra sulla mappa'
   link_menu_copy: "Copia l'indirizzo"
+  web_search_places: Luoghi
+  web_search_land: 'Vendita Terreni'
+  web_search_events: Eventi
+  web_search_classifieds: Inserzioni
+  web_search_people: Persone
+  web_search_submit: Cerca
+  web_search_words: 'Inserisci i termini di ricerca'
+  web_search_name: Nome
+  web_search_min_letters: 'Almeno %d lettere.'
+  web_search_category: Categoria
+  web_search_any_category: 'Tutte le categorie'
+  web_search_ratings: Classificazioni
+  web_search_rating_general: Generale
+  web_search_rating_moderate: Moderato
+  web_search_rating_adult: Adulti
+  web_search_land_type: Tipo
+  web_search_land_any: Tutte
+  web_search_land_mainland: 'Vendite Mainland'
+  web_search_land_estate: 'Vendite Immobiliari'
+  web_search_price_max: 'Prezzo <'
+  web_search_area_min: 'Superficie minima'
+  web_search_when: Quando
+  web_search_upcoming: 'In corso e in arrivo'
+  web_search_day: 'Per data'
+  web_search_previous_day: 'Giorno precedente'
+  web_search_next_day: 'Giorno successivo'
+  web_search_nothing: 'Nessun risultato'
+  web_search_price: Prezzo
+  web_search_area: Superficie
+  web_search_traffic: Traffico
+  web_search_region: Regione
+  web_search_date: Data
+  web_search_duration: Durata
+  web_search_sort: 'Ordina per'
+  web_search_price_m2: Prezzo/m²
+  web_search_time: Ora
+  web_search_adult_content: 'Contenuto per adulti'
+  web_search_yes: Sì
+  web_search_no: 'No'
+  web_search_organizer: Organizzatore
+  web_search_location: Luogo
+  web_search_entry_fee: Ingresso
+  web_search_none: Nessuno
+  web_search_description: Descrizione
+  web_search_content_type: 'Tipo di contenuto'
+  web_search_creation_date: 'Data di creazione'
+  web_search_listing_cost: 'Prezzo per inserzione'
+  web_search_rating: Classificazione
+  web_search_next: Successiva
+  web_search_previous: Precedente
+  web_search_groups: Gruppi
+  web_search_members: Membri
+  web_search_key: UUID
+  web_search_born: 'Data di nascita'
+  web_search_account: Account
+  web_search_partner: Partner
+  web_search_about: Info
+  web_search_show_profile: Profilo
+  web_search_group_key: 'ID gruppo'
+  web_search_founder: Fondatore
+  web_search_charter: 'Statuto del gruppo'
+  web_search_member: Membro
+  web_search_title: Titolo
+  web_search_status: Stato
+  web_search_online: Online
+  web_search_open_enrollment: 'Chiunque può aderire'
+  web_search_join_fee: 'Quota di adesione'
+  web_search_content_general: 'Contenuti di tipo Generale'
+  web_search_content_moderate: 'Contenuti di tipo Moderato'
+  place_category_arts: 'Arte e cultura'
+  place_category_business: Affari
+  place_category_educational: Istruzione
+  place_category_gaming: Giochi
+  place_category_hangout: Ritrovo
+  place_category_newcomer: 'Per i nuovi arrivati'
+  place_category_parks: 'Parchi e natura'
+  place_category_residential: Residenziale
+  place_category_shopping: Shopping
+  place_category_other: Altro
+  place_category_rental: Affitto
+  event_category_discussion: Discussione
+  event_category_sports: Sport
+  event_category_live_music: 'Musica dal vivo'
+  event_category_commercial: Commerciale
+  event_category_nightlife: 'Vita notturna / Intrattenimento'
+  event_category_games: 'Giochi / Concorsi'
+  event_category_pageants: Spettacoli
+  event_category_education: Apprendimento
+  event_category_arts: 'Arte e cultura'
+  event_category_charity: 'Beneficenza / Gruppi di sostegno'
+  event_category_miscellaneous: Varie
+  classified_category_shopping: Shopping
+  classified_category_land_rental: 'Affitto di terreni'
+  classified_category_property_rental: 'Affitto di immobili'
+  classified_category_attraction: 'Attrazione speciale'
+  classified_category_new_products: 'Nuovi prodotti'
+  classified_category_employment: Lavoro
+  classified_category_wanted: Cercasi
+  classified_category_service: Servizio
+  classified_category_personal: Personale
   tp_more: 'Altri modi per andarci'
   setting_gatekeeper_help: "L'indirizzo con cui le altre griglie raggiungono questa (hypergrid)."
   setting_uas: 'Servizio user agent'

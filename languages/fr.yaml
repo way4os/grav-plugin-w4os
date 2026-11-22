@@ -454,6 +454,106 @@ w4os:
   link_menu_local: 'Se téléporter (cette grille)'
   link_menu_map: 'Afficher sur la carte'
   link_menu_copy: "Copier l'adresse"
+  web_search_places: Lieux
+  web_search_land: 'Ventes de terrains'
+  web_search_events: Événements
+  web_search_classifieds: Annonces
+  web_search_people: Personnes
+  web_search_submit: Recherche
+  web_search_words: 'Termes de la recherche'
+  web_search_name: Nom
+  web_search_min_letters: 'Au moins %d lettres.'
+  web_search_category: Catégorie
+  web_search_any_category: 'Toutes catégories'
+  web_search_ratings: Classements
+  web_search_rating_general: Général
+  web_search_rating_moderate: Modéré
+  web_search_rating_adult: Adulte
+  web_search_land_type: Type
+  web_search_land_any: 'Toutes catégories'
+  web_search_land_mainland: 'À vendre - Continent'
+  web_search_land_estate: 'À vendre - Domaine'
+  web_search_price_max: 'Prix ≤'
+  web_search_area_min: 'Surface ≥'
+  web_search_when: Quand
+  web_search_upcoming: 'En cours & à venir'
+  web_search_day: Date
+  web_search_previous_day: 'Revenir à la veille'
+  web_search_next_day: "Avance d'un jour"
+  web_search_nothing: 'Aucun résultat'
+  web_search_price: Prix
+  web_search_area: Surface
+  web_search_traffic: Trafic
+  web_search_region: Région
+  web_search_date: Date
+  web_search_duration: Durée
+  web_search_sort: 'Trier par'
+  web_search_price_m2: Prix/m²
+  web_search_time: Heure
+  web_search_adult_content: 'Contenu adulte'
+  web_search_yes: Oui
+  web_search_no: Non
+  web_search_organizer: 'Organisé par'
+  web_search_location: Lieu
+  web_search_entry_fee: "Prix d'entrée"
+  web_search_none: aucun
+  web_search_description: Description
+  web_search_content_type: 'Type de contenu'
+  web_search_creation_date: 'Date de création'
+  web_search_listing_cost: "Coût de l'annonce"
+  web_search_rating: Classement
+  web_search_next: Suivant
+  web_search_previous: Précédent
+  web_search_groups: Groupes
+  web_search_members: Membres
+  web_search_key: Clé
+  web_search_born: 'Date de naissance'
+  web_search_account: Compte
+  web_search_partner: Partenaire
+  web_search_about: Info
+  web_search_show_profile: 'Afficher le profil'
+  web_search_group_key: 'UUID du groupe'
+  web_search_founder: Fondateur/trice
+  web_search_charter: 'Charte du groupe'
+  web_search_member: Membre
+  web_search_title: Titre
+  web_search_status: Statut
+  web_search_online: 'En ligne'
+  web_search_open_enrollment: 'Tout le monde peut adhérer'
+  web_search_join_fee: "Frais d'adhésion"
+  web_search_content_general: 'Contenu général'
+  web_search_content_moderate: 'Contenu modéré'
+  place_category_arts: 'Arts & Culture'
+  place_category_business: Affaires
+  place_category_educational: Éducatif
+  place_category_gaming: Jeux
+  place_category_hangout: 'Lieu de rencontre'
+  place_category_newcomer: 'Pour les nouveaux arrivants'
+  place_category_parks: 'Parcs & Nature'
+  place_category_residential: Résidentiel
+  place_category_shopping: Shopping
+  place_category_other: Autres
+  place_category_rental: Location
+  event_category_discussion: Discussion
+  event_category_sports: Sports
+  event_category_live_music: 'Musique live'
+  event_category_commercial: Annonce
+  event_category_nightlife: 'Vie nocturne/Divertissements'
+  event_category_games: Jeux/Concours
+  event_category_pageants: 'Concours de beauté'
+  event_category_education: Éducation
+  event_category_arts: 'Arts et Culture'
+  event_category_charity: 'Organisations caritatives / Groupes de soutien'
+  event_category_miscellaneous: Divers
+  classified_category_shopping: Achats
+  classified_category_land_rental: 'Location de terrain'
+  classified_category_property_rental: 'Location immobilière'
+  classified_category_attraction: 'Attraction spéciale'
+  classified_category_new_products: 'Nouveaux produits'
+  classified_category_employment: Emploi
+  classified_category_wanted: Recherché
+  classified_category_service: Service
+  classified_category_personal: Personnel
   tp_more: "Plus de façons d'y aller"
   setting_gatekeeper_help: 'L’adresse par laquelle les autres grilles atteignent celle-ci (hypergrid).'
   setting_uas: 'Service des agents'

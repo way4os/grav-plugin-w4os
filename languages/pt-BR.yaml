@@ -454,6 +454,106 @@ w4os:
   link_menu_local: 'Teletransportar (este grid)'
   link_menu_map: 'Mostrar no mapa'
   link_menu_copy: 'Copiar o endereço'
+  web_search_places: Lugares
+  web_search_land: 'Vendas de terreno'
+  web_search_events: Eventos
+  web_search_classifieds: Classificados
+  web_search_people: Pessoas
+  web_search_submit: Buscar
+  web_search_words: 'Digite os termos de busca'
+  web_search_name: Name
+  web_search_min_letters: 'Pelo menos %d letras.'
+  web_search_category: Categoria
+  web_search_any_category: 'Todas as categorias'
+  web_search_ratings: Classificações
+  web_search_rating_general: Geral
+  web_search_rating_moderate: Moderado
+  web_search_rating_adult: Adulto
+  web_search_land_type: Tipo
+  web_search_land_any: 'Todos os tipos'
+  web_search_land_mainland: 'Venda no continente'
+  web_search_land_estate: 'Venda em região estate'
+  web_search_price_max: 'Preço ≤'
+  web_search_area_min: 'Área ≥'
+  web_search_when: Quando
+  web_search_upcoming: 'Em andamento e em breve'
+  web_search_day: Data
+  web_search_previous_day: 'Voltar um dia'
+  web_search_next_day: 'Avançar um dia'
+  web_search_nothing: 'Nenhum resultado'
+  web_search_price: Preço
+  web_search_area: Área
+  web_search_traffic: Traffic
+  web_search_region: Região
+  web_search_date: Data
+  web_search_duration: 'Duração do evento'
+  web_search_sort: 'Ordenar por'
+  web_search_price_m2: Preço/m²
+  web_search_time: Hora
+  web_search_adult_content: 'Conteúdo moderado'
+  web_search_yes: Sim
+  web_search_no: Não
+  web_search_organizer: Organizador
+  web_search_location: Local
+  web_search_entry_fee: 'Taxa de entrada'
+  web_search_none: nenhum
+  web_search_description: Descrição
+  web_search_content_type: 'Tipo de conteúdo'
+  web_search_creation_date: 'Data de criação'
+  web_search_listing_cost: 'Preço do anúncio'
+  web_search_rating: Classificação
+  web_search_next: Avançar
+  web_search_previous: Voltar
+  web_search_groups: Grupos
+  web_search_members: Membros
+  web_search_key: UUID
+  web_search_born: 'Data de nascimento'
+  web_search_account: Conta
+  web_search_partner: Parceiro
+  web_search_about: Sobre
+  web_search_show_profile: 'Abrir perfil'
+  web_search_group_key: 'UUID do grupo'
+  web_search_founder: Fundador
+  web_search_charter: 'Carta do grupo'
+  web_search_member: Membro
+  web_search_title: Título
+  web_search_status: Status
+  web_search_online: Conectado
+  web_search_open_enrollment: 'Qualquer pessoa pode entrar'
+  web_search_join_fee: 'Cobrar taxa de entrada'
+  web_search_content_general: 'Conteúdo geral'
+  web_search_content_moderate: 'Conteúdo moderado'
+  place_category_arts: 'Arte e cultura'
+  place_category_business: Negócios
+  place_category_educational: Educação
+  place_category_gaming: Jogos
+  place_category_hangout: 'Ponto de encontro'
+  place_category_newcomer: 'Amigável para iniciantes'
+  place_category_parks: 'Parques e natureza'
+  place_category_residential: Residencial
+  place_category_shopping: Compras
+  place_category_other: Outros
+  place_category_rental: Aluguel
+  event_category_discussion: Discussão
+  event_category_sports: Esportes
+  event_category_live_music: 'Música ao vivo'
+  event_category_commercial: Comercial
+  event_category_nightlife: 'Vida noturna/Entretenimento'
+  event_category_games: Jogos/Competições
+  event_category_pageants: 'Concursos de beleza'
+  event_category_education: Educação
+  event_category_arts: 'Arte e cultura'
+  event_category_charity: 'Grupos de caridade/suporte'
+  event_category_miscellaneous: Outros
+  classified_category_shopping: Compras
+  classified_category_land_rental: 'Aluguel de terreno'
+  classified_category_property_rental: 'Aluguel de imóvel'
+  classified_category_attraction: 'Atrações especiais'
+  classified_category_new_products: 'Produtos novos'
+  classified_category_employment: Emprego
+  classified_category_wanted: Procura-se
+  classified_category_service: Serviços
+  classified_category_personal: Pessoal
   tp_more: 'Mais formas de ir até lá'
   setting_gatekeeper_help: 'O endereço pelo qual os outros grids alcançam este (hypergrid).'
   setting_uas: 'Serviço de user agent'

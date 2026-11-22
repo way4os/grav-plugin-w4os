@@ -454,6 +454,106 @@ w4os:
   link_menu_local: 'Teleporteren (dit grid)'
   link_menu_map: 'Op de kaart tonen'
   link_menu_copy: 'Adres kopiëren'
+  web_search_places: Plaatsen
+  web_search_land: 'Land te koop'
+  web_search_events: Evenementen
+  web_search_classifieds: Advertenties
+  web_search_people: Personen
+  web_search_submit: Zoeken
+  web_search_words: Woorden
+  web_search_name: Naam
+  web_search_min_letters: 'Minstens %d letters.'
+  web_search_category: Categorie
+  web_search_any_category: 'Alle categorieën'
+  web_search_ratings: Classificaties
+  web_search_rating_general: Algemeen
+  web_search_rating_moderate: Gematigd
+  web_search_rating_adult: Volwassen
+  web_search_land_type: Soort
+  web_search_land_any: Alle
+  web_search_land_mainland: Vasteland
+  web_search_land_estate: Landgoed
+  web_search_price_max: 'Maximale prijs'
+  web_search_area_min: 'Minimale oppervlakte'
+  web_search_when: Wanneer
+  web_search_upcoming: 'Lopend en komend'
+  web_search_day: 'Op een dag'
+  web_search_previous_day: 'Vorige dag'
+  web_search_next_day: 'Volgende dag'
+  web_search_nothing: 'Geen resultaten'
+  web_search_price: Prijs
+  web_search_area: Oppervlakte
+  web_search_traffic: Bezoekers
+  web_search_region: Regio
+  web_search_date: Datum
+  web_search_duration: Duur
+  web_search_sort: 'Sorteren op'
+  web_search_price_m2: Prijs/m²
+  web_search_time: Tijd
+  web_search_adult_content: 'Inhoud voor volwassenen'
+  web_search_yes: Ja
+  web_search_no: Nee
+  web_search_organizer: Organisator
+  web_search_location: Locatie
+  web_search_entry_fee: Toegangsprijs
+  web_search_none: Geen
+  web_search_description: Beschrijving
+  web_search_content_type: 'Soort inhoud'
+  web_search_creation_date: Aanmaakdatum
+  web_search_listing_cost: Advertentiekosten
+  web_search_rating: Classificatie
+  web_search_next: Volgende
+  web_search_previous: Vorige
+  web_search_groups: Groepen
+  web_search_members: Leden
+  web_search_key: Sleutel
+  web_search_born: Geboortedatum
+  web_search_account: Account
+  web_search_partner: Partner
+  web_search_about: Info
+  web_search_show_profile: 'Profiel tonen'
+  web_search_group_key: Groepssleutel
+  web_search_founder: 'Opgericht door'
+  web_search_charter: Groepshandvest
+  web_search_member: Lid
+  web_search_title: Titel
+  web_search_status: Status
+  web_search_online: Online
+  web_search_open_enrollment: 'Iedereen kan lid worden'
+  web_search_join_fee: 'Kosten om lid te worden'
+  web_search_content_general: 'Algemene inhoud'
+  web_search_content_moderate: 'Gematigde inhoud'
+  place_category_arts: 'Kunst en cultuur'
+  place_category_business: Zaken
+  place_category_educational: Educatief
+  place_category_gaming: Spellen
+  place_category_hangout: Ontmoetingsplek
+  place_category_newcomer: 'Voor nieuwkomers'
+  place_category_parks: 'Parken en natuur'
+  place_category_residential: Woongebied
+  place_category_shopping: Winkelen
+  place_category_other: Overig
+  place_category_rental: Verhuur
+  event_category_discussion: Discussie
+  event_category_sports: Sport
+  event_category_live_music: Livemuziek
+  event_category_commercial: Commercieel
+  event_category_nightlife: Nachtleven/Amusement
+  event_category_games: Spellen/Wedstrijden
+  event_category_pageants: Missverkiezingen
+  event_category_education: Onderwijs
+  event_category_arts: 'Kunst en cultuur'
+  event_category_charity: Liefdadigheid/Steungroepen
+  event_category_miscellaneous: Diversen
+  classified_category_shopping: Winkelen
+  classified_category_land_rental: Grondverhuur
+  classified_category_property_rental: Vastgoedverhuur
+  classified_category_attraction: 'Speciale attractie'
+  classified_category_new_products: 'Nieuwe producten'
+  classified_category_employment: Werk
+  classified_category_wanted: Gezocht
+  classified_category_service: Dienst
+  classified_category_personal: Persoonlijk
   tp_more: 'Meer manieren om erheen te gaan'
   setting_gatekeeper_help: 'Het adres waarmee andere grids dit grid bereiken (hypergrid).'
   setting_uas: 'User agent-service'
