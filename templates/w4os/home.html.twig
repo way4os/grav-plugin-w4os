@@ -1,12 +1,12 @@
 {# The home page of a grid, as content of any page (the shortcode [w4os-home]...[/w4os-home], in the theme's default page): the
-   text of the page, the popular places and the guide (where the text has the marker <!--w4os-blocks-->, if it has one), then what the grid is (its info, its status, the Connect block, its texts
-   start_title, start_content and start_footer from the front matter of the page, or as a theme that extends it sets them) and its
-   message of the day with the last news of the site (its page /news, when it has one) and a link to all of them.
+   text of the page, the popular places and the guide (where the text has the marker <!--w4os-blocks-->, if it has one), then what the grid is (its info, its status, its message of the day, the Connect block, its texts
+   start_title, start_content and start_footer from the front matter of the page, or as a theme that extends it sets them), and the
+   last news of the site (its page /news, when it has one) with a link to all of them.
    Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
    column, if it has one, stays the theme's. The main column a section, its blocks titled h2 (the page's own title is h1); the
    others asides, their blocks titled h3. A theme adds its own boxes to the asides by extending this template
    ({% extends '@w4os/w4os/home.html.twig' %}) and filling the blocks w4os_home_grid_extra (under what the grid is),
-   w4os_home_news_before (between the message of the day and the news) and w4os_home_news_extra (under the news). #}
+   w4os_home_news_before (above the news) and w4os_home_news_extra (under the news). #}
 {% set news = w4os_home_news() %}
 <div class="w4os-home">
     <div class="w4os-home-layout">
@@ -21,11 +21,11 @@
         <aside class="w4os-home-grid">
             {{ w4os_block('grid-info', {level: 'h3'}) }}
             {{ w4os_block('grid-status', {level: 'h3'}) }}
+            {{ w4os_block('motd', {level: 'h3'}) }}
             {% include 'w4os/getting-started.html.twig' with {start_level: 'h3', start_title: start_title ?? grav.page.header.start_title ?? '', start_content: start_content ?? grav.page.header.start_content ?? '', start_footer: start_footer ?? grav.page.header.start_footer ?? ''} %}
             {% block w4os_home_grid_extra %}{% endblock %}
         </aside>
         <aside class="w4os-home-news">
-            {{ w4os_block('motd', {level: 'h3'}) }}
             {% block w4os_home_news_before %}{% endblock %}
             {% if news %}
             <section class="w4os-latest">

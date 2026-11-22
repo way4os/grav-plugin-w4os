@@ -158,7 +158,7 @@ describe('the home page of a grid', function () {
             ->and($html)->toContain('<h3 class="block-title">grid-info</h3>', '<h3 class="block-title">grid-status</h3>', '<h3 class="block-title">motd</h3>');
     });
 
-    test('has the Connect block under what the grid is, the last three news of the site under its message of the day, then a link to all of them', function () {
+    test('has its message of the day and the Connect block under what the grid is, the last three news of the site beside them, then a link to all of them', function () {
         $twig = themeless_twig();
         $post = fn (int $n) => new class($n) {
             public array $header = [];
@@ -191,7 +191,8 @@ describe('the home page of a grid', function () {
         $grid = substr($html, (int) strpos($html, '<aside class="w4os-home-grid">'), (int) strpos($html, '<aside class="w4os-home-news">') - (int) strpos($html, '<aside class="w4os-home-grid">'));
 
         expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
-            ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
+            ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'block-motd'))
+            ->and(strpos($grid, 'block-motd'))->toBeLessThan(strpos($grid, 'w4os-start'))
             ->and($html)->toContain('<h3 class="w4os-latest-title">News</h3>', '<p class="w4os-latest-all"><a class="w4os-more" href="/news">[w4os.home_all_news]</a></p>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
             ->and($html)->not->toContain('Post 4')
             // The excerpt cut with an ellipsis written once, never escaped again (&amp;hellip;)
@@ -211,8 +212,9 @@ describe('the home page of a grid', function () {
         expect($html)->toContain('<p>Support</p>', '<p>Before</p>', '<p>Extra</p>', '<aside class="w4os-home-grid">', '>Try it</h3>')
             // The texts of the Connect block from the front matter of the page, where the theme sets none
             ->and($twig->render('w4os/home.html.twig', ['content' => '', 'grav' => ['page' => ['header' => ['start_footer' => 'Full help']]]]))->toContain('<div class="w4os-start-footer">Full help</div>')
-            // Between the message of the day and the news, in the order of the page (screen readers read it so)
-            ->and(strpos($html, 'block-motd'))->toBeLessThan(strpos($html, '<p>Before</p>'))
+            // In the order of the page (screen readers read it so): what the grid is and its boxes, then the news and theirs
+            ->and(strpos($html, 'Support'))->toBeLessThan(strpos($html, '<aside class="w4os-home-news">'))
+            ->and(strpos($html, '<aside class="w4os-home-news">'))->toBeLessThan(strpos($html, '<p>Before</p>'))
             ->and(strpos($html, '<p>Before</p>'))->toBeLessThan(strpos($html, '<p>Extra</p>'))
             ->and(strpos($html, 'w4os-start'))->toBeLessThan(strpos($html, 'Support'))
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("addPath(__DIR__.'/templates', 'w4os')")
