@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Teleportio (y grid hwn)'
   link_menu_map: 'Dangos ar y map'
   link_menu_copy: "Copïo'r cyfeiriad"
+  link_menu_addgrid: "Ychwanegu'r grid"
   web_search_places: Lleoedd
   web_search_land: 'Tir ar werth'
   web_search_events: Digwyddiadau

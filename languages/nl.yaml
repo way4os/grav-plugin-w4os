@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Teleporteren (dit grid)'
   link_menu_map: 'Op de kaart tonen'
   link_menu_copy: 'Adres kopiëren'
+  link_menu_addgrid: 'Grid toevoegen'
   web_search_places: Plaatsen
   web_search_land: 'Land te koop'
   web_search_events: Evenementen

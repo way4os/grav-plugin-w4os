@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Teleportieren (dieses Grid)'
   link_menu_map: 'Auf der Karte zeigen'
   link_menu_copy: 'Adresse kopieren'
+  link_menu_addgrid: 'Grid hinzufügen'
   web_search_places: Orte
   web_search_land: Land-Verkauf
   web_search_events: Events

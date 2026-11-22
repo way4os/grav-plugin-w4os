@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Teletransportar (este grid)'
   link_menu_map: 'Mostrar no mapa'
   link_menu_copy: 'Copiar o endereço'
+  link_menu_addgrid: 'Adicionar grid'
   web_search_places: Lugares
   web_search_land: 'Vendas de terreno'
   web_search_events: Eventos

@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Se téléporter (cette grille)'
   link_menu_map: 'Afficher sur la carte'
   link_menu_copy: "Copier l'adresse"
+  link_menu_addgrid: 'Ajouter la grille'
   web_search_places: Lieux
   web_search_land: 'Ventes de terrains'
   web_search_events: Événements

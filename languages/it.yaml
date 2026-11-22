@@ -455,6 +455,7 @@ w4os:
   link_menu_local: 'Teletrasportati (questa griglia)'
   link_menu_map: 'Mostra sulla mappa'
   link_menu_copy: "Copia l'indirizzo"
+  link_menu_addgrid: 'Aggiungi grid'
   web_search_places: Luoghi
   web_search_land: 'Vendita Terreni'
   web_search_events: Eventi
