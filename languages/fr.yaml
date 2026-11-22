@@ -188,10 +188,10 @@ w4os:
   copy: Copier
   copied: Copié
   start_title: Connexion
-  start_avatar: 'Créer votre avatar'
+  start_avatar: 'Créez votre avatar'
   start_avatar_done: 'Connecté comme %s'
-  start_add_grid: 'Ajouter la grille'
-  start_login: 'Se connecter'
+  start_add_grid: 'Ajoutez la grille'
+  start_login: Connectez-vous
   start_login_done: 'Bon séjour !'
   start_done: Terminé
   home_all_news: 'Toutes les actualités'
