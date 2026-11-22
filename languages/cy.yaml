@@ -323,6 +323,7 @@ w4os:
   manage_title: Afatarau
   search_avatars: 'Enw neu ebost'
   search: Chwilio
+  search_title: Chwilio
   no_avatars: 'Dim canlyniad'
   avatars_count: '%d afatar'
   status: Statws

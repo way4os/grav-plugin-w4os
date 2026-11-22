@@ -323,6 +323,7 @@ w4os:
   manage_title: Avatar
   search_avatars: 'Nome o email'
   search: Cerca
+  search_title: Ricerca
   no_avatars: 'Nessun risultato'
   avatars_count: '%d avatar'
   status: Stato
