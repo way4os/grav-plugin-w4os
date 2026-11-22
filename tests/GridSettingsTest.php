@@ -74,6 +74,8 @@ describe('the web assets of the grid', function () {
             ->and(Site::providedRoute(['provide' => false, 'path' => 'helpers/assets', 'assetsUrl' => 'https://assets.example.org/']))->toBeNull()
             ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/00000000-0000-1111-9999-000000000001.jpg'))->toBe(['00000000-0000-1111-9999-000000000001', 'jpg'])
             ->and(Site::assetAsked('/helpers/assets/', '/helpers/assets/00000000-0000-1111-9999-000000000001.png'))->toBe(['00000000-0000-1111-9999-000000000001', 'png'])
+            // The image of a title, the engine's picture of a place that has none
+            ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/title-48616e67206f7574.jpg'))->toBe(['title-48616e67206f7574', 'jpg'])
             ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/page'))->toBeNull()
             ->and(Site::assetAsked('/helpers/assets', '/helpers/register.php'))->toBeNull();
     });

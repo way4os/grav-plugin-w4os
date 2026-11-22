@@ -392,10 +392,16 @@ final class Site
         return $this->assetsUrl().'/'.rawurlencode($uuid).'.'.$format;
     }
 
-    /** The UUID and the format of a picture asked under a route (<route>/<UUID>.jpg), null for another address. */
+    /**
+     * The id and the format of a picture asked under a route (<route>/<id>.jpg): an asset UUID, or the image of a title the engine
+     * gives a place that has none; null for another address.
+     */
     public static function assetAsked(string $route, string $path): ?array
     {
-        return preg_match('#^'.preg_quote(rtrim($route, '/'), '#').'/([0-9a-fA-F-]{36})\.(jpg|png)$#', $path, $m) === 1 ? [$m[1], $m[2]] : null;
+        Bundled::library();
+        $id = class_exists(\W4OS\Engine\Assets\TitleImage::class) ? \W4OS\Engine\Assets\TitleImage::ID_PATTERN : '[0-9a-fA-F-]{36}';
+
+        return preg_match('#^'.preg_quote(rtrim($route, '/'), '#').'/('.$id.')\.(jpg|png)$#', $path, $m) === 1 ? [$m[1], $m[2]] : null;
     }
 
     /**
