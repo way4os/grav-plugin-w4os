@@ -188,10 +188,10 @@ w4os:
   copy: Copïo
   copied: "Wedi'i gopïo"
   start_title: Cysylltu
-  start_avatar: 'Creu eich afatar'
+  start_avatar: 'Crëwch eich afatar'
   start_avatar_done: 'Wedi mewngofnodi fel %s'
-  start_add_grid: "Ychwanegu'r grid"
-  start_login: Mewngofnodi
+  start_add_grid: 'Ychwanegwch y grid'
+  start_login: Mewngofnodwch
   start_login_done: Mwynhewch!
   start_done: "Wedi'i wneud"
   home_all_news: 'Yr holl newyddion'
