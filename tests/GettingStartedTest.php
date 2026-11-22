@@ -114,7 +114,7 @@ describe('the grid added to a viewer', function () {
     });
 
     test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle; the login URI a link', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field .w4os-login-uri { color: inherit; }', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field .w4os-login-uri { color: inherit; }', '.w4os-start-step:has([aria-expanded="true"]) { opacity: 1; z-index: 1; }', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
     });
 
     test('takes the texts of a site above and under its steps, a link to a path of the site in the language of the page, nothing when empty', function () {
