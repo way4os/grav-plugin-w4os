@@ -1,5 +1,5 @@
 {# The home page of a grid, as content of any page (the shortcode [w4os-home]...[/w4os-home], in the theme's default page): the
-   text of the page, the popular places and the guide, then what the grid is (its info, its status, the Connect block, its texts
+   text of the page, the popular places and the guide (where the text has the marker <!--w4os-blocks-->, if it has one), then what the grid is (its info, its status, the Connect block, its texts
    start_title, start_content and start_footer from the front matter of the page, or as a theme that extends it sets them) and its
    message of the day with the last news of the site (its page /news, when it has one) and a link to all of them.
    Side by side only where the content is wide enough (css/w4os.css, container queries), the text first otherwise; the theme's own
@@ -11,9 +11,12 @@
 <div class="w4os-home">
     <div class="w4os-home-layout">
         <section class="w4os-home-main">
-            {{ content|raw }}
+            {# The text, then the popular places and the guide, then what the text has after the marker <!--w4os-blocks-->, if any #}
+            {% set text = content|split('<!--w4os-blocks-->', 2) %}
+            {{ text[0]|raw }}
             {{ w4os_block('popular-places', {level: 'h2'}) }}
             {{ w4os_block('destination_guide', {level: 'h2'}) }}
+            {{ (text[1] ?? '')|raw }}
         </section>
         <aside class="w4os-home-grid">
             {{ w4os_block('grid-info', {level: 'h3'}) }}

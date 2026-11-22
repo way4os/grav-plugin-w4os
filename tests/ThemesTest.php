@@ -135,6 +135,15 @@ describe('the home page of a grid', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('@container');
     });
 
+    test('puts the text after the marker <!--w4os-blocks--> under the popular places and the guide', function () {
+        $html = themeless_twig()->render('w4os/home.html.twig', ['content' => "<h1>Welcome</h1>\n<!--w4os-blocks-->\n<h2>Install</h2>"]);
+
+        expect(strpos($html, '<h1>Welcome</h1>'))->toBeLessThan(strpos($html, 'block-popular-places'))
+            ->and(strpos($html, 'block-destination_guide'))->toBeLessThan(strpos($html, '<h2>Install</h2>'))
+            ->and(strpos($html, '<h2>Install</h2>'))->toBeLessThan(strpos($html, 'w4os-home-grid'))
+            ->and($html)->not->toContain('<!--w4os-blocks-->');
+    });
+
     test('has its main column a section, its blocks titled h2, its side columns asides, their blocks titled h3', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(picture_tag_function());
