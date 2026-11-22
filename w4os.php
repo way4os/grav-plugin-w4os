@@ -462,6 +462,9 @@ class W4osPlugin extends Plugin
             $query = (string) ($_SERVER['QUERY_STRING'] ?? '');
             $this->grav->redirectLangSafe($moved.($query === '' ? '' : "?$query"), 301);
         }
+        // The previous addresses of the grid on this site's host, served by Grav's own redirects after the site's own list
+        $config = $this->grav['config'];
+        $config->set('site.redirects', Site::redirectsFrom($this->site()->previousAddresses(), (string) $this->grav['uri']->host(), (array) $config->get('site.redirects', [])));
         $this->site()->addMenu();
         $this->site()->addPage($this->grav['uri']->path());
         $this->loginTexts();

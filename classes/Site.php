@@ -1159,6 +1159,75 @@ final class Site
     }
 
     /**
+     * The previous addresses of the grid (the engine's /addresses, `previous`: service, old, new, date, source), kept an hour; none
+     * when the engine does not answer, without asking it again before then.
+     *
+     * @return list<array<string,mixed>>
+     */
+    public function previousAddresses(): array
+    {
+        $pairs = $this->cached('previous addresses', function () {
+            try {
+                return array_values(array_filter((array) ($this->engine()->addresses()['previous'] ?? []), 'is_array'));
+            } catch (\Throwable) {
+                return [];
+            }
+        }, 3600);
+
+        return is_array($pairs) ? $pairs : [];
+    }
+
+    /**
+     * The redirects of the site (Grav's `site.redirects`) with the previous addresses of the grid on its own host: each old address
+     * exactly (its path and its query, a last slash or not), its placeholders ([AGENT_NAME]) carried to the new one, for good
+     * (301); a path when the new one is on the same host. The site's own list first: Grav follows the first that matches, so it
+     * wins on the same address. An old address on another host (or another port: a grid) is the web server's.
+     *
+     * @param list<mixed> $previous the pairs (previousAddresses())
+     * @param array<string,string> $manual the site's own redirects
+     * @return array<string,string>
+     */
+    public static function redirectsFrom(array $previous, string $host, array $manual): array
+    {
+        $host = strtolower(trim($host));
+        $ours = [];
+        foreach ($previous as $pair) {
+            $old = is_array($pair) ? parse_url((string) ($pair['old'] ?? '')) : false;
+            $new = is_array($pair) ? trim((string) ($pair['new'] ?? '')) : '';
+            if (! is_array($old) || strtolower((string) ($old['host'] ?? '')) !== $host || $host === '' || $new === ''
+                || ! in_array((int) ($old['port'] ?? 0), [0, 80, 443], true)) {
+                continue;
+            }
+            $query = isset($old['query']) ? '?'.$old['query'] : '';
+            $path = (string) ($old['path'] ?? '/');
+            // Its placeholders ([AGENT_NAME]) as captures, the rest as it is
+            $parts = preg_split('/\[([A-Z_]+)\]/', $path.$query, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
+            $pattern = '';
+            $names = [];
+            foreach ($parts as $i => $part) {
+                if ($i % 2 === 0) {
+                    $pattern .= preg_quote($part, '#');
+                } else {
+                    $names[] = $part;
+                    $pattern .= '([^&]*)';
+                }
+            }
+            $query === '' && ($pattern = rtrim($pattern, '/').'/?');
+            $target = parse_url($new);
+            $local = is_array($target) && strtolower((string) ($target['host'] ?? '')) === $host && ! isset($target['port']);
+            $to = $local ? ($target['path'] ?? '/').(isset($target['query']) ? '?'.$target['query'] : '') : $new;
+            foreach ($names as $n => $name) {
+                $to = str_replace("[$name]", '${'.($n + 1).'}', $to);
+            }
+            if (rtrim((string) $pair['old'], '/') !== rtrim($new, '/')) {
+                $ours[$pattern.'$'] = $to.'[301]';
+            }
+        }
+
+        return $manual + array_diff_key($ours, $manual);
+    }
+
+    /**
      * The access of an avatar as the engine gives it: the level its access is decided by (`accessLevel`: its user level, a god's for
      * the owner of the grid whatever its own; its user level with an engine before it), its user level, whether it owns the grid.
      *

@@ -113,6 +113,10 @@ For example, on a grid where Gudule is a god (200) and Suzi a liaison (150), Suz
 
 The level that decides is the one the engine gives the avatar at sign-in (`accessLevel`): its user level, except for the owner of the grid, the owner of its first estate (the lowest EstateID), who gets at least a god's (200) whatever its user level, as OpenSimulator makes the owner of a region its god (`region_owner_is_god`). So the owner of a grid without gods still manages it from the website. Its user level is not changed, and the lists show it as it is. A later version (opensim-kit ROADMAP, 3.1) gives it only while the grid has no god, through a list of administrators in the settings.
 
+## The previous addresses of the grid
+
+A grid that moves gets new addresses (its welcome page, search, profiles...), while the viewers keep asking the old ones until their user refreshes the grid's info. The engine keeps each old address with its new one (`GET /grids/{grid}/addresses`, `previous`); the plugin adds the ones on the site's own host to Grav's redirects (`site.redirects`, a 301 to the new address, its placeholders such as `[AGENT_NAME]` carried over), so Grav serves them itself. They are read from the engine once an hour, none when it does not answer. Your own list in `user/config/site.yaml` (`redirects:`) comes first and wins on the same address. An old address on another host (an old helpers server, the grid's own) needs a redirect of the web server that answers it.
+
 ## Standalone
 
 The plugin ships as a Grav plugin: its release zip (Grav's GPM installs it), and inside the light w4os site; it has no system package of its own. It is self-contained: its release zip (about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):
