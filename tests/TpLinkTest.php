@@ -28,6 +28,10 @@ describe('a teleport link of the site', function () {
             ->and(dirname(__DIR__).'/vendor/w4os/w4os-views/assets/'.\W4OS\Views\TeleportLink::ASSETS['css'][0])->toBeFile()
             ->and(dirname(__DIR__).'/js/tp-link.js')->not->toBeFile()
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->not->toContain('.w4os-tp')
+            // The list with its detail of a search (ListDetailView), its style and script the views' own too
+            ->and($php)->toContain("ListDetailView::ASSETS['js'] as \$file", "ListDetailView::ASSETS['css'] as \$file")
+            ->and(dirname(__DIR__).'/vendor/w4os/w4os-views/assets/'.\W4OS\Views\ListDetailView::ASSETS['js'][0])->toBeFile()
+            ->and(dirname(__DIR__).'/vendor/w4os/w4os-views/assets/'.\W4OS\Views\ListDetailView::ASSETS['css'][0])->toBeFile()
             ->and(Site::viewerPattern())->toContain('Firestorm')->not->toStartWith('/');
     });
 });

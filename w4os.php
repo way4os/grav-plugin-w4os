@@ -1389,6 +1389,15 @@ class W4osPlugin extends Plugin
         foreach ($files['js'] as $file) {
             $assets->addJs('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
         }
+        // The results of a search: a list with the detail of the item it selects, drawn by the views (ListHtml), their style and script
+        if (\W4OS\Grav\Blocks::name($name) === 'search' && class_exists(\W4OS\Views\ListDetailView::class)) {
+            foreach (\W4OS\Views\ListDetailView::ASSETS['css'] as $file) {
+                $assets->addCss('plugin://w4os/vendor/w4os/w4os-views/assets/'.$file);
+            }
+            foreach (\W4OS\Views\ListDetailView::ASSETS['js'] as $file) {
+                $assets->addJs('plugin://w4os/vendor/w4os/w4os-views/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
+            }
+        }
     }
 
     /**
