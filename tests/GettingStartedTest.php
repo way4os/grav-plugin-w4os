@@ -50,7 +50,9 @@ describe('the steps of a newcomer', function () {
         expect($html)->toContain('<h2 class="w4os-start-title">w4os.start_title</h2>', 'class="w4os-start-step w4os-start-avatar is-next" aria-current="step"')
             ->and($html)->toContain('<a class="btn btn-primary" href="/register">w4os.start_avatar</a>')
             ->and($html)->toContain('<a class="btn btn-ghost w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002">w4os.start_add_grid</a>')
-            ->and($html)->toContain('<code class="w4os-login-uri">grid.example.org:8002</code>')
+            // Under its button that adds the grid, its login URI to copy, nothing else
+            ->and($html)->toContain('<p class="w4os-start-uri"><span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><span class="w4os-tp-main"><code class="w4os-login-uri">grid.example.org:8002</code></span>'."\u{2060}".'<button type="button" class="w4os-tp-action w4os-tp-copy"')
+            ->and(explode('<p class="w4os-start-uri">', $html)[1])->not->toContain('w4os-tp-toggle', 'addgrid/grid')
             ->and($html)->not->toContain('start_viewer_note', 'firestormviewer')
             ->and($html)->toContain('<a class="btn btn-ghost w4os-login-button" href="secondlife:///app/login?grid=grid.example.org%3A8002">w4os.start_login</a>')
             ->and(substr_count($html, '<h3'))->toBe(0)
@@ -86,8 +88,9 @@ describe('the grid added to a viewer', function () {
 
         expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
             ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
-            // The login URI a teleport link of its own (the links the engine gives): adding the grid first, its exact address to copy
+            // The login URI a link of its own (the links the engine gives): adding the grid, its exact address to copy, nothing else
             ->and($html)->toContain('<span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002"', '><code class="w4os-login-uri">grid.example.org:8002</code></a>', 'data-w4os-tp-copy="grid.example.org:8002"')
+            ->and(explode('w4os-uri-field', $html)[1])->not->toContain('hop://grid.example.org')
             ->and(dirname(__DIR__).'/js/copy.js')->not->toBeFile();
     });
 

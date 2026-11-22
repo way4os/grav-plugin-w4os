@@ -1,3 +1,4 @@
-{# The login URI of a grid (uri): its address as a teleport link (w4os_tp_link, the links the engine gives for it), the one that adds
-   the grid to the viewer first (or the action prefer says: teleport for a visit), its menu with the exact address to copy. #}
-{% if uri %}<span class="w4os-uri-field">{{ w4os_tp_link(uri, uri, '<code class="w4os-login-uri">' ~ uri|e ~ '</code>', prefer ?? null) }}</span>{% endif %}
+{# The login URI of a grid (uri): its address as a teleport link (w4os_tp_link, the links the engine gives for it). What it offers is
+   the page's: only (the actions kept: addgrid and copy by default, copy alone under a button that adds the grid or for an address to
+   paste in a map), prefer (the action of its main link: addgrid by default). #}
+{% if uri %}<span class="w4os-uri-field">{{ w4os_tp_link(uri, uri, '<code class="w4os-login-uri">' ~ uri|e ~ '</code>', prefer ?? 'addgrid', only ?? ['addgrid', 'copy']) }}</span>{% endif %}

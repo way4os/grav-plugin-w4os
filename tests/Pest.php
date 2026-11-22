@@ -14,13 +14,13 @@ function link_function(string $prefix = ''): Twig\TwigFunction
  */
 function tp_link_function(): Twig\TwigFunction
 {
-    return new Twig\TwigFunction('w4os_tp_link', function (?string $destination, ?string $label = null, ?string $html = null, ?string $prefer = null) {
+    return new Twig\TwigFunction('w4os_tp_link', function (?string $destination, ?string $label = null, ?string $html = null, ?string $prefer = null, ?array $only = null) {
         $destination = (string) $destination;
         $links = str_contains($destination, '/') ? [] : [['action' => 'addgrid', 'format' => 4096, 'link' => 'hop:///app/gridmanager/addgrid/'.rawurlencode($destination), 'label' => 'Add the grid']];
         $links[] = ['action' => 'teleport', 'format' => 8, 'link' => "hop://$destination", 'label' => 'hop'];
         $links[] = ['action' => 'copy', 'format' => 1024, 'link' => $destination, 'label' => 'Copy'];
 
-        return W4OS\Views\TeleportLink::html(['browser' => $links], (string) $label, 'browser', ['copied' => 'Copied'], '', $html, $prefer);
+        return W4OS\Views\TeleportLink::html(['browser' => $links], (string) $label, 'browser', ['copied' => 'Copied'], '', $html, $prefer, $only);
     }, ['is_safe' => ['html']]);
 }
 

@@ -855,7 +855,7 @@ final class Site
      * client the server tells; its text the one given, else the name of the place (its region; a grid alone, its address). The
      * address alone, as text, when the engine gives no link.
      */
-    public function tpLink(string $destination, ?string $label = null, ?string $html = null, ?string $prefer = null): string
+    public function tpLink(string $destination, ?string $label = null, ?string $html = null, ?string $prefer = null, ?array $only = null): string
     {
         $destination = trim($destination);
         $place = $destination === '' ? [] : $this->cached('place '.$destination, function () use ($destination) {
@@ -875,7 +875,7 @@ final class Site
         return \W4OS\Views\TeleportLink::html($links, $text, $this->client(), [
             'more' => $this->translate('w4os.tp_more'),
             'copied' => $this->translate('w4os.copied'),
-        ], self::viewerPattern(), $html, $prefer);
+        ], self::viewerPattern(), $html, $prefer, $only === null ? null : array_values(array_map('strval', $only)));
     }
 
     /** The name a place is shown by: its region (host:port/Region/x/y/z, host:port:Region), a grid alone its address. */

@@ -26,7 +26,7 @@
                 {# Once the avatar has been in the world, the grid is in its viewer: its login URI alone #}
                 {% if links and item.state != 'done' %}{{ w4os_anchor(links.hop, 'w4os.start_add_grid'|t, kind, 'w4os-add-grid-button') }}{% endif %}
                 {% if uri %}
-                <p class="w4os-start-uri">{% include 'w4os/login-uri.html.twig' %}</p>
+                <p class="w4os-start-uri">{% include 'w4os/login-uri.html.twig' with {only: ['copy']} %}</p>
                 {% endif %}
             {% elseif item.step == 'login' and uri %}
                 {{ w4os_anchor(w4os_login_link(), (item.state == 'done' ? 'w4os.start_login_done' : 'w4os.start_login')|t, kind, 'w4os-login-button') }}
