@@ -372,7 +372,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => $this->site()->picture($uuid, $default)));
         // A teleport link that fits where it is seen, browser or viewer (Site::tpLink(), W4OS\Views\TeleportLink)
-        $twig->addFunction(new \Twig\TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null) => $this->site()->tpLink((string) $destination, $label), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null, ?string $html = null) => $this->site()->tpLink((string) $destination, $label, $html), ['is_safe' => ['html']]));
         // A picture of the grid that never shows broken: the picture when it has one, else the initials of its name (Site::pictureTag())
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag(Site::hasPicture($uuid) ? $this->site()->picture($uuid, $default) : null, Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     }
@@ -431,7 +431,7 @@ class W4osPlugin extends Plugin
         // [login-uri]: the address alone, in a text; [login-uri add-grid]: with the button that adds the grid to a viewer
         $handlers->add('login-uri', fn ($shortcode) => array_key_exists('add-grid', (array) $shortcode->getParameters())
             ? $this->grav['twig']->processTemplate('w4os/add-grid.html.twig')
-            : '<code class="w4os-login-uri">'.htmlspecialchars($this->site()->loginUri()).'</code>');
+            : $this->grav['twig']->processTemplate('w4os/login-uri.html.twig', ['uri' => $this->site()->loginUri()]));
         // [getting-started title="..." content="..." footer="..."]: the Connect block, the next step to do standing out, the texts of
         // the site above and under its steps (templates/w4os/getting-started.html.twig)
         $handlers->add('getting-started', fn ($shortcode) => $this->grav['twig']->processTemplate('w4os/getting-started.html.twig', [

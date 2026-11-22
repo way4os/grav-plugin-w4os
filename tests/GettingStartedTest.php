@@ -13,6 +13,7 @@ function render_start(string $template, array $given, array $context = []): stri
     $given += ['links' => null, 'uri' => '', 'grid' => 'Demo World', 'avatar' => [], 'steps' => [], 'routes' => ['register' => '/register']];
     $twig->addFunction(new TwigFunction('w4os_add_grid', fn () => $given['links']));
     $twig->addFunction(new TwigFunction('w4os_login_uri', fn () => $given['uri']));
+    $twig->addFunction(tp_link_function());
     $twig->addFunction(new TwigFunction('w4os_grid_name', fn () => $given['grid']));
     $twig->addFunction(new TwigFunction('w4os_login_link', fn () => Site::loginLink($given['uri'])));
     $twig->addFunction(new TwigFunction('w4os_profile_page', fn () => '/profile/'.str_replace(' ', '.', (string) ($given['avatar']['name'] ?? ''))));
@@ -85,8 +86,9 @@ describe('the grid added to a viewer', function () {
 
         expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
             ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
-            ->and($html)->toMatch('#<span class="w4os-uri-field">\s*<code class="w4os-login-uri">grid.example.org:8002</code>\s*<button type="button" class="w4os-copy" hidden title="w4os.copy" aria-label="w4os.copy" data-w4os-copy="grid.example.org:8002" data-w4os-copied="w4os.copied"><i class="fa-regular fa-copy w4os-copy-icon" aria-hidden="true"></i>#')
-            ->and((string) file_get_contents(dirname(__DIR__).'/js/copy.js'))->toContain('if (navigator.clipboard) {', 'button.hidden = false');
+            // The login URI a teleport link of its own (the links the engine gives): adding the grid first, its exact address to copy
+            ->and($html)->toContain('<span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002"', '><code class="w4os-login-uri">grid.example.org:8002</code></a>', 'data-w4os-tp-copy="grid.example.org:8002"')
+            ->and(dirname(__DIR__).'/js/copy.js')->not->toBeFile();
     });
 
     test('the login URI alone when the engine gives no link, nothing when it gives neither', function () {
@@ -111,8 +113,8 @@ describe('the grid added to a viewer', function () {
             ->and(array_column(Site::SHORTCODES[array_search('[login-uri]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['add-grid']);
     });
 
-    test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle; the copy of the login URI on its line', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field { display: inline-flex;', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
+    test('keeps its links inline in a sidebar, whose list links a theme may make blocks; side by side, the content of each step in its middle; the login URI a link', function () {
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('.w4os-uri-field .w4os-login-uri { color: inherit; }', '.w4os-start-step a { display: inline-block; }', 'justify-content: center; align-items: flex-start;', '.w4os-start-title::before { display: none; }');
     });
 
     test('takes the texts of a site above and under its steps, a link to a path of the site in the language of the page, nothing when empty', function () {

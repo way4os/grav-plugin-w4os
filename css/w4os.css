@@ -40,6 +40,8 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-add-grid { margin: 1rem 0; }
 .w4os-add-grid p { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: .5rem 0; }
 .w4os-add-grid .w4os-login-uri { overflow-wrap: anywhere; }
+/* The login URI of a grid, a teleport link (w4os/login-uri.html.twig): its address as code, the text of the link */
+.w4os-uri-field .w4os-login-uri { color: inherit; }
 
 /* The Connect block: numbered steps, the one to do now framed with its number filled, the ones done checked, the others faded;
    the colour of the frame and the number the theme's (--w4os-accent), else the colour of the text */
@@ -57,7 +59,7 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-start-step.is-next::before { background: var(--w4os-accent, currentColor); border-color: var(--w4os-accent, currentColor); color: Canvas; }
 .w4os-start-step.is-done::before { content: "\2713"; border-color: var(--w4os-accent, currentColor); color: var(--w4os-accent, currentColor); }
 .w4os-start-step.is-done, .w4os-start-step.is-todo { opacity: .7; }
-.w4os-start-uri .w4os-login-uri { overflow-wrap: anywhere; user-select: all; }
+.w4os-start-uri .w4os-login-uri { overflow-wrap: anywhere; }
 /* Its links as they are in a sidebar too, where a theme makes the links of a list blocks (Quark2: aside li a) */
 .w4os-start-step a { display: inline-block; }
 /* Side by side where the block has the room (a page), stacked where it has not (a sidebar) */
@@ -74,18 +76,6 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-callout p { margin: .5rem 0 0; }
 .w4os-callout > :last-child { margin-bottom: 0; }
 
-/* The login URI to copy: one click selects it whole */
-.w4os-login-uri { user-select: all; cursor: text; }
-/* The login URI to copy (w4os/login-uri.html.twig): the address and the button that copies it as one field, the button a quiet icon at
-   its end, on the same line */
-.w4os-uri-field { display: inline-flex; align-items: stretch; max-width: 100%; vertical-align: middle; }
-.w4os-uri-field .w4os-login-uri { margin: 0; min-width: 0; }
-.w4os-uri-field .w4os-login-uri:not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
-.w4os-copy { display: inline-flex; align-items: center; margin: 0; padding: 0 .5rem; min-height: 0; font: inherit; font-size: .85em; line-height: 1; color: inherit; background: none; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-radius: 0 .3rem .3rem 0; box-shadow: none; opacity: .7; cursor: pointer; }
-.w4os-copy:hover, .w4os-copy:focus-visible { opacity: 1; }
-.w4os-copy[hidden] { display: none; }
-.w4os-copy .w4os-copied-icon, .w4os-copy.is-copied .w4os-copy-icon { display: none; }
-.w4os-copy.is-copied .w4os-copied-icon { display: inline; }
 .w4os-login-links { margin: 1rem 0 0; text-align: center; font-size: .9em; }
 /* A list item emptied by [w4os-register] while registration is closed: hidden, the list numbered without it */
 li:empty { display: none; }

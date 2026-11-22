@@ -8,6 +8,22 @@ function link_function(string $prefix = ''): Twig\TwigFunction
     return new Twig\TwigFunction('w4os_link', fn (?string $target, string $text, string $kind = 'plain', array $args = [], string $class = '') => W4OS\Views\Link::to(W4OS\Grav\Site::siteLinks('', $prefix, ['en', 'fr'], '/'), (string) $target, $text, $kind, $args, $class), ['is_safe' => ['html']]);
 }
 
+/**
+ * The w4os_tp_link() of the plugin's Twig, the links the engine gives (its /place) as a browser sees them: a grid alone (its login
+ * URI) added to the viewer, a region teleported to (hop://); the address to copy.
+ */
+function tp_link_function(): Twig\TwigFunction
+{
+    return new Twig\TwigFunction('w4os_tp_link', function (?string $destination, ?string $label = null, ?string $html = null) {
+        $destination = (string) $destination;
+        $first = str_contains($destination, '/')
+            ? ['action' => 'teleport', 'format' => 8, 'link' => "hop://$destination", 'label' => 'hop']
+            : ['action' => 'addgrid', 'format' => 4096, 'link' => 'hop:///app/gridmanager/addgrid/'.rawurlencode($destination), 'label' => 'Add the grid'];
+
+        return W4OS\Views\TeleportLink::html(['browser' => [$first, ['action' => 'copy', 'format' => 1024, 'link' => $destination, 'label' => 'Copy']]], (string) $label, 'browser', ['copied' => 'Copied'], '', $html);
+    }, ['is_safe' => ['html']]);
+}
+
 /** The w4os_picture_tag() of the plugin's Twig, its picture at /pictures/<uuid>.jpg (none-<default> without one). */
 function picture_tag_function(): Twig\TwigFunction
 {
