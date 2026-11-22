@@ -111,6 +111,8 @@ So reading the lists and caring for the accounts (an avatar's details, its email
 
 For example, on a grid where Gudule is a god (200) and Suzi a liaison (150), Suzi has nearly all the gods' rights in the world. With the setting at 200, only Gudule manages the grid from the website; Suzi keeps her rights in the world. With it at 150, Suzi also manages the grid from the website, as far as her level 150 allows: she sees the lists and cares for the accounts, but she does not change a role or a region.
 
+The level that decides is the one the engine gives the avatar at sign-in (`accessLevel`): its user level, except for the owner of the grid, the owner of its first estate (the lowest EstateID), who gets at least a god's (200) whatever its user level, as OpenSimulator makes the owner of a region its god (`region_owner_is_god`). So the owner of a grid without gods still manages it from the website. Its user level is not changed, and the lists show it as it is. A later version (opensim-kit ROADMAP, 3.1) gives it only while the grid has no god, through a list of administrators in the settings.
+
 ## Standalone
 
 The plugin ships as a Grav plugin: its release zip (Grav's GPM installs it), and inside the light w4os site; it has no system package of its own. It is self-contained: its release zip (about 3 MB, 10 MB unpacked) carries the OpenSim engine and helpers in its `vendor` folder. A Grav site with this plugin alone works, with no system package and nothing else installed on the server. It reaches the grid in one of two ways (setting **Engine**):
