@@ -4,32 +4,32 @@ w4os:
   welcome_title: 'Bienvenue sur %s'
   guide_title: 'Guide des destinations'
   register_title: 'Créer mon avatar'
-  register_text: "Choisissez un nom ci-dessous. C'est ainsi que les gens vous verront dans le monde virtuel."
+  register_text: "Choisis un nom ci-dessous. C'est ainsi que les gens te verront dans le monde virtuel."
   register_button: 'Créer mon avatar'
   register: "S'inscrire"
-  have_avatar: 'Vous avez déjà un avatar ?'
+  have_avatar: 'Tu as déjà un avatar ?'
   first_name: Prénom
   last_name: 'Nom de famille'
   first_name_help: 'Le prénom doit commencer par une lettre et ne contenir que des lettres et des chiffres'
   last_name_help: 'Le nom doit commencer par une lettre et ne contenir que des lettres et des chiffres'
   email: E-mail
   password: 'Mot de passe'
-  password_confirm: 'Confirmez le mot de passe'
-  password_help: 'De 6 à 16 caractères, sans guillemet double. Le même mot de passe vous connecte ici et dans le monde virtuel.'
-  model: 'Choisissez le premier ensemble pour votre avatar.'
-  model_help: 'Vous pourrez toujours changer d’apparence dans le monde virtuel.'
+  password_confirm: 'Confirme le mot de passe'
+  password_help: 'De 6 à 16 caractères, sans guillemet double. Le même mot de passe te connecte ici et dans le monde virtuel.'
+  model: 'Choisis le premier ensemble de ton avatar.'
+  model_help: 'Tu pourras toujours changer d’apparence dans le monde virtuel.'
   terms_agree: "Je suis d'accord avec les conditions de la page %s."
-  registered: 'Avatar %s créé. Connectez-vous avec son nom ou votre e-mail.'
-  registered_confirm: 'Presque fini : cliquez sur le lien du message envoyé à votre adresse pour créer %s.'
-  registered_not_sent: 'Presque fini, mais le message de confirmation n’a pas pu partir. Demandez-en un nouveau ci-dessous pour créer %s, ou contactez les gestionnaires de la grille.'
-  registered_test: 'Presque fini. Site de test, pas de mail : créez %1$s avec ce lien : %2$s'
-  confirm_title: 'Confirmez votre e-mail'
-  confirm_text: 'Votre avatar est créé dès que vous cliquez sur le lien du message envoyé. Rien après quelques minutes ? Regardez dans les indésirables.'
-  confirmed: 'Votre e-mail est confirmé, %s est prêt. Vous pouvez vous connecter, ici et dans le monde virtuel.'
+  registered: 'Avatar %s créé. Connecte-toi avec son nom ou ton e-mail.'
+  registered_confirm: 'Presque fini : clique sur le lien du message envoyé à ton adresse pour créer %s.'
+  registered_not_sent: 'Presque fini, mais le message de confirmation n’a pas pu partir. Demandes-en un nouveau ci-dessous pour créer %s, ou contacte les gestionnaires de la grille.'
+  registered_test: 'Presque fini. Site de test, pas de mail : crée %1$s avec ce lien : %2$s'
+  confirm_title: 'Confirme ton e-mail'
+  confirm_text: 'Ton avatar est créé dès que tu cliques sur le lien du message envoyé. Rien après quelques minutes ? Regarde dans les indésirables.'
+  confirmed: 'Ton e-mail est confirmé, %s est prêt. Tu peux te connecter, ici et dans le monde virtuel.'
   resend_title: 'Recevoir un nouveau lien'
   resend_button: 'Envoyer un nouveau lien'
   confirm_resent: 'Un nouveau lien est en route.'
-  confirm_resent_test: 'Site de test, pas de mail : confirmez avec ce lien : %s'
+  confirm_resent_test: 'Site de test, pas de mail : confirme avec ce lien : %s'
   avatar_name: "Nom de l'avatar"
   login_title: Connexion
   log_in: Connexion
@@ -37,21 +37,21 @@ w4os:
   login: 'Nom de l’avatar ou e-mail'
   sign_in_failed: 'Échec de la connexion'
   forgot_title: 'Mot de passe oublié'
-  forgot_text: 'Tapez le nom de votre avatar ou votre e-mail : vous recevrez un lien pour choisir un nouveau mot de passe.'
+  forgot_text: 'Tape le nom de ton avatar ou ton e-mail : tu recevras un lien pour choisir un nouveau mot de passe.'
   forgot_button: 'M’envoyer un lien'
   forgot_sent: 'Si un avatar a ce nom ou cet e-mail, un lien part vers son adresse.'
   forgot_test: 'Site de test, pas de mail : le lien d’un nouveau mot de passe ne s’affiche pas ici, l’API de l’engine le donne (send: false).'
   reset_title: 'Réinitialisation du mot de passe'
-  reset_text: 'Choisissez le nouveau mot de passe de votre avatar.'
+  reset_text: 'Choisis le nouveau mot de passe de ton avatar.'
   reset_no_token: 'Cette page s’ouvre depuis le lien du message reçu.'
   reset_button: 'Enregistrer le mot de passe'
-  reset_done: 'Votre mot de passe est changé. Vous pouvez vous connecter avec.'
+  reset_done: 'Ton mot de passe est changé. Tu peux te connecter avec.'
   new_password: 'Nouveau mot de passe'
   current_password: 'Mot de passe actuel'
   account_title: 'Profil de l’avatar'
   born: 'Né(e) le'
   profile_title: Profil
-  profile_text: 'Ce que les autres voient de vous dans le monde virtuel (la photo et les centres d’intérêt se règlent dans le viewer).'
+  profile_text: 'Ce que les autres voient de toi dans le monde virtuel (la photo et les centres d’intérêt se règlent dans le viewer).'
   about: 'À propos'
   wants: Souhaite
   skills: Compétences
@@ -110,7 +110,7 @@ w4os:
   uri_default_login: "Par défaut : l'URI de connexion."
   setting_profile_page: 'Page de profil'
   setting_exclude_from_stats: 'Exclure des statistiques'
-  setting_exclude_from_stats_help: 'Les comptes sans adresse e-mail sont généralement des comptes de test ou de service, créés depuis la console. Décochez uniquement si vous avez de vrais avatars sans adresse e-mail.'
+  setting_exclude_from_stats_help: 'Les comptes sans adresse e-mail sont généralement des comptes de test ou de service, créés depuis la console. Décoche seulement si tu as de vrais avatars sans adresse e-mail.'
   exclude_models: Modèles
   exclude_nomail: 'Comptes sans adresse e-mail'
   exclude_hypergrid: 'Visiteurs hypergrid'
@@ -139,8 +139,8 @@ w4os:
   provide_path: Chemin
   provide_offline_help_core: "Le module de messagerie hors ligne du cœur d'OpenSimulator ne gère pas l'option de transfert d'e-mails disponible dans les paramètres du viewer."
   economy_helper_uri: "URI du helper d'économie"
-  economy_helper_uri_help: "Réglez l'URL dans la configuration de Robust."
-  economy_help_helpers: "Les helpers d'économie sont des scripts additionnels, nécessaires si vous implémentez une économie dans votre grille (avec une monnaie réelle ou factice)."
+  economy_helper_uri_help: "Règle l'URL dans la configuration de Robust."
+  economy_help_helpers: "Les helpers d'économie sont des scripts en plus, nécessaires si tu mets en place une économie dans ta grille (avec une monnaie réelle ou factice)."
   economy_help_scripts: "Les scripts des helpers permettent la communication entre le serveur de monnaie et la grille: mise à jour du solde, estimation du coût d'achat de monnaie, vente d'objets et de terrains, paiements..."
   economy_help_module: 'Cette extension fournit uniquement les helpers web requis par le module du serveur de devises. Un module tiers doit être installé et configuré sur le simulateur, par exemple :'
   economy_help_modules: 'Gloebit (gloebit.com), Podex (podex.info), DTL/NSL Money Server (nsl.tuis.ac.jp)'
@@ -148,15 +148,15 @@ w4os:
   gloebit_configuration: 'Configuration Gloebit'
   gloebit_help_crash: 'Le module Gloebit doit être configuré avant de redémarrer la région, sinon il pourrait planter le simulateur.'
   gloebit_help_linux: 'Sous Linux, voir README-Gloebit.md (github.com/way4os/w4os-helpers) pour éviter les erreurs liées aux certificats.'
-  gloebit_help_register: 'Créez un compte ou connectez-vous sur gloebit.com et suivez les instructions de dev.gloebit.com pour configurer une application pour votre grille/simulateur.'
-  gloebit_help_config: 'Ajoutez la configuration Gloebit dans OpenSim.ini.'
-  gloebit_help_dll: 'Téléchargez la dernière dll dans le dossier bin/ de votre OpenSimulator (renommez-la Gloebit.dll), depuis github.com/way4os/opensim-kit ou dev.gloebit.com'
+  gloebit_help_register: 'Crée un compte ou connecte-toi sur gloebit.com et suis les instructions de dev.gloebit.com pour configurer une application pour ta grille ou ton simulateur.'
+  gloebit_help_config: 'Ajoute la configuration Gloebit dans OpenSim.ini.'
+  gloebit_help_dll: 'Télécharge la dernière dll dans le dossier bin/ de ton OpenSimulator (renomme-la Gloebit.dll), depuis github.com/way4os/opensim-kit ou dev.gloebit.com'
   money_script_access_key: "Clé d'accès des scripts de devise"
-  money_script_access_key_help: "Choisissez une clé d'accès unique et définissez-la dans le fichier MoneyServer.ini"
+  money_script_access_key_help: "Choisis une clé d'accès unique et mets-la dans le fichier MoneyServer.ini"
   search_engine_url: 'URL du moteur de recherche'
   search_url_help_viewer: 'URL du moteur de recherche utilisé par le viewer pour fournir des résultats de recherche (sans arguments)'
   search_url_help_one: 'Une seule peut être définie, les autres lignes sont des exemples.'
-  search_url_help_web: "Attention, ce Search URL est différent du Web search URL (qui n'est pas utilisé pour le moment par w4os). La recherche web est utile si vous avez une page web dédiée à la recherche de contenu de la grille et fournissant des résultats avec des liens hop:// ou secondlife://. Elle est optionnelle et documentée ici uniquement pour marquer la différence entre deux réglages qui ont malheureusement le même nom."
+  search_url_help_web: "Attention, ce Search URL est différent du Web search URL (que w4os n'utilise pas pour le moment). La recherche web est utile si tu as une page web dédiée à la recherche de contenu de la grille, qui donne des résultats avec des liens hop:// ou secondlife://. Elle est optionnelle et documentée ici seulement pour marquer la différence entre deux réglages qui ont malheureusement le même nom."
   search_register_url: "URL d'inscription au moteur de recherche"
   search_include_2do: 'Inclure 2do.directory'
   search_registers: 'Autres inscriptions de recherche'
@@ -165,47 +165,47 @@ w4os:
   web_search_help: "Une page web où l'on cherche les lieux, les événements et les personnes de la grille ; les viewers l'ouvrent depuis leur fenêtre de recherche. L'URL du moteur de recherche ci-dessus est autre chose : les simulateurs l'appellent, personne ne la voit."
   tip_web_search: 'Formulaire de recherche pour le public'
   search_register_help_data: 'Service de données, utilisé pour enregistrer les régions, objets ou parcelles disponibles à la recherche ou en vente.'
-  search_register_help_several: 'Vous pouvez vous inscrire sur plusieurs moteurs de recherche.'
+  search_register_help_several: "Tu peux t'inscrire sur plusieurs moteurs de recherche."
   search_register_help_prefix: 'Chaque ligne doit avoir un identifiant unique commençant par "DATA_SRV_".'
   events_help_fetch: 'URL du serveur HYPEvents, utilisé pour récupérer les événements à venir et les rendre disponibles dans la recherche.'
   search_help_local: "Permet d'utiliser un moteur de recherche local, n'autorisant que les résultats locaux (recommandé pour les grilles privées)."
-  search_help_external: "Désactiver pour utiliser un moteur de recherche externe comme 2do Directory, permettant les résultats de votre grille et d'autres grilles publiques."
+  search_help_external: "Désactive pour utiliser un moteur de recherche externe comme 2do Directory, qui donne des résultats de ta grille et d'autres grilles publiques."
   search_help_module: "Les fonctionnalités de recherche nécessitent l'installation du module OpenSimSearch sur OpenSimulator."
   search_help_binary: "Le binaire OpenSimSearch.Modules.dll prêt à l'emploi se trouve ici : github.com/way4os/w4os-helpers"
   guide_url: 'URL du guide des destinations'
   guide_source_help_file: 'Un fichier texte avec une liste formatée de destinations.'
-  guide_source_help_where: "La source peut être une URL ou le chemin complet d'un fichier local accessible par votre serveur web."
+  guide_source_help_where: "La source peut être une URL ou le chemin complet d'un fichier local auquel ton serveur web a accès."
   guide_source_help_name: 'Un nom de fichier seul est lu dans le dossier de configuration de la grille.'
   guide_example: 'Exemple de fichier de destinations'
   snippet_ini: 'Lignes à ajouter à %s'
   snippet_example: Exemple
   dashboard_grid_info: 'Infos sur la grille'
   dashboard_grid_status: 'Statut de la grille'
-  grid_add_to_viewer: 'Ajouter cette grille à votre viewer'
-  viewer_add_grid: 'Ajouter %1$s à votre viewer'
+  grid_add_to_viewer: 'Ajouter cette grille à ton viewer'
+  viewer_add_grid: 'Ajouter %1$s à ton viewer'
   viewer_add_grid_other: 'Autre lien'
-  viewer_login_uri_by_hand: 'Ou ajoutez-la dans le gestionnaire de grilles de votre viewer, avec son URI de connexion :'
+  viewer_login_uri_by_hand: 'Ou ajoute-la dans le gestionnaire de grilles de ton viewer, avec son URI de connexion :'
   copy: Copier
   copied: Copié
   start_title: Connexion
-  start_avatar: 'Créez votre avatar'
+  start_avatar: 'Crée ton avatar'
   start_avatar_done: 'Connecté comme %s'
-  start_add_grid: 'Ajoutez la grille'
-  start_login: Connectez-vous
+  start_add_grid: 'Ajoute la grille'
+  start_login: Connecte-toi
   start_login_done: 'Bon séjour !'
   start_done: Terminé
   home_all_news: 'Toutes les actualités'
   hg_visit_title: 'Visiter depuis une autre grille'
-  hg_visit_text: 'Vous avez déjà un avatar sur une autre grille OpenSim ? Venez nous voir sans en créer un : entrez cette adresse dans la carte ou la recherche de votre viewer.'
+  hg_visit_text: 'Tu as déjà un avatar sur une autre grille OpenSim ? Viens nous voir sans en créer un : entre cette adresse dans la carte ou la recherche de ton viewer.'
   hg_visit_go: 'Se téléporter ici'
-  hg_visit_text_examples: 'Vous avez déjà un avatar sur une autre grille OpenSim, comme %s ? Venez nous voir sans en créer un : entrez cette adresse dans la carte ou la recherche de votre viewer.'
+  hg_visit_text_examples: 'Tu as déjà un avatar sur une autre grille OpenSim, comme %s ? Viens nous voir sans en créer un : entre cette adresse dans la carte ou la recherche de ton viewer.'
   list_or: '%1$s ou %2$s'
   total: Total
   tip_models_match: 'Comment un modèle est reconnu'
   tip_models_pattern: 'Partie du nom des modèles'
   tip_economy_url: 'Où sont currency.php et landtool.php'
   tip_gloebit_environment: 'Sandbox pour tester, production pour vendre'
-  tip_gloebit_keys: 'De votre compte marchand Gloebit'
+  tip_gloebit_keys: 'De ton compte marchand Gloebit'
   tip_currency_rate: 'US$ pour 1000 unités du monde'
   tip_money_script_key: 'La même dans MoneyServer.ini'
   tip_podex_message: 'Montré avant la téléportation'
@@ -223,9 +223,9 @@ w4os:
   guide_source_help_comments: 'Les lignes commençant par "#" ou "//" sont ignorées.'
   guide_source_help_board: "Le format est identique à celui de l'objet en monde Gudz Teleport Board, la même URL source peut donc servir pour les deux."
   guide_help_feature: 'Le guide des destinations est une fonctionnalité de Viewer 3, qui propose une fenêtre avec des suggestions de lieux.'
-  guide_help_places: "Bien que ce ne soit pas obligatoire et que tous les avatars n'en profitent pas, c'est un moyen utile de leur proposer une liste de lieux à voir, de votre propre grille ou d'ailleurs."
+  guide_help_places: "Ce n'est pas obligatoire et tous les avatars n'en profitent pas, mais c'est un moyen utile de leur proposer une liste de lieux à voir, de ta propre grille ou d'ailleurs."
   offline_helper: 'Helper des messages hors ligne'
-  offline_helper_help: "Réglez l'URL dans les configurations d'OpenSimulator."
+  offline_helper_help: "Règle l'URL dans les configurations d'OpenSimulator."
   assets_url: 'URL du serveur de ressources web'
   assets_external_help: "Si l'option « Activer le serveur de ressources web » est désactivée, il est nécessaire d'installer un service tiers et d'entrer son URL ici pour assurer le bon fonctionnement du plugin."
   assets_path_help: "N'importe quel chemin sous le site : l'engine y sert les images, quels que soient les helpers."
@@ -250,8 +250,8 @@ w4os:
   action_create_avatar: 'Créer un avatar'
   action_delete_post: Supprimer
   ask_delete_post: 'Supprimer cette publication ?'
-  manage_post: 'Votre publication est en ligne.'
-  manage_delete_post: 'Votre publication est supprimée.'
+  manage_post: 'Ta publication est en ligne.'
+  manage_delete_post: 'Ta publication est supprimée.'
   profile_tab_interests: 'Centres d’intérêt'
   profile_tab_picks: Favoris
   profile_tab_classifieds: 'Petites annonces'
@@ -274,13 +274,13 @@ w4os:
   profile_teleport: Téléportation
   profile_until: Jusqu’au
   save_button: Enregistrer
-  profile_saved: 'Votre profil est enregistré.'
+  profile_saved: 'Ton profil est enregistré.'
   password_title: 'Mot de passe'
   password_button: 'Changer le mot de passe'
-  password_saved: 'Votre mot de passe est changé.'
-  email_pending: 'Votre profil est enregistré. Un lien part vers %s : cliquez dessus pour en faire votre e-mail.'
-  email_pending_test: 'Votre profil est enregistré. Site de test, pas de mail : confirmez %1$s avec ce lien : %2$s'
-  email_changed: 'Votre e-mail est maintenant %s.'
+  password_saved: 'Ton mot de passe est changé.'
+  email_pending: 'Ton profil est enregistré. Un lien part vers %s : clique dessus pour en faire ton e-mail.'
+  email_pending_test: 'Ton profil est enregistré. Site de test, pas de mail : confirme %1$s avec ce lien : %2$s'
+  email_changed: 'Ton e-mail est maintenant %s.'
   regions_title: Régions
   search_regions: 'Nom de la région'
   regions_count: '%d régions'
@@ -425,14 +425,14 @@ w4os:
   shortcode_option_include_landsales: 'Inclure des terrains à vendre'
   block_grid_info_help: 'Informations générales (nom de la grille et URI de connexion)'
   block_grid_status_help: 'Avatars en ligne, régions, etc.'
-  block_popular_places_help: 'Régions les plus visitées dans votre grille.'
+  block_popular_places_help: 'Les régions les plus visitées de ta grille.'
   block_motd_help: 'Le message du jour que les viewers montrent à la connexion.'
   block_destination_guide_help: 'Des lieux à visiter, la même liste que le guide des destinations des viewers.'
   block_directory_info_help: 'Les autres grilles dont les lieux se trouvent dans la recherche de cette grille.'
   block_search_help: 'Un formulaire de recherche des lieux, événements, petites annonces et personnes de la grille.'
   block_profile_help: "Le profil d'un avatar."
   block_new_avatars_help: 'Les derniers avatars arrivés sur la grille.'
-  shortcode_home_help: "Votre texte avec les lieux populaires, le guide, l'état de la grille et le message du jour."
+  shortcode_home_help: "Ton texte avec les lieux populaires, le guide, l'état de la grille et le message du jour."
   shortcode_guest_help: 'Montre son texte seulement aux visiteurs non connectés.'
   shortcode_register_help: "Montre son texte seulement si le site a une page d'inscription."
   shortcode_text_help: 'Montre un texte du site dans la langue de la page.'
@@ -565,11 +565,11 @@ w4os:
   setting_economy: Économie
   setting_economy_help: 'Monnaies et quelques autres services interrogés par le viewer. Les avatars ne les ouvrent pas directement.'
   setting_about: 'À propos de cette grille'
-  setting_about_help: "Page d'informations détaillées, sur votre site web, via un lien affiché sur la page de connexion du viewer."
+  setting_about_help: "Page d'informations détaillées sur ton site web, par un lien affiché sur la page de connexion du viewer."
   setting_register: "Page d'enregistrement"
   setting_register_help: "Lien vers l'inscription d'un avatar."
   setting_help: Aide
-  setting_help_help: "Lien vers une page d'aide sur votre site web."
+  setting_help_help: "Lien vers une page d'aide de ton site web."
   setting_password: 'Récupération de mot de passe'
   setting_password_help: 'Lien vers la page de récupération de mot de passe.'
   setting_grid_status: 'Statut de la grille'
@@ -579,7 +579,7 @@ w4os:
   setting_web_profile: "Profil d'avatar"
   setting_web_profile_help: "La base d'URL pour les profils d'avatars."
   setting_web_search: 'Recherche web'
-  setting_web_search_help: 'Onglet web de la fenêtre de recherche du viewer. Utile si vous avez une page de recherche fournissant des résultats pour la grille.'
+  setting_web_search_help: 'Onglet web de la fenêtre de recherche du viewer. Utile si tu as une page de recherche qui donne des résultats pour la grille.'
   setting_destination_guide: 'Guide des destinations'
   setting_destination_guide_help: 'Le guide des destinations est une fonctionnalité de Viewer 3, qui propose une fenêtre avec des suggestions de lieux.'
   setting_message_url: 'Message du jour'
@@ -766,7 +766,7 @@ w4os:
   health_jp2_external: 'service de ressources web externe'
   health_jp2_external_detail: 'les images du monde sont converties par le service de ressources web de la grille (%s)'
   health_jp2_missing: 'ne lit pas le JPEG 2000'
-  health_jp2_missing_detail: 'requis par le service de ressources web, pour les images du monde (imagick compilé avec OpenJPEG) : sans lui, définissez un service de ressources web externe (%s)'
+  health_jp2_missing_detail: 'requis par le service de ressources web, pour les images du monde (imagick compilé avec OpenJPEG) : sans lui, choisis un service de ressources web externe (%s)'
   health_installed: 'installé %s'
   health_installed_polyfill: 'installé (polyfill)'
   health_for_xmlrpc: 'extension ou polyfill'
@@ -880,11 +880,11 @@ w4os:
   asset_material: Matériau
   error_required: 'Merci de remplir tous les champs.'
   error_password_match: 'Les deux mots de passe ne sont pas les mêmes.'
-  error_terms: 'Vous devez accepter les conditions de la page %s.'
+  error_terms: 'Tu dois accepter les conditions de la page %s.'
   error_current_password: 'Le mot de passe actuel est faux.'
   error_forbidden: 'Ce n’est pas permis.'
   error_nonce: 'Cette page a expiré, merci de recommencer.'
-  error_too_many_registrations: 'Trop d’inscriptions depuis cette adresse. Réessayez dans %s minutes.'
+  error_too_many_registrations: 'Trop d’inscriptions depuis cette adresse. Réessaie dans %s minutes.'
   error_not_found: Introuvable
   error_not_found_grid: 'Grille introuvable'
   error_not_found_avatar: 'Avatar inexistant'
@@ -905,10 +905,10 @@ w4os:
   error_instance_failed: 'La grille ne répond pas pour l’instant. Merci de réessayer plus tard.'
   error_internal_error: 'La grille ne répond pas pour l’instant. Merci de réessayer plus tard.'
   error_sign_in_refused: 'Le nom ou le mot de passe est faux.'
-  error_account_disabled: 'Cet avatar est désactivé. Contactez les gestionnaires de la grille.'
+  error_account_disabled: 'Cet avatar est désactivé. Contacte les gestionnaires de la grille.'
   error_account_banned: 'Cet avatar est banni.'
   error_post_invalid: 'Une publication a de 1 à 1000 caractères.'
-  error_email_unconfirmed: 'Cet avatar n’est pas encore actif : confirmez votre e-mail avec le lien du message envoyé.'
+  error_email_unconfirmed: 'Cet avatar n’est pas encore actif : confirme ton e-mail avec le lien du message envoyé.'
   error_name_invalid: 'Le prénom et le nom sont faits de lettres, de chiffres et de tirets, sans accents.'
   error_name_reserved: 'Ce nom est réservé, merci d’en choisir un autre.'
   error_name_taken: 'Un avatar porte déjà ce nom, merci d’en choisir un autre.'
@@ -926,47 +926,47 @@ w4os:
   error_config_not_writable: "Ceci ne peut pas être changé d'ici : les fichiers de la grille appartiennent à son serveur."
   error_instance_user_required: "Ceci ne peut pas être fait d'ici : les simulateurs sont démarrés et arrêtés sur leur serveur."
   error_restore_conflict: "Cette sauvegarde contient ce que ce serveur a déjà : rien n'a été remplacé."
-  error_source_not_readable: "Certains fichiers de l'ancienne installation ne peuvent pas être lus par le serveur : donnez-lui d'abord l'accès en lecture."
-  error_estate_shared: "Le propriétaire de cette région est celui de son domaine, qui a d'autres régions : changez le propriétaire du domaine."
+  error_source_not_readable: "Certains fichiers de l'ancienne installation ne peuvent pas être lus par le serveur : donne-lui d'abord l'accès en lecture."
+  error_estate_shared: "Le propriétaire de cette région est celui de son domaine, qui a d'autres régions : change le propriétaire du domaine."
   error_filter_unknown: 'Cette liste ne peut pas être filtrée ainsi.'
   error_filter_value_unknown: 'Cette liste ne peut pas être filtrée ainsi.'
   error_sort_unknown: 'Cette liste ne peut pas être triée ainsi.'
   error_role_unknown: 'Ce rôle n’existe pas.'
   error_role_level_conflict: 'Le niveau ne correspond pas au rôle.'
-  error_token_refused: 'Ce lien ne marche pas : il a expiré ou il a déjà servi. Demandez-en un nouveau.'
+  error_token_refused: 'Ce lien ne marche pas : il a expiré ou il a déjà servi. Demandes-en un nouveau.'
   error_no_confirmation_pending: 'Cet avatar n’attend pas de confirmation de son e-mail.'
   error_mail_failed: 'Le message n’a pas pu partir. Merci de réessayer plus tard.'
-  notice_robust_restart_roles: "Robust lit {key} au démarrage : redémarrez Robust ({restart}) pour qu'il donne ces rôles à la région quand elle s'inscrit à nouveau."
-  notice_robust_config_line: '{file} ne peut pas être écrit par ce processus : mettez {line} dans sa section [{section}], puis redémarrez Robust ({restart}).'
-  notice_robust_config_remove: '{file} ne peut pas être écrit par ce processus : retirez {key} de sa section [{section}], puis redémarrez Robust ({restart}).'
-  notice_robust_config_elsewhere: "La configuration de Robust n'est pas sur cette machine : mettez {line} dans sa section [{section}], pour que la région garde ses rôles quand elle s'inscrit à nouveau."
-  notice_start_simulator: 'Démarrez le simulateur {slug} : {command}'
+  notice_robust_restart_roles: "Robust lit {key} au démarrage : redémarre Robust ({restart}) pour qu'il donne ces rôles à la région quand elle s'inscrit à nouveau."
+  notice_robust_config_line: '{file} ne peut pas être écrit par ce processus : mets {line} dans sa section [{section}], puis redémarre Robust ({restart}).'
+  notice_robust_config_remove: '{file} ne peut pas être écrit par ce processus : retire {key} de sa section [{section}], puis redémarre Robust ({restart}).'
+  notice_robust_config_elsewhere: "La configuration de Robust n'est pas sur cette machine : mets {line} dans sa section [{section}], pour que la région garde ses rôles quand elle s'inscrit à nouveau."
+  notice_start_simulator: 'Démarre le simulateur {slug} : {command}'
   notice_start_simulator_regions: 'Le simulateur {slug} charge ses nouvelles régions au démarrage : {command}'
-  notice_region_roles_later: 'Robust donne à {region} ses rôles ({roles}) depuis sa configuration, lue au démarrage : redémarrez Robust ({restart}) avant de démarrer {slug}, ou une fois la région lancée : {command}'
-  notice_plan_reserves_nothing: "Un plan ne réserve rien : les places et les ports qu'il propose sont ceux qui sont libres maintenant, choisis à nouveau quand il est appliqué. Appliquez un plan avant de planifier le suivant, ou donnez les régions dans un seul fichier."
-  notice_import_read_access: "L'utilisateur qui lance l'import ne peut pas lire {paths} : donnez-lui l'accès en lecture (setfacl -R -m u:<user>:rX sur les etc, var/data et var/cache de l'ancienne installation) avant d'appliquer, rien n'est écrit d'ici là."
-  notice_import_stop_source: "Le simulateur qui fait tourner {regions} continue jusqu'à ce qu'on l'arrête : arrêtez-le et empêchez-le de redémarrer (son cron, son screen) avant de démarrer celui-ci, la base de données est la même."
-  notice_import_no_region: "Aucune région n'a été trouvée pour {simulator} dans {folder}, le dossier que nomme sa configuration : vérifiez que c'est bien celui qu'il lit avant d'appliquer, aucune de ses régions ne serait copiée."
-  notice_import_module_package: "Le module {module} ({key} de [{section}]) n'est pas installé pour ce cœur : le simulateur ne le chargerait pas. Installez son paquet (apt install {package}) et ajoutez {name} à EnabledModules dans w4os.conf, ou laissez ce réglage de côté."
-  notice_import_module_missing: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation : le simulateur ne le chargerait pas. Placez une version compilée pour ce cœur dans {folder} et ajoutez {name} à EnabledModules dans w4os.conf, ou laissez ce réglage de côté."
-  notice_import_module_found: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation, l'ancienne installation l'a dans {file} : le simulateur ne le chargerait pas. Placez une version compilée pour ce cœur dans {folder} (un module est compilé pour une version d'OpenSimulator : ce fichier seulement si les deux cœurs sont de la même version) et ajoutez {name} à EnabledModules dans w4os.conf, ou laissez ce réglage de côté."
+  notice_region_roles_later: 'Robust donne à {region} ses rôles ({roles}) depuis sa configuration, lue au démarrage : redémarre Robust ({restart}) avant de démarrer {slug}, ou une fois la région lancée : {command}'
+  notice_plan_reserves_nothing: "Un plan ne réserve rien : les places et les ports qu'il propose sont ceux qui sont libres maintenant, choisis à nouveau quand il est appliqué. Applique un plan avant de planifier le suivant, ou donne les régions dans un seul fichier."
+  notice_import_read_access: "L'utilisateur qui lance l'import ne peut pas lire {paths} : donne-lui l'accès en lecture (setfacl -R -m u:<user>:rX sur les etc, var/data et var/cache de l'ancienne installation) avant d'appliquer, rien n'est écrit d'ici là."
+  notice_import_stop_source: "Le simulateur qui fait tourner {regions} continue jusqu'à ce qu'on l'arrête : arrête-le et empêche-le de redémarrer (son cron, son screen) avant de démarrer celui-ci, la base de données est la même."
+  notice_import_no_region: "Aucune région n'a été trouvée pour {simulator} dans {folder}, le dossier que nomme sa configuration : vérifie que c'est bien celui qu'il lit avant d'appliquer, aucune de ses régions ne serait copiée."
+  notice_import_module_package: "Le module {module} ({key} de [{section}]) n'est pas installé pour ce cœur : le simulateur ne le chargerait pas. Installe son paquet (apt install {package}) et ajoute {name} à EnabledModules dans w4os.conf, ou laisse ce réglage de côté."
+  notice_import_module_missing: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation : le simulateur ne le chargerait pas. Place une version compilée pour ce cœur dans {folder} et ajoute {name} à EnabledModules dans w4os.conf, ou laisse ce réglage de côté."
+  notice_import_module_found: "Le module {module} ({key} de [{section}]) n'est ni dans le cœur ni dans les modules de cette installation, l'ancienne installation l'a dans {file} : le simulateur ne le chargerait pas. Place une version compilée pour ce cœur dans {folder} (un module est compilé pour une version d'OpenSimulator : ce fichier seulement si les deux cœurs sont de la même version) et ajoute {name} à EnabledModules dans w4os.conf, ou laisse ce réglage de côté."
   notice_import_enable_start: 'Ensuite : {enable}, {start}.'
   notice_restart_grid: 'Redémarrage de la grille nécessaire : {restart}.'
   notice_restart_simulators: 'Redémarrage du ou des simulateurs nécessaire : {restart}.'
-  notice_import_stop_grid: "L'ancien Robust de {grid} tourne tant qu'il n'est pas arrêté : arrêtez-le et empêchez-le de redémarrer (son service, son cron, son screen), ses ports {ports} sont ceux de la grille ici, sa base de données la même."
+  notice_import_stop_grid: "L'ancien Robust de {grid} tourne tant qu'il n'est pas arrêté : arrête-le et empêche-le de redémarrer (son service, son cron, son screen), ses ports {ports} sont ceux de la grille ici, sa base de données la même."
   notice_in_place_enable: 'La grille est inscrite sur place, désactivée : une fois son propre démarrage arrêté (son service, son cron, son screen), {enable}, puis {start}.'
-  notice_import_switch: 'Puis basculez : {command} (la grille et ses simulateurs activés et démarrés ici).'
-  notice_restore_estate_missing: "Les régions {regions} n'ont pas de domaine dans {database}, la base de la grille ici, gardée telle quelle : elles démarreraient sans. Restaurez-y leur domaine, ou rattachez-les à un domaine (estate link region) avant de démarrer."
-  notice_restore_estate_unchecked: "Les domaines des régions n'ont pas pu être vérifiés dans {database}, la base de la grille ici, gardée telle quelle : vérifiez qu'ils y sont avant de démarrer."
-  notice_restore_start: 'Démarrez {instance} une fois restauré : {command}'
+  notice_import_switch: 'Puis bascule : {command} (la grille et ses simulateurs activés et démarrés ici).'
+  notice_restore_estate_missing: "Les régions {regions} n'ont pas de domaine dans {database}, la base de la grille ici, gardée telle quelle : elles démarreraient sans. Restaures-y leur domaine, ou rattache-les à un domaine (estate link region) avant de démarrer."
+  notice_restore_estate_unchecked: "Les domaines des régions n'ont pas pu être vérifiés dans {database}, la base de la grille ici, gardée telle quelle : vérifie qu'ils y sont avant de démarrer."
+  notice_restore_start: 'Démarre {instance} une fois restauré : {command}'
   notice_mail_sent_if_known: 'Si un avatar a ce nom ou cet e-mail, un message lui a été envoyé.'
   notice_mail_sent: "Un message a été envoyé à l'avatar."
-  notice_registered: "L'avatar {name} est prêt : connectez-vous avec son nom et son mot de passe."
+  notice_registered: "L'avatar {name} est prêt : connecte-toi avec son nom et son mot de passe."
   notice_registered_confirm: 'Un message a été envoyé à {email} : le compte est créé dès que son lien est suivi.'
-  notice_registered_mail_failed: "L'inscription est gardée, mais le message à {email} n'a pas pu être envoyé : redemandez-le plus tard."
-  notice_setting_file_unwritable: 'Ce serveur ne peut pas écrire {file}, où la grille le lit : réglez-le là à la main.'
-  notice_setting_file_unwritable_unkept: "Ce serveur ne peut pas écrire {file}, et l'application ne garde pas de réglages pour la grille : réglez-le là à la main."
-  notice_setting_no_files: "La grille n'a pas de fichiers sur cette machine : elle lit ce réglage dans ses fichiers, réglez-le là à la main."
+  notice_registered_mail_failed: "L'inscription est gardée, mais le message à {email} n'a pas pu être envoyé : redemande-le plus tard."
+  notice_setting_file_unwritable: 'Ce serveur ne peut pas écrire {file}, où la grille le lit : règle-le là à la main.'
+  notice_setting_file_unwritable_unkept: "Ce serveur ne peut pas écrire {file}, et l'application ne garde pas de réglages pour la grille : règle-le là à la main."
+  notice_setting_no_files: "La grille n'a pas de fichiers sur cette machine : elle lit ce réglage dans ses fichiers, règle-le là à la main."
   notice_setting_no_files_unkept: "La grille n'a pas de fichiers sur cette machine, et l'application ne garde pas de réglages pour elle."
   notice_options_no_files: "La grille n'a pas de fichiers sur cette machine : ses options se réparent là où sa configuration est gardée."
   notice_database_unsaid: 'La configuration de la grille ne dit pas où est cette base de données.'
