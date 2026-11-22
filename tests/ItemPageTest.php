@@ -31,7 +31,7 @@ function item_twig(array $page = []): Environment
 
 describe('the page of an item in the admin', function () {
     $api = new OpenApi(Contract::document());
-    $region = ['uuid' => 'r1', 'name' => 'Test East', 'mapImage' => 'm1', 'location' => '8015,8012', 'enabled' => true, 'online' => true, 'local' => true, 'hyperlink' => false];
+    $region = ['uuid' => 'r1', 'name' => 'Test East', 'mapImage' => 'm1', 'picture' => 'm1', 'location' => '8015,8012', 'enabled' => true, 'online' => true, 'local' => true, 'hyperlink' => false];
     $page = ['type' => 'regions', 'list' => 'regions', 'form' => $api->itemOf('regions'), 'item' => $region, 'roles' => ['manager'], 'error' => null,
         'groups' => [['label' => 'details', 'fields' => [['name' => 'name', 'type' => 'text', 'label' => 'column_region'], ['name' => 'mapImage', 'type' => 'map', 'label' => 'column_map'], ['name' => 'location', 'type' => 'text', 'label' => 'profile_location'], ['name' => 'enabled', 'type' => 'boolean', 'label' => 'column_enabled']]]],
         'changeable' => true, 'edit' => false];
