@@ -41,10 +41,10 @@ describe('the visit of the grid from another one', function () {
         $html = render_visit(['address' => 'demo.w4os.org:3405']);
 
         expect($html)->toContain('<aside class="w4os-callout w4os-hypergrid-visit">', '<h2 class="w4os-callout-title">w4os.hg_visit_title</h2>', '<p>w4os.hg_visit_text</p>')
-            // Its address a teleport link of its own: adding the grid first, the exact address to copy
-            ->and($html)->toContain('<p class="w4os-hypergrid-address"><span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop:///app/gridmanager/addgrid/demo.w4os.org%3A3405"', '><code class="w4os-login-uri">demo.w4os.org:3405</code></a>', 'data-w4os-tp-copy="demo.w4os.org:3405"')
+            // Its address a teleport link of its own: a visitor teleported there first (adding the grid in its menu), the exact address to copy
+            ->and($html)->toContain('<p class="w4os-hypergrid-address"><span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop://demo.w4os.org:3405"', '><code class="w4os-login-uri">demo.w4os.org:3405</code></a>', 'data-w4os-tp-copy="demo.w4os.org:3405"')
             // Its teleport link, the one of every place (w4os_tp_link): the main link of the client and its menu
-            ->and($html)->toContain('<p class="w4os-hypergrid-go"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop:///app/gridmanager/addgrid/demo.w4os.org%3A3405"', '>w4os.hg_visit_go</a>', 'w4os-tp-copy')
+            ->and($html)->toContain('<p class="w4os-hypergrid-go"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop://demo.w4os.org:3405"', '>w4os.hg_visit_go</a>', 'w4os-tp-copy')
             ->and(render_visit(['address' => 'a.org:8002'], ['hg_title' => 'Hypergrid', 'hg_level' => 'h3']))->toContain('<h3 class="w4os-callout-title">Hypergrid</h3>');
     });
 
