@@ -10,7 +10,7 @@
     <div class="card">
         <div class="card-header"><h3 class="card-title">{{ ('w4os.' ~ (rule.preview.label ?? 'models_list'))|t }}</h3></div>
         <div class="card-body w4os-models-preview"{% if rule.preview and rule.changeable %} data-w4os-models-preview="{{ ('?format=preview')|e('html_attr') }}" data-form="w4os-models" data-filters="{{ rule.preview.filters|json_encode|e('html_attr') }}" aria-live="polite"{% endif %}>
-            {% include 'w4os/models-preview.html.twig' with { models: w4os_models() ?? [] } %}
+            {% include 'w4os/models-preview.html.twig' with { models: w4os_models()|default([]) } %}
         </div>
     </div>
 {% endset %}

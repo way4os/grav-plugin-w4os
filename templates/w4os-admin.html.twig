@@ -3,7 +3,7 @@
    color as the primary color of Tabler, w4os_brand()), the light or dark mode of the visitor. One sidebar of the sections the
    visitor opens (w4os_admin_menu()), a drawer on a phone; the page in the main area. #}
 {% set brand = w4os_brand() %}
-{% set menu = w4os_admin_menu() ?? [] %}
+{% set menu = w4os_admin_menu()|default([]) %}
 {% set visitor = grav.user.w4os ?? null %}
 <!doctype html>
 <html lang="{{ (grav.language.getActive ?: 'en')|e('html_attr') }}">
