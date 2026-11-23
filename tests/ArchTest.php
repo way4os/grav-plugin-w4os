@@ -21,4 +21,14 @@ describe('architecture', function () {
 
         expect($made)->toBe([]);
     });
+
+    test('has no brace glob flag: Alpine (musl) lacks it', function () {
+        $root = dirname(__DIR__);
+        $needle = 'GLOB_'.'BRACE'; // built, so that this file does not match itself
+        exec('git -C '.escapeshellarg($root).' ls-files --cached --others --exclude-standard -- "*.php"', $files);
+        $found = array_values(array_filter($files, fn (string $file) => is_file("$root/$file") && str_contains((string) file_get_contents("$root/$file"), $needle)));
+
+        expect($files)->not->toBe([])
+            ->and($found)->toBe([]);
+    });
 });

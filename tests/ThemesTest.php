@@ -258,7 +258,7 @@ describe('the styles of the plugin in the site', function () {
             ->and($css)->not->toMatch('/#[0-9a-f]{3,8}\b|rgba?\(/i')
             ->and($css)->not->toMatch('/button[^{]*\{[^}]*(background|color|border)\s*:/');
         // A link is a link, never around a button (the Form plugin's button with an address does it: none of the plugin's has one)
-        foreach (glob(dirname(__DIR__).'/templates/w4os/{page,account,home,post-actions,login-links}.html.twig', GLOB_BRACE) as $file) {
+        foreach (array_map(fn (string $name) => dirname(__DIR__)."/templates/w4os/$name.html.twig", ['page', 'account', 'home', 'post-actions', 'login-links']) as $file) {
             expect((string) file_get_contents($file))->not->toMatch('/<a[^>]*>\s*<button/');
         }
         foreach (glob(dirname(__DIR__).'/pages/*.md') as $file) {

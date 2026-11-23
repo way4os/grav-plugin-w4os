@@ -23,7 +23,7 @@ describe('pages', function () {
     });
 
     test('every text used by the code and the templates is in every language file', function () use ($languages) {
-        $sources = array_merge(glob(dirname(__DIR__).'/{*.php,classes/*.php,templates/*/*.twig,templates/*.twig,templates/forms/fields/*/*.twig}', GLOB_BRACE));
+        $sources = array_merge(...array_map(fn (string $pattern) => glob(dirname(__DIR__).'/'.$pattern), ['*.php', 'classes/*.php', 'templates/*/*.twig', 'templates/*.twig', 'templates/forms/fields/*/*.twig']));
         $used = [];
         foreach ($sources as $file) {
             preg_match_all('/[\'"]w4os\.([a-z][a-z0-9_]*[a-z0-9])/', (string) file_get_contents($file), $keys);
