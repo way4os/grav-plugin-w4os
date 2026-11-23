@@ -76,7 +76,7 @@
     } %}
     {% set services = data.addresses.services %}
     {% for usage in usages|keys|merge(services|map(s => (s.usage ?? ''))|filter(u => (u and usages[u] is not defined))) %}
-        {% set rows = services|filter(s => (s.usage ?? '') == usage)|sort((a, b) => (((a.file ?? '~') ~ (a.section ?? '') ~ (a.setting ?? a.key)) <=> ((b.file ?? '~') ~ (b.section ?? '') ~ (b.setting ?? b.key)))) %}
+        {% set rows = services|filter(s => (s.usage ?? '') == usage) %}
         {% if rows %}
         <div class="card mb-3 w4os-health-addresses">
             <div class="card-header"><h3 class="card-title">{{ usages[usage] is defined ? usages[usage]|t : usage }}</h3></div>

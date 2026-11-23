@@ -172,6 +172,24 @@ final class Site
         }
     }
 
+    /**
+     * The addresses of a grid (the engine's /addresses: services) in the order of their settings, as its health page lists them: by
+     * file (none last), section, then setting (its key without one).
+     *
+     * @param array<string,mixed>|null $addresses
+     * @return array<string,mixed>|null
+     */
+    public static function addressesByPlace(?array $addresses): ?array
+    {
+        if (! is_array($addresses['services'] ?? null)) {
+            return $addresses;
+        }
+        $place = fn (array $service): string => ($service['file'] ?? '~').($service['section'] ?? '').($service['setting'] ?? $service['key'] ?? '');
+        usort($addresses['services'], fn ($a, $b) => $place((array) $a) <=> $place((array) $b));
+
+        return $addresses;
+    }
+
     /** The tasks of the engine a settings page of a service shows beside its form, by their name: the search's parsers. */
     public const SERVICE_TASKS = ['search' => ['search-parse', 'events-parse']];
 

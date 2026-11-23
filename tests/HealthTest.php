@@ -171,4 +171,17 @@ describe('the health page of the admin', function () {
             ->and($rows[1]['status'])->toBe('8.3')
             ->and(W4OS\Grav\Site::healthSaid(['groups' => []], fn () => ''))->toBe(['groups' => []]);
     });
+
+    test('lists the addresses by file (none last), section and setting, or key without one', function () {
+        $sorted = Site::addressesByPlace(['services' => [
+            ['key' => 'parser', 'file' => null, 'section' => null, 'setting' => null],
+            ['key' => 'motd', 'file' => 'Robust.HG.ini', 'section' => 'LoginService', 'setting' => 'MessageUrl'],
+            ['key' => 'asset', 'file' => 'OpenSim.ini', 'section' => 'AssetService', 'setting' => 'AssetServerURI'],
+            ['key' => 'guide', 'file' => 'Robust.HG.ini', 'section' => 'LoginService', 'setting' => 'DestinationGuide'],
+        ], 'previous' => []]);
+
+        expect(array_column($sorted['services'], 'key'))->toBe(['asset', 'guide', 'motd', 'parser'])
+            ->and($sorted['previous'])->toBe([])
+            ->and(Site::addressesByPlace(null))->toBeNull();
+    });
 });

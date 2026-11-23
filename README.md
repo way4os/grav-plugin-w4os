@@ -139,7 +139,8 @@ The engine and the helpers read nothing from the server, no folder of config: wi
 
 ## Requirements
 
-- Grav 2 (PHP 8.3 or newer), with the Form, Login and Shortcode Core plugins (Grav installs them with this one).
+- Grav 1.7.51 or newer (PHP 8.2 or newer) or Grav 2 (PHP 8.3 or newer), with the Form, Login and Shortcode Core plugins (Grav installs them
+  with this one).
 - An OpenSimulator grid: with its OpenSim helpers (version 3) and an API key for the site, or with its Robust database reachable from the site.
 
 ## Install

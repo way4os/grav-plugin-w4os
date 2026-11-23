@@ -1102,7 +1102,7 @@ class W4osPlugin extends Plugin
             $addresses = null;
         }
 
-        return $report + ['addresses' => $addresses];
+        return $report + ['addresses' => Site::addressesByPlace($addresses)];
     }
 
     /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */
