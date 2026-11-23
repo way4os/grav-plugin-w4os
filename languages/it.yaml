@@ -954,7 +954,10 @@ w4os:
   notice_restart_grid: 'È necessario riavviare la griglia: {restart}.'
   notice_restart_simulators: 'È necessario riavviare il simulatore o i simulatori: {restart}.'
   notice_import_stop_grid: 'Il vecchio Robust di {grid} continua a funzionare finché non viene fermato: fermalo e impediscigli di ripartire (il suo servizio, il suo cron, il suo screen); le sue porte {ports} sono quelle della griglia qui, il suo database lo stesso.'
-  notice_in_place_enable: 'La griglia è registrata sul posto, disattivata: una volta fermato il suo avvio (il suo servizio, il suo cron, il suo screen), {enable}, poi {start}.'
+  notice_in_place_enable: 'La griglia è registrata sul posto, disattivata. Ferma prima il suo avvio (kickstart.sh --in-place lo fa), o a mano: il suo cron o il suo servizio messo da parte, le sue istanze in esecuzione fermate (kill -TERM: un Robust con console remota non ha screen). Poi {enable}, poi {start}.'
+  notice_in_place_unwritable: "Le sue istanze girano con l'account {account}, che non può scrivere in {folders} (cartelle di {owner}). L'installazione resta com'è: non potranno girare finché {account} non potrà scriverci."
+  notice_region_removed: "{region} è fuori da {simulator}: il suo file di regione ora è {file} (rinominato com'era, la regione torna). Quello che contiene resta nel database di {simulator}. Per darla a un altro simulatore: {command}"
+  notice_install_account: "Le istanze girano come {account}, il proprietario dell'installazione, e il suo sito è servito come {web}: SystemUser, WebUser e WebGroup di {conf}. Il servizio prende l'account con: {command}"
   notice_import_switch: 'Poi passa: {command} (la griglia e i suoi simulatori attivati e avviati qui).'
   notice_restore_estate_missing: "Le regioni {regions} non hanno una proprietà in {database}, il database della griglia qui, mantenuto così com'è: partirebbero senza. Ripristina lì la loro proprietà, o collegale a una (estate link region) prima di avviare."
   notice_restore_estate_unchecked: "Le proprietà delle regioni non si sono potute verificare in {database}, il database della griglia qui, mantenuto così com'è: verifica che ci siano prima di avviare."
@@ -991,7 +994,7 @@ w4os:
   admin_url: 'Indirizzo degli helpers'
   admin_url_help: 'L’indirizzo degli helpers della griglia, dove sono i suoi blocchi'
   admin_api_url: 'Indirizzo dell’API dell’engine'
-  admin_api_url_help: 'Obbligatorio con un engine remoto: https://grid.example.org/api, oppure http://127.0.0.1:8780/api sulla macchina della griglia'
+  admin_api_url_help: "Obbligatorio con un engine remoto: https://grid.example.org/api, oppure sulla macchina della griglia l'indirizzo che dà opensim web GRID api"
   admin_api_url_missing: 'L’engine è remoto ma non ha un indirizzo API: indica l’indirizzo dell’API dell’engine, senza di esso il sito non raggiunge la griglia'
   admin_grid: 'Nick della griglia'
   admin_grid_help: 'Solo se l’API serve più griglie'

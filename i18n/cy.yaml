@@ -23,7 +23,7 @@ w4os:
   admin_url: 'Cyfeiriad y helpers'
   admin_url_help: 'Cyfeiriad helpers y grid, lle mae ei flociau'
   admin_api_url: 'Cyfeiriad API yr engine'
-  admin_api_url_help: 'Angenrheidiol gydag engine o bell: https://grid.example.org/api, neu http://127.0.0.1:8780/api ar beiriant y grid'
+  admin_api_url_help: 'Angenrheidiol gydag engine o bell: https://grid.example.org/api, neu ar beiriant y grid y cyfeiriad y mae opensim web GRID api yn ei roi'
   admin_api_url_missing: 'Mae’r engine o bell ond heb gyfeiriad API: rho gyfeiriad API yr engine, hebddo ni all y safle gyrraedd y grid'
   admin_grid: 'Nick y grid'
   admin_grid_help: 'Dim ond pan fydd yr API yn gwasanaethu sawl grid'

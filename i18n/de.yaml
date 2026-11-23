@@ -23,7 +23,7 @@ w4os:
   admin_url: 'Adresse der Helpers'
   admin_url_help: 'Die Adresse der Helpers des Grids, wo seine Blöcke sind'
   admin_api_url: 'Adresse der Engine-API'
-  admin_api_url_help: 'Erforderlich mit einer entfernten Engine: https://grid.example.org/api, oder http://127.0.0.1:8780/api auf dem Rechner des Grids'
+  admin_api_url_help: 'Erforderlich mit einer entfernten Engine: https://grid.example.org/api, oder auf dem Rechner des Grids die Adresse, die opensim web GRID api angibt'
   admin_api_url_missing: 'Die Engine ist entfernt, hat aber keine API-Adresse: Gib die Adresse der Engine-API an, ohne sie erreicht die Seite das Grid nicht'
   admin_grid: 'Nick des Grids'
   admin_grid_help: 'Nur wenn die API mehrere Grids bedient'

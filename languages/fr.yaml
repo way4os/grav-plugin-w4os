@@ -954,7 +954,10 @@ w4os:
   notice_restart_grid: 'Redémarrage de la grille nécessaire : {restart}.'
   notice_restart_simulators: 'Redémarrage du ou des simulateurs nécessaire : {restart}.'
   notice_import_stop_grid: "L'ancien Robust de {grid} tourne tant qu'il n'est pas arrêté : arrête-le et empêche-le de redémarrer (son service, son cron, son screen), ses ports {ports} sont ceux de la grille ici, sa base de données la même."
-  notice_in_place_enable: 'La grille est inscrite sur place, désactivée : une fois son propre démarrage arrêté (son service, son cron, son screen), {enable}, puis {start}.'
+  notice_in_place_enable: "La grille est inscrite sur place, désactivée. Arrête d'abord son propre démarrage (kickstart.sh --in-place le fait), ou à la main : son cron ou son service mis de côté, ses instances en route arrêtées (kill -TERM : une Robust avec une console à distance n'a pas de screen). Puis {enable}, puis {start}."
+  notice_in_place_unwritable: "Ses instances tournent avec le compte {account}, qui ne peut pas écrire dans {folders} (dossiers de {owner}). L'install reste telle quelle : elles ne pourront pas tourner tant que {account} ne pourra pas y écrire."
+  notice_region_removed: "{region} est sortie de {simulator} : son fichier de région est maintenant {file} (renommé comme avant, la région revient). Ce qu'elle contient reste dans la base de données de {simulator}. Pour la donner à un autre simulateur : {command}"
+  notice_install_account: "Les instances tournent avec {account}, le propriétaire de l'install, et son site est servi par {web} : SystemUser, WebUser et WebGroup de {conf}. Le service prend ce compte avec : {command}"
   notice_import_switch: 'Puis bascule : {command} (la grille et ses simulateurs activés et démarrés ici).'
   notice_restore_estate_missing: "Les régions {regions} n'ont pas de domaine dans {database}, la base de la grille ici, gardée telle quelle : elles démarreraient sans. Restaures-y leur domaine, ou rattache-les à un domaine (estate link region) avant de démarrer."
   notice_restore_estate_unchecked: "Les domaines des régions n'ont pas pu être vérifiés dans {database}, la base de la grille ici, gardée telle quelle : vérifie qu'ils y sont avant de démarrer."
@@ -991,7 +994,7 @@ w4os:
   admin_url: 'Adresse des helpers'
   admin_url_help: 'L’adresse des helpers de la grille, où sont ses blocs'
   admin_api_url: 'Adresse de l’API de l’engine'
-  admin_api_url_help: 'Obligatoire avec un engine distant : https://grid.example.org/api, ou http://127.0.0.1:8780/api sur la machine de la grille'
+  admin_api_url_help: "Obligatoire avec un engine distant : https://grid.example.org/api, ou sur la machine de la grille l'adresse que donne opensim web GRID api"
   admin_api_url_missing: 'L’engine est distant mais n’a pas d’adresse d’API : indique l’adresse de l’API de l’engine, sans elle le site n’atteint pas la grille'
   admin_grid: 'Nick de la grille'
   admin_grid_help: 'Seulement si l’API sert plusieurs grilles'

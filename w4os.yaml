@@ -10,8 +10,8 @@ engine: remote
 serve_helpers: false
 # The address of the helpers of the grid, where its blocks are (https://grid.example.org/helpers)
 url: ''
-# The address of the engine API (engine: remote), required: https://grid.example.org/api, or http://127.0.0.1:8780/api for a
-# site on the machine of the grid (opensim web GRID api)
+# The address of the engine API (engine: remote), required: https://grid.example.org/api, or for a site on the machine of the grid
+# the one opensim web GRID api serves, on a port of the grid
 api_url: ''
 # The nick of the grid, when the API serves several grids (its addresses are then /grids/{grid}/...); empty for the API of one grid.
 # With the bundled engine and an OpenSim install on this server: the grid of the install, empty for its only grid.

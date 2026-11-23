@@ -954,7 +954,10 @@ w4os:
   notice_restart_grid: 'Het grid moet opnieuw starten: {restart}.'
   notice_restart_simulators: 'De simulator(s) moeten opnieuw starten: {restart}.'
   notice_import_stop_grid: 'De oude Robust van {grid} blijft draaien tot hij gestopt wordt: stop hem en voorkom dat hij opnieuw start (zijn service, zijn cron, zijn screen); zijn poorten {ports} zijn die van het grid hier, zijn database dezelfde.'
-  notice_in_place_enable: 'Het grid is ter plaatse geregistreerd, uitgeschakeld: zodra zijn eigen start is gestopt (zijn service, zijn cron, zijn screen), {enable}, daarna {start}.'
+  notice_in_place_enable: 'Het grid is ter plaatse geregistreerd, uitgeschakeld. Stop eerst zijn eigen start (kickstart.sh --in-place doet het), of met de hand: zijn cron of service opzij gezet, zijn draaiende instanties gestopt (kill -TERM: een Robust met een externe console heeft geen screen). Daarna {enable}, daarna {start}.'
+  notice_in_place_unwritable: 'De instanties draaien als het account {account}, dat niet kan schrijven in {folders} (mappen van {owner}). De installatie blijft zoals ze is: ze kunnen pas draaien als {account} daar kan schrijven.'
+  notice_region_removed: '{region} is uit {simulator} gehaald: het regiobestand is nu {file} (terug hernoemd is de regio er weer). Wat erin staat blijft in de database van {simulator}. Geef haar aan een andere simulator met: {command}'
+  notice_install_account: 'De instanties draaien als {account}, de eigenaar van de installatie, en de site wordt geserveerd als {web}: SystemUser, WebUser en WebGroup in {conf}. De service neemt het account over met: {command}'
   notice_import_switch: 'Schakel dan over: {command} (het grid en zijn simulators hier ingeschakeld en gestart).'
   notice_restore_estate_missing: "De regio's {regions} hebben geen landgoed in {database}, de database van het grid hier, die blijft zoals ze is: ze zouden zonder starten. Herstel daar hun landgoed, of koppel ze aan een (estate link region) voordat je start."
   notice_restore_estate_unchecked: "De landgoederen van de regio's konden niet worden gecontroleerd in {database}, de database van het grid hier, die blijft zoals ze is: controleer vóór het starten dat ze er zijn."
@@ -991,7 +994,7 @@ w4os:
   admin_url: 'Adres van de helpers'
   admin_url_help: 'Het adres van de helpers van het grid, waar de blokken staan'
   admin_api_url: 'Adres van de engine-API'
-  admin_api_url_help: 'Verplicht met een externe engine: https://grid.example.org/api, of http://127.0.0.1:8780/api op de machine van het grid'
+  admin_api_url_help: 'Verplicht met een externe engine: https://grid.example.org/api, of op de machine van het grid het adres dat opensim web GRID api geeft'
   admin_api_url_missing: 'De engine is extern maar heeft geen API-adres: vul het adres van de engine-API in, zonder dat bereikt de site het grid niet'
   admin_grid: 'Nick van het grid'
   admin_grid_help: 'Alleen als de API meerdere grids bedient'
