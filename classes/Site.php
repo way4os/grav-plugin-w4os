@@ -2131,10 +2131,17 @@ final class Site
         return $config;
     }
 
-    /** One configuration file of the site rewritten (config://<file>.yaml), then read at once by the next request. */
+    /**
+     * One configuration file of the site rewritten, then read at once by the next request: the file Grav reads (the first of
+     * config:// that has it), else one of the site's own folder (user/config). Never a new one in the folder of an environment that
+     * Grav 1.7 makes for its own files (user/localhost/config, its security.yaml): a setting removed there would stay as the site's
+     * own file has it.
+     */
     private function writeSettings(string $file, \Closure $change): void
     {
-        $yaml = \Grav\Common\File\CompiledYamlFile::instance($this->grav['locator']->findResource("config://$file.yaml", true, true));
+        $locator = $this->grav['locator'];
+        $path = $locator->findResource("config://$file.yaml", true) ?: $locator->findResource('user://config', true, true)."/$file.yaml";
+        $yaml = \Grav\Common\File\CompiledYamlFile::instance($path);
         $yaml->save($change((array) $yaml->content()));
         $yaml->free();
         // The next request reads it at once, the site's pages too: Grav's own clearing of its cache (the list of the configuration
