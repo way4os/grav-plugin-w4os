@@ -10,6 +10,8 @@ function row_html(array $list, array $item, array $links = [], string $icons = '
 {
     $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
     $twig->addFunction(new TwigFunction('w4os_icon', fn (string $icon) => "$icons-$icon"));
+    // As the plugin has it (its HTML kept): Twig compiles a template once per process, whatever environment renders it next
+    $twig->addFunction(picture_tag_function());
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
