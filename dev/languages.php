@@ -5,6 +5,10 @@
 //
 //   php dev/languages.php [folder]     default: languages/ of the plugin (composer languages)
 
+// Symfony YAML from a Grav (the plugin uses the host's): the development one (dev/grav.sh install), or GRAV_DIR
+$grav = getenv('GRAV_DIR') ?: dirname(__DIR__).'/tmp/grav';
+is_file("$grav/vendor/autoload.php") || exit("No Grav for the libraries it provides: dev/grav.sh install, or GRAV_DIR=<a Grav>\n");
+require "$grav/vendor/autoload.php";
 require dirname(__DIR__).'/vendor/autoload.php';
 
 use W4OS\Engine\I18n\Catalog;
