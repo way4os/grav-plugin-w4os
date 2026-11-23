@@ -65,8 +65,16 @@ A date is told by `Site::date()` (Twig filter `w4os_date`, its style): absolute 
 
 ```bash
 composer install
-vendor/bin/pest
+dev/grav.sh install         # the Grav whose libraries the tests load (tmp/grav), once
+vendor/bin/pest             # GRAV_DIR=<a Grav> vendor/bin/pest: on another Grav, a 1.7 one for instance
 ```
+
+The plugin runs on Grav 1.7 (PHP 8.2) and Grav 2 (PHP 8.3+), one code base. It never ships a library Grav already has: Twig, Symfony
+YAML, the PSR interfaces and the polyfills Grav carries on both lines are `replace`d in `composer.json`, so the plugin uses the
+host's, and the tests load them from a Grav (`tests/Pest.php`). A library of the plugin works beside both lines (Twig 1.44 and 3,
+Symfony YAML 4.4 and 7); the templates, the plugin's and the helpers', keep to the syntax of Twig 1.44 (no arrow in `sort`, no
+`?.`, no `...`, no `types` or `guard` tags). `config.platform.php` (8.2) keeps the locked versions to what PHP 8.2 runs. Where a
+feature of Grav 2 alone is needed, the plugin tests for it (`method_exists`, `class_exists`), as Grav's own plugins do.
 
 What needs Grav itself (signing in, "remember me", sessions) is tested end to end by w4os-site (`tests/remember-test.sh`), on the Grav tree it builds with this plugin (`W4OS_PLUGIN=<this folder> packaging/build` there).
 

@@ -82,7 +82,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": ">=8.2",
         "w4os/w4os-engine": "@dev",
         "w4os/w4os-helpers": "@dev",
         "magicoli/opensim-rest-php": "@dev",
@@ -92,10 +92,24 @@
         "w4os/w4os-views": "@dev"
     },
     "require-dev": {
-        "pestphp/pest": "^4.0",
-        "symfony/yaml": "^7.0 || ^8.0",
+        "pestphp/pest": "^3.8 || ^4.0",
         "magicoli/bash-tools": "^1.0",
         "magicoli/build-tools": "^0.2.0"
+    },
+    "replace": {
+        "guzzlehttp/psr7": "*",
+        "psr/container": "*",
+        "psr/http-factory": "*",
+        "psr/http-message": "*",
+        "psr/http-server-handler": "*",
+        "psr/http-server-middleware": "*",
+        "psr/log": "*",
+        "ralouphie/getallheaders": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-mbstring": "*",
+        "symfony/polyfill-php80": "*",
+        "symfony/yaml": "^7.4",
+        "twig/twig": "*"
     },
     "autoload": {
         "psr-4": {
@@ -118,7 +132,10 @@
         },
         "optimize-autoloader": true,
         "prepend-autoloader": false,
-        "platform-check": false
+        "platform-check": false,
+        "platform": {
+            "php": "8.2.0"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

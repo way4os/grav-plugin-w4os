@@ -1,5 +1,11 @@
 <?php
 
+// The libraries the host Grav provides (Twig, Symfony YAML, the PSR interfaces: "replace" in composer.json), from the development
+// Grav (dev/grav.sh install) or the Grav GRAV_DIR names, loaded before the plugin's own as on a site
+$grav = getenv('GRAV_DIR') ?: dirname(__DIR__).'/tmp/grav';
+is_file("$grav/vendor/autoload.php") || exit("No Grav for the libraries it provides: dev/grav.sh install, or GRAV_DIR=<a Grav>\n");
+require_once "$grav/vendor/autoload.php";
+
 require_once __DIR__.'/Support.php';
 
 /** The w4os_link() of the plugin's Twig, the links built from the root of a site in its first language. */
