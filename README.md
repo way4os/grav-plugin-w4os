@@ -141,6 +141,16 @@ The engine and the helpers read nothing from the server, no folder of config: wi
 
 - Grav 1.7.51 or newer (PHP 8.2 or newer) or Grav 2 (PHP 8.3 or newer), with the Form, Login and Shortcode Core plugins (Grav installs them
   with this one).
+
+| Grav | PHP | Supported until |
+| --- | --- | --- |
+| 2 | 8.3 or newer | as long as Grav 2 |
+| 1.7.51 or newer | 8.3 | 31 December 2027 at the latest, PHP 8.3's end of life: Grav 1.7 runs on no newer PHP |
+| 1.7.51 or newer | 8.2 (Debian 12) | 31 December 2026, PHP 8.2's end of life; a site can move to PHP 8.3 then |
+
+Grav 1.7 is supported for the servers that have no PHP 8.3 (Debian 12, whose long-term support ends on 30 June 2028). Its support is
+reviewed during 2027 by the sites that still use it, and announced deprecated before December 2027 if none does (ROADMAP.md). On Grav
+1.7, a recent date in a list reads as a date, not relatively (`il y a 2 heures` on Grav 2).
 - An OpenSimulator grid: with its OpenSim helpers (version 3) and an API key for the site, or with its Robust database reachable from the site.
 
 ## Install
