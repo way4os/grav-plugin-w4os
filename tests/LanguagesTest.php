@@ -13,7 +13,7 @@ describe('languages', function () {
             expect(file_get_contents(dirname(__DIR__).'/languages/'.basename($file)))->toBe(file_get_contents($file), basename($file).' is not up to date');
         }
         exec('rm -rf '.escapeshellarg($folder));
-    });
+    })->skip(! defined(Symfony\Component\Yaml\Yaml::class.'::DUMP_NULL_AS_EMPTY'), 'the files are written with the Symfony YAML of Grav 2, which quotes otherwise');
 
     test('each file reads back every text as the catalog has it, on several lines and with quotes included', function () {
         $folder = sys_get_temp_dir().'/w4os-languages-'.bin2hex(random_bytes(4));
