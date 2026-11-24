@@ -221,6 +221,25 @@ describe('the home page of a grid', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('grid-template-rows: auto 1fr;', '.w4os-home-news { align-self: start; }');
     });
 
+    test('lets a theme move the message of the day and the Connect block to the other aside, by blocks of its own', function () {
+        $loader = new FilesystemLoader(dirname(__DIR__).'/templates');
+        $loader->addPath(dirname(__DIR__).'/templates', 'w4os');
+        $theme = "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid %}{{ block('w4os_home_grid_info') }}{% endblock %}{% block w4os_home_news_before %}{{ block('w4os_home_connect') }}{% endblock %}";
+        $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => $theme]), $loader]));
+        $twig->addFunction(new TwigFunction('w4os_block', fn (string $name) => "<section class=\"block block-$name\"></section>", ['is_safe' => ['html']]));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        [$grid, $news] = explode('<aside class="w4os-home-news">', $twig->render('w4os/home.html.twig', ['content' => '']), 2);
+        $plain = explode('<aside class="w4os-home-news">', themeless_twig()->render('w4os/home.html.twig', ['content' => '']), 2)[0];
+
+        // Moved: what the grid is on one side, its message of the day and how to connect on the other
+        expect($grid)->toContain('block-grid-info', 'block-grid-status')->not->toContain('block-motd', 'w4os-start')
+            ->and($news)->toContain('block-motd', 'w4os-start')
+            // Left as it was: all four under what the grid is
+            ->and($plain)->toContain('block-grid-info', 'block-motd', 'w4os-start');
+    });
+
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
         expect(W4OS\Grav\Site::shortcodeBlocks("# Hi\n[w4os-home]Text[/w4os-home]"))->toBe(['popular_places', 'destination_guide', 'grid_info', 'grid_status', 'motd'])
             ->and(W4OS\Grav\Site::shortcodeBlocks('[grid-status] and [avatar-profile name="A.B" /], [new-avatars]'))->toBe(['grid_status', 'profile', 'new_users'])

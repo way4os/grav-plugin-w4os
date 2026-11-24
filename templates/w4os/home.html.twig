@@ -6,7 +6,9 @@
    column, if it has one, stays the theme's. The main column a section, its blocks titled h2 (the page's own title is h1); the
    others asides, their blocks titled h3. A theme adds its own boxes to the asides by extending this template
    ({% extends '@w4os/w4os/home.html.twig' %}) and filling the blocks w4os_home_grid_extra (under what the grid is),
-   w4os_home_news_before (above the news) and w4os_home_news_extra (under the news). #}
+   w4os_home_news_before (above the news) and w4os_home_news_extra (under the news); it moves the message of the day and the Connect
+   block to the other aside by giving w4os_home_grid only {{ block('w4os_home_grid_info') }} and w4os_home_news_before
+   {{ block('w4os_home_connect') }}. #}
 {% set news = w4os_home_news() %}
 <div class="w4os-home">
     <div class="w4os-home-layout">
@@ -19,11 +21,17 @@
             {{ (text[1] ?? '')|raw }}
         </section>
         <aside class="w4os-home-grid">
-            {{ w4os_block('grid-info', {level: 'h3'}) }}
-            {{ w4os_block('grid-status', {level: 'h3'}) }}
-            {{ w4os_block('motd', {level: 'h3'}) }}
-            {% include 'w4os/getting-started.html.twig' with {start_level: 'h3', start_title: start_title ?? grav.page.header.start_title ?? '', start_content: start_content ?? grav.page.header.start_content ?? '', start_footer: start_footer ?? grav.page.header.start_footer ?? ''} %}
-            {% block w4os_home_grid_extra %}{% endblock %}
+            {% block w4os_home_grid %}
+                {% block w4os_home_grid_info %}
+                    {{ w4os_block('grid-info', {level: 'h3'}) }}
+                    {{ w4os_block('grid-status', {level: 'h3'}) }}
+                {% endblock %}
+                {% block w4os_home_connect %}
+                    {{ w4os_block('motd', {level: 'h3'}) }}
+                    {% include 'w4os/getting-started.html.twig' with {start_level: 'h3', start_title: start_title ?? grav.page.header.start_title ?? '', start_content: start_content ?? grav.page.header.start_content ?? '', start_footer: start_footer ?? grav.page.header.start_footer ?? ''} %}
+                {% endblock %}
+                {% block w4os_home_grid_extra %}{% endblock %}
+            {% endblock %}
         </aside>
         <aside class="w4os-home-news">
             {% block w4os_home_news_before %}{% endblock %}
