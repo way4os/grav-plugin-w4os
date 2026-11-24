@@ -6,6 +6,7 @@ use Grav\Common\Plugin;
 use Grav\Common\Utils;
 use Grav\Plugin\Login\Events\UserLoginEvent;
 use RocketTheme\Toolbox\Event\Event;
+use W4OS\Grav\Backdrop;
 use W4OS\Grav\Blocks;
 use W4OS\Grav\EngineException;
 use W4OS\Grav\FormError;
@@ -377,12 +378,33 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag(Site::hasPicture($uuid) ? $this->site()->picture($uuid, $default) : null, Site::initials($name), $class, $size), ['is_safe' => ['html']]));
     }
 
+    /**
+     * The backdrop of the site on its pages (Backdrop): its style, and for a theme that dresses its pages for it, w4os_backdrop in
+     * Twig. An image Grav can't serve never breaks the page.
+     */
+    private function backdrop(): void
+    {
+        $page = $this->grav['page'] ?? null;
+        if (! Backdrop::shown($page?->template(), $this->grav['twig']->template ?? null)) {
+            return;
+        }
+        try {
+            $css = $this->site()->backdropCss();
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning('w4os: no backdrop: '.$e->getMessage());
+            $css = '';
+        }
+        $this->grav['twig']->twig_vars['w4os_backdrop'] = $css !== '';
+        $css === '' || $this->grav['assets']->addInlineCss($css);
+    }
+
     public function onTwigSiteVariables(): void
     {
         $page = $this->grav['page'] ?? null;
         $site = Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null);
         if ($site) {
             $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+            $this->backdrop();
             // The teleport links' own style and script (TeleportLink::ASSETS, from the views), on the pages of the site: a link in a
             // text kept in a cache needs them too
             foreach (\W4OS\Views\TeleportLink::ASSETS['css'] as $file) {
@@ -800,6 +822,13 @@ class W4osPlugin extends Plugin
                     foreach ([...array_values($fields), ...array_keys(Site::brandSwitches($has))] as $field) {
                         $site->removeSetting("themes/$active", $field);
                     }
+                    // The backdrop, shown or not (as posted: nothing is posted for a box not checked), and the site's own series (none:
+                    // the theme's)
+                    $site->saveSetting('plugins/w4os', 'backdrop.enabled', (bool) $this->grav['uri']->post('data.backdrop'));
+                    foreach (array_keys(Backdrop::FOLDERS) as $mode) {
+                        $files = (array) ($form->getData()->get("backdrop_$mode") ?? []);
+                        $files === [] ? $site->removeSetting('plugins/w4os', "backdrop.$mode") : $site->saveSetting('plugins/w4os', "backdrop.$mode", $files);
+                    }
                     // Grav's own setting of the theme, as its admin writes it
                     $site->saveSetting('system', 'pages.theme', $theme);
                     $this->done('w4os.admin_site_saved', $routes['settings']);
@@ -910,6 +939,9 @@ class W4osPlugin extends Plugin
             $fields['appearance']['fields'][$setting]['destination'] = (string) $this->grav['locator']->findResource($folder, false, true);
             isset($supported[$setting]) || $fields['appearance']['fields'][$setting]['description'] = $notices[$setting];
         }
+        foreach (Backdrop::FOLDERS as $mode => $folder) {
+            $fields['appearance']['fields']["backdrop_$mode"]['destination'] = (string) $this->grav['locator']->findResource($folder, false, true);
+        }
         $form->setFields($fields);
         // The values as the site has them now, whatever the form kept: its brand, else what the active theme kept of its own
         // before the brand was the site's (a site saved before; its first save makes it the site's)
@@ -924,6 +956,12 @@ class W4osPlugin extends Plugin
                 $files = Site::isDefault($own, $this->site()->themeDefault($active, $fields[$setting])) ? [] : $own;
             }
             $form->setData($setting, $files);
+        }
+        // The backdrop: shown or not, the site's own series
+        $backdrop = (array) $this->grav['config']->get('plugins.w4os.backdrop', []);
+        $form->setData('backdrop', (bool) ($backdrop['enabled'] ?? true));
+        foreach (array_keys(Backdrop::FOLDERS) as $mode) {
+            $form->setData("backdrop_$mode", (array) ($backdrop[$mode] ?? []));
         }
     }
 

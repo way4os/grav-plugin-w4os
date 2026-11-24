@@ -4,6 +4,8 @@ namespace W4OS\Grav;
 
 use Grav\Common\Grav;
 use Grav\Common\HTTP\Client;
+use Grav\Common\Page\Medium\ImageMedium;
+use Grav\Common\Page\Medium\MediumFactory;
 use Grav\Common\Page\Page;
 use Grav\Common\User\Interfaces\UserInterface;
 use W4OS\Engine\Http\Url;
@@ -105,6 +107,50 @@ final class Site
     public function config(): array
     {
         return (array) $this->grav['config']->get('plugins.w4os', []);
+    }
+
+    /**
+     * The style of the backdrop of the site for this request (Backdrop): an image of the series of each mode at random, the site's
+     * own else the active theme's (its parents' too), served by Grav's image media at the widths and in the formats Backdrop
+     * gives; '' when the site shows none.
+     */
+    public function backdropCss(): string
+    {
+        $config = (array) ($this->config()['backdrop'] ?? []);
+        if (! ($config['enabled'] ?? true)) {
+            return '';
+        }
+        $images = [];
+        foreach (array_keys(Backdrop::FOLDERS) as $mode) {
+            $folder = $this->grav['locator']->findResource('theme://'.Backdrop::THEME_FOLDER."/$mode", false);
+            $theme = is_string($folder) ? Backdrop::themeSeries(GRAV_ROOT, $folder) : [];
+            $file = Backdrop::pick(Backdrop::series((array) ($config[$mode] ?? []), $theme, fn (string $path) => is_file(GRAV_ROOT.'/'.$path)));
+            $file === null || $images[$mode] = $this->backdropImage(GRAV_ROOT.'/'.$file);
+        }
+
+        return Backdrop::css($images);
+    }
+
+    /**
+     * An image of the backdrop as Grav serves it, resized and converted in its cache of images: by width, then format, its address.
+     *
+     * @return array<int,array<string,string>>
+     */
+    private function backdropImage(string $file): array
+    {
+        $size = @getimagesize($file);
+        $images = [];
+        foreach ($size ? Backdrop::widths((int) $size[0]) : [] as $width => $query) {
+            foreach (array_keys(Backdrop::FORMATS) as $format) {
+                $medium = MediumFactory::fromFile($file);
+                if (! $medium instanceof ImageMedium) {
+                    return [];
+                }
+                $images[$width][$format] = $medium->cropResize($width, $width)->format($format)->quality(Backdrop::QUALITY)->url();
+            }
+        }
+
+        return $images;
     }
 
     /**

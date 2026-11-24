@@ -38,6 +38,10 @@ bundled:
 send_mail: true
 # The style sheet of the plugin (its pages, the models picker, the blocks); off when the theme styles them
 built_in_css: true
+# A picture behind the pages, one of a series at random, a series for the light mode and one for the dark mode: the site's own
+# (light, dark: their files, set in its settings), else the active theme's (its images/backdrop/<mode> folder)
+backdrop:
+  enabled: true
 # An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in
 menu: true
 # How long (seconds) the blocks of the helpers (but the search) and the avatar models are kept before being read again

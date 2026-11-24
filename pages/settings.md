@@ -34,6 +34,24 @@ form:
           help: w4os.admin_site_favicon_help
           multiple: false
           accept: [image/png, image/svg+xml, .ico]
+        # The backdrop of the site, a series by mode (classes/Backdrop.php): its files in its data (their destination set when the
+        # form is made); without any, the theme's own
+        backdrop:
+          type: checkbox
+          label: w4os.admin_site_backdrop
+          help: w4os.admin_site_backdrop_help
+        backdrop_light:
+          type: file
+          label: w4os.admin_site_backdrop_light
+          help: w4os.admin_site_backdrop_light_help
+          multiple: true
+          accept: [image/jpeg, image/png, image/webp]
+        backdrop_dark:
+          type: file
+          label: w4os.admin_site_backdrop_dark
+          help: w4os.admin_site_backdrop_dark_help
+          multiple: true
+          accept: [image/jpeg, image/png, image/webp]
   buttons:
     - { type: submit, value: w4os.save_button, classes: 'btn-primary' }
   process:

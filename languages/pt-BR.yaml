@@ -1038,6 +1038,12 @@ w4os:
   admin_site_logo_help: 'O logo do site, para todos os temas (sem ele, cada um mantém o seu); um PNG funciona com todos'
   admin_site_favicon: Favicon
   admin_site_favicon_help: 'O ícone do site nas abas dos navegadores, para todos os temas (sem ele, cada um mantém o seu)'
+  admin_site_backdrop: 'Background image'
+  admin_site_backdrop_help: 'A picture behind the pages, one of a series at random on each page, as the light or the dark mode shows'
+  admin_site_backdrop_light: 'Background images, light mode'
+  admin_site_backdrop_light_help: 'Wide pictures (2048 pixels or more), for the light mode; without any, the ones of the theme'
+  admin_site_backdrop_dark: 'Background images, dark mode'
+  admin_site_backdrop_dark_help: 'Wide pictures (2048 pixels or more), for the dark mode; without any, the ones of the theme'
   admin_site_logo_unsupported: 'O tema atual não mostra o logo do site; ele fica guardado para o próximo tema que mostrar um'
   admin_site_favicon_unsupported: 'O tema atual não mostra o favicon do site; ele fica guardado para o próximo tema que mostrar um'
   admin_route: 'Páginas de administração'

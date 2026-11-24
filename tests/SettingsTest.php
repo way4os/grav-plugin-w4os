@@ -54,7 +54,7 @@ describe('the settings of the site', function () {
 
         expect($header)->toMatchArray(['template' => 'w4os-admin', 'w4os' => 'settings'])
             ->and(array_keys($header['form']['fields']))->toBe(['appearance'])
-            ->and(array_keys($header['form']['fields']['appearance']['fields']))->toBe(['theme', 'logo', 'favicon'])
+            ->and(array_keys($header['form']['fields']['appearance']['fields']))->toBe(['theme', 'logo', 'favicon', 'backdrop', 'backdrop_light', 'backdrop_dark'])
             ->and($header['form']['process'])->toBe([['upload' => true], ['w4os' => 'settings']])
             ->and($html)->toContain('class="list-group list-group-transparent"', 'href="#w4os-settings-appearance"', '[w4os.admin_site_appearance]', '<form id="w4os-settings"></form>');
     });
