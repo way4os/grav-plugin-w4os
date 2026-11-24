@@ -2533,7 +2533,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "3bfa27c7b18ed97ef9797d7e66404923017a13ef"
+                "reference": "fa63b8cb09977c7edfecbe9962914b3e357d8d24"
             },
             "require": {
                 "egulias/email-validator": "^4.0",
@@ -2623,7 +2623,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "d3fe7263d4968cb2188c883074767a2bea46255a"
+                "reference": "1b7bcbdee9f25ce2c3eb9ef0e2daa7e74668615e"
             },
             "require": {
                 "ext-curl": "*",
@@ -2707,7 +2707,7 @@
             "dist": {
                 "type": "path",
                 "url": "../w4os-views",
-                "reference": "c8da5b7db3ff9d14461876e22cf8f4f6d6806e75"
+                "reference": "180f557825ee0e58ea06a63d43a8d0005f0a6448"
             },
             "require": {
                 "ext-intl": "*",
