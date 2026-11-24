@@ -654,8 +654,10 @@ w4os:
   setting_podex_url: 'URL de teletransporte do câmbio'
   setting_assets_url: 'URL do Servidor de Ativos Web'
   setting_assets_url_help: 'O servidor de ativos web do grid quando não é o dos helpers: ele converte as imagens do mundo (JPEG 2000) para a web.'
-  offline_module_v1: 'Pelos helpers (V1)'
-  offline_module_v2: 'Pelo Robust (V2)'
+  offline_module_v1: 'V1, guardadas pelos helpers (obsoleto)'
+  offline_module_help_v1: 'V1 (obsoleto): os helpers guardam as mensagens e as encaminham por e-mail quando o avatar pede no viewer.'
+  offline_module_v2: 'V2, guardadas pelo Robust'
+  offline_module_help_v2: 'V2: o módulo do núcleo, o Robust guarda as mensagens.'
   offline_database: 'Banco de dados das mensagens offline'
   db_host: 'Nome do host'
   db_port: Porta

@@ -654,8 +654,10 @@ w4os:
   setting_podex_url: 'URL teleportio i’r gyfnewidfa'
   setting_assets_url: 'URL y gweinydd asedau gwe'
   setting_assets_url_help: "Gweinydd asedau gwe'r grid pan nad yw'n un yr helpers: mae'n trosi lluniau'r byd (JPEG 2000) ar gyfer y we."
-  offline_module_v1: 'Gan yr helpers (V1)'
-  offline_module_v2: 'Gan Robust (V2)'
+  offline_module_v1: 'V1, cedwir gan yr helpers (anghymeradwy)'
+  offline_module_help_v1: "V1 (anghymeradwy): mae'r helpers yn cadw'r negeseuon ac yn eu hanfon drwy e-bost pan fydd yr afatar yn gofyn yn y viewer."
+  offline_module_v2: 'V2, cedwir gan Robust'
+  offline_module_help_v2: "V2: modiwl y craidd, mae Robust yn cadw'r negeseuon."
   offline_database: "Cronfa ddata'r negeseuon all-lein"
   db_host: 'Enw gwesteiwr'
   db_port: Porth

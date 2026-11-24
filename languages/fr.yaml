@@ -654,8 +654,10 @@ w4os:
   setting_podex_url: "URL de téléportation vers l'échange"
   setting_assets_url: 'URL du serveur de ressources web'
   setting_assets_url_help: "Le serveur de ressources web de la grille quand ce n'est pas celui des helpers : il convertit les images du monde (JPEG 2000) pour le web."
-  offline_module_v1: 'Par les helpers (V1)'
-  offline_module_v2: 'Par Robust (V2)'
+  offline_module_v1: 'V1, gardés par les helpers (obsolète)'
+  offline_module_help_v1: "V1 (obsolète) : les helpers gardent les messages et les transfèrent par mail quand l'avatar le demande dans le viewer."
+  offline_module_v2: 'V2, gardés par Robust'
+  offline_module_help_v2: 'V2 : le module du cœur, Robust garde les messages.'
   offline_database: 'Base de données des messages hors ligne'
   db_host: "Nom d'hôte"
   db_port: Port

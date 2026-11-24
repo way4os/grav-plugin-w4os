@@ -654,8 +654,10 @@ w4os:
   setting_podex_url: 'Teleport-URL van het wisselkantoor'
   setting_assets_url: 'URL van de webassets-server'
   setting_assets_url_help: 'De webassetserver van het grid wanneer het niet die van de helpers is: hij zet de afbeeldingen van de wereld (JPEG 2000) om voor het web.'
-  offline_module_v1: 'Door de helpers (V1)'
-  offline_module_v2: 'Door Robust (V2)'
+  offline_module_v1: 'V1, bewaard door de helpers (verouderd)'
+  offline_module_help_v1: 'V1 (verouderd): de helpers bewaren de berichten en sturen ze per e-mail door als de avatar daarom vraagt in de viewer.'
+  offline_module_v2: 'V2, bewaard door Robust'
+  offline_module_help_v2: 'V2: de module van de kern, Robust bewaart de berichten.'
   offline_database: 'Database van de offline berichten'
   db_host: Hostnaam
   db_port: Poort

@@ -654,8 +654,10 @@ w4os:
   setting_podex_url: 'Teleport-URL der Wechselstube'
   setting_assets_url: 'URL des Web-Assets-Servers'
   setting_assets_url_help: 'Der Web-Assets-Server des Grids, wenn er nicht der der Helpers ist: Er wandelt die Bilder der Welt (JPEG 2000) für das Web um.'
-  offline_module_v1: 'Durch die Helpers (V1)'
-  offline_module_v2: 'Durch Robust (V2)'
+  offline_module_v1: 'V1, von den Helpers gespeichert (veraltet)'
+  offline_module_help_v1: 'V1 (veraltet): Die Helpers speichern die Nachrichten und leiten sie per E-Mail weiter, wenn der Avatar es im Viewer wünscht.'
+  offline_module_v2: 'V2, von Robust gespeichert'
+  offline_module_help_v2: 'V2: Das Modul des Kerns, Robust speichert die Nachrichten.'
   offline_database: 'Datenbank der Offline-Nachrichten'
   db_host: Hostname
   db_port: Port
