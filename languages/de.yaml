@@ -842,6 +842,9 @@ w4os:
   unit_dimensions: '%1$s x %2$s'
   unit_mb: '%s MB'
   unit_percent: '%s %%'
+  unit_minutes: '%s Min.'
+  unit_hours: '%s Std.'
+  unit_hours_minutes: '%1$s Std. %2$s Min.'
   usage_of: '%1$s von %2$s'
   column_cpu: CPU
   column_avatars: Avatare
