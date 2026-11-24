@@ -1039,6 +1039,8 @@ w4os:
   admin_site_favicon_unsupported: 'Le thème actuel n’affiche pas de favicon du site ; il est gardé pour le prochain thème qui en affiche un'
   admin_route: 'Pages d’administration'
   admin_route_help: 'La route des pages d’administration de la grille et du site, jamais sous celle de l’admin de Grav'
+  admin_route_welcome: 'Welcome page of the viewer, before the login'
+  admin_route_password: 'Lost password page, as the viewer gives it'
   admin_menu_list: Liste
   admin_avatar_created: "L'avatar %s est créé."
   admin_search_parcels: 'Nom de la parcelle'

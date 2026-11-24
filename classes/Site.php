@@ -853,12 +853,30 @@ final class Site
     /** The type of the page of the plugin at a path, and the rest of the path after its route (a topic, a name). */
     public function pageAt(string $path): array
     {
-        $type = array_search($path, $this->routes(), true);
+        return self::typeAt($path, $this->routes());
+    }
+
+    /** The blocks of the helpers the page a viewer shows before the login has (templates/w4os/welcome.html.twig), by their names. */
+    public const WELCOME_BLOCKS = ['grid_info', 'grid_status', 'popular_places', 'motd'];
+
+    /** The routes that show the page of another type: password (the address grids name for a lost password) shows forgot. */
+    public const SAME_PAGES = ['password' => 'forgot'];
+
+    /**
+     * The type of the page of the plugin at a path, by the routes of the site, with what follows a route that takes a name (a
+     * profile), [false, ''] for none.
+     *
+     * @param array<string,string> $routes
+     * @return array{0: string|false, 1: string}
+     */
+    public static function typeAt(string $path, array $routes): array
+    {
+        $type = array_search($path, $routes, true);
         if ($type !== false) {
-            return [$type, ''];
+            return [self::SAME_PAGES[$type] ?? $type, ''];
         }
         foreach (self::PREFIX_PAGES as $prefix) {
-            $route = $this->routes()[$prefix] ?? '';
+            $route = $routes[$prefix] ?? '';
             if ($route !== '' && $route !== '/' && str_starts_with($path, "$route/")) {
                 return [$prefix, rawurldecode(substr($path, strlen($route) + 1))];
             }

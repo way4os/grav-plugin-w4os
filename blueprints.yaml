@@ -188,3 +188,5 @@ form:
             routes.search: { type: text, label: w4os.search }
             routes.profile: { type: text, label: w4os.profile_title }
             routes.guide: { type: text, label: w4os.guide_title }
+            routes.welcome: { type: text, label: w4os.admin_route_welcome }
+            routes.password: { type: text, label: w4os.admin_route_password }

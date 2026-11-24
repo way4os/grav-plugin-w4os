@@ -35,3 +35,24 @@ describe('the admin pages', function () {
             ->and(Site::movedRoute('/w4os/regions', $routes))->toBeNull();
     });
 });
+
+describe('the pages a grid names in its grid info', function () {
+    test('welcome, the page a viewer shows before the login, and password, the page of a lost password, have routes of their own', function () {
+        $routes = ['welcome' => '/welcome', 'password' => '/password', 'forgot' => '/forgot_password'];
+
+        expect(Site::typeAt('/welcome', $routes))->toBe(['welcome', ''])
+            // The page of a lost password at both its addresses: the site's own, and the one grids name
+            ->and(Site::typeAt('/password', $routes))->toBe(['forgot', ''])
+            ->and(Site::typeAt('/forgot_password', $routes))->toBe(['forgot', ''])
+            ->and(Site::typeAt('/nothing', $routes))->toBe([false, '']);
+    });
+
+    test('are routes of the plugin by default, in its settings', function () {
+        $config = Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml');
+
+        expect($config['routes'])->toMatchArray(['welcome' => '/welcome', 'password' => '/password'])
+            ->and(is_file(dirname(__DIR__).'/pages/welcome.md'))->toBeTrue()
+            ->and(is_file(dirname(__DIR__).'/templates/w4os/welcome.html.twig'))->toBeTrue()
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os-welcome.html.twig'))->toContain('class="w4os-viewer viewer w4os-welcome"');
+    });
+});

@@ -1,0 +1,19 @@
+{# The page a viewer shows before the login (welcome, in the grid info): the page alone, without the theme of the site, in the style
+   of the helpers' pages, whatever asks it. A theme may give its own w4os-welcome.html.twig. #}
+<!doctype html>
+<html lang="{{ (grav.language.getActive ?: 'en')|e('html_attr') }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{{ page.title }}</title>
+    {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20}) %}
+    {% do assets.addCss('plugin://w4os/css/viewer.css', {priority: 5}) %}
+    {{ assets.css()|raw }}
+    {{ assets.js()|raw }}
+</head>
+<body class="w4os-viewer viewer w4os-welcome">
+    {{ page.content|raw }}
+    {{ assets.js('bottom')|raw }}
+</body>
+</html>

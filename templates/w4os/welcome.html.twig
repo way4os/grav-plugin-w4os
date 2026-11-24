@@ -1,0 +1,16 @@
+{# The page a viewer shows before the login (welcome, in the grid info), as the helpers' splash page: what the grid is on the left
+   (its info, its status), the title of the site and its popular places in the middle, its message of the day on the right; one
+   column on a narrow screen. In w4os-welcome.html.twig, the page alone. #}
+<div class="layout with-sidebars">
+    <aside class="sidebar sidebar-left">
+        {{ w4os_block('grid-info', {level: 'h2'}) }}
+        {{ w4os_block('grid-status', {level: 'h2'}) }}
+    </aside>
+    <main id="main">
+        <h1>{{ page.title }}</h1>
+        {{ w4os_block('popular-places', {level: 'h2'}) }}
+    </main>
+    <aside class="sidebar sidebar-right">
+        {{ w4os_block('motd', {level: 'h2'}) }}
+    </aside>
+</div>

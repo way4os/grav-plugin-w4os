@@ -550,6 +550,12 @@ class W4osPlugin extends Plugin
         }
         // A page of the plugin in a viewer's panel: its own bare page, not the theme's (as the sitemap plugin gives its own)
         $this->sitePage() && $this->site()->isViewer() && $this->grav['twig']->template = 'w4os-viewer.html.twig';
+        // The page a viewer shows before the login: alone whatever asks it, titled by the site, the files of its blocks in its head
+        if ($type === 'welcome' && $this->sitePage()) {
+            $this->grav['page']->title($this->site()->title());
+            $this->grav['twig']->template = 'w4os-welcome.html.twig';
+            array_map($this->blockFiles(...), Site::WELCOME_BLOCKS);
+        }
     }
 
     /** Whether a page (the one shown by default) is one of the plugin's that shows in the site (pages/*.md), not an admin page. */

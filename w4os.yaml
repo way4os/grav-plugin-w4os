@@ -103,5 +103,8 @@ routes:
   search: /search
   profile: /profile
   guide: /guide
+  # The page a viewer shows before the login (welcome), and the one of a lost password (password: the same as forgot)
+  welcome: /welcome
+  password: /password
   # The pictures of the grid (the models), served by the bundled engine
   assets: /grid-assets
