@@ -16,4 +16,9 @@ describe('the boxes of the site (css/w4os.css)', function () {
             ->and($css())->not->toContain('.w4os-start-step.is-done, .w4os-start-step.is-todo { opacity')
             ->and($css())->toContain('.w4os-start-step:is(.is-done, .is-todo) > *, .w4os-start-step:is(.is-done, .is-todo)::before { opacity: .7; }');
     });
+
+    test('a callout on the solid surface too, tinted with the color of its text, never see-through', function () use ($css) {
+        expect($css())->toContain('border-radius: .5rem; background: color-mix(in srgb, currentColor 4%, var(--w4os-surface, Canvas)); }')
+            ->and($css())->not->toContain('background: color-mix(in srgb, currentColor 4%, transparent); }');
+    });
 });
