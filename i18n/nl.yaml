@@ -63,6 +63,8 @@ w4os:
   admin_site_favicon_unsupported: 'Het huidige thema toont geen favicon van de site; het blijft bewaard voor het volgende thema dat er een toont'
   admin_route: 'Beheerpagina’s'
   admin_route_help: 'De route van de beheerpagina’s van het grid en van de site, nooit onder die van de beheer van Grav'
+  admin_route_welcome: 'Welkomstpagina van de viewer, vóór het inloggen'
+  admin_route_password: 'Pagina voor een vergeten wachtwoord, zoals de viewer die geeft'
   admin_menu_list: 'Lijst'
   admin_avatar_created: 'De avatar %s is aangemaakt.'
   admin_search_parcels: 'Naam van het perceel'

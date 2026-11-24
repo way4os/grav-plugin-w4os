@@ -1039,8 +1039,8 @@ w4os:
   admin_site_favicon_unsupported: 'Nid yw’r thema bresennol yn dangos favicon y safle; caiff ei gadw ar gyfer y thema nesaf sy’n dangos un'
   admin_route: 'Tudalennau gweinyddu'
   admin_route_help: 'Llwybr tudalennau gweinyddu’r grid a’r safle, byth o dan lwybr gweinyddu Grav'
-  admin_route_welcome: 'Welcome page of the viewer, before the login'
-  admin_route_password: 'Lost password page, as the viewer gives it'
+  admin_route_welcome: 'Tudalen groeso’r viewer, cyn mewngofnodi'
+  admin_route_password: 'Tudalen cyfrinair coll, fel y mae’r viewer yn ei rhoi'
   admin_menu_list: Rhestr
   admin_avatar_created: 'Mae’r afatar %s wedi’i greu.'
   admin_search_parcels: 'Enw’r parsel'
