@@ -131,3 +131,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Een teleportlink die zich aanpast aan waar je hem ziet: in een browser of in de viewer de eigen link, met een menu van de andere en het adres om te kopiëren'
   admin_shortcode_option_destination: 'De plek: host:poort:Regio/x/y/z, hop://... of een regio van het grid'
   admin_shortcode_option_label: 'De tekst (standaard de naam van de plek)'
+  admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'

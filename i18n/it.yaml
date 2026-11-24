@@ -131,3 +131,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Un link di teletrasporto che si adatta a dove lo si vede: dal browser o dal viewer, il suo link, e un menu degli altri e dell’indirizzo da copiare'
   admin_shortcode_option_destination: 'Il luogo: host:porta:Regione/x/y/z, hop://... o una regione della griglia'
   admin_shortcode_option_label: 'Il suo testo (il nome del luogo per impostazione predefinita)'
+  admin_shortcode_site_title_help: 'Il titolo del sito, altrimenti il nome della griglia'

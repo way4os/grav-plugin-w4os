@@ -131,3 +131,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Um link de teletransporte que se adapta a onde é visto: no navegador ou no viewer, seu próprio link, e um menu dos outros e do endereço para copiar'
   admin_shortcode_option_destination: 'O lugar: host:porta:Região/x/y/z, hop://... ou uma região do grid'
   admin_shortcode_option_label: 'O texto (o nome do lugar por padrão)'
+  admin_shortcode_site_title_help: 'O título do site, senão o nome do grid'

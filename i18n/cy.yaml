@@ -131,3 +131,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Dolen teleportio sy’n addasu i ble mae’n cael ei gweld: mewn porwr neu yn y viewer, ei dolen ei hun, a dewislen o’r lleill a’r cyfeiriad i’w gopïo'
   admin_shortcode_option_destination: 'Y lle: gwesteiwr:porth:Rhanbarth/x/y/z, hop://... neu ranbarth o’r grid'
   admin_shortcode_option_label: 'Ei thestun (enw’r lle yn ddiofyn)'
+  admin_shortcode_site_title_help: 'Teitl y safle, neu enw’r grid fel arall'
