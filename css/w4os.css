@@ -87,6 +87,9 @@ li:empty { display: none; }
 .w4os-home-layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
 .w4os-home-grid, .w4os-home-news { overflow-wrap: anywhere; }
 .w4os-home-grid > * + *, .w4os-home-news > * + * { margin-top: 2rem; }
+/* What the grid is in boxes, as the steps of the Connect block: its info and its status (the message of the day a text) */
+.w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
 /* Two columns: the news right under what the grid is, not halfway down the text */
 @container (min-width: 46rem) {
     .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; }
