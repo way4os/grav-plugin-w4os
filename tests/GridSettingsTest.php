@@ -90,3 +90,20 @@ describe('the web assets of the grid', function () {
             ->and(Site::routeUnder('/opensimx/assets', '/opensim'))->toBeNull();
     });
 });
+
+describe('the offline messages page', function () {
+    test('the fields of V1 shown with Provide on and the module V1 both, the module with Provide alone: the script and the page as the engine says', function () {
+        $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('offline');
+        $v1 = ['provide' => [true], 'offlineModule' => ['OfflineMessageModule']];
+        $conditions = Items::conditions(FormView::of($form, ['provide' => true, 'offlineModule' => 'Offline Message Module V2'], null, true, 250));
+        $path = array_column($form['fields'], null, 'name')['path'];
+
+        expect($conditions)->toMatchArray(['offlineModule' => ['provide' => [true]], 'path' => $v1, 'offlineDatabase' => $v1, 'mailSender' => $v1])
+            ->and(FormView::met($path, ['provide' => true, 'offlineModule' => 'OfflineMessageModule']))->toBeTrue()
+            ->and(FormView::met($path, ['provide' => true, 'offlineModule' => 'Offline Message Module V2']))->toBeFalse()
+            ->and(FormView::met($path, ['provide' => false, 'offlineModule' => 'OfflineMessageModule']))->toBeFalse()
+            // As a form posts them: the box '1', the select its value
+            ->and(FormView::met($path, ['provide' => '1', 'offlineModule' => 'OfflineMessageModule']))->toBeTrue()
+            ->and(FormView::met($path, ['offlineModule' => 'OfflineMessageModule']))->toBeFalse();
+    });
+});
