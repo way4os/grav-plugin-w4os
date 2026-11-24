@@ -90,6 +90,12 @@ li:empty { display: none; }
 /* What the grid is in boxes, as the steps of the Connect block: its info and its status (the message of the day a text) */
 .w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
 .w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
+/* A box on the solid surface of the theme (the color of its cards, Pico's; Canvas without one), light or dark as the page, over a
+   picture behind the page too: what the grid is, the steps of the Connect block, the box of the search; the tables in them on the box
+   itself, never on cells of their own */
+:root { --w4os-surface: var(--pico-card-background-color, Canvas); }
+.w4os-home .block-grid-info, .w4os-home .block-grid-status, .w4os-start-step, .block-search.client-browser .search-box { background: var(--w4os-surface); }
+.w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
 /* Two columns: the news right under what the grid is, not halfway down the text */
 @container (min-width: 46rem) {
     .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; }
