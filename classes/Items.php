@@ -347,8 +347,14 @@ final class Items
             'type' => ! empty($field['multiple']) ? 'array' : null, 'pattern' => isset($field['pattern']) ? (string) $field['pattern'] : null], fn ($rule) => $rule !== null);
         $validate = ($input['validate'] ?? []) + $validate;
 
-        // What an empty field shows: its default as it is, an example as one, else a text of the catalog
-        ($empty = self::placeholder($field, $translate)) === null || $input['placeholder'] = $empty;
+        // What an empty field shows: its default as it is, an example as one, else a text of the catalog; a choice shows its default
+        // chosen, never an empty choice of its own (Grav makes a placeholder one)
+        if (in_array($input['type'], ['select', 'radio', 'checkboxes'], true) && isset($field['default'])) {
+            $default = is_scalar($field['default']) ? (string) $field['default'] : null;
+            $default === null || ! array_key_exists($default, (array) ($input['options'] ?? [])) || $input['default'] = $default;
+        } else {
+            ($empty = self::placeholder($field, $translate)) === null || $input['placeholder'] = $empty;
+        }
 
         // The pictures of the models say their help themselves
         return $input + ['label' => 'w4os.'.$field['label']] + ($input['type'] !== 'w4os_models' ? $words : []) + ($validate === [] ? [] : ['validate' => $validate]);

@@ -276,3 +276,21 @@ describe('the settings pages of the services of the grid', function () {
             ->and($on['podexUrl']['validate']['required'] ?? false)->toBeTrue();
     });
 });
+
+describe('a choice with a default', function () {
+    test('shows the default chosen, never as an empty choice of its own; a text shows its default as its placeholder', function () {
+        $select = Items::input(['name' => 'module', 'label' => 'setting_offline_module', 'type' => 'select', 'options' => ['v2' => 'Robust', 'v1' => 'Helpers'], 'default' => 'v2']);
+        $radio = Items::input(['name' => 'mode', 'label' => 'setting_offline_module', 'type' => 'select', 'widget' => 'radio', 'options' => ['a' => 'A', 'b' => 'B'], 'default' => 'b']);
+        $text = Items::input(['name' => 'port', 'label' => 'setting_offline_module', 'type' => 'integer', 'default' => 3306]);
+
+        expect($select)->not->toHaveKey('placeholder')
+            ->and($select['default'] ?? null)->toBe('v2')
+            ->and($radio)->not->toHaveKey('placeholder')
+            ->and($radio['default'] ?? null)->toBe('b')
+            ->and($text['placeholder'] ?? null)->toBe('3306')
+            // A default the choices do not have is no choice
+            ->and(Items::input(['name' => 'module', 'label' => 'x', 'type' => 'select', 'options' => ['v2' => 'Robust'], 'default' => 'gone']))->not->toHaveKeys(['placeholder', 'default'])
+            // A choice that may be left empty keeps its empty choice, a text of the catalog
+            ->and(Items::input(['name' => 'outfit', 'label' => 'x', 'type' => 'select', 'options' => ['a' => 'A'], 'placeholder' => 'none'])['placeholder'] ?? null)->toBe('w4os.none');
+    });
+});
