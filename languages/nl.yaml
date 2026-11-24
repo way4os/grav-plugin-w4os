@@ -735,6 +735,9 @@ w4os:
   health_unset: 'Niet ingesteld: niet geleverd en niet getest.'
   health_options_all: 'alle opties van het grid'
   health_options_missing: 'ontbreken: %s'
+  health_module_unconfigured: '%s geïnstalleerd maar niet ingesteld, uit: %s in te stellen'
+  health_runtime_wrong: 'draait op .NET %s, zijn core is gemaakt voor .NET %s: zijn asset-cache bewaart niets (grijze huid); installeer .NET %s en herstart het'
+  health_grid_info_broken: 'de grid-info is geen goed gevormde UTF-8-XML, de viewers weigeren het grid: %s. De waarden moeten ASCII zijn (opensim settings GRID grid --set gridName=...)'
   health_matches_grid_info: 'komt overeen met %s van get_grid_info'
   health_differs_grid_info: 'wijkt af van %s van get_grid_info'
   health_web_search: 'Zoeken op het web'
@@ -1047,7 +1050,6 @@ w4os:
   admin_shortcode_uri_help: 'Het inlogadres van het grid'
   admin_shortcode_grid_name_help: 'De naam van het grid'
   admin_shortcode_base_url_help: 'Het adres van de site'
-  admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'
   admin_shortcode_slogan_help: 'De slogan van de site'
   admin_health_title: Gezondheid
   admin_health_ok: 'Alles wat gecontroleerd wordt, antwoordt zoals het hoort.'
@@ -1105,3 +1107,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Een teleportlink die zich aanpast aan waar je hem ziet: in een browser of in de viewer de eigen link, met een menu van de andere en het adres om te kopiëren'
   admin_shortcode_option_destination: 'De plek: host:poort:Regio/x/y/z, hop://... of een regio van het grid'
   admin_shortcode_option_label: 'De tekst (standaard de naam van de plek)'
+  admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'

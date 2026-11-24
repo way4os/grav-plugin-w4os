@@ -735,6 +735,9 @@ w4os:
   health_unset: 'Non défini : ni servi ni testé.'
   health_options_all: 'toutes les options de la grille'
   health_options_missing: 'manquantes : %s'
+  health_module_unconfigured: '%s installé mais pas configuré, désactivé : %s à régler'
+  health_runtime_wrong: "tourne sur .NET %s, son core vise .NET %s : son cache d'assets ne garde rien (peaux grises) ; installer .NET %s et le redémarrer"
+  health_grid_info_broken: 'les infos de la grille ne sont pas du XML UTF-8 bien formé, les viewers refusent la grille : %s. Ses valeurs doivent être en ASCII (opensim settings GRID grid --set gridName=...)'
   health_matches_grid_info: 'correspond à %s de get_grid_info'
   health_differs_grid_info: 'diffère de %s de get_grid_info'
   health_web_search: 'Recherche web'
@@ -1047,7 +1050,6 @@ w4os:
   admin_shortcode_uri_help: "L'adresse de connexion de la grille"
   admin_shortcode_grid_name_help: 'Le nom de la grille'
   admin_shortcode_base_url_help: 'L’adresse du site'
-  admin_shortcode_site_title_help: 'Le titre du site, sinon le nom de la grille'
   admin_shortcode_slogan_help: 'Le slogan du site'
   admin_health_title: Santé
   admin_health_ok: 'Tout ce qui est vérifié répond comme il faut.'
@@ -1105,3 +1107,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Un lien de téléportation qui s’adapte à l’endroit où on le voit : depuis un navigateur ou depuis le viewer, son lien, et un menu des autres et de l’adresse à copier'
   admin_shortcode_option_destination: 'Le lieu : hôte:port:Région/x/y/z, hop://..., ou une région de la grille'
   admin_shortcode_option_label: 'Son texte (le nom du lieu par défaut)'
+  admin_shortcode_site_title_help: 'Le titre du site, sinon le nom de la grille'

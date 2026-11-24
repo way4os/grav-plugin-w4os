@@ -735,6 +735,9 @@ w4os:
   health_unset: 'Not set: neither served nor tested.'
   health_options_all: 'all the options of the grid'
   health_options_missing: 'missing: %s'
+  health_module_unconfigured: '%s installed but not configured, off: %s to set'
+  health_runtime_wrong: 'runs on .NET %s, its core targets .NET %s: its asset cache keeps nothing (grey skins); install .NET %s and restart it'
+  health_grid_info_broken: 'the grid info is not well-formed UTF-8 XML, the viewers refuse the grid: %s. Its values must be ASCII (opensim settings GRID grid --set gridName=...)'
   health_matches_grid_info: 'matches %s of get_grid_info'
   health_differs_grid_info: 'differs from %s of get_grid_info'
   health_web_search: 'Web search'
@@ -1047,7 +1050,6 @@ w4os:
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_grid_name_help: 'The name of the grid'
   admin_shortcode_base_url_help: 'The address of the site'
-  admin_shortcode_site_title_help: 'The title of the site, else the name of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
   admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'
@@ -1105,3 +1107,4 @@ w4os:
   admin_shortcode_tp_link_help: 'A teleport link that fits where it is seen: from a browser or from the viewer, its own link, and a menu of the others and the address to copy'
   admin_shortcode_option_destination: 'The place: host:port:Region/x/y/z, hop://..., or a region of the grid'
   admin_shortcode_option_label: 'Its text (the name of the place by default)'
+  admin_shortcode_site_title_help: 'The title of the site, else the name of the grid'

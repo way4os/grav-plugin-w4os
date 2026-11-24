@@ -735,6 +735,9 @@ w4os:
   health_unset: "Heb ei osod: heb ei weini na'i brofi."
   health_options_all: "holl opsiynau'r grid"
   health_options_missing: 'ar goll: %s'
+  health_module_unconfigured: "%s wedi'i osod ond heb ei ffurfweddu, i ffwrdd: %s i'w gosod"
+  health_runtime_wrong: "yn rhedeg ar .NET %s, mae ei graidd yn targedu .NET %s: nid yw ei storfa asedau yn cadw dim (crwyn llwyd); gosod .NET %s a'i ailgychwyn"
+  health_grid_info_broken: "nid yw gwybodaeth y grid yn XML UTF-8 wedi'i ffurfio'n dda, mae'r viewers yn gwrthod y grid: %s. Rhaid i'w gwerthoedd fod yn ASCII (opensim settings GRID grid --set gridName=...)"
   health_matches_grid_info: 'yn cyfateb i %s get_grid_info'
   health_differs_grid_info: 'yn wahanol i %s get_grid_info'
   health_web_search: 'Chwiliad Gwe'
@@ -1047,7 +1050,6 @@ w4os:
   admin_shortcode_uri_help: 'Cyfeiriad mewngofnodi’r grid'
   admin_shortcode_grid_name_help: 'Enw’r grid'
   admin_shortcode_base_url_help: 'Cyfeiriad y safle'
-  admin_shortcode_site_title_help: 'Teitl y safle, neu enw’r grid fel arall'
   admin_shortcode_slogan_help: 'Slogan y safle'
   admin_health_title: Iechyd
   admin_health_ok: 'Mae popeth a wirir yn ateb fel y dylai.'
@@ -1105,3 +1107,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Dolen teleportio sy’n addasu i ble mae’n cael ei gweld: mewn porwr neu yn y viewer, ei dolen ei hun, a dewislen o’r lleill a’r cyfeiriad i’w gopïo'
   admin_shortcode_option_destination: 'Y lle: gwesteiwr:porth:Rhanbarth/x/y/z, hop://... neu ranbarth o’r grid'
   admin_shortcode_option_label: 'Ei thestun (enw’r lle yn ddiofyn)'
+  admin_shortcode_site_title_help: 'Teitl y safle, neu enw’r grid fel arall'
