@@ -23,14 +23,22 @@ describe('the settings pages of the services of the grid', function () {
             ->and(Site::serviceGroup('models'))->toBeNull();
     });
 
-    test('shows the choice of the module and, with Provide off, the address of the service elsewhere', function () {
+    test('the offline messages: Provide first, then the module; the address, the database and the sender of V1 with the module V1 alone', function () {
         $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('offline');
-        $fields = Items::fields(FormView::of($form, ['provide' => false, 'offlineModule' => 'OfflineMessageModule', 'offlineMessageUrl' => 'https://play.example.org/offline', 'mailSender' => ''], null, true, 250), shown: true);
+        $fields = fn (array $item) => Items::fields(FormView::of($form, $item + ['mailSender' => ''], null, true, 250), shown: true);
+        $v1 = $fields(['provide' => true, 'offlineModule' => 'OfflineMessageModule']);
+        $v2 = $fields(['provide' => true, 'offlineModule' => 'Offline Message Module V2']);
+        $off = $fields(['provide' => false, 'offlineModule' => 'OfflineMessageModule']);
 
-        expect($fields['offlineModule'])->toMatchArray(['type' => 'select', 'label' => 'w4os.setting_offline_module'])
-            ->and($fields['offlineModule'])->not->toHaveKey('disabled')
-            ->and($fields['offlineMessageUrl'])->toMatchArray(['type' => 'url'])
-            ->and($fields['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org', 'outerclasses' => 'w4os-unmet']);
+        expect(array_keys(array_diff_key($v1, ['id' => 1])))->toBe(['provide', 'offlineModule', 'path', 'offlineDatabase', 'mailSender'])
+            ->and($v1['offlineModule'])->toMatchArray(['type' => 'select', 'label' => 'w4os.setting_offline_module'])
+            ->and($v1['offlineModule'])->not->toHaveKey('disabled')
+            ->and($v1['mailSender'])->toMatchArray(['type' => 'email', 'placeholder' => 'no-reply@example.org'])
+            ->and($v1['path']['outerclasses'] ?? '')->not->toContain('w4os-unmet')
+            ->and($v2['path']['outerclasses'] ?? '')->toContain('w4os-unmet')
+            ->and($v2['mailSender']['outerclasses'] ?? '')->toContain('w4os-unmet')
+            ->and($v2['offlineModule']['outerclasses'] ?? '')->not->toContain('w4os-unmet')
+            ->and($off['offlineModule']['outerclasses'] ?? '')->toContain('w4os-unmet');
     });
 
     test('shows a default as it is and an example as one (e.g.: YC$), never one as the other', function () {
