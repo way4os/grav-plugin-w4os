@@ -58,7 +58,7 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-start-step.is-next { border: 2px solid var(--w4os-accent, currentColor); }
 .w4os-start-step.is-next::before { background: var(--w4os-accent, currentColor); border-color: var(--w4os-accent, currentColor); color: Canvas; }
 .w4os-start-step.is-done::before { content: "\2713"; border-color: var(--w4os-accent, currentColor); color: var(--w4os-accent, currentColor); }
-.w4os-start-step.is-done, .w4os-start-step.is-todo { opacity: .7; }
+.w4os-start-step:is(.is-done, .is-todo) > *, .w4os-start-step:is(.is-done, .is-todo)::before { opacity: .7; }
 /* A step whose menu is open (a teleport link) shown whole, its menu over what follows */
 .w4os-start-step:has([aria-expanded="true"]) { opacity: 1; z-index: 1; }
 .w4os-start-uri .w4os-login-uri { overflow-wrap: anywhere; }
