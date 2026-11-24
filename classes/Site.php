@@ -1380,6 +1380,14 @@ final class Site
         return trim((string) $slogan);
     }
 
+    /** The title of the site as it writes it (site.title, its accents kept), else the name of its grid (ASCII, as its grid info sends it). */
+    public function title(): string
+    {
+        $title = trim((string) $this->grav['config']->get('site.title', ''));
+
+        return $title !== '' ? $title : $this->gridName();
+    }
+
     /** The languages most avatars speak, besides the ones of the site, suggested for the languages of a profile. */
     public const USUAL_LANGUAGES = ['en', 'fr', 'de', 'es', 'it', 'nl', 'pt', 'cy', 'pl', 'sv', 'ru', 'ja', 'zh', 'ko', 'ar', 'tr'];
 
@@ -1466,6 +1474,7 @@ final class Site
         ['code' => '[w4os-guest]…[/w4os-guest]', 'help' => 'admin_shortcode_guest_help', 'options' => []],
         ['code' => '[w4os-register]…[/w4os-register]', 'help' => 'admin_shortcode_register_help', 'options' => []],
         ['code' => '[grid-name]', 'help' => 'admin_shortcode_grid_name_help', 'options' => []],
+        ['code' => '[site-title]', 'help' => 'admin_shortcode_site_title_help', 'options' => []],
         ['code' => '[site-slogan]', 'help' => 'admin_shortcode_slogan_help', 'options' => []],
     ];
 

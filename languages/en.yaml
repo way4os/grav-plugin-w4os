@@ -1047,6 +1047,7 @@ w4os:
   admin_shortcode_uri_help: 'The login address of the grid'
   admin_shortcode_grid_name_help: 'The name of the grid'
   admin_shortcode_base_url_help: 'The address of the site'
+  admin_shortcode_site_title_help: 'The title of the site, else the name of the grid'
   admin_shortcode_slogan_help: 'The slogan of the site'
   admin_health_title: Health
   admin_health_ok: 'All that is checked answers as it should.'

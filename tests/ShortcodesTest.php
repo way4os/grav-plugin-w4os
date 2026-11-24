@@ -25,7 +25,7 @@ describe('the page of the shortcodes', function () {
         $codes = array_column(Site::SHORTCODES, 'code');
 
         expect(array_slice($codes, 0, 5))->toBe(['[grid-info]', '[grid-status]', '[avatar-profile]', '[popular-places]', '[web-search]'])
-            ->and($codes)->toContain('[new-avatars]', '[login-uri]', '[grid-name]', '[site-slogan]', '[base_url]', '[w4os-home]…[/w4os-home]', '[w4os-guest]…[/w4os-guest]', '[w4os-register]…[/w4os-register]')
+            ->and($codes)->toContain('[new-avatars]', '[login-uri]', '[grid-name]', '[site-title]', '[site-slogan]', '[base_url]', '[w4os-home]…[/w4os-home]', '[w4os-guest]…[/w4os-guest]', '[w4os-register]…[/w4os-register]')
             ->and(implode(' ', $codes))->not->toContain('[w4os ', '[new-users]', ' /]')
             ->and(array_merge(...array_column(Site::SHORTCODES, 'aliases')))->toBe([])
             ->and(array_column(Site::SHORTCODES[0]['options'], 'option'))->toBe(['title', 'level=h3'])

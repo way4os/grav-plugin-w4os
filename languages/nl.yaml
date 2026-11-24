@@ -1047,6 +1047,7 @@ w4os:
   admin_shortcode_uri_help: 'Het inlogadres van het grid'
   admin_shortcode_grid_name_help: 'De naam van het grid'
   admin_shortcode_base_url_help: 'Het adres van de site'
+  admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'
   admin_shortcode_slogan_help: 'De slogan van de site'
   admin_health_title: Gezondheid
   admin_health_ok: 'Alles wat gecontroleerd wordt, antwoordt zoals het hoort.'

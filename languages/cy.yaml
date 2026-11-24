@@ -1047,6 +1047,7 @@ w4os:
   admin_shortcode_uri_help: 'Cyfeiriad mewngofnodi’r grid'
   admin_shortcode_grid_name_help: 'Enw’r grid'
   admin_shortcode_base_url_help: 'Cyfeiriad y safle'
+  admin_shortcode_site_title_help: 'Teitl y safle, neu enw’r grid fel arall'
   admin_shortcode_slogan_help: 'Slogan y safle'
   admin_health_title: Iechyd
   admin_health_ok: 'Mae popeth a wirir yn ateb fel y dylai.'

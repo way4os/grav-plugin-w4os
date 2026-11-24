@@ -1047,6 +1047,7 @@ w4os:
   admin_shortcode_uri_help: 'L’indirizzo di accesso della griglia'
   admin_shortcode_grid_name_help: 'Il nome della griglia'
   admin_shortcode_base_url_help: 'L’indirizzo del sito'
+  admin_shortcode_site_title_help: 'Il titolo del sito, altrimenti il nome della griglia'
   admin_shortcode_slogan_help: 'Lo slogan del sito'
   admin_health_title: 'Stato di salute'
   admin_health_ok: 'Tutto ciò che è controllato risponde come deve.'

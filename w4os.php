@@ -414,7 +414,7 @@ class W4osPlugin extends Plugin
     /**
      * One shortcode by block, by the names of w4os-wp (Site::BLOCK_SHORTCODES): [grid-info], [grid-status], [avatar-profile
      * name="First.Last"], [popular-places max=5 include-hypergrid], [web-search], [new-avatars]...; [login-uri] ([login-uri
-     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [hypergrid-visit title="..."], [tp-link destination="..." label="..."], [base_url], [grid-name], [site-slogan]. The
+     * add-grid] with the button that adds the grid to a viewer), [getting-started title="..." content="..." footer="..."], [hypergrid-visit title="..."], [tp-link destination="..." label="..."], [base_url], [grid-name], [site-title], [site-slogan]. The
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
@@ -448,6 +448,7 @@ class W4osPlugin extends Plugin
         ]));
         $handlers->add('base_url', fn () => htmlspecialchars(rtrim((string) $this->grav['uri']->rootUrl(true), '/')));
         $handlers->add('grid-name', fn () => htmlspecialchars($this->site()->gridName()));
+        $handlers->add('site-title', fn () => htmlspecialchars($this->site()->title()));
         $handlers->add('site-slogan', fn () => htmlspecialchars($this->site()->slogan()));
         $handlers->add('w4os-guest', fn ($shortcode) => $this->site()->avatar() === null ? (string) $shortcode->getContent() : '');
         $handlers->add('w4os-register', fn ($shortcode) => isset($this->site()->routes()['register']) ? (string) $shortcode->getContent() : '');
