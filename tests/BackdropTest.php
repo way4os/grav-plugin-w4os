@@ -62,12 +62,15 @@ describe('the backdrop of the site', function () {
             ->toContain(':root{--w4os-backdrop:var(--w4os-backdrop-light)');
     });
 
-    test('on the pages the theme lays out, never on the admin pages nor on the bare pages of a viewer', function () {
-        expect(Backdrop::shown('default', null))->toBeTrue()
-            ->and(Backdrop::shown('w4os', null))->toBeTrue()
-            ->and(Backdrop::shown('w4os-admin', null))->toBeFalse()
-            ->and(Backdrop::shown('w4os', 'w4os-welcome.html.twig'))->toBeFalse()
-            ->and(Backdrop::shown('w4os', 'w4os-viewer.html.twig'))->toBeFalse();
+    test('on the pages the theme lays out in a browser, never on the admin pages nor on any page a viewer shows', function () {
+        expect(Backdrop::shown('default', null, false))->toBeTrue()
+            ->and(Backdrop::shown('w4os', null, false))->toBeTrue()
+            ->and(Backdrop::shown('w4os-admin', null, false))->toBeFalse()
+            ->and(Backdrop::shown('w4os', 'w4os-welcome.html.twig', false))->toBeFalse()
+            ->and(Backdrop::shown('w4os', 'w4os-viewer.html.twig', false))->toBeFalse()
+            // The web only: in a viewer, whatever the page (its own day and night in the world, no mode of its own)
+            ->and(Backdrop::shown('default', null, true))->toBeFalse()
+            ->and(Backdrop::shown('w4os', null, true))->toBeFalse();
     });
 
     test('no image, no style', function () {

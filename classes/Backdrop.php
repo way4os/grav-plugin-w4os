@@ -5,7 +5,7 @@ namespace W4OS\Grav;
 /**
  * The backdrop of the site: a picture behind its pages, one of a series at random on each page, a series for the light mode of the
  * theme and one for its dark mode. The site's own series (its settings, files in its data), else the active theme's (the images of
- * its folder images/backdrop/<mode>). Its style follows the theme's switch (data-theme on the root, Quark 2's) and, without one,
+ * its folder images/backdrop/<mode>), on the web only (never in a viewer). Its style follows the theme's switch (data-theme on the root, Quark 2's) and, without one,
  * the browser's mode; only the image of the mode shown is loaded.
  */
 final class Backdrop
@@ -29,13 +29,15 @@ final class Backdrop
     public const BARE_TEMPLATES = ['w4os-welcome.html.twig', 'w4os-viewer.html.twig'];
 
     /**
-     * Whether a page shows the backdrop: a page the theme lays out, not an admin page nor a bare page of a viewer.
+     * Whether a page shows the backdrop: a page the theme lays out in a browser, not an admin page; never a page a viewer shows (the
+     * web only: a viewer has its own day and night in the world, and no mode of its own).
      *
      * @param ?string $template the template of the page; $layout: the one it is rendered with when the plugin sets another
+     * @param bool $viewer whether a viewer shows the page (Site::isViewer())
      */
-    public static function shown(?string $template, ?string $layout): bool
+    public static function shown(?string $template, ?string $layout, bool $viewer): bool
     {
-        return $template !== 'w4os-admin' && ! in_array($layout, self::BARE_TEMPLATES, true);
+        return ! $viewer && $template !== 'w4os-admin' && ! in_array($layout, self::BARE_TEMPLATES, true);
     }
 
     /**
