@@ -79,4 +79,14 @@ describe('the web assets of the grid', function () {
             ->and(Site::assetAsked('/helpers/assets', '/helpers/assets/page'))->toBeNull()
             ->and(Site::assetAsked('/helpers/assets', '/helpers/register.php'))->toBeNull();
     });
+
+    test('under the path of their settings from the root of the site, never under the root of Grav again', function () {
+        // A mini site under /opensim: the path of the assets is /opensim/economy/assets on the site, /economy/assets for Grav
+        expect(Site::routeUnder('/opensim/economy/assets', '/opensim'))->toBe('/economy/assets')
+            ->and(Site::routeUnder('/helpers/assets', ''))->toBe('/helpers/assets')
+            ->and(Site::routeUnder('/helpers/assets', '/'))->toBe('/helpers/assets')
+            // Outside the root of Grav: never a request it gets
+            ->and(Site::routeUnder('/helpers/assets', '/opensim'))->toBeNull()
+            ->and(Site::routeUnder('/opensimx/assets', '/opensim'))->toBeNull();
+    });
 });

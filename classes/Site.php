@@ -381,7 +381,12 @@ final class Site
     public function asset(string $path): ?array
     {
         $provided = $this->assetsRoute();
-        $route = $provided ?? ($this->routes()['assets'] ?? '');
+        // The path of the settings is on the site; Grav has its requests without its own root (a mini site under /opensim)
+        $under = $provided === null ? null : self::routeUnder($provided, $this->grav['uri']->rootUrl(false));
+        if ($provided !== null && $under === null) {
+            return null;
+        }
+        $route = $under ?? ($this->routes()['assets'] ?? '');
         $asked = $route === '' ? null : self::assetAsked($route, $path);
         // The bundled engine when the site talks to it, else the engine of the grid (a site has the bundled library either way)
         $bundled = $asked === null || self::engineChannel($this->config(), $this->apiKey() !== '') !== 'bundled' ? null : $this->bundled();
@@ -401,7 +406,19 @@ final class Site
     {
         $route = $this->assetsRoute();
 
-        return $route !== null ? rtrim($this->grav['uri']->rootUrl(true), '/').$route : $this->engine()->assetsUrl();
+        // The path of the settings is from the root of the site, never under the root of Grav again
+        return $route !== null ? rtrim($this->grav['uri']->base(), '/').$route : $this->engine()->assetsUrl();
+    }
+
+    /** A path of the site as Grav has it under its root (`/opensim/economy/assets` under `/opensim` is `/economy/assets`), null outside it. */
+    public static function routeUnder(string $route, string $root): ?string
+    {
+        $root = rtrim($root, '/');
+        if ($root === '') {
+            return $route;
+        }
+
+        return str_starts_with($route, "$root/") ? substr($route, strlen($root)) : null;
     }
 
     /** The address of a picture of the grid (a model, a profile), by its asset UUID. */
