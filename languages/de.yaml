@@ -132,9 +132,9 @@ w4os:
   settings_menu_assets: Web-Assets
   settings_menu_map: Karte
   setting_map_module: Darstellung
-  setting_map_module_help: 'Die 3D-Karte zeigt die Regionen so, wie sie gebaut sind; die einfache ihr Gelände und die Umrisse ihrer Objekte.'
-  map_module_simple: Einfach
-  map_module_warp3d: '3D (Warp3D)'
+  setting_map_module_help: 'Warp3D liefert eine detailliertere Darstellung, braucht aber mehr Serverressourcen. Verwenden Sie das Standardmodul auf Servern mit begrenzten Ressourcen.'
+  map_module_simple: MapImageModule
+  map_module_warp3d: Warp3DImageModule
   setting_map_terrain: Geländetexturen
   setting_map_prims: Objekte
   setting_map_prims_help: 'Langsam zu zeichnen in einer Region mit vielen Objekten.'

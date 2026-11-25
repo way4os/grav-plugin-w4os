@@ -132,9 +132,9 @@ w4os:
   settings_menu_assets: 'Risorse web'
   settings_menu_map: Mappa
   setting_map_module: Resa
-  setting_map_module_help: 'La mappa 3D mostra le regioni come sono costruite; quella semplice, il loro terreno e il contorno dei loro oggetti.'
-  map_module_simple: Semplice
-  map_module_warp3d: '3D (Warp3D)'
+  setting_map_module_help: 'Warp3D offre una resa più dettagliata ma consuma più risorse del server. Usate il modulo predefinito su server con risorse limitate.'
+  map_module_simple: MapImageModule
+  map_module_warp3d: Warp3DImageModule
   setting_map_terrain: 'Texture del terreno'
   setting_map_prims: Oggetti
   setting_map_prims_help: 'Lenta da disegnare su una regione con molti oggetti.'

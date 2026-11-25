@@ -132,9 +132,9 @@ w4os:
   settings_menu_assets: Webassets
   settings_menu_map: Kaart
   setting_map_module: Weergave
-  setting_map_module_help: "De 3D-kaart toont de regio's zoals ze gebouwd zijn; de eenvoudige hun terrein en de omtrek van hun objecten."
-  map_module_simple: Eenvoudig
-  map_module_warp3d: '3D (Warp3D)'
+  setting_map_module_help: 'Warp3D geeft een gedetailleerdere weergave maar gebruikt meer serverbronnen. Gebruik de standaardmodule op servers met beperkte bronnen.'
+  map_module_simple: MapImageModule
+  map_module_warp3d: Warp3DImageModule
   setting_map_terrain: Terreintexturen
   setting_map_prims: Objecten
   setting_map_prims_help: 'Traag te tekenen op een regio met veel objecten.'

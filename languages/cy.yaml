@@ -132,9 +132,9 @@ w4os:
   settings_menu_assets: 'Asedau Gwe'
   settings_menu_map: Map
   setting_map_module: Rendro
-  setting_map_module_help: "Mae'r map 3D yn dangos y rhanbarthau fel y maen nhw wedi'u hadeiladu; yr un syml, eu tir ac amlinell eu gwrthrychau."
-  map_module_simple: Syml
-  map_module_warp3d: '3D (Warp3D)'
+  setting_map_module_help: "Mae Warp3D yn rhoi rendro manylach ond yn defnyddio mwy o adnoddau'r gweinydd. Defnyddiwch y modiwl diofyn ar weinyddion ag adnoddau cyfyngedig."
+  map_module_simple: MapImageModule
+  map_module_warp3d: Warp3DImageModule
   setting_map_terrain: 'Gweadau tir'
   setting_map_prims: Gwrthrychau
   setting_map_prims_help: "Araf i'w lunio ar ranbarth gyda llawer o wrthrychau."

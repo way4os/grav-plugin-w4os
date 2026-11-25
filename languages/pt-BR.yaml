@@ -132,9 +132,9 @@ w4os:
   settings_menu_assets: 'Ativos Web'
   settings_menu_map: Mapa
   setting_map_module: Renderização
-  setting_map_module_help: 'O mapa 3D mostra as regiões como estão construídas; o simples, o terreno e o contorno dos objetos.'
-  map_module_simple: Simples
-  map_module_warp3d: '3D (Warp3D)'
+  setting_map_module_help: 'O Warp3D oferece uma renderização mais detalhada, mas usa mais recursos do servidor. Use o módulo padrão em servidores com recursos limitados.'
+  map_module_simple: MapImageModule
+  map_module_warp3d: Warp3DImageModule
   setting_map_terrain: 'Texturas do terreno'
   setting_map_prims: Objetos
   setting_map_prims_help: 'Lento de desenhar numa região com muitos objetos.'
