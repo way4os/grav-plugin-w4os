@@ -16,6 +16,9 @@
    them on the box itself, never on cells of their own */
 .w4os-home .block-grid-info, .w4os-home .block-grid-status, .w4os-start-step, .block-search .search-box { background: var(--w4os-surface, Canvas); }
 .w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
+/* A profile in a box as well: its tabs and their sections when it is shown (the helpers' profile-box), the form of its edit page and
+   its tabs; its title and its banner (the picture, the name, the birth) above it, on the page as they are */
+.block-profile .profile-box, .w4os-form-profile { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; background: var(--w4os-surface, Canvas); }
 
 /* The guide's own title (an h1 the viewers' panel needs) at the size of a section on the home page, in its colours whatever the
    theme says of the color of titles */

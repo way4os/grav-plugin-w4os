@@ -2633,7 +2633,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "1aaa516daad802c8ccaf58281ec5d7d9510bd761"
+                "reference": "7c933d2b5e10dec5cc64ae473677ee197ac8fe5e"
             },
             "require": {
                 "ext-curl": "*",
