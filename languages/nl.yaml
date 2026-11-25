@@ -763,6 +763,7 @@ w4os:
   health_differs_grid_info: 'wijkt af van %s van get_grid_info'
   health_web_search: 'Zoeken op het web'
   health_offline_robust: 'geleverd door Robust (module V2)'
+  health_offline_unused: 'ingesteld, maar module V2 gebruikt het niet (Robust bewaart de offline berichten): verwijder %s'
   health_set: ingesteld
   health_missing: ontbreekt
   health_signed_out: afgemeld

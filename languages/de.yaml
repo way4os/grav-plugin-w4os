@@ -763,6 +763,7 @@ w4os:
   health_differs_grid_info: 'weicht von %s von get_grid_info ab'
   health_web_search: Web-Suche
   health_offline_robust: 'von Robust bereitgestellt (Modul V2)'
+  health_offline_unused: 'gesetzt, aber das Modul V2 verwendet es nicht (Robust speichert die Offline-Nachrichten): entfernen Sie %s'
   health_set: gesetzt
   health_missing: fehlt
   health_signed_out: abgemeldet

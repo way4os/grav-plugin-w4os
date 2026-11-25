@@ -763,6 +763,7 @@ w4os:
   health_differs_grid_info: 'yn wahanol i %s get_grid_info'
   health_web_search: 'Chwiliad Gwe'
   health_offline_robust: 'yn cael ei weini gan Robust (modiwl V2)'
+  health_offline_unused: "wedi'i osod, ond nid yw modiwl V2 yn ei ddefnyddio (mae Robust yn cadw'r negeseuon all-lein): tynnwch %s"
   health_set: "wedi'i osod"
   health_missing: 'ar goll'
   health_signed_out: 'wedi allgofnodi'
