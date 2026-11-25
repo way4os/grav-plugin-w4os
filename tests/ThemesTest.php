@@ -88,7 +88,9 @@ describe('a page of the site in a viewer', function () {
         ]));
         $twig->setLoader(new Twig\Loader\ChainLoader([$twig->getLoader(), new FilesystemLoader(dirname(__DIR__).'/templates')]));
 
-        expect($twig->render('w4os-viewer-frame.html.twig', ['w4os_framed' => 'page.html.twig']))->toBe('<main>text</main>');
+        expect($twig->render('w4os-viewer-frame.html.twig', ['w4os_framed' => 'page.html.twig']))->toBe('<main>text</main>')
+            // And no room kept for the bar at the top (Quark's fixed one, a class of the body by the theme's option)
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("\$this->grav['config']->set('theme.header-fixed', false);");
     });
 
     test('in a viewer only, an HTML page of the site whose template no one changed, never an admin page', function () {

@@ -1394,6 +1394,8 @@ class W4osPlugin extends Plugin
         if ($page !== null && Site::viewerFrame($this->site()->isViewer(), $twig->template ?? null, $page->template(), (string) ($page->templateFormat() ?: 'html'))) {
             $twig->twig_vars['w4os_framed'] = $twig->getPageTwigTemplate($page);
             $twig->template = 'w4os-viewer-frame.html.twig';
+            // No room kept for a bar at the top that is not there (the theme's option of a fixed one, body_class())
+            $this->grav['config']->set('theme.header-fixed', false);
         }
         $page !== null && ! $this->sitePage() && Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) !== []
             && $page->content();
