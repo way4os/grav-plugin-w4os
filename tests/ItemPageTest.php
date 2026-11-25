@@ -25,7 +25,8 @@ function item_twig(array $page = []): Environment
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
-    $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'fr', $style), ['is_safe' => ['html']]));
+    $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list', bool $zoned = false) => \W4OS\Grav\Site::timeTag($value, 'fr', $style, null, $zoned), ['is_safe' => ['html']]));
+    $twig->addFunction(new \Twig\TwigFunction('w4os_zone', fn () => \W4OS\Grav\Site::zoneTag(), ['is_safe' => ['html']]));
 
     return $twig;
 }

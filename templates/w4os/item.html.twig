@@ -33,7 +33,7 @@
                 {% for field in group.fields %}
                     <div class="datagrid-item">
                         <div class="datagrid-title">{{ ('w4os.' ~ field.label)|t }}</div>
-                        <div class="datagrid-content">{{ cells.cell(field, page_item.item, 'long') }}</div>
+                        <div class="datagrid-content">{{ cells.cell(field, page_item.item, 'long', true, true) }}</div>
                     </div>
                 {% endfor %}
                 </div>

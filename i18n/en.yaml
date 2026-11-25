@@ -128,6 +128,7 @@ w4os:
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
   admin_task_run: 'Run now'
   admin_task_last: 'Last run %s'
+  admin_times_zone: 'Time zone: %s'
   admin_task_never: 'Never run'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pin the sidebar'

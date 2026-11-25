@@ -11,8 +11,9 @@
 {# The value of a column for a row, drawn by its type; nothing for an empty value. A value the column names (`values`: value,
    label, description) shows its label, its description as its tip; a picture with nothing shows the engine's picture of nothing (`default`: person, or a place);
    a day as a date; a time (datetime) in the style `dates` (W4OS\Views\Dates: `list` relative while recent, `long` with its time), its
-   full date as its tip, in the browser's own time (w4os_time) #}
-{% macro cell(column, item, dates = 'list', counted = true) %}
+   full date as its tip, in the browser's own time (w4os_time), its zone after it when `zoned` (a detail; a list says
+   it once) #}
+{% macro cell(column, item, dates = 'list', counted = true, zoned = false) %}
     {% set value = attribute(item, column.name) ?? null %}
     {% set type = column.type %}
     {% set labels = {} %}
@@ -25,9 +26,9 @@
     {%- if column.count is defined and value is not null -%}{{ counted ? w4os_count('w4os.' ~ column.count, value) : w4os_number(value, 0) }}
     {%- elseif type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'connection-string' -%}{% if value is iterable and (value.host ?? '') != '' %}{{ value.user ?? '' ? value.user ~ '@' }}{{ value.host }}{{ value.port ?? '' ? ':' ~ value.port }}{{ value.database ?? '' ? '/' ~ value.database }}{% elseif column.fallback is defined %}{{ (column.description ?? column.fallback) is iterable ? (column.description|map(key => ('w4os.' ~ key)|t)|join(' ')) : ('w4os.' ~ (column.description ?? column.fallback))|t }}{% endif %}
-    {%- elseif type == 'datetime' -%}{{ w4os_time(value, dates) }}
+    {%- elseif type == 'datetime' -%}{{ w4os_time(value, dates, zoned) }}
     {%- elseif type == 'boolean' -%}{{ value ? '✓' }}
-    {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates)|trim %}{% if text is not empty %}{% set shown = shown|merge(['<div>' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}
+    {%- elseif type == 'group' -%}{% import _self as cells %}{% set shown = [] %}{% for part in column.parts ?? [] %}{% set text = cells.cell(part, item, dates, counted, zoned)|trim %}{% if text is not empty %}{% set shown = shown|merge(['<div>' ~ text ~ '</div>']) %}{% endif %}{% endfor %}{% if shown %}<div class="w4os-group">{{ shown|join|raw }}</div>{% endif %}
     {%- elseif type == 'dimensions' -%}{% set width = item.width ?? value %}{% if width is not null %}{{ 'w4os.unit_dimensions'|t(w4os_number(width, 0), w4os_number(item.height ?? width, 0)) }}{% endif %}
     {%- elseif type == 'area' -%}{% if value is not null %}{{ w4os_area(value) }}{% endif %}
     {%- elseif type == 'usage' -%}{% if value is not null %}

@@ -1,6 +1,7 @@
 // The times of the admin in the time and the language of the browser (Intl): each <time data-w4os-time> the server wrote in its own
-// zone (Site::timeTag), told again in the same style; a recent one it said relatively keeps its words, its tip told again with the
-// zone of the browser. W4OSDates.localize(element) for a part of the page drawn again.
+// zone (Site::timeTag), told again in the same style, its zone after it when it stands on its own (data-w4os-zoned: a banner, a
+// header); a recent one it said relatively keeps its words; its tip told again with its zone. The zone a list says once for its
+// times (data-w4os-zone), the browser's. W4OSDates.localize(element) for a part of the page drawn again.
 (function (localize) {
     if (typeof module === 'object' && module.exports) {
         module.exports = localize;
@@ -26,12 +27,25 @@
             return new Intl.DateTimeFormat(undefined, options).format(date);
         }
     };
+    // The name of the zone at a time, as the language says it (UTC−5, EST)
+    const named = (date) => {
+        try {
+            return new Intl.DateTimeFormat(language, { timeZoneName: 'short', timeZone: zone }).formatToParts(date).find((part) => part.type === 'timeZoneName')?.value || '';
+        } catch (error) {
+            return '';
+        }
+    };
     root.querySelectorAll('time[data-w4os-time][datetime]').forEach((time) => {
         const date = new Date(time.getAttribute('datetime'));
         if (Number.isNaN(date.getTime())) {
             return;
         }
-        time.hasAttribute('data-w4os-relative') || (time.textContent = say(date, STYLES[time.dataset.w4osTime] || STYLES.list));
+        const style = time.dataset.w4osTime;
+        const own = time.hasAttribute('data-w4os-zoned') && style !== 'date' ? ' ' + named(date) : '';
+        time.hasAttribute('data-w4os-relative') || (time.textContent = (say(date, STYLES[style] || STYLES.list) + own).trim());
         time.title = say(date, TIP);
+    });
+    root.querySelectorAll('[data-w4os-zone]').forEach((element) => {
+        element.textContent = named(new Date()) || element.textContent;
     });
 });

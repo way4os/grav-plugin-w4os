@@ -13,7 +13,7 @@ const time = (datetime, style, relative = false) => {
         hasAttribute: (name) => name in attributes,
     };
 };
-const page = (...times) => ({ querySelectorAll: () => times });
+const page = (...times) => ({ querySelectorAll: (selector) => (selector.startsWith('time') ? times : []) });
 
 test('tells a time in the zone and the language of the browser, its zone in its tip', () => {
     const shown = time('2026-11-25T20:37:00Z', 'list');
@@ -29,4 +29,13 @@ test('keeps the words of a recent time the server said relatively, its tip told 
     assert.strictEqual(recent.textContent, 'server');
     assert.match(recent.title, /^November 25, 2026 (at )?3:37\sPM EST$/);
     assert.strictEqual(day.textContent, 'Nov 24, 2026');
+});
+
+test('names its zone after a time on its own (a banner), and once for a list', () => {
+    const banner = time('2026-11-25T20:37:00Z', 'list');
+    banner.hasAttribute = (name) => name === 'data-w4os-zoned';
+    const note = { textContent: 'UTC' };
+    localize({ querySelectorAll: (selector) => (selector.startsWith('time') ? [banner] : [note]) }, 'fr', 'America/Toronto');
+    assert.strictEqual(banner.textContent, '25/11/2026 15:37 UTC−5');
+    assert.match(note.textContent, /^UTC−[45]$/);
 });

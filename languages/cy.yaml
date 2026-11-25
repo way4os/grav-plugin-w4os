@@ -1141,6 +1141,7 @@ w4os:
   admin_service_no_block: 'Nid yw tudalen %s y safle yn dangos y bloc %s sydd ei angen ar y gwasanaeth.'
   admin_task_run: 'Rhedeg nawr'
   admin_task_last: 'Rhedwyd ddiwethaf %s'
+  admin_times_zone: 'Cylchfa amser: %s'
   admin_task_never: 'Heb ei rhedeg erioed'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pinio’r bar ochr'

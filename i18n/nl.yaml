@@ -128,6 +128,7 @@ w4os:
   admin_service_no_block: 'De pagina %s van de site toont het blok %s niet dat de dienst nodig heeft.'
   admin_task_run: 'Nu uitvoeren'
   admin_task_last: 'Laatst uitgevoerd %s'
+  admin_times_zone: 'Tijdzone: %s'
   admin_task_never: 'Nooit uitgevoerd'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'

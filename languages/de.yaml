@@ -1141,6 +1141,7 @@ w4os:
   admin_service_no_block: 'Die Seite %s der Website zeigt den Block %s nicht, den der Dienst braucht.'
   admin_task_run: 'Jetzt ausführen'
   admin_task_last: 'Zuletzt ausgeführt %s'
+  admin_times_zone: 'Zeitzone: %s'
   admin_task_never: 'Nie ausgeführt'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'

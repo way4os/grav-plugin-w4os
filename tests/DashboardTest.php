@@ -20,7 +20,8 @@ describe('the dashboard', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'fr', $style), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list', bool $zoned = false) => \W4OS\Grav\Site::timeTag($value, 'fr', $style, null, $zoned), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_zone', fn () => \W4OS\Grav\Site::zoneTag(), ['is_safe' => ['html']]));
 
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
@@ -86,7 +87,8 @@ describe('the dashboard', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => (string) $value));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list', bool $zoned = false) => \W4OS\Grav\Site::timeTag($value, 'en', $style, null, $zoned), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_zone', fn () => \W4OS\Grav\Site::zoneTag(), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
 
         expect($problems)->toMatchArray(['count' => 2, 'warnings' => 1, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000'], 'statuses' => ['', '']])

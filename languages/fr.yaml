@@ -1141,6 +1141,7 @@ w4os:
   admin_service_no_block: 'La page %s du site n’affiche pas le bloc %s dont le service a besoin.'
   admin_task_run: 'Lancer maintenant'
   admin_task_last: 'Dernier passage %s'
+  admin_times_zone: 'Fuseau horaire : %s'
   admin_task_never: 'Jamais lancée'
   admin_task_ran: '%s : %s'
   admin_sidebar_pin: 'Épingler la barre latérale'

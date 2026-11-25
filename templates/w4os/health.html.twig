@@ -11,7 +11,7 @@
 {% if data.health %}
     {% set checked = data.health.checkedAt ?? null %}
     {% if data.refreshError %}
-        <div class="alert alert-warning" role="alert">{{ 'w4os.admin_health_refresh_failed'|t(data.refreshError|e, checked ? w4os_time(checked) : '?')|raw }}</div>
+        <div class="alert alert-warning" role="alert">{{ 'w4os.admin_health_refresh_failed'|t(data.refreshError|e, checked ? w4os_time(checked, 'list', true) : '?')|raw }}</div>
     {% endif %}
     {# The level of the report and its time; the script checks the lines again one by one and says it here (js/health.js) #}
     {# How many errors and warnings: red with an error, orange with warnings only, green without a problem; the script counts them
@@ -20,7 +20,7 @@
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3 w4os-health-banner" data-checked="{{ 'w4os.admin_health_checked'|t('%s')|e('html_attr') }}" data-errors-one="{{ 'w4os.admin_health_errors_one'|t('%d')|e('html_attr') }}" data-errors-other="{{ 'w4os.admin_health_errors_other'|t('%d')|e('html_attr') }}" data-warnings-one="{{ 'w4os.admin_health_warnings_one'|t('%d')|e('html_attr') }}" data-warnings-other="{{ 'w4os.admin_health_warnings_other'|t('%d')|e('html_attr') }}" data-none="{{ 'w4os.admin_health_none'|t|e('html_attr') }}" data-failed="{{ 'w4os.admin_health_not_checked'|t('%s')|e('html_attr') }}">
         <div class="alert {{ problems.count ? 'alert-danger' : (problems.warnings ? 'alert-warning' : 'alert-success') }} mb-0 flex-fill" role="status">
             <span class="w4os-health-level">{{ w4os_health_counts(problems.count, problems.warnings) }}</span>
-            {%- if checked %} <span class="text-secondary">· <span class="w4os-health-checked">{{ 'w4os.admin_health_checked'|t(w4os_time(checked))|raw }}</span></span>{% endif %}
+            {%- if checked %} <span class="text-secondary">· <span class="w4os-health-checked">{{ 'w4os.admin_health_checked'|t(w4os_time(checked, 'list', true))|raw }}</span></span>{% endif %}
         </div>
         <a class="btn" href="{{ (page.route ?? '') ~ '?refresh=1' }}" data-w4os-health-check><i class="ti ti-refresh me-1" aria-hidden="true"></i>{{ 'w4os.admin_health_check'|t }}</a>
     </div>

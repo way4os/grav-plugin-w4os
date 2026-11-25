@@ -53,12 +53,14 @@ final class Site
 
     /**
      * A time for a page of the admin: a `<time>` with its ISO moment and its style (W4OS\Views\Dates), told by the server in its own
-     * zone, the zone said with it (`25/11/2026 20:37 UTC`), its full date as its tip; the script of the admin tells it again in the
-     * time and the language of the browser (js/dates.js). A recent time in a list stays relative (`5 minutes ago`).
+     * zone, its full date and its zone as its tip; the script of the admin tells it again in the time and the language of the
+     * browser (js/dates.js). A time in a list stays relative while recent (`5 minutes ago`), its zone said once by the list
+     * (zoneTag()); a time of its own (`zoned`: a banner, a header, a detail) is a date and an hour, its zone after them
+     * (`25/11/2026 20:37 UTC`).
      *
      * @param int|string|null $value a timestamp or a date PHP reads
      */
-    public static function timeTag(int|string|null $value, string $language, string $style = 'list', ?int $now = null): string
+    public static function timeTag(int|string|null $value, string $language, string $style = 'list', ?int $now = null, bool $zoned = false): string
     {
         if ($value === null || $value === '' || $value === 0 || $value === '0') {
             return '';
@@ -70,14 +72,24 @@ final class Site
             return htmlspecialchars((string) $value);
         }
         $now ??= time();
-        $relative = $style === 'list' && abs($now - $date->getTimestamp()) < \W4OS\Views\Dates::RECENT && \W4OS\Views\Dates::canTellRelative();
+        $relative = ! $zoned && $style === 'list' && abs($now - $date->getTimestamp()) < \W4OS\Views\Dates::RECENT && \W4OS\Views\Dates::canTellRelative();
         $zone = ' '.$date->format('T');
-        $text = \W4OS\Views\Dates::format($date->getTimestamp(), $language, $style, $now).($relative || $style === 'date' ? '' : $zone);
+        // A time of its own as a date and an hour, never relative
+        $text = \W4OS\Views\Dates::format($date->getTimestamp(), $language, $style, $zoned ? $date->getTimestamp() + \W4OS\Views\Dates::RECENT : $now)
+            .($zoned && $style !== 'date' ? $zone : '');
         $e = fn (string $text) => htmlspecialchars($text, ENT_QUOTES);
 
         return '<time datetime="'.$e($date->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z')).'" data-w4os-time="'.$e($style).'"'
-            .($relative ? ' data-w4os-relative' : '').' title="'.$e(\W4OS\Views\Dates::format($date->getTimestamp(), $language, 'full', $now).$zone).'">'
+            .($relative ? ' data-w4os-relative' : '').($zoned ? ' data-w4os-zoned' : '').' title="'.$e(\W4OS\Views\Dates::format($date->getTimestamp(), $language, 'full', $now).$zone).'">'
             .$e($text).'</time>';
+    }
+
+    /** The zone the times of a list are in, said once for them all: the server's (`UTC`), the browser's once its script ran (js/dates.js). */
+    public static function zoneTag(?int $now = null): string
+    {
+        $zone = (new \DateTimeImmutable('@'.($now ?? time())))->setTimezone(new \DateTimeZone(date_default_timezone_get()))->format('T');
+
+        return '<span data-w4os-zone>'.htmlspecialchars($zone).'</span>';
     }
 
     /**

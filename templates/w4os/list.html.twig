@@ -62,8 +62,11 @@
     <div class="alert alert-danger" role="alert">{{ error }}</div>
 {% else %}
     {% if view.rows is not empty or view.activeFilters %}
+    {# The zone of its times, said once here rather than on each row #}
+    {% set timed = view.columns|filter(c => c.type == 'datetime' or (c.definition.parts ?? [])|filter(p => (p.type ?? '') == 'datetime')|length > 0)|length > 0 %}
     <p class="text-secondary w4os-count mb-2">
         {{ w4os_count(texts.count, view.total) }}
+        {%- if timed and view.rows is not empty %} · {{ 'w4os.admin_times_zone'|t(w4os_zone())|raw }}{% endif %}
         {% if view.activeFilters %} · {{ w4os_count('w4os.filters_active', view.activeFilters) }} <a class="text-secondary" href="?{{ view.clearQuery|url_encode }}" title="{{ 'w4os.filter_clear'|t|e('html_attr') }}" aria-label="{{ 'w4os.filter_clear'|t|e('html_attr') }}"><i class="ti ti-x" aria-hidden="true"></i></a>{% endif %}
     </p>
     {% endif %}

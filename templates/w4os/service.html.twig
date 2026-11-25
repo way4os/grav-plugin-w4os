@@ -50,6 +50,8 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        {# The zone of their times, said once #}
+                        {% if service.tasks|filter(job => (job.lastRun ?? false))|length > 0 %}<div class="card-footer small text-secondary">{{ 'w4os.admin_times_zone'|t(w4os_zone())|raw }}</div>{% endif %}
                     </div>
                 {% endif %}
                 {% if service.help %}

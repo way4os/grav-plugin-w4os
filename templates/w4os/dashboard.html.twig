@@ -24,7 +24,8 @@
             {%- if card.kind == 'rows' %}
                 {% set sort = card.list.sort.default ?? '' %}
                 {% set by = card.list.columns|filter(c => c.name == sort|trim('-', 'left'))|first %}
-                {% if by %}<div class="card-actions text-secondary">{{ ('w4os.' ~ by.label)|t }}</div>{% endif %}
+                {# The column its rows are sorted by; a time, its zone with it, once for the rows #}
+                {% if by %}<div class="card-actions text-secondary">{{ ('w4os.' ~ by.label)|t }}{% if (by.type ?? '') == 'datetime' and card.items is not empty %} · {{ w4os_zone() }}{% endif %}</div>{% endif %}
             {%- endif %}</div>
             {% if card.kind == 'block' %}
                 <div class="card-body w4os-dashboard-block">{{ w4os_block(card.block, card.args|merge({title: ''})) }}</div>

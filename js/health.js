@@ -85,8 +85,13 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
             const time = last?.querySelector('.w4os-health-when time');
             const checked = banner.querySelector('.w4os-health-checked');
             if (time && checked) {
+                // The time of the last line, on its own: a date and an hour, its zone after them
                 const [before, after = ''] = (banner.dataset.checked || '%s').split('%s');
-                checked.replaceChildren(before, time.cloneNode(true), after);
+                const own = time.cloneNode(true);
+                own.removeAttribute('data-w4os-relative');
+                own.setAttribute('data-w4os-zoned', '');
+                checked.replaceChildren(before, own, after);
+                window.W4OSDates?.localize(checked);
             }
         });
     });

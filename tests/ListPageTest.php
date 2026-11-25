@@ -21,7 +21,8 @@ function render_list(?array $list, array $items, array $meta, array $links = [],
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
-    $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'fr', $style), ['is_safe' => ['html']]));
+    $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list', bool $zoned = false) => \W4OS\Grav\Site::timeTag($value, 'fr', $style, null, $zoned), ['is_safe' => ['html']]));
+    $twig->addFunction(new \Twig\TwigFunction('w4os_zone', fn () => \W4OS\Grav\Site::zoneTag(), ['is_safe' => ['html']]));
     $assets = new class {
         public function addCss(string $url): void {}
         public function addJs(string $url, array $options = []): void {}
@@ -111,7 +112,9 @@ describe('the list of a page of the admin', function () {
             ->and($html)->toContain('<span class="w4os-fold-md">[w4os.role_resident]</span><span class="w4os-fold-md">[w4os.label_value:[w4os.last_seen]|'.W4OS\Grav\Site::timeTag($recent, 'fr').']</span><span class="w4os-fold-xl">bart@example.org</span><span class="w4os-fold-xl">[w4os.label_value:[w4os.born]|'.W4OS\Grav\Site::timeTag($older, 'fr').']</span></div>')
             ->and(W4OS\Grav\Site::timeTag($recent, 'fr'))->toContain(' data-w4os-relative ', '>il y a 3 jours</time>')
             // In the browser's own time (js/dates.js); the server's zone said meanwhile
-            ->and($html)->toMatch('~<time datetime="'.gmdate('Y-m-d\\TH:i:s\\Z', $older).'" data-w4os-time="list" title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short.' '.date('T', $older), '~').'</time>~')
+            ->and($html)->toMatch('~<time datetime="'.gmdate('Y-m-d\\TH:i:s\\Z', $older).'" data-w4os-time="list" title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
+            // Their zone said once, with the count of the list
+            ->and($html)->toContain('[w4os.admin_times_zone:<span data-w4os-zone>'.date('T').'</span>]')
             ->and($html)->not->toContain('>'.date('Y-m-d', $older));
     });
 
