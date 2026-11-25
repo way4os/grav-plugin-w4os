@@ -2707,7 +2707,7 @@
             "dist": {
                 "type": "path",
                 "url": "../w4os-views",
-                "reference": "26ef3119d72f3ab2114693ecce228a673e0f615d"
+                "reference": "541ed1135bfd93ba07c7135ead0bc541c13a1de0"
             },
             "require": {
                 "ext-intl": "*",
