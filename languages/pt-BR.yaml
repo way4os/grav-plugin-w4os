@@ -585,6 +585,7 @@ w4os:
   setting_about: 'Sobre este grid'
   setting_about_help: 'Página de informações detalhadas em seu site, por meio de um link exibido na página de login do viewer.'
   setting_register: 'Página de cadastro'
+  setting_groups_external: 'Endereço dos grupos para outros grids'
   setting_registration: Inscrição
   setting_registration_help: 'Fechada, o grid não anuncia nenhuma página de inscrição e seus sites não criam novos avatares.'
   registration_open: Aberta
@@ -767,6 +768,8 @@ w4os:
   health_differs_grid_info: 'difere de %s de get_grid_info'
   health_web_search: 'Pesquisa na Web'
   health_offline_robust: 'servido pelo Robust (módulo V2)'
+  health_groups_external_status: 'inalcançável pelos outros grids'
+  health_groups_external: 'os outros grids guardam os grupos deste sob este endereço («nome @ 127.0.0.1»): defina o endereço público do Robust, %s'
   health_search_is_service: 'esta é a busca que os simuladores chamam (XML-RPC), não uma página: informe a página de busca web do site'
   health_search_is_robust: 'este é o endereço do Robust, que não tem página de busca: informe a página de busca web do site'
   health_offline_unused: 'definido, mas o módulo V2 não o usa (o Robust guarda as mensagens offline): remova %s'

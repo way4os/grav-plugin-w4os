@@ -585,6 +585,7 @@ w4os:
   setting_about: 'À propos de cette grille'
   setting_about_help: "Page d'informations détaillées sur ton site web, par un lien affiché sur la page de connexion du viewer."
   setting_register: "Page d'enregistrement"
+  setting_groups_external: 'Adresse des groupes pour les autres grilles'
   setting_registration: Inscription
   setting_registration_help: "Fermée, la grille n'annonce aucune page d'inscription et ses sites ne créent aucun nouvel avatar."
   registration_open: Ouverte
@@ -767,6 +768,8 @@ w4os:
   health_differs_grid_info: 'diffère de %s de get_grid_info'
   health_web_search: 'Recherche web'
   health_offline_robust: 'servi par Robust (module V2)'
+  health_groups_external_status: 'injoignable par les autres grilles'
+  health_groups_external: "les autres grilles gardent les groupes de celle-ci sous cette adresse (« nom @ 127.0.0.1 ») : mettez l'adresse publique de Robust, %s"
   health_search_is_service: "c'est la recherche qu'appellent les simulateurs (XML-RPC), pas une page : donnez plutôt la page de recherche web du site"
   health_search_is_robust: "c'est l'adresse de Robust, qui n'a pas de page de recherche : donnez plutôt la page de recherche web du site"
   health_offline_unused: "défini, mais le module V2 ne l'utilise pas (Robust garde les messages hors ligne) : retirez %s"

@@ -2543,7 +2543,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "71fd77d97c0bbdedfcef987aa9176ca23774d7c2"
+                "reference": "36aa1f1eb9dc27154e1f9cba044446d26d97bc67"
             },
             "require": {
                 "egulias/email-validator": "^4.0",

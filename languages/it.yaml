@@ -585,6 +585,7 @@ w4os:
   setting_about: 'Informazioni su questa griglia'
   setting_about_help: 'Pagina dettagliata sul tuo sito web, tramite un link visualizzato sulla pagina di accesso del viewer.'
   setting_register: 'Pagina di registrazione'
+  setting_groups_external: 'Indirizzo dei gruppi per le altre griglie'
   setting_registration: Registrazione
   setting_registration_help: 'Chiusa, la griglia non annuncia nessuna pagina di registrazione e i suoi siti non creano nuovi avatar.'
   registration_open: Aperta
@@ -767,6 +768,8 @@ w4os:
   health_differs_grid_info: 'differisce da %s di get_grid_info'
   health_web_search: 'Ricerca Web'
   health_offline_robust: 'servito da Robust (modulo V2)'
+  health_groups_external_status: 'irraggiungibile dalle altre griglie'
+  health_groups_external: "le altre griglie conservano i gruppi di questa sotto questo indirizzo («nome @ 127.0.0.1»): impostate l'indirizzo pubblico di Robust, %s"
   health_search_is_service: 'questa è la ricerca chiamata dai simulatori (XML-RPC), non una pagina: indicate invece la pagina di ricerca web del sito'
   health_search_is_robust: "questo è l'indirizzo di Robust, che non ha una pagina di ricerca: indicate invece la pagina di ricerca web del sito"
   health_offline_unused: 'impostato, ma il modulo V2 non lo usa (Robust conserva i messaggi offline): rimuovete %s'

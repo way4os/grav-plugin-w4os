@@ -585,6 +585,7 @@ w4os:
   setting_about: 'Am y grid hwn'
   setting_about_help: "Tudalen wybodaeth fanwl ar dy wefan, trwy ddolen a ddangosir ar dudalen mewngofnodi'r viewer."
   setting_register: 'Tudalen gofrestru'
+  setting_groups_external: 'Cyfeiriad grwpiau ar gyfer gridiau eraill'
   setting_registration: Cofrestru
   setting_registration_help: "Ar gau, nid yw'r grid yn cyhoeddi tudalen gofrestru ac nid yw ei wefannau'n creu afatar newydd."
   registration_open: 'Ar agor'
@@ -767,6 +768,8 @@ w4os:
   health_differs_grid_info: 'yn wahanol i %s get_grid_info'
   health_web_search: 'Chwiliad Gwe'
   health_offline_robust: 'yn cael ei weini gan Robust (modiwl V2)'
+  health_groups_external_status: 'ni all y gridiau eraill ei gyrraedd'
+  health_groups_external: 'mae''r gridiau eraill yn cadw grwpiau''r grid hwn dan y cyfeiriad hwn ("enw @ 127.0.0.1"): gosodwch gyfeiriad cyhoeddus Robust, %s'
   health_search_is_service: "dyma'r chwiliad y mae'r efelychwyr yn ei alw (XML-RPC), nid tudalen: rhowch dudalen chwilio we'r wefan yn lle hynny"
   health_search_is_robust: "dyma gyfeiriad Robust, sydd heb dudalen chwilio: rhowch dudalen chwilio we'r wefan yn lle hynny"
   health_offline_unused: "wedi'i osod, ond nid yw modiwl V2 yn ei ddefnyddio (mae Robust yn cadw'r negeseuon all-lein): tynnwch %s"
