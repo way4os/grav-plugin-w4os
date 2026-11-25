@@ -585,6 +585,10 @@ w4os:
   setting_about: 'Over dit grid'
   setting_about_help: 'Gedetailleerde informatiepagina op je website, via een link op de inlogpagina van de viewer.'
   setting_register: 'Registratie pagina'
+  setting_registration: Registratie
+  setting_registration_help: 'Gesloten kondigt het grid geen registratiepagina aan en maken zijn sites geen nieuwe avatar.'
+  registration_open: Open
+  registration_closed: Gesloten
   setting_register_help: 'Link naar de registratie van een avatar.'
   setting_help: Hulp
   setting_help_help: 'Link naar een hulppagina op je website.'
@@ -1041,9 +1045,6 @@ w4os:
   admin_hypergrid_count_help: 'Hoeveel van deze grids het bezoek noemt, elke dag andere; 0: allemaal'
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
-  admin_register: Registreren
-  admin_register_open: 'Registratie open'
-  admin_register_open_help: 'Uit: bezoekers kunnen geen avatar aanmaken, alleen de beheerders (Avatars › Nieuwe Avatar); de registratiepagina zegt dat ze gesloten is'
   admin_confirm_email: 'De e-mail bevestigen'
   admin_confirm_email_help: 'Een nieuwe avatar blijft inactief tot hij op de link klikt die de engine hem stuurt'
   admin_terms: 'Pagina met voorwaarden'

@@ -7,7 +7,7 @@ describe('registration', function () {
         $site = (string) file_get_contents(dirname(__DIR__).'/classes/Site.php');
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
-        expect($site)->toContain("isset(\$routes['register']) && \$routes['register_closed'] = \$routes['register'];\n            unset(\$routes['register'], \$routes['confirm']);")
+        expect($site)->toContain("if (! \$this->registrationOpen()) {\n            isset(\$routes['register']) && \$routes['register_closed'] = \$routes['register'];\n            unset(\$routes['register'], \$routes['confirm']);")
             ->and(Site::titleKey('register_closed'))->toBe('w4os.site_register_closed_title')
             ->and((string) file_get_contents(dirname(__DIR__).'/pages/register_closed.md'))->toContain('w4os: register_closed', 'visible: false')
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/register_closed.html.twig'))->toContain("'w4os.site_register_closed_text'|t")->not->toContain('<form', '<a ')
@@ -19,11 +19,15 @@ describe('registration', function () {
             ->and(Site::ADMIN_ROUTES)->toHaveKey('new');
     });
 
-    test('is switched where one looks for it, with the avatars\' settings, the site\'s own setting (no copy of it)', function () {
+    test('is the engine\'s setting of the grid (registration, with the avatars\' settings), read again once they are saved; none of the site\'s own', function () {
+        $site = (string) file_get_contents(dirname(__DIR__).'/classes/Site.php');
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
-        expect($plugin)->toContain("if (\$service['group'] === 'avatars') {", "'register_open' => ['type' => 'checkbox', 'label' => 'w4os.admin_register_open'", "(bool) \$this->config->get('plugins.w4os.register.enabled', true)",
-            "\$service['group'] === 'avatars' && \$site->saveSetting('plugins/w4os', 'register.enabled', (bool) (\$data['register_open'] ?? false));");
+        expect($site)->toContain("\$kept = (string) (\$this->engine()->settings('avatars')['registration'] ?? 'open');", "return \$kept !== 'closed';")
+            ->and($plugin)->toContain("\$service['group'] === 'avatars' && \$site->forgetRegistration();", "null, \$this->site()->registrationOpen());")
+            ->and($plugin)->not->toContain('register.enabled', 'register_open')
+            ->and((string) file_get_contents(dirname(__DIR__).'/blueprints.yaml'))->not->toContain('register.enabled')
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.yaml'))->not->toMatch('/^register:\n(  #[^\n]*\n)*  enabled:/m');
     });
 });
 

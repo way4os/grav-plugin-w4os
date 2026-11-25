@@ -585,6 +585,10 @@ w4os:
   setting_about: 'Sobre este grid'
   setting_about_help: 'Página de informações detalhadas em seu site, por meio de um link exibido na página de login do viewer.'
   setting_register: 'Página de cadastro'
+  setting_registration: Inscrição
+  setting_registration_help: 'Fechada, o grid não anuncia nenhuma página de inscrição e seus sites não criam novos avatares.'
+  registration_open: Aberta
+  registration_closed: Fechada
   setting_register_help: 'Link para o cadastro de um avatar.'
   setting_help: Ajuda
   setting_help_help: 'Link para uma página de ajuda em seu site.'
@@ -1041,9 +1045,6 @@ w4os:
   admin_hypergrid_count_help: 'Quantos desses grids a visita cita, outros escolhidos a cada dia; 0: todos'
   admin_built_in_css: 'CSS embutido'
   admin_built_in_css_help: 'A folha de estilo do plugin (suas páginas, os modelos, os blocos); desligada quando o tema os estiliza'
-  admin_register: Registrar
-  admin_register_open: 'Cadastro aberto'
-  admin_register_open_help: 'Desligado: os visitantes não podem criar um avatar, só os gestores (Avatares › Novo Avatar); a página de cadastro diz que está encerrado'
   admin_confirm_email: 'Confirmar o email'
   admin_confirm_email_help: 'Um novo avatar fica inativo até clicar no link que o engine envia'
   admin_terms: 'Página dos termos'

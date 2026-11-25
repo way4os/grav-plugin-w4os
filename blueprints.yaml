@@ -127,11 +127,6 @@ form:
           type: tab
           title: w4os.admin_tab_accounts
           fields:
-            register.enabled:
-              type: toggle
-              label: w4os.admin_register
-              options: { 1: PLUGIN_ADMIN.ENABLED, 0: PLUGIN_ADMIN.DISABLED }
-              validate: { type: bool }
             register.confirm_email:
               type: toggle
               label: w4os.admin_confirm_email

@@ -349,7 +349,7 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_start_steps', function () {
             $avatar = self::current() ?? [];
 
-            return Site::steps($avatar !== [], array_key_exists('lastSeen', $avatar) ? $avatar['lastSeen'] !== null : null, (bool) $this->config->get('plugins.w4os.register.enabled', true));
+            return Site::steps($avatar !== [], array_key_exists('lastSeen', $avatar) ? $avatar['lastSeen'] !== null : null, $this->site()->registrationOpen());
         }));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logout_route', fn () => Site::logoutRoute($this->site()->routes())));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_manager', fn () => $this->site()->isManager()));
@@ -489,7 +489,7 @@ class W4osPlugin extends Plugin
      * closing slash is free ([grid-info] or [grid-info /]).
      * [w4os-guest]...[/w4os-guest]: shown only to a visitor with no avatar signed in (the page has `cache_enable: false`)
      * [getting-started] shows the steps of the visitor: the page has `cache_enable: false` too
-     * [w4os-register]...[/w4os-register]: shown only while registration is open (setting register.enabled)
+     * [w4os-register]...[/w4os-register]: shown only while registration is open (the engine's setting of the grid)
      * [w4os-home]...[/w4os-home]: the home page of a grid around the text, its blocks beside it where there is room
      */
     public function onShortcodeHandlers(): void
@@ -694,11 +694,6 @@ class W4osPlugin extends Plugin
                 $bases = (string) ($service['meta']['service']['prefix'] ?? '')
                     ?: ['site' => $site, 'helpers' => rtrim((string) ($service['meta']['service']['helpers'] ?? '') ?: "$site/helpers", '/')];
                 $this->viewForm($form, $service['view'], true, $bases, (array) ($service['meta']['fixed'] ?? []));
-                // With the avatars, the site's own setting where one looks for it: registration open (plugins.w4os.register.enabled)
-                if ($service['group'] === 'avatars') {
-                    $form->setFields(['register_open' => ['type' => 'checkbox', 'label' => 'w4os.admin_register_open', 'description' => 'w4os.admin_register_open_help', 'wrapper_classes' => 'form-check form-switch']] + (array) $form->get('fields'));
-                    $form->getData()->get('register_open') === null && $form->setData('register_open', (bool) $this->config->get('plugins.w4os.register.enabled', true));
-                }
                 $form->set('buttons', $service['changeable'] ? array_map(fn (array $button) => ['value' => 'w4os.'.$service['submit']] + $button, (array) $form->get('buttons')) : []);
             }
 
@@ -848,13 +843,12 @@ class W4osPlugin extends Plugin
                     // The settings of a service, the fields the visitor changes only (FormView), written by the engine
                     $service = $this->service();
                     $service['changeable'] || throw new FormError('w4os.error_forbidden');
-                    // The site's own setting with the avatars' (registration open), in its configuration; the engine's, by the engine
-                    $service['group'] === 'avatars' && $site->saveSetting('plugins/w4os', 'register.enabled', (bool) ($data['register_open'] ?? false));
                     $changes = Items::unfixed($service['view']->changes($data), (array) ($service['meta']['fixed'] ?? []));
                     if ($changes !== []) {
                         try {
                             $site->engine()->updateSettings((string) $service['group'], $changes);
                             $service['group'] === 'assets' && $site->forgetAssetsRoute();
+                    $service['group'] === 'avatars' && $site->forgetRegistration();
                         } catch (EngineException $e) {
                             throw $forms->error($e);
                         }

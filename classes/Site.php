@@ -582,6 +582,36 @@ final class Site
         return ! empty($settings['provide']) && $path !== '' ? "/$path" : null;
     }
 
+    /**
+     * Whether the grid takes new avatars from its site: its registration open (the engine's setting `registration` of the avatars,
+     * open when it says nothing), kept ten minutes, forgotten once the settings of the avatars are saved; open when the engine does
+     * not answer.
+     */
+    public function registrationOpen(): bool
+    {
+        $cache = $this->grav['cache'];
+        $kept = $cache->fetch(self::REGISTRATION);
+        if (! is_string($kept)) {
+            try {
+                $kept = (string) ($this->engine()->settings('avatars')['registration'] ?? 'open');
+                $cache->save(self::REGISTRATION, $kept, 600);
+            } catch (\Throwable) {
+                return true;
+            }
+        }
+
+        return $kept !== 'closed';
+    }
+
+    /** The registration of the grid read again from the engine (its settings of the avatars changed). */
+    public function forgetRegistration(): void
+    {
+        $this->grav['cache']->delete(self::REGISTRATION);
+    }
+
+    /** The key of the cache of the registration of the grid, open or closed. */
+    private const REGISTRATION = 'w4os-registration';
+
     /** The key of the cache of the route of the web assets. */
     private const ASSETS_ROUTE = 'w4os-assets-route';
 
@@ -854,8 +884,9 @@ final class Site
         $routes = self::adminRoutes($routes, $reserved);
         $set === $routes['dashboard'] || isset($this->config()['routes']['dashboard'])
             || $this->grav['log']->warning("w4os: the admin route $set is under the route of Grav's admin: {$routes['dashboard']} instead");
-        // Registration closed: no page of it, nor a link to it; its address says it is closed (a viewer's "create an account" lands there)
-        if (! ($this->config()['register']['enabled'] ?? true)) {
+        // Registration closed (the engine's setting of the grid): no page of it, nor a link to it; its address says it is closed (a
+        // viewer's "create an account" lands there)
+        if (! $this->registrationOpen()) {
             isset($routes['register']) && $routes['register_closed'] = $routes['register'];
             unset($routes['register'], $routes['confirm']);
         }

@@ -585,6 +585,10 @@ w4os:
   setting_about: 'À propos de cette grille'
   setting_about_help: "Page d'informations détaillées sur ton site web, par un lien affiché sur la page de connexion du viewer."
   setting_register: "Page d'enregistrement"
+  setting_registration: Inscription
+  setting_registration_help: "Fermée, la grille n'annonce aucune page d'inscription et ses sites ne créent aucun nouvel avatar."
+  registration_open: Ouverte
+  registration_closed: Fermée
   setting_register_help: "Lien vers l'inscription d'un avatar."
   setting_help: Aide
   setting_help_help: "Lien vers une page d'aide de ton site web."
@@ -1041,9 +1045,6 @@ w4os:
   admin_hypergrid_count_help: 'Combien de ces grilles la visite cite, d’autres choisies chaque jour ; 0 : toutes'
   admin_built_in_css: 'CSS intégré'
   admin_built_in_css_help: 'La feuille de style du plugin (ses pages, les modèles, les blocs) ; désactivée quand le thème les stylise'
-  admin_register: Inscription
-  admin_register_open: 'Inscriptions ouvertes'
-  admin_register_open_help: 'Désactivé : les visiteurs ne peuvent pas créer d’avatar, seuls les gestionnaires le font (Avatars › Nouvel avatar) ; la page d’inscription dit qu’elles sont fermées'
   admin_confirm_email: 'Confirmer l’e-mail'
   admin_confirm_email_help: 'Un nouvel avatar reste inactif jusqu’à ce qu’il clique sur le lien que l’engine lui envoie'
   admin_terms: 'Page des conditions'

@@ -585,6 +585,10 @@ w4os:
   setting_about: 'Informazioni su questa griglia'
   setting_about_help: 'Pagina dettagliata sul tuo sito web, tramite un link visualizzato sulla pagina di accesso del viewer.'
   setting_register: 'Pagina di registrazione'
+  setting_registration: Registrazione
+  setting_registration_help: 'Chiusa, la griglia non annuncia nessuna pagina di registrazione e i suoi siti non creano nuovi avatar.'
+  registration_open: Aperta
+  registration_closed: Chiusa
   setting_register_help: 'Link alla registrazione di un avatar.'
   setting_help: Aiuto
   setting_help_help: 'Link a una pagina di aiuto sul tuo sito web.'
@@ -1041,9 +1045,6 @@ w4os:
   admin_hypergrid_count_help: 'Quante di queste griglie cita la visita, altre scelte ogni giorno; 0: tutte'
   admin_built_in_css: 'CSS integrato'
   admin_built_in_css_help: 'Il foglio di stile del plugin (le sue pagine, i modelli, i blocchi); disattivato quando il tema li stilizza'
-  admin_register: Registrare
-  admin_register_open: 'Registrazioni aperte'
-  admin_register_open_help: 'Disattivato: i visitatori non possono creare un avatar, solo i gestori (Avatar › Nuovo Avatar); la pagina di registrazione dice che sono chiuse'
   admin_confirm_email: 'Conferma l’email'
   admin_confirm_email_help: 'Un nuovo avatar resta inattivo finché non clicca sul link che l’engine gli invia'
   admin_terms: 'Pagina dei termini'

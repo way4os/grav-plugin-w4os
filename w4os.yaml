@@ -52,8 +52,6 @@ hypergrid:
   # How many of them it names, others each day (0: all of them)
   count: 3
 register:
-  # Registration on the site: off, nobody registers here
-  enabled: true
   # The new avatar is inactive until it confirms its email with the link the engine mails it
   confirm_email: true
   # A page of the site the visitor must agree to (terms of service), as its route; empty for none
