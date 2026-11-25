@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ec068a82b65cda3250a2a45e55a7c1a",
+    "content-hash": "76d535b989bde41eb101bc036ea98e9f",
     "packages": [
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1158,6 +1158,16 @@
                 "source": "https://github.com/nikic/FastRoute/tree/1.3.1"
             },
             "time": "2026-07-09T19:38:47+00:00"
+        },
+        {
+            "name": "npm-asset/leaflet",
+            "version": "1.9.4",
+            "dist": {
+                "type": "tar",
+                "url": "https://registry.npmjs.org/leaflet/-/leaflet-1.9.4.tgz",
+                "shasum": "23fae724e282fa25745aff82ca4d394748db7d8d"
+            },
+            "type": "library"
         },
         {
             "name": "npm-asset/tabler-core",
@@ -2533,7 +2543,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-engine",
-                "reference": "c1bf5cc10c21b4f33fa0768ca9ec5f55d0c5fc6f"
+                "reference": "c24aa84b529efc0b60e0405ed952e35449a99e94"
             },
             "require": {
                 "egulias/email-validator": "^4.0",
@@ -2623,7 +2633,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "40e8239aca44dbf9b9db7fb20773d6d35f921b96"
+                "reference": "98a9636e11567f07af0e59112520d6a943c2f244"
             },
             "require": {
                 "ext-curl": "*",
@@ -2639,6 +2649,7 @@
                 "gettext/translator": "^1.2",
                 "magicoli/opensim-rest-php": "@dev",
                 "nesbot/carbon": "3.15.1",
+                "npm-asset/leaflet": "1.9.4",
                 "php": ">=8.2",
                 "php-di/php-di": "^7",
                 "php-di/slim-bridge": "^3",

@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Willkommen auf %s'
   guide_title: 'Reiseführer für Ziele'
+  map_title: Karte
   register_title: 'Meinen Avatar erstellen'
   register_text: 'Wähle einen Namen unten aus. So werden dich die Leute in der Welt sehen.'
   register_button: 'Meinen Avatar erstellen'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Allgemeine Informationen (Gridname und Login-URI)'
   block_grid_status_help: 'Avatare online, Regionen usw.'
   block_popular_places_help: 'Am meisten besuchte Regionen in deinem Grid.'
-  block_motd_help: 'Ein Begrüßungstitel mit dem Namen des angemeldeten Avatars, sonst die Willkommensnachricht des Grids.'
+  block_motd_help: 'Ein Begrüßungstitel, die Nachricht des Grids, wenn es eine eigene hat, sonst der angemeldete Avatar.'
   block_destination_guide_help: 'Orte zum Besuchen, dieselbe Liste wie im Reiseführer der Viewer.'
   block_directory_info_help: 'Die anderen Grids, deren Orte in der Suche dieses Grids zu finden sind.'
   block_search_help: 'Ein Suchformular für Orte, Events, Kleinanzeigen und Personen des Grids.'
+  block_map_help: 'Die Karte des Grids und seiner Regionen, ein Klick auf eine gibt ihren Teleport-Link.'
   block_profile_help: 'Das Profil eines Avatars.'
   block_new_avatars_help: 'Die zuletzt beigetretenen Avatare des Grids.'
   shortcode_home_help: 'Dein Text mit den beliebten Orten, dem Reiseführer, dem Grid-Status und der Nachricht des Tages.'

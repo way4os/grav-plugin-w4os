@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Welcome to %s'
   guide_title: 'Destinations guide'
+  map_title: Map
   register_title: 'Create My Avatar'
   register_text: 'Choose a name below. This is how people will see you in-world.'
   register_button: 'Create My Avatar'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'General information (grid name and login uri)'
   block_grid_status_help: 'Online avatars, regions, etc.'
   block_popular_places_help: 'Most visited regions in your grid.'
-  block_motd_help: 'A welcome title naming the avatar signed in, else the welcome message of the grid.'
+  block_motd_help: 'A welcome title, the message of the grid when it has its own, else the avatar signed in.'
   block_destination_guide_help: 'Places to visit, the same list the viewers show in their destinations guide.'
   block_directory_info_help: 'The other grids whose places can be found in the search of this grid.'
   block_search_help: 'A search form for the places, events, classifieds and people of the grid.'
+  block_map_help: 'The map of the grid and its regions, a click on one gives its teleport link.'
   block_profile_help: 'The profile of an avatar.'
   block_new_avatars_help: 'The last avatars who joined the grid.'
   shortcode_home_help: 'Your text with the popular places, the guide, the grid status and the message of the day.'
@@ -1046,9 +1048,9 @@ w4os:
   admin_site_backdrop: 'Background image'
   admin_site_backdrop_help: 'One at random on each page, from the series of the light or dark mode'
   admin_site_backdrop_light: 'Background images, light mode'
-  admin_site_backdrop_light_help: 'Recommended: jpg 1920x1080, leave empty to use the theme''s.'
+  admin_site_backdrop_light_help: "Recommended: jpg 1920x1080, leave empty to use the theme's."
   admin_site_backdrop_dark: 'Background images, dark mode'
-  admin_site_backdrop_dark_help: 'Recommended: jpg 1920x1080, leave empty to use the theme''s.'
+  admin_site_backdrop_dark_help: "Recommended: jpg 1920x1080, leave empty to use the theme's."
   admin_site_logo_unsupported: 'The current theme shows no logo of the site; it is kept for the next theme that does'
   admin_site_favicon_unsupported: 'The current theme shows no favicon of the site; it is kept for the next theme that does'
   admin_route: 'Admin pages'

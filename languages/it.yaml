@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Benvenuto su %s'
   guide_title: 'Guida delle destinazioni'
+  map_title: Mappa
   register_title: 'Crea il mio avatar'
   register_text: 'Scegli un nome qui sotto. È così che le persone ti vedranno nel mondo virtuale.'
   register_button: 'Crea il mio avatar'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Informazioni generali (nome della griglia e URI di accesso)'
   block_grid_status_help: 'Avatar online, regioni, ecc.'
   block_popular_places_help: 'Regioni più visitate nella tua griglia.'
-  block_motd_help: "Un titolo di benvenuto con il nome dell'avatar connesso, altrimenti il messaggio di benvenuto della griglia."
+  block_motd_help: "Un titolo di benvenuto, il messaggio della griglia quando ne ha uno proprio, altrimenti l'avatar connesso."
   block_destination_guide_help: 'Luoghi da visitare, la stessa lista della guida alle destinazioni dei viewer.'
   block_directory_info_help: 'Le altre griglie i cui luoghi si trovano nella ricerca di questa griglia.'
   block_search_help: 'Un modulo di ricerca di luoghi, eventi, annunci e persone della griglia.'
+  block_map_help: 'La mappa della griglia e delle sue regioni, un clic su una dà il suo link di teletrasporto.'
   block_profile_help: 'Il profilo di un avatar.'
   block_new_avatars_help: 'Gli ultimi avatar arrivati nella griglia.'
   shortcode_home_help: 'Il tuo testo con i luoghi popolari, la guida, lo stato della griglia e il messaggio del giorno.'

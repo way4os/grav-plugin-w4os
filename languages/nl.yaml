@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Welkom op %s'
   guide_title: 'Gids voor bestemmingen'
+  map_title: Kaart
   register_title: 'Mijn Avatar aanmaken'
   register_text: 'Kies hieronder een naam. Zo zullen mensen je in de virtuele wereld zien.'
   register_button: 'Mijn Avatar aanmaken'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Algemene informatie (gridnaam en login-uri)'
   block_grid_status_help: "Avatars online, regio's, enz."
   block_popular_places_help: "Meest bezochte regio's in jouw grid."
-  block_motd_help: 'Een welkomsttitel met de naam van de aangemelde avatar, anders het welkomstbericht van het grid.'
+  block_motd_help: 'Een welkomsttitel, het bericht van het grid als het er een heeft, anders de aangemelde avatar.'
   block_destination_guide_help: 'Plaatsen om te bezoeken, dezelfde lijst als de bestemmingengids van de viewers.'
   block_directory_info_help: 'De andere grids waarvan de plaatsen in de zoekfunctie van dit grid te vinden zijn.'
   block_search_help: 'Een zoekformulier voor de plaatsen, evenementen, advertenties en personen van het grid.'
+  block_map_help: "De kaart van het grid en zijn regio's, een klik op een regio geeft de teleportlink."
   block_profile_help: 'Het profiel van een avatar.'
   block_new_avatars_help: 'De laatste avatars die zich bij het grid hebben aangesloten.'
   shortcode_home_help: 'Je tekst met de populaire plaatsen, de gids, de status van het grid en het bericht van de dag.'

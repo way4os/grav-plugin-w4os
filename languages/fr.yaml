@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Bienvenue sur %s'
   guide_title: 'Guide des destinations'
+  map_title: Carte
   register_title: 'Créer mon avatar'
   register_text: "Choisis un nom ci-dessous. C'est ainsi que les gens te verront dans le monde virtuel."
   register_button: 'Créer mon avatar'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Informations générales (nom de la grille et URI de connexion)'
   block_grid_status_help: 'Avatars en ligne, régions, etc.'
   block_popular_places_help: 'Les régions les plus visitées de ta grille.'
-  block_motd_help: "Un titre d'accueil au nom de l'avatar connecté, sinon le message d'accueil de la grille."
+  block_motd_help: "Un titre d'accueil, le message de la grille quand elle a le sien, sinon l'avatar connecté."
   block_destination_guide_help: 'Des lieux à visiter, la même liste que le guide des destinations des viewers.'
   block_directory_info_help: 'Les autres grilles dont les lieux se trouvent dans la recherche de cette grille.'
   block_search_help: 'Un formulaire de recherche des lieux, événements, petites annonces et personnes de la grille.'
+  block_map_help: "La carte de la grille et de ses régions, un clic sur l'une donne son lien de téléportation."
   block_profile_help: "Le profil d'un avatar."
   block_new_avatars_help: 'Les derniers avatars arrivés sur la grille.'
   shortcode_home_help: "Ton texte avec les lieux populaires, le guide, l'état de la grille et le message du jour."

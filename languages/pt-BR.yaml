@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Boas-vindas a %s'
   guide_title: 'Guia de Destinos'
+  map_title: Mapa
   register_title: 'Criar meu avatar'
   register_text: 'Escolha um nome abaixo. É assim que as pessoas vão te ver no mundo virtual.'
   register_button: 'Criar meu avatar'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Informações gerais (nome do grid e URI de login)'
   block_grid_status_help: 'Avatares online, regiões etc.'
   block_popular_places_help: 'Regiões mais visitadas em seu grid.'
-  block_motd_help: 'Um título de boas-vindas com o nome do avatar conectado, senão a mensagem de boas-vindas do grid.'
+  block_motd_help: 'Um título de boas-vindas, a mensagem do grid quando tem a sua, senão o avatar conectado.'
   block_destination_guide_help: 'Lugares para visitar, a mesma lista do guia de destinos dos viewers.'
   block_directory_info_help: 'Os outros grids cujos lugares aparecem na busca deste grid.'
   block_search_help: 'Um formulário de busca de lugares, eventos, classificados e pessoas do grid.'
+  block_map_help: 'O mapa do grid e de suas regiões, um clique em uma dá seu link de teletransporte.'
   block_profile_help: 'O perfil de um avatar.'
   block_new_avatars_help: 'Os últimos avatares que entraram no grid.'
   shortcode_home_help: 'Seu texto com os lugares populares, o guia, o status do grid e a mensagem do dia.'

@@ -3,6 +3,7 @@
 w4os:
   welcome_title: 'Croeso i %s'
   guide_title: 'Canllaw cyrchfannau'
+  map_title: Map
   register_title: 'Creu Fy Afatar'
   register_text: 'Dewisa enw isod. Dyma sut bydd pobl yn dy weld di yn y byd rhithwir.'
   register_button: 'Creu Fy Afatar'
@@ -428,10 +429,11 @@ w4os:
   block_grid_info_help: 'Gwybodaeth gyffredinol (enw grid a uri mewngofnodi)'
   block_grid_status_help: 'Afatarau ar-lein, rhanbarthau, ac ati.'
   block_popular_places_help: 'Y rhanbarthau mwyaf poblogaidd yn dy grid.'
-  block_motd_help: "Teitl croeso yn enwi'r afatar sydd wedi mewngofnodi, neu fel arall neges groeso'r grid."
+  block_motd_help: 'Teitl croeso, neges y grid pan fydd ganddo ei neges ei hun, neu fel arall yr afatar sydd wedi mewngofnodi.'
   block_destination_guide_help: "Lleoedd i ymweld â nhw, yr un rhestr â chanllaw cyrchfannau'r viewers."
   block_directory_info_help: "Y gridiau eraill y mae eu lleoedd i'w cael yn chwiliad y grid hwn."
   block_search_help: 'Ffurflen chwilio ar gyfer lleoedd, digwyddiadau, hysbysebion a phobl y grid.'
+  block_map_help: "Map y grid a'i ranbarthau, mae clic ar un yn rhoi ei ddolen deleportio."
   block_profile_help: 'Proffil afatar.'
   block_new_avatars_help: "Yr afatarau diweddaraf a ymunodd â'r grid."
   shortcode_home_help: "Dy destun gyda'r lleoedd poblogaidd, y canllaw, statws y grid a neges y dydd."
