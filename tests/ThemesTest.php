@@ -14,6 +14,7 @@ function themeless_twig(bool $viewer = true): Environment
     $twig->addFunction(new TwigFunction('w4os_block', fn (string $name, array $args = []) => "<section class=\"block block-$name\">".(($args['title'] ?? null) === '' ? '' : '<h1 class="block-title">Bart Simpson</h1>').'</section>', ['is_safe' => ['html']]));
     $twig->addFunction(new TwigFunction('w4os_page_args', fn () => ['name' => 'Bart.Simpson']));
     $twig->addFunction(new TwigFunction('w4os_is_viewer', fn () => $viewer));
+    $twig->addFunction(new TwigFunction('w4os_layer', fn () => $viewer ? 'viewer' : 'web'));
     $twig->addFunction(link_function());
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
     $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
@@ -50,7 +51,7 @@ describe('themes', function () {
         $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']], 'assets' => new FakeAssets()]);
 
         expect($html)->toStartWith('<!doctype html>')
-            ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css">', '<link href="plugin://w4os/css/viewer.css">',
+            ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.viewer.css">',
                 '<div class="w4os w4os-page w4os-profile">', '<section class="block block-profile">')
             // As the helpers' own pages in a viewer: the block is the page there, under its own title (the guide's panel has its
             // title in it), no other one around it
@@ -74,10 +75,35 @@ describe('themes', function () {
 
     test('in a viewer, the compact style of the plugin comes before the styles of the blocks, which keep their own look there', function () {
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os-viewer.html.twig');
+        $php = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
-        // Grav prints the higher priority first: the helpers' page style (20), the plugin's (15), then the blocks' (10, the default)
-        expect($template)->toContain("addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20})")
-            ->toContain("addCss('plugin://w4os/css/viewer.css', {priority: 15})");
+        // Grav prints the higher priority first: the helpers' page styles (21, 20), then the plugin's and the blocks' (10, the default,
+        // the plugin's first: added before the files of the blocks)
+        expect($template)->toContain("addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 21})", "addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.' ~ w4os_layer() ~ '.css', {priority: 20})")
+            ->and(strpos($php, "addCss('plugin://w4os/css/w4os.'.Site::layer("))->toBeLessThan((int) strpos($php, "\$this->blockFiles(\$block);"));
+    });
+});
+
+describe('the styles of the plugin', function () {
+    test('are the common ones, then the ones of the client alone: a viewer never has a style of the web, a browser never one of the viewer', function () {
+        $links = fn (string $html) => preg_match_all('/<link href="([^"]+)">/', $html, $m) ? $m[1] : [];
+        foreach (['w4os-viewer.html.twig', 'w4os-welcome.html.twig'] as $template) {
+            $page = ['page' => ['title' => 'Guide', 'header' => ['w4os' => 'guide', 'w4os_block' => 'destination_guide'], 'content' => ''], 'assets' => new FakeAssets()];
+            expect(preg_grep('/\.web\.css$/', $links(themeless_twig(true)->render($template, $page))))->toBe([], $template)
+                ->and(preg_grep('/\.viewer\.css$/', $links(themeless_twig(false)->render($template, ['assets' => new FakeAssets()] + $page))))->toBe([], $template);
+        }
+        expect(W4OS\Grav\Site::layer('viewer'))->toBe('viewer')
+            ->and(W4OS\Grav\Site::layer('browser'))->toBe('web')
+            ->and(is_file(dirname(__DIR__).'/css/w4os.web.css') && is_file(dirname(__DIR__).'/css/w4os.viewer.css'))->toBeTrue()
+            ->and(is_file(dirname(__DIR__).'/css/viewer.css'))->toBeFalse();
+    });
+
+    test('never undo each other: the layer is the client, no rule of the common or of the web asks it again', function () {
+        foreach (['w4os.css', 'w4os.web.css', 'w4os.viewer.css'] as $file) {
+            $css = (string) file_get_contents(dirname(__DIR__)."/css/$file");
+            expect($css)->not->toMatch('/\.client-(viewer|browser)\b/', $file);
+            $file === 'w4os.viewer.css' || expect($css)->not->toMatch('/body\.(w4os-)?viewer\b/', $file);
+        }
     });
 });
 
@@ -296,7 +322,7 @@ describe('the home page of a grid', function () {
 
 describe('the menus of the visitor', function () {
     test('open below their name on hover and on focus (the keyboard), shown as they are in the menu of a phone (.w4os-menus-open)', function () {
-        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.css');
+        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.web.css');
 
         expect($css)->toContain('.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible;')
             ->and($css)->toMatch('/\.w4os-menus-open \.w4os-user-list \{ position: static; visibility: visible;/')
@@ -317,11 +343,12 @@ describe('a page of an earlier version', function () {
 
 describe('the styles of the plugin in the site', function () {
     test('lay out only: no colours of a theme (its variables) nor of their own, the theme\'s buttons and links as they are', function () {
-        $css = (string) file_get_contents(dirname(__DIR__).'/css/w4os.css');
-
-        expect($css)->not->toMatch('/--pico-|--q2-/')
-            ->and($css)->not->toMatch('/#[0-9a-f]{3,8}\b|rgba?\(/i')
-            ->and($css)->not->toMatch('/button[^{]*\{[^}]*(background|color|border)\s*:/');
+        foreach (['w4os.css', 'w4os.web.css', 'w4os.viewer.css'] as $file) {
+            $css = (string) file_get_contents(dirname(__DIR__)."/css/$file");
+            expect($css)->not->toMatch('/--pico-|--q2-/', $file)
+                ->and($css)->not->toMatch('/#[0-9a-f]{3,8}\b|rgba?\(/i', $file)
+                ->and($css)->not->toMatch('/button[^{]*\{[^}]*(background|color|border)\s*:/', $file);
+        }
         // A link is a link, never around a button (the Form plugin's button with an address does it: none of the plugin's has one)
         foreach (array_map(fn (string $name) => dirname(__DIR__)."/templates/w4os/$name.html.twig", ['page', 'account', 'home', 'post-actions', 'login-links']) as $file) {
             expect((string) file_get_contents($file))->not->toMatch('/<a[^>]*>\s*<button/');

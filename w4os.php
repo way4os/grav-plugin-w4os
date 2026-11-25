@@ -323,6 +323,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_can', fn (string $type, string $what = 'change') => $this->site()->can($type, $what)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_language_names', fn () => $this->site()->languageNames()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_is_viewer', fn () => $this->site()->isViewer()));
+        // The layer of the styles of the client: web (a browser) or viewer (Site::layer())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_layer', fn () => Site::layer($this->site()->client())));
         $twig->addFunction(new \Twig\TwigFunction('w4os_page_args', fn () => $this->pageArgs()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_slogan', fn () => $this->site()->slogan()));
         // The fields of the settings of the site for the active theme, again before the form shows (settingsFields())
@@ -405,7 +407,11 @@ class W4osPlugin extends Plugin
         $page = $this->grav['page'] ?? null;
         $site = Site::siteStyles($page?->template(), $page ? ($page->header()->w4os ?? null) : null);
         if ($site) {
-            $this->config->get('plugins.w4os.built_in_css', true) && $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+            // Its styles: the common ones, then the ones of the client alone (w4os.web.css in a browser, w4os.viewer.css in a viewer)
+            if ($this->config->get('plugins.w4os.built_in_css', true)) {
+                $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
+                $this->grav['assets']->addCss('plugin://w4os/css/w4os.'.Site::layer($this->site()->client()).'.css');
+            }
             $this->backdrop();
             // The teleport links' own style and script (TeleportLink::ASSETS, from the views), on the pages of the site: a link in a
             // text kept in a cache needs them too
@@ -1440,7 +1446,7 @@ class W4osPlugin extends Plugin
             return;
         }
         $assets = $this->grav['assets'];
-        $files = $view::blockFiles($name);
+        $files = $view::blockFiles($name, $this->site()->client());
         foreach ($files['css'] as $file) {
             $assets->addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file);
         }

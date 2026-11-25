@@ -1,0 +1,37 @@
+/* The pages of the w4os plugin and the blocks of the helpers in a browser, over w4os.css: the boxes and the frames, the menus of the
+   visitor in the top bar of a theme */
+
+/* The Connect block: the step to do now framed in the theme's colour (--w4os-accent), else the colour of the text */
+.w4os-start-step { border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-start-step.is-next { border: 2px solid var(--w4os-accent, currentColor); }
+
+/* A callout (the visit of the grid from another one): set apart by a frame, a thicker line at its start, a tint of the text's colour */
+.w4os-callout { padding: 1rem 1.25rem; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-inline-start: 4px solid var(--w4os-accent, color-mix(in srgb, currentColor 45%, transparent)); border-radius: .5rem; background: color-mix(in srgb, currentColor 4%, var(--w4os-surface, Canvas)); }
+
+/* What the grid is in boxes, as the steps of the Connect block: its info and its status (the message of the day a text) */
+.w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
+/* A box on a solid surface, the one a theme gives (--w4os-surface, the color of its cards), Canvas without one, light or dark as the
+   page, over a picture behind the page too: what the grid is, the steps of the Connect block, the box of the search; the tables in
+   them on the box itself, never on cells of their own */
+.w4os-home .block-grid-info, .w4os-home .block-grid-status, .w4os-start-step, .block-search .search-box { background: var(--w4os-surface, Canvas); }
+.w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
+
+/* The guide's own title (an h1 the viewers' panel needs) at the size of a section on the home page, in its colours whatever the
+   theme says of the color of titles */
+.w4os-home .block-guide h1 { font-size: 1.5rem; }
+#guide :is(h1, h2, h3, .block-title) { color: inherit; }
+
+/* The menus of the visitor in the top bar of a theme (w4os/user-menu.html.twig, w4os/admin-menu.html.twig): the name, its list
+   below it on hover or focus, one entry under the other whatever a theme does with the lists of its nav (Quark2: nav ul, a row),
+   inside the window; inside .w4os-menus-open (the menu of a phone), the lists shown as they are */
+.w4os-user-menu { position: relative; display: inline-block; }
+.w4os-user-current { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .2rem; white-space: nowrap; color: inherit; text-decoration: none; }
+.w4os-user-list { display: block; position: absolute; right: 0; left: auto; top: 100%; z-index: 20; min-width: 13rem; max-width: calc(100vw - 2rem); max-height: calc(100vh - 6rem); overflow-y: auto; margin: 0; padding: .4rem 0; list-style: none; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: Canvas; color: CanvasText; box-shadow: 0 .6rem 1.6rem color-mix(in srgb, CanvasText 18%, transparent); visibility: hidden; opacity: 0; transition: opacity .15s; }
+.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible; opacity: 1; }
+.w4os-user-list li { display: block; margin: 0; padding: 0; }
+.w4os-user-list a { display: block; margin: 0; padding: .45rem 1rem; line-height: 1.4; color: inherit; text-decoration: none; white-space: nowrap; }
+.w4os-user-list a:hover, .w4os-user-list a:focus { background: color-mix(in srgb, currentColor 8%, transparent); }
+.w4os-menus-open .w4os-user-menu { display: block; }
+.w4os-menus-open .w4os-user-list { position: static; visibility: visible; opacity: 1; min-width: 0; max-height: none; overflow: visible; margin: .3rem 0 1rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
+.w4os-menus-open .w4os-user-list a { padding: .3rem 0; }

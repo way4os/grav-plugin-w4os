@@ -960,6 +960,15 @@ final class Site
         return $viewer && ($set ?? '') === '' && ($template ?? '') !== '' && $template !== 'w4os-admin' && $format === 'html';
     }
 
+    /**
+     * The layer of the styles of a client (client()): `web` for a browser, `viewer` for a viewer. A page has the common styles, then
+     * the ones of its client alone, never both (css/w4os.<layer>.css, and the helpers' View::blockFiles(), View::pageStyles()).
+     */
+    public static function layer(string $client): string
+    {
+        return $client === 'viewer' ? 'viewer' : 'web';
+    }
+
     /** Whether a viewer asks the page (its user agent, as the engine tells it): the page then shows its content alone. */
     public function isViewer(): bool
     {

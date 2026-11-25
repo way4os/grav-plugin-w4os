@@ -1,4 +1,6 @@
-/* The pages of the w4os plugin and the blocks of the helpers. Light on purpose: the theme does the rest. */
+/* The pages of the w4os plugin and the blocks of the helpers, what they are made of in a browser and in a viewer alike. Light on
+   purpose: the theme does the rest. The choices of each client are their own: w4os.web.css in a browser, w4os.viewer.css in a viewer
+   (never both) */
 .w4os-form { max-width: 44rem; container-type: inline-size; }
 /* A field of a form of the plugin with its label beside it, where the form is wide enough: the label (and its help) in a margin on
    the left, the field on the right; one under the other otherwise. Only the layout: the theme's markup and looks as they are */
@@ -52,10 +54,9 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
 .w4os-start-content > :first-child, .w4os-start-footer > :first-child { margin-top: 0; }
 .w4os-start-content > :last-child, .w4os-start-footer > :last-child { margin-bottom: 0; }
 .w4os-start-steps { list-style: none; counter-reset: w4os-step; padding: 0; margin: 0; display: grid; gap: .75rem; }
-.w4os-start-step { counter-increment: w4os-step; position: relative; margin: 0; padding: .75rem 1rem .75rem 3.25rem; min-height: 3.2rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-start-step { counter-increment: w4os-step; position: relative; margin: 0; padding: .75rem 1rem .75rem 3.25rem; min-height: 3.2rem; }
 .w4os-start-step::before { content: counter(w4os-step); position: absolute; left: 1rem; top: .8rem; width: 1.6rem; height: 1.6rem; display: grid; place-items: center; border-radius: 50%; border: 2px solid color-mix(in srgb, currentColor 45%, transparent); font-weight: bold; font-size: .9rem; }
 .w4os-start-step p { margin: .5rem 0 0; }
-.w4os-start-step.is-next { border: 2px solid var(--w4os-accent, currentColor); }
 .w4os-start-step.is-next::before { background: var(--w4os-accent, currentColor); border-color: var(--w4os-accent, currentColor); color: Canvas; }
 .w4os-start-step.is-done::before { content: "\2713"; border-color: var(--w4os-accent, currentColor); color: var(--w4os-accent, currentColor); }
 .w4os-start-step:is(.is-done, .is-todo) > *, .w4os-start-step:is(.is-done, .is-todo)::before { opacity: .7; }
@@ -71,8 +72,8 @@ ul.w4os-models .w4os-model { display: block; width: 100%; cursor: pointer; posit
     .w4os-start-step::before { top: 50%; transform: translateY(-50%); }
 }
 
-/* A callout (the visit of the grid from another one): set apart by a frame, a thicker line at its start, a tint of the text's colour */
-.w4os-callout { margin: 1.5rem 0; padding: 1rem 1.25rem; border: 1px solid color-mix(in srgb, currentColor 20%, transparent); border-inline-start: 4px solid var(--w4os-accent, color-mix(in srgb, currentColor 45%, transparent)); border-radius: .5rem; background: color-mix(in srgb, currentColor 4%, var(--w4os-surface, Canvas)); }
+/* A callout (the visit of the grid from another one): its frame on the web (w4os.web.css) */
+.w4os-callout { margin: 1.5rem 0; }
 .w4os-callout-title { margin: 0 0 .5rem; }
 .w4os-callout-title::before { display: none; }
 .w4os-callout p { margin: .5rem 0 0; }
@@ -87,14 +88,6 @@ li:empty { display: none; }
 .w4os-home-layout { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
 .w4os-home-grid, .w4os-home-news { overflow-wrap: anywhere; }
 .w4os-home-grid > * + *, .w4os-home-news > * + * { margin-top: 2rem; }
-/* What the grid is in boxes, as the steps of the Connect block: its info and its status (the message of the day a text) */
-.w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
-.w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
-/* A box on a solid surface, the one a theme gives (--w4os-surface, the color of its cards), Canvas without one, light or dark as the
-   page, over a picture behind the page too: what the grid is, the steps of the Connect block, the box of the search; the tables in
-   them on the box itself, never on cells of their own */
-.w4os-home .block-grid-info, .w4os-home .block-grid-status, .w4os-start-step, .block-search.client-browser .search-box { background: var(--w4os-surface, Canvas); }
-.w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
 /* Two columns: the news right under what the grid is, not halfway down the text */
 @container (min-width: 46rem) {
     .w4os-home-layout { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: auto 1fr; }
@@ -115,19 +108,6 @@ li:empty { display: none; }
 .w4os-latest-image img { width: 100%; height: auto; border-radius: .4rem; }
 .w4os-latest .w4os-latest-date { margin-top: .35rem; font-size: .8rem; opacity: .7; }
 .w4os-latest-all { margin: 0; padding-top: 1rem; border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
-/* The menus of the visitor in the top bar of a theme (w4os/user-menu.html.twig, w4os/admin-menu.html.twig): the name, its list
-   below it on hover or focus, one entry under the other whatever a theme does with the lists of its nav (Quark2: nav ul, a row),
-   inside the window; inside .w4os-menus-open (the menu of a phone), the lists shown as they are */
-.w4os-user-menu { position: relative; display: inline-block; }
-.w4os-user-current { display: inline-flex; align-items: center; gap: .4rem; padding: .4rem .2rem; white-space: nowrap; color: inherit; text-decoration: none; }
-.w4os-user-list { display: block; position: absolute; right: 0; left: auto; top: 100%; z-index: 20; min-width: 13rem; max-width: calc(100vw - 2rem); max-height: calc(100vh - 6rem); overflow-y: auto; margin: 0; padding: .4rem 0; list-style: none; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: Canvas; color: CanvasText; box-shadow: 0 .6rem 1.6rem color-mix(in srgb, CanvasText 18%, transparent); visibility: hidden; opacity: 0; transition: opacity .15s; }
-.w4os-user-menu:hover .w4os-user-list, .w4os-user-menu:focus-within .w4os-user-list { visibility: visible; opacity: 1; }
-.w4os-user-list li { display: block; margin: 0; padding: 0; }
-.w4os-user-list a { display: block; margin: 0; padding: .45rem 1rem; line-height: 1.4; color: inherit; text-decoration: none; white-space: nowrap; }
-.w4os-user-list a:hover, .w4os-user-list a:focus { background: color-mix(in srgb, currentColor 8%, transparent); }
-.w4os-menus-open .w4os-user-menu { display: block; }
-.w4os-menus-open .w4os-user-list { position: static; visibility: visible; opacity: 1; min-width: 0; max-height: none; overflow: visible; margin: .3rem 0 1rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
-.w4os-menus-open .w4os-user-list a { padding: .3rem 0; }
 /* The profile of an avatar (a block of the helpers): its picture beside its name */
 .block-profile .block-title { display: flex; align-items: center; gap: 1rem; }
 /* The rest of a profile (its banner, its pictures, its stream): the styles of its block, css/profile.css of the helpers */
@@ -144,16 +124,10 @@ li:empty { display: none; }
 .w4os-identity-name { margin: 0 0 .25rem; font-weight: 600; }
 .w4os-identity-details dl { display: grid; grid-template-columns: auto 1fr; gap: .1rem 1rem; margin: 0; }
 .w4os-identity-details dd { margin: 0; }
-/* The blocks of the helpers in the pages of the site: their hidden labels, the search on one row, its topics together, the guide's
-   own title (an h1 the viewers' panel needs) at the size of a section on the home page */
+/* The blocks of the helpers in the pages of the site: their hidden labels, the search on one row, its topics together */
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .block-search .search-form button { flex: none; white-space: nowrap; padding-inline: 1.25rem; }
 .search-topics { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: .25rem 1rem; margin: .5rem 0 1rem; }
-.w4os-home .block-guide h1 { font-size: 1.5rem; }
-/* The titles of the guide in its own colors (its dark panel), whatever the theme says of the color of titles */
-#guide :is(h1, h2, h3, .block-title) { color: inherit; }
-/* The guide in a viewer's panel: it fills it, without the spacing of the site's pages */
-body.viewer:has(.w4os-guide) :is(#page-wrapper, #body-wrapper, #body-wrapper > .container, .w4os-page) { margin: 0; padding: 0; max-width: none; }
 /* The text areas of the forms grow with their text (a script does it where the browser cannot) */
 .w4os-autogrow { field-sizing: content; min-height: 5rem; max-height: 30rem; }
 

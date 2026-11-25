@@ -1,0 +1,17 @@
+/* The pages of the w4os plugin and the blocks of the helpers in a viewer, over w4os.css. A page of the plugin in a viewer's panel
+   (w4os-viewer.html.twig), over the style of the helpers' own pages: small titles, no space above the content, the panel's whole
+   width */
+body.w4os-viewer .layout { padding: .5rem .75rem; }
+body.w4os-viewer .w4os-page > :first-child, body.w4os-viewer .block:first-child { margin-top: 0; }
+body.w4os-viewer h1, body.w4os-viewer .block-title { font-size: 1.25rem; line-height: 1.3; margin: 0 0 .5rem; }
+body.w4os-viewer h2 { font-size: 1.05rem; margin: 1rem 0 .5rem; }
+body.w4os-viewer .block { padding: .75rem 1rem; }
+/* The banner of a profile, smaller in a small panel */
+body.w4os-viewer .profile-banner .profile-photo { max-width: 6rem; max-height: 5rem; }
+body.w4os-viewer .profile-banner { gap: .75rem; margin-bottom: .5rem; }
+/* The splash page of the grid (its home blocks, over the backdrop): what the grid is in boxes on a solid surface, the one a theme
+   gives (--w4os-surface), Canvas without one */
+.w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+.w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
+.w4os-home .block-grid-info, .w4os-home .block-grid-status { background: var(--w4os-surface, Canvas); }
+.w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }

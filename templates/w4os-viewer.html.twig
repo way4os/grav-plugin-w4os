@@ -9,9 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ page.title }}</title>
-    {# The style of the helpers' own pages (the same in a viewer), the plugin's, compact, then the blocks', their own look there #}
-    {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20}) %}
-    {% do assets.addCss('plugin://w4os/css/viewer.css', {priority: 15}) %}
+    {# The style of the helpers' own pages, the common one then the one of the client (page.<layer>.css), before the plugin's and the
+       blocks' (w4os.css and its layer, added with the files of the blocks) #}
+    {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 21}) %}
+    {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.' ~ w4os_layer() ~ '.css', {priority: 20}) %}
     {{ assets.css()|raw }}
     {{ assets.js()|raw }}
 </head>
