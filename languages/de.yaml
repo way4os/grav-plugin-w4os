@@ -1006,7 +1006,7 @@ w4os:
   notice_database_unsaid: 'Die Konfiguration des Grids sagt nicht, wo diese Datenbank ist.'
   notice_database_unreachable: 'Die Datenbank ist nicht erreichbar.'
   admin_engine: Engine
-  admin_engine_help: 'Wo die Seite alles über das Grid erfragt'
+  admin_engine_help: 'Wo die Website alles über das Grid erfragt'
   admin_engine_remote: 'Die API des Grids'
   admin_engine_bundled: 'Die im Plugin enthaltene Engine'
   admin_bundled_login: 'Login-Adresse des Grids'
@@ -1018,7 +1018,7 @@ w4os:
   admin_db_password: Datenbankpasswort
   admin_db_password_help: 'Außerhalb der Konfiguration und von git aufbewahrt'
   admin_serve_helpers: 'Die Helpers bereitstellen'
-  admin_serve_helpers_help: 'Was Viewer und Simulatoren abfragen (Willkommen, Suche, Profile, Ökonomie, Offline-Nachrichten) unter den Adressen des Grids, die die dieser Seite sein müssen. Aus: das Grid behält seine eigenen Helpers'
+  admin_serve_helpers_help: 'Was Viewer und Simulatoren abfragen (Willkommen, Suche, Profile, Ökonomie, Offline-Nachrichten) unter den Adressen des Grids, die die dieser Website sein müssen. Aus: das Grid behält seine eigenen Helpers'
   admin_tab_connection: Verbindung
   admin_tab_accounts: Konten
   admin_tab_pages: Seiten
@@ -1026,14 +1026,14 @@ w4os:
   admin_url_help: 'Die Adresse der Helpers des Grids, wo seine Blöcke sind'
   admin_api_url: 'Adresse der Engine-API'
   admin_api_url_help: 'Erforderlich mit einer entfernten Engine: https://grid.example.org/api, oder auf dem Rechner des Grids die Adresse, die opensim web GRID api angibt'
-  admin_api_url_missing: 'Die Engine ist entfernt, hat aber keine API-Adresse: Gib die Adresse der Engine-API an, ohne sie erreicht die Seite das Grid nicht'
+  admin_api_url_missing: 'Die Engine ist entfernt, hat aber keine API-Adresse: Gib die Adresse der Engine-API an, ohne sie erreicht die Website das Grid nicht'
   admin_grid: 'Nick des Grids'
   admin_grid_help: 'Nur wenn die API mehrere Grids bedient'
   admin_api_key: API-Schlüssel
   admin_api_key_help: 'Auf dem Rechner des Grids erstellt: opensim api-key create <Name>. Außerhalb der Konfiguration und von git aufbewahrt.'
   admin_api_key_saved: 'Gespeichert (gib einen neuen ein, um ihn zu ersetzen)'
   admin_send_mail: 'E-Mails senden'
-  admin_send_mail_help: 'Nur auf einer Testseite aus: Die Engine sendet nichts, die Links der Registrierungen und E-Mail-Änderungen erscheinen auf der Seite'
+  admin_send_mail_help: 'Nur auf einer Test-Website aus: Die Engine sendet nichts, die Links der Registrierungen und E-Mail-Änderungen erscheinen auf der Seite'
   admin_cache: 'Cache (Sekunden)'
   admin_hypergrid_examples: 'Grids als Beispiele'
   admin_hypergrid_examples_help: 'Grids, aus denen ein Avatar kommen kann, genannt beim Besuch aus einem anderen Grid ([hypergrid-visit]); leer: keine Namen'
@@ -1053,26 +1053,26 @@ w4os:
   admin_save_accounts: 'Grav-Konten behalten'
   admin_save_accounts_help: 'Für jeden Avatar, der sich anmeldet, ein Grav-Konto (user/accounts) behalten; mit dem API-Plugin immer an'
   admin_menu: 'Eintrag im Menü'
-  admin_menu_help: 'Ein Eintrag im Menü der Seite, mit jedem Theme: einloggen, oder das Konto des angemeldeten Avatars (sein Profil, abmelden)'
-  admin_site_settings: 'Einstellungen der Seite'
+  admin_menu_help: 'Ein Eintrag im Menü der Website, mit jedem Theme: einloggen, oder das Konto des angemeldeten Avatars (sein Profil, abmelden)'
+  admin_site_settings: Website-Einstellungen
   admin_site_appearance: Erscheinungsbild
   admin_site_theme: Theme
-  admin_site_theme_help: 'Das Theme der Seite, unter den installierten'
-  admin_site_saved: 'Die Einstellungen der Seite sind gespeichert.'
+  admin_site_theme_help: 'Das Theme der Website, unter den installierten'
+  admin_site_saved: 'Die Website-Einstellungen sind gespeichert.'
   admin_site_logo: Logo
-  admin_site_logo_help: 'Das Logo der Seite, für jedes Theme (ohne es behält jedes sein eigenes); ein PNG funktioniert mit allen'
+  admin_site_logo_help: 'Das Logo der Website, für jedes Theme (ohne es behält jedes sein eigenes); ein PNG funktioniert mit allen'
   admin_site_favicon: Favicon
-  admin_site_favicon_help: 'Das Symbol der Seite in den Tabs der Browser, für jedes Theme (ohne es behält jedes sein eigenes)'
+  admin_site_favicon_help: 'Das Symbol der Website in den Tabs der Browser, für jedes Theme (ohne es behält jedes sein eigenes)'
   admin_site_backdrop: Hintergrundbild
   admin_site_backdrop_help: 'Eines zufällig auf jeder Seite, aus der Reihe des hellen oder dunklen Modus'
   admin_site_backdrop_light: 'Hintergrundbilder, heller Modus'
   admin_site_backdrop_light_help: 'Empfohlen: jpg 1920x1080, leer lassen für die des Themes.'
   admin_site_backdrop_dark: 'Hintergrundbilder, dunkler Modus'
   admin_site_backdrop_dark_help: 'Empfohlen: jpg 1920x1080, leer lassen für die des Themes.'
-  admin_site_logo_unsupported: 'Das aktuelle Theme zeigt kein Logo der Seite; es bleibt für das nächste Theme, das eines zeigt'
-  admin_site_favicon_unsupported: 'Das aktuelle Theme zeigt kein Favicon der Seite; es bleibt für das nächste Theme, das eines zeigt'
+  admin_site_logo_unsupported: 'Das aktuelle Theme zeigt kein Logo der Website; es bleibt für das nächste Theme, das eines zeigt'
+  admin_site_favicon_unsupported: 'Das aktuelle Theme zeigt kein Favicon der Website; es bleibt für das nächste Theme, das eines zeigt'
   admin_route: Verwaltungsseiten
-  admin_route_help: 'Die Route der Verwaltungsseiten des Grids und der Seite, nie unter der Route der Grav-Verwaltung'
+  admin_route_help: 'Die Route der Verwaltungsseiten des Grids und der Website, nie unter der Route der Grav-Verwaltung'
   admin_route_welcome: 'Willkommensseite des Viewers, vor der Anmeldung'
   admin_route_password: 'Seite für ein vergessenes Passwort, wie der Viewer sie angibt'
   admin_menu_list: Liste
@@ -1082,11 +1082,11 @@ w4os:
   admin_parcels_count: '%d Parzellen'
   admin_shortcode_home_help: 'Die Startseite des Grids um ihren Text: die beliebten Orte und der Reiseführer, daneben die Infos und der Status des Grids und die Nachricht des Tages'
   admin_shortcode_guest_help: 'Sein Text nur für Besucher, nicht für einen angemeldeten Avatar'
-  admin_shortcode_register_help: 'Sein Text nur, wenn die Seite ihre Registrierungsseite hat'
+  admin_shortcode_register_help: 'Sein Text nur, wenn die Website ihre Registrierungsseite hat'
   admin_shortcode_uri_help: 'Die Login-Adresse des Grids'
   admin_shortcode_grid_name_help: 'Der Name des Grids'
-  admin_shortcode_base_url_help: 'Die Adresse der Seite'
-  admin_shortcode_slogan_help: 'Der Slogan der Seite'
+  admin_shortcode_base_url_help: 'Die Adresse der Website'
+  admin_shortcode_slogan_help: 'Der Slogan der Website'
   admin_health_title: Zustand
   admin_health_ok: 'Alles Geprüfte antwortet, wie es soll.'
   admin_health_error: 'Einige Adressen antworten nicht, wie sie sollen: siehe die rot markierten Zeilen.'
@@ -1108,7 +1108,7 @@ w4os:
   admin_health_installed: Installiert
   admin_health_missing: Fehlt
   admin_blocks_unavailable: 'Die Helpers des Grids haben %s nicht geliefert: %s.'
-  admin_blocks_no_url: 'die Einstellung „Adresse der Helpers“ der Seite ist leer'
+  admin_blocks_no_url: 'die Einstellung „Adresse der Helpers“ der Website ist leer'
   admin_blocks_http: 'sie haben mit dem Fehler HTTP %s geantwortet'
   admin_blocks_no_answer: 'sie haben nicht geantwortet (%s)'
   admin_blocks_nothing: 'sie haben nichts geliefert'
@@ -1127,8 +1127,8 @@ w4os:
   admin_health_source_simulator: 'ein Simulator'
   admin_models_saved: 'Die Regel der Avatar-Modelle ist gespeichert.'
   admin_health_problems: 'Die Prüfung des Grids hat %d Probleme gefunden:'
-  admin_service_no_page: 'Die Seite hat keine Seite unter %s: der Dienst braucht eine, die den Block %s zeigt.'
-  admin_service_no_block: 'Die Seite %s zeigt den Block %s nicht, den der Dienst braucht.'
+  admin_service_no_page: 'Die Website hat keine Seite unter %s: der Dienst braucht eine, die den Block %s zeigt.'
+  admin_service_no_block: 'Die Seite %s der Website zeigt den Block %s nicht, den der Dienst braucht.'
   admin_task_run: 'Jetzt ausführen'
   admin_task_last: 'Zuletzt ausgeführt %s'
   admin_task_never: 'Nie ausgeführt'
@@ -1145,4 +1145,4 @@ w4os:
   admin_shortcode_tp_link_help: 'Ein Teleport-Link, der sich anpasst, wo man ihn sieht: im Browser oder im Viewer sein eigener Link, dazu ein Menü der anderen und der Adresse zum Kopieren'
   admin_shortcode_option_destination: 'Der Ort: Host:Port:Region/x/y/z, hop://... oder eine Region des Grids'
   admin_shortcode_option_label: 'Sein Text (standardmäßig der Name des Ortes)'
-  admin_shortcode_site_title_help: 'Der Titel der Seite, sonst der Name des Grids'
+  admin_shortcode_site_title_help: 'Der Titel der Website, sonst der Name des Grids'
