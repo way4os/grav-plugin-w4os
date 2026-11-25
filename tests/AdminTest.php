@@ -96,7 +96,7 @@ describe('the menu of the admin', function () {
             ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
     });
 
-    test('heads the pages of a section that is no page (Services, Tools) with its name, the pages listed flat under it', function () {
+    test('makes a section that is no page (Services, Tools, Site) an entry of its own, leading to its first page, its pages under it', function () {
         $items = [
             ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
             ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'active' => false, 'parent' => 'services'],
@@ -104,13 +104,12 @@ describe('the menu of the admin', function () {
             ['type' => 'health', 'label' => 'Health', 'url' => '/w4os/health', 'active' => false, 'parent' => 'tools'],
             ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'active' => false],
         ];
-        $menu = Site::menuTree($items, 'List', ['services' => ['label' => 'Services'], 'tools' => ['label' => 'Tools']]);
+        $menu = Site::menuTree($items, 'List', ['services' => ['label' => 'Services', 'icon' => 'ti ti-plug-connected'], 'tools' => ['label' => 'Tools']]);
 
-        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'settings_search', 'settings_guide', 'tools', 'health', 'settings'])
-            ->and($menu[1])->toBe(['type' => 'services', 'label' => 'Services', 'heading' => true])
-            ->and($menu[3]['active'])->toBeTrue()
-            ->and(array_column($menu, 'gap', 'type'))->toBe(['settings' => true])
-            ->and(array_column($menu, 'children'))->toBe([])
+        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'tools', 'settings'])
+            ->and($menu[1])->toMatchArray(['label' => 'Services', 'url' => '/w4os/search', 'group' => true, 'active' => true, 'icon' => 'ti ti-plug-connected'])
+            ->and(array_column($menu[1]['children'], 'type'))->toBe(['settings_search', 'settings_guide'])
+            ->and($menu[2])->toMatchArray(['url' => '/w4os/health', 'active' => false])
             ->and(array_column(Site::menuTree(array_slice($items, 1, 2)), 'type'))->toBe(['settings_search', 'settings_guide']);
     });
 
@@ -133,21 +132,10 @@ describe('the menu of the admin', function () {
             public function js(string $group = ''): string { return ''; }
         }, 'grav' => ['user' => []]]);
 
-        // The parent opens its pages (a flyout in the folded rail), shown under it on the page of one of them
-        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" data-bs-toggle="dropdown" data-bs-auto-close="outside" role="button" aria-expanded="true">~')
+        // The parent leads to its first page at once (never a click that only opens it), its pages shown under it on the page of one of them
+        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;manage" aria-expanded="true">~')
+            ->and($html)->not->toContain('data-bs-toggle="dropdown"')
             ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
-    });
-
-    test('shows a section as a heading above its pages, always shown, a line in the folded sidebar, the next page set apart', function () {
-        $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], [
-            ['type' => 'services', 'label' => 'Services', 'heading' => true],
-            ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'icon' => 'ti ti-search', 'active' => false],
-            ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'icon' => 'ti ti-settings', 'active' => false, 'gap' => true],
-        ]);
-
-        expect($html)->toMatch('~<li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">Services</span></li>\s*<li class="nav-item">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;search">~')
-            ->and($html)->toMatch('~<li class="nav-item w4os-nav-gap">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;settings">~')
-            ->and((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toMatch('~\[data-bs-sidebar=folded-hover\][^{]*\) :is\(\.w4os-nav-heading, \.w4os-nav-gap\) \{[^}]*border-top-color~');
     });
 
     test('has the site as a section: its settings, then its pages in Grav\'s admin, marked as leaving for it', function () {
@@ -157,8 +145,9 @@ describe('the menu of the admin', function () {
         ], 'List', ['site' => ['label' => 'Site']]);
         $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], $menu);
 
-        expect(array_column($menu, 'type'))->toBe(['site', 'settings', 'grav_pages'])
-            ->and($menu[0]['heading'])->toBeTrue()
+        expect(array_column($menu, 'type'))->toBe(['site'])
+            ->and($menu[0]['url'])->toBe('/w4os/settings')
+            ->and(array_column($menu[0]['children'], 'type'))->toBe(['settings', 'grav_pages'])
             ->and($html)->toMatch('~href="&#x2F;admin&#x2F;pages" title="In&#x20;Grav[^"]*admin">~')
             ->and($html)->toMatch('~<span class="w4os-nav-external"><i class="ti ti-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">In Grav[^<]*s admin</span></span>~');
     });
@@ -290,8 +279,6 @@ describe('the sidebar of the admin', function () {
             ->and($head)->not->toContain('prefers-color-scheme')
             // The icon of the site in the folded rail, its logo or its name unfolded, the pin button beside them
             ->and($html)->toContain('<img class="navbar-brand-image w4os-admin-icon" src="&#x2F;favicon.png" alt=""', '<span class="w4os-admin-brand-full">', 'data-bs-toggle="sidebar-folded" aria-pressed="false" aria-label="&#x5B;w4os.admin_sidebar_pin&#x5D;"')
-            // A page with pages under it opens them as a flyout in the rail, closed by a click elsewhere
-            ->and($html)->toContain('data-bs-toggle="dropdown" data-bs-auto-close="outside"')
             // No tooltip on the icons: a hover unfolds their titles
             ->and($html)->not->toContain('data-bs-toggle="tooltip"');
     });

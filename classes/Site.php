@@ -1715,11 +1715,11 @@ final class Site
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings', 'parent' => 'site'],
     ];
 
-    /** The sections of the admin menu that are no page: a heading above the pages whose `parent` they are. */
+    /** The sections of the admin menu that are no page: an entry of the menu leading to the first of the pages whose `parent` they are. */
     public const ADMIN_GROUPS = [
-        'services' => ['label' => 'w4os.group_services'],
-        'tools' => ['label' => 'w4os.admin_menu_tools'],
-        'site' => ['label' => 'w4os.admin_menu_site'],
+        'services' => ['label' => 'w4os.group_services', 'icon' => 'ti ti-plug-connected'],
+        'tools' => ['label' => 'w4os.admin_menu_tools', 'icon' => 'ti ti-tool'],
+        'site' => ['label' => 'w4os.admin_menu_site', 'icon' => 'ti ti-world-www'],
     ];
 
     /**
@@ -1819,40 +1819,38 @@ final class Site
 
     /**
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
-     * first, named as a list ($list, not the name of the parent), then theirs; the parent open (active) when one of them is the page
-     * shown. A parent that is a section of $groups (no page: its label) is a heading (`heading`) before its first entry, its entries
-     * left in the menu after it, the next entry out of it set apart (`gap`). An entry whose parent is in neither stays where it is.
+     * first, named as a list ($list, not the name of the parent), then theirs. A parent that is a section of $groups (no page: its
+     * label, its icon) is an entry of its own where its first page was, leading to that page (`url`), its pages under it; marked
+     * `group`. A parent is open (active) when one of its pages is the page shown. An entry whose parent is in neither stays where it is.
      *
      * @param list<array<string,mixed>> $items
-     * @param array<string, array{label: string}> $groups
+     * @param array<string, array{label: string, icon?: string}> $groups
      * @return list<array<string,mixed>>
      */
     public static function menuTree(array $items, ?string $list = null, array $groups = []): array
     {
         $types = array_column($items, 'type');
-        $nested = fn (array $item) => isset($item['parent']) && in_array($item['parent'], $types, true);
+        $parent = fn (array $item) => isset($item['parent']) && (in_array($item['parent'], $types, true) || isset($groups[$item['parent']])) ? $item['parent'] : null;
         $children = [];
         foreach ($items as $item) {
-            $nested($item) && $children[$item['parent']][] = $item;
+            ($of = $parent($item)) !== null && $children[$of][] = $item;
         }
+        $active = fn (array $entries) => in_array(true, array_column($entries, 'active'), true);
         $menu = [];
-        $headings = [];
-        $section = null;
         foreach ($items as $item) {
-            if ($nested($item)) {
+            $of = $parent($item);
+            // A section: its entry where its first page was
+            if ($of !== null && ! in_array($of, $types, true)) {
+                $children[$of][0] === $item && $menu[] = ['type' => $of, 'label' => $groups[$of]['label'], 'url' => $item['url'] ?? '', 'group' => true,
+                    'active' => $active($children[$of]), 'children' => $children[$of]] + (isset($groups[$of]['icon']) ? ['icon' => $groups[$of]['icon']] : []);
                 continue;
             }
-            $group = isset($groups[$item['parent'] ?? null]) ? $item['parent'] : null;
-            if ($group !== null && ! isset($headings[$group])) {
-                $headings[$group] = true;
-                $menu[] = ['type' => $group, 'label' => $groups[$group]['label'], 'heading' => true];
+            if ($of !== null) {
+                continue;
             }
-            // The first entry out of a section, set apart from it
-            $group === null && $section !== null && $item['gap'] = true;
-            $section = $group;
             if (isset($children[$item['type'] ?? null])) {
                 $item['children'] = [['label' => $list ?? $item['label']] + $item, ...$children[$item['type']]];
-                $item['active'] = in_array(true, array_column($item['children'], 'active'), true);
+                $item['active'] = $active($item['children']);
             }
             $menu[] = $item;
         }
