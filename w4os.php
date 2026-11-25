@@ -399,7 +399,11 @@ class W4osPlugin extends Plugin
             (array) ($page['groups'] ?? []),
             $this->site()->isManager() && is_array($page['form'] ?? null) ? \W4OS\Views\Rows::actions($page['form'], (array) $page['item'], $this->site()->avatar()['uuid'] ?? null, $this->site()->level()) : [],
         )));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_column($this->avatarItems($uuid, 'groups'), 'name')));
+        // Its groups: the name, and the grid of one of another grid (never its address)
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_groups', fn (string $uuid) => array_map(fn (array $group) => [
+            'name' => (string) ($group['name'] ?? ''),
+            'grid' => ($group['local'] ?? true) ? '' : trim((string) ($group['grid'] ?? '')),
+        ], $this->avatarItems($uuid, 'groups'))));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_items', fn (string $uuid, string $kind) => $this->itemsHtml($uuid, $kind), ['is_safe' => ['html']]));
         // The stream of the profile shown, for its own avatar signed in on the site (not in a viewer): the form that writes a post,
         // the actions of its posts; and the profile of the helpers with them in its stream

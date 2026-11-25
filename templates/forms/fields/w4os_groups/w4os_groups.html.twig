@@ -2,4 +2,5 @@
    under its about #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
 {% set groups = avatar ? w4os_avatar_groups(avatar.uuid) : [] %}
-{% if groups %}<dl class="profile-details profile-groups"><dt>{{ 'w4os.profile_groups'|t }}</dt><dd>{{ groups|join(', ') }}</dd></dl>{% endif %}
+{# One under the other, a few rows then a scroll; one of another grid with the name of that grid, in small #}
+{% if groups %}<dl class="profile-details profile-groups"><dt>{{ 'w4os.profile_groups'|t }}</dt><dd><ul class="profile-group-list">{% for group in groups %}<li>{{ group.name }}{% if group.grid %} <small class="profile-group-grid">{{ group.grid }}</small>{% endif %}</li>{% endfor %}</ul></dd></dl>{% endif %}

@@ -115,6 +115,10 @@ li:empty { display: none; }
    too */
 .profile-details { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25rem 1rem; margin: 0 0 1rem; }
 .profile-details dt, .profile-details dd { margin: 0; }
+/* Its groups one under the other, eight rows at most then a scroll; the grid of a group of another grid muted (as the helpers' profile) */
+.profile-group-list { max-height: 12em; overflow-y: auto; margin: 0; padding: 0; list-style: none; line-height: 1.5; }
+.profile-group-list li { margin: 0; padding: 0; }
+.profile-group-grid { opacity: .65; }
 .lead:empty { display: none; }
 .w4os-thumb-large { width: 64px; height: 64px; }
 /* The avatar on top of the 2nd Life tab of a profile form, as in the viewer */
