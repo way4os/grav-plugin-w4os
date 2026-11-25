@@ -1445,6 +1445,55 @@ final class Site
         return ['level' => (int) ($avatar['accessLevel'] ?? $userLevel), 'userLevel' => $userLevel, 'owner' => (bool) ($avatar['owner'] ?? false)];
     }
 
+    /** The pictures of the accounts of the site, the ones of their avatars: a file each, by the account and the picture. */
+    public const AVATAR_FOLDER = 'user/accounts/avatars';
+
+    /** The file of the picture of an account: the account and its picture (a new picture, a new file, the old one left behind). */
+    public static function avatarFile(string $account, string $picture): string
+    {
+        return self::AVATAR_FOLDER.'/'.$account.'-'.substr((string) preg_replace('/[^0-9a-f]/', '', strtolower($picture)), 0, 8).'.jpg';
+    }
+
+    /**
+     * Grav's avatar field of an account with a file (a file field, as its admins read it: getAvatarImage(), the API's avatar_url).
+     *
+     * @return array<string, array{name: string, type: string, size: int, path: string}>
+     */
+    public static function avatarField(string $path, int $size): array
+    {
+        return [$path => ['name' => basename($path), 'type' => 'image/jpeg', 'size' => $size, 'path' => $path]];
+    }
+
+    /**
+     * The picture of an account, the one of its avatar: kept in the files of the accounts (asked of the engine once a picture, as
+     * the pictures of the grid are), its avatar field to it; none without a picture (the initials of its name then), the file of
+     * the one before removed. An engine that does not answer leaves the account as it was.
+     */
+    private function accountPicture(UserInterface $user, string $account, ?string $picture): void
+    {
+        $account = strtolower(preg_replace('/[^A-Za-z0-9._-]/', '', $account) ?? '');
+        $folder = GRAV_ROOT.'/'.self::AVATAR_FOLDER;
+        $file = $account !== '' && self::hasPicture($picture) ? self::avatarFile($account, (string) $picture) : null;
+        try {
+            if ($file !== null && ! is_file(GRAV_ROOT."/$file")) {
+                [$status, $body] = $this->engine()->picture((string) $picture, 'jpg');
+                if ($status !== 200 || $body === '') {
+                    return;
+                }
+                is_dir($folder) || mkdir($folder, 0775, true);
+                file_put_contents(GRAV_ROOT."/$file", $body);
+            }
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning('w4os: the picture of the account '.$account.' not kept: '.$e->getMessage());
+
+            return;
+        }
+        foreach ($account === '' ? [] : (glob("$folder/$account-*.jpg") ?: []) as $old) {
+            $file !== null && $old === GRAV_ROOT."/$file" || unlink($old);
+        }
+        $file === null ? $user->undef('avatar') : $user->set('avatar', self::avatarField($file, (int) filesize(GRAV_ROOT."/$file")));
+    }
+
     /** The rights of Grav's admin and of its API (admin2) an admin of the grid has: the ones of a super user of the site. */
     public const GRAV_ADMIN = ['admin' => ['login', 'super'], 'api' => ['login', 'super']];
 
@@ -1533,6 +1582,8 @@ final class Site
         $access['site']['w4os']['manage'] = $manage;
         // The admins of the grid manage the site too (Grav's admin and its API), as long as their level does
         $user->set('access', self::gravAdmin($access, $manage));
+        // Its picture, the avatar's (Grav's avatar field, the one its admins show), else none: its initials
+        $this->accountPicture($user, (string) ($avatar['slug'] ?? $avatar['uuid']), $avatar['profileImage'] ?? null);
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();
         }
