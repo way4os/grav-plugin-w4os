@@ -173,7 +173,7 @@ describe('the menu of the admin', function () {
         $html = $twig->render('w4os/admin-menu.html.twig');
 
         expect($html)->toContain('<li><a href="/w4os">Dashboard</a></li>')
-            ->and($html)->toMatch('~<li class="w4os-has-sub"><a href="/w4os/settings" aria-haspopup="true"><i class="fa-solid fa-angle-left w4os-sub-mark" aria-hidden="true"></i>Site</a>\s*<ul class="w4os-user-sublist"><li><a href="/w4os/settings">Site settings</a></li><li><a href="/admin/pages">Grav Pages</a></li></ul>~')
+            ->and($html)->toMatch('~<li class="w4os-has-sub"><a href="/w4os/settings" aria-haspopup="true">Site<i class="fa-solid fa-angle-right w4os-sub-mark" aria-hidden="true"></i></a>\s*<ul class="w4os-user-sublist"><li><a href="/w4os/settings">Site settings</a></li><li><a href="/admin/pages">Grav Pages</a></li></ul>~')
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.web.css'))->toContain('.w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }');
     });
 

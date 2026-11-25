@@ -11,7 +11,7 @@
         {% if item.heading ?? false %}
         <li class="w4os-user-heading">{{ item.label }}</li>
         {% elseif item.children ?? false %}
-        <li class="w4os-has-sub"><a href="{{ item.url }}" aria-haspopup="true"><i class="fa-solid fa-angle-left w4os-sub-mark" aria-hidden="true"></i>{{ item.label }}</a>
+        <li class="w4os-has-sub"><a href="{{ item.url }}" aria-haspopup="true">{{ item.label }}<i class="fa-solid fa-angle-right w4os-sub-mark" aria-hidden="true"></i></a>
             <ul class="w4os-user-sublist">{% for child in item.children %}<li><a href="{{ child.url }}">{{ child.label }}</a></li>{% endfor %}</ul>
         </li>
         {% else %}
