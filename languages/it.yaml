@@ -962,6 +962,7 @@ w4os:
   error_owner_unknown: 'Questo avatar non esiste.'
   error_config_not_writable: 'Questo non si può cambiare da qui: i file della griglia appartengono al suo server.'
   error_instance_user_required: 'Questo non si può fare da qui: i simulatori si avviano e si fermano sul loro server.'
+  error_page_set_elsewhere: 'Questa pagina ha un indirizzo dato altrove (la griglia d’origine, un gestore): il sito non lo sostituisce.'
   error_restore_conflict: 'Questo backup contiene ciò che questo server ha già: non è stato sostituito nulla.'
   error_source_not_readable: "Alcuni file della vecchia installazione non possono essere letti dal server: dagli prima l'accesso in lettura."
   error_estate_shared: 'Il proprietario di questa regione è quello della sua proprietà, che ha altre regioni: cambia il proprietario della proprietà.'

@@ -962,6 +962,7 @@ w4os:
   error_owner_unknown: 'Deze avatar bestaat niet.'
   error_config_not_writable: 'Dit kan hier niet worden gewijzigd: de bestanden van het grid horen bij zijn server.'
   error_instance_user_required: 'Dit kan hier niet: de simulators worden op hun server gestart en gestopt.'
+  error_page_set_elsewhere: 'Deze pagina heeft een adres dat elders is gegeven (het oorspronkelijke grid, een beheerder): de site vervangt het niet.'
   error_restore_conflict: 'Deze back-up bevat wat deze server al heeft: er is niets vervangen.'
   error_source_not_readable: 'Sommige bestanden van de oude installatie kan de server niet lezen: geef hem eerst leestoegang.'
   error_estate_shared: "De eigenaar van deze regio is die van haar landgoed, dat andere regio's heeft: wijzig de eigenaar van het landgoed."

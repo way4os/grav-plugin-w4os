@@ -962,6 +962,7 @@ w4os:
   error_owner_unknown: 'Este avatar não existe.'
   error_config_not_writable: 'Isto não pode ser alterado daqui: os arquivos do grid pertencem ao seu servidor.'
   error_instance_user_required: 'Isto não pode ser feito daqui: os simuladores são iniciados e parados no seu servidor.'
+  error_page_set_elsewhere: 'Esta página tem um endereço dado em outro lugar (o grid de origem, um gestor): o site não o substitui.'
   error_restore_conflict: 'Este backup contém o que este servidor já tem: nada foi substituído.'
   error_source_not_readable: 'Alguns arquivos da instalação antiga não podem ser lidos pelo servidor: dê a ele acesso de leitura primeiro.'
   error_estate_shared: 'O dono desta região é o dono da sua propriedade, que tem outras regiões: altere o dono da propriedade.'

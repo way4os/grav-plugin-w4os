@@ -962,6 +962,7 @@ w4os:
   error_owner_unknown: 'Diesen Avatar gibt es nicht.'
   error_config_not_writable: 'Das lässt sich von hier aus nicht ändern: die Dateien des Grids gehören seinem Server.'
   error_instance_user_required: 'Das ist von hier aus nicht möglich: die Simulatoren werden auf ihrem Server gestartet und gestoppt.'
+  error_page_set_elsewhere: 'Diese Seite hat eine anderswo vergebene Adresse (das Herkunftsgrid, ein Verwalter): Die Website ersetzt sie nicht.'
   error_restore_conflict: 'Diese Sicherung enthält, was dieser Server schon hat: nichts wurde ersetzt.'
   error_source_not_readable: 'Einige Dateien der alten Installation kann der Server nicht lesen: gib ihm zuerst Lesezugriff darauf.'
   error_estate_shared: 'Der Eigentümer dieser Region ist der ihres Estates, das weitere Regionen hat: ändere den Eigentümer des Estates.'
