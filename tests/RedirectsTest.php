@@ -71,6 +71,6 @@ describe('the previous addresses of the grid', function () {
         $site = (string) file_get_contents(dirname(__DIR__).'/classes/Site.php');
 
         expect($php)->toContain("Site::redirectsFrom(\$this->site()->previousAddresses(), (string) \$this->grav['uri']->host(), (array) \$config->get('site.redirects', []))")
-            ->and($site)->toContain("\$this->cached('previous addresses'", '->addresses()');
+            ->and($site)->toContain("\$this->cached('grid addresses'", '->addresses()', "\$this->gridAddresses()['previous']");
     });
 });

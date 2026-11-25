@@ -73,7 +73,22 @@ describe('the backdrop of the site', function () {
             ->and(Backdrop::shown('w4os', 'w4os-viewer.html.twig', true))->toBeFalse()
             // But the splash page, the one a viewer shows before the login: in the viewer as in a browser
             ->and(Backdrop::shown('default', 'w4os-welcome.html.twig', true))->toBeTrue()
-            ->and(Backdrop::shown('default', 'w4os-welcome.html.twig', false))->toBeTrue();
+            ->and(Backdrop::shown('default', 'w4os-welcome.html.twig', false))->toBeTrue()
+            // The grid's own splash page, the one its welcome address leads to (a page of the site: /splash), whatever its layout
+            ->and(Backdrop::shown('default', 'w4os-viewer-frame.html.twig', true, true))->toBeTrue()
+            ->and(Backdrop::shown('default', null, true, false))->toBeFalse();
+    });
+
+    test('the splash page of the grid is the page of the site its welcome address leads to, under the root of the site', function () {
+        expect(Backdrop::isSplash('/splash', '', 'https://dev.w4os.org/splash', 'dev.w4os.org'))->toBeTrue()
+            ->and(Backdrop::isSplash('/splash', '', 'https://DEV.w4os.org/splash/', 'dev.w4os.org'))->toBeTrue()
+            ->and(Backdrop::isSplash('/splash', '/opensim', 'https://example.org/opensim/splash', 'example.org'))->toBeTrue()
+            ->and(Backdrop::isSplash('/', '', 'https://dev.w4os.org/', 'dev.w4os.org'))->toBeTrue()
+            ->and(Backdrop::isSplash('/', '', 'https://dev.w4os.org/splash', 'dev.w4os.org'))->toBeFalse()
+            // Another site, another port (a grid), no address
+            ->and(Backdrop::isSplash('/splash', '', 'https://w4os.org/splash', 'dev.w4os.org'))->toBeFalse()
+            ->and(Backdrop::isSplash('/splash', '', 'https://dev.w4os.org:8002/splash', 'dev.w4os.org'))->toBeFalse()
+            ->and(Backdrop::isSplash('/splash', '', '', 'dev.w4os.org'))->toBeFalse();
     });
 
     test('no image, no style', function () {

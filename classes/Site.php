@@ -1270,22 +1270,38 @@ final class Site
     }
 
     /**
-     * The previous addresses of the grid (the engine's /addresses, `previous`: service, old, new, date, source), kept an hour; none
-     * when the engine does not answer, without asking it again before then.
+     * The previous addresses of the grid (the engine's /addresses, `previous`: service, old, new, date, source; gridAddresses()).
      *
      * @return list<array<string,mixed>>
      */
     public function previousAddresses(): array
     {
-        $pairs = $this->cached('previous addresses', function () {
+        return array_values(array_filter((array) ($this->gridAddresses()['previous'] ?? []), 'is_array'));
+    }
+
+    /** The welcome address of the grid, the one of its splash page (the grid info's `welcome`), '' for none (gridAddresses()). */
+    public function welcomeAddress(): string
+    {
+        return (string) ($this->gridAddresses()['addresses']['welcome'] ?? '');
+    }
+
+    /**
+     * The addresses of the grid as the engine tells them (its /addresses: each page, the previous ones), kept an hour; none when
+     * the engine does not answer, without asking it again before then.
+     *
+     * @return array<string,mixed>
+     */
+    public function gridAddresses(): array
+    {
+        $addresses = $this->cached('grid addresses', function () {
             try {
-                return array_values(array_filter((array) ($this->engine()->addresses()['previous'] ?? []), 'is_array'));
+                return $this->engine()->addresses();
             } catch (\Throwable) {
                 return [];
             }
         }, 3600);
 
-        return is_array($pairs) ? $pairs : [];
+        return is_array($addresses) ? $addresses : [];
     }
 
     /**

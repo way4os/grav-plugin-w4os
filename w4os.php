@@ -385,7 +385,9 @@ class W4osPlugin extends Plugin
     private function backdrop(): void
     {
         $page = $this->grav['page'] ?? null;
-        if (! Backdrop::shown($page?->template(), $this->grav['twig']->template ?? null, $this->site()->isViewer())) {
+        $uri = $this->grav['uri'];
+        $splash = Backdrop::isSplash((string) $uri->path(), (string) $uri->rootUrl(false), $this->site()->welcomeAddress(), (string) $uri->host());
+        if (! Backdrop::shown($page?->template(), $this->grav['twig']->template ?? null, $this->site()->isViewer(), $splash)) {
             return;
         }
         try {

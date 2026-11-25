@@ -37,11 +37,32 @@ final class Backdrop
      *
      * @param ?string $template the template of the page; $layout: the one it is rendered with when the plugin sets another
      * @param bool $viewer whether a viewer shows the page (Site::isViewer())
+     * @param bool $splash whether the page is the grid's splash page, the one its welcome address leads to (isSplash())
      */
-    public static function shown(?string $template, ?string $layout, bool $viewer): bool
+    public static function shown(?string $template, ?string $layout, bool $viewer, bool $splash = false): bool
     {
-        return $layout === self::SPLASH_TEMPLATE
+        return $splash || $layout === self::SPLASH_TEMPLATE
             || (! $viewer && $template !== 'w4os-admin' && ! in_array($layout, self::BARE_TEMPLATES, true));
+    }
+
+    /**
+     * Whether a page of the site is the grid's splash page: the one its welcome address leads to (the grid info's `welcome`), on the
+     * host of the site (no other port), at the path of the page under the root of the site.
+     *
+     * @param string $path the path of the page, under the root of the site; $root: the path of the root (a site under a folder)
+     * @param string $welcome the welcome address of the grid, '' for none
+     */
+    public static function isSplash(string $path, string $root, string $welcome, string $host): bool
+    {
+        $url = $welcome === '' ? false : parse_url($welcome);
+        if (! is_array($url) || $host === '' || strtolower((string) ($url['host'] ?? '')) !== strtolower($host) || ! in_array((int) ($url['port'] ?? 0), [0, 80, 443], true)) {
+            return false;
+        }
+        $at = '/'.trim((string) ($url['path'] ?? ''), '/');
+        $root = '/'.trim($root, '/');
+        $root === '/' || ! str_starts_with($at.'/', "$root/") || $at = '/'.trim(substr($at, strlen($root)), '/');
+
+        return $at === '/'.trim($path, '/');
     }
 
     /**
