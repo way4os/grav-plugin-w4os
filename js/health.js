@@ -69,12 +69,17 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
             if (!banner) {
                 return;
             }
-            const failed = document.querySelector('tr[data-check].w4os-health-error');
+            // How many errors and warnings now, as the page says them
+            const errors = document.querySelectorAll('tr[data-check].w4os-health-error').length;
+            const warnings = document.querySelectorAll('tr[data-check]:is(.w4os-health-warning, .w4os-health-slow)').length;
+            const said = (count, kind) => (count === 1 ? banner.dataset[kind + 'One'] : banner.dataset[kind + 'Other']).replace('%d', count);
             const alert = banner.querySelector('.alert');
-            alert?.classList.toggle('alert-danger', !!failed);
-            alert?.classList.toggle('alert-success', !failed);
+            alert?.classList.toggle('alert-danger', errors > 0);
+            alert?.classList.toggle('alert-warning', !errors && warnings > 0);
+            alert?.classList.toggle('alert-success', !errors && !warnings);
             const level = banner.querySelector('.w4os-health-level');
-            level && (level.textContent = failed ? banner.dataset.error : banner.dataset.ok);
+            const parts = [errors && said(errors, 'errors'), warnings && said(warnings, 'warnings')].filter(Boolean);
+            level && (level.textContent = parts.length ? parts.join(', ') : banner.dataset.none);
             const time = last?.querySelector('.w4os-health-when [title]');
             const checked = banner.querySelector('.w4os-health-checked');
             if (time && checked) {

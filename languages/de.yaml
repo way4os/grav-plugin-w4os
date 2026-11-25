@@ -767,6 +767,8 @@ w4os:
   health_differs_grid_info: 'weicht von %s von get_grid_info ab'
   health_web_search: Web-Suche
   health_offline_robust: 'von Robust bereitgestellt (Modul V2)'
+  health_search_is_service: 'das ist die Suche, die die Simulatoren aufrufen (XML-RPC), keine Seite: geben Sie stattdessen die Websuche der Website an'
+  health_search_is_robust: 'das ist die Adresse von Robust, das keine Suchseite hat: geben Sie stattdessen die Websuche der Website an'
   health_offline_unused: 'gesetzt, aber das Modul V2 verwendet es nicht (Robust speichert die Offline-Nachrichten): entfernen Sie %s'
   health_set: gesetzt
   health_missing: fehlt
@@ -1091,10 +1093,13 @@ w4os:
   admin_shortcode_base_url_help: 'Die Adresse der Website'
   admin_shortcode_slogan_help: 'Der Slogan der Website'
   admin_health_title: Zustand
-  admin_health_ok: 'Alles Geprüfte antwortet, wie es soll.'
-  admin_health_error: 'Einige Adressen antworten nicht, wie sie sollen: siehe die rot markierten Zeilen.'
   admin_health_check: 'Erneut prüfen'
   admin_health_checked: 'geprüft %s'
+  admin_health_errors_one: '%d Fehler'
+  admin_health_errors_other: '%d Fehler'
+  admin_health_warnings_one: '%d Warnung'
+  admin_health_warnings_other: '%d Warnungen'
+  admin_health_none: 'Kein Problem'
   admin_health_refresh_failed: 'Die Prüfung konnte nicht erneut laufen (%s): dieser Bericht ist vom %s.'
   admin_health_not_checked: 'Nicht erneut geprüft: %s'
   admin_health_expected: Erwartet
@@ -1129,7 +1134,6 @@ w4os:
   admin_health_source_default: 'Standard, nicht gesetzt'
   admin_health_source_simulator: 'ein Simulator'
   admin_models_saved: 'Die Regel der Avatar-Modelle ist gespeichert.'
-  admin_health_problems: 'Die Prüfung des Grids hat %d Probleme gefunden:'
   admin_service_no_page: 'Die Website hat keine Seite unter %s: der Dienst braucht eine, die den Block %s zeigt.'
   admin_service_no_block: 'Die Seite %s der Website zeigt den Block %s nicht, den der Dienst braucht.'
   admin_task_run: 'Jetzt ausführen'

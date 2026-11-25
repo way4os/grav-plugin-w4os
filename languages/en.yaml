@@ -767,6 +767,8 @@ w4os:
   health_differs_grid_info: 'differs from %s of get_grid_info'
   health_web_search: 'Web search'
   health_offline_robust: 'served by Robust (module V2)'
+  health_search_is_service: 'this is the search the simulators call (XML-RPC), not a page: give the web search page of the site instead'
+  health_search_is_robust: 'this is the address of Robust, which has no search page: give the web search page of the site instead'
   health_offline_unused: 'set, but the module V2 does not use it (Robust keeps the offline messages): remove %s'
   health_set: set
   health_missing: missing
@@ -1091,10 +1093,13 @@ w4os:
   admin_shortcode_base_url_help: 'The address of the site'
   admin_shortcode_slogan_help: 'The slogan of the site'
   admin_health_title: Health
-  admin_health_ok: 'All that is checked answers as it should.'
-  admin_health_error: 'Some addresses do not answer as they should: see the rows marked in red.'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
+  admin_health_errors_one: '%d error'
+  admin_health_errors_other: '%d errors'
+  admin_health_warnings_one: '%d warning'
+  admin_health_warnings_other: '%d warnings'
+  admin_health_none: 'No problem'
   admin_health_refresh_failed: 'The check could not be run again (%s): this report is from %s.'
   admin_health_not_checked: 'Not checked again: %s'
   admin_health_expected: Expected
@@ -1129,7 +1134,6 @@ w4os:
   admin_health_source_default: 'by default, not set'
   admin_health_source_simulator: 'a simulator'
   admin_models_saved: 'The rule of the avatar models is saved.'
-  admin_health_problems: 'The health of the grid found %d problems:'
   admin_service_no_page: 'The site has no page at %s: the service needs one that shows the block %s.'
   admin_service_no_block: 'The page %s of the site does not show the block %s the service needs.'
   admin_task_run: 'Run now'

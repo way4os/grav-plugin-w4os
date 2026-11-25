@@ -370,6 +370,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_admin_css', fn (string $html) => Site::adminCss($html)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health', fn () => $this->health()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_health_problems', fn () => $this->healthProblems()));
+        // "3 errors, 5 warnings", or no problem
+        $twig->addFunction(new \Twig\TwigFunction('w4os_health_counts', fn (int $errors, int $warnings) => Site::healthCounts($errors, $warnings, fn (string $key, int $count) => $this->site()->translate($key, [$count]))));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models_rule', fn () => $this->modelsRule()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_service', fn () => $this->service()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_area', function ($m2) {
@@ -1171,7 +1173,7 @@ class W4osPlugin extends Plugin
      */
     private function healthProblems(): array
     {
-        $none = ['count' => 0, 'labels' => [], 'url' => ''];
+        $none = ['count' => 0, 'warnings' => 0, 'labels' => [], 'url' => ''];
         if (! $this->site()->canOperation('health')) {
             return $none;
         }
@@ -1203,7 +1205,7 @@ class W4osPlugin extends Plugin
             $addresses = null;
         }
 
-        return $report + ['addresses' => Site::addressesByPlace($addresses)];
+        return $report + ['addresses' => Site::addressesByPlace($addresses), 'problems' => Site::healthProblems((array) ($report['health'] ?? []))];
     }
 
     /** The stream of the avatar signed in, for itself (w4os-views PostsView): null when the engine describes none. */

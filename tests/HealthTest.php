@@ -25,13 +25,16 @@ describe('the health page of the admin', function () {
             ]],
             'addresses' => ['addresses' => ['motd' => 'http://example.org/helpers/motd.php'], 'sources' => ['motd' => 'config'], 'servedBy' => ['welcome' => 'helpers']],
             'error' => null,
+            'problems' => ['count' => 1, 'warnings' => 2],
         ]));
+        $twig->addFunction(new TwigFunction('w4os_health_counts', fn (int $errors, int $warnings) => Site::healthCounts($errors, $warnings, fn (string $key, int $count) => "[$key:$count]")));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
         $html = $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health']]);
 
-        expect($html)->toContain('alert alert-danger', 'Robust.HG.ini', '[LoginService]', 'DestinationGuide', '>http:/<wbr>/<wbr>example.<wbr>org/<wbr>guide</a>', 'cURL error 28', 'Operation timed out')
+        // How many errors and warnings, red with an error
+        expect($html)->toContain('alert alert-danger', '[w4os.admin_health_errors_one:1], [w4os.admin_health_warnings_other:2]', 'Robust.HG.ini', '[LoginService]', 'DestinationGuide', '>http:/<wbr>/<wbr>example.<wbr>org/<wbr>guide</a>', 'cURL error 28', 'Operation timed out')
             ->and($html)->toContain('ti ti-circle-x', 'ti ti-circle-check', '446', 'Message', 'Friendly Fowl')
             ->and($html)->toContain('motd', 'config', '[w4os.admin_health_check]');
     });

@@ -81,13 +81,18 @@ describe('the dashboard', function () {
         $twig->addFunction(link_function());
         $twig->addFunction(new TwigFunction('w4os_dashboard', fn () => []));
         $twig->addFunction(new TwigFunction('w4os_health_problems', fn () => $problems + ['url' => '/w4os/health']));
+        $twig->addFunction(new TwigFunction('w4os_health_counts', fn (int $errors, int $warnings) => Site::healthCounts($errors, $warnings, fn (string $key, int $count) => "[$key:$count]")));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => (string) $value));
         $html = $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
 
-        expect($problems)->toMatchArray(['count' => 2, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000'], 'statuses' => ['', '']])
-            ->and(Site::healthProblems(['level' => 'ok', 'groups' => []]))->toMatchArray(['count' => 0])
-            ->and($html)->toContain('alert-danger', '[w4os.admin_health_problems:2]', 'SRV_ProfileServerURI', 'href="&#x2F;w4os&#x2F;health"');
+        expect($problems)->toMatchArray(['count' => 2, 'warnings' => 1, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000'], 'statuses' => ['', '']])
+            ->and(Site::healthProblems(['level' => 'ok', 'groups' => []]))->toMatchArray(['count' => 0, 'warnings' => 0])
+            // Warnings only: their labels, orange
+            ->and(Site::healthProblems(['groups' => [['rows' => [['label' => 'intl', 'level' => 'slow'], ['label' => 'gd', 'level' => 'warning']]]]]))->toMatchArray(['count' => 0, 'warnings' => 2, 'labels' => ['intl', 'gd']])
+            ->and($html)->toContain('alert-danger', '[w4os.admin_health_errors_other:2], [w4os.admin_health_warnings_one:1]', 'SRV_ProfileServerURI', 'href="&#x2F;w4os&#x2F;health"')
+            // None: said so
+            ->and(Site::healthCounts(0, 0, fn (string $key, int $count) => $key))->toBe('w4os.admin_health_none');
     });
 });

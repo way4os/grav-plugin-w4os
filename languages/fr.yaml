@@ -767,6 +767,8 @@ w4os:
   health_differs_grid_info: 'diffère de %s de get_grid_info'
   health_web_search: 'Recherche web'
   health_offline_robust: 'servi par Robust (module V2)'
+  health_search_is_service: "c'est la recherche qu'appellent les simulateurs (XML-RPC), pas une page : donnez plutôt la page de recherche web du site"
+  health_search_is_robust: "c'est l'adresse de Robust, qui n'a pas de page de recherche : donnez plutôt la page de recherche web du site"
   health_offline_unused: "défini, mais le module V2 ne l'utilise pas (Robust garde les messages hors ligne) : retirez %s"
   health_set: défini
   health_missing: manquant
@@ -1091,10 +1093,13 @@ w4os:
   admin_shortcode_base_url_help: 'L’adresse du site'
   admin_shortcode_slogan_help: 'Le slogan du site'
   admin_health_title: Santé
-  admin_health_ok: 'Tout ce qui est vérifié répond comme il faut.'
-  admin_health_error: 'Certaines adresses ne répondent pas comme il faut : voir les lignes en rouge.'
   admin_health_check: 'Vérifier à nouveau'
   admin_health_checked: 'vérifié %s'
+  admin_health_errors_one: '%d erreur'
+  admin_health_errors_other: '%d erreurs'
+  admin_health_warnings_one: '%d avertissement'
+  admin_health_warnings_other: '%d avertissements'
+  admin_health_none: 'Aucun problème'
   admin_health_refresh_failed: "La vérification n'a pas pu être refaite (%s) : ce rapport date de %s."
   admin_health_not_checked: 'Pas vérifié à nouveau : %s'
   admin_health_expected: Attendu
@@ -1129,7 +1134,6 @@ w4os:
   admin_health_source_default: 'par défaut, non réglé'
   admin_health_source_simulator: 'un simulateur'
   admin_models_saved: 'La règle des modèles d’avatars est enregistrée.'
-  admin_health_problems: 'La santé de la grille a trouvé %d problèmes :'
   admin_service_no_page: 'Le site n’a pas de page à l’adresse %s : le service en demande une qui affiche le bloc %s.'
   admin_service_no_block: 'La page %s du site n’affiche pas le bloc %s dont le service a besoin.'
   admin_task_run: 'Lancer maintenant'

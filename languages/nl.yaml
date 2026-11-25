@@ -767,6 +767,8 @@ w4os:
   health_differs_grid_info: 'wijkt af van %s van get_grid_info'
   health_web_search: 'Zoeken op het web'
   health_offline_robust: 'geleverd door Robust (module V2)'
+  health_search_is_service: 'dit is de zoekdienst die de simulators aanroepen (XML-RPC), geen pagina: geef in plaats daarvan de webzoekpagina van de site'
+  health_search_is_robust: 'dit is het adres van Robust, dat geen zoekpagina heeft: geef in plaats daarvan de webzoekpagina van de site'
   health_offline_unused: 'ingesteld, maar module V2 gebruikt het niet (Robust bewaart de offline berichten): verwijder %s'
   health_set: ingesteld
   health_missing: ontbreekt
@@ -1091,10 +1093,13 @@ w4os:
   admin_shortcode_base_url_help: 'Het adres van de site'
   admin_shortcode_slogan_help: 'De slogan van de site'
   admin_health_title: Gezondheid
-  admin_health_ok: 'Alles wat gecontroleerd wordt, antwoordt zoals het hoort.'
-  admin_health_error: 'Sommige adressen antwoorden niet zoals het hoort: zie de rode regels.'
   admin_health_check: 'Opnieuw controleren'
   admin_health_checked: 'gecontroleerd %s'
+  admin_health_errors_one: '%d fout'
+  admin_health_errors_other: '%d fouten'
+  admin_health_warnings_one: '%d waarschuwing'
+  admin_health_warnings_other: '%d waarschuwingen'
+  admin_health_none: 'Geen problemen'
   admin_health_refresh_failed: 'De controle kon niet opnieuw lopen (%s): dit rapport is van %s.'
   admin_health_not_checked: 'Niet opnieuw gecontroleerd: %s'
   admin_health_expected: Verwacht
@@ -1129,7 +1134,6 @@ w4os:
   admin_health_source_default: 'standaard, niet ingesteld'
   admin_health_source_simulator: 'een simulator'
   admin_models_saved: 'De regel van de avatarmodellen is opgeslagen.'
-  admin_health_problems: 'De controle van het grid vond %d problemen:'
   admin_service_no_page: 'De site heeft geen pagina op %s: de dienst vraagt er een die het blok %s toont.'
   admin_service_no_block: 'De pagina %s van de site toont het blok %s niet dat de dienst nodig heeft.'
   admin_task_run: 'Nu uitvoeren'

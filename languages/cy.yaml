@@ -767,6 +767,8 @@ w4os:
   health_differs_grid_info: 'yn wahanol i %s get_grid_info'
   health_web_search: 'Chwiliad Gwe'
   health_offline_robust: 'yn cael ei weini gan Robust (modiwl V2)'
+  health_search_is_service: "dyma'r chwiliad y mae'r efelychwyr yn ei alw (XML-RPC), nid tudalen: rhowch dudalen chwilio we'r wefan yn lle hynny"
+  health_search_is_robust: "dyma gyfeiriad Robust, sydd heb dudalen chwilio: rhowch dudalen chwilio we'r wefan yn lle hynny"
   health_offline_unused: "wedi'i osod, ond nid yw modiwl V2 yn ei ddefnyddio (mae Robust yn cadw'r negeseuon all-lein): tynnwch %s"
   health_set: "wedi'i osod"
   health_missing: 'ar goll'
@@ -1091,10 +1093,13 @@ w4os:
   admin_shortcode_base_url_help: 'Cyfeiriad y safle'
   admin_shortcode_slogan_help: 'Slogan y safle'
   admin_health_title: Iechyd
-  admin_health_ok: 'Mae popeth a wirir yn ateb fel y dylai.'
-  admin_health_error: 'Nid yw rhai cyfeiriadau’n ateb fel y dylent: gweler y rhesi mewn coch.'
   admin_health_check: 'Gwirio eto'
   admin_health_checked: 'gwiriwyd %s'
+  admin_health_errors_one: '%d gwall'
+  admin_health_errors_other: '%d gwall'
+  admin_health_warnings_one: '%d rhybudd'
+  admin_health_warnings_other: '%d rhybudd'
+  admin_health_none: 'Dim problemau'
   admin_health_refresh_failed: 'Ni ellid gwirio eto (%s): mae’r adroddiad hwn o %s.'
   admin_health_not_checked: 'Heb ei wirio eto: %s'
   admin_health_expected: Disgwyliedig
@@ -1129,7 +1134,6 @@ w4os:
   admin_health_source_default: 'diofyn, heb ei osod'
   admin_health_source_simulator: efelychydd
   admin_models_saved: 'Mae rheol y modelau afatar wedi’i chadw.'
-  admin_health_problems: 'Daeth gwiriad y grid o hyd i %d problem:'
   admin_service_no_page: 'Nid oes gan y safle dudalen yn %s: mae’r gwasanaeth angen un sy’n dangos y bloc %s.'
   admin_service_no_block: 'Nid yw tudalen %s y safle yn dangos y bloc %s sydd ei angen ar y gwasanaeth.'
   admin_task_run: 'Rhedeg nawr'

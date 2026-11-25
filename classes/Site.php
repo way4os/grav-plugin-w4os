@@ -290,27 +290,43 @@ final class Site
         return array_values(array_unique(array_map(fn (string $name) => self::BLOCK_SHORTCODES[$name], $found[1])));
     }
 
+    /** The levels of a row of the health that are a warning: not as it should be, but answering (slow among them). */
+    public const HEALTH_WARNINGS = ['warning', 'slow'];
+
     /**
-     * The problems the health of the grid found (its rows of level error), for the notice of the dashboard: how many, the labels
-     * of the first ones.
+     * The problems the health of the grid found, for its banner and the notice of the dashboard: how many errors (`count`), how many
+     * warnings (`warnings`), the labels of the first errors, else of the first warnings.
      *
      * @param array<string,mixed> $health the health as the engine gives it
-     * @return array{count: int, labels: list<string>, statuses: list<string>}
+     * @return array{count: int, warnings: int, labels: list<string>, statuses: list<string>}
      */
     public static function healthProblems(array $health, int $shown = 5): array
     {
-        $labels = [];
-        $statuses = [];
+        $found = ['error' => [], 'warning' => []];
         foreach ((array) ($health['groups'] ?? []) as $group) {
             foreach ((array) ($group['rows'] ?? []) as $row) {
-                if (($row['level'] ?? '') === 'error') {
-                    $labels[] = (string) ($row['label'] ?? '');
-                    $statuses[] = (string) ($row['status'] ?? '');
-                }
+                $level = (string) ($row['level'] ?? '');
+                $kind = $level === 'error' ? 'error' : (in_array($level, self::HEALTH_WARNINGS, true) ? 'warning' : null);
+                $kind === null || $found[$kind][] = [(string) ($row['label'] ?? ''), (string) ($row['status'] ?? '')];
             }
         }
+        $first = array_slice($found['error'] !== [] ? $found['error'] : $found['warning'], 0, $shown);
 
-        return ['count' => count($labels), 'labels' => array_slice($labels, 0, $shown), 'statuses' => array_slice($statuses, 0, $shown)];
+        return ['count' => count($found['error']), 'warnings' => count($found['warning']), 'labels' => array_column($first, 0), 'statuses' => array_column($first, 1)];
+    }
+
+    /**
+     * What the problems of the health say: "3 errors, 5 warnings" (the plural of each language), or that there is none.
+     *
+     * @param \Closure(string $key, int $count): string $say a text of the catalog with its number
+     */
+    public static function healthCounts(int $errors, int $warnings, \Closure $say): string
+    {
+        $parts = [];
+        $errors > 0 && $parts[] = $say($errors === 1 ? 'w4os.admin_health_errors_one' : 'w4os.admin_health_errors_other', $errors);
+        $warnings > 0 && $parts[] = $say($warnings === 1 ? 'w4os.admin_health_warnings_one' : 'w4os.admin_health_warnings_other', $warnings);
+
+        return $parts === [] ? $say('w4os.admin_health_none', 0) : implode(', ', $parts);
     }
 
     /**
