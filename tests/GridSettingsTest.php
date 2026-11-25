@@ -17,6 +17,15 @@ describe('the settings of the grid and of its avatars', function () {
             ->and(is_file(dirname(__DIR__).'/pages/settings_grid.md') && is_file(dirname(__DIR__).'/pages/settings_avatars.md'))->toBeTrue();
     });
 
+    test('the map\'s under Regions (Regions › Map), the engine\'s settings map', function () {
+        expect(Site::adminRoutes(['admin' => '/w4os'], [])['settings_map'])->toBe('/w4os/regions/map')
+            ->and(Site::ADMIN_PAGES['settings_map']['parent'])->toBe('regions')
+            ->and(Site::serviceGroup('settings_map'))->toBe('map')
+            ->and(Site::titleKey('settings_map'))->toBe('w4os.settings_map')
+            ->and((new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('map'))->not->toBeNull()
+            ->and(is_file(dirname(__DIR__).'/pages/settings_map.md'))->toBeTrue();
+    });
+
     test('the grid in the tabs of its groups: Grid Info, Robust, Services, Avatars', function () {
         $form = (new Contract(W4OS\Engine\Api\Contract::document()))->settingsOf('grid');
         $fields = Items::fields(FormView::of($form, [], null, true, 250), shown: true);

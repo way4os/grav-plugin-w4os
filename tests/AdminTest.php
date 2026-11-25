@@ -15,7 +15,7 @@ describe('admin', function () {
     });
 
     test('has its sections in their order, the grid first, each with its icon of Tabler', function () {
-        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
+        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'settings_map', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
             ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-')
             ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools', 'site'])
             // The site: its settings, then its pages in Grav's admin (added by adminMenu())

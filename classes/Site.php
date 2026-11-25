@@ -867,7 +867,7 @@ final class Site
         'region' => '/regions/region', 'simulators' => '/simulators', 'simulator' => '/simulators/simulator', 'models' => '/models', 'health' => '/health',
         'shortcodes' => '/shortcodes', 'settings' => '/settings', 'flux' => '/flux',
         'settings_economy' => '/economy', 'settings_search' => '/search', 'settings_guide' => '/guide', 'settings_offline' => '/offline',
-        'settings_assets' => '/assets', 'settings_grid' => '/grid', 'settings_avatars' => '/avatars/settings',
+        'settings_assets' => '/assets', 'settings_grid' => '/grid', 'settings_avatars' => '/avatars/settings', 'settings_map' => '/regions/map',
     ];
 
     /** Where the admin pages were before they had a route of their own: the sites that kept them there get the admin route. */
@@ -1700,6 +1700,7 @@ final class Site
         'settings_grid' => ['label' => 'w4os.settings_menu_grid', 'icon' => 'ti ti-world-cog'],
         'simulators' => ['label' => 'w4os.simulators_title', 'icon' => 'ti ti-server'],
         'regions' => ['label' => 'w4os.regions_title', 'icon' => 'ti ti-map'],
+        'settings_map' => ['label' => 'w4os.settings_menu_map', 'icon' => 'ti ti-map-2', 'parent' => 'regions'],
         'manage' => ['label' => 'w4os.manage_title', 'icon' => 'ti ti-users'],
         'models' => ['label' => 'w4os.settings_models', 'icon' => 'ti ti-shirt', 'parent' => 'manage'],
         'flux' => ['label' => 'w4os.flux_menu', 'icon' => 'ti ti-message-circle', 'parent' => 'manage'],
@@ -1768,7 +1769,7 @@ final class Site
         'settings_economy' => ['get', '/grids/{grid}/settings/economy'], 'settings_search' => ['get', '/grids/{grid}/settings/search'],
         'settings_guide' => ['get', '/grids/{grid}/settings/guide'], 'settings_offline' => ['get', '/grids/{grid}/settings/offline'],
         'settings_assets' => ['get', '/grids/{grid}/settings/assets'], 'settings_grid' => ['get', '/grids/{grid}/settings/grid'],
-        'settings_avatars' => ['get', '/grids/{grid}/settings/avatars']];
+        'settings_avatars' => ['get', '/grids/{grid}/settings/avatars'], 'settings_map' => ['get', '/grids/{grid}/settings/map']];
 
     /** The group of settings of the engine a settings page of a service shows (settings_economy: economy), null for another page. */
     public static function serviceGroup(string $type): ?string
