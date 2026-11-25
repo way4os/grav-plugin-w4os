@@ -78,7 +78,10 @@ class W4osPlugin extends Plugin
         $event['items'] = $items;
     }
 
-    /** Its page in admin2 (admin-next/pages/w4os.js): the links to the admin of the grid and to the settings of the site. */
+    /**
+     * Its page in admin2 (admin-next/pages/w4os.js): it leads at once to the settings of the site in the admin of the grid (`url`), as
+     * admin2 links the entries of its sidebar under its own address only.
+     */
     public function onApiPluginPageInfo(Event $event): void
     {
         if ($event['plugin'] !== 'w4os') {
@@ -87,10 +90,7 @@ class W4osPlugin extends Plugin
         $site = $this->site();
         $event['definition'] = [
             'id' => 'w4os', 'plugin' => 'w4os', 'title' => $site->translate('w4os.admin_admin2_menu'), 'icon' => 'fa-earth-europe', 'page_type' => 'component',
-            'links' => [
-                ['label' => $site->translate('w4os.dashboard_title'), 'url' => $site->path('dashboard', true), 'icon' => 'fa-gauge'],
-                ['label' => $site->translate('w4os.admin_site_settings'), 'url' => $site->path('settings', true), 'icon' => 'fa-gear'],
-            ],
+            'url' => $site->path('settings', true), 'label' => $site->translate('w4os.admin_site_settings'),
         ];
     }
 

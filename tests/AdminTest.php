@@ -175,8 +175,8 @@ describe('the menu of the admin', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
         $page = (string) file_get_contents(dirname(__DIR__).'/admin-next/pages/w4os.js');
 
-        expect($plugin)->toContain("'label' => \$this->site()->translate('w4os.admin_admin2_menu')", "'onApiSidebarItems' => ['onApiSidebarItems', 0]", "'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0]", "'route' => '/plugin/w4os'", "'authorize' => ['api.super', 'admin.super']", "'page_type' => 'component'", "\$site->path('dashboard', true)", "\$site->path('settings', true)")
-            ->and($page)->toContain('customElements.define(', 'window.__GRAV_PAGE_TAG', '/gpm/plugins/w4os/page', 'window.__GRAV_API_TOKEN');
+        expect($plugin)->toContain("'label' => \$this->site()->translate('w4os.admin_admin2_menu')", "'onApiSidebarItems' => ['onApiSidebarItems', 0]", "'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0]", "'route' => '/plugin/w4os'", "'authorize' => ['api.super', 'admin.super']", "'page_type' => 'component'", "'url' => \$site->path('settings', true)")
+            ->and($page)->toContain('customElements.define(', 'window.__GRAV_PAGE_TAG', '/gpm/plugins/w4os/page', 'window.__GRAV_API_TOKEN', 'window.location.assign(url)');
     });
 });
 
