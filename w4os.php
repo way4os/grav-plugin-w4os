@@ -1617,6 +1617,8 @@ class W4osPlugin extends Plugin
         return match ($type) {
             'profile' => ['name' => $rest],
             'search' => $rest !== '' ? ['topic' => $rest] : [],
+            // The map is the page: the whole height left in the window
+            'map' => ['fill' => 'true'],
             default => [],
         };
     }

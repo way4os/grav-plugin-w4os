@@ -16,7 +16,7 @@ final class Blocks
     private const LIVE = ['search'];
 
     /** The arguments a block takes from the page or the shortcode. */
-    private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client', 'count', 'include_hypergrid', 'include_landsales', 'avatar', 'map_tiles'];
+    private const ARGS = ['name', 'feed_only', 'q', 'topic', 'category', 'level', 'title', 'lang', 'assets', 'search_url', 'web_profile_url', 'client', 'count', 'include_hypergrid', 'include_landsales', 'avatar', 'map_tiles', 'fill'];
 
     /**
      * @param \Closure(string $name, array<string,scalar> $args): ?string $fetch the HTML of a block (BlockUnavailable when it cannot
@@ -149,7 +149,7 @@ final class Blocks
      * The HTML of a block, empty when it is not one.
      *
      * @param array<string,scalar|list<scalar>> $args name and feed_only (profile: its stream alone), the parameters of a search (searchParameters(): q, rating[]...), category (destination_guide), count, include_hypergrid and include_landsales (popular_places), client (the class of the visitor, viewer or browser: the engine gives the links for where the page is shown), level, title, the addresses of the site's pages for
-     *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME]), avatar (motd: the name of the avatar signed in), map_tiles (map: the address of its tiles on the site)
+     *     the links of the helpers (search_url, web_profile_url with [AGENT_NAME]), avatar (motd: the name of the avatar signed in), map_tiles (map: the address of its tiles on the site), fill (map: the whole height left in the window)
      * @throws BlockUnavailable when it cannot be read
      */
     public function html(string $name, array $args = []): string
