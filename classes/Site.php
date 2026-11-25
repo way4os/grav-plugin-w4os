@@ -1445,6 +1445,50 @@ final class Site
         return ['level' => (int) ($avatar['accessLevel'] ?? $userLevel), 'userLevel' => $userLevel, 'owner' => (bool) ($avatar['owner'] ?? false)];
     }
 
+    /** The rights of Grav's admin and of its API (admin2) an admin of the grid has: the ones of a super user of the site. */
+    public const GRAV_ADMIN = ['admin' => ['login', 'super'], 'api' => ['login', 'super']];
+
+    /**
+     * The access of an account with Grav's admin rights (GRAV_ADMIN) when its avatar is an admin of the grid, without them otherwise
+     * (taken back once its level drops below); its other rights as they are.
+     *
+     * @param array<string,mixed> $access the access of the account (Grav's)
+     * @return array<string,mixed>
+     */
+    public static function gravAdmin(array $access, bool $admin): array
+    {
+        foreach (self::GRAV_ADMIN as $scope => $rights) {
+            foreach ($rights as $right) {
+                if ($admin) {
+                    $access[$scope][$right] = true;
+                } else {
+                    unset($access[$scope][$right]);
+                }
+            }
+            if (! $admin && ($access[$scope] ?? null) === []) {
+                unset($access[$scope]);
+            }
+        }
+
+        return $access;
+    }
+
+    /**
+     * The route of Grav's admin the site has (admin2, else the classic admin, enabled), null without one.
+     *
+     * @param array<string,mixed> $plugins the config of the plugins (Grav's `plugins`)
+     */
+    public static function gravAdminRoute(array $plugins): ?string
+    {
+        foreach (['admin2', 'admin'] as $admin) {
+            if (($plugins[$admin]['enabled'] ?? false) === true) {
+                return '/'.trim((string) ($plugins[$admin]['route'] ?? '/admin'), '/');
+            }
+        }
+
+        return null;
+    }
+
     /** Whether an avatar of this level reads the admin pages (adminLevel()). */
     public static function readsAdmin(int $level, array $config): bool
     {
@@ -1485,8 +1529,10 @@ final class Site
         $user->set('w4os', ['uuid' => (string) $avatar['uuid'], 'name' => (string) $avatar['name']] + $granted);
         $access = (array) $user->get('access', []);
         $access['site']['login'] = true;
-        $access['site']['w4os']['manage'] = self::readsAdmin($granted['level'], $this->config());
-        $user->set('access', $access);
+        $manage = self::readsAdmin($granted['level'], $this->config());
+        $access['site']['w4os']['manage'] = $manage;
+        // The admins of the grid manage the site too (Grav's admin and its API), as long as their level does
+        $user->set('access', self::gravAdmin($access, $manage));
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();
         }
@@ -1705,6 +1751,11 @@ final class Site
                 && $items[] = ['type' => $type, 'label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section]
                     + (isset($page['parent']) ? ['parent' => $page['parent']] : []);
         }
+        // The pages of the site, in Grav's admin, for whom has its rights (the admins of the grid, gravAdmin())
+        $route = self::gravAdminRoute((array) $this->grav['config']->get('plugins', []));
+        $user = $this->grav['user'] ?? null;
+        $route !== null && $user && ($user->authorize('api.super') || $user->authorize('admin.super'))
+            && $items[] = ['type' => 'grav_pages', 'label' => $this->translate('w4os.admin_tab_pages'), 'url' => rtrim($this->grav['uri']->rootUrl(false), '/').$route.'/pages', 'icon' => 'ti ti-files', 'active' => false];
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 
