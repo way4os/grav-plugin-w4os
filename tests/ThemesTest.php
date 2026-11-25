@@ -89,7 +89,7 @@ describe('the message of the day', function () {
         $php = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
         expect($php)->toContain("'avatar' => \\W4OS\\Grav\\Blocks::name(\$name) === 'motd' ? (\$this->site()->avatar()['name'] ?? null) : null,")
-            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Blocks.php'))->toContain("'include_landsales', 'avatar']");
+            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Blocks.php'))->toContain("'include_landsales', 'avatar', 'map_tiles']");
     });
 
     test('is on the right of the splash page, what the grid is on the left', function () {

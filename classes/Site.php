@@ -447,6 +447,51 @@ final class Site
         return $this->engine()->picture($id, $format);
     }
 
+    /**
+     * Answers the address of a tile of the map of the grid (the block map) with the engine: under the route "map_tiles", its zoom (1
+     * to 8) and the region of its bottom left corner (`/grid-map/1/1000/1000.jpg`).
+     *
+     * @return ?array{int, string, array<string,string>} the status, the body, the headers; null when it is not such an address
+     */
+    public function mapTile(string $path): ?array
+    {
+        $asked = self::tileAsked((string) ($this->routes()['map_tiles'] ?? ''), $path);
+        if ($asked === null) {
+            return null;
+        }
+        [$zoom, $x, $y] = $asked;
+        // From the web: the bundled engine locked, it answers what it says is public only; else the engine of the grid, its open operation
+        $bundled = self::engineChannel($this->config(), $this->apiKey() !== '') === 'bundled' ? $this->bundled() : null;
+
+        return $bundled !== null
+            ? $bundled->publicRoute('GET', '/grids/'.rawurlencode($bundled->nick())."/map/$zoom/$x/$y.jpg")
+            : $this->engine()->mapTile($zoom, $x, $y);
+    }
+
+    /** The zoom and the region of a tile of the map a path asks under its route, null for another path. @return ?array{int, int, int} */
+    public static function tileAsked(string $route, string $path): ?array
+    {
+        $route = rtrim($route, '/');
+
+        return $route !== '' && preg_match('#^'.preg_quote($route, '#').'/([1-8])/(-?\d+)/(-?\d+)\.jpg$#', $path, $m) === 1 ? [(int) $m[1], (int) $m[2], (int) $m[3]] : null;
+    }
+
+    /**
+     * The address of a file of the assets of the helpers: theirs, or the one of a library they name by its prefix (View::LIBRARIES:
+     * Leaflet), from its package in the vendor of the plugin.
+     */
+    public static function helpersAsset(string $file): string
+    {
+        $libraries = defined(\W4OS\Helpers\View\View::class.'::LIBRARIES') ? \W4OS\Helpers\View\View::LIBRARIES : [];
+        foreach ($libraries as $prefix => $library) {
+            if (str_starts_with($file, $prefix)) {
+                return 'plugin://w4os/vendor/'.$library['package'].'/'.$library['folder'].substr($file, strlen($prefix));
+            }
+        }
+
+        return 'plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file;
+    }
+
     /** The address the pictures of the grid are under: the web assets the site provides, else where the engine says. */
     public function assetsUrl(): string
     {
@@ -1562,7 +1607,7 @@ final class Site
     public const BLOCK_SHORTCODES = [
         'grid-info' => 'grid_info', 'grid-status' => 'grid_status', 'avatar-profile' => 'profile', 'popular-places' => 'popular_places',
         'web-search' => 'search', 'destination-guide' => 'destination_guide', 'new-avatars' => 'new_users', 'directory-info' => 'directory_info',
-        'motd' => 'motd',
+        'motd' => 'motd', 'grid-map' => 'map',
     ];
 
     /** The route of the news page of a site, whose last posts the home page of the grid shows. */
@@ -1580,6 +1625,7 @@ final class Site
         ['code' => '[popular-places]', 'help' => 'block_popular_places_help', 'block' => 'popular-places', 'preview' => ['title' => '', 'level' => 'h3', 'count' => 3], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level'], ['option' => 'max=5', 'help' => 'shortcode_option_count'], ['option' => 'include-hypergrid', 'help' => 'shortcode_option_include_hypergrid'], ['option' => 'include-landsales', 'help' => 'shortcode_option_include_landsales']]],
         ['code' => '[web-search]', 'help' => 'block_search_help', 'block' => 'search', 'preview' => ['title' => ''], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[motd]', 'help' => 'block_motd_help', 'block' => 'motd', 'preview' => ['level' => 'h3'], 'options' => [['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
+        ['code' => '[grid-map]', 'help' => 'block_map_help', 'block' => 'map', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[destination-guide]', 'help' => 'block_destination_guide_help', 'block' => 'destination-guide', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[new-avatars]', 'help' => 'block_new_avatars_help', 'block' => 'new-users', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],
         ['code' => '[directory-info]', 'help' => 'block_directory_info_help', 'block' => 'directory-info', 'preview' => ['title' => '', 'level' => 'h3'], 'options' => [['option' => 'title', 'help' => 'shortcode_option_title'], ['option' => 'level=h3', 'help' => 'shortcode_option_level']]],

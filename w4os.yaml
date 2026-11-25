@@ -112,3 +112,6 @@ routes:
   password: /password
   # The pictures of the grid (the models), served by the bundled engine
   assets: /grid-assets
+  # The map of the grid (the helpers' block map), and its tiles, served by the engine
+  map: /map
+  map_tiles: /grid-map

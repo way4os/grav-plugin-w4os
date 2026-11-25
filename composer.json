@@ -79,6 +79,18 @@
                     "shasum": "87325ad8f308c1bdba3d1b8941171c3a485e4a94"
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "npm-asset/leaflet",
+                "version": "1.9.4",
+                "dist": {
+                    "type": "tar",
+                    "url": "https://registry.npmjs.org/leaflet/-/leaflet-1.9.4.tgz",
+                    "shasum": "23fae724e282fa25745aff82ca4d394748db7d8d"
+                }
+            }
         }
     ],
     "require": {

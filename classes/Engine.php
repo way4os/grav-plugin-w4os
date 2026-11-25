@@ -59,6 +59,20 @@ final class Engine
             array_intersect_key($headers, array_flip(['content-type', 'content-length', 'cache-control', 'etag', 'last-modified'])))];
     }
 
+    /**
+     * A tile of the map of the grid as the engine gives it (its open operation, GET /map/{z}/{x}/{y}.jpg), for the site to serve.
+     *
+     * @return array{int, string, array<string,string>} the status, the body, its headers (type, length, cache)
+     */
+    public function mapTile(int $zoom, int $x, int $y): array
+    {
+        $answer = ($this->send)('GET', $this->url.$this->path("/map/$zoom/$x/$y.jpg"), $this->key === '' ? [] : ['Authorization' => 'Bearer '.$this->key], null);
+        $headers = array_change_key_case((array) ($answer[2] ?? []));
+
+        return [(int) $answer[0], (string) $answer[1], array_map(fn ($values) => implode(', ', (array) $values),
+            array_intersect_key($headers, array_flip(['content-type', 'content-length', 'cache-control', 'etag', 'last-modified'])))];
+    }
+
     /** The address the pictures of the grid are under (<UUID>.<format>). */
     public function assetsUrl(): string
     {

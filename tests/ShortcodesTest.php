@@ -17,7 +17,7 @@ describe('the page of the shortcodes', function () {
         expect(Site::BLOCK_SHORTCODES)->toBe([
             'grid-info' => 'grid_info', 'grid-status' => 'grid_status', 'avatar-profile' => 'profile', 'popular-places' => 'popular_places',
             'web-search' => 'search', 'destination-guide' => 'destination_guide', 'new-avatars' => 'new_users', 'directory-info' => 'directory_info',
-            'motd' => 'motd',
+            'motd' => 'motd', 'grid-map' => 'map',
         ]);
     });
 

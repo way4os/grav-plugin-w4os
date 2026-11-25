@@ -3,7 +3,7 @@
 namespace W4OS\Grav;
 
 /**
- * The libraries of the browser the plugin serves (Tabler, its icons, Tom Select): npm releases pinned in composer.json (package
+ * The libraries of the browser the plugin serves (Tabler, its icons, Tom Select, Leaflet for the helpers' map): npm releases pinned in composer.json (package
  * repositories, with their checksum), installed in vendor/npm-asset/. Of each, only the files the plugin serves are kept, and its
  * license, so the release zip carries no demo, no source and no other variant.
  */
@@ -20,6 +20,8 @@ final class Assets
         ],
         'npm-asset/tabler-icons-webfont' => ['LICENSE', 'dist/tabler-icons.min.css', 'dist/fonts/tabler-icons.*.woff2'],
         'npm-asset/tom-select' => ['LICENSE', 'dist/js/tom-select.popular.min.js', 'dist/css/tom-select.min.css'],
+        // The map of the grid (the helpers' block map, their View::LIBRARIES)
+        'npm-asset/leaflet' => ['LICENSE', 'dist/leaflet.js', 'dist/leaflet.css', 'dist/images/*.png'],
     ];
 
     /** The translations of Carbon (the dates it tells relatively), one file by locale (`fr.php`, `pt_BR.php`). */

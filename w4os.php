@@ -99,8 +99,8 @@ class W4osPlugin extends Plugin
         if ($this->isAdmin()) {
             return;
         }
-        // The pictures of the grid (its web assets, under the helpers' address by default), served by the engine
-        if ($answer = $this->site()->asset($this->grav['uri']->path())) {
+        // The pictures of the grid (its web assets, under the helpers' address by default) and the tiles of its map, served by the engine
+        if ($answer = $this->site()->asset($this->grav['uri']->path()) ?? $this->site()->mapTile($this->grav['uri']->path())) {
             [$status, $body, $headers] = $answer;
             http_response_code($status);
             foreach ($headers as $name => $value) {
@@ -1343,6 +1343,8 @@ class W4osPlugin extends Plugin
             'feed_only' => $name === 'profile' ? $uri->query('feed_only') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
+            // The map: its tiles on the site (Site::mapTile())
+            'map_tiles' => \W4OS\Grav\Blocks::name($name) === 'map' ? $this->site()->path('map_tiles') : null,
             // The message of the day welcomes the avatar signed in on the site by its name (the grid's own welcome otherwise)
             'avatar' => \W4OS\Grav\Blocks::name($name) === 'motd' ? ($this->site()->avatar()['name'] ?? null) : null,
             // The class of the visitor, as the engine tells it (viewer or browser): the links of the block are the ones it takes (the
@@ -1450,10 +1452,10 @@ class W4osPlugin extends Plugin
         $assets = $this->grav['assets'];
         $files = $view::blockFiles($name, $this->site()->client());
         foreach ($files['css'] as $file) {
-            $assets->addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file);
+            $assets->addCss(Site::helpersAsset($file));
         }
         foreach ($files['js'] as $file) {
-            $assets->addJs('plugin://w4os/vendor/w4os/w4os-helpers/assets/'.$file, ['group' => 'bottom', 'loading' => 'defer']);
+            $assets->addJs(Site::helpersAsset($file), ['group' => 'bottom', 'loading' => 'defer']);
         }
         // The results of a search: a list with the detail of the item it selects, drawn by the views (ListHtml), their style and script
         if (\W4OS\Grav\Blocks::name($name) === 'search' && class_exists(\W4OS\Views\ListDetailView::class)) {
