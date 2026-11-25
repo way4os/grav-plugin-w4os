@@ -10,6 +10,12 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
         url.search = `?check=${encodeURIComponent(id)}`;
         return url;
     };
+    // The lines under a line (its detail, why it could not be checked again), gone when it is drawn again
+    const under = (row) => {
+        while (row.nextElementSibling?.matches('.w4os-health-detail, .w4os-health-note')) {
+            row.nextElementSibling.remove();
+        }
+    };
     const check = (row) => {
         const when = row.querySelector('.w4os-health-when');
         when && (when.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>');
@@ -18,12 +24,26 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
             .then((html) => {
                 const body = document.createElement('tbody');
                 body.innerHTML = html.trim();
-                const line = body.querySelector('tr');
-                line ? row.replaceWith(line) : Promise.reject('');
-                return line;
+                const lines = [...body.querySelectorAll('tr')];
+                if (!lines.length) {
+                    return Promise.reject('');
+                }
+                under(row);
+                row.replaceWith(...lines);
+                return lines[0];
             })
             .catch((reason) => {
-                when && (when.textContent = (banner?.dataset.failed || '%s').replace('%s', String(reason).slice(0, 200)));
+                // Why it could not be checked again, under the line, across it: never a column of its own
+                when && (when.textContent = '');
+                under(row);
+                const note = document.createElement('tr');
+                const cell = document.createElement('td');
+                note.className = 'w4os-health-note';
+                cell.colSpan = Math.max(1, row.cells.length - 1);
+                cell.className = 'small text-secondary';
+                cell.textContent = (banner?.dataset.failed || '%s').replace('%s', String(reason).slice(0, 300));
+                note.append(document.createElement('td'), cell);
+                row.after(note);
                 row.classList.add('w4os-health-error');
                 return null;
             });

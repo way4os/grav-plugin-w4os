@@ -222,3 +222,8 @@
 @container (min-width: 36rem) { .w4os-list .w4os-tier-md { display: table-cell; } .w4os-list .w4os-fold-md { display: none; } }
 @container (min-width: 58rem) { .w4os-list .w4os-tier-xl { display: table-cell; } .w4os-list .w4os-fold-xl { display: none; } }
 @container (min-width: 76rem) { .w4os-list .w4os-tier-xxl { display: table-cell; } .w4os-list .w4os-fold-xxl { display: none; } }
+/* The health of the grid: an address broken where it reads (after its / and its .), never a letter a line; what a line answered at
+   length or why it could not be checked again on a line under it, across it, close to it */
+.w4os-admin .w4os-health-address { overflow-wrap: normal; word-break: normal; }
+.w4os-admin tr:has(+ :is(.w4os-health-detail, .w4os-health-note)) > td { border-bottom-width: 0; }
+.w4os-admin :is(.w4os-health-detail, .w4os-health-note) > td { padding-top: 0; white-space: normal; overflow-wrap: anywhere; }

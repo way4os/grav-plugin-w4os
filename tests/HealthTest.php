@@ -31,7 +31,7 @@ describe('the health page of the admin', function () {
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
         $html = $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health']]);
 
-        expect($html)->toContain('alert alert-danger', 'Robust.HG.ini', '[LoginService]', 'DestinationGuide', '>http://example.org/guide</a>', 'cURL error 28', 'Operation timed out')
+        expect($html)->toContain('alert alert-danger', 'Robust.HG.ini', '[LoginService]', 'DestinationGuide', '>http:/<wbr>/<wbr>example.<wbr>org/<wbr>guide</a>', 'cURL error 28', 'Operation timed out')
             ->and($html)->toContain('ti ti-circle-x', 'ti ti-circle-check', '446', 'Message', 'Friendly Fowl')
             ->and($html)->toContain('motd', 'config', '[w4os.admin_health_check]');
     });
@@ -100,6 +100,11 @@ describe('the health page of the admin', function () {
         $html = $twig->render('w4os/health-row.html.twig', ['row' => ['id' => 'a1', 'kind' => 'address', 'label' => 'login', 'url' => 'http://grid.example.org:8002', 'level' => 'ok', 'status' => '200', 'ms' => 12, 'checkedAt' => 1795059606]]);
 
         expect($html)->toContain('<tr data-check="a1" class="w4os-health-ok">', 'at 1795059606', '12 ms');
+
+        // What it answered at length under it, across it; its address broken after its / and its . only
+        $html = $twig->render('w4os/health-row.html.twig', ['row' => ['id' => 'a2', 'kind' => 'address', 'label' => 'welcome', 'url' => 'http://grid.example.org/welcome', 'level' => 'error', 'status' => 'cURL error 28', 'detail' => 'Operation timed out after 3000 milliseconds']]);
+        expect($html)->toContain('rel="noopener">http:/<wbr>/<wbr>grid.<wbr>example.<wbr>org/<wbr>welcome</a>', '<tr class="w4os-health-detail" data-detail="a2"><td></td><td colspan="5" class="small text-secondary">Operation timed out after 3000 milliseconds</td></tr>')
+            ->and((string) file_get_contents(dirname(__DIR__).'/js/health.js'))->toContain("note.className = 'w4os-health-note';", 'cell.colSpan = Math.max(1, row.cells.length - 1);', 'row.replaceWith(...lines);');
     });
 
     test('lists the addresses of the grid by their use, then their file and section, each its key, its name, its address and where it comes from', function () {
