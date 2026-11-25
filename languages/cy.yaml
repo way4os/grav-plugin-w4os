@@ -218,6 +218,8 @@ w4os:
   tip_assets_url: "Lle mae lluniau'r byd yn cael eu gweini"
   motd_welcome: 'Croeso i %1$s, %2$s!'
   motd_visitor: teithiwr
+  motd_avatar: 'Croeso, %s'
+  motd_avatar_visitor: Afatar
   guide_source_help_pipe: "Mae enw'r cyrchfan a'r URL teleportio wedi'u gwahanu gan nod pibell (|)."
   guide_source_help_categories: "Caiff llinellau sy'n cynnwys testun yn unig eu dehongli fel categorïau."
   guide_source_help_comments: 'Caiff llinellau sy''n dechrau gyda "#" neu "//" eu hanwybyddu.'
@@ -426,7 +428,7 @@ w4os:
   block_grid_info_help: 'Gwybodaeth gyffredinol (enw grid a uri mewngofnodi)'
   block_grid_status_help: 'Afatarau ar-lein, rhanbarthau, ac ati.'
   block_popular_places_help: 'Y rhanbarthau mwyaf poblogaidd yn dy grid.'
-  block_motd_help: "Neges y dydd y mae'r viewers yn ei dangos wrth fewngofnodi."
+  block_motd_help: "Teitl croeso yn enwi'r afatar sydd wedi mewngofnodi, neu fel arall neges groeso'r grid."
   block_destination_guide_help: "Lleoedd i ymweld â nhw, yr un rhestr â chanllaw cyrchfannau'r viewers."
   block_directory_info_help: "Y gridiau eraill y mae eu lleoedd i'w cael yn chwiliad y grid hwn."
   block_search_help: 'Ffurflen chwilio ar gyfer lleoedd, digwyddiadau, hysbysebion a phobl y grid.'
@@ -611,6 +613,7 @@ w4os:
   setting_grid_name: "Enw'r Grid"
   setting_grid_nick: "Llysenw'r grid"
   setting_welcome_message: 'Neges croeso'
+  setting_welcome_message_help: "Caiff <USERNAME> ei ddisodli gan enw'r afatar"
   setting_currency_symbol: 'Symbol yr arian'
   setting_search_module: 'Modiwl chwilio'
   setting_index_sims: 'Mynegeio rhanbarthau'

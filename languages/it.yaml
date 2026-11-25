@@ -218,6 +218,8 @@ w4os:
   tip_assets_url: 'Dove sono servite le immagini del mondo'
   motd_welcome: 'Benvenuto su %1$s, %2$s!'
   motd_visitor: viaggiatore
+  motd_avatar: 'Benvenuto, %s'
+  motd_avatar_visitor: Avatar
   guide_source_help_pipe: "Il nome della destinazione e l'URL del teletrasporto sono separati da un carattere pipe (|)."
   guide_source_help_categories: 'Le righe contenenti solo testo vengono interpretate come categorie.'
   guide_source_help_comments: 'Le righe che iniziano con "#" o "//" vengono ignorate.'
@@ -426,7 +428,7 @@ w4os:
   block_grid_info_help: 'Informazioni generali (nome della griglia e URI di accesso)'
   block_grid_status_help: 'Avatar online, regioni, ecc.'
   block_popular_places_help: 'Regioni più visitate nella tua griglia.'
-  block_motd_help: "Il messaggio del giorno che i viewer mostrano all'accesso."
+  block_motd_help: "Un titolo di benvenuto con il nome dell'avatar connesso, altrimenti il messaggio di benvenuto della griglia."
   block_destination_guide_help: 'Luoghi da visitare, la stessa lista della guida alle destinazioni dei viewer.'
   block_directory_info_help: 'Le altre griglie i cui luoghi si trovano nella ricerca di questa griglia.'
   block_search_help: 'Un modulo di ricerca di luoghi, eventi, annunci e persone della griglia.'
@@ -611,6 +613,7 @@ w4os:
   setting_grid_name: 'Nome della griglia'
   setting_grid_nick: 'Nickname della griglia'
   setting_welcome_message: 'Messaggio di benvenuto'
+  setting_welcome_message_help: "<USERNAME> è sostituito dal nome dell'avatar"
   setting_currency_symbol: 'Simbolo della valuta'
   setting_search_module: 'Modulo di ricerca'
   setting_index_sims: 'Indicizza le regioni'

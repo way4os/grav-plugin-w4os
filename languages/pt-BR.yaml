@@ -218,6 +218,8 @@ w4os:
   tip_assets_url: 'Onde as imagens do mundo são servidas'
   motd_welcome: 'Bem-vindo a %1$s, %2$s!'
   motd_visitor: viajante
+  motd_avatar: 'Bem-vindo, %s'
+  motd_avatar_visitor: Avatar
   guide_source_help_pipe: 'O nome do destino e a URL de teletransporte são separados por um caractere de barra vertical (|).'
   guide_source_help_categories: 'Linhas contendo apenas texto são interpretadas como categorias.'
   guide_source_help_comments: 'Linhas começando com "#" ou "//" são ignoradas.'
@@ -426,7 +428,7 @@ w4os:
   block_grid_info_help: 'Informações gerais (nome do grid e URI de login)'
   block_grid_status_help: 'Avatares online, regiões etc.'
   block_popular_places_help: 'Regiões mais visitadas em seu grid.'
-  block_motd_help: 'A mensagem do dia que os viewers mostram no login.'
+  block_motd_help: 'Um título de boas-vindas com o nome do avatar conectado, senão a mensagem de boas-vindas do grid.'
   block_destination_guide_help: 'Lugares para visitar, a mesma lista do guia de destinos dos viewers.'
   block_directory_info_help: 'Os outros grids cujos lugares aparecem na busca deste grid.'
   block_search_help: 'Um formulário de busca de lugares, eventos, classificados e pessoas do grid.'
@@ -611,6 +613,7 @@ w4os:
   setting_grid_name: 'Nome do Grid'
   setting_grid_nick: 'Apelido do grid'
   setting_welcome_message: 'Mensagem de boas-vindas'
+  setting_welcome_message_help: '<USERNAME> é substituído pelo nome do avatar'
   setting_currency_symbol: 'Símbolo da moeda'
   setting_search_module: 'Módulo de busca'
   setting_index_sims: 'Indexar regiões'

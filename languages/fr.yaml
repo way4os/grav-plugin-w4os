@@ -218,6 +218,8 @@ w4os:
   tip_assets_url: 'Où sont servies les images du monde'
   motd_welcome: 'Bienvenue sur %1$s, %2$s !'
   motd_visitor: voyageur
+  motd_avatar: 'Bienvenue, %s'
+  motd_avatar_visitor: Avatar
   guide_source_help_pipe: "Le nom de la destination et l'URL de téléportation sont séparés par le caractère pipe (|)."
   guide_source_help_categories: 'Les lignes contenant uniquement du texte sont interprétées comme des catégories.'
   guide_source_help_comments: 'Les lignes commençant par "#" ou "//" sont ignorées.'
@@ -426,7 +428,7 @@ w4os:
   block_grid_info_help: 'Informations générales (nom de la grille et URI de connexion)'
   block_grid_status_help: 'Avatars en ligne, régions, etc.'
   block_popular_places_help: 'Les régions les plus visitées de ta grille.'
-  block_motd_help: 'Le message du jour que les viewers montrent à la connexion.'
+  block_motd_help: "Un titre d'accueil au nom de l'avatar connecté, sinon le message d'accueil de la grille."
   block_destination_guide_help: 'Des lieux à visiter, la même liste que le guide des destinations des viewers.'
   block_directory_info_help: 'Les autres grilles dont les lieux se trouvent dans la recherche de cette grille.'
   block_search_help: 'Un formulaire de recherche des lieux, événements, petites annonces et personnes de la grille.'
@@ -611,6 +613,7 @@ w4os:
   setting_grid_name: 'Nom de la grille'
   setting_grid_nick: 'Surnom de la grille'
   setting_welcome_message: 'Message de bienvenue'
+  setting_welcome_message_help: "<USERNAME> est remplacé par le nom de l'avatar"
   setting_currency_symbol: 'Symbole de la monnaie'
   setting_search_module: 'Module de recherche'
   setting_index_sims: 'Indexer les régions'
