@@ -1042,6 +1042,8 @@ w4os:
   admin_built_in_css: 'CSS integrato'
   admin_built_in_css_help: 'Il foglio di stile del plugin (le sue pagine, i modelli, i blocchi); disattivato quando il tema li stilizza'
   admin_register: Registrare
+  admin_register_open: 'Registrazioni aperte'
+  admin_register_open_help: 'Disattivato: i visitatori non possono creare un avatar, solo i gestori (Avatar › Nuovo Avatar); la pagina di registrazione dice che sono chiuse'
   admin_confirm_email: 'Conferma l’email'
   admin_confirm_email_help: 'Un nuovo avatar resta inattivo finché non clicca sul link che l’engine gli invia'
   admin_terms: 'Pagina dei termini'
@@ -1146,3 +1148,5 @@ w4os:
   admin_shortcode_option_destination: 'Il luogo: host:porta:Regione/x/y/z, hop://... o una regione della griglia'
   admin_shortcode_option_label: 'Il suo testo (il nome del luogo per impostazione predefinita)'
   admin_shortcode_site_title_help: 'Il titolo del sito, altrimenti il nome della griglia'
+  site_register_closed_title: 'Registrazioni chiuse'
+  site_register_closed_text: 'Questa griglia non crea qui nuovi avatar: li creano i suoi gestori. Chiedi loro il tuo.'

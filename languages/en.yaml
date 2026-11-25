@@ -1042,6 +1042,8 @@ w4os:
   admin_built_in_css: 'Built-in CSS'
   admin_built_in_css_help: 'The style sheet of the plugin (its pages, the models, the blocks); off when the theme styles them'
   admin_register: Register
+  admin_register_open: 'Registration open'
+  admin_register_open_help: 'Off: the visitors cannot create an avatar, only the managers do (Avatars › New Avatar); the registration page says it is closed'
   admin_confirm_email: 'Confirm the email'
   admin_confirm_email_help: 'A new avatar is inactive until it clicks the link the engine mails it'
   admin_terms: 'Terms page'
@@ -1146,3 +1148,5 @@ w4os:
   admin_shortcode_option_destination: 'The place: host:port:Region/x/y/z, hop://..., or a region of the grid'
   admin_shortcode_option_label: 'Its text (the name of the place by default)'
   admin_shortcode_site_title_help: 'The title of the site, else the name of the grid'
+  site_register_closed_title: 'Registration is closed'
+  site_register_closed_text: 'This grid does not create new avatars here: its managers create them. Ask them for yours.'

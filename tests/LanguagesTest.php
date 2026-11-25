@@ -40,7 +40,8 @@ describe('languages', function () {
     test('the plugin keeps only what is Grav\'s alone', function () {
         foreach (glob(dirname(__DIR__).'/i18n/*.yaml') as $file) {
             foreach (array_keys(Symfony\Component\Yaml\Yaml::parseFile($file)['w4os']) as $key) {
-                expect($key)->toStartWith('admin_')->and(Catalog::MESSAGES)->not->toHaveKey($key);
+                // Its admin's texts, and the site's own pages that are Grav's alone (site_: registration closed)
+                expect(preg_match('/^(admin|site)_/', $key))->toBe(1, $key)->and(Catalog::MESSAGES)->not->toHaveKey($key);
             }
         }
     });

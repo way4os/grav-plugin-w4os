@@ -40,7 +40,10 @@ describe('the steps of a newcomer', function () {
             ->and(array_column(Site::steps(true, false), 'state'))->toBe(['done', 'next', 'todo'])
             ->and(array_column(Site::steps(true, null), 'state'))->toBe(['done', 'next', 'todo'])
             ->and(array_column(Site::steps(true, true), 'state'))->toBe(['done', 'done', 'done'])
-            ->and(array_column(Site::steps(true, true), 'step'))->toBe(['avatar', 'viewer', 'login']);
+            ->and(array_column(Site::steps(true, true), 'step'))->toBe(['avatar', 'viewer', 'login'])
+            // Registration closed: no avatar to create for a visitor (the managers create them), the one signed in keeps its step
+            ->and(Site::steps(false, null, false))->toBe([['step' => 'viewer', 'state' => 'next'], ['step' => 'login', 'state' => 'todo']])
+            ->and(array_column(Site::steps(true, false, false), 'step'))->toBe(['avatar', 'viewer', 'login']);
     });
 
     test('stand out the one to do now: the avatar to create, a button alone; the grid to add, its button and its login URI; log in, a button alone', function () {

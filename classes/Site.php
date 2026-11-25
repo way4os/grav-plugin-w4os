@@ -811,13 +811,15 @@ final class Site
 
     /**
      * The steps of a newcomer and their state: done, next (the one to do now) or todo. The avatar is done once signed in; adding the
-     * grid to the viewer and logging in are done once the avatar has logged in-world (a viewer that logs in has the grid).
+     * grid to the viewer and logging in are done once the avatar has logged in-world (a viewer that logs in has the grid). Registration
+     * closed ($open false), a visitor has no avatar to create: no such step (the managers create the avatars).
      *
      * @return list<array{step: string, state: string}>
      */
-    public static function steps(bool $signedIn, ?bool $visited): array
+    public static function steps(bool $signedIn, ?bool $visited, bool $open = true): array
     {
         $done = ['avatar' => $signedIn, 'viewer' => $signedIn && $visited === true, 'login' => $signedIn && $visited === true];
+        ! $open && ! $signedIn && $done = array_diff_key($done, ['avatar' => true]);
         $steps = [];
         $next = false;
         foreach ($done as $step => $isDone) {
@@ -852,7 +854,9 @@ final class Site
         $routes = self::adminRoutes($routes, $reserved);
         $set === $routes['dashboard'] || isset($this->config()['routes']['dashboard'])
             || $this->grav['log']->warning("w4os: the admin route $set is under the route of Grav's admin: {$routes['dashboard']} instead");
+        // Registration closed: no page of it, nor a link to it; its address says it is closed (a viewer's "create an account" lands there)
         if (! ($this->config()['register']['enabled'] ?? true)) {
+            isset($routes['register']) && $routes['register_closed'] = $routes['register'];
             unset($routes['register'], $routes['confirm']);
         }
 
@@ -1252,6 +1256,7 @@ final class Site
             'models' => 'w4os.settings_models',
             'new' => 'w4os.action_new_avatar',
             'shortcodes' => 'w4os.shortcodes_title',
+            'register_closed' => 'w4os.site_register_closed_title',
             default => self::serviceGroup($type) !== null ? 'w4os.'.$type : 'w4os.'.$type.'_title',
         };
     }
@@ -1298,6 +1303,23 @@ final class Site
         }
 
         return (array) \Symfony\Component\Yaml\Yaml::parse($matter[1]);
+    }
+
+    /**
+     * The map's page of the site's tree (its entry in the menu: the plugin's page map) out of the menu and of its address (a 404) while
+     * the grid has no map, back once it has one.
+     */
+    public function hideMapPage(): void
+    {
+        $route = $this->routes()['map'] ?? null;
+        if ($route === null || $this->hasMap()) {
+            return;
+        }
+        $page = $this->grav['pages']->find($route);
+        if ($page !== null && (string) ($page->header()->w4os ?? '') === 'map') {
+            $page->visible(false);
+            $page->routable(false);
+        }
     }
 
     public function addPage(string $path): void

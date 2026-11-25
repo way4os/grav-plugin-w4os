@@ -1042,6 +1042,8 @@ w4os:
   admin_built_in_css: 'Ingebouwde CSS'
   admin_built_in_css_help: 'Het stijlblad van de plugin (zijn pagina’s, de modellen, de blokken); uit als het thema ze opmaakt'
   admin_register: Registreren
+  admin_register_open: 'Registratie open'
+  admin_register_open_help: 'Uit: bezoekers kunnen geen avatar aanmaken, alleen de beheerders (Avatars › Nieuwe Avatar); de registratiepagina zegt dat ze gesloten is'
   admin_confirm_email: 'De e-mail bevestigen'
   admin_confirm_email_help: 'Een nieuwe avatar blijft inactief tot hij op de link klikt die de engine hem stuurt'
   admin_terms: 'Pagina met voorwaarden'
@@ -1146,3 +1148,5 @@ w4os:
   admin_shortcode_option_destination: 'De plek: host:poort:Regio/x/y/z, hop://... of een regio van het grid'
   admin_shortcode_option_label: 'De tekst (standaard de naam van de plek)'
   admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'
+  site_register_closed_title: 'Registratie gesloten'
+  site_register_closed_text: 'Dit grid maakt hier geen nieuwe avatars aan: de beheerders maken ze. Vraag hun om de jouwe.'
