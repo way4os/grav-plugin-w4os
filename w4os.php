@@ -1343,6 +1343,8 @@ class W4osPlugin extends Plugin
             'feed_only' => $name === 'profile' ? $uri->query('feed_only') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
+            // The message of the day welcomes the avatar signed in on the site by its name (the grid's own welcome otherwise)
+            'avatar' => \W4OS\Grav\Blocks::name($name) === 'motd' ? ($this->site()->avatar()['name'] ?? null) : null,
             // The class of the visitor, as the engine tells it (viewer or browser): the links of the block are the ones it takes (the
             // helpers see the site, not the visitor); one copy of a block per class is kept
             'client' => $this->site()->client(),
