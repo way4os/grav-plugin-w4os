@@ -100,6 +100,14 @@ describe('the backdrop of the site', function () {
         expect(Backdrop::css(['light' => [2048 => ['jpg' => '/images/a").b{x:y}.jpg']]]))->toContain('url("/images/a%22).b{x:y}.jpg")');
     });
 
+    test('switched off in the settings of the site, there is none anywhere: no style, no class of the page', function () {
+        $site = (string) file_get_contents(dirname(__DIR__).'/classes/Site.php');
+        $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
+
+        expect($site)->toContain("if (! (\$config['enabled'] ?? true)) {\n            return '';")
+            ->and($plugin)->toContain("\$this->grav['twig']->twig_vars['w4os_backdrop'] = \$css !== '';\n        \$css === '' || \$this->grav['assets']->addInlineCss(\$css);");
+    });
+
     test('the settings page has its fields, in the appearance of the site', function () {
         $fields = Symfony\Component\Yaml\Yaml::parse(explode('---', file_get_contents(dirname(__DIR__).'/pages/settings.md'))[1])['form']['fields']['appearance']['fields'];
 
