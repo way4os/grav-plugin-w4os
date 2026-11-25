@@ -6,15 +6,10 @@ function page_header(string $name): array
     return Symfony\Component\Yaml\Yaml::parse(explode('---', (string) file_get_contents(dirname(__DIR__)."/pages/$name.md"))[1]);
 }
 
-describe('the width of the pages of the plugin, for a theme that reads it (header width)', function () {
-    test('the search full width, its list and its details side by side; the guide as wide as the menu bar', function () {
-        expect(page_header('search')['width'] ?? null)->toBe('full')
-            ->and(page_header('guide')['width'] ?? null)->toBe('wide');
-    });
-
-    test('the other pages, forms and texts, in the theme\'s column', function () {
-        foreach (['account', 'confirm', 'forgot', 'profile', 'register', 'reset'] as $name) {
-            expect(page_header($name))->not->toHaveKey('width');
+describe('the width of the pages of the plugin', function () {
+    test('is the theme\'s, for the page of each type (w4os-search, w4os-map...): no page of the plugin says its own', function () {
+        foreach (glob(dirname(__DIR__).'/pages/*.md') as $file) {
+            expect(page_header(basename($file, '.md')))->not->toHaveKey('width', basename($file));
         }
     });
 });
