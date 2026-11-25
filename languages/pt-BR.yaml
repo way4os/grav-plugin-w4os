@@ -1069,6 +1069,10 @@ w4os:
   admin_site_theme_help: 'O tema do site, entre os instalados'
   admin_site_saved: 'As configurações do site estão salvas.'
   admin_site_page_kept: 'O grid mantém o próprio endereço para “%s”: o site não o substitui (ele é alterado nas configurações do grid).'
+  admin_site_pages_new: 'As páginas do site ainda não foram anunciadas ao grid:'
+  admin_site_pages_moved: 'Algumas páginas do site mudaram de endereço, o grid ainda anuncia o antigo:'
+  admin_site_pages_announce: Anunciá-las
+  admin_site_pages_announced: 'As páginas do site foram anunciadas ao grid.'
   admin_site_logo: Logo
   admin_site_logo_help: 'O logo do site, para todos os temas (sem ele, cada um mantém o seu); um PNG funciona com todos'
   admin_site_favicon: Favicon

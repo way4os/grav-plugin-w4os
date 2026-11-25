@@ -393,6 +393,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_zone', fn () => Site::zoneTag(), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
+        // The pages of the grid the site serves the engine was not told yet, for a manager who can announce them (Site::pendingPages())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_pending_pages', fn () => $this->pendingPages()));
         // The view of a list (w4os-views): its actions only for a manager, from their level, never on their own row when it says so;
         // the column and the filter of a filter the page fixes (the grid of the site) left out
         $twig->addFunction(new \Twig\TwigFunction('w4os_list_view', fn (array $list, array $items, array $meta = [], array $query = [], array $links = [], array $fixed = []) => \W4OS\Views\ListView::of(
@@ -611,6 +613,8 @@ class W4osPlugin extends Plugin
             ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'], $_POST['post']) && $this->postAction((array) $_POST);
         } elseif ($page[0] === 'search') {
             $this->grav['page']->title($this->site()->translate('w4os.search'));
+        } elseif ($type === 'dashboard' && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'announce_pages') {
+            $this->announcePages((string) ($_POST['nonce'] ?? ''));
         } elseif (Site::serviceGroup((string) $type) !== null && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && ($_POST['action'] ?? '') === 'run_task') {
             $this->runTask((string) ($_POST['task'] ?? ''), (string) ($_POST['nonce'] ?? ''));
         } elseif (in_array($type, ['manage', 'regions', 'region', 'simulators', 'simulator', 'flux', 'edit'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && isset($_POST['action'])) {
@@ -629,17 +633,6 @@ class W4osPlugin extends Plugin
             // The name of the item in the title
             $name = (string) ($this->item()['item']['name'] ?? '');
             $name === '' || $this->grav['page']->title($name);
-        }
-        // The pages of the grid the site serves, declared to the engine once the dashboard or the settings of the site open, when they
-        // were never declared or moved (the prefix of the site, a route): what that leaves to do said there
-        if (in_array($type, ['dashboard', 'settings'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && $this->site()->canSettings()) {
-            try {
-                foreach ($this->site()->declarePages() as $note) {
-                    $this->grav['messages']->add(htmlspecialchars($this->site()->notice($note)), 'warning');
-                }
-            } catch (\Throwable $e) {
-                $this->grav['log']->warning('w4os: the pages of the site not declared to the engine: '.$e->getMessage());
-            }
         }
         // A page of the plugin in a viewer's panel: its own bare page, not the theme's (as the sitemap plugin gives its own)
         $this->sitePage() && $this->site()->isViewer() && $this->grav['twig']->template = 'w4os-viewer.html.twig';
@@ -1137,6 +1130,39 @@ class W4osPlugin extends Plugin
             $this->grav['messages']->add($e->getMessage(), 'error');
         }
         $this->grav->redirectLangSafe($path, 303);
+    }
+
+    /**
+     * The pages of the grid the site serves announced to the engine, as the manager asked it on the dashboard (the ones never
+     * announced, or moved): what it leaves to do (a restart of the grid), the ones the grid keeps, said there.
+     */
+    private function announcePages(string $nonce): void
+    {
+        $path = $this->grav['uri']->path();
+        if (! Utils::verifyNonce($nonce, 'w4os-pages') || ! $this->site()->canSettings()) {
+            $this->grav['messages']->add($this->site()->translate('w4os.error_invalid_request'), 'error');
+            $this->grav->redirectLangSafe($path, 303);
+        }
+        $this->done('w4os.admin_site_pages_announced', $path, notes: $this->site()->declarePages());
+    }
+
+    /**
+     * The pages of the grid the site serves the engine was not told yet, for a manager who can announce them, each its address,
+     * whether it moved and the label of its setting; none for another visitor, or when the engine cannot tell.
+     *
+     * @return list<array{url: string, moved: bool, label: string}>
+     */
+    private function pendingPages(): array
+    {
+        if (! $this->site()->canSettings()) {
+            return [];
+        }
+        $pages = [];
+        foreach ($this->site()->pendingPages() as $name => $page) {
+            $pages[] = $page + ['label' => 'w4os.'.Site::SITE_PAGES[$name]['label']];
+        }
+
+        return $pages;
     }
 
     /** The language of the page (fr, pt-BR), for what is said or written in it. */

@@ -1001,18 +1001,43 @@ final class Site
     }
 
     /**
+     * The pages of the grid the site serves that the engine was never told, or at another path (the prefix of the site, a route),
+     * by page: their address now, and whether they moved; nothing is written (the dashboard offers to announce them).
+     *
+     * @return array<string,array{url: string, moved: bool}>
+     */
+    public function pendingPages(): array
+    {
+        $declared = $this->declaredPages();
+        $pending = [];
+        foreach (self::pagesToDeclare(self::servedPages($this->routes(), (string) $this->grav['uri']->rootUrl(true)), $declared) as $page => $url) {
+            $pending[$page] = ['url' => $url, 'moved' => isset($declared[$page])];
+        }
+
+        return $pending;
+    }
+
+    /** @return array<string,string> the addresses of its pages the site declared last, by page */
+    private function declaredPages(): array
+    {
+        $file = (string) $this->grav['locator']->findResource(self::SITE_PAGES_FILE);
+        $declared = $file !== '' && is_file($file) ? json_decode((string) file_get_contents($file), true) : [];
+
+        return is_array($declared) ? $declared : [];
+    }
+
+    /**
      * Declare to the engine the pages of the grid the site serves (its site pages), their addresses kept as declared: all of them
-     * ($all: the settings of the site saved), else the ones that changed (pagesToDeclare()). A page the grid has from elsewhere (the
-     * grid it was migrated from, a manager) stays the grid's: said, never an error; an engine that cannot be reached is asked again
-     * next time.
+     * ($all: the settings of the site saved), else the ones that changed (pendingPages(): the manager announces them). A page the
+     * grid has from elsewhere (the grid it was migrated from, a manager) stays the grid's: said, never an error; an engine that
+     * cannot be reached is asked again next time.
      *
      * @return list<string|array<string,mixed>> what to tell the manager: what the engine leaves to do (a restart), the pages it kept
      */
     public function declarePages(bool $all = false): array
     {
         $file = (string) $this->grav['locator']->findResource('user-data://w4os', true, true).'/'.basename(self::SITE_PAGES_FILE);
-        $before = is_file($file) ? json_decode((string) file_get_contents($file), true) : [];
-        $before = is_array($before) ? $before : [];
+        $before = $this->declaredPages();
         $done = self::declareTo(
             $this->engine(),
             self::pagesToDeclare(self::servedPages($this->routes(), (string) $this->grav['uri']->rootUrl(true)), $before, $all),

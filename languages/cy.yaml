@@ -1069,6 +1069,10 @@ w4os:
   admin_site_theme_help: 'Thema’r safle, o blith y rhai sydd wedi’u gosod'
   admin_site_saved: 'Mae gosodiadau’r safle wedi’u cadw.'
   admin_site_page_kept: 'Mae’r grid yn cadw ei gyfeiriad ei hun ar gyfer “%s”: nid yw’r safle’n ei ddisodli (caiff ei newid yng ngosodiadau’r grid).'
+  admin_site_pages_new: 'Nid yw tudalennau’r safle wedi’u cyhoeddi i’r grid eto:'
+  admin_site_pages_moved: 'Mae rhai o dudalennau’r safle wedi symud, mae’r grid yn dal i gyhoeddi eu hen gyfeiriad:'
+  admin_site_pages_announce: 'Eu cyhoeddi'
+  admin_site_pages_announced: 'Mae tudalennau’r safle wedi’u cyhoeddi i’r grid.'
   admin_site_logo: Logo
   admin_site_logo_help: 'Logo’r safle, ar gyfer pob thema (hebddo, mae pob un yn cadw ei logo ei hun); mae PNG yn gweithio gyda phob un'
   admin_site_favicon: Favicon

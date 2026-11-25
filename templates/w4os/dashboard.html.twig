@@ -14,6 +14,21 @@
         <a class="alert-link" href="{{ problems.url|e('html_attr') }}">{{ 'w4os.admin_health_title'|t }}</a>
     </div>
 {% endif %}
+{# The pages of the grid the site serves the grid does not announce yet, or at their old address: announced on the manager's
+   request only (a write has the grid restart) #}
+{% set pending = w4os_pending_pages() %}
+{% if pending %}
+    {% set moved = pending|filter(page => page.moved)|length > 0 %}
+    <div class="alert alert-info d-flex flex-wrap align-items-center gap-2" role="status">
+        <div class="flex-fill">
+            {{ (moved ? 'w4os.admin_site_pages_moved' : 'w4os.admin_site_pages_new')|t }}
+            {% for page in pending %}<code title="{{ page.url|e('html_attr') }}">{{ page.label|t }}</code>{{ loop.last ? '' : ', ' }}{% endfor %}
+        </div>
+        <form method="post">{{ nonce_field('w4os-pages')|raw }}
+            <button class="btn btn-sm" name="action" value="announce_pages">{{ 'w4os.admin_site_pages_announce'|t }}</button>
+        </form>
+    </div>
+{% endif %}
 <div class="w4os-dashboard">
     {% for card in cards %}
     {# Every card the same: its title in its header, its content, the link to its list in its footer, at the right #}

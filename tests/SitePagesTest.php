@@ -86,10 +86,33 @@ describe('the pages of the grid the site serves', function () {
             ->and(Site::declareTo(fakeEngine([[404, problem(404, 'No route')]]), ['profile' => 'https://example.org/profile'], false, fn () => '', fn () => null)['declared'])->toBe([]);
     });
 
-    test('are declared when the settings of the site are saved, and when the dashboard or the settings open after they moved', function () {
+    test('are declared when the settings of the site are saved; never on a page shown: the dashboard offers to announce the ones that are not', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
+        $dashboard = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/dashboard.html.twig');
 
         expect($plugin)->toContain("\$this->done('w4os.admin_site_saved', \$routes['settings'], notes: \$site->declarePages(true));")
-            ->and($plugin)->toContain("if (in_array(\$type, ['dashboard', 'settings'], true) && (\$_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && \$this->site()->canSettings()) {\n            try {\n                foreach (\$this->site()->declarePages() as \$note) {");
+            ->and(substr_count($plugin, 'declarePages('))->toBe(2)
+            ->and($plugin)->toContain("\$type === 'dashboard' && (\$_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST' && (\$_POST['action'] ?? '') === 'announce_pages'", "Utils::verifyNonce(\$nonce, 'w4os-pages') || ! \$this->site()->canSettings()")
+            ->and($dashboard)->toContain("{% set pending = w4os_pending_pages() %}", "{{ nonce_field('w4os-pages')|raw }}", 'name="action" value="announce_pages"');
+    });
+
+    test('are said on the dashboard, those never announced or those that moved, with the button that announces them', function () {
+        $twig = new Twig\Environment(new Twig\Loader\FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->registerUndefinedFunctionCallback(fn (string $name) => new Twig\TwigFunction($name, fn () => null));
+        $twig->registerUndefinedFilterCallback(fn (string $name) => new Twig\TwigFilter($name, fn ($value) => $value));
+        $twig->addFilter(new Twig\TwigFilter('t', fn ($key) => "[$key]"));
+        $pending = [];
+        $twig->addFunction(new Twig\TwigFunction('w4os_pending_pages', function () use (&$pending) {
+            return $pending;
+        }));
+        $render = function (array $pages) use ($twig, &$pending) {
+            $pending = $pages;
+
+            return $twig->render('w4os/dashboard.html.twig');
+        };
+        $html = $render([['url' => 'https://example.org/opensim/profile', 'moved' => true, 'label' => 'w4os.setting_web_profile'], ['url' => 'https://example.org/opensim/search', 'moved' => false, 'label' => 'w4os.setting_web_search']]);
+
+        expect($html)->toContain('[w4os.admin_site_pages_moved]', '>[w4os.setting_web_profile]</code>, <code title="', 'opensim&#x2F;search">[w4os.setting_web_search]</code>', '[w4os.admin_site_pages_announce]')
+            ->and($render([]))->not->toContain('announce_pages');
     });
 });
