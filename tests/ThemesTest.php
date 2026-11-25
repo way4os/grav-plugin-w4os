@@ -64,6 +64,14 @@ describe('themes', function () {
         expect($html)->toContain('<h1>My account</h1>');
     });
 
+    test('a page of the plugin in a viewer has the layout of the helpers\' pages: its content never wider than the panel', function () {
+        $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'Guide', 'header' => ['w4os' => 'guide', 'w4os_block' => 'destination_guide']], 'assets' => new FakeAssets()]);
+
+        // The column of the grid is main, which the helpers' page style lets shrink (min-width: 0)
+        expect($html)->toContain('<div class="layout content-only"><main id="main">')
+            ->and((string) file_get_contents(dirname(__DIR__).'/vendor/w4os/w4os-helpers/assets/css/page.css'))->toContain('main { min-width: 0; }');
+    });
+
     test('in a viewer, the compact style of the plugin comes before the styles of the blocks, which keep their own look there', function () {
         $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os-viewer.html.twig');
 

@@ -16,7 +16,8 @@
     {{ assets.js()|raw }}
 </head>
 <body class="w4os-viewer viewer">
-    <main class="layout">{% if not page.header.w4os_block %}<h1>{{ page.title }}</h1>{% endif %}{{ body|raw }}</main>
+    {# The layout of the helpers' pages: the grid, its column the content (main), which never grows wider than the panel #}
+    <div class="layout content-only"><main id="main">{% if not page.header.w4os_block %}<h1>{{ page.title }}</h1>{% endif %}{{ body|raw }}</main></div>
     {{ assets.js('bottom')|raw }}
 </body>
 </html>
