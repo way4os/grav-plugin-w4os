@@ -18,7 +18,9 @@ describe('the boxes of the site (css/w4os.web.css)', function () {
     });
 
     test('in a viewer too on the splash page of the grid, over the backdrop: what the grid is in boxes on the solid surface', function () {
-        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.viewer.css'))->toContain('.w4os-home .block-grid-info, .w4os-home .block-grid-status { background: var(--w4os-surface, Canvas); }');
+        // The plugin's own splash page too (body.w4os-welcome), its boxes never left without a surface over the backdrop
+        expect((string) file_get_contents(dirname(__DIR__).'/css/w4os.viewer.css'))->toContain(':is(.w4os-home, .w4os-welcome) :is(.block-grid-info, .block-grid-status) { background: var(--w4os-surface, var(--card, Canvas)); }')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os-welcome.html.twig'))->toContain('<body class="w4os-viewer viewer w4os-welcome">');
     });
 
     test('a callout on the solid surface too, tinted with the color of its text, never see-through', function () use ($css) {

@@ -9,9 +9,9 @@ body.w4os-viewer .block { padding: .75rem 1rem; }
 /* The banner of a profile, smaller in a small panel */
 body.w4os-viewer .profile-banner .profile-photo { max-width: 6rem; max-height: 5rem; }
 body.w4os-viewer .profile-banner { gap: .75rem; margin-bottom: .5rem; }
-/* The splash page of the grid (its home blocks, over the backdrop): what the grid is in boxes on a solid surface, the one a theme
-   gives (--w4os-surface), Canvas without one */
-.w4os-home .block-grid-info, .w4os-home .block-grid-status { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
-.w4os-home .block-grid-info > .block-title, .w4os-home .block-grid-status > .block-title { margin-top: 0; }
-.w4os-home .block-grid-info, .w4os-home .block-grid-status { background: var(--w4os-surface, Canvas); }
-.w4os-home :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
+/* The splash page of the grid, a page of the site (its home blocks) or the plugin's own (w4os-welcome.html.twig), over the backdrop:
+   what the grid is in boxes on a solid surface, the one a theme gives (--w4os-surface), else the card of the helpers' page (--card) */
+:is(.w4os-home, .w4os-welcome) :is(.block-grid-info, .block-grid-status) { padding: .75rem 1rem; border: 1px solid color-mix(in srgb, currentColor 15%, transparent); border-radius: .5rem; }
+:is(.w4os-home, .w4os-welcome) :is(.block-grid-info, .block-grid-status) > .block-title { margin-top: 0; }
+:is(.w4os-home, .w4os-welcome) :is(.block-grid-info, .block-grid-status) { background: var(--w4os-surface, var(--card, Canvas)); }
+:is(.w4os-home, .w4os-welcome) :is(.block-grid-info, .block-grid-status) .block-table :is(th, td) { background: transparent; }
