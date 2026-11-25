@@ -72,9 +72,12 @@ describe('the brand of the site', function () {
         // Editorial: its switch on with the logo
             ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], ['logo' => 'user/themes/editorial/images/logo/fowl.png'], ['custom_logo_enabled' => true]))
             ->toBe(['custom_logo' => $copy('user/themes/editorial/images/logo/fowl.png'), 'custom_logo_enabled' => true])
+        // Quark2: the same logo in its menu on a phone
+            ->and(Site::themeBrand(['logo' => $logo, 'favicon' => $icon], ['logo' => 'custom_logo', 'favicon' => 'custom_favicon'], ['logo' => 'user/themes/quark2/images/logo/fowl.png', 'favicon' => 'user/themes/quark2/images/favicon/fowl-icon.png'], [], ['custom_logo_mobile']))
+            ->toBe(['custom_logo' => $copy('user/themes/quark2/images/logo/fowl.png'), 'custom_logo_mobile' => $copy('user/themes/quark2/images/logo/fowl.png'), 'custom_favicon' => $copy('user/themes/quark2/images/favicon/fowl-icon.png')])
         // Nothing set for the site, a theme without the field, a copy that could not be made: the theme as it is
             ->and(Site::themeBrand(['logo' => [], 'favicon' => $icon], ['logo' => 'custom_logo'], ['logo' => 'user/themes/quark2/images/logo/fowl.png'], ['custom_logo_enabled' => true]))->toBe([])
-            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], [], []))->toBe([])
+            ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo'], [], [], ['custom_logo_mobile']))->toBe([])
             ->and(Site::themeBrand(['logo' => $logo], ['logo' => 'custom_logo', 'favicon' => 'favicon'], ['logo' => 'user/themes/quark2/images/logo/fowl.png'], []))
             ->toBe(['custom_logo' => $copy('user/themes/quark2/images/logo/fowl.png')]);
     });

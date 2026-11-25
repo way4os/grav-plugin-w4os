@@ -2183,6 +2183,9 @@ final class Site
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
     public const BRAND_SWITCHES = ['custom_logo_enabled'];
 
+    /** The other fields of a theme that show the logo of the site too (Quark2's custom_logo_mobile, in its menu on a phone). */
+    public const LOGO_FIELDS = ['custom_logo_mobile'];
+
     /**
      * The fields of the active theme the brand of the site goes to (its logo, its favicon): the first of each its blueprint has,
      * none for a theme without them (its own choice stands).
@@ -2277,9 +2280,10 @@ final class Site
      * @param array<string,string> $fields setting => the field of the theme
      * @param array<string,string> $copies setting => the path of its copy in the theme
      * @param array<string,bool> $switches the switches of the theme (brandSwitches())
+     * @param list<string> $logoFields the other fields of the theme that show the logo (LOGO_FIELDS it has)
      * @return array<string,mixed> field of the theme => its value
      */
-    public static function themeBrand(array $brand, array $fields, array $copies, array $switches): array
+    public static function themeBrand(array $brand, array $fields, array $copies, array $switches, array $logoFields = []): array
     {
         $settings = [];
         foreach ($fields as $setting => $field) {
@@ -2290,7 +2294,7 @@ final class Site
                 continue;
             }
             $settings[$field] = [$copy => ['name' => basename($copy), 'type' => (string) ($file['type'] ?? ''), 'path' => $copy]];
-            $setting === 'logo' && $settings += $switches;
+            $setting === 'logo' && $settings += $switches + array_fill_keys($logoFields, $settings[$field]);
         }
 
         return $settings;
@@ -2366,7 +2370,8 @@ final class Site
             }
         }
         // Both the theme's settings and their copy as the active theme's (config.theme, what theme_var() reads)
-        foreach (self::themeBrand($brand, $fields, $copies, self::brandSwitches($has)) as $field => $value) {
+        $logoFields = array_values(array_filter(self::LOGO_FIELDS, $has));
+        foreach (self::themeBrand($brand, $fields, $copies, self::brandSwitches($has), $logoFields) as $field => $value) {
             $this->grav['config']->set("themes.$theme.$field", $value);
             $this->grav['config']->set("theme.$field", $value);
         }
