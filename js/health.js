@@ -30,6 +30,8 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
                 }
                 under(row);
                 row.replaceWith(...lines);
+                // Its time in the browser's own time
+                lines.forEach((line) => window.W4OSDates?.localize(line));
                 return lines[0];
             })
             .catch((reason) => {
@@ -80,11 +82,11 @@ document.querySelectorAll('[data-w4os-health-check]').forEach((button) => {
             const level = banner.querySelector('.w4os-health-level');
             const parts = [errors && said(errors, 'errors'), warnings && said(warnings, 'warnings')].filter(Boolean);
             level && (level.textContent = parts.length ? parts.join(', ') : banner.dataset.none);
-            const time = last?.querySelector('.w4os-health-when [title]');
+            const time = last?.querySelector('.w4os-health-when time');
             const checked = banner.querySelector('.w4os-health-checked');
             if (time && checked) {
-                checked.textContent = (banner.dataset.checked || '%s').replace('%s', time.textContent);
-                checked.title = time.title;
+                const [before, after = ''] = (banner.dataset.checked || '%s').split('%s');
+                checked.replaceChildren(before, time.cloneNode(true), after);
             }
         });
     });

@@ -388,6 +388,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_page', fn (?string $name = null) => $this->site()->profilePage($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_name', fn (?string $uuid) => $this->avatarName($uuid)));
         $twig->addFilter(new \Twig\TwigFilter('w4os_date', fn (int|string|null $value, string $style = 'date') => \W4OS\Views\Dates::format($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style)));
+        // A time of the admin, told again by the browser in its own time (js/dates.js), the server's zone said meanwhile
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn (int|string|null $value, string $style = 'list') => Site::timeTag($value, (string) ($this->grav['language']->getLanguage() ?: $this->grav['language']->getDefault() ?: 'en'), $style), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_age', fn (?int $created) => $this->age($created)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_dashboard', fn () => $this->dashboard()));
         // The view of a list (w4os-views): its actions only for a manager, from their level, never on their own row when it says so;

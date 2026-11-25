@@ -52,6 +52,35 @@ final class Site
     }
 
     /**
+     * A time for a page of the admin: a `<time>` with its ISO moment and its style (W4OS\Views\Dates), told by the server in its own
+     * zone, the zone said with it (`25/11/2026 20:37 UTC`), its full date as its tip; the script of the admin tells it again in the
+     * time and the language of the browser (js/dates.js). A recent time in a list stays relative (`5 minutes ago`).
+     *
+     * @param int|string|null $value a timestamp or a date PHP reads
+     */
+    public static function timeTag(int|string|null $value, string $language, string $style = 'list', ?int $now = null): string
+    {
+        if ($value === null || $value === '' || $value === 0 || $value === '0') {
+            return '';
+        }
+        try {
+            $date = (is_numeric($value) ? (new \DateTimeImmutable)->setTimestamp((int) $value) : new \DateTimeImmutable((string) $value))
+                ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        } catch (\Exception) {
+            return htmlspecialchars((string) $value);
+        }
+        $now ??= time();
+        $relative = $style === 'list' && abs($now - $date->getTimestamp()) < \W4OS\Views\Dates::RECENT && \W4OS\Views\Dates::canTellRelative();
+        $zone = ' '.$date->format('T');
+        $text = \W4OS\Views\Dates::format($date->getTimestamp(), $language, $style, $now).($relative || $style === 'date' ? '' : $zone);
+        $e = fn (string $text) => htmlspecialchars($text, ENT_QUOTES);
+
+        return '<time datetime="'.$e($date->setTimezone(new \DateTimeZone('UTC'))->format('Y-m-d\TH:i:s\Z')).'" data-w4os-time="'.$e($style).'"'
+            .($relative ? ' data-w4os-relative' : '').' title="'.$e(\W4OS\Views\Dates::format($date->getTimestamp(), $language, 'full', $now).$zone).'">'
+            .$e($text).'</time>';
+    }
+
+    /**
      * What the health of the grid says, in the language of the page: each text of a line the engine gives as a sentence of its
      * catalog (`texts`: by field, its key and the values of its placeholders) said by `translate`, the others as they are.
      *

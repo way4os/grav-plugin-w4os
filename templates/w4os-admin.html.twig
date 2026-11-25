@@ -121,6 +121,8 @@
     </div>
 </div>
 <script src="{{ url('plugin://w4os/vendor/npm-asset/tabler-core/dist/js/tabler.min.js')|e('html_attr') }}" defer></script>
+{# The times of the page in the browser's own time (w4os_time) #}
+<script src="{{ url('plugin://w4os/js/dates.js')|e('html_attr') }}" defer></script>
 {# What the page added (the scripts of its lists and forms), once it is rendered; of the styles, the plugin's and the Form plugin's
    alone (the other plugins' are for the site) #}
 {{ w4os_admin_css(assets.css())|raw }}

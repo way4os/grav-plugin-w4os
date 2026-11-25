@@ -84,6 +84,7 @@ describe('the settings pages of the services of the grid', function () {
         $twig->addFunction(new Twig\TwigFunction('nonce_field', fn () => '<input type="hidden" name="nonce" value="n">', ['is_safe' => ['html']]));
         $twig->addFilter(new Twig\TwigFilter('t', fn ($key) => "[$key]"));
         $twig->addFilter(new Twig\TwigFilter('w4os_date', fn ($value) => (string) $value));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
 
         return $twig->render('w4os/service.html.twig', []);
     };

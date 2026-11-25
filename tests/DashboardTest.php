@@ -20,6 +20,7 @@ describe('the dashboard', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'fr', $style), ['is_safe' => ['html']]));
 
         return $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
     };
@@ -61,7 +62,7 @@ describe('the dashboard', function () {
         $html = $render([['kind' => 'rows', 'page' => 'manage', 'title' => 'w4os.recent_avatars', 'list' => $api->listOf('avatars'), 'url' => '/avatars', 'items' => [$bart], 'item' => ['url' => '/avatars/edit', 'param' => 'avatar'], 'error' => null]]);
 
         expect($html)->toContain('[w4os.recent_avatars]', 'href="/avatars/edit?avatar=a1"', 'Bart Simpson', W4OS\Views\Dates::format($created, 'fr', 'list'), '<div class="card-footer text-end"><a class="w4os-more" href="/avatars">[w4os.see_all]</a></div>')
-            ->not->toContain(date('Y-m-d', $created));
+            ->not->toContain('>'.date('Y-m-d', $created));
     });
 
     test('says so in one sentence when a list has no row', function () use ($api, $render) {
@@ -85,6 +86,7 @@ describe('the dashboard', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value) => (string) $value));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/dashboard.html.twig', ['page' => ['header' => []]]);
 
         expect($problems)->toMatchArray(['count' => 2, 'warnings' => 1, 'labels' => ['SRV_ProfileServerURI', 'imagick JPEG 2000'], 'statuses' => ['', '']])

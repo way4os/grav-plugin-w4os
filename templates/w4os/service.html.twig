@@ -41,7 +41,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <div class="flex-fill">
                                             <div>{{ task.label ?? task.name }}</div>
-                                            <div class="small text-secondary">{{ task.lastRun ? 'w4os.admin_task_last'|t(task.lastRun|w4os_date('list')) : 'w4os.admin_task_never'|t }}{% if task.message %} · {{ task.message }}{% endif %}</div>
+                                            <div class="small text-secondary">{% if task.lastRun %}{{ 'w4os.admin_task_last'|t(w4os_time(task.lastRun))|raw }}{% else %}{{ 'w4os.admin_task_never'|t }}{% endif %}{% if task.message %} · {{ task.message }}{% endif %}</div>
                                         </div>
                                         {% if service.run %}
                                             <form method="post">{{ nonce_field('w4os-task')|raw }}<input type="hidden" name="task" value="{{ task.id|e('html_attr') }}"><button class="btn btn-sm" name="action" value="run_task">{{ 'w4os.admin_task_run'|t }}</button></form>

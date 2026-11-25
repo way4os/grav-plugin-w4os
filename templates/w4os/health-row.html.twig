@@ -48,7 +48,7 @@
     {% endif %}
     <td class="w-1 text-end text-secondary text-nowrap w4os-health-when">
         {{- row.ms is defined and row.ms is not null ? row.ms ~ ' ms' : '' -}}
-        {%- if (row.checkedAt ?? false) and row.checkedAt != (checked ?? null) %}<div class="small" title="{{ row.checkedAt|w4os_date('long')|e('html_attr') }}">{{ row.checkedAt|w4os_date('list') }}</div>{% endif -%}
+        {%- if (row.checkedAt ?? false) and row.checkedAt != (checked ?? null) %}<div class="small">{{ w4os_time(row.checkedAt) }}</div>{% endif -%}
     </td>
 </tr>
 {% if kind == 'address' and (row.detail ?? false) %}

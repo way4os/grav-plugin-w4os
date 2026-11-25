@@ -102,9 +102,9 @@
                         {% set parts = [] %}
                         {% for other in view.secondary %}
                             {# A group: each of its values with its own label #}
-                            {% for shown in other.type == 'group' ? other.definition.parts : [other.definition] %}{% set part = cells.cell(shown, row.item)|striptags|trim %}{% if part %}{% set parts = parts|merge([{text: (other.type == 'group' ? (shown.bare ?? false) : other.bare) ? part : 'w4os.label_value'|t(('w4os.' ~ shown.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
+                            {% for shown in other.type == 'group' ? other.definition.parts : [other.definition] %}{% set part = cells.cell(shown, row.item)|striptags('<time>')|trim %}{% if part %}{% set parts = parts|merge([{text: (other.type == 'group' ? (shown.bare ?? false) : other.bare) ? part : 'w4os.label_value'|t(('w4os.' ~ shown.label)|t, part), tier: tiers[other.priority] ?? 'xxl'}]) %}{% endif %}{% endfor %}
                         {% endfor %}
-                        {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded w4os-fold-{{ (parts|last).tier }}">{% for part in parts %}<span class="w4os-fold-{{ part.tier }}">{{ part.text }}</span>{% endfor %}</div>{% endif %}
+                        {% if parts %}<div class="w4os-subtitle text-secondary w4os-folded w4os-fold-{{ (parts|last).tier }}">{% for part in parts %}<span class="w4os-fold-{{ part.tier }}">{{ part.text|raw }}</span>{% endfor %}</div>{% endif %}
                     </td>
                     {% else %}
                     <td class="w4os-cell-{{ column.type|e('html_attr') }}{{ column.definition.picture is defined ? ' w4os-cell-who' }}{{ column.primary ? '' : ' w4os-tier-' ~ (tiers[column.priority] ?? 'xxl') }}">{{ cells.cell(column.definition, row.item, 'list', false) }}</td>

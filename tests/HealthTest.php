@@ -31,6 +31,7 @@ describe('the health page of the admin', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health']]);
 
         // How many errors and warnings, red with an error
@@ -56,6 +57,7 @@ describe('the health page of the admin', function () {
             $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
             $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key".($args ? ':'.implode('|', $args) : '').']'));
             $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'en', $style)));
+            $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
 
             return $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health']]);
         };
@@ -65,10 +67,10 @@ describe('the health page of the admin', function () {
         ]]]];
         $html = $render(['health' => $health]);
 
-        expect($html)->toMatch('~<span class="w4os-health-checked" title="[^"]+">\[w4os.admin_health_checked:2 minutes ago\]</span>~')
+        expect($html)->toMatch('~<span class="w4os-health-checked">\[w4os.admin_health_checked:<time datetime="[^"]+Z" data-w4os-time="list" data-w4os-relative title="[^"]+">2 minutes ago</time>\]</span>~')
             ->and($html)->toContain('href="/w4os/health?refresh=1"')
             ->and(substr_count($html, '2 hours ago'))->toBe(1)
-            ->and($render(['health' => $health, 'refreshError' => 'Idle timeout reached']))->toContain('[w4os.admin_health_refresh_failed:Idle timeout reached|2 minutes ago]');
+            ->and($render(['health' => $health, 'refreshError' => 'Idle timeout reached']))->toMatch('~\[w4os.admin_health_refresh_failed:Idle timeout reached\|<time [^>]+>2 minutes ago</time>\]~');
     });
 
     test('shows each kind of line with its own columns, nothing where a value means nothing, the reason of what is not set', function () {
@@ -85,6 +87,7 @@ describe('the health page of the admin', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key".($args ? ':'.implode('|', $args) : '').']'));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => 'now'));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/health.html.twig', ['page' => ['route' => '/w4os/health'], 'assets' => new class {
             public function addJs(string $url, array $options = []): void {}
         }]);
@@ -100,9 +103,10 @@ describe('the health page of the admin', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => "at $value"));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/health-row.html.twig', ['row' => ['id' => 'a1', 'kind' => 'address', 'label' => 'login', 'url' => 'http://grid.example.org:8002', 'level' => 'ok', 'status' => '200', 'ms' => 12, 'checkedAt' => 1795059606]]);
 
-        expect($html)->toContain('<tr data-check="a1" class="w4os-health-ok">', 'at 1795059606', '12 ms');
+        expect($html)->toContain('<tr data-check="a1" class="w4os-health-ok">', '<time datetime="'.gmdate('Y-m-d\\TH:i:s\\Z', 1795059606).'" data-w4os-time="list"', '12 ms');
 
         // What it answered at length under it, across it; its address broken after its / and its . only
         $html = $twig->render('w4os/health-row.html.twig', ['row' => ['id' => 'a2', 'kind' => 'address', 'label' => 'welcome', 'url' => 'http://grid.example.org/welcome', 'level' => 'error', 'status' => 'cURL error 28', 'detail' => 'Operation timed out after 3000 milliseconds']]);
@@ -121,6 +125,7 @@ describe('the health page of the admin', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/health.html.twig', ['page' => []]);
 
         // The Robust services first, then the pages, then the tasks
@@ -145,6 +150,7 @@ describe('the health page of the admin', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => 'now'));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
         $html = $twig->render('w4os/health.html.twig', ['page' => [], 'assets' => new class {
             public function addJs(string $url, array $options = []): void {}
         }]);
@@ -161,6 +167,7 @@ describe('the health page of the admin', function () {
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
         $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => "[$key]"));
         $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => (string) $value));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'en', $style), ['is_safe' => ['html']]));
 
         expect($twig->render('w4os/health.html.twig', ['page' => []]))->toContain('alert alert-danger', 'The engine API cannot be reached');
     });

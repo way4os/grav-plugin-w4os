@@ -21,6 +21,7 @@ function render_list(?array $list, array $items, array $meta, array $links = [],
     $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => ''));
     $twig->addFilter(new TwigFilter('t', fn ($key, ...$args) => $args ? "[$key:".implode('|', $args).']' : "[$key]"));
     $twig->addFilter(new TwigFilter('w4os_date', fn ($value, string $style = 'date') => W4OS\Views\Dates::format($value, 'fr', $style)));
+    $twig->addFunction(new \Twig\TwigFunction('w4os_time', fn ($value, string $style = 'list') => \W4OS\Grav\Site::timeTag($value, 'fr', $style), ['is_safe' => ['html']]));
     $assets = new class {
         public function addCss(string $url): void {}
         public function addJs(string $url, array $options = []): void {}
@@ -107,9 +108,11 @@ describe('the list of a page of the admin', function () {
             ->and(W4OS\Views\Dates::format($old, 'fr', 'long'))->toMatch('~^16 nov\\. 2026, \\d{2}:\\d{2}$~')
             ->and(W4OS\Views\Dates::format($old, 'en'))->toBe('Nov 16, 2026')
             ->and(W4OS\Views\Dates::format(null, 'fr'))->toBe('')
-            ->and($html)->toContain('<span class="w4os-fold-md">[w4os.role_resident]</span><span class="w4os-fold-md">[w4os.label_value:[w4os.last_seen]|il y a 3 jours]</span><span class="w4os-fold-xl">bart@example.org</span><span class="w4os-fold-xl">[w4os.label_value:[w4os.born]|'.$short.']</span></div>')
-            ->and($html)->toMatch('~<time title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short, '~').'</time>~')
-            ->and($html)->not->toContain(date('Y-m-d', $older));
+            ->and($html)->toContain('<span class="w4os-fold-md">[w4os.role_resident]</span><span class="w4os-fold-md">[w4os.label_value:[w4os.last_seen]|'.W4OS\Grav\Site::timeTag($recent, 'fr').']</span><span class="w4os-fold-xl">bart@example.org</span><span class="w4os-fold-xl">[w4os.label_value:[w4os.born]|'.W4OS\Grav\Site::timeTag($older, 'fr').']</span></div>')
+            ->and(W4OS\Grav\Site::timeTag($recent, 'fr'))->toContain(' data-w4os-relative ', '>il y a 3 jours</time>')
+            // In the browser's own time (js/dates.js); the server's zone said meanwhile
+            ->and($html)->toMatch('~<time datetime="'.gmdate('Y-m-d\\TH:i:s\\Z', $older).'" data-w4os-time="list" title="[^"]*'.date('Y', $older).'[^"]*">'.preg_quote($short.' '.date('T', $older), '~').'</time>~')
+            ->and($html)->not->toContain('>'.date('Y-m-d', $older));
     });
 
     test('shows each value of a filter with the number of rows it gives, when the engine counts them', function () {

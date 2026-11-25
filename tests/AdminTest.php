@@ -315,5 +315,20 @@ describe('the sidebar of the admin', function () {
 
         expect($status)->toBe(0, implode("\n", $output));
     })->skip(fn () => trim((string) shell_exec('command -v node')) === '', 'node is not installed');
+
+    test('tells its times with the zone of the server, then the browser tells them in its own time (node --test tests/js)', function () {
+        $zone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+        $at = 1795639020;
+        $tag = W4OS\Grav\Site::timeTag($at, 'fr', 'list', $at + 8 * 86400);
+        date_default_timezone_set($zone);
+        exec('node --test '.escapeshellarg(dirname(__DIR__).'/tests/js/dates.test.js').' 2>&1', $output, $status);
+
+        expect($tag)->toBe('<time datetime="2026-11-25T20:37:00Z" data-w4os-time="list" title="25 novembre 2026 à 20:37 UTC">25/11/2026 20:37 UTC</time>')
+            ->and(W4OS\Grav\Site::timeTag($at, 'fr', 'list', $at + 120))->toContain(' data-w4os-relative ', '>il y a 2 minutes</time>')
+            ->and(W4OS\Grav\Site::timeTag(null, 'fr'))->toBe('')
+            ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os-admin.html.twig'))->toContain("url('plugin://w4os/js/dates.js')")
+            ->and($status)->toBe(0, implode("\n", $output));
+    })->skip(fn () => trim((string) shell_exec('command -v node')) === '', 'node is not installed');
 });
 
