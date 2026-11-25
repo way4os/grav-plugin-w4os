@@ -92,12 +92,13 @@ describe('the message of the day', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/classes/Blocks.php'))->toContain("'include_landsales', 'avatar']");
     });
 
-    test('comes before what the grid is on the splash page too, whatever the width', function () {
+    test('is on the right of the splash page, what the grid is on the left', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
         $twig->addFunction(new TwigFunction('w4os_block', fn (string $name) => "<section class=\"block block-$name\"></section>", ['is_safe' => ['html']]));
         $html = $twig->render('w4os/welcome.html.twig', ['page' => ['title' => 'Grid']]);
 
-        expect(strpos($html, 'block-motd'))->toBeLessThan(strpos($html, 'block-grid-info'))
+        expect(strpos($html, '<aside class="sidebar sidebar-right">'))->toBeLessThan(strpos($html, 'block-motd'))
+            ->and(strpos($html, 'block-grid-info'))->toBeLessThan(strpos($html, '<main'))
             ->and(substr_count($html, 'block-motd'))->toBe(1);
     });
 });
@@ -248,7 +249,7 @@ describe('the home page of a grid', function () {
             ->and($html)->toContain('<h3 class="block-title">grid-info</h3>', '<h3 class="block-title">grid-status</h3>', '<h3 class="block-title">motd</h3>');
     });
 
-    test('has its message of the day above what the grid is, the Connect block under it, the last three news of the site beside them, then a link to all of them', function () {
+    test('has its message of the day and the Connect block under what the grid is, the last three news of the site beside them, then a link to all of them', function () {
         $twig = themeless_twig();
         $post = fn (int $n) => new class($n) {
             public array $header = [];
@@ -281,8 +282,8 @@ describe('the home page of a grid', function () {
         $grid = substr($html, (int) strpos($html, '<aside class="w4os-home-grid">'), (int) strpos($html, '<aside class="w4os-home-news">') - (int) strpos($html, '<aside class="w4os-home-grid">'));
 
         expect($grid)->toContain('<section class="w4os-start">', '<h3 class="w4os-start-title">')
-            ->and(strpos($grid, 'block-motd'))->toBeLessThan(strpos($grid, 'block-grid-info'))
-            ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'w4os-start'))
+            ->and(strpos($grid, 'block-grid-status'))->toBeLessThan(strpos($grid, 'block-motd'))
+            ->and(strpos($grid, 'block-motd'))->toBeLessThan(strpos($grid, 'w4os-start'))
             ->and($html)->toContain('<h3 class="w4os-latest-title">News</h3>', '<p class="w4os-latest-all"><a class="w4os-more" href="/news">[w4os.home_all_news]</a></p>', '<h4><a href="/news/post-1">Post 1</a></h4>', 'Post 3', 'Text of the post', '<time datetime="2023-11-14">')
             ->and($html)->not->toContain('Post 4')
             // The excerpt cut with an ellipsis written once, never escaped again (&amp;hellip;)
@@ -311,10 +312,10 @@ describe('the home page of a grid', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.css'))->toContain('grid-template-rows: auto 1fr;', '.w4os-home-news { align-self: start; }');
     });
 
-    test('lets a theme move the Connect block to the other aside, by blocks of its own, the message of the day above what the grid is', function () {
+    test('lets a theme move the message of the day and the Connect block to the other aside, or the message of the day first, by blocks of its own', function () {
         $loader = new FilesystemLoader(dirname(__DIR__).'/templates');
         $loader->addPath(dirname(__DIR__).'/templates', 'w4os');
-        $theme = "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid %}{{ block('w4os_home_motd') }}{{ block('w4os_home_grid_info') }}{% endblock %}{% block w4os_home_news_before %}{{ block('w4os_home_connect') }}{% endblock %}";
+        $theme = "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid %}{{ block('w4os_home_grid_info') }}{% endblock %}{% block w4os_home_news_before %}{{ block('w4os_home_motd') }}{{ block('w4os_home_connect') }}{% endblock %}";
         $twig = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => $theme]), $loader]));
         $twig->addFunction(new TwigFunction('w4os_block', fn (string $name) => "<section class=\"block block-$name\"></section>", ['is_safe' => ['html']]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
@@ -323,13 +324,22 @@ describe('the home page of a grid', function () {
         [$grid, $news] = explode('<aside class="w4os-home-news">', $twig->render('w4os/home.html.twig', ['content' => '']), 2);
         $plain = explode('<aside class="w4os-home-news">', themeless_twig()->render('w4os/home.html.twig', ['content' => '']), 2)[0];
 
-        // Moved: the message of the day and what the grid is on one side, how to connect on the other
-        expect($grid)->toContain('block-motd', 'block-grid-info', 'block-grid-status')->not->toContain('w4os-start')
-            ->and(strpos($grid, 'block-motd'))->toBeLessThan(strpos($grid, 'block-grid-info'))
-            ->and($news)->toContain('w4os-start')->not->toContain('block-motd')
-            // Left as it was: all four in one aside, the message of the day first
+        // Moved: what the grid is on one side, its message of the day and how to connect on the other
+        expect($grid)->toContain('block-grid-info', 'block-grid-status')->not->toContain('block-motd', 'w4os-start')
+            ->and($news)->toContain('block-motd', 'w4os-start')
+            ->and(strpos($news, 'block-motd'))->toBeLessThan(strpos($news, 'w4os-start'))
+            // Left as it was: all four under what the grid is, the message of the day after it
             ->and($plain)->toContain('block-grid-info', 'block-motd', 'w4os-start')
-            ->and(strpos($plain, 'block-motd'))->toBeLessThan(strpos($plain, 'block-grid-info'));
+            ->and(strpos($plain, 'block-grid-status'))->toBeLessThan(strpos($plain, 'block-motd'));
+        // The message of the day first, as w4os.org has it
+        $first = new Environment(new Twig\Loader\ChainLoader([new Twig\Loader\ArrayLoader(['w4os/home.html.twig' => "{% extends '@w4os/w4os/home.html.twig' %}{% block w4os_home_grid %}{{ block('w4os_home_motd') }}{{ block('w4os_home_grid_info') }}{{ block('w4os_home_connect') }}{% endblock %}"]), $loader]));
+        $first->addFunction(new TwigFunction('w4os_block', fn (string $name) => "<section class=\"block block-$name\"></section>", ['is_safe' => ['html']]));
+        $first->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
+        $first->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => $value));
+        $first->addFilter(new TwigFilter('t', fn ($key) => "[$key]"));
+        $aside = explode('<aside class="w4os-home-news">', $first->render('w4os/home.html.twig', ['content' => '']), 2)[0];
+        expect(strpos($aside, 'block-motd'))->toBeLessThan(strpos($aside, 'block-grid-info'))
+            ->and(strpos($aside, 'block-grid-status'))->toBeLessThan(strpos($aside, 'w4os-start'));
     });
 
     test('has the files of its blocks before the theme writes its head, as any page with blocks of the helpers in its text', function () {
