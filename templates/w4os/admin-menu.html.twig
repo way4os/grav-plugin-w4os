@@ -1,14 +1,16 @@
 {# The admin menu, for the managers of the grid, before the menu of the visitor in the top bar of a theme: its entries are the admin
    pages (w4os_admin_menu: the plugin's, and the ones other plugins add), as in the sidebar of the admin: an entry with pages under it
-   (Regions, a section: Services, Tools, Site) leads to its first page, its pages beside it on hover or focus. The label leads to the
-   first one. #}
+   (Regions, the section Site) leads to its first page, its pages beside it on hover or focus; a section of pages with nothing in
+   common (Services) a heading above them. The label leads to the first one. #}
 {% set items = w4os_admin_menu() %}
 {% if items %}
 <div class="w4os-user-menu w4os-admin-menu">
     <a class="w4os-user-current" href="{{ items|first.url }}" aria-haspopup="true"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> {{ 'w4os.menu_admin'|t }}</a>
     <ul class="w4os-user-list">
         {% for item in items %}
-        {% if item.children ?? false %}
+        {% if item.heading ?? false %}
+        <li class="w4os-user-heading">{{ item.label }}</li>
+        {% elseif item.children ?? false %}
         <li class="w4os-has-sub"><a href="{{ item.url }}" aria-haspopup="true"><i class="fa-solid fa-angle-left w4os-sub-mark" aria-hidden="true"></i>{{ item.label }}</a>
             <ul class="w4os-user-sublist">{% for child in item.children %}<li><a href="{{ child.url }}">{{ child.label }}</a></li>{% endfor %}</ul>
         </li>

@@ -15,12 +15,15 @@ describe('admin', function () {
     });
 
     test('has its sections in their order, the grid first, each with its icon of Tabler', function () {
-        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'settings_map', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
+        expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'settings_map', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'settings', 'shortcodes', 'health'])
             ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-')
-            ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools', 'site'])
-            // The site: its settings, then its pages in Grav's admin (added by adminMenu())
-            ->and(Site::ADMIN_PAGES['settings']['parent'])->toBe('site')
-            ->and(array_keys(array_filter(Site::ADMIN_PAGES, fn (array $page) => ($page['parent'] ?? null) === 'tools')))->toBe(['health', 'shortcodes']);
+            ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'site'])
+            // Services a heading (services with nothing in common), the site an entry: its settings, its shortcodes, then the pages of
+            // Grav's admin (added by adminMenu()); the health last, an entry of its own
+            ->and(Site::ADMIN_GROUPS['services']['heading'])->toBeTrue()
+            ->and(array_keys(array_filter(Site::ADMIN_PAGES, fn (array $page) => ($page['parent'] ?? null) === 'site')))->toBe(['settings', 'shortcodes'])
+            ->and(Site::ADMIN_PAGES['health'])->not->toHaveKey('parent')
+            ->and(array_key_last(Site::ADMIN_PAGES))->toBe('health');
     });
 
     test('is a layout of its own (Tabler), the site\'s identity in its sidebar, the sections the visitor opens', function () {
@@ -96,20 +99,23 @@ describe('the menu of the admin', function () {
             ->and(Site::menuTree([$items[2]]))->toBe([$items[2]]);
     });
 
-    test('makes a section that is no page (Services, Tools, Site) an entry of its own, leading to its first page, its pages under it', function () {
+    test('makes a section that is no page an entry of its own leading to its first page (Site), or a heading above its pages (Services)', function () {
         $items = [
             ['type' => 'manage', 'label' => 'Avatars', 'url' => '/w4os/manage', 'active' => false],
             ['type' => 'settings_search', 'label' => 'Search', 'url' => '/w4os/search', 'active' => false, 'parent' => 'services'],
             ['type' => 'settings_guide', 'label' => 'Guide', 'url' => '/w4os/guide', 'active' => true, 'parent' => 'services'],
-            ['type' => 'health', 'label' => 'Health', 'url' => '/w4os/health', 'active' => false, 'parent' => 'tools'],
-            ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'active' => false],
+            ['type' => 'settings', 'label' => 'Settings', 'url' => '/w4os/settings', 'active' => false, 'parent' => 'site'],
+            ['type' => 'shortcodes', 'label' => 'Shortcodes', 'url' => '/w4os/shortcodes', 'active' => false, 'parent' => 'site'],
+            ['type' => 'health', 'label' => 'Health', 'url' => '/w4os/health', 'active' => false],
         ];
-        $menu = Site::menuTree($items, 'List', ['services' => ['label' => 'Services', 'icon' => 'ti ti-plug-connected'], 'tools' => ['label' => 'Tools']]);
+        $menu = Site::menuTree($items, 'List', ['services' => ['label' => 'Services', 'heading' => true], 'site' => ['label' => 'Site', 'icon' => 'ti ti-world-www']]);
 
-        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'tools', 'settings'])
-            ->and($menu[1])->toMatchArray(['label' => 'Services', 'url' => '/w4os/search', 'group' => true, 'active' => true, 'icon' => 'ti ti-plug-connected'])
-            ->and(array_column($menu[1]['children'], 'type'))->toBe(['settings_search', 'settings_guide'])
-            ->and($menu[2])->toMatchArray(['url' => '/w4os/health', 'active' => false])
+        expect(array_column($menu, 'type'))->toBe(['manage', 'services', 'settings_search', 'settings_guide', 'site', 'health'])
+            ->and($menu[1])->toBe(['type' => 'services', 'label' => 'Services', 'heading' => true])
+            ->and($menu[3]['active'])->toBeTrue()
+            ->and($menu[4])->toMatchArray(['label' => 'Site', 'url' => '/w4os/settings', 'group' => true, 'active' => false, 'icon' => 'ti ti-world-www', 'gap' => true])
+            ->and(array_column($menu[4]['children'], 'type'))->toBe(['settings', 'shortcodes'])
+            ->and($menu[5])->not->toHaveKey('gap')
             ->and(array_column(Site::menuTree(array_slice($items, 1, 2)), 'type'))->toBe(['settings_search', 'settings_guide']);
     });
 

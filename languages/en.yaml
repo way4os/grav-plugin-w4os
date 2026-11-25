@@ -1133,7 +1133,6 @@ w4os:
   admin_task_never: 'Never run'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pin the sidebar'
-  admin_menu_tools: Tools
   admin_menu_site: Site
   admin_grav_pages: 'Grav Pages'
   admin_admin2_menu: 'w4os settings'

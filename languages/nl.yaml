@@ -1133,7 +1133,6 @@ w4os:
   admin_task_never: 'Nooit uitgevoerd'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'
-  admin_menu_tools: Hulpmiddelen
   admin_menu_site: Site
   admin_grav_pages: 'Grav Pages'
   admin_admin2_menu: 'w4os settings'

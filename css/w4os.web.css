@@ -44,3 +44,5 @@
 .w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }
 .w4os-menus-open .w4os-user-sublist { position: static; visibility: visible; opacity: 1; min-width: 0; margin: 0 0 .3rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
 .w4os-menus-open .w4os-sub-mark { display: none; }
+/* A section of the admin menu (Services): its name above its pages */
+.w4os-user-list .w4os-user-heading { margin-top: .3rem; padding: .45rem 1rem .2rem; font-size: .75em; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; opacity: .6; }

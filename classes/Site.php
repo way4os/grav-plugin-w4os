@@ -1710,15 +1710,17 @@ final class Site
         'settings_economy' => ['label' => 'w4os.settings_menu_economy', 'icon' => 'ti ti-coin', 'parent' => 'services'],
         'settings_offline' => ['label' => 'w4os.settings_menu_offline', 'icon' => 'ti ti-mail', 'parent' => 'services'],
         'settings_assets' => ['label' => 'w4os.settings_menu_assets', 'icon' => 'ti ti-photo', 'parent' => 'services'],
-        'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat', 'parent' => 'tools'],
-        'shortcodes' => ['label' => 'w4os.admin_shortcodes_menu', 'icon' => 'ti ti-code', 'parent' => 'tools'],
         'settings' => ['label' => 'w4os.admin_site_settings', 'icon' => 'ti ti-settings', 'parent' => 'site'],
+        'shortcodes' => ['label' => 'w4os.admin_shortcodes_menu', 'icon' => 'ti ti-code', 'parent' => 'site'],
+        'health' => ['label' => 'w4os.admin_health_title', 'icon' => 'ti ti-heartbeat'],
     ];
 
-    /** The sections of the admin menu that are no page: an entry of the menu leading to the first of the pages whose `parent` they are. */
+    /**
+     * The sections of the admin menu that are no page: an entry of the menu leading to the first of the pages whose `parent` they
+     * are (Site: its pages belong together), or a heading above them (`heading`: Services, pages with nothing in common).
+     */
     public const ADMIN_GROUPS = [
-        'services' => ['label' => 'w4os.group_services', 'icon' => 'ti ti-plug-connected'],
-        'tools' => ['label' => 'w4os.admin_menu_tools', 'icon' => 'ti ti-tool'],
+        'services' => ['label' => 'w4os.group_services', 'heading' => true],
         'site' => ['label' => 'w4os.admin_menu_site', 'icon' => 'ti ti-world-www'],
     ];
 
@@ -1821,10 +1823,12 @@ final class Site
      * The entries of a menu with the ones that belong to another (`parent`, its type) under it (`children`): the page of the parent
      * first, named as a list ($list, not the name of the parent), then theirs. A parent that is a section of $groups (no page: its
      * label, its icon) is an entry of its own where its first page was, leading to that page (`url`), its pages under it; marked
-     * `group`. A parent is open (active) when one of its pages is the page shown. An entry whose parent is in neither stays where it is.
+     * `group`. A section marked `heading` is a heading (`heading`) before its first page instead, its pages left in the menu after
+     * it, the next entry out of it set apart (`gap`). A parent is open (active) when one of its pages is the page shown. An entry
+     * whose parent is in neither stays where it is.
      *
      * @param list<array<string,mixed>> $items
-     * @param array<string, array{label: string, icon?: string}> $groups
+     * @param array<string, array{label: string, icon?: string, heading?: bool}> $groups
      * @return list<array<string,mixed>>
      */
     public static function menuTree(array $items, ?string $list = null, array $groups = []): array
@@ -1837,12 +1841,23 @@ final class Site
         }
         $active = fn (array $entries) => in_array(true, array_column($entries, 'active'), true);
         $menu = [];
+        $heading = null;
         foreach ($items as $item) {
             $of = $parent($item);
+            // A section of pages with nothing in common: its heading before its first page, its pages after it, the next entry apart
+            if ($of !== null && ! in_array($of, $types, true) && ($groups[$of]['heading'] ?? false)) {
+                ($children[$of][0]['type'] ?? null) === ($item['type'] ?? null) && $menu[] = ['type' => $of, 'label' => $groups[$of]['label'], 'heading' => true];
+                $heading = $of;
+                $menu[] = $item;
+                continue;
+            }
+            $heading !== null && $of !== $heading && $item['gap'] = true;
+            $heading = null;
             // A section: its entry where its first page was
             if ($of !== null && ! in_array($of, $types, true)) {
-                $children[$of][0] === $item && $menu[] = ['type' => $of, 'label' => $groups[$of]['label'], 'url' => $item['url'] ?? '', 'group' => true,
-                    'active' => $active($children[$of]), 'children' => $children[$of]] + (isset($groups[$of]['icon']) ? ['icon' => $groups[$of]['icon']] : []);
+                ($children[$of][0]['type'] ?? null) === ($item['type'] ?? null) && $menu[] = ['type' => $of, 'label' => $groups[$of]['label'], 'url' => $item['url'] ?? '', 'group' => true,
+                    'active' => $active($children[$of]), 'children' => $children[$of]] + (isset($groups[$of]['icon']) ? ['icon' => $groups[$of]['icon']] : [])
+                    + (($item['gap'] ?? false) ? ['gap' => true] : []);
                 continue;
             }
             if ($of !== null) {

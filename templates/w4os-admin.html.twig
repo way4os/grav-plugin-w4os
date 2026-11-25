@@ -59,11 +59,14 @@
             <div class="collapse navbar-collapse" id="w4os-sidebar">
                 <ul class="navbar-nav pt-lg-3">
                     {% for item in menu %}
-                    {% if item.children ?? false %}
+                    {% if item.heading ?? false %}
+                    {# A section of pages with nothing in common (Services): its name, a line in the folded sidebar #}
+                    <li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">{{ item.label }}</span></li>
+                    {% elseif item.children ?? false %}
                     {# An entry with pages under it (Regions: its list, the map; a section: Services, Tools, Site), Tabler's chevron telling it:
                        a click leads to its first page at once (no toggle), its pages shown under it (Tabler's dropdown menu) on the page of one
                        of them #}
-                    <li class="nav-item dropdown{{ item.active ? ' active' }}">
+                    <li class="nav-item dropdown{{ item.active ? ' active' }}{{ item.gap ?? false ? ' w4os-nav-gap' }}">
                         <a class="nav-link dropdown-toggle" href="{{ item.url|e('html_attr') }}"{% if item.active %} aria-expanded="true"{% endif %}>
                             {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
@@ -75,7 +78,7 @@
                         </div>
                     </li>
                     {% else %}
-                    <li class="nav-item{{ item.active ?? false ? ' active' }}">
+                    <li class="nav-item{{ item.active ?? false ? ' active' }}{{ item.gap ?? false ? ' w4os-nav-gap' }}">
                         <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
                             {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
