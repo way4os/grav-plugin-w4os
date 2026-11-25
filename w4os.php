@@ -447,6 +447,8 @@ class W4osPlugin extends Plugin
                 $this->grav['assets']->addCss('plugin://w4os/css/w4os.css');
                 $this->grav['assets']->addCss('plugin://w4os/css/w4os.'.Site::layer($this->site()->client()).'.css');
             }
+            // The pages of the admin menu beside it, inside the window (a browser's: a viewer shows no admin menu)
+            Site::layer($this->site()->client()) === 'web' && $this->grav['assets']->addJs('plugin://w4os/js/menus.js', ['group' => 'bottom', 'loading' => 'defer']);
             $this->backdrop();
             // The teleport links' own style and script (TeleportLink::ASSETS, from the views), on the pages of the site: a link in a
             // text kept in a cache needs them too

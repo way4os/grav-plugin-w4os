@@ -174,7 +174,9 @@ describe('the menu of the admin', function () {
 
         expect($html)->toContain('<li><a href="/w4os">Dashboard</a></li>')
             ->and($html)->toMatch('~<li class="w4os-has-sub"><a href="/w4os/settings" aria-haspopup="true">Site<i class="fa-solid fa-angle-right w4os-sub-mark" aria-hidden="true"></i></a>\s*<ul class="w4os-user-sublist"><li><a href="/w4os/settings">Site settings</a></li><li><a href="/admin/pages">Grav Pages</a></li></ul>~')
-            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.web.css'))->toContain('.w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }');
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.web.css'))->toContain('.w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }', '.w4os-user-sublist { display: block; position: absolute; left: 100%; right: auto;', '.w4os-sub-left > .w4os-user-sublist { left: auto; right: 100%; }')
+            // To its left only where the window has no room on the right (Quark2's method)
+            ->and((string) file_get_contents(dirname(__DIR__).'/js/menus.js'))->toContain('panel.getBoundingClientRect().right > width - EDGE_GAP && panel.parentNode.classList.add("w4os-sub-left")', 'document.fonts?.ready.then(fit)');
     });
 
     test('has a way back from Grav\'s admin (admin2): an entry of its sidebar and its page, for whom has Grav\'s admin rights', function () {
