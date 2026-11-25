@@ -1787,6 +1787,9 @@ final class Site
         'motd' => 'motd', 'grid-map' => 'map',
     ];
 
+    /** The route of the about page a grid announces (its grid info), the home where the site has none. */
+    public const ABOUT_ROUTE = '/about';
+
     /** The route of the news page of a site, whose last posts the home page of the grid shows. */
     public const NEWS_ROUTE = '/news';
 

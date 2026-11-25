@@ -537,6 +537,11 @@ class W4osPlugin extends Plugin
         // The previous addresses of the grid on this site's host, served by Grav's own redirects after the site's own list
         $config = $this->grav['config'];
         $config->set('site.redirects', Site::redirectsFrom($this->site()->previousAddresses(), (string) $this->grav['uri']->host(), (array) $config->get('site.redirects', [])));
+        // The about page the grid announces (its grid info: /about), where the site has none (the default home says what the grid is): the
+        // home, for good, in its language
+        if ($this->grav['uri']->path() === Site::ABOUT_ROUTE && $this->grav['pages']->find(Site::ABOUT_ROUTE) === null) {
+            $this->grav->redirectLangSafe('/', 301);
+        }
         $this->site()->addMenu();
         $this->site()->hideMapPage();
         $this->site()->addPage($this->grav['uri']->path());

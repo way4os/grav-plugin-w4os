@@ -39,3 +39,10 @@ describe('the map\'s page of the site', function () {
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("\$this->site()->hideMapPage();");
     });
 });
+
+describe('the about page a grid announces', function () {
+    test('leads to the home, for good and in its language, where the site has no page of it', function () {
+        expect(Site::ABOUT_ROUTE)->toBe('/about')
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("if (\$this->grav['uri']->path() === Site::ABOUT_ROUTE && \$this->grav['pages']->find(Site::ABOUT_ROUTE) === null) {\n            \$this->grav->redirectLangSafe('/', 301);");
+    });
+});
