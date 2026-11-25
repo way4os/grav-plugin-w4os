@@ -130,7 +130,7 @@ w4os:
   admin_task_never: 'Nie ausgeführt'
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'
-  admin_menu_site: 'Seite'
+  admin_menu_site: 'Website'
   admin_grav_pages: 'Grav-Seiten'
   admin_admin2_menu: 'w4os-Einstellungen'
   admin_shortcode_option_add_grid: 'Mit dem Knopf, der das Grid zum Viewer hinzufügt, und der Login-URI zum Kopieren'
