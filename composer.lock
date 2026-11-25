@@ -2623,7 +2623,7 @@
             "dist": {
                 "type": "path",
                 "url": "../opensim-helpers",
-                "reference": "7b58da7a782a4cc11cb336ae9c19c88599e078fe"
+                "reference": "c87a897e4c6ba4fcbac78552a6f9e97aba9902ac"
             },
             "require": {
                 "ext-curl": "*",
