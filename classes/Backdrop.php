@@ -25,19 +25,23 @@ final class Backdrop
     /** The quality of the images served. */
     public const QUALITY = 82;
 
-    /** The pages laid out without the theme, which the backdrop leaves alone: the plugin's bare pages of a viewer. */
-    public const BARE_TEMPLATES = ['w4os-welcome.html.twig', 'w4os-viewer.html.twig'];
+    /** The splash page, the one a viewer shows before the login: laid out without the theme, with the backdrop, in a viewer too. */
+    public const SPLASH_TEMPLATE = 'w4os-welcome.html.twig';
+
+    /** The other pages laid out without the theme, which the backdrop leaves alone: the plugin's bare pages of a viewer. */
+    public const BARE_TEMPLATES = ['w4os-viewer.html.twig'];
 
     /**
-     * Whether a page shows the backdrop: a page the theme lays out in a browser, not an admin page; never a page a viewer shows (the
-     * web only: a viewer has its own day and night in the world, and no mode of its own).
+     * Whether a page shows the backdrop: a page the theme lays out in a browser, not an admin page; never another page a viewer shows
+     * (the web only: a viewer has its own day and night in the world, and no mode of its own); always the splash page.
      *
      * @param ?string $template the template of the page; $layout: the one it is rendered with when the plugin sets another
      * @param bool $viewer whether a viewer shows the page (Site::isViewer())
      */
     public static function shown(?string $template, ?string $layout, bool $viewer): bool
     {
-        return ! $viewer && $template !== 'w4os-admin' && ! in_array($layout, self::BARE_TEMPLATES, true);
+        return $layout === self::SPLASH_TEMPLATE
+            || (! $viewer && $template !== 'w4os-admin' && ! in_array($layout, self::BARE_TEMPLATES, true));
     }
 
     /**
