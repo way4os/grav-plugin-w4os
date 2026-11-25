@@ -1998,6 +1998,137 @@ final class Site
         return str_contains($destination, '://') ? $destination : 'user://'.trim($destination, '/');
     }
 
+    /** Where admin2 keeps the files of its logo and its icon (its branding, admin-next.ui.branding: their names). */
+    public const ADMIN_NEXT_MEDIA = 'user://media/admin-next';
+
+    /** The prefix of the copies the plugin makes there: the files of a choice made in an admin itself have none. */
+    public const ADMIN_BRAND_PREFIX = 'w4os-';
+
+    /**
+     * The logo and the icon of the site, for Grav's admins: its own settings (Réglages du site, plugins.w4os.brand), else the ones of
+     * its theme (its file fields, BRAND_FIELDS: custom_logo; custom_favicon, favicon); paths from the root of the site, null for none.
+     *
+     * @param array<string,mixed> $brand the brand of the site (plugins.w4os.brand)
+     * @param array<string,mixed> $theme the settings of the active theme
+     * @return array{logo: ?string, favicon: ?string}
+     */
+    public static function effectiveBrand(array $brand, array $theme): array
+    {
+        $path = function (mixed $files): ?string {
+            $file = is_array($files) && $files !== [] ? reset($files) : null;
+            $path = is_array($file) ? ltrim((string) ($file['path'] ?? ''), '/') : '';
+
+            return $path === '' || str_contains($path, '..') ? null : $path;
+        };
+        $found = [];
+        foreach (self::BRAND_FIELDS as $setting => $fields) {
+            $found[$setting] = $path($brand[$setting] ?? null);
+            foreach ($fields as $field) {
+                $found[$setting] ??= $path($theme[$field] ?? null);
+            }
+        }
+
+        return ['logo' => $found['logo'] ?? null, 'favicon' => $found['favicon'] ?? null];
+    }
+
+    /**
+     * The name of the copy of a file of the brand in the media of admin2: its kind and a mark of the file (its path, its size, its
+     * date), its extension; another file, or the same one changed, another name (and no browser keeping the old one).
+     */
+    public static function brandCopyName(string $kind, string $path, int $size, int $time): string
+    {
+        return self::ADMIN_BRAND_PREFIX.$kind.'-'.substr(md5("$path|$size|$time"), 0, 8).'.'.strtolower(pathinfo($path, PATHINFO_EXTENSION));
+    }
+
+    /**
+     * Admin2's branding with the logo of the site (light and dark) and its icon, by the names of their copies in its media; null for
+     * none (admin2's own again). A choice made in admin2 itself stays: its text instead of a logo, its own logo, its own icon.
+     *
+     * @param array<string,mixed> $branding admin2's (admin-next.ui.branding)
+     * @return array<string,mixed>
+     */
+    public static function adminNextBranding(array $branding, ?string $logo, ?string $favicon): array
+    {
+        $ours = fn (mixed $file) => (string) $file === '' || str_starts_with((string) $file, self::ADMIN_BRAND_PREFIX);
+        if (($branding['mode'] ?? 'default') !== 'text' && $ours($branding['logoLight'] ?? '') && $ours($branding['logoDark'] ?? '')) {
+            $branding['mode'] = $logo === null ? 'default' : 'custom';
+            $branding['logoLight'] = (string) $logo;
+            $branding['logoDark'] = (string) $logo;
+        }
+        $ours($branding['favicon'] ?? '') && $branding['favicon'] = (string) $favicon;
+
+        return $branding;
+    }
+
+    /**
+     * The classic admin's whitelabel with the logo of the site, on its sign-in screen and in its menu (it has no setting of its icon:
+     * the one of its theme); empty for none. A logo chosen in the admin itself stays.
+     *
+     * @param array<string,mixed> $whitelabel its whitelabel (plugins.admin.whitelabel)
+     * @param ?string $logo the path of the copy, from the root of the site
+     * @return array<string,mixed>
+     */
+    public static function adminWhitelabel(array $whitelabel, ?string $logo): array
+    {
+        $mime = ['png' => 'image/png', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg', 'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'webp' => 'image/webp', 'ico' => 'image/x-icon'];
+        $file = $logo === null ? [] : [$logo => ['name' => basename($logo), 'type' => $mime[strtolower(pathinfo($logo, PATHINFO_EXTENSION))] ?? 'image/png', 'size' => 0, 'path' => $logo]];
+        foreach (['logo_login', 'logo_custom'] as $field) {
+            $current = array_keys((array) ($whitelabel[$field] ?? []));
+            $theirs = $current !== [] && ! str_starts_with(basename((string) $current[0]), self::ADMIN_BRAND_PREFIX);
+            $theirs || $whitelabel[$field] = $file;
+        }
+
+        return $whitelabel;
+    }
+
+    /**
+     * The logo and the icon of the site where Grav's admins read them, installed or not (installed later, they show them): copies in
+     * admin2's media, its branding (user/config/admin-next.yaml) and the classic admin's whitelabel (user/config/plugins/admin.yaml),
+     * their other settings as they are. Written only when the files of the site changed: a request with nothing new writes nothing.
+     */
+    public function syncAdminBrand(): void
+    {
+        $config = $this->grav['config'];
+        $theme = (string) $config->get('system.pages.theme');
+        // The theme's own settings, as its file and the site's give them (never the copies applyBrand() puts in them for a request)
+        $own = [];
+        foreach (array_merge(...array_values(self::BRAND_FIELDS)) as $field) {
+            $value = $this->savedSetting("themes/$theme", $field) ?? $this->themeDefault($theme, $field);
+            $value === null || $own[$field] = $value;
+        }
+        $effective = self::effectiveBrand((array) $config->get('plugins.w4os.brand', []), $own);
+        $names = [];
+        foreach ($effective as $kind => $path) {
+            $file = $path === null ? '' : GRAV_ROOT.'/'.$path;
+            $names[$kind] = $file !== '' && is_file($file) ? self::brandCopyName($kind, $path, (int) filesize($file), (int) filemtime($file)) : null;
+        }
+        $branding = (array) $config->get('admin-next.ui.branding', []);
+        $whitelabel = (array) $config->get('plugins.admin.whitelabel', []);
+        $media = rtrim((string) $this->grav['locator']->findResource(self::ADMIN_NEXT_MEDIA, false, true), '/');
+        $logoPath = $names['logo'] === null ? null : $media.'/'.$names['logo'];
+        $newBranding = self::adminNextBranding($branding, $names['logo'], $names['favicon']);
+        $newWhitelabel = self::adminWhitelabel($whitelabel, $logoPath);
+        $copies = array_filter($names);
+        $missing = array_filter($copies, fn (string $name) => ! is_file(GRAV_ROOT."/$media/$name"));
+        if ($newBranding === $branding && $newWhitelabel === $whitelabel && $missing === []) {
+            return;
+        }
+        // The copies, the ones of before removed
+        $folder = GRAV_ROOT."/$media";
+        is_dir($folder) || mkdir($folder, 0775, true);
+        foreach (glob("$folder/".self::ADMIN_BRAND_PREFIX.'*') ?: [] as $old) {
+            in_array(basename($old), $copies, true) || unlink($old);
+        }
+        foreach ($copies as $kind => $name) {
+            is_file("$folder/$name") || copy(GRAV_ROOT.'/'.$effective[$kind], "$folder/$name");
+        }
+        // Their settings, the one key of each in its file of the configuration, as Grav's admin writes them (writeSettings())
+        $newBranding === $branding || $this->writeSettings('admin-next', fn (array $content) => self::withSetting($content, 'ui.branding', $newBranding));
+        $newWhitelabel === $whitelabel || $this->writeSettings('plugins/admin', fn (array $content) => self::withSetting($content, 'whitelabel', $newWhitelabel));
+        $config->set('admin-next.ui.branding', $newBranding);
+        $config->set('plugins.admin.whitelabel', $newWhitelabel);
+    }
+
     /** The switches of a theme that show its logo once it is set (Editorial's custom_logo_enabled). */
     public const BRAND_SWITCHES = ['custom_logo_enabled'];
 
@@ -2059,6 +2190,14 @@ final class Site
     {
         $this->writeSettings($file, fn (array $config) => self::withSetting($config, $key, $value));
         $this->grav['config']->set("$file.$key", $value);
+    }
+
+    /** A setting saved in the configuration of the site (config://<file>.yaml, user/config), null when it has none. */
+    public function savedSetting(string $file, string $key): mixed
+    {
+        $path = (string) $this->grav['locator']->findResource("config://$file.yaml");
+
+        return $path === '' ? null : \Grav\Common\Utils::getDotNotation((array) \Grav\Common\File\CompiledYamlFile::instance($path)->content(), $key);
     }
 
     /** A setting of a theme as the theme gives it (its <theme>.yaml), null when it has none. */

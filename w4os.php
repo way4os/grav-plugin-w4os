@@ -260,7 +260,10 @@ class W4osPlugin extends Plugin
     }
 
     /** Templates of the plugin come last, so a theme can override them. */
-    /** The settings the plugin gives the active theme (the leftovers of a demo out), then the brand of the site, whatever the theme. */
+    /**
+     * The settings the plugin gives the active theme (the leftovers of a demo out), then the brand of the site, whatever the theme,
+     * and in Grav's admins (written only when it changed).
+     */
     public function onThemeInitialized(): void
     {
         try {
@@ -269,6 +272,11 @@ class W4osPlugin extends Plugin
             $this->grav['log']->warning('w4os: the settings of the theme not given: '.$e->getMessage());
         }
         $this->site()->applyBrand();
+        try {
+            $this->site()->syncAdminBrand();
+        } catch (\Throwable $e) {
+            $this->grav['log']->warning('w4os: the brand of the site not given to Grav\'s admins: '.$e->getMessage());
+        }
     }
 
     public function onTwigTemplatePaths(): void
