@@ -54,6 +54,7 @@ w4os:
   admin_site_theme: 'Theme'
   admin_site_theme_help: 'The theme of the site, among the ones installed'
   admin_site_saved: 'The settings of the site are saved.'
+  admin_site_page_kept: 'The grid keeps its own address for “%s”: the site does not replace it (it is changed in the settings of the grid).'
   admin_site_logo: 'Logo'
   admin_site_logo_help: 'The logo of the site, for every theme (without it, each keeps its own); a PNG works with all of them'
   admin_site_favicon: 'Favicon'

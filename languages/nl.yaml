@@ -1068,6 +1068,7 @@ w4os:
   admin_site_theme: Thema
   admin_site_theme_help: 'Het thema van de site, uit de geïnstalleerde'
   admin_site_saved: 'De instellingen van de site zijn opgeslagen.'
+  admin_site_page_kept: 'Het grid houdt zijn eigen adres voor ‘%s’: de site vervangt het niet (het wordt gewijzigd in de instellingen van het grid).'
   admin_site_logo: Logo
   admin_site_logo_help: 'Het logo van de site, voor elk thema (zonder houdt elk zijn eigen); een PNG werkt met allemaal'
   admin_site_favicon: Favicon

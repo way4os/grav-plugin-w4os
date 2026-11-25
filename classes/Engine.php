@@ -222,6 +222,23 @@ final class Engine
         return $this->resource($this->call('PATCH', '/settings/'.rawurlencode($group), ['type' => 'settings', 'id' => $group, 'attributes' => $values]));
     }
 
+    /** @return array<string,mixed> a page of the grid its site serves, as the grid has it: its url, whether the site declared it, who serves it */
+    public function sitePage(string $page): array
+    {
+        return $this->resource($this->call('GET', '/site-pages/'.rawurlencode($page)));
+    }
+
+    /**
+     * Declare a page of the grid the site serves, at its address on the site (`page-set-elsewhere` when the grid has it from
+     * elsewhere: nothing written).
+     *
+     * @return array<string,mixed> the document: the page now, what is left to do (meta.reminders), the address it replaced
+     */
+    public function declareSitePage(string $page, string $url): array
+    {
+        return $this->call('PUT', '/site-pages/'.rawurlencode($page), ['type' => 'site-pages', 'id' => $page, 'attributes' => ['url' => $url]]);
+    }
+
     /** @return array<string,mixed> what the engine of the grid's machine says of it for the helpers of a site (its grid, its config, its destinations, checkedAt) */
     public function siteDescription(): array
     {

@@ -54,6 +54,7 @@ w4os:
   admin_site_theme: 'Theme'
   admin_site_theme_help: 'Das Theme der Website, unter den installierten'
   admin_site_saved: 'Die Website-Einstellungen sind gespeichert.'
+  admin_site_page_kept: 'Das Grid behält seine eigene Adresse für „%s“: die Website ersetzt sie nicht (sie wird in den Einstellungen des Grids geändert).'
   admin_site_logo: 'Logo'
   admin_site_logo_help: 'Das Logo der Website, für jedes Theme (ohne es behält jedes sein eigenes); ein PNG funktioniert mit allen'
   admin_site_favicon: 'Favicon'

@@ -54,6 +54,7 @@ w4os:
   admin_site_theme: 'Thème'
   admin_site_theme_help: 'Le thème du site, parmi ceux installés'
   admin_site_saved: 'Les réglages du site sont enregistrés.'
+  admin_site_page_kept: 'La grille garde sa propre adresse pour « %s » : le site ne la remplace pas (elle se change dans les réglages de la grille).'
   admin_site_logo: 'Logo'
   admin_site_logo_help: 'Le logo du site, pour tous les thèmes (sans lui, chacun garde le sien) ; un PNG marche avec tous'
   admin_site_favicon: 'Favicon'

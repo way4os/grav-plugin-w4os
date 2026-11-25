@@ -54,6 +54,7 @@ w4os:
   admin_site_theme: 'Tema'
   admin_site_theme_help: 'Il tema del sito, tra quelli installati'
   admin_site_saved: 'Le impostazioni del sito sono salvate.'
+  admin_site_page_kept: 'La griglia tiene il proprio indirizzo per «%s»: il sito non lo sostituisce (si cambia nelle impostazioni della griglia).'
   admin_site_logo: 'Logo'
   admin_site_logo_help: 'Il logo del sito, per ogni tema (senza, ognuno tiene il proprio); un PNG funziona con tutti'
   admin_site_favicon: 'Favicon'

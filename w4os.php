@@ -630,6 +630,17 @@ class W4osPlugin extends Plugin
             $name = (string) ($this->item()['item']['name'] ?? '');
             $name === '' || $this->grav['page']->title($name);
         }
+        // The pages of the grid the site serves, declared to the engine once the dashboard or the settings of the site open, when they
+        // were never declared or moved (the prefix of the site, a route): what that leaves to do said there
+        if (in_array($type, ['dashboard', 'settings'], true) && ($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'GET' && $this->site()->canSettings()) {
+            try {
+                foreach ($this->site()->declarePages() as $note) {
+                    $this->grav['messages']->add(htmlspecialchars($this->site()->notice($note)), 'warning');
+                }
+            } catch (\Throwable $e) {
+                $this->grav['log']->warning('w4os: the pages of the site not declared to the engine: '.$e->getMessage());
+            }
+        }
         // A page of the plugin in a viewer's panel: its own bare page, not the theme's (as the sitemap plugin gives its own)
         $this->sitePage() && $this->site()->isViewer() && $this->grav['twig']->template = 'w4os-viewer.html.twig';
         // The page a viewer shows before the login: alone whatever asks it, titled by the site, the files of its blocks in its head
@@ -892,7 +903,8 @@ class W4osPlugin extends Plugin
                     }
                     // Grav's own setting of the theme, as its admin writes it
                     $site->saveSetting('system', 'pages.theme', $theme);
-                    $this->done('w4os.admin_site_saved', $routes['settings']);
+                    // The pages of the grid the site serves, declared to the engine: what it leaves to do, the ones the grid keeps, said
+                    $this->done('w4os.admin_site_saved', $routes['settings'], notes: $site->declarePages(true));
                     // no break
                 case 'post':
                     $posts = $this->ownPosts() ?? throw new FormError('w4os.error_forbidden');

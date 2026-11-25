@@ -951,6 +951,122 @@ final class Site
         return $routes;
     }
 
+    /**
+     * The pages of the grid the plugin serves, by the engine's name of each (its site pages): the route of the plugin that serves it,
+     * the label of its setting. The registration only while it is open (routes()).
+     */
+    public const SITE_PAGES = [
+        'profile' => ['route' => 'profile', 'label' => 'setting_web_profile'],
+        'search' => ['route' => 'search', 'label' => 'setting_web_search'],
+        'guide' => ['route' => 'guide', 'label' => 'setting_destination_guide'],
+        'welcome' => ['route' => 'welcome', 'label' => 'setting_welcome'],
+        'register' => ['route' => 'register', 'label' => 'setting_register'],
+        'password' => ['route' => 'password', 'label' => 'setting_password'],
+    ];
+
+    /** The addresses of its pages the site declared to the engine last, by page. */
+    public const SITE_PAGES_FILE = 'user-data://w4os/site-pages.json';
+
+    /**
+     * The address of each page of the grid the site serves, by page: its route at the base of the site (no language: the grid gives
+     * it to every viewer); none for a page it has no route for.
+     *
+     * @param array<string,string> $routes the routes of the plugin
+     * @return array<string,string>
+     */
+    public static function servedPages(array $routes, string $base): array
+    {
+        $pages = [];
+        foreach (self::SITE_PAGES as $page => $definition) {
+            $route = (string) ($routes[$definition['route']] ?? '');
+            $route === '' || $route === '/' || $pages[$page] = rtrim($base, '/').$route;
+        }
+
+        return $pages;
+    }
+
+    /**
+     * The pages to declare: all of them ($all), else the ones the site never declared, or at another path (its prefix, its route
+     * changed); never for another host alone (the same site reached at another name).
+     *
+     * @param array<string,string> $served the addresses of the pages now (servedPages())
+     * @param array<string,string> $declared the ones declared last
+     * @return array<string,string>
+     */
+    public static function pagesToDeclare(array $served, array $declared, bool $all = false): array
+    {
+        $path = fn (?string $url) => $url === null ? null : (string) parse_url($url, PHP_URL_PATH);
+
+        return $all ? $served : array_filter($served, fn (string $url, string $page) => $path($url) !== $path($declared[$page] ?? null), ARRAY_FILTER_USE_BOTH);
+    }
+
+    /**
+     * Declare to the engine the pages of the grid the site serves (its site pages), their addresses kept as declared: all of them
+     * ($all: the settings of the site saved), else the ones that changed (pagesToDeclare()). A page the grid has from elsewhere (the
+     * grid it was migrated from, a manager) stays the grid's: said, never an error; an engine that cannot be reached is asked again
+     * next time.
+     *
+     * @return list<string|array<string,mixed>> what to tell the manager: what the engine leaves to do (a restart), the pages it kept
+     */
+    public function declarePages(bool $all = false): array
+    {
+        $file = (string) $this->grav['locator']->findResource('user-data://w4os', true, true).'/'.basename(self::SITE_PAGES_FILE);
+        $before = is_file($file) ? json_decode((string) file_get_contents($file), true) : [];
+        $before = is_array($before) ? $before : [];
+        $done = self::declareTo(
+            $this->engine(),
+            self::pagesToDeclare(self::servedPages($this->routes(), (string) $this->grav['uri']->rootUrl(true)), $before, $all),
+            $all,
+            fn (string $page) => $this->translate('w4os.admin_site_page_kept', [$this->translate('w4os.'.self::SITE_PAGES[$page]['label'])]),
+            fn (string $page, string $why) => $this->grav['log']->warning("w4os: the page $page not declared to the engine: $why"),
+        );
+        $declared = $done['declared'] + $before;
+        $declared === $before || file_put_contents($file, json_encode($declared, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
+
+        return $done['notes'];
+    }
+
+    /**
+     * Declare pages to the engine, each at its address: checked first ($check: only a page the grid does not have as the site
+     * declared it is written, a write has Robust restart); a page the grid has from elsewhere (`page-set-elsewhere`) said by $kept.
+     *
+     * @param array<string,string> $pages the address of each page
+     * @param \Closure(string $page): string $kept the text of a page the grid keeps
+     * @param \Closure(string $page, string $why): void $failed a page the engine could not take
+     * @return array{declared: array<string,string>, notes: list<string|array<string,mixed>>} the pages the engine settled (not when it
+     *         cannot be reached, or does not know the page yet: asked again), what to tell the manager
+     */
+    public static function declareTo(Engine $engine, array $pages, bool $check, \Closure $kept, \Closure $failed): array
+    {
+        $declared = [];
+        $notes = [];
+        foreach ($pages as $page => $url) {
+            try {
+                $now = $check ? $engine->sitePage($page) : [];
+                if (! (($now['declared'] ?? false) && self::samePage((string) ($now['url'] ?? ''), $url))) {
+                    array_push($notes, ...array_values((array) ($engine->declareSitePage($page, $url)['meta']['reminders'] ?? [])));
+                }
+            } catch (EngineException $e) {
+                $e->problemCode === 'page-set-elsewhere' ? $notes[] = $kept($page) : $failed($page, $e->getMessage());
+                // Asked again unless the engine said it for good: the grid keeps its own, or it has no files here
+                if (! in_array($e->problemCode, ['page-set-elsewhere', 'channel-unavailable'], true) || $e->problem === []) {
+                    continue;
+                }
+            }
+            $declared[$page] = $url;
+        }
+
+        return ['declared' => $declared, 'notes' => array_values(array_unique($notes, SORT_REGULAR))];
+    }
+
+    /** Whether two addresses are the same page, the name of an avatar a profile ends with left out. */
+    public static function samePage(string $one, string $other): bool
+    {
+        $bare = fn (string $url) => rtrim(str_replace('[AGENT_NAME]', '', $url), '/');
+
+        return $bare($one) === $bare($other);
+    }
+
     /** The admin route of the plugin by default, and its sections in it. */
     public const ADMIN_ROUTE = '/w4os';
 
