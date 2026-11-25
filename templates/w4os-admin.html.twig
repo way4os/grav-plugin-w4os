@@ -60,26 +60,25 @@
                 <ul class="navbar-nav pt-lg-3">
                     {% for item in menu %}
                     {% if item.children ?? false %}
-                    {# An entry with pages under it (Regions: its list, the map; a section: Services, Tools, Site): a click leads to its first
-                       page at once, its pages shown under it (Tabler's dropdown menu) on the page of one of them #}
+                    {# An entry with pages under it (Regions: its list, the map; a section: Services, Tools, Site), Tabler's chevron telling it:
+                       a click leads to its first page at once (no toggle), its pages shown under it (Tabler's dropdown menu) on the page of one
+                       of them #}
                     <li class="nav-item dropdown{{ item.active ? ' active' }}">
-                        <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active %} aria-expanded="true"{% endif %}>
+                        <a class="nav-link dropdown-toggle" href="{{ item.url|e('html_attr') }}"{% if item.active %} aria-expanded="true"{% endif %}>
                             {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
                         </a>
                         <div class="dropdown-menu{{ item.active ? ' show' }}">
                             {% for child in item.children %}
-                            <a class="dropdown-item{{ child.active ?? false ? ' active' }}" href="{{ child.url|e('html_attr') }}"{% if child.active ?? false %} aria-current="page"{% endif %}{% if child.external ?? false %} title="{{ child.external|e('html_attr') }}"{% endif %}>{{ child.label }}{% if child.external ?? false %}<span class="w4os-nav-external"><i class="ti ti-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">{{ child.external }}</span></span>{% endif %}</a>
+                            <a class="dropdown-item{{ child.active ?? false ? ' active' }}" href="{{ child.url|e('html_attr') }}"{% if child.active ?? false %} aria-current="page"{% endif %}>{{ child.label }}</a>
                             {% endfor %}
                         </div>
                     </li>
                     {% else %}
                     <li class="nav-item{{ item.active ?? false ? ' active' }}">
-                        <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}{% if item.external ?? false %} title="{{ item.external|e('html_attr') }}"{% endif %}>
+                        <a class="nav-link" href="{{ item.url|e('html_attr') }}"{% if item.active ?? false %} aria-current="page"{% endif %}>
                             {% if item.icon is defined %}<span class="nav-link-icon"><i class="{{ item.icon|e('html_attr') }}" aria-hidden="true"></i></span>{% endif %}
                             <span class="nav-link-title">{{ item.label }}</span>
-                            {# Another admin (Grav's): the arrow out, its name read out #}
-                            {% if item.external ?? false %}<span class="w4os-nav-external"><i class="ti ti-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">{{ item.external }}</span></span>{% endif %}
                         </a>
                     </li>
                     {% endif %}

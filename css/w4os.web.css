@@ -35,3 +35,12 @@
 .w4os-menus-open .w4os-user-menu { display: block; }
 .w4os-menus-open .w4os-user-list { position: static; visibility: visible; opacity: 1; min-width: 0; max-height: none; overflow: visible; margin: .3rem 0 1rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
 .w4os-menus-open .w4os-user-list a { padding: .3rem 0; }
+/* An entry of the admin menu with pages under it: its mark, its pages beside the list (to the left: the menu is at the right of the
+   top bar) on hover or focus; under it in the menu of a phone */
+.w4os-admin-menu .w4os-user-list { overflow: visible; max-height: none; }
+.w4os-user-list .w4os-has-sub { position: relative; }
+.w4os-user-list .w4os-sub-mark { margin-right: .4rem; opacity: .6; }
+.w4os-user-sublist { position: absolute; right: 100%; top: -.4rem; z-index: 21; min-width: 13rem; margin: 0; padding: .4rem 0; list-style: none; border-radius: .5rem; border: 1px solid color-mix(in srgb, currentColor 30%, transparent); background: Canvas; color: CanvasText; box-shadow: 0 .6rem 1.6rem color-mix(in srgb, CanvasText 18%, transparent); visibility: hidden; opacity: 0; transition: opacity .15s; }
+.w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }
+.w4os-menus-open .w4os-user-sublist { position: static; visibility: visible; opacity: 1; min-width: 0; margin: 0 0 .3rem 1.2rem; padding: 0; border: 0; background: none; color: inherit; box-shadow: none; }
+.w4os-menus-open .w4os-sub-mark { display: none; }

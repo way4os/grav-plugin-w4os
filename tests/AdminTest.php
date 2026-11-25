@@ -133,30 +133,49 @@ describe('the menu of the admin', function () {
         }, 'grav' => ['user' => []]]);
 
         // The parent leads to its first page at once (never a click that only opens it), its pages shown under it on the page of one of them
-        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;manage" aria-expanded="true">~')
+        expect($html)->toMatch('~<li class="nav-item dropdown active">\s*<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;manage" aria-expanded="true">~')
             ->and($html)->not->toContain('data-bs-toggle="dropdown"')
             ->and($html)->toMatch('~<div class="dropdown-menu show">\s*<a class="dropdown-item" href="&#x2F;w4os&#x2F;manage">List</a>\s*<a class="dropdown-item active" href="&#x2F;w4os&#x2F;models" aria-current="page">Avatar Models</a>~');
     });
 
-    test('has the site as a section: its settings, then its pages in Grav\'s admin, marked as leaving for it', function () {
+    test('has the site as a section: its settings, then the pages of Grav\'s admin, named so', function () {
         $menu = Site::menuTree([
             ['type' => 'settings', 'label' => 'Site settings', 'url' => '/w4os/settings', 'active' => false, 'parent' => 'site'],
-            ['type' => 'grav_pages', 'label' => 'Pages', 'url' => '/admin/pages', 'active' => false, 'parent' => 'site', 'external' => "In Grav's admin"],
+            ['type' => 'grav_pages', 'label' => 'Grav Pages', 'url' => '/admin/pages', 'active' => false, 'parent' => 'site'],
         ], 'List', ['site' => ['label' => 'Site']]);
         $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], $menu);
 
         expect(array_column($menu, 'type'))->toBe(['site'])
             ->and($menu[0]['url'])->toBe('/w4os/settings')
             ->and(array_column($menu[0]['children'], 'type'))->toBe(['settings', 'grav_pages'])
-            ->and($html)->toMatch('~href="&#x2F;admin&#x2F;pages" title="In&#x20;Grav[^"]*admin">~')
-            ->and($html)->toMatch('~<span class="w4os-nav-external"><i class="ti ti-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">In Grav[^<]*s admin</span></span>~');
+            // The section's chevron (Tabler's), never a toggle: its click lands on its first page
+            ->and($html)->toMatch('~<a class="nav-link dropdown-toggle" href="&#x2F;w4os&#x2F;settings">~')
+            ->and($html)->toContain('<a class="dropdown-item" href="&#x2F;admin&#x2F;pages">Grav Pages</a>')
+            ->and($html)->not->toContain('data-bs-toggle="dropdown"', 'w4os-nav-external');
+    });
+
+    test('is the same in the top bar of the site: its entries, each with pages under it leading to the first, its pages beside it', function () {
+        $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
+        $twig->addFunction(new TwigFunction('w4os_admin_menu', fn () => [
+            ['label' => 'Dashboard', 'url' => '/w4os', 'active' => false],
+            ['label' => 'Site', 'url' => '/w4os/settings', 'group' => true, 'active' => false, 'children' => [
+                ['label' => 'Site settings', 'url' => '/w4os/settings', 'active' => false],
+                ['label' => 'Grav Pages', 'url' => '/admin/pages', 'active' => false],
+            ]],
+        ]));
+        $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
+        $html = $twig->render('w4os/admin-menu.html.twig');
+
+        expect($html)->toContain('<li><a href="/w4os">Dashboard</a></li>')
+            ->and($html)->toMatch('~<li class="w4os-has-sub"><a href="/w4os/settings" aria-haspopup="true"><i class="fa-solid fa-angle-left w4os-sub-mark" aria-hidden="true"></i>Site</a>\s*<ul class="w4os-user-sublist"><li><a href="/w4os/settings">Site settings</a></li><li><a href="/admin/pages">Grav Pages</a></li></ul>~')
+            ->and((string) file_get_contents(dirname(__DIR__).'/css/w4os.web.css'))->toContain('.w4os-has-sub:hover > .w4os-user-sublist, .w4os-has-sub:focus-within > .w4os-user-sublist { visibility: visible; opacity: 1; }');
     });
 
     test('has a way back from Grav\'s admin (admin2): an entry of its sidebar and its page, for whom has Grav\'s admin rights', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
         $page = (string) file_get_contents(dirname(__DIR__).'/admin-next/pages/w4os.js');
 
-        expect($plugin)->toContain("'onApiSidebarItems' => ['onApiSidebarItems', 0]", "'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0]", "'route' => '/plugin/w4os'", "'authorize' => ['api.super', 'admin.super']", "'page_type' => 'component'", "\$site->path('dashboard', true)", "\$site->path('settings', true)")
+        expect($plugin)->toContain("'label' => \$this->site()->translate('w4os.admin_admin2_menu')", "'onApiSidebarItems' => ['onApiSidebarItems', 0]", "'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0]", "'route' => '/plugin/w4os'", "'authorize' => ['api.super', 'admin.super']", "'page_type' => 'component'", "\$site->path('dashboard', true)", "\$site->path('settings', true)")
             ->and($page)->toContain('customElements.define(', 'window.__GRAV_PAGE_TAG', '/gpm/plugins/w4os/page', 'window.__GRAV_API_TOKEN');
     });
 });

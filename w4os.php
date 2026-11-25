@@ -74,7 +74,7 @@ class W4osPlugin extends Plugin
     public function onApiSidebarItems(Event $event): void
     {
         $items = (array) $event['items'];
-        $items[] = ['id' => 'w4os', 'plugin' => 'w4os', 'label' => 'w4os', 'icon' => 'fa-earth-europe', 'route' => '/plugin/w4os', 'priority' => 100, 'authorize' => ['api.super', 'admin.super']];
+        $items[] = ['id' => 'w4os', 'plugin' => 'w4os', 'label' => $this->site()->translate('w4os.admin_admin2_menu'), 'icon' => 'fa-earth-europe', 'route' => '/plugin/w4os', 'priority' => 100, 'authorize' => ['api.super', 'admin.super']];
         $event['items'] = $items;
     }
 
@@ -86,7 +86,7 @@ class W4osPlugin extends Plugin
         }
         $site = $this->site();
         $event['definition'] = [
-            'id' => 'w4os', 'plugin' => 'w4os', 'title' => 'w4os', 'icon' => 'fa-earth-europe', 'page_type' => 'component',
+            'id' => 'w4os', 'plugin' => 'w4os', 'title' => $site->translate('w4os.admin_admin2_menu'), 'icon' => 'fa-earth-europe', 'page_type' => 'component',
             'links' => [
                 ['label' => $site->translate('w4os.dashboard_title'), 'url' => $site->path('dashboard', true), 'icon' => 'fa-gauge'],
                 ['label' => $site->translate('w4os.admin_site_settings'), 'url' => $site->path('settings', true), 'icon' => 'fa-gear'],

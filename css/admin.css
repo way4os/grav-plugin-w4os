@@ -17,8 +17,6 @@
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-icon { display: block; flex: none; width: 2rem; height: 2rem; }
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) .w4os-admin-brand-full { display: none; }
 }
-/* An entry that leaves for another admin (Grav's): its arrow out at the end */
-.w4os-admin .w4os-nav-external { margin-left: auto; padding-left: .5rem; opacity: .7; }
 /* The tones of the indicators in the colors of Tabler: green when good, grey when off as it should be, orange for a warning, red on an error */
 .w4os-admin .w4os-tone-ok { color: var(--tblr-success); }
 .w4os-admin .w4os-tone-off { color: var(--tblr-secondary); }

@@ -25,6 +25,6 @@ describe('the admins of the grid', function () {
             ->and(Site::gravAdminRoute(['admin2' => ['enabled' => false], 'admin' => ['enabled' => false]]))->toBeNull()
             ->and(Site::gravAdminRoute([]))->toBeNull()
             // An entry of the menu of the plugin's admin, last, for whom has the rights only
-            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Site.php'))->toContain("\$user->authorize('api.super') || \$user->authorize('admin.super')", "'label' => \$this->translate('w4os.admin_tab_pages'), 'url' => rtrim(\$this->grav['uri']->rootUrl(false), '/').\$route.'/pages'");
+            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Site.php'))->toContain("\$user->authorize('api.super') || \$user->authorize('admin.super')", "'label' => \$this->translate('w4os.admin_grav_pages'), 'url' => rtrim(\$this->grav['uri']->rootUrl(false), '/').\$route.'/pages'");
     });
 });

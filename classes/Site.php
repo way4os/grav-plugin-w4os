@@ -1804,11 +1804,11 @@ final class Site
                 && $items[] = ['type' => $type, 'label' => $this->translate($page['label']), 'url' => $this->path($type, true), 'icon' => $page['icon'], 'active' => $type === $section]
                     + (isset($page['parent']) ? ['parent' => $page['parent']] : []);
         }
-        // The pages of the site, in Grav's admin, for whom has its rights (the admins of the grid, gravAdmin()): another admin (external)
+        // The pages of the site, in Grav's admin (named so), for whom has its rights (the admins of the grid, gravAdmin())
         $route = self::gravAdminRoute((array) $this->grav['config']->get('plugins', []));
         $user = $this->grav['user'] ?? null;
         $route !== null && $user && ($user->authorize('api.super') || $user->authorize('admin.super'))
-            && $items[] = ['type' => 'grav_pages', 'label' => $this->translate('w4os.admin_tab_pages'), 'url' => rtrim($this->grav['uri']->rootUrl(false), '/').$route.'/pages', 'icon' => 'ti ti-files', 'active' => false, 'parent' => 'site', 'external' => $this->translate('w4os.admin_grav_hint')];
+            && $items[] = ['type' => 'grav_pages', 'label' => $this->translate('w4os.admin_grav_pages'), 'url' => rtrim($this->grav['uri']->rootUrl(false), '/').$route.'/pages', 'icon' => 'ti ti-files', 'active' => false, 'parent' => 'site'];
         $event = new \RocketTheme\Toolbox\Event\Event(['items' => $items]);
         $this->grav->fireEvent('onW4osAdminMenu', $event);
 

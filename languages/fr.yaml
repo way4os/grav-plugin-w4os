@@ -1135,7 +1135,8 @@ w4os:
   admin_sidebar_pin: 'Épingler la barre latérale'
   admin_menu_tools: Outils
   admin_menu_site: Site
-  admin_grav_hint: "In Grav's admin"
+  admin_grav_pages: 'Grav Pages'
+  admin_admin2_menu: 'w4os settings'
   admin_shortcode_option_add_grid: 'Avec le bouton qui ajoute la grille au viewer, et l’URI de connexion à copier'
   admin_shortcode_option_content: 'Un texte entre le titre et les étapes (Markdown ; un lien vers /help mène à la page dans la langue du visiteur)'
   admin_shortcode_option_footer: 'Un texte sous les étapes (Markdown : un lien vers la page d’aide, par exemple)'
