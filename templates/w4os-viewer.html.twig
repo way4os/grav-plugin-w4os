@@ -1,5 +1,6 @@
 {# A page of the plugin in a viewer's panel (the Feed tab of a profile, the search, the guide): the page alone, without the theme of
-   the site, compact for a small panel. A theme may give its own w4os-viewer.html.twig. #}
+   the site, compact for a small panel, as the helpers' own pages in a viewer: a block is the page there, under its own title (the
+   guide's panel has it in it); a page without a block has the title of the page. A theme may give its own w4os-viewer.html.twig. #}
 {% set body %}{% include 'w4os/page.html.twig' %}{% endset %}
 <!doctype html>
 <html lang="{{ (grav.language.getActive ?: 'en')|e('html_attr') }}">
@@ -8,15 +9,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ page.title }}</title>
-    {# The style of the helpers' own pages (the same in a viewer), then the plugin's, compact #}
+    {# The style of the helpers' own pages (the same in a viewer), the plugin's, compact, then the blocks', their own look there #}
     {% do assets.addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20}) %}
-    {% do assets.addCss('plugin://w4os/css/viewer.css', {priority: 5}) %}
+    {% do assets.addCss('plugin://w4os/css/viewer.css', {priority: 15}) %}
     {{ assets.css()|raw }}
     {{ assets.js()|raw }}
 </head>
 <body class="w4os-viewer viewer">
-    {# This page is the theme here: the title of the page, its content under it #}
-    <main class="layout"><h1>{{ page.title }}</h1>{{ body|raw }}</main>
+    <main class="layout">{% if not page.header.w4os_block %}<h1>{{ page.title }}</h1>{% endif %}{{ body|raw }}</main>
     {{ assets.js('bottom')|raw }}
 </body>
 </html>

@@ -52,9 +52,24 @@ describe('themes', function () {
         expect($html)->toStartWith('<!doctype html>')
             ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css">', '<link href="plugin://w4os/css/viewer.css">',
                 '<div class="w4os w4os-page w4os-profile">', '<section class="block block-profile">')
-            // The page is the theme there: it shows the title of the page, the block none
+            // As the helpers' own pages in a viewer: the block is the page there, under its own title (the guide's panel has its
+            // title in it), no other one around it
             ->and(substr_count($html, '<h1'))->toBe(1)
-            ->and($html)->toContain('<h1>Bart Simpson</h1>')->not->toContain('block-title');
+            ->and($html)->toContain('<h1 class="block-title">Bart Simpson</h1>')->not->toContain('<h1>Bart Simpson</h1>');
+    });
+
+    test('a page of the plugin in a viewer without a block has the title of the page', function () {
+        $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'My account', 'header' => ['w4os' => 'search-link']], 'assets' => new FakeAssets()]);
+
+        expect($html)->toContain('<h1>My account</h1>');
+    });
+
+    test('in a viewer, the compact style of the plugin comes before the styles of the blocks, which keep their own look there', function () {
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os-viewer.html.twig');
+
+        // Grav prints the higher priority first: the helpers' page style (20), the plugin's (15), then the blocks' (10, the default)
+        expect($template)->toContain("addCss('plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css', {priority: 20})")
+            ->toContain("addCss('plugin://w4os/css/viewer.css', {priority: 15})");
     });
 });
 
@@ -99,8 +114,7 @@ describe('the title of a page of the plugin', function () {
     test('is the theme\'s to show: the content of the page has none, its block neither', function () {
         $html = themeless_twig(false)->render('w4os/page.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]]);
 
-        expect($html)->toContain('<section class="block block-profile">')->not->toContain('<h1')
-            ->and(file_get_contents(dirname(__DIR__).'/templates/w4os/page.html.twig'))->not->toContain('page.title');
+        expect($html)->toContain('<section class="block block-profile">')->not->toContain('<h1');
     });
 });
 
