@@ -64,6 +64,33 @@ class W4osPlugin extends Plugin
             // Before the Login plugin's own authorization (priority 0): a session back by its remember-me token
             'onUserLoginAuthorize' => ['onUserLoginAuthorize', 1000],
             'onAdminSave' => ['onAdminSave', 0],
+            // Grav's admin (admin2, through the API plugin): a way back to the admin of the grid
+            'onApiSidebarItems' => ['onApiSidebarItems', 0],
+            'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0],
+        ];
+    }
+
+    /** The entry of the plugin in the sidebar of admin2, for whom has Grav's admin rights (the admins of the grid, Site::gravAdmin()). */
+    public function onApiSidebarItems(Event $event): void
+    {
+        $items = (array) $event['items'];
+        $items[] = ['id' => 'w4os', 'plugin' => 'w4os', 'label' => 'w4os', 'icon' => 'fa-earth-europe', 'route' => '/plugin/w4os', 'priority' => 100, 'authorize' => ['api.super', 'admin.super']];
+        $event['items'] = $items;
+    }
+
+    /** Its page in admin2 (admin-next/pages/w4os.js): the links to the admin of the grid and to the settings of the site. */
+    public function onApiPluginPageInfo(Event $event): void
+    {
+        if ($event['plugin'] !== 'w4os') {
+            return;
+        }
+        $site = $this->site();
+        $event['definition'] = [
+            'id' => 'w4os', 'plugin' => 'w4os', 'title' => 'w4os', 'icon' => 'fa-earth-europe', 'page_type' => 'component',
+            'links' => [
+                ['label' => $site->translate('w4os.dashboard_title'), 'url' => $site->path('dashboard', true), 'icon' => 'fa-gauge'],
+                ['label' => $site->translate('w4os.admin_site_settings'), 'url' => $site->path('settings', true), 'icon' => 'fa-gear'],
+            ],
         ];
     }
 

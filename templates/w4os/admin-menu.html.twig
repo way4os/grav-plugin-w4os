@@ -5,7 +5,7 @@
 <div class="w4os-user-menu w4os-admin-menu">
     <a class="w4os-user-current" href="{{ items|first.url }}" aria-haspopup="true"><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i> {{ 'w4os.menu_admin'|t }}</a>
     <ul class="w4os-user-list">
-        {% for item in items %}<li><a href="{{ item.url }}">{{ item.label }}</a></li>{% endfor %}
+        {% for item in items %}<li><a href="{{ item.url }}"{% if item.external ?? false %} title="{{ item.external|e('html_attr') }}"{% endif %}>{{ item.label }}{% if item.external ?? false %} <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i><span class="visually-hidden">{{ item.external }}</span>{% endif %}</a></li>{% endfor %}
     </ul>
 </div>
 {% endif %}

@@ -1134,6 +1134,8 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Zijbalk vastzetten'
   admin_menu_tools: Hulpmiddelen
+  admin_menu_site: Site
+  admin_grav_hint: "In Grav's admin"
   admin_shortcode_option_add_grid: 'Met de knop die het grid aan de viewer toevoegt, en de login-URI om te kopiëren'
   admin_shortcode_option_content: 'Een tekst tussen de titel en de stappen (Markdown; een link naar /help gaat naar de pagina in de taal van de bezoeker)'
   admin_shortcode_option_footer: 'Een tekst onder de stappen (Markdown: bijvoorbeeld een link naar de hulppagina)'

@@ -1134,6 +1134,8 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Pin the sidebar'
   admin_menu_tools: Tools
+  admin_menu_site: Site
+  admin_grav_hint: "In Grav's admin"
   admin_shortcode_option_add_grid: 'With the button that adds the grid to a viewer, and the login URI to copy'
   admin_shortcode_option_content: "A text between the title and the steps (Markdown, a link to /help goes to the page in the visitor's language)"
   admin_shortcode_option_footer: 'A text under the steps (Markdown: a link to the help page, for instance)'

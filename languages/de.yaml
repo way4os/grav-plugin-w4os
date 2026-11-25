@@ -1134,6 +1134,8 @@ w4os:
   admin_task_ran: '%s: %s'
   admin_sidebar_pin: 'Seitenleiste anheften'
   admin_menu_tools: Werkzeuge
+  admin_menu_site: Site
+  admin_grav_hint: "In Grav's admin"
   admin_shortcode_option_add_grid: 'Mit dem Knopf, der das Grid zum Viewer hinzufügt, und der Login-URI zum Kopieren'
   admin_shortcode_option_content: 'Ein Text zwischen dem Titel und den Schritten (Markdown; ein Link auf /help führt zur Seite in der Sprache des Besuchers)'
   admin_shortcode_option_footer: 'Ein Text unter den Schritten (Markdown: zum Beispiel ein Link auf die Hilfeseite)'

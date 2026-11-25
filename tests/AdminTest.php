@@ -17,7 +17,9 @@ describe('admin', function () {
     test('has its sections in their order, the grid first, each with its icon of Tabler', function () {
         expect(array_keys(Site::ADMIN_PAGES))->toBe(['dashboard', 'settings_grid', 'simulators', 'regions', 'manage', 'models', 'flux', 'settings_avatars', 'settings_search', 'settings_guide', 'settings_economy', 'settings_offline', 'settings_assets', 'health', 'shortcodes', 'settings'])
             ->and(array_column(Site::ADMIN_PAGES, 'icon'))->each->toStartWith('ti ti-')
-            ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools'])
+            ->and(array_keys(Site::ADMIN_GROUPS))->toBe(['services', 'tools', 'site'])
+            // The site: its settings, then its pages in Grav's admin (added by adminMenu())
+            ->and(Site::ADMIN_PAGES['settings']['parent'])->toBe('site')
             ->and(array_keys(array_filter(Site::ADMIN_PAGES, fn (array $page) => ($page['parent'] ?? null) === 'tools')))->toBe(['health', 'shortcodes']);
     });
 
@@ -146,6 +148,27 @@ describe('the menu of the admin', function () {
         expect($html)->toMatch('~<li class="nav-item w4os-nav-heading"><span class="subheader nav-link-title">Services</span></li>\s*<li class="nav-item">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;search">~')
             ->and($html)->toMatch('~<li class="nav-item w4os-nav-gap">\s*<a class="nav-link" href="&#x2F;w4os&#x2F;settings">~')
             ->and((string) file_get_contents(dirname(__DIR__).'/css/admin.css'))->toMatch('~\[data-bs-sidebar=folded-hover\][^{]*\) :is\(\.w4os-nav-heading, \.w4os-nav-gap\) \{[^}]*border-top-color~');
+    });
+
+    test('has the site as a section: its settings, then its pages in Grav\'s admin, marked as leaving for it', function () {
+        $menu = Site::menuTree([
+            ['type' => 'settings', 'label' => 'Site settings', 'url' => '/w4os/settings', 'active' => false, 'parent' => 'site'],
+            ['type' => 'grav_pages', 'label' => 'Pages', 'url' => '/admin/pages', 'active' => false, 'parent' => 'site', 'external' => "In Grav's admin"],
+        ], 'List', ['site' => ['label' => 'Site']]);
+        $html = render_admin(['title' => 'Friendly Fowl', 'home' => '/'], $menu);
+
+        expect(array_column($menu, 'type'))->toBe(['site', 'settings', 'grav_pages'])
+            ->and($menu[0]['heading'])->toBeTrue()
+            ->and($html)->toMatch('~href="&#x2F;admin&#x2F;pages" title="In&#x20;Grav[^"]*admin">~')
+            ->and($html)->toMatch('~<span class="w4os-nav-external"><i class="ti ti-arrow-up-right" aria-hidden="true"></i><span class="visually-hidden">In Grav[^<]*s admin</span></span>~');
+    });
+
+    test('has a way back from Grav\'s admin (admin2): an entry of its sidebar and its page, for whom has Grav\'s admin rights', function () {
+        $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
+        $page = (string) file_get_contents(dirname(__DIR__).'/admin-next/pages/w4os.js');
+
+        expect($plugin)->toContain("'onApiSidebarItems' => ['onApiSidebarItems', 0]", "'onApiPluginPageInfo' => ['onApiPluginPageInfo', 0]", "'route' => '/plugin/w4os'", "'authorize' => ['api.super', 'admin.super']", "'page_type' => 'component'", "\$site->path('dashboard', true)", "\$site->path('settings', true)")
+            ->and($page)->toContain('customElements.define(', 'window.__GRAV_PAGE_TAG', '/gpm/plugins/w4os/page', 'window.__GRAV_API_TOKEN');
     });
 });
 

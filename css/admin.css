@@ -20,6 +20,8 @@
 /* A section of the sidebar (Services, Tools): its name above its pages, the next page set apart; a line in the folded sidebar */
 .w4os-admin .w4os-nav-heading { margin-top: 1rem; padding: .5rem .75rem .25rem; border-top: 1px solid transparent; }
 .w4os-admin .w4os-nav-gap { margin-top: 1rem; border-top: 1px solid transparent; }
+/* An entry that leaves for another admin (Grav's): its arrow out at the end */
+.w4os-admin .w4os-nav-external { margin-left: auto; padding-left: .5rem; opacity: .7; }
 @media (min-width: 992px) {
     .navbar-vertical:is(.navbar-folded, .navbar-folded-hover:not(:hover):not(:has(:focus-visible)), [data-bs-sidebar=folded] *, [data-bs-sidebar=folded-hover] :not(:hover):not(:has(:focus-visible))) :is(.w4os-nav-heading, .w4os-nav-gap) { margin-top: .5rem; padding: 0; border-top-color: var(--tblr-border-color); }
 }
