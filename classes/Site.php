@@ -447,6 +447,25 @@ final class Site
         return $this->engine()->picture($id, $format);
     }
 
+    /** Whether the grid has a web map, as the engine says (Grid::hasMap(), the API's GET /map), kept an hour; none when it does not answer. */
+    public function hasMap(): bool
+    {
+        if (self::engineChannel($this->config(), $this->apiKey() !== '') === 'bundled') {
+            $grid = $this->bundled()?->grid();
+
+            return $grid !== null && method_exists($grid, 'hasMap') && $grid->hasMap();
+        }
+        $has = $this->cached('has map', function () {
+            try {
+                return $this->engine()->hasMap() ? 'yes' : 'no';
+            } catch (\Throwable) {
+                return 'no';
+            }
+        }, 3600);
+
+        return $has === 'yes';
+    }
+
     /**
      * Answers the address of a tile of the map of the grid (the block map) with the engine: under the route "map_tiles", its zoom (1
      * to 8) and the region of its bottom left corner (`/grid-map/1/1000/1000.jpg`).
@@ -1288,6 +1307,10 @@ final class Site
         $found = $pages->find($path);
         // A page of the site at that route wins; the plugin's own already there (the entry of the menu) is the one shown
         if ($type === false || ! is_file(dirname(__DIR__)."/pages/$type.md") || ($found && ! isset($found->header()->w4os))) {
+            return;
+        }
+        // The map of a grid that has none: no page of its own (a 404), never a grid said not to answer
+        if ($type === 'map' && ! $this->hasMap()) {
             return;
         }
         $page = $found ?? $this->pluginPage($type, $path);

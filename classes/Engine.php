@@ -258,6 +258,12 @@ final class Engine
         return $this->resource($this->call('GET', '/addresses'));
     }
 
+    /** Whether the grid has a web map (its open operation GET /map, `meta.hasMap`). */
+    public function hasMap(): bool
+    {
+        return (bool) ($this->call('GET', '/map')['meta']['hasMap'] ?? false);
+    }
+
     /**
      * The OpenAPI document of the engine (`/openapi.json`, at the root of the API): what it gives, its lists among them (W4OS\Views\Contract).
      *
