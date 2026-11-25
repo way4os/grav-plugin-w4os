@@ -81,6 +81,28 @@ describe('themes', function () {
     });
 });
 
+describe('a page of the site in a viewer', function () {
+    test('keeps its own template, without the bar at the top, the footer and the menu of a phone the theme draws around it', function () {
+        $twig = new Environment(new Twig\Loader\ArrayLoader([
+            'page.html.twig' => '{% block header %}<nav>menu</nav>{% endblock %}<main>{% block content %}text{% endblock %}</main>{% block footer %}<footer>f</footer>{% endblock %}{% block mobile %}<div>m</div>{% endblock %}',
+        ]));
+        $twig->setLoader(new Twig\Loader\ChainLoader([$twig->getLoader(), new FilesystemLoader(dirname(__DIR__).'/templates')]));
+
+        expect($twig->render('w4os-viewer-frame.html.twig', ['w4os_framed' => 'page.html.twig']))->toBe('<main>text</main>');
+    });
+
+    test('in a viewer only, an HTML page of the site whose template no one changed, never an admin page', function () {
+        expect(W4OS\Grav\Site::viewerFrame(true, null, 'default', 'html'))->toBeTrue()
+            ->and(W4OS\Grav\Site::viewerFrame(true, null, 'blog', 'html'))->toBeTrue()
+            ->and(W4OS\Grav\Site::viewerFrame(false, null, 'default', 'html'))->toBeFalse()
+            // The plugin's own pages there (w4os-viewer.html.twig, w4os-welcome.html.twig), another plugin's page
+            ->and(W4OS\Grav\Site::viewerFrame(true, 'w4os-viewer.html.twig', 'default', 'html'))->toBeFalse()
+            ->and(W4OS\Grav\Site::viewerFrame(true, null, 'w4os-admin', 'html'))->toBeFalse()
+            ->and(W4OS\Grav\Site::viewerFrame(true, null, 'default', 'json'))->toBeFalse()
+            ->and(W4OS\Grav\Site::viewerFrame(true, null, null, 'html'))->toBeFalse();
+    });
+});
+
 describe('the sign-in page', function () {
     test('has "remember me" checked, whatever the theme draws around the form of the Login plugin', function () {
         $form = '<div class="form-input-wrapper"><input type="checkbox" value="1" name="rememberme" id="#rememberme"><label class="inline" for="#rememberme">Remember me</label></div>';

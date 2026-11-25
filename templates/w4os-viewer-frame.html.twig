@@ -1,0 +1,7 @@
+{# A page of the site in a viewer: its own template, without the bar at the top, the footer and the menu of a phone the theme
+   draws around it (its blocks header, footer and mobile, Quark's and its heirs'): a viewer shows the content alone, as the helpers'
+   pages there. The plugin's own pages have their own (w4os-viewer.html.twig, w4os-welcome.html.twig). #}
+{% extends w4os_framed %}
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block mobile %}{% endblock %}

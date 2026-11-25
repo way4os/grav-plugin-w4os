@@ -1387,6 +1387,12 @@ class W4osPlugin extends Plugin
     public function onTwigSiteVariablesLast(): void
     {
         $page = $this->grav['page'] ?? null;
+        // A page of the site in a viewer: its own template, without the bar at the top and the footer of the theme
+        $twig = $this->grav['twig'];
+        if ($page !== null && Site::viewerFrame($this->site()->isViewer(), $twig->template ?? null, $page->template(), (string) ($page->templateFormat() ?: 'html'))) {
+            $twig->twig_vars['w4os_framed'] = $twig->getPageTwigTemplate($page);
+            $twig->template = 'w4os-viewer-frame.html.twig';
+        }
         $page !== null && ! $this->sitePage() && Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) !== []
             && $page->content();
         $this->blockFailures === [] || $this->blockNotices();

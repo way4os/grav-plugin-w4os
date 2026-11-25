@@ -948,6 +948,18 @@ final class Site
         return [false, ''];
     }
 
+    /**
+     * Whether a page of the site is shown in a viewer without what the theme draws around its content (w4os-viewer-frame.html.twig):
+     * an HTML page in a viewer, whose template no one set already (the plugin's own pages, another plugin's), never an admin page.
+     *
+     * @param ?string $set the template set for the page already (Twig's `template`)
+     * @param ?string $template the template of the page
+     */
+    public static function viewerFrame(bool $viewer, ?string $set, ?string $template, string $format): bool
+    {
+        return $viewer && ($set ?? '') === '' && ($template ?? '') !== '' && $template !== 'w4os-admin' && $format === 'html';
+    }
+
     /** Whether a viewer asks the page (its user agent, as the engine tells it): the page then shows its content alone. */
     public function isViewer(): bool
     {
