@@ -124,11 +124,25 @@ w4os:
   settings_guide: "Gosodiadau'r Canllaw Cyrchfannau"
   settings_offline: 'Gosodiadau Negeseuon All-lein'
   settings_assets: 'Gweinydd Asedau Gwe'
+  settings_map: 'Gosodiadau map'
   settings_menu_economy: Economi
   settings_menu_search: 'Peiriant chwilio'
   settings_menu_guide: 'Canllaw Cyrchfannau'
   settings_menu_offline: 'Negeseuon All-lein'
   settings_menu_assets: 'Asedau Gwe'
+  settings_menu_map: Map
+  setting_map_module: Rendro
+  setting_map_module_help: "Mae'r map 3D yn dangos y rhanbarthau fel y maen nhw wedi'u hadeiladu; yr un syml, eu tir ac amlinell eu gwrthrychau."
+  map_module_simple: Syml
+  map_module_warp3d: '3D (Warp3D)'
+  setting_map_terrain: 'Gweadau tir'
+  setting_map_prims: Gwrthrychau
+  setting_map_prims_help: "Araf i'w lunio ar ranbarth gyda llawer o wrthrychau."
+  setting_map_prim_textures: 'Gweadau gwrthrychau'
+  setting_map_meshes: 'Meshes a sculpties'
+  setting_map_refresh: Adnewyddu
+  setting_map_refresh_help: "Eiliadau rhwng dwy deilsen rhanbarth sy'n rhedeg, 0 wrth ei gychwyn yn unig."
+  setting_map_tiles_directory: 'Ffolder y teils'
   settings_saved: 'Gosodiadau wedi’u cadw.'
   provide_economy: 'Darparu helper economi'
   provide_search: 'Darparu chwilio'
@@ -949,6 +963,9 @@ w4os:
   error_token_refused: 'Nid yw’r ddolen hon yn gweithio: mae wedi dod i ben neu wedi’i defnyddio eisoes. Gofynna am un newydd.'
   error_no_confirmation_pending: 'Nid yw’r afatar hwn yn aros am gadarnhad ei ebost.'
   error_mail_failed: 'Doedd dim modd anfon yr ebost. Rho gynnig arall arni nes ymlaen.'
+  notice_map_package: 'Mae angen y pecyn {package} ar y map 3D: hebddo, ni all yr efelychwyr ysgrifennu ei deils.'
+  notice_map_core: "Mae angen OpenSimulator mwy newydd ar y map 3D: ni all hwn ysgrifennu ei deils lle mae'n rhedeg."
+  notice_map_folder: 'Mae angen i {account} allu ysgrifennu yn {folder} ar gyfer y map 3D.'
   notice_robust_restart_roles: "Mae Robust yn darllen {key} pan fydd yn cychwyn: ailgychwynna Robust ({restart}) fel ei fod yn rhoi'r rolau hyn i'r rhanbarth pan fydd yn cofrestru eto."
   notice_robust_config_line: 'Ni all y broses hon ysgrifennu {file}: gosoda {line} yn ei [{section}], yna ailgychwynna Robust ({restart}).'
   notice_robust_config_remove: "Ni all y broses hon ysgrifennu {file}: tynna {key} o'i [{section}], yna ailgychwynna Robust ({restart})."

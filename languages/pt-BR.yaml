@@ -124,11 +124,25 @@ w4os:
   settings_guide: 'Configurações do Guia de Destinos'
   settings_offline: 'Configurações de Mensagens Offline'
   settings_assets: 'Servidor de Ativos Web'
+  settings_map: 'Configurações do mapa'
   settings_menu_economy: Economia
   settings_menu_search: 'Mecanismo de busca'
   settings_menu_guide: 'Guia de Destinos'
   settings_menu_offline: 'Mensagens Offline'
   settings_menu_assets: 'Ativos Web'
+  settings_menu_map: Mapa
+  setting_map_module: Renderização
+  setting_map_module_help: 'O mapa 3D mostra as regiões como estão construídas; o simples, o terreno e o contorno dos objetos.'
+  map_module_simple: Simples
+  map_module_warp3d: '3D (Warp3D)'
+  setting_map_terrain: 'Texturas do terreno'
+  setting_map_prims: Objetos
+  setting_map_prims_help: 'Lento de desenhar numa região com muitos objetos.'
+  setting_map_prim_textures: 'Texturas dos objetos'
+  setting_map_meshes: 'Meshes e sculpties'
+  setting_map_refresh: Atualização
+  setting_map_refresh_help: 'Segundos entre dois blocos de uma região em execução, 0 só no início.'
+  setting_map_tiles_directory: 'Pasta dos blocos'
   settings_saved: 'Configurações salvas.'
   provide_economy: 'Fornecer helper de economia'
   provide_search: 'Fornecer pesquisa'
@@ -949,6 +963,9 @@ w4os:
   error_token_refused: 'Este link não funciona: expirou ou já foi usado. Peça um novo.'
   error_no_confirmation_pending: 'Este avatar não aguarda a confirmação do email.'
   error_mail_failed: 'O email não pôde ser enviado. Tente de novo mais tarde.'
+  notice_map_package: 'O mapa 3D precisa do pacote {package}: sem ele, os simuladores não podem gravar seus blocos.'
+  notice_map_core: 'O mapa 3D precisa de um OpenSimulator mais recente: este não pode gravar seus blocos onde roda.'
+  notice_map_folder: 'O mapa 3D precisa de {folder} gravável por {account}.'
   notice_robust_restart_roles: 'O Robust lê {key} ao iniciar: reinicie o Robust ({restart}) para que ele dê esses papéis à região quando ela se registrar de novo.'
   notice_robust_config_line: '{file} não pode ser escrito por este processo: defina {line} em [{section}] e depois reinicie o Robust ({restart}).'
   notice_robust_config_remove: '{file} não pode ser escrito por este processo: remova {key} de [{section}] e depois reinicie o Robust ({restart}).'

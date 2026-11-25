@@ -124,11 +124,25 @@ w4os:
   settings_guide: 'Instellingen voor de Gids van Bestemmingen'
   settings_offline: 'Offline berichten instellingen'
   settings_assets: 'Web assets-server'
+  settings_map: Kaartinstellingen
   settings_menu_economy: Economie
   settings_menu_search: Zoekmachine
   settings_menu_guide: Bestemmingengids
   settings_menu_offline: 'Offline berichten'
   settings_menu_assets: Webassets
+  settings_menu_map: Kaart
+  setting_map_module: Weergave
+  setting_map_module_help: "De 3D-kaart toont de regio's zoals ze gebouwd zijn; de eenvoudige hun terrein en de omtrek van hun objecten."
+  map_module_simple: Eenvoudig
+  map_module_warp3d: '3D (Warp3D)'
+  setting_map_terrain: Terreintexturen
+  setting_map_prims: Objecten
+  setting_map_prims_help: 'Traag te tekenen op een regio met veel objecten.'
+  setting_map_prim_textures: Objecttexturen
+  setting_map_meshes: 'Meshes en sculpties'
+  setting_map_refresh: Verversing
+  setting_map_refresh_help: 'Seconden tussen twee tegels van een draaiende regio, 0 alleen bij de start.'
+  setting_map_tiles_directory: 'Map van de tegels'
   settings_saved: 'Instellingen opgeslagen.'
   provide_economy: 'Bied een economie-helper aan'
   provide_search: 'Bied een zoekdienst aan'
@@ -949,6 +963,9 @@ w4os:
   error_token_refused: 'Deze link werkt niet: hij is verlopen of al gebruikt. Vraag een nieuwe aan.'
   error_no_confirmation_pending: 'Deze avatar wacht niet op de bevestiging van zijn e-mail.'
   error_mail_failed: 'De mail kon niet worden verstuurd. Probeer het later opnieuw.'
+  notice_map_package: 'De 3D-kaart heeft het pakket {package} nodig: zonder kunnen de simulators de tegels niet schrijven.'
+  notice_map_core: 'De 3D-kaart heeft een nieuwere OpenSimulator nodig: deze kan de tegels niet schrijven waar hij draait.'
+  notice_map_folder: 'De 3D-kaart heeft {folder} nodig, schrijfbaar voor {account}.'
   notice_robust_restart_roles: 'Robust leest {key} bij het starten: herstart Robust ({restart}) zodat het de regio deze rollen geeft wanneer ze zich opnieuw aanmeldt.'
   notice_robust_config_line: '{file} kan niet door dit proces worden geschreven: zet {line} in [{section}] en herstart dan Robust ({restart}).'
   notice_robust_config_remove: '{file} kan niet door dit proces worden geschreven: verwijder {key} uit [{section}] en herstart dan Robust ({restart}).'

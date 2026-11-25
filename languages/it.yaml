@@ -124,11 +124,25 @@ w4os:
   settings_guide: 'Impostazioni della Guida delle Destinazioni'
   settings_offline: 'Impostazioni dei messaggi offline'
   settings_assets: 'Server delle risorse web'
+  settings_map: 'Impostazioni della mappa'
   settings_menu_economy: Economia
   settings_menu_search: 'Motore di ricerca'
   settings_menu_guide: 'Guida delle destinazioni'
   settings_menu_offline: 'Messaggi offline'
   settings_menu_assets: 'Risorse web'
+  settings_menu_map: Mappa
+  setting_map_module: Resa
+  setting_map_module_help: 'La mappa 3D mostra le regioni come sono costruite; quella semplice, il loro terreno e il contorno dei loro oggetti.'
+  map_module_simple: Semplice
+  map_module_warp3d: '3D (Warp3D)'
+  setting_map_terrain: 'Texture del terreno'
+  setting_map_prims: Oggetti
+  setting_map_prims_help: 'Lenta da disegnare su una regione con molti oggetti.'
+  setting_map_prim_textures: 'Texture degli oggetti'
+  setting_map_meshes: 'Mesh e sculpty'
+  setting_map_refresh: Aggiornamento
+  setting_map_refresh_help: 'Secondi tra due tessere di una regione in funzione, 0 solo al suo avvio.'
+  setting_map_tiles_directory: 'Cartella delle tessere'
   settings_saved: 'Impostazioni salvate.'
   provide_economy: "Fornisci l'helper dell'economia"
   provide_search: 'Fornisci la ricerca'
@@ -949,6 +963,9 @@ w4os:
   error_token_refused: 'Questo link non funziona: è scaduto o è già stato usato. Chiedine uno nuovo.'
   error_no_confirmation_pending: 'Questo avatar non attende la conferma della sua email.'
   error_mail_failed: 'L’email non è potuta partire. Riprova più tardi.'
+  notice_map_package: 'La mappa 3D richiede il pacchetto {package}: senza di esso, i simulatori non possono scrivere le sue tessere.'
+  notice_map_core: 'La mappa 3D richiede un OpenSimulator più recente: questo non può scrivere le sue tessere dove gira.'
+  notice_map_folder: 'La mappa 3D richiede {folder} scrivibile da {account}.'
   notice_robust_restart_roles: "Robust legge {key} all'avvio: riavvia Robust ({restart}) perché dia questi ruoli alla regione quando si registra di nuovo."
   notice_robust_config_line: '{file} non può essere scritto da questo processo: imposta {line} in [{section}], poi riavvia Robust ({restart}).'
   notice_robust_config_remove: '{file} non può essere scritto da questo processo: rimuovi {key} da [{section}], poi riavvia Robust ({restart}).'

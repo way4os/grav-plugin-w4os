@@ -124,11 +124,25 @@ w4os:
   settings_guide: 'Einstellungen für den Reiseführer der Ziele'
   settings_offline: 'Einstellungen für Offline-Nachrichten'
   settings_assets: Web-Assets-Server
+  settings_map: Karteneinstellungen
   settings_menu_economy: Wirtschaft
   settings_menu_search: Suchmaschine
   settings_menu_guide: Reiseführer
   settings_menu_offline: Offline-Nachrichten
   settings_menu_assets: Web-Assets
+  settings_menu_map: Karte
+  setting_map_module: Darstellung
+  setting_map_module_help: 'Die 3D-Karte zeigt die Regionen so, wie sie gebaut sind; die einfache ihr Gelände und die Umrisse ihrer Objekte.'
+  map_module_simple: Einfach
+  map_module_warp3d: '3D (Warp3D)'
+  setting_map_terrain: Geländetexturen
+  setting_map_prims: Objekte
+  setting_map_prims_help: 'Langsam zu zeichnen in einer Region mit vielen Objekten.'
+  setting_map_prim_textures: Objekttexturen
+  setting_map_meshes: 'Meshes und Sculpties'
+  setting_map_refresh: Aktualisierung
+  setting_map_refresh_help: 'Sekunden zwischen zwei Kacheln einer laufenden Region, 0 nur bei ihrem Start.'
+  setting_map_tiles_directory: Kachelordner
   settings_saved: 'Einstellungen gespeichert.'
   provide_economy: 'Wirtschafts-Helper bereitstellen'
   provide_search: 'In-World-Suche bereitstellen'
@@ -949,6 +963,9 @@ w4os:
   error_token_refused: 'Dieser Link funktioniert nicht: Er ist abgelaufen oder wurde schon benutzt. Fordere einen neuen an.'
   error_no_confirmation_pending: 'Dieser Avatar wartet nicht auf die Bestätigung seiner E-Mail.'
   error_mail_failed: 'Die E-Mail konnte nicht gesendet werden. Bitte versuche es später noch einmal.'
+  notice_map_package: 'Die 3D-Karte braucht das Paket {package}: ohne es können die Simulatoren ihre Kacheln nicht schreiben.'
+  notice_map_core: 'Die 3D-Karte braucht ein neueres OpenSimulator: dieses kann seine Kacheln nicht dort schreiben, wo es läuft.'
+  notice_map_folder: 'Die 3D-Karte braucht {folder}, beschreibbar für {account}.'
   notice_robust_restart_roles: 'Robust liest {key} beim Start: starte Robust neu ({restart}), damit es der Region diese Rollen gibt, wenn sie sich wieder anmeldet.'
   notice_robust_config_line: '{file} kann von diesem Prozess nicht geschrieben werden: setze {line} in [{section}], dann starte Robust neu ({restart}).'
   notice_robust_config_remove: '{file} kann von diesem Prozess nicht geschrieben werden: entferne {key} aus [{section}], dann starte Robust neu ({restart}).'
