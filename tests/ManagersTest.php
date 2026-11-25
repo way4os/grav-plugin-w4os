@@ -95,6 +95,9 @@ describe('managers', function () {
         expect(array_keys(Site::adminLevels()))->toBe(array_keys(Avatar::LEVELS))
             ->and(Site::adminLevels()[100])->toBe('w4os.role_customer_service')
             ->and(Site::adminLevel([]))->toBe(Avatar::GOD_CUSTOMER_SERVICE)
+            // Customer service (100) by default in the settings too, and in their form
+            ->and(Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__).'/w4os.yaml')['admin_level'])->toBe(Avatar::GOD_CUSTOMER_SERVICE)
+            ->and((string) file_get_contents(dirname(__DIR__).'/blueprints.yaml'))->toMatch('/admin_level:\n\s+type: select\n(\s+\S.*\n)*?\s+default: 100\n/')
             ->and(Site::adminLevel(['admin_level' => '150']))->toBe(150)
             ->and(Site::adminLevel(['admin_level' => 180]))->toBe(Avatar::GOD_CUSTOMER_SERVICE)
             ->and(Site::adminLevel(['admin_level' => 0]))->toBe(Avatar::GOD_NOT);
