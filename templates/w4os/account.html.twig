@@ -7,11 +7,9 @@
        (found here too in a theme without the entries under my avatar in its menu) #}
     {% import 'w4os/icons.html.twig' as icons %}
     <div class="w4os-page-actions">{{ icons.action('eye', w4os_profile_page(), 'w4os.action_view'|t, ' data-w4os-keep-tab') }}{{ icons.action('logout', w4os_url(w4os_logout_route()), 'w4os.logout'|t) }}</div>
-    {# The steps of a newcomer while one is left, else the grid to add to a viewer (another computer, another viewer) #}
+    {# The steps of a newcomer while one is left #}
     {% if w4os_start_steps()|filter(item => item.state != 'done')|length > 0 %}
         {% include 'w4os/getting-started.html.twig' %}
-    {% else %}
-        {% include 'w4os/add-grid.html.twig' %}
     {% endif %}
     {% include 'forms/form.html.twig' with { form: forms('w4os-profile') } %}
 {% endif %}

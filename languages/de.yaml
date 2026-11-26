@@ -1165,3 +1165,4 @@ w4os:
   site_register_closed_title: 'Registrierung geschlossen'
   site_register_closed_text: 'Dieses Grid erstellt hier keine neuen Avatare: Seine Verwalter erstellen sie. Frag sie nach deinem.'
   site_sign_in_expired: 'Dieses Formular ist abgelaufen. Melde dich bitte erneut an.'
+  site_add_grid_secondlife: 'secondlife://-Link'

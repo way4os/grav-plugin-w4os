@@ -151,3 +151,4 @@ w4os:
   site_register_closed_title: 'Registrazioni chiuse'
   site_register_closed_text: 'Questa griglia non crea qui nuovi avatar: li creano i suoi gestori. Chiedi loro il tuo.'
   site_sign_in_expired: 'Questo modulo è scaduto. Accedi di nuovo.'
+  site_add_grid_secondlife: 'Link secondlife://'

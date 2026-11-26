@@ -1,5 +1,5 @@
 {# The grid added to a viewer: the button that adds it and selects it (hop://, the form Windows and macOS open, the viewer running
-   or not), the other form of the link (secondlife://), and the login URI to copy in the grid manager of a viewer, which works
+   or not), the same link in its other scheme, said by its name (secondlife://), and the login URI to copy in the grid manager of a viewer, which works
    everywhere. Nothing when the engine tells neither. #}
 {% set links = w4os_add_grid() %}
 {% set uri = w4os_login_uri() %}
@@ -8,7 +8,7 @@
     {% if links %}
     <p class="w4os-add-grid-links">
         <a class="btn btn-primary w4os-add-grid-button" href="{{ links.hop|e('html_attr') }}">{{ 'w4os.viewer_add_grid'|t(w4os_grid_name()) }}</a>
-        <a class="w4os-add-grid-other" href="{{ links.secondlife|e('html_attr') }}">{{ 'w4os.viewer_add_grid_other'|t }}</a>
+        <a class="w4os-add-grid-other" href="{{ links.secondlife|e('html_attr') }}">{{ 'w4os.site_add_grid_secondlife'|t }}</a>
     </p>
     {% endif %}
     {% if uri %}

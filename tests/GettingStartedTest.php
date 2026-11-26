@@ -90,7 +90,7 @@ describe('the grid added to a viewer', function () {
             'links' => ['hop' => 'hop:///app/gridmanager/addgrid/x', 'secondlife' => 'secondlife:///app/gridmanager/addgrid/x']]);
 
         expect($html)->toContain('<a class="btn btn-primary w4os-add-grid-button" href="hop:///app/gridmanager/addgrid/x">w4os.viewer_add_grid(Demo World)</a>')
-            ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.viewer_add_grid_other</a>', 'w4os.viewer_login_uri_by_hand')
+            ->and($html)->toContain('href="secondlife:///app/gridmanager/addgrid/x">w4os.site_add_grid_secondlife</a>', 'w4os.viewer_login_uri_by_hand')
             // The login URI a link of its own (the links the engine gives): adding the grid, its exact address to copy, nothing else
             ->and($html)->toContain('<span class="w4os-uri-field"><span class="w4os-tp" data-w4os-tp data-client="browser"><a class="w4os-tp-main" href="hop:///app/gridmanager/addgrid/grid.example.org%3A8002"', '><code class="w4os-login-uri">grid.example.org:8002</code></a>', 'data-w4os-tp-copy="grid.example.org:8002"')
             ->and(explode('w4os-uri-field', $html)[1])->not->toContain('hop://grid.example.org')
@@ -109,10 +109,10 @@ describe('the grid added to a viewer', function () {
             ->and(fakeEngine([[200, ['data' => ['type' => 'info', 'id' => 'demo', 'attributes' => ['addGrid' => null]]]]], $log)->addGrid())->toBeNull();
     });
 
-    test('shows on the profile of the avatar signed in (the steps while one is left) and on the page of the email to confirm', function () {
+    test('shows on the page of the email to confirm, never on the page where an avatar edits its profile (its steps there while one is left)', function () {
         $account = (string) file_get_contents(dirname(__DIR__).'/templates/w4os/account.html.twig');
 
-        expect($account)->toContain("include 'w4os/getting-started.html.twig'", "include 'w4os/add-grid.html.twig'")
+        expect($account)->toContain("include 'w4os/getting-started.html.twig'")->not->toContain('add-grid')
             ->and((string) file_get_contents(dirname(__DIR__).'/templates/w4os/confirm.html.twig'))->toContain("include 'w4os/add-grid.html.twig'")
             ->and(array_column(Site::SHORTCODES, 'code'))->toContain('[login-uri]', '[getting-started]')
             ->and(array_column(Site::SHORTCODES[array_search('[getting-started]', array_column(Site::SHORTCODES, 'code'), true)]['options'], 'option'))->toBe(['title', 'content', 'footer'])

@@ -151,3 +151,4 @@ w4os:
   site_register_closed_title: 'Mae cofrestru ar gau'
   site_register_closed_text: 'Nid yw’r grid hwn yn creu afatarau newydd yma: ei reolwyr sy’n eu creu. Gofyn iddyn nhw am dy un di.'
   site_sign_in_expired: 'Mae’r ffurflen hon wedi dod i ben. Mewngofnoda eto.'
+  site_add_grid_secondlife: 'Dolen secondlife://'

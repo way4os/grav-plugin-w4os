@@ -782,6 +782,21 @@ final class Site
         return \W4OS\Views\Picture::tag($src, $none, trim("w4os-pic $class"), $size);
     }
 
+    /**
+     * The address of the silhouette of a person the site serves itself (the engine's file, in the plugin): a picture that cannot be
+     * loaded still shows one when the server of the pictures fails; null without the engine's file.
+     */
+    public function silhouetteUrl(): ?string
+    {
+        Bundled::library();
+        if (! class_exists(\W4OS\Engine\Assets\WebAssets::class)) {
+            return null;
+        }
+        $path = $this->grav['locator']->findResource('plugin://w4os/vendor/w4os/w4os-engine/'.\W4OS\Engine\Assets\WebAssets::PERSON_FILE, false);
+
+        return is_string($path) && $path !== '' ? rtrim((string) $this->grav['base_url_relative'], '/').'/'.ltrim($path, '/') : null;
+    }
+
     /** Whether a picture of the grid is one: an asset UUID that is not the one of nothing (zeros). */
     public static function hasPicture(?string $uuid): bool
     {
