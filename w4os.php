@@ -257,6 +257,8 @@ class W4osPlugin extends Plugin
         // The session of the site at every address of its host, the pages it serves outside its base too, found by its name alone
         // (a hash of the root of the site: another site of the host has its own); a setting of the site's own wins
         $this->config->get('system.session.path') === null && $this->config->set('system.session.path', '/');
+        // The language chosen in the cookie every application of the suite reads (oli-langswitcher), unless the site names another
+        in_array($this->config->get('plugins.oli-langswitcher.cookie'), [null, 'oli_lang'], true) && $this->config->set('plugins.oli-langswitcher.cookie', 'w4os_lang');
         $settled = SessionCookies::settle($this->sessionNames(), (string) ($_SERVER['HTTP_COOKIE'] ?? ''),
             strtolower((string) preg_replace('/:\d+$/', '', (string) ($_SERVER['HTTP_HOST'] ?? ''))),
             (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH),
