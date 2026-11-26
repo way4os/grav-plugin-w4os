@@ -1037,6 +1037,8 @@ w4os:
   admin_api_url: 'Adresse de l’API de l’engine'
   admin_api_url_help: "Obligatoire avec un engine distant : https://grid.example.org/api, ou sur la machine de la grille l'adresse que donne opensim web GRID api"
   admin_api_url_missing: 'L’engine est distant mais n’a pas d’adresse d’API : indique l’adresse de l’API de l’engine, sans elle le site n’atteint pas la grille'
+  admin_engine_key_refused: 'L’engine refuse la clé du site : fais-en une nouvelle sur la machine de la grille (opensim api-key create <nom>) et donne-la au site (Clé d’API dans les réglages, ou w4os-site setup --key)'
+  admin_engine_down: 'L’API de l’engine ne répond pas à %s : vérifie sur la machine de la grille que son serveur web et son service PHP tournent (opensim web GRID api donne leur configuration), et que cette adresse est la bonne'
   admin_grid: 'Nick de la grille'
   admin_grid_help: 'Seulement si l’API sert plusieurs grilles'
   admin_api_key: 'Clé d’API'
@@ -1165,3 +1167,4 @@ w4os:
   admin_shortcode_site_title_help: 'Le titre du site, sinon le nom de la grille'
   site_register_closed_title: 'Inscriptions fermées'
   site_register_closed_text: 'Cette grille ne crée pas de nouveaux avatars ici : ce sont ses gestionnaires qui les créent. Demande-leur le tien.'
+  site_sign_in_expired: 'Ce formulaire a expiré. Reconnecte-toi.'

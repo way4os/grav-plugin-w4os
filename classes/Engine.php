@@ -33,6 +33,12 @@ final class Engine
         $this->url = rtrim($url, '/');
     }
 
+    /** The address of its API, empty for the bundled engine. */
+    public function address(): string
+    {
+        return $this->local ? '' : $this->url;
+    }
+
     /** Whether the site can talk to the engine: the bundled one, or an API with its address and key. */
     public function ready(): bool
     {
@@ -411,7 +417,7 @@ final class Engine
     public function call(string $method, string $path, ?array $data = null, array $query = [], bool $grid = true): array
     {
         if (! $this->ready()) {
-            throw new EngineException(503, 'The site is not connected to the engine (bundled, or an API address and key).');
+            throw new EngineException(503, 'The site is not connected to the engine (bundled, or an API address and key).', connected: false);
         }
         $url = $this->url.($grid ? $this->path($path) : $path).($query === [] ? '' : '?'.http_build_query($query));
         $headers = ['Accept' => 'application/vnd.api+json, application/problem+json'] + ($this->key === '' ? [] : ['Authorization' => 'Bearer '.$this->key]);

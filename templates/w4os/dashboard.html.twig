@@ -7,7 +7,13 @@
 {# The problems the last health report of the grid found, as w4os-wp says them in its notices: how many errors and warnings (red
    with an error, orange with warnings only), the first ones, leading to the Health page #}
 {% set problems = w4os_health_problems() %}
-{% if (problems.count ?? 0) or (problems.warnings ?? 0) %}
+{% if problems.trouble ?? null %}
+    {# The engine that cannot be asked at all (its key refused, its API that does not answer): why, and what to do #}
+    <div class="alert alert-danger" role="alert">
+        {{ problems.trouble }} <span aria-hidden="true">·</span>
+        <a class="alert-link" href="{{ problems.url|e('html_attr') }}">{{ 'w4os.admin_health_title'|t }}</a>
+    </div>
+{% elseif (problems.count ?? 0) or (problems.warnings ?? 0) %}
     <div class="alert {{ problems.count ? 'alert-danger' : 'alert-warning' }}" role="alert">
         {{ w4os_health_counts(problems.count, problems.warnings ?? 0) }} <span aria-hidden="true">·</span>
         {% for label in problems.labels %}<code>{{ label }}</code>{% if problems.statuses[loop.index0] ?? '' %} ({{ problems.statuses[loop.index0] }}){% endif %}{{ loop.last ? '' : ', ' }}{% endfor %}{{ (problems.count ?: problems.warnings ?? 0) > problems.labels|length ? '…' : '' }}

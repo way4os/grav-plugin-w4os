@@ -1037,6 +1037,8 @@ w4os:
   admin_api_url: 'Adresse der Engine-API'
   admin_api_url_help: 'Erforderlich mit einer entfernten Engine: https://grid.example.org/api, oder auf dem Rechner des Grids die Adresse, die opensim web GRID api angibt'
   admin_api_url_missing: 'Die Engine ist entfernt, hat aber keine API-Adresse: Gib die Adresse der Engine-API an, ohne sie erreicht die Website das Grid nicht'
+  admin_engine_key_refused: 'Die Engine lehnt den Schlüssel der Website ab: Erstelle auf dem Rechner des Grids einen neuen (opensim api-key create <Name>) und gib ihn der Website (API-Schlüssel in den Einstellungen, oder w4os-site setup --key)'
+  admin_engine_down: 'Die Engine-API antwortet nicht unter %s: Prüfe auf dem Rechner des Grids, dass sein Webserver und sein PHP-Dienst laufen (opensim web GRID api gibt ihre Konfiguration), und dass diese Adresse stimmt'
   admin_grid: 'Nick des Grids'
   admin_grid_help: 'Nur wenn die API mehrere Grids bedient'
   admin_api_key: API-Schlüssel
@@ -1165,3 +1167,4 @@ w4os:
   admin_shortcode_site_title_help: 'Der Titel der Website, sonst der Name des Grids'
   site_register_closed_title: 'Registrierung geschlossen'
   site_register_closed_text: 'Dieses Grid erstellt hier keine neuen Avatare: Seine Verwalter erstellen sie. Frag sie nach deinem.'
+  site_sign_in_expired: 'Dieses Formular ist abgelaufen. Melde dich bitte erneut an.'

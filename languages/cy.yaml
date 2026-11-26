@@ -1037,6 +1037,8 @@ w4os:
   admin_api_url: 'Cyfeiriad API yr engine'
   admin_api_url_help: 'Angenrheidiol gydag engine o bell: https://grid.example.org/api, neu ar beiriant y grid y cyfeiriad y mae opensim web GRID api yn ei roi'
   admin_api_url_missing: 'Mae’r engine o bell ond heb gyfeiriad API: rho gyfeiriad API yr engine, hebddo ni all y safle gyrraedd y grid'
+  admin_engine_key_refused: 'Mae’r engine yn gwrthod allwedd y safle: gwna un newydd ar beiriant y grid (opensim api-key create <enw>) a’i rhoi i’r safle (Allwedd API yn y gosodiadau, neu w4os-site setup --key)'
+  admin_engine_down: 'Nid yw API yr engine yn ateb yn %s: gwiria ar beiriant y grid fod ei weinydd gwe a’i wasanaeth PHP yn rhedeg (mae opensim web GRID api yn rhoi eu ffurfweddiad), a bod y cyfeiriad hwn yn gywir'
   admin_grid: 'Nick y grid'
   admin_grid_help: 'Dim ond pan fydd yr API yn gwasanaethu sawl grid'
   admin_api_key: 'Allwedd API'
@@ -1165,3 +1167,4 @@ w4os:
   admin_shortcode_site_title_help: 'Teitl y safle, neu enw’r grid fel arall'
   site_register_closed_title: 'Mae cofrestru ar gau'
   site_register_closed_text: 'Nid yw’r grid hwn yn creu afatarau newydd yma: ei reolwyr sy’n eu creu. Gofyn iddyn nhw am dy un di.'
+  site_sign_in_expired: 'Mae’r ffurflen hon wedi dod i ben. Mewngofnoda eto.'

@@ -1037,6 +1037,8 @@ w4os:
   admin_api_url: 'Adres van de engine-API'
   admin_api_url_help: 'Verplicht met een externe engine: https://grid.example.org/api, of op de machine van het grid het adres dat opensim web GRID api geeft'
   admin_api_url_missing: 'De engine is extern maar heeft geen API-adres: vul het adres van de engine-API in, zonder dat bereikt de site het grid niet'
+  admin_engine_key_refused: 'De engine weigert de sleutel van de site: maak een nieuwe op de machine van het grid (opensim api-key create <naam>) en geef die aan de site (API-sleutel in de instellingen, of w4os-site setup --key)'
+  admin_engine_down: 'De engine-API antwoordt niet op %s: controleer op de machine van het grid dat de webserver en de PHP-dienst draaien (opensim web GRID api geeft hun configuratie), en dat dit adres klopt'
   admin_grid: 'Nick van het grid'
   admin_grid_help: 'Alleen als de API meerdere grids bedient'
   admin_api_key: API-sleutel
@@ -1165,3 +1167,4 @@ w4os:
   admin_shortcode_site_title_help: 'De titel van de site, anders de naam van het grid'
   site_register_closed_title: 'Registratie gesloten'
   site_register_closed_text: 'Dit grid maakt hier geen nieuwe avatars aan: de beheerders maken ze. Vraag hun om de jouwe.'
+  site_sign_in_expired: 'Dit formulier is verlopen. Log opnieuw in.'

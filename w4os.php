@@ -61,6 +61,8 @@ class W4osPlugin extends Plugin
             'onUserLoginGuest' => ['onUserLoginGuest', 0],
             // Before the accounts of the site (priority 0), as the LDAP plugin of the Login plugin does
             'onUserLoginAuthenticate' => ['onUserLoginAuthenticate', 1000],
+            // Before the Login plugin, which says a form without its token as a success
+            'onTask.login.login' => ['onTaskLogin', 10],
             // Before the Login plugin's own authorization (priority 0): a session back by its remember-me token
             'onUserLoginAuthorize' => ['onUserLoginAuthorize', 1000],
             'onAdminSave' => ['onAdminSave', 0],
@@ -205,13 +207,17 @@ class W4osPlugin extends Plugin
             if ($e->key === 'w4os.error_sign_in_refused') {
                 return;
             }
-            // One message: the failure, then its reason
+            // One message: the failure, then its reason; the engine that cannot be asked said to the visitor as the grid unreachable,
+            // its reason in the log (Health and the dashboard say it to a manager)
+            $trouble = $this->troubleText($e, true);
             $event->setMessage(sprintf(
                 '<strong>%s</strong><br>%s',
                 htmlspecialchars($this->site()->translate('w4os.sign_in_failed')),
-                htmlspecialchars($this->site()->translate($e->key)),
+                htmlspecialchars($this->site()->translate($trouble === null ? $e->key : 'w4os.error_channel_unavailable')),
             ), 'error');
-            $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage());
+            $trouble === null
+                ? $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage())
+                : $this->grav['log']->error('w4os: sign-in of '.$login.' impossible: '.$trouble.' ('.$e->getMessage().')');
             // The avatar exists and is refused: no other account signs in with its name
             if (in_array($e->key, Site::REFUSED, true)) {
                 $event->setStatus(UserLoginEvent::AUTHENTICATION_FAILURE);
@@ -229,6 +235,36 @@ class W4osPlugin extends Plugin
         $onLoginPage = $this->grav['uri']->path() === '/'.trim((string) $this->grav['config']->get('plugins.login.route', '/login'), '/');
         $event->setRedirect(Site::landing($asked, $onLoginPage, $session->redirect_after_login ?? null, $this->site()->profilePage((string) $avatar['name'])));
         $event->stopPropagation();
+    }
+
+    /**
+     * A sign-in form that comes back without the token of its session (its page older than the session, or the sessions of the site
+     * not kept): said as the error it is, the form shown again, why in the log. The Login plugin would say "Access denied" as a
+     * success (info).
+     */
+    public function onTaskLogin(Event $event): void
+    {
+        if (Utils::verifyNonce((string) ($_POST['login-form-nonce'] ?? ''), 'login-form')) {
+            return;
+        }
+        $this->grav['messages']->add(htmlspecialchars($this->site()->translate('w4os.site_sign_in_expired')), 'error');
+        $this->grav['log']->warning('w4os: a sign-in form came back without the token of its session: its page was older than the session, or the sessions are not kept (the folder of system.session.options.save_path, writable by the web user?)');
+        $event->stopPropagation();
+    }
+
+    /**
+     * What keeps the site from working with the engine (Site::trouble()), with what to do: in the language of the page, or in English
+     * for the log; null for any other failure.
+     */
+    private function troubleText(\Throwable $e, bool $english = false): ?string
+    {
+        $key = Site::trouble($e);
+        if ($key === null) {
+            return null;
+        }
+        $vars = [$this->site()->engine()->address()];
+
+        return $english ? (string) $this->grav['language']->translate(array_merge([$key], $vars), ['en']) : $this->site()->translate($key, $vars);
     }
 
     /**
@@ -1216,14 +1252,15 @@ class W4osPlugin extends Plugin
      */
     private function healthProblems(): array
     {
-        $none = ['count' => 0, 'warnings' => 0, 'labels' => [], 'url' => ''];
+        $none = ['count' => 0, 'warnings' => 0, 'labels' => [], 'url' => '', 'trouble' => null];
         if (! $this->site()->canOperation('health')) {
             return $none;
         }
         try {
-            return Site::healthProblems(Site::healthSaid($this->site()->engine()->health(), $this->said(...))) + ['url' => $this->site()->url('health')];
-        } catch (\Throwable) {
-            return $none;
+            return Site::healthProblems(Site::healthSaid($this->site()->engine()->health(), $this->said(...))) + ['url' => $this->site()->url('health'), 'trouble' => null];
+        } catch (\Throwable $e) {
+            // The engine that cannot be asked at all: why, for the manager
+            return ['trouble' => $this->troubleText($e), 'url' => $this->site()->url('health')] + $none;
         }
     }
 
@@ -1241,7 +1278,8 @@ class W4osPlugin extends Plugin
         $engine = $this->site()->engine();
         // Checked again when the page is asked so (its button), else the last report
         // Said in the language of the page (the texts of its lines)
-        $report = Site::healthReport(fn (bool $refresh) => Site::healthSaid($engine->health($refresh), $this->said(...)), $this->grav['uri']->query('refresh') === '1');
+        $report = Site::healthReport(fn (bool $refresh) => Site::healthSaid($engine->health($refresh), $this->said(...)), $this->grav['uri']->query('refresh') === '1',
+            fn (\Throwable $e) => $this->troubleText($e) ?? $e->getMessage());
         try {
             $addresses = $report['error'] === null ? $engine->addresses() : null;
         } catch (\Throwable) {

@@ -1037,6 +1037,8 @@ w4os:
   admin_api_url: 'Indirizzo dell’API dell’engine'
   admin_api_url_help: "Obbligatorio con un engine remoto: https://grid.example.org/api, oppure sulla macchina della griglia l'indirizzo che dà opensim web GRID api"
   admin_api_url_missing: 'L’engine è remoto ma non ha un indirizzo API: indica l’indirizzo dell’API dell’engine, senza di esso il sito non raggiunge la griglia'
+  admin_engine_key_refused: 'L’engine rifiuta la chiave del sito: creane una nuova sulla macchina della griglia (opensim api-key create <nome>) e dalla al sito (Chiave API nelle impostazioni, o w4os-site setup --key)'
+  admin_engine_down: 'L’API dell’engine non risponde a %s: controlla sulla macchina della griglia che il suo server web e il suo servizio PHP siano attivi (opensim web GRID api dà la loro configurazione), e che questo indirizzo sia giusto'
   admin_grid: 'Nick della griglia'
   admin_grid_help: 'Solo se l’API serve più griglie'
   admin_api_key: 'Chiave API'
@@ -1165,3 +1167,4 @@ w4os:
   admin_shortcode_site_title_help: 'Il titolo del sito, altrimenti il nome della griglia'
   site_register_closed_title: 'Registrazioni chiuse'
   site_register_closed_text: 'Questa griglia non crea qui nuovi avatar: li creano i suoi gestori. Chiedi loro il tuo.'
+  site_sign_in_expired: 'Questo modulo è scaduto. Accedi di nuovo.'

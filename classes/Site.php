@@ -240,23 +240,39 @@ final class Site
      * could not run again says why (`refreshError`) beside the last report, whose time tells how old it is.
      *
      * @param \Closure(bool $refresh): array<string,mixed> $read the health as the engine gives it
+     * @param ?\Closure(\Throwable): string $said what a failure says, its message without it
      * @return array{health: ?array<string,mixed>, error: ?string, refreshError: ?string}
      */
-    public static function healthReport(\Closure $read, bool $refresh): array
+    public static function healthReport(\Closure $read, bool $refresh, ?\Closure $said = null): array
     {
+        $said ??= fn (\Throwable $e): string => $e->getMessage();
         $refreshError = null;
         if ($refresh) {
             try {
                 return ['health' => $read(true), 'error' => null, 'refreshError' => null];
             } catch (\Throwable $e) {
-                $refreshError = $e->getMessage();
+                $refreshError = $said($e);
             }
         }
         try {
             return ['health' => $read(false), 'error' => null, 'refreshError' => $refreshError];
         } catch (\Throwable $e) {
-            return ['health' => null, 'error' => $e->getMessage(), 'refreshError' => $refreshError];
+            return ['health' => null, 'error' => $said($e), 'refreshError' => $refreshError];
         }
+    }
+
+    /** The texts of what keeps the site from working with the engine (EngineException::trouble()), with what to do. */
+    public const TROUBLES = ['key' => 'w4os.admin_engine_key_refused', 'down' => 'w4os.admin_engine_down'];
+
+    /**
+     * The key of the text of what keeps the site from working with the engine, whatever it asks (its key refused, its API that does
+     * not answer), for a manager and the log; null for any other failure (a problem of what was asked).
+     */
+    public static function trouble(\Throwable $e): ?string
+    {
+        $engine = $e instanceof EngineException ? $e : $e->getPrevious();
+
+        return $engine instanceof EngineException ? (self::TROUBLES[$engine->trouble() ?? ''] ?? null) : null;
     }
 
     /**
