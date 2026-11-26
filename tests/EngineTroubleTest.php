@@ -50,6 +50,13 @@ describe('an engine the site cannot work with', function () {
         expect($twig->render('w4os/dashboard.html.twig'))->toContain('<div class="alert alert-danger" role="alert">', 'The engine refuses the key of the site: make a new one', 'href="&#x2F;w4os&#x2F;health">[w4os.admin_health_title]</a>');
     });
 
+    test('never breaks the admin pages that say it: the logo of the grid left out', function () {
+        expect((string) file_get_contents(dirname(__DIR__).'/classes/Site.php'))->toContain("            try {
+                \$logo = (string) (\$this->engine()->gridLogo() ?? '');
+            } catch (EngineException) {
+            }");
+    });
+
     test('is said to the visitor signing in as the grid unreachable, its reason in the log', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 

@@ -2169,7 +2169,13 @@ final class Site
         $admin = (array) ($this->config()['admin'] ?? []);
         $logo = (string) self::adminLogo((string) ($admin['logo'] ?? ''), (array) ($this->config()['brand'] ?? []), fn (string $path) => is_file(GRAV_ROOT.'/'.$path));
         $logo !== '' && ! str_contains($logo, '://') && ! str_starts_with($logo, '/') && $logo = $this->grav['base_url_relative'].'/'.$logo;
-        $logo === '' && $logo = (string) ($this->engine()->gridLogo() ?? '');
+        // The logo of the grid; none while the engine cannot be asked (the pages say why)
+        if ($logo === '') {
+            try {
+                $logo = (string) ($this->engine()->gridLogo() ?? '');
+            } catch (EngineException) {
+            }
+        }
         // The icon of the site, in the folded sidebar
         $icon = (string) self::adminLogo('', (array) ($this->config()['brand'] ?? []), fn (string $path) => is_file(GRAV_ROOT.'/'.$path), 'favicon');
 
