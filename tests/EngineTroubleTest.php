@@ -75,18 +75,44 @@ describe('a sign-in form without the token of its session', function () {
             ->and($plugin)->toContain("\$this->grav['log']->warning('w4os: a sign-in form came back without the token of its session");
     });
 
-    test('expires the session cookies of an install of before, which the browser sends first, never the one of now', function () {
+});
+
+describe('a browser that sends the cookie of the session more than once', function () {
+    test('is found by the names of the sessions of the site only, each its ids in the order sent', function () {
+        $header = 'grav-site-87d8ca0=old1; other=1; grav-site-87d8ca0=new2; grav-site-87d8ca0-admin=a; other=2';
+
+        expect(Site::duplicateSessionCookies($header, 'grav-site'))->toBe(['grav-site-87d8ca0' => ['old1', 'new2']])
+            ->and(Site::duplicateSessionCookies('grav-site-87d8ca0=one; other=1; other=2', 'grav-site'))->toBe([]);
+    });
+
+    test('reads the session the site keeps, else none', function () {
+        $folder = sys_get_temp_dir().'/w4os-sessions-'.getmypid();
+        @mkdir($folder);
+        touch($folder.'/sess_new2');
+
+        expect(Site::liveSession(['old1', 'new2'], $folder))->toBe('new2')
+            ->and(Site::liveSession(['old1', '../x'], $folder))->toBeNull()
+            ->and(Site::liveSession(['new2'], null))->toBeNull();
+        unlink($folder.'/sess_new2');
+        rmdir($folder);
+    });
+
+    test('has the others expired: host only and each domain above the host, at each path above the one asked, never the one of now', function () {
+        $variants = Site::sessionCookieVariants('kimbe.red', '/opensim/fr/login', 'kimbe.red', '/opensim/');
+        $paths = ['/', '/opensim', '/opensim/', '/opensim/fr', '/opensim/fr/', '/opensim/fr/login', '/opensim/fr/login/'];
+
+        expect($variants)->toHaveCount(13)
+            ->and($variants)->not->toContain(['domain' => 'kimbe.red', 'path' => '/opensim/'])
+            ->and(array_column(array_filter($variants, fn ($v) => $v['domain'] === ''), 'path'))->toBe($paths)
+            // A subdomain: the domains above it too; a leading dot the same domain
+            ->and(array_values(array_unique(array_column(Site::sessionCookieVariants('www.kimbe.red', '/', '.www.kimbe.red', '/'), 'domain'))))->toBe(['', 'kimbe.red'])
+            // An address takes no domain
+            ->and(Site::sessionCookieVariants('192.0.2.7', '/w/', '', '/w/'))->toBe([['domain' => '', 'path' => '/'], ['domain' => '', 'path' => '/w']]);
+    });
+
+    test('is handled before Grav starts the session, the others expired once the cookie of now is set', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
-        // Grav 2 at /opensim/, host-only: the Domain=<host> of Grav 1.7 and the other paths
-        expect(Site::staleSessionCookies('kimbe.red', '', '/opensim/'))->toBe([
-            ['domain' => '', 'path' => '/opensim'], ['domain' => '', 'path' => '/'],
-            ['domain' => 'kimbe.red', 'path' => '/opensim/'], ['domain' => 'kimbe.red', 'path' => '/opensim'], ['domain' => 'kimbe.red', 'path' => '/'],
-        ])
-            // Grav 1.7, Domain=<host> at the root (its leading dot the same domain): the host-only one
-            ->and(Site::staleSessionCookies('kimbe.red', '.kimbe.red', '/'))->toBe([['domain' => '', 'path' => '/']])
-            // An address takes no domain: the other paths only
-            ->and(Site::staleSessionCookies('192.0.2.7', '', '/w/'))->toBe([['domain' => '', 'path' => '/w'], ['domain' => '', 'path' => '/']])
-            ->and($plugin)->toContain("foreach (Site::staleSessionCookies((string) \$this->grav['uri']->host(), (string) \$now['domain'], (string) \$now['path']) as \$stale) {", "setcookie(\$name, '', ['expires' => 1");
+        expect($plugin)->toContain('PluginsLoadedEvent::class => [\'onPluginsLoaded\', 0]', '$live === null || $_COOKIE[$name] = $live;', 'header_register_callback(function () use ($duplicates, $host, $requested) {');
     });
 });

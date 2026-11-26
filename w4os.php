@@ -4,6 +4,7 @@ namespace Grav\Plugin;
 
 use Grav\Common\Plugin;
 use Grav\Common\Utils;
+use Grav\Events\PluginsLoadedEvent;
 use Grav\Plugin\Login\Events\UserLoginEvent;
 use RocketTheme\Toolbox\Event\Event;
 use W4OS\Grav\Backdrop;
@@ -56,6 +57,8 @@ class W4osPlugin extends Plugin
     public static function getSubscribedEvents(): array
     {
         return [
+            // Before Grav starts the session
+            PluginsLoadedEvent::class => ['onPluginsLoaded', 0],
             // Before the Login plugin signs a visitor in by "remember me" (from priority 10000)
             'onPluginsInitialized' => [['rememberTokens', 10001], ['onPluginsInitialized', 0]],
             'onUserLoginGuest' => ['onUserLoginGuest', 0],
@@ -241,6 +244,52 @@ class W4osPlugin extends Plugin
     }
 
     /**
+     * A browser that sends the cookie of the session more than once (an older one of other attributes, a domain or a path, which
+     * a cookie of the site never replaces, sent first, where PHP takes it): the session the site keeps is the one read, the other
+     * cookies of that name expired with the answer, so the browser keeps one. Nothing for a single cookie, nor for other cookies.
+     */
+    public function onPluginsLoaded(): void
+    {
+        $duplicates = \PHP_SAPI === 'cli' ? [] : Site::duplicateSessionCookies((string) ($_SERVER['HTTP_COOKIE'] ?? ''), (string) $this->config->get('system.session.name', 'grav-site'));
+        if ($duplicates === []) {
+            return;
+        }
+        $folder = $this->sessionFolder();
+        foreach ($duplicates as $name => $ids) {
+            $live = Site::liveSession($ids, $folder);
+            $live === null || $_COOKIE[$name] = $live;
+        }
+        $host = strtolower((string) preg_replace('/:\d+$/', '', (string) ($_SERVER['HTTP_HOST'] ?? '')));
+        $requested = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
+        // Once Grav set the cookie of now: the others of each name, their attributes guessed
+        header_register_callback(function () use ($duplicates, $host, $requested) {
+            $now = session_get_cookie_params();
+            foreach (array_keys($duplicates) as $name) {
+                foreach (Site::sessionCookieVariants($host, $requested, (string) $now['domain'], (string) $now['path']) as $variant) {
+                    setcookie((string) $name, '', ['expires' => 1, 'path' => $variant['path'], 'domain' => $variant['domain'], 'secure' => (bool) $now['secure'],
+                        'httponly' => (bool) $now['httponly'], 'samesite' => (string) ($now['samesite'] ?: 'Lax')]);
+                }
+            }
+        });
+        $this->grav['log']->info('w4os: a browser sent the cookie of the session '.count(reset($duplicates)).' times (an older one of other attributes): the session of the site kept, the others expired');
+    }
+
+    /** The folder of the sessions of the site (Grav's `save_path`, else PHP's), null when they are not kept in files. */
+    private function sessionFolder(): ?string
+    {
+        $options = (array) $this->config->get('system.session.options', []);
+        if (($options['save_handler'] ?? ini_get('session.save_handler')) !== 'files') {
+            return null;
+        }
+        $path = (string) ($options['save_path'] ?? '');
+        $path === '' && $path = (string) preg_replace('/^.*;/', '', (string) ini_get('session.save_path'));
+        $path === '' && $path = sys_get_temp_dir();
+        $path[0] === '/' || $path = GRAV_ROOT.'/'.$path;
+
+        return is_dir($path) ? $path : null;
+    }
+
+    /**
      * A sign-in form that comes back without the token of its session (its page older than the session, or the sessions of the site
      * not kept): said as the error it is, the form shown again, why in the log. The Login plugin would say "Access denied" as a
      * success (info).
@@ -251,16 +300,7 @@ class W4osPlugin extends Plugin
             return;
         }
         $this->grav['messages']->add(htmlspecialchars($this->site()->translate('w4os.site_sign_in_expired')), 'error');
-        $this->grav['log']->warning('w4os: a sign-in form came back without the token of its session: its page was older than the session, an older session cookie sent first (expired now), or the sessions are not kept (the folder of system.session.options.save_path, writable by the web user?)');
-        // The session cookies of an install of before expired, so the next try opens the session of now
-        $name = session_name();
-        if ($name !== false && isset($_COOKIE[$name]) && ! headers_sent()) {
-            $now = session_get_cookie_params();
-            foreach (Site::staleSessionCookies((string) $this->grav['uri']->host(), (string) $now['domain'], (string) $now['path']) as $stale) {
-                setcookie($name, '', ['expires' => 1, 'path' => $stale['path'], 'domain' => $stale['domain'], 'secure' => (bool) $now['secure'],
-                    'httponly' => (bool) $now['httponly'], 'samesite' => (string) ($now['samesite'] ?: 'Lax')]);
-            }
-        }
+        $this->grav['log']->warning('w4os: a sign-in form came back without the token of its session: its page was older than the session, or the sessions are not kept (the folder of system.session.options.save_path, writable by the web user?)');
         $event->stopPropagation();
     }
 
