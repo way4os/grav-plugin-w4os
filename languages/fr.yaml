@@ -16,7 +16,7 @@ w4os:
   email: E-mail
   password: 'Mot de passe'
   password_confirm: 'Confirme le mot de passe'
-  password_help: 'De 6 à 16 caractères, sans guillemet double. Le même mot de passe te connecte ici et dans le monde virtuel.'
+  password_help: 'Le même mot de passe te connecte ici et dans le monde virtuel.'
   model: 'Choisis le premier ensemble de ton avatar.'
   model_help: 'Tu pourras toujours changer d’apparence dans le monde virtuel.'
   terms_agree: "Je suis d'accord avec les conditions de la page %s."
@@ -951,7 +951,7 @@ w4os:
   error_name_taken: 'Un avatar porte déjà ce nom, merci d’en choisir un autre.'
   error_email_taken: 'Un avatar a déjà cette adresse e-mail.'
   error_password_required: 'Merci de remplir tous les champs.'
-  error_password_invalid: 'Le mot de passe doit avoir de 6 à 16 caractères, sans guillemet double.'
+  error_password_invalid: 'Le mot de passe manque.'
   error_email_invalid: 'Cette adresse e-mail n’est pas valide.'
   error_email_required: 'Cet avatar n’a pas d’adresse e-mail.'
   error_model_unknown: 'Cet ensemble n’est pas disponible, merci d’en choisir un autre.'

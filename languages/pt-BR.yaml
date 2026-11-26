@@ -16,7 +16,7 @@ w4os:
   email: Email
   password: Senha
   password_confirm: 'Confirmar senha'
-  password_help: 'De 6 a 16 caracteres, sem aspas duplas. A mesma senha te conecta aqui e no mundo virtual.'
+  password_help: 'A mesma senha te conecta aqui e no mundo virtual.'
   model: 'Escolha o primeiro traje para o seu avatar.'
   model_help: 'Você sempre pode mudar sua aparência no mundo virtual.'
   terms_agree: 'Eu concordo com os termos na página %s.'
@@ -951,7 +951,7 @@ w4os:
   error_name_taken: 'Um avatar já tem este nome, escolha outro.'
   error_email_taken: 'Um avatar já tem este endereço de e-mail.'
   error_password_required: 'Preencha todos os campos.'
-  error_password_invalid: 'A senha deve ter de 6 a 16 caracteres, sem aspas duplas.'
+  error_password_invalid: 'A senha está faltando.'
   error_email_invalid: 'Este endereço de email não é válido.'
   error_email_required: 'Este avatar não tem endereço de email.'
   error_model_unknown: 'Este traje não está disponível, escolha outro.'

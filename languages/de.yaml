@@ -16,7 +16,7 @@ w4os:
   email: E-Mail
   password: Passwort
   password_confirm: 'Passwort bestätigen'
-  password_help: '6 bis 16 Zeichen, ohne doppelte Anführungszeichen. Mit demselben Passwort meldest du dich hier und in der Welt an.'
+  password_help: 'Mit demselben Passwort meldest du dich hier und in der Welt an.'
   model: 'Wähle das erste Outfit für deinen Avatar aus.'
   model_help: 'Du kannst dein Aussehen in der Welt jederzeit ändern.'
   terms_agree: 'Ich stimme den Bedingungen auf Seite %s zu.'
@@ -951,7 +951,7 @@ w4os:
   error_name_taken: 'Ein Avatar hat schon diesen Namen, bitte wähle einen anderen.'
   error_email_taken: 'Ein Avatar hat diese E-Mail-Adresse bereits.'
   error_password_required: 'Bitte fülle alle Felder aus.'
-  error_password_invalid: 'Das Passwort muss 6 bis 16 Zeichen haben, ohne doppelte Anführungszeichen.'
+  error_password_invalid: 'Das Passwort fehlt.'
   error_email_invalid: 'Diese E-Mail-Adresse ist nicht gültig.'
   error_email_required: 'Dieser Avatar hat keine E-Mail-Adresse.'
   error_model_unknown: 'Dieses Outfit ist nicht verfügbar, bitte wähle ein anderes.'

@@ -16,7 +16,7 @@ w4os:
   email: E-mail
   password: Wachtwoord
   password_confirm: 'Bevestig wachtwoord'
-  password_help: '6 tot 16 tekens, zonder dubbele aanhalingstekens. Met hetzelfde wachtwoord log je hier en in de virtuele wereld in.'
+  password_help: 'Met hetzelfde wachtwoord log je hier en in de virtuele wereld in.'
   model: 'Kies de eerste outfit voor je avatar.'
   model_help: 'Je kunt altijd je uiterlijk in de wereld veranderen.'
   terms_agree: 'Ik ga akkoord met de voorwaarden op pagina %s.'
@@ -951,7 +951,7 @@ w4os:
   error_name_taken: 'Een avatar heeft deze naam al, kies een andere.'
   error_email_taken: 'Een avatar heeft dit e-mailadres al.'
   error_password_required: 'Vul alle velden in.'
-  error_password_invalid: 'Het wachtwoord moet 6 tot 16 tekens hebben, zonder dubbele aanhalingstekens.'
+  error_password_invalid: 'Het wachtwoord ontbreekt.'
   error_email_invalid: 'Dit e-mailadres is niet geldig.'
   error_email_required: 'Deze avatar heeft geen e-mailadres.'
   error_model_unknown: 'Deze outfit is niet beschikbaar, kies een andere.'

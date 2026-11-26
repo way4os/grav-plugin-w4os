@@ -16,7 +16,7 @@ w4os:
   email: Ebost
   password: Cyfrinair
   password_confirm: 'Cadarnhau cyfrinair'
-  password_help: '6 i 16 nod, heb ddyfynnod dwbl. Mae’r un cyfrinair yn dy fewngofnodi di yma ac yn y byd rhithwir.'
+  password_help: 'Mae’r un cyfrinair yn dy fewngofnodi di yma ac yn y byd rhithwir.'
   model: 'Dewisa’r wisg gyntaf ar gyfer dy afatar.'
   model_help: 'Gelli di newid dy olwg yn y byd rhithwir unrhyw bryd.'
   terms_agree: "Rwy'n cytuno i'r telerau ar dudalen %s."
@@ -951,7 +951,7 @@ w4os:
   error_name_taken: 'Mae gan afatar yr enw hwn yn barod, dewisa un arall.'
   error_email_taken: 'Mae gan afatar y cyfeiriad ebost hwn eisoes.'
   error_password_required: 'Llenwa bob maes, plîs.'
-  error_password_invalid: 'Rhaid i’r cyfrinair fod rhwng 6 ac 16 nod, heb ddyfynnod dwbl.'
+  error_password_invalid: 'Mae’r cyfrinair ar goll.'
   error_email_invalid: 'Nid yw’r cyfeiriad ebost hwn yn ddilys.'
   error_email_required: 'Nid oes gan yr afatar hwn gyfeiriad ebost.'
   error_model_unknown: 'Nid yw’r wisg hon ar gael, dewisa un arall.'
