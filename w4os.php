@@ -1434,6 +1434,8 @@ class W4osPlugin extends Plugin
             'feed_only' => $name === 'profile' ? $uri->query('feed_only') : null,
             // The category of the guide its cards open (?category=)
             'category' => $name === 'destination_guide' ? $uri->query('category') : null,
+            // The page of the guide its categories open on, wherever the block is (the home)
+            'guide_page' => \W4OS\Grav\Blocks::name($name) === 'destination_guide' && isset($this->site()->routes()['guide']) ? $this->site()->path('guide', true) : null,
             // The map: its tiles on the site (Site::mapTile())
             'map_tiles' => \W4OS\Grav\Blocks::name($name) === 'map' ? $this->site()->path('map_tiles') : null,
             // The message of the day welcomes the avatar signed in on the site by its name (the grid's own welcome otherwise)

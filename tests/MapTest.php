@@ -14,7 +14,7 @@ describe('the map of the grid', function () {
             ->and($page)->toMatchArray(['template' => 'default', 'w4os' => 'map', 'w4os_block' => 'map', 'hide_title' => true])
             // The map is the page: the whole height left in the window
             ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("'map' => ['fill' => 'true'],")
-            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Blocks.php'))->toContain("'map_tiles', 'fill'];")
+            ->and((string) file_get_contents(dirname(__DIR__).'/classes/Blocks.php'))->toContain("'map_tiles', 'fill', 'guide_page'];")
             ->and(Site::titleKey('map'))->toBe('w4os.map_title')
             ->and(Site::typeAt('/map', $config['routes']))->toBe(['map', ''])
             // A grid without a map has no page /map (a 404), never a grid said not to answer

@@ -68,7 +68,10 @@ describe('blocks', function () {
     test('asks the guide for the category the page shows', function () {
         $blocks = new Blocks(fn (string $name, array $args) => json_encode($args));
 
-        expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out']);
+        expect(json_decode($blocks->html('destination_guide', ['category' => 'Hang out']), true))->toBe(['category' => 'Hang out'])
+            // Its categories open on the page of the guide, wherever the block is (the home)
+            ->and(json_decode($blocks->html('destination_guide', ['guide_page' => '/fr/guide']), true))->toBe(['guide_page' => '/fr/guide'])
+            ->and((string) file_get_contents(dirname(__DIR__).'/w4os.php'))->toContain("'guide_page' => \\W4OS\\Grav\\Blocks::name(\$name) === 'destination_guide' && isset(\$this->site()->routes()['guide']) ? \$this->site()->path('guide', true) : null,");
     });
 
     test('gives the helpers the class of the visitor (client), so the engine links for where the page is shown', function () {
