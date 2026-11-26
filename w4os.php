@@ -254,6 +254,9 @@ class W4osPlugin extends Plugin
         if (\PHP_SAPI === 'cli') {
             return;
         }
+        // The session of the site at every address of its host, the pages it serves outside its base too, found by its name alone
+        // (a hash of the root of the site: another site of the host has its own); a setting of the site's own wins
+        $this->config->get('system.session.path') === null && $this->config->set('system.session.path', '/');
         $settled = SessionCookies::settle($this->sessionNames(), (string) ($_SERVER['HTTP_COOKIE'] ?? ''),
             strtolower((string) preg_replace('/:\d+$/', '', (string) ($_SERVER['HTTP_HOST'] ?? ''))),
             (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH),
