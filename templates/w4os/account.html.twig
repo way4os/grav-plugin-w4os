@@ -1,7 +1,7 @@
 {# The profile of the avatar signed in, organized like the viewer's profile window (the tabs of the form), its account (email,
    password) in the last tab #}
 {% if w4os_avatar() is empty %}
-    <p class="notices red">{{ 'w4os.error_channel_unavailable'|t }}</p>
+    <p class="notices red">{{ w4os_avatar_failure() ?? 'w4os.error_channel_unavailable'|t }}</p>
 {% else %}
     {# Its actions at the top right of the content, on the line of the tabs of the form: the profile page of the avatar, signing out
        (found here too in a theme without the entries under my avatar in its menu) #}

@@ -47,6 +47,9 @@ class W4osPlugin extends Plugin
     /** The avatar signed in, read once per request (the account page). */
     private static ?array $current = null;
 
+    /** Why the avatar signed in could not be read (current()), null when it was. */
+    private static ?FormError $currentError = null;
+
     /** The avatar of the profile page shown, once found. */
     private ?array $profiled = null;
 
@@ -413,6 +416,8 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_block', fn (string $name, array $args = []) => $this->block($name, $args), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_models', fn () => $this->site()->models()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar', fn () => self::current()));
+        // Why the avatar signed in could not be read, as a failure says it (errorText())
+        $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_failure', fn () => self::current() === null && self::$currentError !== null ? $this->errorText(self::$currentError, 'account') : null));
         $twig->addFunction(new \Twig\TwigFunction('w4os_list', fn (array $options) => $this->listing($options)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_item', fn () => $this->item()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_avatar_of', fn (string $uuid) => $this->avatarOf($uuid)));
@@ -905,7 +910,7 @@ class W4osPlugin extends Plugin
                     // A new password first: a wrong current one changes nothing
                     $password = (string) ($data['password'] ?? '') !== '';
                     $password && $forms->password($avatar, $data);
-                    $result = $forms->profile(self::current() ?? throw new FormError('w4os.error_channel_unavailable'), $data);
+                    $result = $forms->profile(self::current() ?? throw (self::$currentError ?? new FormError('w4os.error_channel_unavailable')), $data);
                     $site->forgetProfile((string) $avatar['name']);
                     $key = $result['email'] !== null ? ($result['link'] ? 'w4os.email_pending_test' : 'w4os.email_pending') : ($password ? 'w4os.password_saved' : 'w4os.profile_saved');
                     $this->done($key, $routes['account'], [htmlspecialchars((string) $result['email']), $this->link($result['link'])]);
@@ -1684,7 +1689,8 @@ class W4osPlugin extends Plugin
     {
         $type = (string) ($options['type'] ?? '');
         $list = $this->site()->openApi()->listOf($type);
-        $error = ['list' => $list, 'items' => [], 'meta' => [], 'query' => [], 'error' => $this->site()->translate('w4os.error_channel_unavailable')];
+        // A list the engine does not describe
+        $error = ['list' => $list, 'items' => [], 'meta' => [], 'query' => [], 'error' => Failure::line(Failure::status(501), "engine: $type")];
         if ($list === null) {
             return $error;
         }
@@ -2008,8 +2014,9 @@ class W4osPlugin extends Plugin
             $avatar = $site->avatar();
             try {
                 self::$current = $avatar === null ? [] : $site->forms()->avatar($avatar['uuid']);
-            } catch (FormError) {
+            } catch (FormError $e) {
                 self::$current = [];
+                self::$currentError = $e;
             }
         }
 

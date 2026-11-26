@@ -76,7 +76,9 @@ final class Blocks
             return [];
         }
         if (! $manager) {
-            return $page !== null && isset($failures[self::name($page)]) ? [['level' => 'warning', 'text' => htmlspecialchars($t('w4os.error_channel_unavailable', []))]] : [];
+            $name = $page === null ? null : self::name($page);
+
+            return $name !== null && isset($failures[$name]) ? [['level' => 'error', 'text' => htmlspecialchars(Failure::line((string) $failures[$name], "helpers: $name"))]] : [];
         }
         $byReason = [];
         foreach ($failures as $name => $reason) {

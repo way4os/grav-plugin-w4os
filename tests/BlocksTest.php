@@ -156,9 +156,9 @@ describe('the blocks that cannot be read', function () {
             ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('Failed to connect to 127.0.0.1 port 28698 after 0 ms: Could not connect to server')))->toBe('Connection refused');
     });
 
-    test('are said to a visitor only when the block is the whole page, without a reason', function () use ($t) {
-        expect(Blocks::notices(['profile' => 'Idle timeout reached'], false, 'profile', null, $t))->toBe([['level' => 'warning', 'text' => '[w4os.error_channel_unavailable]']])
-            ->and(Blocks::notices(['grid-info' => 'Idle timeout reached'], false, null, null, $t))->toBe([])
+    test('are said to a visitor only when the block is the whole page, as a failure is, without the link to the diagnostics', function () use ($t) {
+        expect(Blocks::notices(['profile' => '503 Service Unavailable'], false, 'profile', null, $t))->toBe([['level' => 'error', 'text' => '503 Service Unavailable · helpers: profile']])
+            ->and(Blocks::notices(['grid-info' => 'Timeout'], false, null, null, $t))->toBe([])
             ->and(Blocks::notices([], true, 'profile', '/w4os/health', $t))->toBe([]);
     });
 });
