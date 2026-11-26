@@ -31,6 +31,15 @@ final class EngineException extends \RuntimeException
     }
 
     /**
+     * Whether the engine answered a problem of what was asked (a name taken, a token refused: a 4xx with its code), which the person
+     * can act on, rather than failed to answer it (an error of its own, no answer, the key of the site refused).
+     */
+    public function answered(): bool
+    {
+        return $this->getPrevious() === null && $this->status >= 400 && $this->status < 500 && isset($this->problem['code']) && $this->problemCode !== 'unauthorized';
+    }
+
+    /**
      * Why the site cannot work with the engine at all, whatever it asks: `key`, the engine refuses the key of the site; `down`, its
      * API does not answer (unreachable, or an error without a problem document: a web server or a PHP service in front of it); null
      * for a problem the engine answered about what was asked, or a site not connected.

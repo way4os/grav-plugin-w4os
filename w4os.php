@@ -10,6 +10,7 @@ use RocketTheme\Toolbox\Event\Event;
 use W4OS\Grav\Backdrop;
 use W4OS\Grav\Blocks;
 use W4OS\Grav\EngineException;
+use W4OS\Grav\Failure;
 use W4OS\Grav\FormError;
 use W4OS\Grav\Forms;
 use W4OS\Grav\Items;
@@ -217,7 +218,7 @@ class W4osPlugin extends Plugin
             $event->setMessage(sprintf(
                 '<strong>%s</strong><br>%s',
                 htmlspecialchars($this->site()->translate('w4os.sign_in_failed')),
-                htmlspecialchars($this->site()->translate($trouble === null ? $e->key : 'w4os.error_channel_unavailable')),
+                htmlspecialchars($trouble === null ? $this->errorText($e) : Failure::line(Failure::of($e), 'engine')),
             ), 'error');
             $trouble === null
                 ? $this->grav['log']->info('w4os: sign-in of '.$login.': '.$e->getMessage())
@@ -315,8 +316,9 @@ class W4osPlugin extends Plugin
             return null;
         }
         $vars = [$this->site()->engine()->address()];
+        $text = $english ? (string) $this->grav['language']->translate(array_merge([$key], $vars), ['en']) : $this->site()->translate($key, $vars);
 
-        return $english ? (string) $this->grav['language']->translate(array_merge([$key], $vars), ['en']) : $this->site()->translate($key, $vars);
+        return Failure::line(Failure::of($e), 'engine').' — '.$text;
     }
 
     /**
@@ -1015,7 +1017,7 @@ class W4osPlugin extends Plugin
                     $this->done('w4os.manage_saved', $this->grav['page']->route().'?'.http_build_query(['id' => $id]), [(string) ($page['item']['name'] ?? '')], (array) ($saved['meta']['reminders'] ?? []));
             }
         } catch (FormError $e) {
-            $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e)]));
+            $this->grav->fireEvent('onFormValidationError', new Event(['form' => $form, 'message' => $this->errorText($e, (string) $event['params'])]));
             $event->stopPropagation();
         }
     }
@@ -1049,7 +1051,7 @@ class W4osPlugin extends Plugin
             $again = $e->key === 'w4os.error_name_taken' && isset($this->site()->routes()['register'])
                 ? ' <a href="'.htmlspecialchars($this->site()->url('register')).'">'.htmlspecialchars($this->site()->translate('w4os.register_title')).'</a>'
                 : '';
-            $this->grav['messages']->add($this->errorText($e).$again, 'error');
+            $this->grav['messages']->add($this->errorText($e, 'confirm').$again, 'error');
 
             return;
         }
@@ -1200,7 +1202,7 @@ class W4osPlugin extends Plugin
 
             return $read[$group] = ['view' => $view, 'changeable' => $view->changeable, 'values' => $values, 'meta' => $meta] + $none;
         } catch (\Throwable $e) {
-            return $read[$group] = ['error' => $e->getMessage()] + $none;
+            return $read[$group] = ['error' => $this->failureText($e, "settings: $group")] + $none;
         }
     }
 
@@ -1217,7 +1219,7 @@ class W4osPlugin extends Plugin
             $task = $this->site()->engine()->runTask($id);
             $this->grav['messages']->add($this->site()->translate('w4os.admin_task_ran', [(string) ($tasks[$id]['label'] ?? $id), (string) ($task['message'] ?? '')]), ($task['status'] ?? '') === 'failed' ? 'error' : 'info');
         } catch (EngineException $e) {
-            $this->grav['messages']->add($e->getMessage(), 'error');
+            $this->grav['messages']->add($this->failureText($e, "tasks: $id"), 'error');
         }
         $this->grav->redirectLangSafe($path, 303);
     }
@@ -1312,7 +1314,7 @@ class W4osPlugin extends Plugin
             return Site::healthProblems(Site::healthSaid($this->site()->engine()->health(), $this->said(...))) + ['url' => $this->site()->url('health'), 'trouble' => null];
         } catch (\Throwable $e) {
             // The engine that cannot be asked at all: why, for the manager
-            return ['trouble' => $this->troubleText($e), 'url' => $this->site()->url('health')] + $none;
+            return ['trouble' => Site::trouble($e) === null ? null : $this->failureText($e, 'health'), 'url' => $this->site()->url('health')] + $none;
         }
     }
 
@@ -1331,7 +1333,7 @@ class W4osPlugin extends Plugin
         // Checked again when the page is asked so (its button), else the last report
         // Said in the language of the page (the texts of its lines)
         $report = Site::healthReport(fn (bool $refresh) => Site::healthSaid($engine->health($refresh), $this->said(...)), $this->grav['uri']->query('refresh') === '1',
-            fn (\Throwable $e) => $this->troubleText($e) ?? $e->getMessage());
+            fn (\Throwable $e) => $this->failureText($e, 'health'));
         try {
             $addresses = $report['error'] === null ? $engine->addresses() : null;
         } catch (\Throwable) {
@@ -1378,7 +1380,7 @@ class W4osPlugin extends Plugin
             $this->site()->forgetProfile((string) $this->site()->avatar()['name']);
             $this->done('w4os.'.\W4OS\Views\Done::key($name), $this->site()->profilePage());
         } catch (EngineException $e) {
-            $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
+            $this->grav['messages']->add($this->failureText($e, "posts: $name"), 'error');
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
         }
@@ -1416,7 +1418,7 @@ class W4osPlugin extends Plugin
                 : http_build_query(Lists::query(Lists::showing($described, isset($options['filters']) ? (array) $options['filters'] : null), $_GET, 1)['page'] + array_intersect_key($_GET, ['page' => 1]));
             $this->done('w4os.'.\W4OS\Views\Done::key($name), $route.($query === '' ? '' : "?$query"), [(string) ($row['name'] ?? '')]);
         } catch (EngineException $e) {
-            $this->grav['messages']->add($this->errorText($this->site()->forms()->error($e)), 'error');
+            $this->grav['messages']->add($this->failureText($e, "$type: $name"), 'error');
         } catch (FormError $e) {
             $this->grav['messages']->add($this->errorText($e), 'error');
         }
@@ -1447,11 +1449,28 @@ class W4osPlugin extends Plugin
     }
 
     /** The text of a refusal in the language of the visitor; what the engine said stays in the log, in English. */
-    private function errorText(FormError $e): string
+    private function errorText(FormError $e, string $asked = ''): string
     {
         $e->detail === '' || $this->grav['log']->info("w4os: {$e->key}: {$e->detail}");
+        $engine = $e->getPrevious();
+        // A failure of the engine, not a problem of what was asked: its status, what was asked; a refused key what to do
+        if ($engine instanceof EngineException && ! $engine->answered()) {
+            $line = Failure::line(Failure::of($engine), $asked === '' ? 'engine' : "engine: $asked");
+
+            return $engine->trouble() === 'key' ? $line.' — '.$this->site()->translate('w4os.admin_engine_key_refused') : $line;
+        }
 
         return $this->site()->translate($e->key, $e->vars);
+    }
+
+    /** What a failure says on a page (errorText()): a problem of the engine as such, any other by its status. */
+    private function failureText(\Throwable $e, string $asked): string
+    {
+        return match (true) {
+            $e instanceof FormError => $this->errorText($e, $asked),
+            $e instanceof EngineException => $this->errorText($this->site()->forms()->error($e), $asked),
+            default => Failure::line(Failure::of($e), $asked),
+        };
     }
 
     /** @return array{uuid: string, name: string, level: int} */
@@ -1563,7 +1582,7 @@ class W4osPlugin extends Plugin
             return '';
         }
         // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
-        $html === '' && $this->pageBlock() === \W4OS\Grav\Blocks::name($name) && $this->blockUnavailable($name, $this->site()->translate('w4os.admin_blocks_nothing', []), 'empty answer');
+        $html === '' && $this->pageBlock() === \W4OS\Grav\Blocks::name($name) && $this->blockUnavailable($name, 'No Content', 'empty answer');
         $html === '' || $this->blockFiles($name);
 
         return $html;
@@ -1681,10 +1700,7 @@ class W4osPlugin extends Plugin
 
             return ['list' => Lists::offering($list, $meta, $query['page']), 'items' => $items, 'meta' => $meta, 'query' => $query['page'], 'fixed' => $fixed, 'error' => null];
         } catch (EngineException $e) {
-            // What the engine refuses (a simulator it does not know...) said as it is, the rest as a channel down
-            $refused = $e->status >= 400 && $e->status < 500 ? $this->errorText($this->site()->forms()->error($e)) : $error['error'];
-
-            return ['list' => $list, 'query' => $query['page'], 'fixed' => $fixed, 'error' => $refused] + $error;
+            return ['list' => $list, 'query' => $query['page'], 'fixed' => $fixed, 'error' => $this->failureText($e, $type)] + $error;
         }
     }
 
@@ -1825,7 +1841,7 @@ class W4osPlugin extends Plugin
             try {
                 $page['item'] = $id === '' || $page['form'] === null ? null : ($this->site()->engine()->item($type, $id, ! empty($page['form']['scoped'])) ?: null);
             } catch (EngineException $e) {
-                $page['error'] = $e->status === 404 ? null : $this->errorText($this->site()->forms()->error($e));
+                $page['error'] = $e->status === 404 ? null : $this->failureText($e, $type);
             }
             if ($page['item'] !== null) {
                 // Its form for the visitor (w4os-views FormView): who it is to the item, the fields it sees, the ones it changes (of its

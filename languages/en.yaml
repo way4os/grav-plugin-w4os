@@ -1037,7 +1037,7 @@ w4os:
   admin_api_url: 'Engine API address'
   admin_api_url_help: 'Required with a remote engine: https://grid.example.org/api, or on the machine of the grid the address opensim web GRID api gives'
   admin_api_url_missing: 'The engine is remote but has no API address: set the Engine API address, the site cannot reach the grid without it'
-  admin_engine_key_refused: 'The engine refuses the key of the site: make a new one on the machine of the grid (opensim api-key create <label>) and give it to the site (API key in the settings, or w4os-site setup --key)'
+  admin_engine_key_refused: 'make a key on the machine of the grid (opensim api-key create <label>) and give it to the site (w4os-site setup --key)'
   admin_engine_down: 'The engine API does not answer at %s: check on the machine of the grid that its web server and its PHP service run (opensim web GRID api gives their configuration), and that this address is right'
   admin_grid: 'Grid nick'
   admin_grid_help: 'Only when the API serves several grids'
@@ -1103,7 +1103,8 @@ w4os:
   admin_shortcode_grid_name_help: 'The name of the grid'
   admin_shortcode_base_url_help: 'The address of the site'
   admin_shortcode_slogan_help: 'The slogan of the site'
-  admin_health_title: Health
+  admin_health_title: Diagnostics
+  admin_health_link: 'Diagnostics page'
   admin_health_check: 'Check again'
   admin_health_checked: 'checked %s'
   admin_health_errors_one: '%d error'
@@ -1126,11 +1127,7 @@ w4os:
   admin_health_instance: Instance
   admin_health_installed: Installed
   admin_health_missing: Missing
-  admin_blocks_unavailable: 'The helpers of the grid did not give %s: %s.'
-  admin_blocks_no_url: 'the setting "Helpers address" of the site is empty'
-  admin_blocks_http: 'they answered with the error HTTP %s'
-  admin_blocks_no_answer: 'they did not answer (%s)'
-  admin_blocks_nothing: 'they gave nothing'
+  admin_blocks_no_url: 'Helpers address not set'
   admin_shortcodes_menu: Shortcodes
   admin_health_setting: Setting
   admin_health_address: Address

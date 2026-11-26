@@ -48,7 +48,7 @@ describe('an engine the site cannot work with', function () {
         $twig->addFunction(new Twig\TwigFunction('w4os_health_problems', fn () => ['count' => 0, 'warnings' => 0, 'labels' => [], 'url' => '/w4os/health',
             'trouble' => 'The engine refuses the key of the site: make a new one']));
 
-        expect($twig->render('w4os/dashboard.html.twig'))->toContain('<div class="alert alert-danger" role="alert">', 'The engine refuses the key of the site: make a new one', 'href="&#x2F;w4os&#x2F;health">[w4os.admin_health_title]</a>');
+        expect($twig->render('w4os/dashboard.html.twig'))->toContain('<div class="alert alert-danger" role="alert">', 'The engine refuses the key of the site: make a new one', 'href="&#x2F;w4os&#x2F;health">[w4os.admin_health_link]</a>');
     });
 
     test('never breaks the admin pages that say it: the logo of the grid left out', function () {
@@ -61,7 +61,7 @@ describe('an engine the site cannot work with', function () {
     test('is said to the visitor signing in as the grid unreachable, its reason in the log', function () {
         $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
 
-        expect($plugin)->toContain("\$this->site()->translate(\$trouble === null ? \$e->key : 'w4os.error_channel_unavailable')", "), 'error');")
+        expect($plugin)->toContain("htmlspecialchars(\$trouble === null ? \$this->errorText(\$e) : Failure::line(Failure::of(\$e), 'engine')),", "), 'error');")
             ->and($plugin)->toContain("\$this->grav['log']->error('w4os: sign-in of '.\$login.' impossible: '.\$trouble.' ('.\$e->getMessage().')')")
             ->and($plugin)->toContain("\$this->grav['language']->translate(array_merge([\$key], \$vars), ['en'])");
     });

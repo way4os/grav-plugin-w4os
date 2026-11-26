@@ -1037,7 +1037,7 @@ w4os:
   admin_api_url: 'Cyfeiriad API yr engine'
   admin_api_url_help: 'Angenrheidiol gydag engine o bell: https://grid.example.org/api, neu ar beiriant y grid y cyfeiriad y mae opensim web GRID api yn ei roi'
   admin_api_url_missing: 'Mae’r engine o bell ond heb gyfeiriad API: rho gyfeiriad API yr engine, hebddo ni all y safle gyrraedd y grid'
-  admin_engine_key_refused: 'Mae’r engine yn gwrthod allwedd y safle: gwna un newydd ar beiriant y grid (opensim api-key create <enw>) a’i rhoi i’r safle (Allwedd API yn y gosodiadau, neu w4os-site setup --key)'
+  admin_engine_key_refused: 'gwna allwedd ar beiriant y grid (opensim api-key create <enw>) a’i rhoi i’r safle (w4os-site setup --key)'
   admin_engine_down: 'Nid yw API yr engine yn ateb yn %s: gwiria ar beiriant y grid fod ei weinydd gwe a’i wasanaeth PHP yn rhedeg (mae opensim web GRID api yn rhoi eu ffurfweddiad), a bod y cyfeiriad hwn yn gywir'
   admin_grid: 'Nick y grid'
   admin_grid_help: 'Dim ond pan fydd yr API yn gwasanaethu sawl grid'
@@ -1103,7 +1103,8 @@ w4os:
   admin_shortcode_grid_name_help: 'Enw’r grid'
   admin_shortcode_base_url_help: 'Cyfeiriad y safle'
   admin_shortcode_slogan_help: 'Slogan y safle'
-  admin_health_title: Iechyd
+  admin_health_title: Diagnosteg
+  admin_health_link: 'Tudalen ddiagnosteg'
   admin_health_check: 'Gwirio eto'
   admin_health_checked: 'gwiriwyd %s'
   admin_health_errors_one: '%d gwall'
@@ -1126,11 +1127,7 @@ w4os:
   admin_health_instance: Enghraifft
   admin_health_installed: 'Wedi’i gosod'
   admin_health_missing: 'Ar goll'
-  admin_blocks_unavailable: 'Ni roddodd helpers y grid %s: %s.'
-  admin_blocks_no_url: 'mae gosodiad “Cyfeiriad y helpers” y safle yn wag'
-  admin_blocks_http: 'atebon nhw gyda’r gwall HTTP %s'
-  admin_blocks_no_answer: 'ni atebon nhw (%s)'
-  admin_blocks_nothing: 'ni roddon nhw ddim'
+  admin_blocks_no_url: 'Cyfeiriad y helpers heb ei osod'
   admin_shortcodes_menu: 'Codau byr'
   admin_health_setting: Gosodiad
   admin_health_address: Cyfeiriad

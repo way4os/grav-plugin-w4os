@@ -1037,7 +1037,7 @@ w4os:
   admin_api_url: 'Adresse der Engine-API'
   admin_api_url_help: 'Erforderlich mit einer entfernten Engine: https://grid.example.org/api, oder auf dem Rechner des Grids die Adresse, die opensim web GRID api angibt'
   admin_api_url_missing: 'Die Engine ist entfernt, hat aber keine API-Adresse: Gib die Adresse der Engine-API an, ohne sie erreicht die Website das Grid nicht'
-  admin_engine_key_refused: 'Die Engine lehnt den Schlüssel der Website ab: Erstelle auf dem Rechner des Grids einen neuen (opensim api-key create <Name>) und gib ihn der Website (API-Schlüssel in den Einstellungen, oder w4os-site setup --key)'
+  admin_engine_key_refused: 'erstelle einen Schlüssel auf dem Rechner des Grids (opensim api-key create <Name>) und gib ihn der Website (w4os-site setup --key)'
   admin_engine_down: 'Die Engine-API antwortet nicht unter %s: Prüfe auf dem Rechner des Grids, dass sein Webserver und sein PHP-Dienst laufen (opensim web GRID api gibt ihre Konfiguration), und dass diese Adresse stimmt'
   admin_grid: 'Nick des Grids'
   admin_grid_help: 'Nur wenn die API mehrere Grids bedient'
@@ -1103,7 +1103,8 @@ w4os:
   admin_shortcode_grid_name_help: 'Der Name des Grids'
   admin_shortcode_base_url_help: 'Die Adresse der Website'
   admin_shortcode_slogan_help: 'Der Slogan der Website'
-  admin_health_title: Zustand
+  admin_health_title: Diagnose
+  admin_health_link: Diagnoseseite
   admin_health_check: 'Erneut prüfen'
   admin_health_checked: 'geprüft %s'
   admin_health_errors_one: '%d Fehler'
@@ -1126,11 +1127,7 @@ w4os:
   admin_health_instance: Instanz
   admin_health_installed: Installiert
   admin_health_missing: Fehlt
-  admin_blocks_unavailable: 'Die Helpers des Grids haben %s nicht geliefert: %s.'
-  admin_blocks_no_url: 'die Einstellung „Adresse der Helpers“ der Website ist leer'
-  admin_blocks_http: 'sie haben mit dem Fehler HTTP %s geantwortet'
-  admin_blocks_no_answer: 'sie haben nicht geantwortet (%s)'
-  admin_blocks_nothing: 'sie haben nichts geliefert'
+  admin_blocks_no_url: 'Adresse der Helpers nicht gesetzt'
   admin_shortcodes_menu: Shortcodes
   admin_health_setting: Einstellung
   admin_health_address: Adresse

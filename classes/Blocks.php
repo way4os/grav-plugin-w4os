@@ -40,7 +40,7 @@ final class Blocks
         $url = rtrim($url, '/');
 
         return new self(fn (string $name, array $args) => $url === ''
-            ? throw new BlockUnavailable('no address of the helpers is set (setting url)', 'admin_blocks_no_url')
+            ? throw new BlockUnavailable('no address of the helpers is set (setting url)', key: 'admin_blocks_no_url')
             : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
     }
 
@@ -53,7 +53,7 @@ final class Blocks
      */
     public static function answer(int $status, string $body, array $headers): array
     {
-        $status === 200 || throw new BlockUnavailable("HTTP $status", 'admin_blocks_http', [(string) $status]);
+        $status === 200 || throw new BlockUnavailable("HTTP $status", Failure::status($status));
         $notices = json_decode((string) ($headers['x-helpers-notices'][0] ?? ''), true);
 
         return ['html' => $body, 'notices' => is_array($notices) ? $notices : []];
@@ -82,10 +82,10 @@ final class Blocks
         foreach ($failures as $name => $reason) {
             $byReason[$reason][] = $name;
         }
-        $link = $health === null ? '' : ' <a href="'.htmlspecialchars($health).'">'.htmlspecialchars($t('w4os.admin_health_title', [])).'</a>';
+        $link = $health === null ? '' : ' <a href="'.htmlspecialchars($health).'">'.htmlspecialchars($t('w4os.admin_health_link', [])).'</a>';
         $notices = [];
         foreach ($byReason as $reason => $names) {
-            $notices[] = ['level' => 'error', 'text' => htmlspecialchars($t('w4os.admin_blocks_unavailable', [implode(', ', $names), (string) $reason])).$link];
+            $notices[] = ['level' => 'error', 'text' => htmlspecialchars(Failure::line((string) $reason, 'helpers: '.implode(', ', $names))).$link];
         }
 
         return $notices;

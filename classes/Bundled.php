@@ -237,7 +237,7 @@ final class Bundled
         // A block the helpers could not make for now (a database of the grid that cannot be reached): its reason, their error notice
         if ($this->unavailable) {
             $reasons = array_column(array_filter($notices, fn (array $notice) => ($notice['level'] ?? '') === 'error'), 'text');
-            throw new BlockUnavailable($reasons !== [] ? implode(' ', $reasons) : 'the helpers cannot make it for now', $reasons !== [] ? '' : 'admin_blocks_nothing');
+            throw new BlockUnavailable($reasons !== [] ? implode(' ', $reasons) : 'the helpers cannot make it for now', Failure::status(503));
         }
 
         return $html === null ? null : ['html' => $html, 'notices' => $notices];

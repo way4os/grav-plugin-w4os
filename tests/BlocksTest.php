@@ -131,16 +131,16 @@ describe('the page of a profile', function () {
 describe('the blocks that cannot be read', function () {
     $t = fn (string $key, array $vars = []) => "[$key".($vars ? ':'.implode('|', $vars) : '').']';
 
-    test('are said to a manager, once for each reason, with the blocks it took and a link to the health of the grid', function () use ($t) {
-        $notices = Blocks::notices(['profile' => 'Idle timeout reached', 'grid-info' => 'Idle timeout reached', 'motd' => 'HTTP 500 <b>'], true, 'profile', '/w4os/health', $t);
+    test('are said to a manager as a failure is, once for each status: its code and standard phrase, then what was asked, a link to the diagnostics', function () use ($t) {
+        $notices = Blocks::notices(['profile' => 'Timeout', 'grid-info' => 'Timeout', 'search' => '500 Internal Server Error'], true, 'profile', '/w4os/health', $t);
 
         expect($notices)->toBe([
-            ['level' => 'error', 'text' => '[w4os.admin_blocks_unavailable:profile, grid-info|Idle timeout reached] <a href="/w4os/health">[w4os.admin_health_title]</a>'],
-            ['level' => 'error', 'text' => '[w4os.admin_blocks_unavailable:motd|HTTP 500 &lt;b&gt;] <a href="/w4os/health">[w4os.admin_health_title]</a>'],
+            ['level' => 'error', 'text' => 'Timeout · helpers: profile, grid-info <a href="/w4os/health">[w4os.admin_health_link]</a>'],
+            ['level' => 'error', 'text' => '500 Internal Server Error · helpers: search <a href="/w4os/health">[w4os.admin_health_link]</a>'],
         ]);
     });
 
-    test('say their reason in the language of the page, from a key of the catalog', function () use ($t) {
+    test('say their status as the standard says it, the reason of the transport without an answer, a text only where the manager can act', function () use ($t) {
         $reason = function (Closure $failing) use ($t) {
             try {
                 $failing();
@@ -150,11 +150,10 @@ describe('the blocks that cannot be read', function () {
         };
 
         expect($reason(fn () => (Blocks::remote('', fn () => ''))->html('grid-info', [])))->toBe('[w4os.admin_blocks_no_url]')
-            ->and($reason(fn () => Blocks::answer(500, '', [])))->toBe('[w4os.admin_blocks_http:500]')
-            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('Idle timeout reached', 'admin_blocks_no_answer', ['Idle timeout reached'])))
-            ->toBe('[w4os.admin_blocks_no_answer:Idle timeout reached]')
-            // A reason the helpers said themselves (in the language they were asked): as it is
-            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('La base de données est injoignable.')))->toBe('La base de données est injoignable.');
+            ->and($reason(fn () => Blocks::answer(500, '', [])))->toBe('500 Internal Server Error')
+            ->and($reason(fn () => Blocks::answer(502, '', [])))->toBe('502 Bad Gateway')
+            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('Idle timeout reached')))->toBe('Timeout')
+            ->and($reason(fn () => throw new W4OS\Grav\BlockUnavailable('Failed to connect to 127.0.0.1 port 28698 after 0 ms: Could not connect to server')))->toBe('Connection refused');
     });
 
     test('are said to a visitor only when the block is the whole page, without a reason', function () use ($t) {

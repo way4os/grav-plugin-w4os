@@ -1037,7 +1037,7 @@ w4os:
   admin_api_url: 'Endereço da API do engine'
   admin_api_url_help: 'Obrigatório com um engine remoto: https://grid.example.org/api, ou na máquina do grid o endereço que opensim web GRID api dá'
   admin_api_url_missing: 'O engine é remoto mas não tem endereço de API: indique o endereço da API do engine, sem ele o site não alcança o grid'
-  admin_engine_key_refused: 'O engine recusa a chave do site: crie uma nova na máquina do grid (opensim api-key create <nome>) e dê ao site (Chave de API nas configurações, ou w4os-site setup --key)'
+  admin_engine_key_refused: 'crie uma chave na máquina do grid (opensim api-key create <nome>) e dê ao site (w4os-site setup --key)'
   admin_engine_down: 'A API do engine não responde em %s: verifique na máquina do grid se o servidor web e o serviço PHP estão rodando (opensim web GRID api dá a configuração deles), e se este endereço está certo'
   admin_grid: 'Nick do grid'
   admin_grid_help: 'Só quando a API serve vários grids'
@@ -1103,7 +1103,8 @@ w4os:
   admin_shortcode_grid_name_help: 'O nome do grid'
   admin_shortcode_base_url_help: 'O endereço do site'
   admin_shortcode_slogan_help: 'O slogan do site'
-  admin_health_title: Saúde
+  admin_health_title: Diagnóstico
+  admin_health_link: 'Página de diagnóstico'
   admin_health_check: 'Verificar de novo'
   admin_health_checked: 'verificado %s'
   admin_health_errors_one: '%d erro'
@@ -1126,11 +1127,7 @@ w4os:
   admin_health_instance: Instância
   admin_health_installed: Instalada
   admin_health_missing: Ausente
-  admin_blocks_unavailable: 'Os helpers do grid não deram %s: %s.'
-  admin_blocks_no_url: 'a configuração “Endereço dos helpers” do site está vazia'
-  admin_blocks_http: 'eles responderam com o erro HTTP %s'
-  admin_blocks_no_answer: 'eles não responderam (%s)'
-  admin_blocks_nothing: 'eles não deram nada'
+  admin_blocks_no_url: 'Endereço dos helpers não definido'
   admin_shortcodes_menu: Shortcodes
   admin_health_setting: Configuração
   admin_health_address: Endereço
