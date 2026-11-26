@@ -261,6 +261,30 @@ final class Site
         }
     }
 
+    /**
+     * The other session cookies of the site a browser may keep beside the one of now, which it would send first (an install of
+     * before: Grav 1.7 set `Domain=<host>`, another path): each its domain ('' host-only) and its path, never the one of now. A
+     * leading dot is the same domain to a browser; an address or localhost takes no domain.
+     *
+     * @return list<array{domain: string, path: string}>
+     */
+    public static function staleSessionCookies(string $host, string $domain, string $path): array
+    {
+        $domain = ltrim($domain, '.');
+        $plain = $host === '' || $host === 'localhost' || filter_var($host, FILTER_VALIDATE_IP) !== false;
+        $domains = array_values(array_unique($plain ? ['', $domain] : ['', $host, $domain]));
+        $base = rtrim($path, '/');
+        $paths = array_values(array_unique([$base.'/', $base === '' ? '/' : $base, '/']));
+        $stale = [];
+        foreach ($domains as $d) {
+            foreach ($paths as $p) {
+                ($d === $domain && $p === $path) || $stale[] = ['domain' => $d, 'path' => $p];
+            }
+        }
+
+        return $stale;
+    }
+
     /** The texts of what keeps the site from working with the engine (EngineException::trouble()), with what to do. */
     public const TROUBLES = ['key' => 'w4os.admin_engine_key_refused', 'down' => 'w4os.admin_engine_down'];
 

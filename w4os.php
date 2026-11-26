@@ -251,7 +251,16 @@ class W4osPlugin extends Plugin
             return;
         }
         $this->grav['messages']->add(htmlspecialchars($this->site()->translate('w4os.site_sign_in_expired')), 'error');
-        $this->grav['log']->warning('w4os: a sign-in form came back without the token of its session: its page was older than the session, or the sessions are not kept (the folder of system.session.options.save_path, writable by the web user?)');
+        $this->grav['log']->warning('w4os: a sign-in form came back without the token of its session: its page was older than the session, an older session cookie sent first (expired now), or the sessions are not kept (the folder of system.session.options.save_path, writable by the web user?)');
+        // The session cookies of an install of before expired, so the next try opens the session of now
+        $name = session_name();
+        if ($name !== false && isset($_COOKIE[$name]) && ! headers_sent()) {
+            $now = session_get_cookie_params();
+            foreach (Site::staleSessionCookies((string) $this->grav['uri']->host(), (string) $now['domain'], (string) $now['path']) as $stale) {
+                setcookie($name, '', ['expires' => 1, 'path' => $stale['path'], 'domain' => $stale['domain'], 'secure' => (bool) $now['secure'],
+                    'httponly' => (bool) $now['httponly'], 'samesite' => (string) ($now['samesite'] ?: 'Lax')]);
+            }
+        }
         $event->stopPropagation();
     }
 

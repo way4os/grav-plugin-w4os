@@ -74,4 +74,19 @@ describe('a sign-in form without the token of its session', function () {
             ->and($plugin)->toContain("\$this->grav['messages']->add(htmlspecialchars(\$this->site()->translate('w4os.site_sign_in_expired')), 'error');")
             ->and($plugin)->toContain("\$this->grav['log']->warning('w4os: a sign-in form came back without the token of its session");
     });
+
+    test('expires the session cookies of an install of before, which the browser sends first, never the one of now', function () {
+        $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
+
+        // Grav 2 at /opensim/, host-only: the Domain=<host> of Grav 1.7 and the other paths
+        expect(Site::staleSessionCookies('kimbe.red', '', '/opensim/'))->toBe([
+            ['domain' => '', 'path' => '/opensim'], ['domain' => '', 'path' => '/'],
+            ['domain' => 'kimbe.red', 'path' => '/opensim/'], ['domain' => 'kimbe.red', 'path' => '/opensim'], ['domain' => 'kimbe.red', 'path' => '/'],
+        ])
+            // Grav 1.7, Domain=<host> at the root (its leading dot the same domain): the host-only one
+            ->and(Site::staleSessionCookies('kimbe.red', '.kimbe.red', '/'))->toBe([['domain' => '', 'path' => '/']])
+            // An address takes no domain: the other paths only
+            ->and(Site::staleSessionCookies('192.0.2.7', '', '/w/'))->toBe([['domain' => '', 'path' => '/w'], ['domain' => '', 'path' => '/']])
+            ->and($plugin)->toContain("foreach (Site::staleSessionCookies((string) \$this->grav['uri']->host(), (string) \$now['domain'], (string) \$now['path']) as \$stale) {", "setcookie(\$name, '', ['expires' => 1");
+    });
 });
