@@ -226,6 +226,9 @@ class W4osPlugin extends Plugin
 
             return;
         }
+        // The Login plugin counts every attempt under the name as typed and clears them under the account's (the avatar's slug):
+        // cleared here under the name typed, else five sign-ins in a row lock the avatar out
+        $this->grav['login']->resetLoginRateLimit($this->grav['login']->rateLimitName((string) ($credentials['username'] ?? ''), $event->getUser()));
         $event->setUser($this->site()->user($avatar));
         $event->setStatus($event::AUTHENTICATION_SUCCESS);
         // The avatar lands on its profile, unless the sign-in was asked by a page it goes back to (Site::landing())

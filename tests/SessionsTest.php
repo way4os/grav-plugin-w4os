@@ -37,4 +37,12 @@ describe('a sign-in with the password', function () {
     test('of a banned, disabled or unconfirmed avatar stops there: no other account signs in with its name', function () {
         expect(Site::REFUSED)->toBe(['w4os.error_account_disabled', 'w4os.error_account_banned', 'w4os.error_email_unconfirmed']);
     });
+
+    test('that succeeds clears the attempts the Login plugin counted under the name typed: five in a row never lock the avatar out', function () {
+        $plugin = (string) file_get_contents(dirname(__DIR__).'/w4os.php');
+        $reset = "\$this->grav['login']->resetLoginRateLimit(\$this->grav['login']->rateLimitName((string) (\$credentials['username'] ?? ''), \$event->getUser()));";
+
+        // Under the name as typed, before the user becomes the avatar's account (its slug)
+        expect($plugin)->toContain($reset."\n        \$event->setUser(\$this->site()->user(\$avatar));");
+    });
 });
