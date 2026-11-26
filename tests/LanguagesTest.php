@@ -81,4 +81,15 @@ describe('languages', function () {
             }
         }
     });
+
+    test('give the Login plugin only its own texts it lacks, in the languages of the suite besides English (i18n/login)', function () {
+        $files = array_map('basename', glob(dirname(__DIR__).'/i18n/login/*.yaml'));
+
+        expect($files)->toEqualCanonicalizing(['fr.yaml', 'de.yaml', 'it.yaml', 'nl.yaml', 'pt-BR.yaml', 'cy.yaml']);
+        foreach ($files as $file) {
+            $texts = Symfony\Component\Yaml\Yaml::parseFile(dirname(__DIR__)."/i18n/login/$file");
+            expect(array_keys($texts))->toBe(['PLUGIN_LOGIN'], $file)
+                ->and(array_filter($texts['PLUGIN_LOGIN'], fn ($text) => ! is_string($text) || trim($text) === ''))->toBe([], $file);
+        }
+    });
 });

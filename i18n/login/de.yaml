@@ -1,0 +1,99 @@
+# The texts of the Login plugin (3.12.1) it lacks in this language, given by the w4os plugin (dev/languages.php): only those.
+PLUGIN_LOGIN:
+  SHOW_PASSWORD_FORM: 'Passwortformular anzeigen'
+  SHOW_PASSWORD_FORM_HELP: 'Zeigt das Formular mit Benutzername und Passwort auf der Anmeldeseite der Website; die Anmeldeseiten von Admin sind nicht betroffen (Admin2 hat seine eigene Einstellung im API-Plugin). Schalte es aus, um nur andere Anmeldewege anzubieten, etwa Single-Sign-On-Buttons oder die Anmeldung per Link; gibt es keine, erscheint das Formular trotzdem. Das Ausblenden sperrt die Anmeldung mit Passwort nicht. Andere Plugins können diese Einstellung überschreiben.'
+  LOGIN_METHODS: Anmeldemethoden
+  LOGIN_SECTION: Anmeldung
+  LOGOUT_SECTION: Abmeldung
+  REGISTRATION_SECTION: Registrierung
+  APPEARANCE: Erscheinungsbild
+  PAGE_ACCESS: Seitenzugriff
+  USER_ACCOUNTS: Benutzerkonten
+  PASSWORD_RESET: 'Passwort zurücksetzen'
+  USER_PROFILE: Benutzerprofil
+  ACCOUNT_ACTIVATION: Kontoaktivierung
+  REGISTRATION_EMAILS: E-Mails
+  EMAIL_LINKS: E-Mail-Links
+  RATE_LIMITS: Begrenzungen
+  TOO_MANY_LOGIN_ATTEMPTS_RETRY: 'Zu viele fehlgeschlagene Anmeldeversuche. Versuche es in %s Minuten erneut'
+  2FA_SECRET_NOT_SAVED: 'Klicke auf „Neu generieren“ und scanne den neuen Code mit deiner Authentifikator-App, bevor du die 2-Faktor-Authentifizierung einschaltest'
+  VERIFY_EMAIL_CHANGE: 'E-Mail-Änderungen bestätigen'
+  VERIFY_EMAIL_CHANGE_HELP: 'Ändert jemand die E-Mail-Adresse in seinem Profil, geht ein Link an die neue Adresse, und das Konto wechselt erst, wenn er geöffnet wird. Admins, die ein Konto bearbeiten, sind nicht betroffen.'
+  ROUTE_CONFIRM_EMAIL: 'Pfad für die Bestätigung der E-Mail-Änderung'
+  EMAIL_CHANGE_SENT: 'Wir haben einen Bestätigungslink an %s geschickt. Deine E-Mail-Adresse ändert sich, sobald du ihn öffnest.'
+  EMAIL_CHANGE_WAITING: 'Deine neue Adresse <strong>%1$s</strong> wartet auf Bestätigung. Öffne den Link, den wir dorthin geschickt haben. Bis dahin nutzt dein Konto weiter <strong>%2$s</strong>.'
+  EMAIL_CHANGE_RESEND: 'Link erneut senden'
+  EMAIL_CHANGE_CANCEL: 'Änderung abbrechen'
+  EMAIL_CHANGE_CANCELLED: 'E-Mail-Änderung abgebrochen. Dein Konto nutzt weiter %s.'
+  EMAIL_CHANGE_NOTHING_WAITING: 'Es wartet keine E-Mail-Änderung.'
+  EMAIL_CHANGE_CONFIRMED: 'Deine E-Mail-Adresse ist jetzt %s.'
+  EMAIL_CHANGE_LINK_EXPIRED: 'Dieser Link ist abgelaufen. Melde dich an und sende in deinem Profil einen neuen.'
+  EMAIL_CHANGE_LINK_INVALID: 'Dieser Link funktioniert nicht mehr. Vielleicht wurde er schon benutzt oder durch einen neueren ersetzt.'
+  EMAIL_CHANGE_TOO_MANY: 'Zu viele Anfragen zur E-Mail-Änderung. Versuche es in %s Minuten erneut.'
+  EMAIL_CHANGE_EMAIL_SUBJECT: 'Bestätige deine neue E-Mail-Adresse bei %s'
+  EMAIL_CHANGE_EMAIL_BODY: '<h1>Bestätige deine E-Mail-Adresse</h1><p>Hallo %1$s,</p><p>du möchtest die E-Mail-Adresse deines Kontos bei <b>%3$s</b> auf diese ändern. Klicke auf den Button unten, um sie zu bestätigen. Bis dahin behält dein Konto seine bisherige Adresse.</p><p><br/><a href="%2$s" class="btn-primary">E-Mail-Adresse bestätigen</a><br/><br/></p><p>Oder kopiere diesen Link in deinen Browser:</p><p class="word-break"><a href="%2$s">%2$s</a></p><p>Der Link gilt 24 Stunden. Wenn du diese Änderung nicht angefragt hast, ignoriere diese E-Mail, dann ändert sich nichts.</p><p><br/>Viele Grüße,<br/><br/>%4$s</p>'
+  EMAIL_CHANGED_EMAIL_SUBJECT: 'Deine E-Mail-Adresse bei %s wurde geändert'
+  EMAIL_CHANGED_EMAIL_BODY: '<h1>E-Mail-Adresse geändert</h1><p>Hallo %1$s,</p><p>die E-Mail-Adresse deines Kontos bei <b>%2$s</b> ist jetzt <b>%3$s</b>. E-Mails der Website gehen ab sofort dorthin.</p><p>Wenn du das warst, musst du nichts weiter tun. Wenn nicht, wende dich sofort an die Verwalter der Website.</p><p><br/>Viele Grüße,<br/><br/>%4$s</p>'
+  EMAIL_CHANGE_REQUESTED_EMAIL_SUBJECT: 'Jemand möchte deine E-Mail-Adresse bei %s ändern'
+  EMAIL_CHANGE_REQUESTED_EMAIL_BODY: '<h1>E-Mail-Änderung angefragt</h1><p>Hallo %1$s,</p><p>jemand möchte die E-Mail-Adresse deines Kontos bei <b>%2$s</b> auf <b>%3$s</b> ändern. Es ändert sich nichts, bis der Link geöffnet wird, den wir an diese Adresse geschickt haben.</p><p>Wenn du das warst, musst du nichts tun. Wenn nicht, brich die Änderung jetzt ab:</p><p><br/><a href="%4$s" class="btn-primary">Änderung abbrechen</a><br/><br/></p><p>Oder kopiere diesen Link in deinen Browser:</p><p class="word-break"><a href="%4$s">%4$s</a></p><p>Ändere danach dein Passwort oder wende dich an die Verwalter der Website, denn vielleicht kann sich jemand anderes in deinem Konto anmelden.</p><p><br/>Viele Grüße,<br/><br/>%5$s</p>'
+  EMAIL_CHANGE_CANCELLED_BY_LINK: 'Die E-Mail-Änderung ist abgebrochen, dein Konto nutzt weiter %s. Wenn du sie nicht angefragt hast, kann sich vielleicht jemand anderes in deinem Konto anmelden: Ändere dein Passwort oder wende dich an die Verwalter der Website.'
+  EMAIL_CHANGE_CANCEL_LINK_INVALID: 'Dieser Link funktioniert nicht mehr. Vielleicht wurde die Änderung schon abgebrochen oder bestätigt oder durch eine neuere ersetzt.'
+  CURRENT_PASSWORD: 'Aktuelles Passwort'
+  CONFIRM_NEW_PASSWORD: 'Neues Passwort bestätigen'
+  CURRENT_PASSWORD_REQUIRED: 'Gib dein aktuelles Passwort ein, um ein neues festzulegen.'
+  CURRENT_PASSWORD_REQUIRED_EMAIL: 'Gib dein aktuelles Passwort ein, um deine E-Mail-Adresse zu ändern.'
+  CURRENT_PASSWORD_WRONG: 'Dein aktuelles Passwort ist nicht richtig.'
+  CURRENT_PASSWORD_TOO_MANY: 'Zu viele falsche Passwörter. Versuche es in %s Minuten erneut.'
+  PASSWORD_CHANGED: 'Dein Passwort wurde geändert. Alle anderen Browser, in denen du angemeldet warst, wurden abgemeldet.'
+  SIGNED_OUT_PASSWORD_CHANGED: 'Das Passwort deines Kontos wurde geändert, deshalb wurdest du abgemeldet. Bitte melde dich erneut an.'
+  2FA_CURRENT_CODE: 'Aktueller 2FA-Code'
+  2FA_CURRENT_CODE_HELP: 'Um die 2-Faktor-Authentifizierung auszuschalten oder das Secret neu zu generieren, gib den Code ein, den deine Authentifikator-App gerade anzeigt.'
+  2FA_CODE_REQUIRED: 'Gib den Code aus deiner Authentifikator-App ein, um die 2-Faktor-Authentifizierung auszuschalten oder das Secret neu zu generieren.'
+  2FA_CODE_WRONG: 'Dieser 2-Faktor-Authentifizierungscode ist nicht richtig.'
+  2FA_CODE_TOO_MANY: 'Zu viele falsche Codes. Versuche es in %s Minuten erneut.'
+  PASSKEYS: Passkeys
+  PASSKEYS_ENABLED: Passkeys
+  PASSKEYS_ENABLED_HELP: 'Konten können in ihrem Profil Passkeys hinzufügen und sich damit ohne Passwort anmelden, auf der Website und in Admin. Ein Passkey ersetzt auch den Code der 2-Faktor-Authentifizierung. Erfordert Grav 2 und HTTPS'
+  PASSKEYS_HELP: 'Mit einem Passkey meldest du dich per Fingerabdruck, Gesicht oder Geräte-PIN an, über einen Passwortmanager wie 1Password, iCloud-Schlüsselbund oder Google Passwortmanager, oder mit einem Sicherheitsschlüssel. Er funktioniert auf dieser Website und in Admin.'
+  PASSKEYS_RP_ID: Passkey-Domain
+  PASSKEYS_RP_ID_HELP: 'Der Host, zu dem die Passkeys gehören. Leer lassen, um den Host dieser Website zu nutzen. Eine übergeordnete Domain (example.com für www.example.com) lässt Passkeys auf all ihren Subdomains funktionieren'
+  PASSKEYS_ORIGIN: Passkey-Ursprung
+  PASSKEYS_ORIGIN_HELP: 'Die Adresse, die Browser bei der Nutzung eines Passkeys melden, etwa https://example.com. Leer lassen, um system.custom_base_url zu nutzen, sonst die Adresse der Anfrage. Setze sie, wenn die Website hinter einem Proxy liegt, der Schema oder Port ändert'
+  PASSKEYS_MAX_ATTEMPTS_COUNT: 'Fehlgeschlagene Passkey-Versuche'
+  PASSKEYS_MAX_ATTEMPTS_COUNT_HELP: 'Wie viele Passkey-Antworten von einer Adresse fehlschlagen dürfen, bevor sie warten muss'
+  PASSKEYS_MAX_ATTEMPTS_INTERVAL: 'Zeitfenster für fehlgeschlagene Passkey-Versuche'
+  BTN_PASSKEY: 'Mit einem Passkey anmelden'
+  PASSKEY_OR: oder
+  PASSKEY_USE_INSTEAD: 'Stattdessen deinen Passkey verwenden'
+  PASSKEY_WAITING: 'Warte auf deinen Passkey…'
+  PASSKEY_CANCELLED: 'Es wurde kein Passkey verwendet. Versuche es noch einmal, wenn du bereit bist, oder melde dich mit deinem Passwort an.'
+  PASSKEY_UNSUPPORTED: 'Dieser Browser kann hier keine Passkeys verwenden.'
+  PASSKEY_ALREADY_SAVED: 'Dieser Passwortmanager oder dieses Gerät hat schon einen Passkey für dieses Konto.'
+  PASSKEY_FAILED: 'Etwas ist schiefgelaufen. Bitte versuche es noch einmal.'
+  PASSKEY_SIGN_IN_FAILED: 'Mit diesem Passkey hat die Anmeldung nicht geklappt. Wenn du ihn aus deinem Konto entfernt hast, melde dich mit deinem Passwort an.'
+  PASSKEY_NOT_THIS_ACCOUNT: 'Dieser Passkey gehört nicht zu diesem Konto. Versuche einen anderen oder gib deinen Code ein.'
+  PASSKEY_EXPIRED: 'Das hat zu lange gedauert. Bitte versuche es noch einmal.'
+  PASSKEY_UNREADABLE: 'Der Browser hat eine Antwort geschickt, die nicht gelesen werden konnte. Bitte versuche es noch einmal.'
+  PASSKEY_NOT_CHECKED: 'Dieser Passkey konnte nicht geprüft werden. Versuche es noch einmal oder nutze einen anderen Passwortmanager oder ein anderes Gerät.'
+  PASSKEY_TOO_MANY: 'Mehr Passkeys kann ein Konto nicht haben. Entferne zuerst einen, den du nicht mehr nutzt.'
+  PASSKEY_IN_USE: 'Dieser Passkey wird bereits verwendet.'
+  PASSKEY_TOO_MANY_TRIES: 'Zu viele Passkey-Versuche. Warte ein paar Minuten und versuche es dann noch einmal.'
+  PASSKEY_NOT_FOUND: 'Dieser Passkey ist nicht in diesem Konto hinterlegt.'
+  PASSKEY_ADDED: 'Passkey hinzugefügt (%s). Ab jetzt reicht er allein für die Anmeldung.'
+  PASSKEY_REMOVED: 'Passkey entfernt (%s).'
+  PASSKEY_PROOF_PASSWORD: 'Gib dein aktuelles Passwort ein, um deine Passkeys zu ändern.'
+  PASSKEY_PROOF_WAIT: 'Zu viele falsche Passwörter. Versuche es in %s Minuten erneut.'
+  PASSKEY_CONFIRM_PASSWORD: 'Aktuelles Passwort'
+  PASSKEY_CONFIRM_CODE: 'Aktueller 2FA-Code'
+  PASSKEY_ADD: 'Passkey hinzufügen'
+  PASSKEY_REMOVE: Entfernen
+  PASSKEY_RENAME: Umbenennen
+  PASSKEY_SAVE: Speichern
+  PASSKEY_CANCEL: Abbrechen
+  PASSKEY_NONE: 'Noch keine Passkeys.'
+  PASSKEY_ADDED_ON: 'Hinzugefügt am %s'
+  PASSKEY_LAST_USED: 'zuletzt verwendet am %s'
+  PASSKEY_NEVER_USED: 'noch nicht verwendet'
+  PASSKEY_SYNCED: synchronisiert
+  PASSKEY_REMOVE_CONFIRM: 'Diesen Passkey entfernen? Du kannst dich dann nicht mehr damit anmelden.'
+  PASSKEY_PROOF_NONE: 'Richte zuerst ein Passwort oder die 2-Faktor-Authentifizierung für dein Konto ein. Passkeys lassen sich nicht allein von einem angemeldeten Browser aus hinzufügen oder entfernen.'

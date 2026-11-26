@@ -1,6 +1,8 @@
 <?php
 // Writes the language files of the plugin, languages/<lang>.yaml (Grav's format), from the catalog of w4os-engine (vendor: the
-// texts every bridge of a grid shares) and i18n/<lang>.yaml (the texts of Grav alone).
+// texts every bridge of a grid shares) and i18n/<lang>.yaml (the texts of Grav alone); then, from i18n/login/<lang>.yaml, the texts
+// of the Login plugin it lacks in that language (only those: a text it has is never given again, tests/login-texts-test.sh of
+// w4os-site checks it against the version the site ships).
 // A text missing in a language is the English one.
 //
 //   php dev/languages.php [folder]     default: languages/ of the plugin (composer languages)
@@ -29,6 +31,13 @@ foreach (LANGUAGES as $lang => $locale) {
     foreach ($texts as $key => $text) {
         // Quoted as YAML wants it, a text on several lines included
         $out .= "  $key: ".Yaml::dump((string) $text)."\n";
+    }
+    $login = is_file("$root/i18n/login/$lang.yaml") ? (array) (Yaml::parseFile("$root/i18n/login/$lang.yaml")['PLUGIN_LOGIN'] ?? []) : [];
+    if ($login !== []) {
+        $out .= "PLUGIN_LOGIN:\n";
+        foreach ($login as $key => $text) {
+            $out .= "  $key: ".Yaml::dump((string) $text)."\n";
+        }
     }
     file_put_contents("$folder/$lang.yaml", $out);
 }
