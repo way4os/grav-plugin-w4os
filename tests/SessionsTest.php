@@ -33,6 +33,33 @@ describe('a session that comes back by its remember-me token', function () {
     });
 });
 
+describe('a password typed in a form of the site', function () {
+    test('takes whatever OpenSim takes: no length nor pattern, required where it is asked for', function () {
+        $fields = [];
+        foreach (['register', 'account', 'edit', 'reset'] as $page) {
+            $text = (string) file_get_contents(dirname(__DIR__)."/pages/$page.md");
+            $header = Symfony\Component\Yaml\Yaml::parse(explode("---\n", $text)[1]);
+            $find = function (array $node) use (&$find, &$fields, $page) {
+                foreach ($node as $key => $value) {
+                    if (is_array($value)) {
+                        in_array($key, ['password', 'password_confirm'], true) && ($value['type'] ?? '') === 'password' && $fields["$page.$key"] = $value;
+                        $find($value);
+                    }
+                }
+            };
+            $find($header);
+        }
+
+        expect(array_keys($fields))->toBe(['register.password', 'register.password_confirm', 'account.password', 'account.password_confirm', 'edit.password', 'edit.password_confirm', 'reset.password', 'reset.password_confirm']);
+        foreach ($fields as $name => $field) {
+            expect(array_intersect_key($field, ['minlength' => 1, 'maxlength' => 1, 'pattern' => 1]))->toBe([], $name)
+                ->and(array_diff(array_keys((array) ($field['validate'] ?? [])), ['required']))->toBe([], $name);
+        }
+        expect($fields['register.password']['validate'])->toBe(['required' => true])
+            ->and($fields['reset.password']['validate'])->toBe(['required' => true]);
+    });
+});
+
 describe('a sign-in with the password', function () {
     test('of a banned, disabled or unconfirmed avatar stops there: no other account signs in with its name', function () {
         expect(Site::REFUSED)->toBe(['w4os.error_account_disabled', 'w4os.error_account_banned', 'w4os.error_email_unconfirmed']);

@@ -128,14 +128,10 @@ form:
               label: w4os.new_password
               help: w4os.password_help
               autocomplete: new-password
-              minlength: 6
-              maxlength: 16
             password_confirm:
               type: password
               label: w4os.password_confirm
               autocomplete: new-password
-              minlength: 6
-              maxlength: 16
   buttons:
     # Save, at the far right (the profile page of the avatar is a link of the header of the page)
     - { type: submit, value: w4os.save_button, classes: 'btn-primary' }

@@ -36,15 +36,11 @@ form:
       label: w4os.password
       description: w4os.password_help
       autocomplete: new-password
-      minlength: 6
-      maxlength: 16
       validate: { required: true }
     password_confirm:
       type: password
       label: w4os.password_confirm
       autocomplete: new-password
-      minlength: 6
-      maxlength: 16
       validate: { required: true }
     model:
       type: w4os_models

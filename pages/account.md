@@ -119,14 +119,10 @@ forms:
                 label: w4os.new_password
                 description: w4os.password_help
                 autocomplete: new-password
-                minlength: 6
-                maxlength: 16
               password_confirm:
                 type: password
                 label: w4os.password_confirm
                 autocomplete: new-password
-                minlength: 6
-                maxlength: 16
     buttons:
       # Save, the theme's button (the profile page of the avatar is a plain link of the page, templates/w4os/account.html.twig)
       - { type: submit, value: w4os.save_button, classes: 'button primary' }
