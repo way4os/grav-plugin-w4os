@@ -16,6 +16,7 @@ use W4OS\Grav\Items;
 use W4OS\Grav\Lists;
 use W4OS\Grav\Posts;
 use W4OS\Grav\RememberTokens;
+use W4OS\Grav\SessionCookies;
 use W4OS\Grav\Site;
 
 require_once __DIR__.'/classes/EngineException.php';
@@ -250,43 +251,37 @@ class W4osPlugin extends Plugin
      */
     public function onPluginsLoaded(): void
     {
-        $duplicates = \PHP_SAPI === 'cli' ? [] : Site::duplicateSessionCookies((string) ($_SERVER['HTTP_COOKIE'] ?? ''), (string) $this->config->get('system.session.name', 'grav-site'));
-        if ($duplicates === []) {
+        if (\PHP_SAPI === 'cli') {
             return;
         }
-        $folder = $this->sessionFolder();
-        foreach ($duplicates as $name => $ids) {
-            $live = Site::liveSession($ids, $folder);
-            $live === null || $_COOKIE[$name] = $live;
+        $settled = SessionCookies::settle($this->sessionNames(), (string) ($_SERVER['HTTP_COOKIE'] ?? ''),
+            strtolower((string) preg_replace('/:\d+$/', '', (string) ($_SERVER['HTTP_HOST'] ?? ''))),
+            (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH),
+            SessionCookies::files((array) $this->config->get('system.session.options', []), GRAV_ROOT));
+        foreach ($settled as $name => $live) {
+            $this->grav['log']->info("w4os: the cookie $name sent more than once (an older one of other attributes): ".($live === null ? 'a new session' : 'the session of the site kept').', the others expired');
         }
-        $host = strtolower((string) preg_replace('/:\d+$/', '', (string) ($_SERVER['HTTP_HOST'] ?? '')));
-        $requested = (string) parse_url((string) ($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH);
-        // Once Grav set the cookie of now: the others of each name, their attributes guessed
-        header_register_callback(function () use ($duplicates, $host, $requested) {
-            $now = session_get_cookie_params();
-            foreach (array_keys($duplicates) as $name) {
-                foreach (Site::sessionCookieVariants($host, $requested, (string) $now['domain'], (string) $now['path']) as $variant) {
-                    setcookie((string) $name, '', ['expires' => 1, 'path' => $variant['path'], 'domain' => $variant['domain'], 'secure' => (bool) $now['secure'],
-                        'httponly' => (bool) $now['httponly'], 'samesite' => (string) ($now['samesite'] ?: 'Lax')]);
-                }
-            }
-        });
-        $this->grav['log']->info('w4os: a browser sent the cookie of the session '.count(reset($duplicates)).' times (an older one of other attributes): the session of the site kept, the others expired');
     }
 
-    /** The folder of the sessions of the site (Grav's `save_path`, else PHP's), null when they are not kept in files. */
-    private function sessionFolder(): ?string
+    /**
+     * The names of the cookies of the sessions of this site, the site's and the admin's, as Grav makes them (SessionServiceProvider):
+     * its `system.session.name`, then a hash of its root (or of its salt).
+     *
+     * @return list<string>
+     */
+    private function sessionNames(): array
     {
-        $options = (array) $this->config->get('system.session.options', []);
-        if (($options['save_handler'] ?? ini_get('session.save_handler')) !== 'files') {
-            return null;
-        }
-        $path = (string) ($options['save_path'] ?? '');
-        $path === '' && $path = (string) preg_replace('/^.*;/', '', (string) ini_get('session.save_path'));
-        $path === '' && $path = sys_get_temp_dir();
-        $path[0] === '/' || $path = GRAV_ROOT.'/'.$path;
+        $raw = (string) $this->config->get('system.session.name', 'grav-site');
+        $prefix = method_exists(\Grav\Common\Service\SessionServiceProvider::class, 'resolveSessionPrefix')
+            ? \Grav\Common\Service\SessionServiceProvider::resolveSessionPrefix($this->grav['inflector'], $raw)
+            : (string) $this->grav['inflector']->hyphenize($raw);
+        $unique = match (true) {
+            $this->config->get('system.session.uniqueness', 'path') === 'path' => substr(md5(GRAV_ROOT), 0, 7),
+            method_exists(\Grav\Common\Security::class, 'getNonceKey') => md5(\Grav\Common\Security::getNonceKey()),
+            default => md5((string) $this->config->get('security.salt')),
+        };
 
-        return is_dir($path) ? $path : null;
+        return [$prefix.'-'.$unique, $prefix.'-'.$unique.'-admin'];
     }
 
     /**
