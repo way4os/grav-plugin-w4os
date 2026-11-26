@@ -1,4 +1,4 @@
 {# A picture of the avatar of a profile form (field.picture: profileImage, firstImage), in its own proportions: read only, it is
    set in the viewer #}
 {% set avatar = form.name == 'w4os-edit' ? w4os_edited() : w4os_avatar() %}
-{% if avatar %}<img class="w4os-identity-picture w4os-photo" src="{{ w4os_picture(attribute(avatar, field.picture), 'person')|e('html_attr') }}" alt="">{% endif %}
+{% if avatar %}{{ w4os_picture_tag(attribute(avatar, field.picture), 'person', 'w4os-identity-picture w4os-photo', 0) }}{% endif %}

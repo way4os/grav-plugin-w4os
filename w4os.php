@@ -420,10 +420,12 @@ class W4osPlugin extends Plugin
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
         $twig->addFunction(new \Twig\TwigFunction('w4os_picture', fn (?string $uuid, ?string $default = null) => $this->site()->picture($uuid, $default)));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_has_picture', fn (?string $uuid) => Site::hasPicture($uuid)));
         // A teleport link that fits where it is seen, browser or viewer (Site::tpLink(), W4OS\Views\TeleportLink)
         $twig->addFunction(new \Twig\TwigFunction('w4os_tp_link', fn (?string $destination, ?string $label = null, ?string $html = null, ?string $prefer = null, ?array $only = null) => $this->site()->tpLink((string) $destination, $label, $html, $prefer, $only), ['is_safe' => ['html']]));
-        // A picture of the grid that never shows broken: the picture when it has one, else the initials of its name (Site::pictureTag())
-        $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => Site::pictureTag(Site::hasPicture($uuid) ? $this->site()->picture($uuid, $default) : null, Site::initials($name), $class, $size), ['is_safe' => ['html']]));
+        // A picture of the grid that never shows broken: its picture, else for a person the engine's silhouette, faint (Site::pictureTag());
+        // a size of 0, the one its class gives
+        $twig->addFunction(new \Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, string $class = '', int $size = 32) => Site::pictureTag(Site::hasPicture($uuid) ? $this->site()->picture($uuid, $default) : null, $default === 'person' ? $this->site()->picture(null, 'person') : null, $class, $size ?: null), ['is_safe' => ['html']]));
     }
 
     /**
@@ -1844,7 +1846,7 @@ class W4osPlugin extends Plugin
             try {
                 [$items] = $this->site()->engine()->items('avatars', ['search' => trim($search), 'filter[technical]' => 'no', 'sort' => 'name', 'page[size]' => 20]);
                 foreach ($items as $avatar) {
-                    $found[] = ['value' => (string) ($avatar['uuid'] ?? ''), 'text' => (string) ($avatar['name'] ?? ''), 'picture' => $this->site()->picture($avatar['profileImage'] ?? null, 'person')];
+                    $found[] = ['value' => (string) ($avatar['uuid'] ?? ''), 'text' => (string) ($avatar['name'] ?? ''), 'picture' => $this->site()->picture($avatar['profileImage'] ?? null, 'person'), 'none' => ! Site::hasPicture($avatar['profileImage'] ?? null)];
                 }
             } catch (EngineException) {
                 $found = [];

@@ -22,7 +22,7 @@
         {% set labels = labels|merge({(known.value): known.label}) %}
         {% if known.description is defined %}{% set tips = tips|merge({(known.value): known.description}) %}{% endif %}
     {% endfor %}
-    {% if column.picture is defined %}<div class="w4os-who">{{ w4os_picture_tag(attribute(item, column.picture) ?? null, column.default ?? null, item.name ?? value, 'w4os-thumb' ~ ((column.default ?? null) == 'person' ? ' w4os-thumb-person')) }}<span>{% endif %}
+    {% if column.picture is defined %}<div class="w4os-who">{{ w4os_picture_tag(attribute(item, column.picture) ?? null, column.default ?? null, 'w4os-thumb' ~ ((column.default ?? null) == 'person' ? ' w4os-thumb-person')) }}<span>{% endif %}
     {%- if column.count is defined and value is not null -%}{{ counted ? w4os_count('w4os.' ~ column.count, value) : w4os_number(value, 0) }}
     {%- elseif type == 'date' -%}{{ value|w4os_date }}
     {%- elseif type == 'connection-string' -%}{% if value is iterable and (value.host ?? '') != '' %}{{ value.user ?? '' ? value.user ~ '@' }}{{ value.host }}{{ value.port ?? '' ? ':' ~ value.port }}{{ value.database ?? '' ? '/' ~ value.database }}{% elseif column.fallback is defined %}{{ (column.description ?? column.fallback) is iterable ? (column.description|map(key => ('w4os.' ~ key)|t)|join(' ')) : ('w4os.' ~ (column.description ?? column.fallback))|t }}{% endif %}
@@ -42,10 +42,10 @@
     {%- endif %}
     {%- elseif type == 'status' -%}{% if value is not empty %}<span class="w4os-status">{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.status_' ~ value)|t }}</span>{% endif %}
     {%- elseif type == 'role' -%}{% if value is not empty %}{{ labels[value] is defined ? ('w4os.' ~ labels[value])|t : ('w4os.role_' ~ value|replace({'-': '_'}))|t }}{% else %}{{ item.level ?? '' }}{% endif %}{% if item.standardLevel is defined and not item.standardLevel %} ({{ item.level }}){% endif %}
-    {%- elseif type == 'picture' -%}{{ w4os_picture_tag(value, column.default ?? null, item.name ?? '', 'w4os-thumb' ~ ((column.default ?? null) == 'person' ? ' w4os-thumb-person')) }}
-    {%- elseif type == 'map' -%}{% if value %}{{ w4os_picture_tag(value, null, item.name ?? '', 'w4os-map-thumb', 48) }}{% endif %}
+    {%- elseif type == 'picture' -%}{{ w4os_picture_tag(value, column.default ?? null, 'w4os-thumb' ~ ((column.default ?? null) == 'person' ? ' w4os-thumb-person')) }}
+    {%- elseif type == 'map' -%}{% if value %}{{ w4os_picture_tag(value, null, 'w4os-map-thumb', 48) }}{% endif %}
     {%- elseif type == 'link' -%}{% set url = attribute(item, column.link ?? '') ?? null %}{% if url and value is not empty %}<a href="{{ url|e('html_attr') }}">{{ value }}</a>{% else %}{{ value }}{% endif %}
-    {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar.profilePage ?? null %}<div class="w4os-who">{{ w4os_picture_tag(avatar.profileImage ?? null, 'person', avatar.name ?? '', 'w4os-thumb w4os-thumb-person') }}<span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
+    {%- elseif type == 'avatar' -%}{% if value %}{% set avatar = w4os_avatar_of(value) %}{% set profile = avatar.profilePage ?? null %}<div class="w4os-who">{{ w4os_picture_tag(avatar.profileImage ?? null, 'person', 'w4os-thumb w4os-thumb-person') }}<span>{% if profile %}<a href="{{ profile|e('html_attr') }}">{{ avatar.name }}</a>{% else %}{{ avatar.name ?? value }}{% endif %}</span></div>{% endif %}
     {%- elseif type == 'hop' -%}{% if value %}<a href="{{ value|e('html_attr') }}" title="{{ value|e('html_attr') }}">{{ ('w4os.' ~ column.label)|t }}</a>{% endif %}
     {%- else -%}
         {%- for v in (value is iterable ? value : (value is null ? [] : [value])) -%}

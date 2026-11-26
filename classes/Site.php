@@ -757,29 +757,19 @@ final class Site
     }
 
     /**
-     * A picture of the grid that never shows broken, never under initials: the picture when there is one ($src), its initials
-     * (initials()) on a tint when there is none, or when it cannot be loaded (the picture taken away then); $class gives its shape.
+     * A picture of the grid as every page shows one (W4OS\Views\Picture): the picture when there is one ($src); for a person
+     * without one ($none: the engine's silhouette), the silhouette at half its opacity; for a place, nothing. $class gives its
+     * shape, $size its width and height (none: the class's).
      */
-    public static function pictureTag(?string $src, string $initials, string $class = '', int $size = 32): string
+    public static function pictureTag(?string $src, ?string $none, string $class = '', ?int $size = 32): string
     {
-        $esc = fn (string $text) => htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-        $picture = $src === null || $src === '' ? '' : '<img src="'.$esc($src).'" alt="" width="'.$size.'" height="'.$size.'" onerror="this.parentNode.classList.remove(\'w4os-pic-shown\');this.remove()">';
-
-        return '<span class="'.$esc(trim('w4os-pic'.($picture === '' ? '' : ' w4os-pic-shown')." $class")).'" style="width: '.$size.'px; height: '.$size.'px" data-initials="'.$esc($initials).'">'.$picture.'</span>';
+        return \W4OS\Views\Picture::tag($src, $none, trim("w4os-pic $class"), $size);
     }
 
     /** Whether a picture of the grid is one: an asset UUID that is not the one of nothing (zeros). */
     public static function hasPicture(?string $uuid): bool
     {
         return $uuid !== null && trim($uuid, "0- ") !== '';
-    }
-
-    /** The initials of a name (Ada Love: AL; Plaza: P), '' for none. */
-    public static function initials(?string $name): string
-    {
-        $words = preg_split('/[\s._-]+/u', trim((string) $name), -1, PREG_SPLIT_NO_EMPTY) ?: [];
-
-        return mb_strtoupper(implode('', array_map(fn (string $word) => mb_substr($word, 0, 1), array_slice($words, 0, 2))));
     }
 
     /**
@@ -1712,13 +1702,13 @@ final class Site
      */
     public static function avatarField(string $path, int $size): array
     {
-        return [$path => ['name' => basename($path), 'type' => 'image/jpeg', 'size' => $size, 'path' => $path]];
+        return [$path => ['name' => basename($path), 'type' => str_ends_with($path, '.png') ? 'image/png' : 'image/jpeg', 'size' => $size, 'path' => $path]];
     }
 
     /**
      * The picture of an account, the one of its avatar: kept in the files of the accounts (asked of the engine once a picture, as
-     * the pictures of the grid are), its avatar field to it; none without a picture (the initials of its name then), the file of
-     * the one before removed. An engine that does not answer leaves the account as it was.
+     * the pictures of the grid are), its avatar field to it; without a picture, the engine's silhouette (one file for all), never
+     * initials; the file of the one before removed. An engine that does not answer leaves the account as it was.
      */
     private function accountPicture(UserInterface $user, string $account, ?string $picture): void
     {
@@ -1742,8 +1732,31 @@ final class Site
         foreach ($account === '' ? [] : (glob("$folder/$account-*.jpg") ?: []) as $old) {
             $file !== null && $old === GRAV_ROOT."/$file" || unlink($old);
         }
+        $file ??= $this->silhouetteFile();
         $file === null ? $user->undef('avatar') : $user->set('avatar', self::avatarField($file, (int) filesize(GRAV_ROOT."/$file")));
     }
+
+    /** The silhouette of the engine (a person without a picture), copied once among the files of the accounts; null without it. */
+    private function silhouetteFile(): ?string
+    {
+        Bundled::library();
+        if (! class_exists(\W4OS\Engine\Assets\WebAssets::class)) {
+            return null;
+        }
+        $file = self::AVATAR_FOLDER.'/'.self::SILHOUETTE;
+        if (! is_file(GRAV_ROOT."/$file")) {
+            $source = dirname((string) (new \ReflectionClass(\W4OS\Engine\Assets\WebAssets::class))->getFileName(), 3).'/'.\W4OS\Engine\Assets\WebAssets::PERSON_FILE;
+            is_dir(dirname(GRAV_ROOT."/$file")) || mkdir(dirname(GRAV_ROOT."/$file"), 0775, true);
+            if (! is_file($source) || ! copy($source, GRAV_ROOT."/$file")) {
+                return null;
+            }
+        }
+
+        return $file;
+    }
+
+    /** The file of the silhouette among the files of the accounts. */
+    public const SILHOUETTE = 'no-picture.png';
 
     /** The rights of Grav's admin and of its API (admin2) an admin of the grid has: the ones of a super user of the site. */
     public const GRAV_ADMIN = ['admin' => ['login', 'super'], 'api' => ['login', 'super']];
@@ -1833,7 +1846,7 @@ final class Site
         $access['site']['w4os']['manage'] = $manage;
         // The admins of the grid manage the site too (Grav's admin and its API), as long as their level does
         $user->set('access', self::gravAdmin($access, $manage));
-        // Its picture, the avatar's (Grav's avatar field, the one its admins show), else none: its initials
+        // Its picture, the avatar's (Grav's avatar field, the one its admins show), else the engine's silhouette
         $this->accountPicture($user, (string) ($avatar['slug'] ?? $avatar['uuid']), $avatar['profileImage'] ?? null);
         if (($this->config()['save_accounts'] ?? false) || $this->grav['config']->get('plugins.api.enabled', false)) {
             $user->save();

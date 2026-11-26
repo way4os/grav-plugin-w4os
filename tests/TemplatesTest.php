@@ -62,7 +62,7 @@ describe('templates', function () {
 
     test('a column with a picture (a region\'s map) shows it as a square thumbnail by its value, the default one when there is none', function () {
         $twig = new Environment(new FilesystemLoader(dirname(__DIR__).'/templates'));
-        $twig->addFunction(new TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]));
+        $twig->addFunction(new TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, $default === 'person' ? '/pictures/none-person.jpg' : null, $class, $size ?: null), ['is_safe' => ['html']]));
         $twig->registerUndefinedFunctionCallback(fn (string $name) => new TwigFunction($name, fn () => null));
         $twig->registerUndefinedFilterCallback(fn (string $name) => new TwigFilter($name, fn ($value) => (string) $value));
         $twig->addFilter(new TwigFilter('t', fn ($key) => $key));
@@ -71,10 +71,11 @@ describe('templates', function () {
         $person = ['name' => 'name', 'type' => 'text', 'picture' => 'profileImage', 'default' => 'person'];
 
         expect($cell->render(['column' => $map, 'item' => ['name' => 'Test East', 'mapImage' => 'm1']]))
-            ->toContain('<span class="w4os-pic w4os-pic-shown w4os-thumb" style="width: 32px; height: 32px" data-initials="TE"><img src="/pictures/m1.jpg"', 'Test East')
-            // No picture: its initials alone, no picture of nothing under or over them
-            ->and($cell->render(['column' => $map, 'item' => ['name' => 'Test North']]))->toContain('<span class="w4os-pic w4os-thumb" style="width: 32px; height: 32px" data-initials="TN"></span>')
-            ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love', 'profileImage' => '00000000-0000-0000-0000-000000000000']]))->toContain('class="w4os-pic w4os-thumb w4os-thumb-person"', 'data-initials="AL"></span>')->not->toContain('<img');
+            ->toContain('<span class="w4os-picture w4os-pic w4os-thumb" style="width: 32px; height: 32px"><img src="/pictures/m1.jpg"', 'Test East')
+            // No picture: a place none, a person the silhouette, faint; never initials
+            ->and($cell->render(['column' => $map, 'item' => ['name' => 'Test North']]))->not->toContain('w4os-pic', 'data-initials')
+            ->and($cell->render(['column' => $person, 'item' => ['name' => 'Ada Love', 'profileImage' => '00000000-0000-0000-0000-000000000000']]))
+            ->toContain('class="w4os-picture w4os-pic w4os-thumb w4os-thumb-person w4os-picture-none"', 'src="/pictures/none-person.jpg"', 'style="opacity: 0.5"')->not->toContain('data-initials');
     });
 
     test('a database reads user@host:port/database, never its password; its default said in words when the grid takes it', function () {

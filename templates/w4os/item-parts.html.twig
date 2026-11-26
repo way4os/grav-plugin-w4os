@@ -11,7 +11,7 @@
             <div class="row g-3 align-items-center">
                 {% if view.pictured %}
                 <div class="col-auto">
-                    {{ w4os_picture_tag(view.picture, view.pictureDefault, view.name, 'w4os-item-picture' ~ (view.round ? ' rounded-circle' : ' rounded'), 64) }}
+                    {{ w4os_picture_tag(view.picture, view.pictureDefault, 'w4os-item-picture' ~ (view.round ? ' rounded-circle' : ' rounded'), 64) }}
                 </div>
                 {% endif %}
                 <div class="col">

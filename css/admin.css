@@ -208,12 +208,14 @@
    at the right, a chevron before it */
 .w4os-more { display: block; margin-top: .6rem; text-align: right; font-weight: 600; }
 .w4os-more::before { content: "\203A\00A0"; }
-/* A picture of the grid (Site::pictureTag()): the picture when it has one, else the initials of its name on a tint (the picture taken
-   away when it cannot be loaded), never both, never a broken picture */
-.w4os-pic { display: inline-grid; place-items: center; flex: none; overflow: hidden; vertical-align: middle; background: color-mix(in srgb, currentColor 10%, transparent); font-weight: 600; line-height: 1; }
-.w4os-pic::before { content: attr(data-initials); grid-area: 1 / 1; font-size: .8em; opacity: .7; }
+/* A picture of the grid (Site::pictureTag(), W4OS\Views\Picture): the picture on a tint while it loads; a person without one the
+   engine's silhouette, faint; a place's gone when it cannot be loaded; never a broken picture, never initials */
+.w4os-pic { display: inline-grid; place-items: center; flex: none; overflow: hidden; vertical-align: middle; background: color-mix(in srgb, currentColor 10%, transparent); }
+.w4os-pic[hidden] { display: none; }
 .w4os-pic img { grid-area: 1 / 1; display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
-.w4os-pic-shown::before { content: none; }
+/* The picture of a profile form whole, in its own proportions */
+.w4os-pic.w4os-identity-picture { display: block; background: none; }
+.w4os-pic.w4os-identity-picture img { width: auto; height: auto; max-width: 100%; max-height: inherit; object-fit: contain; }
 /* The columns of a list by the width of its card (not of the window, which the sidebar of the admin shares): the ones of priority 2
    (md), 3 (xl), 4 and more (xxl) from that width, folded in the grey line under the name below it; a long address breaks */
 .w4os-list-card { container-type: inline-size; }

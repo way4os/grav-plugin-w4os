@@ -32,8 +32,8 @@ function tp_link_function(): Twig\TwigFunction
     }, ['is_safe' => ['html']]);
 }
 
-/** The w4os_picture_tag() of the plugin's Twig, its picture at /pictures/<uuid>.jpg (none-<default> without one). */
+/** The w4os_picture_tag() of the plugin's Twig, its picture at /pictures/<uuid>.jpg (a person without one: /pictures/none-person.jpg). */
 function picture_tag_function(): Twig\TwigFunction
 {
-    return new Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, ?string $name = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, W4OS\Grav\Site::initials($name), $class, $size), ['is_safe' => ['html']]);
+    return new Twig\TwigFunction('w4os_picture_tag', fn (?string $uuid, ?string $default = null, string $class = '', int $size = 32) => W4OS\Grav\Site::pictureTag(W4OS\Grav\Site::hasPicture($uuid) ? "/pictures/$uuid.jpg" : null, $default === 'person' ? '/pictures/none-person.jpg' : null, $class, $size ?: null), ['is_safe' => ['html']]);
 }

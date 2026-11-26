@@ -12,7 +12,7 @@
                 {% if field.multiple %}multiple{% endif %} {% if required %}required="required"{% endif %}>
             {% for uuid in values|filter(uuid => uuid) %}
                 {% set chosen = w4os_avatar_of(uuid) %}
-                <option value="{{ uuid|e('html_attr') }}" data-picture="{{ w4os_picture(chosen.profileImage ?? null, 'person')|e('html_attr') }}" selected>{{ chosen.name ?? uuid }}</option>
+                <option value="{{ uuid|e('html_attr') }}" data-picture="{{ w4os_picture(chosen.profileImage ?? null, 'person')|e('html_attr') }}"{% if not w4os_has_picture(chosen.profileImage ?? null) %} data-none{% endif %} selected>{{ chosen.name ?? uuid }}</option>
             {% endfor %}
         </select>
     </div>
