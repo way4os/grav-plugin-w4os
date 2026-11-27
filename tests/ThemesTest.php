@@ -46,9 +46,17 @@ final class FakeAssets
     }
 }
 
+/** A page of the plugin in a viewer: its content as the plugin renders it (w4os/page.html.twig), in w4os-viewer.html.twig. */
+function viewer_page(array $page): string
+{
+    $page['content'] = themeless_twig()->render('w4os/page.html.twig', ['page' => $page]);
+
+    return themeless_twig()->render('w4os-viewer.html.twig', ['page' => $page, 'assets' => new FakeAssets()]);
+}
+
 describe('themes', function () {
     test('a page of the plugin in a viewer is a page of its own, no theme needed: the helpers\' page style, compact, the block alone', function () {
-        $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']], 'assets' => new FakeAssets()]);
+        $html = viewer_page(['title' => 'Bart Simpson', 'header' => ['w4os' => 'profile', 'w4os_block' => 'profile']]);
 
         expect($html)->toStartWith('<!doctype html>')
             ->toContain('<body class="w4os-viewer viewer">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.css">', '<link href="plugin://w4os/vendor/w4os/w4os-helpers/assets/css/page.viewer.css">',
@@ -59,14 +67,20 @@ describe('themes', function () {
             ->and($html)->toContain('<h1 class="block-title">Bart Simpson</h1>')->not->toContain('<h1>Bart Simpson</h1>');
     });
 
+    test('a page of the plugin in a viewer shows the content the plugin rendered, never renders it again (its block asked once)', function () {
+        $template = (string) file_get_contents(dirname(__DIR__).'/templates/w4os-viewer.html.twig');
+
+        expect($template)->toContain('{{ page.content|raw }}')->not->toContain("include 'w4os/page.html.twig'");
+    });
+
     test('a page of the plugin in a viewer without a block has the title of the page', function () {
-        $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'My account', 'header' => ['w4os' => 'search-link']], 'assets' => new FakeAssets()]);
+        $html = viewer_page(['title' => 'My account', 'header' => ['w4os' => 'search-link']]);
 
         expect($html)->toContain('<h1>My account</h1>');
     });
 
     test('a page of the plugin in a viewer has the layout of the helpers\' pages: its content never wider than the panel', function () {
-        $html = themeless_twig()->render('w4os-viewer.html.twig', ['page' => ['title' => 'Guide', 'header' => ['w4os' => 'guide', 'w4os_block' => 'destination_guide']], 'assets' => new FakeAssets()]);
+        $html = viewer_page(['title' => 'Guide', 'header' => ['w4os' => 'guide', 'w4os_block' => 'destination_guide']]);
 
         // The column of the grid is main, which the helpers' page style lets shrink (min-width: 0)
         expect($html)->toContain('<div class="layout content-only"><main id="main">')

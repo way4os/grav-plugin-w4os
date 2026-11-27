@@ -1,7 +1,7 @@
 {# A page of the plugin in a viewer's panel (the Feed tab of a profile, the search, the guide): the page alone, without the theme of
    the site, compact for a small panel, as the helpers' own pages in a viewer: a block is the page there, under its own title (the
-   guide's panel has it in it); a page without a block has the title of the page. A theme may give its own w4os-viewer.html.twig. #}
-{% set body %}{% include 'w4os/page.html.twig' %}{% endset %}
+   guide's panel has it in it); a page without a block has the title of the page. Its content is the page's, as the plugin rendered
+   it (w4os/page.html.twig). A theme may give its own w4os-viewer.html.twig. #}
 <!doctype html>
 <html lang="{{ (grav.language.getActive ?: 'en')|e('html_attr') }}">
 <head>
@@ -18,7 +18,7 @@
 </head>
 <body class="w4os-viewer viewer">
     {# The layout of the helpers' pages: the grid, its column the content (main), which never grows wider than the panel #}
-    <div class="layout content-only"><main id="main">{% if not page.header.w4os_block %}<h1>{{ page.title }}</h1>{% endif %}{{ body|raw }}</main></div>
+    <div class="layout content-only"><main id="main">{% if not page.header.w4os_block %}<h1>{{ page.title }}</h1>{% endif %}{{ page.content|raw }}</main></div>
     {{ assets.js('bottom')|raw }}
 </body>
 </html>
