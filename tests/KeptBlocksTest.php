@@ -138,3 +138,21 @@ describe('the blocks a page shows', function () {
             ->and($noneCalls)->toHaveCount(2)->and($noneCache)->toHaveCount(0);
     });
 });
+
+describe('the page sent before the end of the request', function () {
+    test('as Grav closes the connection before onShutdown: FastCGI, else Apache by the length of the page, uncompressed', function () {
+        $closed = fn (array $server) => W4OS\Grav\Site::closedFirst(...($server + ['close' => true, 'fastcgi' => false, 'apache' => false, 'zlib' => false, 'gzip' => false, 'webserverGzip' => false]));
+
+        expect($closed(['fastcgi' => true]))->toBeTrue()
+            // Apache with mod_php: the length of the page and Connection: close, mod_deflate off for it
+            ->and($closed(['apache' => true]))->toBeTrue()
+            // PHP's built-in server: no length, the client waits for the end
+            ->and($closed([]))->toBeFalse()
+            // Compressed by PHP, by Grav or by the web server: the length would not be the one sent
+            ->and($closed(['apache' => true, 'zlib' => true]))->toBeFalse()
+            ->and($closed(['apache' => true, 'gzip' => true]))->toBeFalse()
+            ->and($closed(['apache' => true, 'webserverGzip' => true]))->toBeFalse()
+            // Grav's closing of the connection off
+            ->and($closed(['fastcgi' => true, 'close' => false]))->toBeFalse();
+    });
+});

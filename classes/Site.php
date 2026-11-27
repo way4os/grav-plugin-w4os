@@ -731,13 +731,30 @@ final class Site
         $this->keptBlocks?->waiting() && $this->keptBlocks->refresh();
     }
 
-    /**
-     * Whether the page is sent before the end of the request (Grav's onShutdown after the connection closed): with FastCGI
-     * (fastcgi_finish_request), Grav's closing of the connection on.
-     */
+    /** Whether the page is sent before the end of the request, its connection closed before Grav's onShutdown (closedFirst()). */
     public function closesFirst(): bool
     {
-        return function_exists('fastcgi_finish_request') && (bool) $this->grav['config']->get('system.debugger.shutdown.close_connection', true);
+        $config = $this->grav['config'];
+
+        return self::closedFirst(
+            close: (bool) $config->get('system.debugger.shutdown.close_connection', true),
+            fastcgi: function_exists('fastcgi_finish_request'),
+            apache: function_exists('apache_setenv'),
+            zlib: (bool) ini_get('zlib.output_compression'),
+            gzip: (bool) $config->get('system.cache.gzip', false),
+            webserverGzip: (bool) $config->get('system.cache.allow_webserver_gzip', false),
+        );
+    }
+
+    /**
+     * Whether Grav closes the connection before onShutdown, as it does it (Grav::shutdown(), its setting close_connection): with
+     * FastCGI (fastcgi_finish_request), else by the length of the page and Connection: close, which Apache with mod_php lets go
+     * once mod_deflate is off for the page (apache_setenv), where nothing compresses it (zlib.output_compression, Grav's gzip,
+     * allow_webserver_gzip). Never PHP's built-in server: Grav sends no length there, the client waits for the end.
+     */
+    public static function closedFirst(bool $close, bool $fastcgi, bool $apache, bool $zlib, bool $gzip, bool $webserverGzip): bool
+    {
+        return $close && ($fastcgi || ($apache && ! $zlib && ! $gzip && ! $webserverGzip));
     }
 
     /** How long a block is waited for (seconds, the setting blocks_timeout). */
