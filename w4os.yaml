@@ -44,8 +44,11 @@ backdrop:
   enabled: true
 # An entry in the menu of the site, in any theme: log in, or the account of the avatar signed in
 menu: true
-# How long (seconds) the blocks of the helpers (but the search) and the avatar models are kept before being read again
+# How long (seconds) the blocks of the helpers (but the search) and the avatar models are shown before being read again (a block
+# read again after the page is sent, its copy shown meanwhile)
 cache: 60
+# How long (seconds) a block of the helpers is waited for: past it, the page shows without it
+blocks_timeout: 3
 hypergrid:
   # The grids an avatar may come from, named by the visit of the grid from another one ([hypergrid-visit]); none: no names
   examples: ['Wolf Territories', 'Groovy Verse', 'GBG World', 'Alternate Metaverse', 'DigiWorldz', 'New Life Italy', 'Neverworld', "Darkheart's Playground", 'Cave Grid', 'Kitely']

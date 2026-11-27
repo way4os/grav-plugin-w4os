@@ -198,7 +198,7 @@ w4os:
   dashboard_grid_status: 'Statut de la grille'
   grid_add_to_viewer: 'Ajouter cette grille à ton viewer'
   viewer_add_grid: 'Ajouter %1$s à ton viewer'
-  viewer_add_grid_other: 'Autre lien'
+  viewer_add_grid_other: 'Lien secondlife://'
   viewer_login_uri_by_hand: 'Ou ajoute-la dans le gestionnaire de grilles de ton viewer, avec son URI de connexion :'
   copy: Copier
   copied: Copié
@@ -788,6 +788,8 @@ w4os:
   health_ok: OK
   health_readable: lisible
   health_not_readable: illisible
+  health_pool_reached: 'joint par le serveur web'
+  health_pool_unreached: 'non joint par le serveur web'
   health_helpers: helpers
   health_site: site
   health_helpers_signed_out: 'helpers, déconnecté'
@@ -1047,6 +1049,7 @@ w4os:
   admin_send_mail: 'Envoyer les mails'
   admin_send_mail_help: 'Désactivé sur un site de test seulement : l’engine n’envoie rien, les liens des inscriptions et des changements d’e-mail s’affichent sur la page'
   admin_cache: 'Cache (secondes)'
+  admin_blocks_timeout: 'Attente d’un bloc (secondes)'
   admin_hypergrid_examples: 'Grilles à citer en exemple'
   admin_hypergrid_examples_help: 'Grilles d’où un avatar peut venir, citées par la visite depuis une autre grille ([hypergrid-visit]) ; vide : aucun nom'
   admin_hypergrid_count: 'Grilles citées à la fois'

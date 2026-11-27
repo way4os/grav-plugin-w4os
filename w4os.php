@@ -56,6 +56,9 @@ class W4osPlugin extends Plugin
     /** @var array<string,string> the blocks of the helpers the page could not read, and why */
     private array $blockFailures = [];
 
+    /** @var array<string,string> the blocks of the helpers the page shows, by their marker (block()) */
+    private array $blocksShown = [];
+
     /** The page of an earlier version laid out by the splash template of the plugin (now the theme's default page, onPageInitialized). */
     private $splash = null;
 
@@ -165,6 +168,7 @@ class W4osPlugin extends Plugin
             'onFormProcessed' => ['onFormProcessed', 0],
             'onPageContentProcessed' => ['onPageContentProcessed', 0],
             'onOutputGenerated' => ['onOutputGenerated', 0],
+            'onShutdown' => ['onShutdown', 0],
         ]);
     }
 
@@ -174,7 +178,9 @@ class W4osPlugin extends Plugin
      */
     public function onOutputGenerated(): void
     {
-        $output = (string) $this->grav->output;
+        // The blocks of the helpers in the page, all asked at once
+        $output = $this->withBlocks((string) $this->grav->output);
+        $this->grav->output = $output;
         // The sign-in page: "remember me" checked, the links to register and to a lost password under the form
         if ($this->grav['uri']->path() === $this->grav['config']->get('plugins.login.route', '/login')) {
             $output = Site::rememberChecked($output);
@@ -194,6 +200,12 @@ class W4osPlugin extends Plugin
             $messages = $this->grav['messages']->all() ? $twig->processTemplate($template) : '';
             $this->grav->output = $output = str_replace($marker, $messages, $output);
         }
+    }
+
+    /** The blocks of the helpers past their time read again, once the page is sent. */
+    public function onShutdown(): void
+    {
+        $this->site?->refreshBlocks();
     }
 
     /**
@@ -510,7 +522,7 @@ class W4osPlugin extends Plugin
         // The stream of the profile shown, for its own avatar signed in on the site (not in a viewer): the form that writes a post,
         // the actions of its posts; and the profile of the helpers with them in its stream
         $twig->addFunction(new \Twig\TwigFunction('w4os_posts', fn () => $this->profiled !== null && ! $this->site()->isViewer() && ($this->profiled['uuid'] ?? null) === ($this->site()->avatar()['uuid'] ?? false) ? $this->ownPosts() : null));
-        $twig->addFunction(new \Twig\TwigFunction('w4os_in_feed', fn (string $html, string $form, \W4OS\Views\PostsView $view) => Posts::inFeed($html, $form, fn (string $post) => $this->grav['twig']->processTemplate('w4os/post-actions.html.twig', ['view' => $view, 'post' => $post])), ['is_safe' => ['html']]));
+        $twig->addFunction(new \Twig\TwigFunction('w4os_in_feed', fn (string $html, string $form, \W4OS\Views\PostsView $view) => Posts::inFeed($this->withBlocks($html), $form, fn (string $post) => $this->grav['twig']->processTemplate('w4os/post-actions.html.twig', ['view' => $view, 'post' => $post])), ['is_safe' => ['html']]));
         $twig->addFunction(new \Twig\TwigFunction('w4os_profile_edit_url', fn () => $this->profiled === null ? null : $this->site()->profileEditUrl($this->profiled)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_logo', fn (string $name) => $this->site()->logo($name)));
         $twig->addFunction(new \Twig\TwigFunction('w4os_grid_logo', fn () => $this->site()->gridLogo()));
@@ -1579,18 +1591,43 @@ class W4osPlugin extends Plugin
             $args['name'] = str_replace(' ', '.', $avatar['name']);
         }
 
-        try {
-            $html = $this->site()->blocks()->html($name, $args);
-        } catch (\W4OS\Grav\BlockUnavailable $e) {
-            $this->blockUnavailable($name, $e->reason(fn (string $key, array $vars) => $this->site()->translate($key, $vars)), $e->getMessage());
-
+        $asked = \W4OS\Grav\Blocks::asked($name, $args);
+        if ($asked === null) {
             return '';
         }
-        // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
-        $html === '' && $this->pageBlock() === \W4OS\Grav\Blocks::name($name) && $this->blockUnavailable($name, 'No Content', 'empty answer');
-        $html === '' || $this->blockFiles($name);
+        $this->blockFiles($asked[0]);
 
-        return $html;
+        // Its marker, the block in its place once all the blocks of the page are read at once (withBlocks())
+        return '<!-- w4os:block '.base64_encode((string) json_encode($asked)).' -->';
+    }
+
+    /**
+     * A text with the blocks of the helpers in place of their markers (block()): the ones not read yet asked all at once. A block
+     * that cannot be read is said with the messages of the page; the block that is the whole page empty too.
+     */
+    private function withBlocks(string $html): string
+    {
+        if (! str_contains($html, '<!-- w4os:block ') || preg_match_all('/<!-- w4os:block ([A-Za-z0-9+\/=]+) -->/', $html, $found) === 0) {
+            return $html;
+        }
+        $asked = [];
+        foreach (array_unique($found[0]) as $i => $marker) {
+            $block = isset($this->blocksShown[$marker]) ? null : json_decode((string) base64_decode($found[1][$i]), true);
+            is_array($block) && is_string($block[0] ?? null) && is_array($block[1] ?? null) && $asked[$marker] = [$block[0], $block[1]];
+        }
+        foreach ($asked === [] ? [] : $this->site()->takeBlocks($asked) as $marker => $taken) {
+            $name = $asked[$marker][0];
+            if ($taken instanceof \W4OS\Grav\BlockUnavailable) {
+                $this->blockUnavailable($name, $taken->reason(fn (string $key, array $vars) => $this->site()->translate($key, $vars)), $taken->getMessage());
+                $taken = '';
+            }
+            $taken = trim($taken);
+            // The block that is the whole page (profile, guide, search) empty: the helpers gave nothing to show
+            $taken === '' && $this->pageBlock() === $name && $this->blockUnavailable($name, 'No Content', 'empty answer');
+            $this->blocksShown[$marker] = $taken;
+        }
+
+        return strtr($html, array_intersect_key($this->blocksShown, array_flip($found[0])));
     }
 
     /** The block of the helpers that is the whole page (its header w4os_block: profile, guide, search), null for another page. */
@@ -1617,7 +1654,7 @@ class W4osPlugin extends Plugin
             $this->grav['config']->set('theme.header-fixed', false);
         }
         $page !== null && ! $this->sitePage() && Site::shortcodeBlocks(($page === $this->splash ? '[w4os-home]' : '').$page->rawMarkdown()) !== []
-            && $page->content();
+            && $this->withBlocks((string) $page->content());
         $this->blockFailures === [] || $this->blockNotices();
     }
 

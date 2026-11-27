@@ -142,6 +142,8 @@ final class Site
 
     private ?Bundled $bundled = null;
 
+    private ?KeptBlocks $keptBlocks = null;
+
     public function __construct(private Grav $grav) {}
 
     /** @return array<string,mixed> the settings of the plugin */
@@ -695,22 +697,158 @@ final class Site
 
     public function blocks(): Blocks
     {
-        // The blocks of the helpers the site serves, or of the bundled engine without other helpers; else the ones of the helpers of the grid
-        $bundled = $this->bundled();
-        if ($bundled && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '')) {
-            $rendered = fn (string $name, array $args) => $bundled->rendered($name, $args) ?? throw new BlockUnavailable('the bundled helpers gave nothing', 'No Content');
+        return new Blocks(function (string $name, array $args) {
+            $taken = $this->takeBlocks([[$name, $args]])[0];
 
-            return new Blocks(fn (string $name, array $args) => $this->noticed(Blocks::kept($name)
-                ? $this->cached("block $name ".json_encode($args).$this->profileVersion($name, $args), fn () => $rendered($name, $args))
-                : $rendered($name, $args)));
+            return $taken instanceof BlockUnavailable ? throw $taken : $taken;
+        });
+    }
+
+    /**
+     * Blocks of the helpers, as Blocks::asked() gives them, all at once (KeptBlocks): the ones of the helpers the site serves, or
+     * of the bundled engine without other helpers; else the ones of the helpers of the grid. Their notices to the visitor added to
+     * the messages of the site.
+     *
+     * @param array<array-key, array{0: string, 1: array<string,mixed>}> $asked each block: its name, its arguments
+     * @return array<array-key, string|BlockUnavailable> the HTML of each, or why it cannot be read
+     */
+    public function takeBlocks(array $asked): array
+    {
+        $bundled = $this->bundledBlocks();
+        $url = (string) ($this->config()['url'] ?? '');
+        $blocks = [];
+        foreach ($asked as $id => [$name, $args]) {
+            $key = $bundled ? "block $name ".json_encode($args) : Blocks::url($url, $name, $args);
+            $blocks[$id] = ['key' => Blocks::kept($name) ? $this->cacheKey($key.$this->profileVersion($name, $args)) : null, 'ask' => [$name, $args]];
         }
 
-        return Blocks::remote((string) ($this->config()['url'] ?? ''), function (string $url) {
-            parse_str((string) parse_url($url, PHP_URL_QUERY), $args);
-            $name = basename((string) parse_url($url, PHP_URL_PATH));
+        return array_map(fn ($taken) => $taken instanceof BlockUnavailable ? $taken : (string) $this->noticed($taken), $this->keptBlocks()->take($blocks));
+    }
 
-            return $this->noticed(Blocks::kept($name) ? $this->cached($url.$this->profileVersion($name, $args), fn () => $this->block($url)) : $this->block($url));
-        });
+    /** The blocks past their time read again, once the page is sent (Grav's onShutdown, after it closed the connection). */
+    public function refreshBlocks(): void
+    {
+        $this->keptBlocks?->waiting() && $this->keptBlocks->refresh();
+    }
+
+    /**
+     * Whether the page is sent before the end of the request (Grav's onShutdown after the connection closed): with FastCGI
+     * (fastcgi_finish_request), Grav's closing of the connection on.
+     */
+    public function closesFirst(): bool
+    {
+        return function_exists('fastcgi_finish_request') && (bool) $this->grav['config']->get('system.debugger.shutdown.close_connection', true);
+    }
+
+    /** How long a block is waited for (seconds, the setting blocks_timeout). */
+    public function blocksTimeout(): float
+    {
+        return max(0.5, (float) ($this->config()['blocks_timeout'] ?? 3));
+    }
+
+    /** Whether the blocks are made by the helpers the plugin bundles (the site serves them, or the grid has no other ones). */
+    private function bundledBlocks(): bool
+    {
+        return $this->bundled() !== null && ($this->servesHelpers() || trim((string) ($this->config()['url'] ?? '')) === '');
+    }
+
+    private function keptBlocks(): KeptBlocks
+    {
+        $cache = $this->grav['cache'];
+
+        return $this->keptBlocks ??= new KeptBlocks(
+            read: fn (string $key) => $cache->fetch($key),
+            write: fn (string $key, array $copy, int $lifetime) => $cache->save($key, $copy, $lifetime),
+            fetch: fn (array $asked) => $this->bundledBlocks() ? $this->renderBlocks($asked) : $this->readBlocks($asked),
+            fresh: max(0, (int) ($this->config()['cache'] ?? 60)),
+            closesFirst: $this->closesFirst(),
+            lock: $this->blockLock(...),
+        );
+    }
+
+    /**
+     * Blocks made by the helpers the plugin bundles, one after the other.
+     *
+     * @param array<array-key, array{0: string, 1: array<string,mixed>}> $asked
+     * @return array<array-key, array{html: string, notices: list<array<string,string>>}|BlockUnavailable>
+     */
+    private function renderBlocks(array $asked): array
+    {
+        $bundled = $this->bundled();
+
+        return array_map(function (array $block) use ($bundled) {
+            try {
+                return $bundled?->rendered(...$block) ?? throw new BlockUnavailable('the bundled helpers gave nothing', 'No Content');
+            } catch (BlockUnavailable $e) {
+                return $e;
+            }
+        }, $asked);
+    }
+
+    /**
+     * Blocks of the helpers of the grid, all asked at once with Grav's HTTP client (its requests run together), each waited for
+     * the time of the setting blocks_timeout.
+     *
+     * @param array<array-key, array{0: string, 1: array<string,mixed>}> $asked
+     * @return array<array-key, array{html: string, notices: list<array<string,string>>}|BlockUnavailable>
+     */
+    private function readBlocks(array $asked): array
+    {
+        $url = (string) ($this->config()['url'] ?? '');
+        if (rtrim($url, '/') === '') {
+            return array_map(fn () => Blocks::noUrl(), $asked);
+        }
+        $timeout = $this->blocksTimeout();
+        $client = Client::getClient(['timeout' => $timeout, 'max_duration' => $timeout]);
+        $headers = ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()];
+        $read = [];
+        foreach ($asked as $id => [$name, $args]) {
+            try {
+                $read[$id] = $client->request('GET', Blocks::url($url, $name, $args), ['headers' => $headers]);
+            } catch (\Throwable $e) {
+                $read[$id] = self::blockFailure($e);
+            }
+        }
+
+        return array_map(function ($response) {
+            if ($response instanceof BlockUnavailable) {
+                return $response;
+            }
+            try {
+                return Blocks::answer($response->getStatusCode(), $response->getContent(false), $response->getHeaders(false));
+            } catch (BlockUnavailable $e) {
+                return $e;
+            } catch (\Throwable $e) {
+                return self::blockFailure($e);
+            }
+        }, $read);
+    }
+
+    /** A block the helpers did not answer: the reason of the transport. */
+    private static function blockFailure(\Throwable $e): BlockUnavailable
+    {
+        return new BlockUnavailable(Blocks::reason($e->getMessage()), Failure::transport($e->getMessage()), previous: $e);
+    }
+
+    /**
+     * The lock of the refresh of a block for this page (a file locked in Grav's cache folder), its release; null when another
+     * page has it.
+     */
+    private function blockLock(string $key): ?\Closure
+    {
+        $folder = (string) $this->grav['locator']->findResource('cache://', true, true).'/w4os-locks';
+        is_dir($folder) || @mkdir($folder, 0775, true);
+        $file = @fopen("$folder/".md5($key).'.lock', 'c');
+        if ($file === false || ! flock($file, LOCK_EX | LOCK_NB)) {
+            $file === false || fclose($file);
+
+            return null;
+        }
+
+        return function () use ($file) {
+            flock($file, LOCK_UN);
+            fclose($file);
+        };
     }
 
     /**
@@ -3065,23 +3203,6 @@ final class Site
         return [$response->getStatusCode(), $response->getContent(false), $response->getHeaders(false)];
     }
 
-    /**
-     * A block of the helpers of the grid, and its notices to the visitor (their header X-Helpers-Notices).
-     *
-     * @return array{html: string, notices: list<array{level: string, text: string}>}
-     * @throws BlockUnavailable when the helpers do not give it (no answer, an error)
-     */
-    private function block(string $url): array
-    {
-        try {
-            [$status, $body, $headers] = $this->send('GET', $url, ['Accept' => 'text/html', 'Accept-Language' => $this->acceptLanguage()], null);
-        } catch (\Throwable $e) {
-            throw new BlockUnavailable(Blocks::reason($e->getMessage()), Failure::transport($e->getMessage()), previous: $e);
-        }
-
-        return Blocks::answer($status, $body, $headers);
-    }
-
     /** The HTML of a block, its notices to the visitor added to the messages of the site (shown at the start of the page). */
     private function noticed(mixed $block): ?string
     {
@@ -3152,10 +3273,16 @@ final class Site
         return 'w4os-'.md5($key.'|'.$language.'|'.json_encode($source));
     }
 
+    /** The key of a value kept in the cache of Grav, for the language of the page and the grid of the site (cacheId()). */
+    private function cacheKey(string $key): string
+    {
+        return self::cacheId($key, (string) $this->grav['language']->getActive(), $this->config());
+    }
+
     private function cached(string $key, \Closure $value, ?int $lifetime = null): mixed
     {
         $cache = $this->grav['cache'];
-        $id = self::cacheId($key, (string) $this->grav['language']->getActive(), $this->config());
+        $id = $this->cacheKey($key);
         $kept = $cache->fetch($id);
         if ($kept !== false && $kept !== null) {
             return $kept;

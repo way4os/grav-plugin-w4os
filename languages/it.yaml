@@ -198,7 +198,7 @@ w4os:
   dashboard_grid_status: 'Stato della griglia'
   grid_add_to_viewer: 'Aggiungi questa griglia al tuo viewer'
   viewer_add_grid: 'Aggiungi %1$s al tuo viewer'
-  viewer_add_grid_other: 'Altro link'
+  viewer_add_grid_other: 'Link secondlife://'
   viewer_login_uri_by_hand: 'Oppure aggiungila nel gestore delle griglie del tuo viewer, con il suo URI di accesso:'
   copy: Copia
   copied: Copiato
@@ -788,6 +788,8 @@ w4os:
   health_ok: OK
   health_readable: leggibile
   health_not_readable: 'non leggibile'
+  health_pool_reached: 'raggiunto dal server web'
+  health_pool_unreached: 'non raggiunto dal server web'
   health_helpers: helpers
   health_site: sito
   health_helpers_signed_out: 'helpers, disconnesso'
@@ -1047,6 +1049,7 @@ w4os:
   admin_send_mail: 'Invia le email'
   admin_send_mail_help: 'Disattivato solo su un sito di prova: l’engine non invia nulla, i link delle registrazioni e dei cambi di email appaiono sulla pagina'
   admin_cache: 'Cache (secondi)'
+  admin_blocks_timeout: 'Attesa di un blocco (secondi)'
   admin_hypergrid_examples: 'Griglie da citare come esempio'
   admin_hypergrid_examples_help: 'Griglie da cui può venire un avatar, citate dalla visita da un’altra griglia ([hypergrid-visit]); vuoto: nessun nome'
   admin_hypergrid_count: 'Griglie citate alla volta'

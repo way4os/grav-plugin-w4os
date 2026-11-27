@@ -35,6 +35,7 @@ w4os:
   admin_send_mail: 'Anfon yr ebyst'
   admin_send_mail_help: 'I ffwrdd ar safle prawf yn unig: nid yw’r engine yn anfon dim, mae dolenni’r cofrestriadau a’r newidiadau ebost yn cael eu dangos ar y dudalen'
   admin_cache: 'Storfa (eiliadau)'
+  admin_blocks_timeout: 'Aros am floc (eiliadau)'
   admin_hypergrid_examples: 'Gridiau i’w henwi fel enghreifftiau'
   admin_hypergrid_examples_help: 'Gridiau y gall afatar ddod ohonynt, wedi’u henwi gan yr ymweliad o grid arall ([hypergrid-visit]); gwag: dim enwau'
   admin_hypergrid_count: 'Gridiau a enwir ar y tro'

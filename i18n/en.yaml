@@ -33,6 +33,7 @@ w4os:
   admin_send_mail: 'Send the mails'
   admin_send_mail_help: 'Off on a test site only: the engine mails nothing, the links of the registrations and of the email changes are shown on the page'
   admin_cache: 'Cache (seconds)'
+  admin_blocks_timeout: 'Waiting for a block (seconds)'
   admin_hypergrid_examples: 'Grids to name as examples'
   admin_hypergrid_examples_help: 'Grids an avatar may come from, a few of them named by the visit from another grid ([hypergrid-visit]); empty: no names'
   admin_hypergrid_count: 'Grids named at a time'

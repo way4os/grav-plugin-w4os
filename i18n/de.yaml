@@ -35,6 +35,7 @@ w4os:
   admin_send_mail: 'E-Mails senden'
   admin_send_mail_help: 'Nur auf einer Test-Website aus: Die Engine sendet nichts, die Links der Registrierungen und E-Mail-Änderungen erscheinen auf der Seite'
   admin_cache: 'Cache (Sekunden)'
+  admin_blocks_timeout: 'Wartezeit pro Block (Sekunden)'
   admin_hypergrid_examples: 'Grids als Beispiele'
   admin_hypergrid_examples_help: 'Grids, aus denen ein Avatar kommen kann, genannt beim Besuch aus einem anderen Grid ([hypergrid-visit]); leer: keine Namen'
   admin_hypergrid_count: 'Gleichzeitig genannte Grids'

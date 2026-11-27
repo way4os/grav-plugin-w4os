@@ -198,7 +198,7 @@ w4os:
   dashboard_grid_status: 'Statws grid'
   grid_add_to_viewer: "Ychwanegu'r grid hwn at dy viewer"
   viewer_add_grid: 'Ychwanegu %1$s at dy viewer'
-  viewer_add_grid_other: 'Dolen arall'
+  viewer_add_grid_other: 'Dolen secondlife://'
   viewer_login_uri_by_hand: "Neu ychwanega fe yn rheolwr gridiau dy viewer, gyda'i URI mewngofnodi:"
   copy: Copïo
   copied: "Wedi'i gopïo"
@@ -788,6 +788,8 @@ w4os:
   health_ok: Iawn
   health_readable: darllenadwy
   health_not_readable: 'ddim yn ddarllenadwy'
+  health_pool_reached: 'o fewn cyrraedd y gweinydd gwe'
+  health_pool_unreached: 'y tu hwnt i gyrraedd y gweinydd gwe'
   health_helpers: helpers
   health_site: gwefan
   health_helpers_signed_out: 'helpers, wedi allgofnodi'
@@ -1047,6 +1049,7 @@ w4os:
   admin_send_mail: 'Anfon yr ebyst'
   admin_send_mail_help: 'I ffwrdd ar safle prawf yn unig: nid yw’r engine yn anfon dim, mae dolenni’r cofrestriadau a’r newidiadau ebost yn cael eu dangos ar y dudalen'
   admin_cache: 'Storfa (eiliadau)'
+  admin_blocks_timeout: 'Aros am floc (eiliadau)'
   admin_hypergrid_examples: 'Gridiau i’w henwi fel enghreifftiau'
   admin_hypergrid_examples_help: 'Gridiau y gall afatar ddod ohonynt, wedi’u henwi gan yr ymweliad o grid arall ([hypergrid-visit]); gwag: dim enwau'
   admin_hypergrid_count: 'Gridiau a enwir ar y tro'

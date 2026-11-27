@@ -112,6 +112,10 @@ form:
               type: number
               label: w4os.admin_cache
               validate: { type: int, min: 0 }
+            blocks_timeout:
+              type: number
+              label: w4os.admin_blocks_timeout
+              validate: { type: int, min: 1 }
             hypergrid.examples:
               type: selectize
               label: w4os.admin_hypergrid_examples

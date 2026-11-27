@@ -37,11 +37,15 @@ final class Blocks
      */
     public static function remote(string $url, \Closure $get): self
     {
-        $url = rtrim($url, '/');
+        return new self(fn (string $name, array $args) => rtrim($url, '/') === ''
+            ? throw self::noUrl()
+            : $get(self::url($url, $name, $args)));
+    }
 
-        return new self(fn (string $name, array $args) => $url === ''
-            ? throw new BlockUnavailable('no address of the helpers is set (setting url)', key: 'admin_blocks_no_url')
-            : $get("$url/blocks/$name".($args === [] ? '' : '?'.http_build_query($args))));
+    /** What a block says without the address of the helpers. */
+    public static function noUrl(): BlockUnavailable
+    {
+        return new BlockUnavailable('no address of the helpers is set (setting url)', key: 'admin_blocks_no_url');
     }
 
     /**
@@ -156,17 +160,35 @@ final class Blocks
      */
     public function html(string $name, array $args = []): string
     {
+        $asked = self::asked($name, $args);
+        $html = $asked === null ? '' : ($this->fetch)(...$asked);
+
+        return is_string($html) ? trim($html) : '';
+    }
+
+    /**
+     * A block as the helpers are asked for it: its name and the arguments it takes (html()); null when it is not one.
+     *
+     * @param array<string,mixed> $args
+     * @return ?array{0: string, 1: array<string,scalar|list<string>>}
+     */
+    public static function asked(string $name, array $args = []): ?array
+    {
         $name = self::name($name);
         if (! in_array($name, self::NAMES, true)) {
-            return '';
+            return null;
         }
         // An empty title is asked as it is: the block leaves its title to the page
         $taken = $name === 'search' ? [...self::ARGS, ...self::searchParameters()] : self::ARGS;
         // A list (the ratings of a search) of its words only, never deeper
         $args = array_map(fn ($v) => is_array($v) ? array_values(array_filter(array_map(fn ($one) => is_scalar($one) ? (string) $one : '', $v), fn ($one) => $one !== '')) : $v, $args);
-        $query = array_filter(array_intersect_key($args, array_flip($taken)), fn ($v, $k) => $v !== null && $v !== [] && ($v !== '' || $k === 'title'), ARRAY_FILTER_USE_BOTH);
-        $html = ($this->fetch)($name, $query);
 
-        return is_string($html) ? trim($html) : '';
+        return [$name, array_filter(array_intersect_key($args, array_flip($taken)), fn ($v, $k) => $v !== null && $v !== [] && ($v !== '' || $k === 'title'), ARRAY_FILTER_USE_BOTH)];
+    }
+
+    /** The address of a block at the helpers of a grid (`https://grid.example.org/helpers`). */
+    public static function url(string $helpers, string $name, array $query): string
+    {
+        return rtrim($helpers, '/')."/blocks/$name".($query === [] ? '' : '?'.http_build_query($query));
     }
 }
