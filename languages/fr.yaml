@@ -789,6 +789,9 @@ w4os:
   health_readable: lisible
   health_not_readable: illisible
   health_pool_reached: 'joint par le serveur web'
+  health_guide_copy: 'copie du %s'
+  health_guide_failed: "son serveur n'a pas répondu le %s"
+  health_guide_none: 'pas encore de copie'
   health_pool_unreached: 'non joint par le serveur web'
   health_helpers: helpers
   health_site: site

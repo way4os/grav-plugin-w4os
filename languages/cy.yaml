@@ -789,6 +789,9 @@ w4os:
   health_readable: darllenadwy
   health_not_readable: 'ddim yn ddarllenadwy'
   health_pool_reached: 'o fewn cyrraedd y gweinydd gwe'
+  health_guide_copy: 'copi o %s'
+  health_guide_failed: 'ni atebodd ei weinydd am %s'
+  health_guide_none: 'dim copi eto'
   health_pool_unreached: 'y tu hwnt i gyrraedd y gweinydd gwe'
   health_helpers: helpers
   health_site: gwefan
